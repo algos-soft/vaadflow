@@ -14,8 +14,6 @@ import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import it.algos.vaadflow.wizard.enumeration.Progetto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -47,14 +45,10 @@ public abstract class TDialogo extends Dialog {
     protected NativeButton confirmButton;
     protected NativeButton cancelButton;
     protected RadioButtonGroup<String> groupTitolo;
-
-
     /**
      * Service recuperato come istanza dalla classe singleton
      */
     protected ATextService text = ATextService.getInstance();
-
-
     /**
      * Service recuperato come istanza dalla classe singleton
      */
@@ -73,7 +67,6 @@ public abstract class TDialogo extends Dialog {
         this.setCloseOnEsc(false);
         this.setCloseOnOutsideClick(false);
     }// end of method
-
 
 
     protected Component creaFooter() {

@@ -47,7 +47,7 @@ public class TDialogoPackage extends TDialogo {
     public final static boolean DEFAULT_USA_COMPANY = false;
     public final static boolean DEFAULT_USA_SOVRASCRIVE = false;
     private static Progetto PROGETTO_STANDARD_SUGGERITO = Progetto.vaadin;
-    private static String NOME_PACKAGE_STANDARD_SUGGERITO = "role";
+    private static String NOME_PACKAGE_STANDARD_SUGGERITO = "prova";
     private static String CAPTION = "Package";
     private static String RADIO_NEW = "Creazione di un nuovo package";
     private static String RADIO_UPDATE = "Modifica di un package esistente";

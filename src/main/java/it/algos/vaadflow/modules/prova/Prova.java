@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
@@ -14,15 +14,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 20-ago-2018 19.02.32 <br>
  * <p>
- * @ESTENDEENTITY@ <br>
+ * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
  * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
@@ -44,19 +44,19 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
 @SpringComponent
-@Document(collection = "@PACKAGE@")
+@Document(collection = "prova")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(@QUALIFIER@)
-@AIEntity(company = @USACOMPANY@)
-@AIList(fields = {@PROPERTIES@})
-@AIForm(fields = {@PROPERTIES@})
+@Qualifier(TAG_PRO)
+@AIEntity(company = EACompanyRequired.nonUsata)
+@AIList(fields = {"ordine", "code"})
+@AIForm(fields = {"ordine", "code"})
 @AIScript(sovrascrivibile = false)
-public class @ENTITY@ extends @SUPERCLASSENTITY@ {
+public class Prova extends AEntity {
 
 
     /**
@@ -64,16 +64,34 @@ public class @ENTITY@ extends @SUPERCLASSENTITY@ {
      */
     private final static long serialVersionUID = 1L;
 
-    @ORDINE@
-    @CODE@
-    @DESCRIZIONE@
+    
+	/**
+     * ordine di presentazione (obbligatorio, unico) <br>
+     * il più importante per primo <br>
+     */
+    @NotNull
+    @Indexed()
+    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIColumn(name = "#", width = 55)
+    public int ordine;
+    
+	/**
+     * codice di riferimento (obbligatorio, unico) <br>
+     */
+    @NotNull
+    @Indexed()
+    @Size(min = 3)
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
+    @AIColumn(width = 210)
+    public String code;
+    
 
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        @TOSTRING@
+        return code;
     }// end of method
 
 

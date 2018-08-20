@@ -2,7 +2,9 @@ package it.algos.vaadflow.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,11 +93,11 @@ public abstract class APresenter implements IAPresenter {
      * @param entityClazz iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
      * @param service     iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
      */
-//    public APresenter(Class<? extends AEntity> entityClazz, IAService service) {
-//        ((AService) service).entityClass = entityClazz;
-//        this.entityClazz = entityClazz;
+    public APresenter(Class<? extends AEntity> entityClazz, IAService service) {
+        ((AService) service).entityClass = entityClazz;
+        this.entityClazz = entityClazz;
 //        this.service = service;
-//    }// end of Spring constructor
+    }// end of Spring constructor
 
 
 //    /**

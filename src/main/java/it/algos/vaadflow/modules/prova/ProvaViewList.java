@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.prova;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
@@ -11,13 +11,13 @@ import it.algos.vaadtest.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 20-ago-2018 19.09.21 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -35,11 +35,11 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = @QUALIFIER@, layout = MainLayout.class)
-@Qualifier(@QUALIFIER@)
+@Route(value = TAG_PRO, layout = MainLayout.class)
+@Qualifier(TAG_PRO)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class @ENTITY@ViewList extends AViewList {
+public class ProvaViewList extends AViewList {
 
 
     /**
@@ -57,9 +57,9 @@ public class @ENTITY@ViewList extends AViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public @ENTITY@ViewList(@Qualifier(@QUALIFIER@) IAPresenter presenter, @Qualifier(@QUALIFIER@) IADialog dialog) {
+    public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
         super(presenter, dialog);
-       // ((@ENTITY@ViewDialog) dialog).fixFunzioni(this::save, this::delete);
+       // ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
 

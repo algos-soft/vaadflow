@@ -1,18 +1,20 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import java.util.List;
+import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 20-ago-2018 18.59.20 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>
@@ -23,10 +25,14 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_PRO)
 @AIScript(sovrascrivibile = false)
-public interface @ENTITY@Repository extends MongoRepository<@ENTITY@, String> {
+public interface ProvaRepository extends MongoRepository<Prova, String> {
 
-@QUERY@
+
+
+	public Prova findByCode(String code);
+
+	public List<Prova> findAllByOrderByOrdineAsc();
 
 }// end of class

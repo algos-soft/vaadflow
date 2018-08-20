@@ -1,22 +1,27 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 20-ago-2018 19.09.21 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -30,10 +35,10 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
 @SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_PRO)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class @ENTITY@Service extends AService {
+public class ProvaService extends AService {
 
 
     /**
@@ -47,7 +52,7 @@ public class @ENTITY@Service extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (come previsto dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    private @ENTITY@Repository repository;
+    private ProvaRepository repository;
 
 
     /**
@@ -58,12 +63,38 @@ public class @ENTITY@Service extends AService {
      * @param repository per la persistenza dei dati
      */
     @Autowired
-    public @ENTITY@Service(@Qualifier(@QUALIFIER@) MongoRepository repository) {
+    public ProvaService(@Qualifier(TAG_PRO) MongoRepository repository) {
         super(repository);
-         this.repository = (@ENTITY@Repository) repository;
+         this.repository = (ProvaRepository) repository;
    }// end of Spring constructor
 
-    @FIND@
+    /**
+     * Ricerca di una entity (la crea se non la trova) <br>
+     *
+     * @param code di riferimento (obbligatorio ed unico)
+     *
+     * @return la entity trovata o appena creata
+     */
+    public Prova findOrCrea(String code) {
+        Prova entity = findByKeyUnica(code);
+
+        if (entity == null) {
+            entity = crea(code);
+        }// end of if cycle
+
+        return entity;
+    }// end of method
+
+    /**
+     * Crea una entity e la registra <br>
+     *
+     * @param code di riferimento (obbligatorio ed unico)
+     *
+     * @return la entity appena creata
+     */
+    public Prova crea(String code) {
+         return (Prova)save(newEntity(0, code));
+    }// end of method
 
      /**
       * Creazione in memoria di una nuova entity che NON viene salvata
@@ -73,8 +104,8 @@ public class @ENTITY@Service extends AService {
       * @return la nuova entity appena creata (non salvata)
       */
      @Override
-     public @ENTITY@ newEntity() {
-         return newEntity(@PARAMETERSNEWENTITY@);
+     public Prova newEntity() {
+         return newEntity(0, "");
      }// end of method
 
 
@@ -84,15 +115,23 @@ public class @ENTITY@Service extends AService {
       * All properties <br>
       * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
       *
-      @PARAMETERSDOC@
+      * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)
+	* @param code        codice di riferimento (obbligatorio)
       *
       * @return la nuova entity appena creata (non salvata)
       */
-     public @ENTITY@ newEntity(@PARAMETERS@) {
-         @ENTITY@ entity = null;
+     public Prova newEntity(int ordine, String code) {
+         Prova entity = null;
 
-         @KEYUNICA@
-         entity = @ENTITY@.builder()@BUILDER@;
+         entity = findByKeyUnica(code);
+		if (entity != null) {
+			return findByKeyUnica(code);
+		}// end of if cycle
+		
+         entity = Prova.builder()
+				.ordine(ordine != 0 ? ordine : this.getNewOrdine())
+				.code(code.equals("") ? null : code)
+				.build();
 
          return entity;
      }// end of method
@@ -105,12 +144,27 @@ public class @ENTITY@Service extends AService {
      *
      * @return istanza della Entity, null se non trovata
      */
-    public @ENTITY@ findByKeyUnica(String code) {
+    public Prova findByKeyUnica(String code) {
         return repository.findByCode(code);
     }// end of method
 
-    @IDKEYSPECIFICA@
+    
 
-    @NEWORDINE@
+    /**
+     * Ordine di presentazione (obbligatorio, unico per tutte le eventuali company), <br>
+     * Viene calcolato in automatico alla creazione della entity <br>
+     * Recupera dal DB il valore massimo pre-esistente della property <br>
+     * Incrementa di uno il risultato <br>
+     */
+    public int getNewOrdine() {
+        int ordine = 0;
+        List<Prova> lista = repository.findAllByOrderByOrdineAsc();
+
+        if (lista != null && lista.size() > 0) {
+            ordine = lista.get(lista.size() - 1).getOrdine();
+        }// end of if cycle
+
+        return ordine + 1;
+    }// end of method
 
 }// end of class

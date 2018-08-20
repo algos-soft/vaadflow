@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.role;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.APresenter;
+import it.algos.vaadflow.service.IAService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -37,8 +38,8 @@ public class RolePresenter extends APresenter {
      *
      * @param service layer di collegamento per la Repository e la Business Logic
      */
-    public RolePresenter( RoleService service) {
-//        super(Role.class, service);
+    public RolePresenter(@Qualifier(TAG_ROL) IAService service) {
+        super(Role.class, service);
      }// end of Spring constructor
 
 

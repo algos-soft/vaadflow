@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos
- * User: @USER@
- * Date: @TODAY@
+ * User: Gac
+ * Date: 20-ago-2018 19.09.21
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -28,10 +28,10 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_PRO)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class @ENTITY@ViewDialog extends AViewDialog<@ENTITY@> {
+public class ProvaViewDialog extends AViewDialog<Prova> {
 
 
    /**
@@ -42,10 +42,9 @@ public class @ENTITY@ViewDialog extends AViewDialog<@ENTITY@> {
      * @param presenter per gestire la business logic del package
      */
     @Autowired
-    public @ENTITY@ViewDialog(@Qualifier(@QUALIFIER@) IAPresenter presenter) {
+    public ProvaViewDialog(@Qualifier(TAG_PRO) IAPresenter presenter) {
         super(presenter);
     }// end of constructor
 
-    @READCOMPANY@
+    
 }// end of class
-

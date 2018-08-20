@@ -13,6 +13,7 @@ import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
 
+import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
 
 /**
@@ -34,11 +35,11 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         setMargin(false);
         setSpacing(false);
         setPadding(false);
-        final AppLayout app = new AppLayout("Layout di test - va sostituito anche perché è molto lungo");
+        final AppLayout app = new AppLayout("Layout di test - va sostituito col nome dell'utente?");
         app.setMenuItems(
                 new MenuItem("Home", () -> UI.getCurrent().navigate("")),
                 new MenuItem("Wizard", () -> UI.getCurrent().navigate(TAG_WIZ)),
-                new MenuItem("Role", () -> UI.getCurrent().navigate("role")),
+                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL)),
                 new MenuItem("Delta", () -> UI.getCurrent().navigate("delta"))
 //                new MenuItem("About ...", () -> UI.getCurrent().navigate("about")));
         );
