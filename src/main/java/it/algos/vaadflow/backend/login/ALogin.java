@@ -1,0 +1,42 @@
+package it.algos.vaadflow.backend.login;
+
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+
+/**
+ * Project vaadwam
+ * Created by Algos
+ * User: gac
+ * Date: gio, 10-mag-2018
+ * Time: 16:23
+ */
+@Slf4j
+@SpringComponent
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class ALogin {
+
+//    @Autowired
+//    private CompanyService service;
+//    private Company company;
+    private boolean developer = false;
+
+//    public Company getCompany() {
+//        return company;
+//    }// end of method
+
+//    public void setCompany(Company company) {
+//        this.company = company;
+//    }// end of method
+
+    public boolean isDeveloper() {
+        return developer;
+    }// end of method
+
+    public void setDeveloper(boolean developer) {
+        this.developer = developer;
+    }// end of method
+
+}// end of class
