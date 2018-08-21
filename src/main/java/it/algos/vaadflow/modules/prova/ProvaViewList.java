@@ -17,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 20-ago-2018 19.09.21 <br>
+ * Date: 20-ago-2018 21.43.41 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>

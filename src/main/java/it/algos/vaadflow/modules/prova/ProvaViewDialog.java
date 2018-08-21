@@ -15,7 +15,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 20-ago-2018 19.09.21
+ * Date: 20-ago-2018 21.43.41
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -35,8 +35,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
 
    /**
-     * Costruttore <br>
-     * Si usa un @Qualifier(), per avere dall'interfaccia la sottoclasse specifica <br>
+     * Costruttore @Autowired <br>
+     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
      * @param presenter per gestire la business logic del package

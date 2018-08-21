@@ -35,8 +35,8 @@ public class @ENTITY@ViewDialog extends AViewDialog<@ENTITY@> {
 
 
    /**
-     * Costruttore <br>
-     * Si usa un @Qualifier(), per avere dall'interfaccia la sottoclasse specifica <br>
+     * Costruttore @Autowired <br>
+     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
      * @param presenter per gestire la business logic del package

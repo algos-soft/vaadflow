@@ -3,6 +3,7 @@ package it.algos.@MODULELOWER@.modules.@PACKAGE@;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.APresenter;
+import it.algos.vaadflow.service.IAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

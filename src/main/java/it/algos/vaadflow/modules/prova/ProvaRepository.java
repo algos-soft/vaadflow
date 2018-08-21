@@ -29,8 +29,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
 @AIScript(sovrascrivibile = false)
 public interface ProvaRepository extends MongoRepository<Prova, String> {
 
-
-
 	public Prova findByCode(String code);
 
 	public List<Prova> findAllByOrderByOrdineAsc();
