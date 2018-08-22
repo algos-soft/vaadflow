@@ -1,4 +1,4 @@
-package it.algos.vaadflow.modules.role;
+package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
@@ -11,19 +11,17 @@ import it.algos.vaadtest.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
-
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
- * Project vaadbase <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-mag-2018 20.31.30 <br>
+ * Date: 22-ago-2018 16.13.08 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
- * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -38,20 +36,22 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_ROL, layout = MainLayout.class)
-@Qualifier(TAG_ROL)
+@Route(value = TAG_ADD, layout = MainLayout.class)
+@Qualifier(TAG_ADD)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class RoleViewList extends AViewList {
+public class AddressViewList extends AViewList {
 
 
     /**
      * Icona visibile nel menu (facoltativa)
+     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.KEY;
+    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -60,10 +60,16 @@ public class RoleViewList extends AViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public RoleViewList(@Qualifier(TAG_ROL) IAPresenter presenter, @Qualifier(TAG_ROL) IADialog dialog) {
+    public AddressViewList(@Qualifier(TAG_ADD) IAPresenter presenter, @Qualifier(TAG_ADD) IADialog dialog) {
         super(presenter, dialog);
-        ((RoleViewDialog) dialog).fixFunzioni(this::save, this::delete);
+        ((AddressViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    protected void fixPreferenzeSpecifiche() {
+        super.isEntityEmbadded = true;
+    }// end of method
 
 }// end of class

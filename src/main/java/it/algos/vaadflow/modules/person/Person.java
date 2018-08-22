@@ -1,4 +1,4 @@
-package it.algos.vaadflow.modules.company;
+package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
@@ -7,8 +7,6 @@ import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
-import it.algos.vaadflow.modules.person.Person;
-import it.algos.vaadflow.modules.person.PersonPresenter;
 import lombok.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,13 +17,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadflow.application.FlowCost.TAG_COM;
+import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 22-ago-2018 11.15.15 <br>
+ * Date: 22-ago-2018 16.12.50 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -50,19 +48,19 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
 @SpringComponent
-@Document(collection = "company")
+@Document(collection = "person")
 @UIScope
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builderCompany")
+@Builder(builderMethodName = "builderPerson")
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(TAG_COM)
+@Qualifier(TAG_PER)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"code", "descrizione", "telefono", "email"})
-@AIForm(fields = {"code", "descrizione", "contatto", "telefono", "email", "indirizzo", "note"})
+@AIList(fields = {"nome", "cognome"})
+@AIForm(fields = {"nome", "cognome", "telefono", "email", "indirizzo"})
 @AIScript(sovrascrivibile = false)
-public class Company extends AEntity {
+public class Person extends AEntity {
 
 
     /**
@@ -70,41 +68,32 @@ public class Company extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-    
 
-	/**
-     * codice di riferimento (obbligatorio, unico) <br>
+    /**
+     * nome (obbligatorio, non unica)
      */
     @NotNull
     @Indexed()
-    @Size(min = 3)
-    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(width = 210)
-    public String code;
-    
-	/**
-     * descrizione (obbligatoria, non unica) <br>
-     */
-    @NotNull(message = "La descrizione è obbligatoria")
-    @Size(min = 2, max = 50)
-    @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(width = 370)
-    public String descrizione;
+    @Size(min = 4, max = 40)
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 20)
+    @AIColumn(width = 200)
+    private String nome;
 
     /**
-     * persona di riferimento (facoltativo)
-     * riferimento statico SENZA @DBRef
+     * cognome (obbligatorio, non unica)
      */
-    @AIField(type = EAFieldType.link, clazz = PersonPresenter.class, help = "Riferimento")
-    @AIColumn(width = 220, name = "Riferimento")
-    private Person contatto;
-
+    @NotNull
+    @Indexed()
+    @Size(min = 4, max = 40)
+    @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 20)
+    @AIColumn(width = 200)
+    private String cognome;
 
     /**
      * telefono (facoltativo)
      */
     @AIField(type = EAFieldType.text)
-    @AIColumn(width = 170)
+    @AIColumn(width = 160)
     private String telefono;
 
 
@@ -117,8 +106,8 @@ public class Company extends AEntity {
 
 
     /**
-     * indirizzo (facoltativo)
-     * riferimento statico SENZA @DBRef
+     * indirizzo (facoltativo, non unica)
+     * riferimento statico SENZA @DBRef (embedded)
      */
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(width = 400, name = "Indirizzo")
@@ -130,7 +119,7 @@ public class Company extends AEntity {
      */
     @Override
     public String toString() {
-        return getCode();
+        return nome + " " + cognome;
     }// end of method
 
 

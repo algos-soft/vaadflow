@@ -18,9 +18,10 @@ import java.time.LocalDateTime;
  * Time: 18:30
  * Le sottoclassi concrete sono di tipo JavaBean
  * 1) la sottoclasse deve avere un costruttore senza argomenti (fornito in automatico da Lombok)
- * 2) le proprietà devono essere private e accessibili solo con get, set e is (usato per i boolen al posto di get)
- * 3) la sottoclasse deve implementare l'annotation Serializable (lo fa in questa classe)
- * 4) la sottoclasse non deve contenere nessun metodo per la gestione degli eventi
+ * 2) le proprietà devono essere pubbliche per poter usare la @Reflection
+ * 2) le proprietà sono accessibili anche con get, set e is (usato per i boolen al posto di get)
+ * 4) la sottoclasse deve implementare l'annotation Serializable (lo fa in questa classe)
+ * 5) la sottoclasse non deve contenere nessun metodo per la gestione degli eventi
  * <p>
  * Annotated with @Getter (Lombok) for automatic use of Getter
  * Sottoclassi annotated (obbligatorio) with @SpringComponent
@@ -30,7 +31,7 @@ import java.time.LocalDateTime;
  * <p>
  * La classe NON può usare la Annotation @Setter (contrariamente alle altre classi di Entity),
  * perché 'oscurerebbe' la gestione automatica della key property ObjectId da parte di Mongo
- * Le properety sono tutte pubbliche (contrariamente alle altre classi di Entity),
+ * Le property sono tutte pubbliche (contrariamente alle altre classi di Entity),
  * per essere accessibili visto che mancano i 'setters'
  * <p>
  * La gestione delle property 'dataCreazione' e 'dataModifica' è automatica in AService.save()

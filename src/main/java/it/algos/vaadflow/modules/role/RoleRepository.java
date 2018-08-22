@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.role;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -20,18 +21,15 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Scope (obbligatorio = 'singleton') <br>
+ * Annotated with @UIScope (obbligatorio) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@UIScope
 @Qualifier(TAG_ROL)
 @AIScript(sovrascrivibile = false)
 public interface RoleRepository extends MongoRepository<Role, String> {
-
-    //@TODO
-    // Le query riportate sono INDICATIVE e possono essere sostituite
 
 	public Role findByCode(String code);
 

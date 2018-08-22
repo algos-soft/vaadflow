@@ -52,6 +52,7 @@ public class TElabora {
     private static final String WEB_NAME = "/webapp";
     private static final String UI_NAME = "ui";
     private static final String ENTITIES_NAME = "modules";
+    private static final String LAYOUT_NAME = "MainLayout";
     private static final String LIB_NAME = "lib";
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;
     private static final String SUPERCLASS_ENTITY = "AEntity";
@@ -103,6 +104,7 @@ public class TElabora {
     //--risultati del dialogo
     private String targetProjectName;       //--dal dialogo di input
     private String targetModuleName;        //--dal dialogo di input
+    private String targetLayoutName;        //--dal dialogo di input
     private String newProjectName;          //--dal dialogo di input
     private String newPackageName;          //--dal dialogo di input
     private String newEntityTag;            //--dal dialogo di input
@@ -113,8 +115,6 @@ public class TElabora {
     private String projectPath;         //--ideaProjectRootPath più targetProjectName (usato come radice per pom.xml e README.text)
     private String targetModuleCapitalName;   //--targetModuleName con la prima maiuscola
     private String projectJavaPath;     //--projectPath più DIR_JAVA più targetProjectName
-    //    private String pathMain;        //--pathProject più PATH_MAIN (usato come radice per resources e webapp)
-//    private String pathModulo;    //--pathMain più PATH_JAVA più nameProject (usato come radice per i files java)
     private String applicationPath;     //--projectJavaPath più APP_NAME
     private String bootPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
     private String uiPath;              //--projectJavaPath più UI_NAME
@@ -128,6 +128,7 @@ public class TElabora {
     private String qualifier;       //--NAME_COST (springvaadin) o NAME_APP_COST (altri progetti) più TAG più tagBreveTreChar
     private String qualifierView;   //--NAME_COST (springvaadin) o NAME_APP_COST (altri progetti) più VIEW più tagBreveTreChar
     private String queryText;
+    private String layoutPath;
     private String propertiesText;
     private String parametersEntityText;
     private String parametersDocText;
@@ -247,12 +248,8 @@ public class TElabora {
                 progetto = (Progetto) projectValue;
                 this.targetProjectName = progetto.getNameProject().toLowerCase();
                 this.targetModuleName = progetto.getNameModule().toLowerCase();
-                this.nameClassCost = progetto.getNameClassCost();
-            } else {
-                projectName = (String) projectValue;
-                this.targetProjectName = projectName.toLowerCase();
-                this.targetModuleName = projectName.toLowerCase();
-                this.nameClassCost = "AppCost";
+                this.targetLayoutName = progetto.getNameLayout().toLowerCase();
+                this.nameClassCost = progetto.getNameCost();
             }// end of if/else cycle
             this.targetModuleCapitalName = text.primaMaiuscola(targetModuleName);
             this.projectPath = ideaProjectRootPath + SEP + targetProjectName;
@@ -262,6 +259,7 @@ public class TElabora {
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
             //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
             this.bootPath = applicationPath + SEP + targetModuleCapitalName + BOOT_SUFFIX + JAVA_SUFFIX;
+            this.layoutPath = projectPath + DIR_JAVA + SEP + targetLayoutName + SEP + LAYOUT_NAME + JAVA_SUFFIX;
         }// end of if cycle
 
         if (mappaInput.containsKey(Chiave.newProjectName)) {
@@ -842,65 +840,68 @@ public class TElabora {
 
 
     private void addPackageMenu() {
-        String viewClass = text.primaMaiuscola(newPackageName) + VIEW_SUFFIX;
-        //
-        addRouteSpecifichePackage(bootPath, viewClass);
-        addImportPackage(bootPath, viewClass);
+        addRouteSpecifichePackage();
+        addImportPackage();
     }// end of method
 
 
-    private void addRouteSpecifichePackage(String layoutPath, String viewClass) {
-        String aCapo = "\n\t\t";
+    private void addRouteSpecifichePackage() {
+        String aCapo = "\n\t\t\t\t";
         String tagPackage = "";
-        String tagMethod = "protected void addRouteSpecifiche() {";
+        String tag = "new MenuItem(\"Home\", () -> UI.getCurrent().navigate(\"\")),";
         String textUIClass = file.leggeFile(layoutPath);
+        String max = text.primaMaiuscola(newPackageName);
+        String viewItem = "new MenuItem(\"" + max + "\", () -> UI.getCurrent().navigate(" + qualifier + ")),";
 
-        if (isEsisteMetodo(targetModuleCapitalName + BOOT_SUFFIX, textUIClass, tagMethod)) {
-            tagPackage = "BaseCost.MENU_CLAZZ_LIST.add(" + viewClass + ".class);";
-
-            if (textUIClass.contains(tagPackage)) {
+        if (textUIClass.contains(tag)) {
+            if (textUIClass.contains(viewItem)) {
+                System.out.println("Nella classe MainLayout esiste già il menu per il package " + newPackageName);
             } else {
-                textUIClass = text.sostituisce(textUIClass, tagMethod, tagMethod + aCapo + tagPackage);
+                textUIClass = text.sostituisce(textUIClass, tag, tag + aCapo + viewItem);
                 file.scriveFile(layoutPath, textUIClass, true);
 
-                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto al menu");
+                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto al MainLayout");
             }// end of if/else cycle
-        }// end of if cycle
-    }// end of method
-
-
-    private boolean isEsisteMetodo(String fileNameUIClass, String textUIClass, String tagMethod) {
-        boolean esiste = false;
-
-        if (textUIClass.contains(tagMethod)) {
-            esiste = true;
         } else {
-            System.out.println("Nella classe iniziale " + fileNameUIClass + " manca il metodo " + tagMethod);
+            System.out.println("Nella classe MainLayout manca il metodo setMenuItems()");
         }// end of if/else cycle
-
-        return esiste;
     }// end of method
 
 
-    private void addImportPackage(String layoutPath, String viewClass) {
+    private void addImportPackage() {
         String aCapo = "\n";
-        String tagImport = "";
+        String tagImport;
         String tagInizioInserimento = "\n/**";
         int posIni = 0;
         String textUIClass = file.leggeFile(layoutPath);
-
-        tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + viewClass + ";";
+        String a = "import static it.algos.vaadflow.application.FlowCost.TAG_WIZ";
+        String ae = "import static it.algos.vaadtest.application.TestCost.TAG_WIZ";
+        tagImport = "import static it.algos." + targetModuleName + ".application." + nameClassCost + "." + qualifier+";";
 
         if (textUIClass.contains(tagImport)) {
+            System.out.println("Nella classe MainLayout esiste già l'import per il package " + newPackageName);
         } else {
             posIni = textUIClass.indexOf(tagInizioInserimento);
             tagImport = tagImport + aCapo;
             textUIClass = text.inserisce(textUIClass, tagImport, posIni);
             file.scriveFile(layoutPath, textUIClass, true);
 
-            System.out.println("L'import del file " + viewClass + " è stato inserito negli import iniziali");
+            System.out.println("L'import del file " + " è stato inserito negli import iniziali");
         }// end of if/else cycle
     }// end of method
+
+
+    //    private boolean isEsisteMetodo(String fileNameUIClass, String textUIClass, String tagMethod) {
+//        boolean esiste = false;
+//
+//        if (textUIClass.contains(tagMethod)) {
+//            esiste = true;
+//        } else {
+//            System.out.println("Nella classe iniziale " + fileNameUIClass + " manca il metodo " + tagMethod);
+//        }// end of if/else cycle
+//
+//        return esiste;
+//    }// end of method
 
 
     private void addTagCostanti() {

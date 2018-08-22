@@ -1,4 +1,4 @@
-package it.algos.vaadflow.modules.prova;
+package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
@@ -6,6 +6,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import lombok.*;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -14,19 +15,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 20-ago-2018 19.02.32 <br>
+ * Date: 22-ago-2018 16.13.08 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
  * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
- * Annotated with @Scope (obbligatorio = 'singleton') <br>
+ * Annotated with @UIScope (obbligatorio) <br>
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>
  * Annotated with @AllArgsConstructor (Lombok) per usare il costruttore completo nel Service <br>
@@ -44,19 +45,19 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
 @SpringComponent
-@Document(collection = "prova")
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Document(collection = "address")
+@UIScope
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(TAG_PRO)
+@Qualifier(TAG_ADD)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordine", "code"})
-@AIForm(fields = {"ordine", "code"})
+@AIList(fields = {"indirizzo", "localita", "cap"})
+@AIForm(fields = {"indirizzo", "localita", "cap"})
 @AIScript(sovrascrivibile = false)
-public class Prova extends AEntity {
+public class Address extends AEntity {
 
 
     /**
@@ -64,35 +65,50 @@ public class Prova extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-    
-	/**
-     * ordine di presentazione (obbligatorio, unico) <br>
-     * il più importante per primo <br>
+
+    /**
+     * indirizzo: via, nome e numero (obbligatoria, non unica)
      */
-    @NotNull
-    @Indexed()
-    @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", width = 55)
-    public int ordine;
-    
-	/**
-     * codice di riferimento (obbligatorio, unico) <br>
-     */
-    @NotNull
-    @Indexed()
-    @Size(min = 3)
+    @NotNull(message = "L'indirizzo è obbligatorio")
+    @Size(min = 2, max = 50)
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
-    public String code;
-    
+    private String indirizzo;
+
+
+    /**
+     * località (obbligatoria, non unica)
+     */
+    @NotNull(message = "La località è obbligatoria")
+    @Size(min = 2, max = 50)
+    @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
+    @AIColumn(width = 370)
+    private String localita;
+
+
+    /**
+     * codice di avviamento postale (facoltativo, non unica)
+     */
+    @Size(min = 5, max = 5, message = "Il codice postale deve essere di 5 cifre")
+    @AIField(type = EAFieldType.text, widthEM = 5)
+    @AIColumn(width = 370)
+    private String cap;
+
 
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        return code;
-    }// end of method
+        String value = "";
+        String spazio = " ";
+        String sep = " - ";
 
+        value += indirizzo;
+        value += (localita != null && !localita.equals("")) ? sep + localita : "";
+        value += spazio + cap;
+
+        return value.trim();
+    }// end of method
 
 }// end of entity class

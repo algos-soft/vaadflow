@@ -15,20 +15,23 @@ import java.util.List;
 @Slf4j
 public enum Progetto {
 
-    vaadin("vaadflow", "vaadflow", "FlowCost"),
-    test("vaadflow", "vaadtest", "AppCost"),
-    bio("vaadbio", "vaadbio", "AppCost"),
-    wam("vaadwam", "vaadwam", "AppCost"),;
+    vaadin("vaadflow", "vaadflow", "vaadtest", "FlowCost"),
+    test("vaadflow", "vaadtest", "vaadtest", "TestCost"),
+    bio("vaadbio", "vaadbio", "vaadbio", "BioCost"),
+    wam("vaadwam", "vaadwam", "vaadwam", "WamCost"),
+    ;
 
     private String nameProject;
     private String nameModule;
-    private String nameClassCost;
+    private String nameLayout;
+    private String nameCost;
 
 
-    Progetto(String nameProject, String nameModule, String nameClassCost) {
+    Progetto(String nameProject, String nameModule, String nameLayout, String nameCost) {
         this.setNameProject(nameProject);
         this.setNameModule(nameModule);
-        this.setNameClassCost(nameClassCost);
+        this.setNameLayout(nameLayout);
+        this.setNameCost(nameCost);
     }// fine del costruttore
 
     public static List<String> getNames() {
@@ -58,12 +61,20 @@ public enum Progetto {
         this.nameModule = nameModule;
     }// end of method
 
-    public String getNameClassCost() {
-        return nameClassCost;
+    public String getNameLayout() {
+        return nameLayout;
     }// end of method
 
-    public void setNameClassCost(String nameClassCost) {
-        this.nameClassCost = nameClassCost;
+    public void setNameLayout(String nameLayout) {
+        this.nameLayout = nameLayout;
+    }// end of method
+
+    public String getNameCost() {
+        return nameCost;
+    }// end of method
+
+    public void setNameCost(String nameCost) {
+        this.nameCost = nameCost;
     }// end of method
 
 }// end of enumeration class

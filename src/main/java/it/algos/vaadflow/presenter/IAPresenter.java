@@ -2,6 +2,7 @@ package it.algos.vaadflow.presenter;
 
 
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 
 /**
@@ -16,7 +17,7 @@ public interface IAPresenter {
 
     public Class<? extends AEntity> getEntityClazz();
 
-//    public IAService getService();
+    public IAService getService();
 
     public IAView getView();
     public void setView(IAView view);

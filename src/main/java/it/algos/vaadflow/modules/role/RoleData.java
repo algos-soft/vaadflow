@@ -1,11 +1,15 @@
 package it.algos.vaadflow.modules.role;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.backend.data.AData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import javax.annotation.PostConstruct;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
@@ -17,72 +21,70 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Time: 14:54
  * <p>
  * Estende la classe astratta AData per la costruzione inziale della Collection <br>
+ * <p>
  * I valori iniziali sono presi da una Enumeration codificata e standard <br>
  * Vengono caricati sul DB (mongo) in modo che se ne possano aggiungere altri specifici per l'applicazione<br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio per le injections) <br>
  * Annotated with @Scope (obbligatorio = 'singleton') <br>
- * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la sottoclasse specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_ROL)
 @Slf4j
-public class RoleData  {
+public class RoleData extends AData {
 
 
     /**
-     * Il service viene iniettato dal costruttore, in modo che sia disponibile nella superclasse,
-     * dove viene usata l'interfaccia IAService
-     * Spring costruisce al volo, quando serve, una implementazione di IAService (come previsto dal @Qualifier)
-     * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici
+     * Costruttore @Autowired <br>
+     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     *
+     * @param repository per la persistenza dei dati
      */
-    private RoleService service;
+    @Autowired
+    public RoleData(@Qualifier(TAG_ROL) MongoRepository repository) {
+        super(repository);
+    }// end of Spring constructor
 
 
-//    /**
-//     * Costruttore @Autowired
-//     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation
-//     * Si usa un @Qualifier(), per avere la sottoclasse specifica
-//     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti
-//     *
-//     * @param service iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
-//     */
-//    @Autowired
-//    public RoleData(@Qualifier(BaseCost.TAG_ROL) IAService service) {
-//        super(service);
-//        this.service = (RoleService) service;
-//    }// end of Spring constructor
+    /**
+     * Metodo invocato subito DOPO il costruttore
+     * <p>
+     * Performing the initialization in a constructor is not suggested
+     * as the state of the UI is not properly set up when the constructor is invoked.
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
+     * ma l'ordine con cui vengono chiamati NON è garantito
+     * <p>
+     * Creazione di una collezione - Solo se non ci sono records
+     */
+    @PostConstruct
+    public void inizia() {
+        super.collectionName = annotation.getCollectionName(Role.class);
+        int numRec = super.count();
 
-
-//    /**
-//     * Creazione di una collezione
-//     * Solo se non ci sono records
-//     * Controlla se la collezione esiste già
-//     */
-//    public void findOrCrea() {
-//        int numRec = 0;
-//
-//        if (nessunRecordEsistente()) {
-//            this.crea();
-//            numRec = service.count();
-//            log.warn("Algos - Creazione dati iniziali ADataGenerator(@PostConstruct).loadData() -> roleData.loadData(): " + numRec + " schede");
-//        } else {
-//            numRec = service.count();
-//            log.info("Algos - Data. La collezione Role è presente: " + numRec + " schede");
-//        }// end of if/else cycle
-//    }// end of method
+        if (numRec == 0) {
+            this.crea();
+            log.warn("Algos - Creazione dati iniziali ADataGenerator(@PostConstruct).loadData() -> roleData.loadData(): " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione Role è presente: " + numRec + " schede");
+        }// end of if/else cycle
+    }// end of method
 
 
     /**
      * Creazione della collezione
      */
     public void crea() {
-//        service.deleteAll();
+        int pos = 1;
 
         for (EARole ruolo : EARole.values()) {
-            service.crea(ruolo.toString());
+            Role entity = Role.builder()
+                    .ordine(pos++)
+                    .code(ruolo.toString())
+                    .build();
+            super.crea(entity, entity.getCode());
         }// end of for cycle
     }// end of method
 

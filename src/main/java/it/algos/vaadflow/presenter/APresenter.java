@@ -1,14 +1,12 @@
 package it.algos.vaadflow.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.service.AService;
-import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -19,36 +17,53 @@ import java.util.List;
  * User: gac
  * Date: ven, 08-dic-2017
  * Time: 07:32
+ * <p>
+ * Superclasse astratta delle classi che gestiscono la business logic del package <br>
+ * Implementa l'interfaccia IAPresenter <br>
+ * <p>
+ * <p>
+ * La sottoclasse concreta viene costruita partendo dalla catena @Autowired di SpringBoot <br>
+ * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
+ * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
+ * 2) vengono dichiarate prima del costruttore <br>
+ * <p>
+ * Annotated with @SpringComponent (obbligatorio) <br>
+ * Annotated with @UIScope (obbligatorio) <br>
+ * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
-@Slf4j
 @SpringComponent
-@Scope("session")
+@UIScope
+@Slf4j
 public abstract class APresenter implements IAPresenter {
 
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
+     * Service usato come libreria <br>
      */
-//    @Autowired
-//    public AArrayService array;
+    @Autowired
+    public AArrayService array;
 
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
+     * Service usato come libreria <br>
      */
-//    @Autowired
-//    public AReflectionService reflection;
+    @Autowired
+    public AReflectionService reflection;
 
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
+     * Service usato come libreria <br>
      */
-//    @Autowired
-//    public AAnnotationService annotation;
+    @Autowired
+    public AAnnotationService annotation;
 
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
+     * Service usato come libreria <br>
      */
     @Autowired
     public ATextService text;
@@ -69,26 +84,21 @@ public abstract class APresenter implements IAPresenter {
 
 
     /**
-     * Il service (contenente la repository) viene iniettato dal costruttore della sottoclasse concreta
+     * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      * La repository è gestita direttamente dal service
      */
-//    protected IAService service;
+    protected IAService service;
 
 
     /**
-     * La view viene iniettata dal costruttore della sottoclasse concreta
      */
     protected IAView view;
 
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta)
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation.
-     * L' @Autowired (esplicito o implicito) funziona SOLO per UN costruttore
-     * Se ci sono DUE o più costruttori, va in errore
-     * Se ci sono DUE costruttori, di cui uno senza parametri, inietta quello senza parametri
-     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica
-     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
      * @param entityClazz iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
      * @param service     iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
@@ -96,7 +106,7 @@ public abstract class APresenter implements IAPresenter {
     public APresenter(Class<? extends AEntity> entityClazz, IAService service) {
         ((AService) service).entityClass = entityClazz;
         this.entityClazz = entityClazz;
-//        this.service = service;
+        this.service = service;
     }// end of Spring constructor
 
 
@@ -331,9 +341,9 @@ public abstract class APresenter implements IAPresenter {
         return entityClazz;
     }// end of method
 
-//    public IAService getService() {
-//        return service;
-//    }// end of method
+    public IAService getService() {
+        return service;
+    }// end of method
 
     @Override
     public IAView getView() {
@@ -342,7 +352,7 @@ public abstract class APresenter implements IAPresenter {
 
     @Override
     public void setView(IAView view) {
-        this.view=view;
+        this.view = view;
     }// end of method
 
 }// end of class

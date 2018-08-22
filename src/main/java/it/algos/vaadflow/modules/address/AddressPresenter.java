@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 22-ago-2018 16.13.08 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -27,9 +27,9 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  */
 @SpringComponent
 @UIScope
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_ADD)
 @AIScript(sovrascrivibile = true)
-public class @ENTITY@Presenter extends APresenter {
+public class AddressPresenter extends APresenter {
 
     /**
      * Costruttore <br>
@@ -40,8 +40,8 @@ public class @ENTITY@Presenter extends APresenter {
      * @param service layer di collegamento per la Repository e la Business Logic
      */
     @Autowired
-    public @ENTITY@Presenter(@Qualifier(@QUALIFIER@) IAService service) {
-        super(@ENTITY@.class, service);
+    public AddressPresenter(@Qualifier(TAG_ADD) IAService service) {
+        super(Address.class, service);
      }// end of Spring constructor
 
 

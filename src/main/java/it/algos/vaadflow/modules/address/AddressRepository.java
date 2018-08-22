@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadflow.modules.address;
 
 import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * User: Gac <br>
+ * Date: 22-ago-2018 16.13.08 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>
@@ -25,10 +25,7 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  */
 @SpringComponent
 @UIScope
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_ADD)
 @AIScript(sovrascrivibile = false)
-public interface @ENTITY@Repository extends MongoRepository<@ENTITY@, String> {
-
-@QUERY@
-
+public interface AddressRepository extends MongoRepository<Address, String> {
 }// end of class

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,9 +32,9 @@ import java.util.List;
  * Gestisce le interfacce @Annotation standard di Springs
  * Gestisce le interfacce specifiche di Springvaadin: AIColumn, AIField, AIEntity, AIForm, AIList
  */
-@Slf4j
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Slf4j
 public class AAnnotationService {
 
     public final static String TESTO_NULL = " non può essere vuoto";
@@ -105,8 +106,30 @@ public class AAnnotationService {
      *
      * @return the Annotation for the specific class
      */
-    public AIList getAIList(final Class<? extends AEntity> entityClazz) {
-        return entityClazz.getAnnotation(AIList.class);
+    public Document getDocument(final Class<? extends AEntity> entityClazz) {
+        return entityClazz.getAnnotation(Document.class);
+    }// end of method
+
+
+    /**
+     * Get the name of the mongo collection name.
+     * Cerca nella classe l'annotation @Document
+     * Se non la trova, di default usa il nome (minuscolo) della classe AEntity
+     *
+     * @param entityClazz the entity class
+     *
+     * @return the name of the spring-view
+     */
+    public String getCollectionName(final Class<? extends AEntity> entityClazz) {
+        String name = "";
+        String entityName = entityClazz.getSimpleName().toLowerCase();
+        Document annotation = getDocument(entityClazz);
+
+        if (annotation != null) {
+            name = annotation.collection();
+        }// end of if cycle
+
+        return text.isValid(name) ? name : entityName;
     }// end of method
 
 
@@ -122,6 +145,18 @@ public class AAnnotationService {
         return entityClazz.getAnnotation(AIForm.class);
     }// end of method
 
+
+    /**
+     * Get the specific annotation of the class.
+     * Entity class
+     *
+     * @param entityClazz the entity class
+     *
+     * @return the Annotation for the specific class
+     */
+    public AIList getAIList(final Class<? extends AEntity> entityClazz) {
+        return entityClazz.getAnnotation(AIList.class);
+    }// end of method
 
     /**
      * Get the specific annotation of the class.

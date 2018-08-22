@@ -18,12 +18,12 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.AArrayService;
-import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +43,18 @@ import java.util.List;
  * Time: 18:49
  * Classe astratta per visualizzare la Grid e il Form/Dialog <br>
  * <p>
+ * <p>
+ * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Le property di questa classe/sottoclasse vengono iniettate automaticamente da SpringBoot se: <br>
+ * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta <br>
+ * 2) usano una loro classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+ * 3) vengono usate in un un metodo @PostConstruct di questa classe/sottoclasse,
+ * perché SpringBoot le inietta solo DOPO init() <br>
+ * <p>
  * Le sottoclassi concrete NON hanno le annotation @SpringComponent, @SpringView e @Scope
  * NON annotated with @SpringComponent - Sbagliato perché va in conflitto con la @Route
  * NON annotated with @SpringView - Sbagliato perché usa la Route di VaadinFlow
- * NON annotated with @Scope - Viene ricreata ogni volta
+ * NON annotated with @Scope - Usa @UIScope
  * Annotated with @Route (obbligatorio) per la selezione della vista.
  * <p>
  * Graficamente abbiamo:
@@ -88,16 +96,16 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
      * Usare quindi un metodo @PostConstruct per averla disponibile <br>
      */
-//    @Autowired
-//    public AAnnotationService annotation;
+    @Autowired
+    public AAnnotationService annotation;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
      * Usare quindi un metodo @PostConstruct per averla disponibile <br>
      */
-//    @Autowired
-//    public AReflectionService reflection;
+    @Autowired
+    public AReflectionService reflection;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -128,8 +136,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
      * Usare quindi un metodo @PostConstruct per averla disponibile <br>
      */
-//    @Autowired
-//    protected ADateService date;
+    @Autowired
+    protected ADateService date;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -141,23 +149,26 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
-     * Il presenter viene iniettato dal costruttore della sottoclasse concreta
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      */
     protected IAPresenter presenter;
 
     /**
-     * Il dialog viene iniettato dal costruttore della sottoclasse concreta
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      */
     protected IADialog dialog;
 
     /**
-     * Il service viene recuperato dal presenter,
-     * La repository è gestita direttamente dal service
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * Il service viene recuperato dal presenter, <br>
+     * La repository è gestita direttamente dal service <br>
      */
-//    protected IAService service;
+    protected IAService service;
 
     /**
-     * Il modello-dati specifico viene recuperato dal presenter
+     * Il modello-dati specifico viene recuperato dal presenter <br>
      */
     protected Class<? extends AEntity> entityClazz;
 
@@ -166,6 +177,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Placeholder per (eventuali) bottoni SOPRA della Grid <br>
      */
     protected HorizontalLayout topLayout = new HorizontalLayout();
+
 
     /**
      * Placeholder per (eventuali) bottoni SOTTO la Grid <br>
@@ -219,6 +231,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected boolean isEntityEmbadded;
 
+
+    /**
+     * Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
+     */
+    protected boolean usaRefresh;
+
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
@@ -229,7 +247,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.dialog = dialog;
         if (presenter != null) {
             this.presenter.setView(this);
-//            this.service = presenter.getService();
+            this.service = presenter.getService();
             this.entityClazz = presenter.getEntityClazz();
         }// end of if cycle
     }// end of Spring constructor
@@ -237,7 +255,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() automatico <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
      * Le preferenze vengono (eventualmente) lette da Mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     @PostConstruct
@@ -283,6 +302,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
         isEntityEmbadded = false;
 
+        //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
+        usaRefresh = true;
+
         //--Le preferenze sovrascritte nella sottoclasse
         fixPreferenzeSpecifiche();
     }// end of method
@@ -324,7 +346,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton = new Button("New entity", new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
-//            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD));
+            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD));
             viewToolbar.add(newButton);
         }// end of if cycle
 
@@ -358,7 +380,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected void creaGrid() {
         FlexLayout layout = new FlexLayout();
 //        layout.setHeight("30em");
-//        List<String> gridPropertiesName = service != null ? service.getGridPropertiesName() : null;
+        List<String> gridPropertiesName = service != null ? service.getGridPropertiesName() : null;
 
         if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             try { // prova ad eseguire il codice
@@ -375,11 +397,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             grid.removeColumn(column);
         }// end of for cycle
 
-//        if (gridPropertiesName != null) {
-//            for (String property : gridPropertiesName) {
-//                addColonna(property);
-//            }// end of for cycle
-//        }// end of if cycle
+        if (gridPropertiesName != null) {
+            for (String property : gridPropertiesName) {
+                addColonna(property);
+            }// end of for cycle
+        }// end of if cycle
 
         //--Aggiunge eventuali colonne calcolate
         addSpecificColumns();
@@ -407,46 +429,46 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected VerticalLayout creaCaption() {
         VerticalLayout layout = new VerticalLayout();
-//        layout.setPadding(false);
-//        layout.setMargin(false);
-//        layout.setSpacing(false);
-//        String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
-//        int count = 0;
-//        String siglaCompany = "";
+        layout.setPadding(false);
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
+        int count = 0;
+        String siglaCompany = "";
 //        Company company = login.getCompany();
 //        if (company != null) {
 //            siglaCompany = " (" + company.getCode() + ")";
 //        }// end of if cycle
-//
-//        if (usaCaption) {
+
+        if (usaCaption) {
 //            if (pref.isBool(BaseCost.USA_COMPANY)) {
 //                count = service != null ? service.countByCompany(company) : 0;
 //            } else {
-//                count = service != null ? service.count() : 0;
+            count = service != null ? service.count() : 0;
 //            }// end of if/else cycle
-//
-//            switch (count) {
-//                case 0:
+
+            switch (count) {
+                case 0:
 //                    if (pref.isBool(BaseCost.USA_COMPANY)) {
 //                        testo += "Non ci sono elementi di questa company";
 //                    } else {
-//                        testo += "Al momento non ci sono elementi in questa collezione";
+                    testo += "Al momento non ci sono elementi in questa collezione";
 //                    }// end of if/else cycle
-//                    break;
-//                case 1:
-//                    testo += "Collezione con un solo elemento";
-//                    break;
-//                default:
-//                    testo += "Collezione di " + text.format(count) + " elementi";
-//                    break;
-//            } // end of switch statement
-//            testo += siglaCompany;
-//            layout.add(new Label(testo));
-//
-//            this.addCaption(layout);
-//
-//            this.add(layout);
-//        }// end of if cycle
+                    break;
+                case 1:
+                    testo += "Collezione con un solo elemento";
+                    break;
+                default:
+                    testo += "Collezione di " + text.format(count) + " elementi";
+                    break;
+            } // end of switch statement
+            testo += siglaCompany;
+            layout.add(new Label(testo));
+
+            this.addCaption(layout);
+
+            this.add(layout);
+        }// end of if cycle
 
         return layout;
     }// end of method
@@ -468,105 +490,108 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     protected void addColonna(String property) {
-//        Grid.Column<AEntity> colonna = null;
-//        EAFieldType type = annotation.getFormType(entityClazz, property);
-//        String header = annotation.getColumnName(entityClazz, property);
-//        String width = annotation.getColumnWithPX(entityClazz, property);
-//        Class clazz = annotation.getComboClass(entityClazz, property);
-//
-//        if (type == null) {
-//            colonna = grid.addColumn(property);
-//            colonna.setSortProperty(property);
-//            return;
-//        }// end of if cycle
-//
-//        switch (type) {
-//            case text:
-//                colonna = grid.addColumn(property);
-//                break;
-//            case integer:
-//                colonna = grid.addColumn(property);
-//                break;
-//            case lungo:
-//                colonna = grid.addColumn(property);
-//                break;
-//            case checkbox:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    Boolean status = false;
-//                    Field field = reflection.getField(entityClazz, property);
-//                    try { // prova ad eseguire il codice
-//                        status = field.getBoolean(entity);
-//                    } catch (Exception unErrore) { // intercetta l'errore
-//                        log.error(unErrore.toString());
-//                    }// fine del blocco try-catch
-//                    return new Checkbox(status);
-//                }));
-//                break;
-//            case combo:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    ComboBox combo = new ComboBox();
-//                    Object entityBean = reflection.getPropertyValue(entity, property);
-//                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-//                    List items = ((IAService) service).findAll();
-//                    if (array.isValid(items)) {
-//                        combo.setItems(items);
-//                        combo.setValue(entityBean);
-//                    }// end of if cycle
-//                    combo.setEnabled(false);
-//                    return combo;
-//                }));
-//                break;
-//            case localdate:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    LocalDate data;
-//                    String testo = "X";
-//                    Field field = reflection.getField(entityClazz, property);
-//                    try { // prova ad eseguire il codice
-//                        data = (LocalDate) field.get(entity);
-//                        testo = date.getDayWeekShort(data);
-//                    } catch (Exception unErrore) { // intercetta l'errore
-//                        log.error(unErrore.toString());
-//                    }// fine del blocco try-catch
-//                    return new Label(testo);
-//                }));
-//                break;
-//            case localdatetime:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    Object obj;
-//                    LocalDateTime timeStamp;
-//                    String testo = "Y";
-//                    Field field = reflection.getField(entityClazz, property);
-//                    try { // prova ad eseguire il codice
-//                        obj = field.get(entity);
-//                        if (obj instanceof LocalDateTime) {
-//                            timeStamp = (LocalDateTime) obj;
-//                            testo = date.getTime(timeStamp);
-//                        } else {
-//                            log.warn("localdatetime non definito");
-//                        }// end of if/else cycle
-//                    } catch (Exception unErrore) { // intercetta l'errore
-//                        log.error(unErrore.toString());
-//                    }// fine del blocco try-catch
-//                    return new Label(testo);
-//                }));
-//                break;
-//            default:
-//                log.warn("Switch - caso non definito");
-//                break;
-//        } // end of switch statement
-//
-//        if (colonna != null) {
-//            colonna.setHeader(text.isValid(header) ? header : property);
-//            colonna.setSortProperty(property);
-////            if (property.equals("id")) {
-////                colonna.setWidth("1px");
-////            }// end of if cycle
-//
-////            if (text.isValid(width)) {
-////                colonna.setWidth(width);
-////                colonna.setFlexGrow(0);
-////            }// end of if cycle
-//        }// end of if cycle
+        Grid.Column<AEntity> colonna = null;
+        EAFieldType type = annotation.getFormType(entityClazz, property);
+        String header = annotation.getColumnName(entityClazz, property);
+        String width = annotation.getColumnWithPX(entityClazz, property);
+        Class clazz = annotation.getComboClass(entityClazz, property);
+
+        if (type == null) {
+            colonna = grid.addColumn(property);
+            colonna.setSortProperty(property);
+            return;
+        }// end of if cycle
+
+        switch (type) {
+            case text:
+                colonna = grid.addColumn(property);
+                break;
+            case integer:
+                colonna = grid.addColumn(property);
+                break;
+            case lungo:
+                colonna = grid.addColumn(property);
+                break;
+            case checkbox:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Boolean status = false;
+                    Field field = reflection.getField(entityClazz, property);
+                    try { // prova ad eseguire il codice
+                        status = field.getBoolean(entity);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                    return new Checkbox(status);
+                }));
+                break;
+            case combo:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    ComboBox combo = new ComboBox();
+                    Object entityBean = reflection.getPropertyValue(entity, property);
+                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+                    List items = ((IAService) service).findAll();
+                    if (array.isValid(items)) {
+                        combo.setItems(items);
+                        combo.setValue(entityBean);
+                    }// end of if cycle
+                    combo.setEnabled(false);
+                    return combo;
+                }));
+                break;
+            case localdate:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    LocalDate data;
+                    String testo = "X";
+                    Field field = reflection.getField(entityClazz, property);
+                    try { // prova ad eseguire il codice
+                        data = (LocalDate) field.get(entity);
+                        testo = date.getDayWeekShort(data);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                    return new Label(testo);
+                }));
+                break;
+            case localdatetime:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Object obj;
+                    LocalDateTime timeStamp;
+                    String testo = "Y";
+                    Field field = reflection.getField(entityClazz, property);
+                    try { // prova ad eseguire il codice
+                        obj = field.get(entity);
+                        if (obj instanceof LocalDateTime) {
+                            timeStamp = (LocalDateTime) obj;
+                            testo = date.getTime(timeStamp);
+                        } else {
+                            log.warn("localdatetime non definito");
+                        }// end of if/else cycle
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                    return new Label(testo);
+                }));
+                break;
+            case email:
+                colonna = grid.addColumn(property);
+                break;
+            default:
+                log.warn("Switch - caso non definito");
+                break;
+        } // end of switch statement
+
+        if (colonna != null) {
+            colonna.setHeader(text.isValid(header) ? header : property);
+            colonna.setSortProperty(property);
+//            if (property.equals("id")) {
+//                colonna.setWidth("1px");
+//            }// end of if cycle
+
+//            if (text.isValid(width)) {
+//                colonna.setWidth(width);
+//                colonna.setFlexGrow(0);
+//            }// end of if cycle
+        }// end of if cycle
 
     }// end of method
 
@@ -634,48 +659,55 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     protected void save(AEntity entityBean, AViewDialog.Operation operation) {
-//        switch (operation) {
-//            case ADD:
-//                if (service.isEsisteEntityKeyUnica(entityBean)) {
-//                    Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
-//                } else {
-//                    service.save(entityBean);
-//                    updateView();
-//                    Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
-//                }// end of if/else cycle
-//                break;
-//            case EDIT:
-//                service.save(entityBean);
-//                updateView();
-//                Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
-//                break;
-//            default:
-//                log.warn("Switch - caso non definito");
-//                break;
-//        } // end of switch statement
+        switch (operation) {
+            case ADD:
+                if (service.isEsisteEntityKeyUnica(entityBean)) {
+                    Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
+                } else {
+                    service.save(entityBean);
+                    updateView();
+                    Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                }// end of if/else cycle
+                break;
+            case EDIT:
+                service.save(entityBean);
+                updateView();
+                Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                break;
+            default:
+                log.warn("Switch - caso non definito");
+                break;
+        } // end of switch statement
+
+//        if (usaRefresh) {
+//            updateView();
+//        }// end of if cycle
 
     }// end of method
 
 
     protected void delete(AEntity entityBean) {
-//        service.delete(entityBean);
-//        Notification.show(entityBean + " successfully deleted.", 3000, Notification.Position.BOTTOM_START);
-//        updateView();
+        service.delete(entityBean);
+        Notification.show(entityBean + " successfully deleted.", 3000, Notification.Position.BOTTOM_START);
+
+        if (usaRefresh) {
+            updateView();
+        }// end of if cycle
     }// end of method
 
 
     public void updateView() {
-//        List items = service != null ? service.findFilter(searchField.getValue()) : null;
-//
-//        if (items != null) {
-//            try { // prova ad eseguire il codice
-//                grid.deselectAll();
-//                grid.setItems(items);
-//            } catch (Exception unErrore) { // intercetta l'errore
-//                log.error(unErrore.toString());
-//            }// fine del blocco try-catch
-//        }// end of if cycle
-//        creaFooter();
+        List items = service != null ? service.findFilter(searchField.getValue()) : null;
+
+        if (items != null) {
+            try { // prova ad eseguire il codice
+                grid.deselectAll();
+                grid.setItems(items);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+        creaFooter();
     }// end of method
 
 

@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.role;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
@@ -45,7 +46,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  */
 @SpringComponent
 @Document(collection = "role")
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@UIScope
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

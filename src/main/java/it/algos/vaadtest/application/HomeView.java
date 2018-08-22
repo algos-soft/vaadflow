@@ -1,5 +1,6 @@
 package it.algos.vaadtest.application;
 
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -20,7 +21,17 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 @Route(value = "", layout = MainLayout.class)
 @Slf4j
 public class HomeView extends VerticalLayout {
+
+
+    private Image immagine = new Image("frontend/images/ambulanza.jpg", "vaadin");
+
+//    public VaadinWelcome() {
+//        add(immagine);
+//        add(new Paragraph("Hello Vaadin 10"));
+//        add(new Paragraph("Framework di prova con Vaadin 10"));
+//    }// end of method
+
     public HomeView() {
-        add(new Label("Per adesso"));
+        add(immagine);
     }
 }// end of class

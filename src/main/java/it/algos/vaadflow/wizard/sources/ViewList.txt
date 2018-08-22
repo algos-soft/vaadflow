@@ -21,10 +21,11 @@ import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
- * Invocata da @Route e NON dalla catena @Autowired di SpringBoot <br>
- * Le istanza A VALLE di questa classe vengono iniettate automaticamente da SpringBoot se: <br>
- * 1) vengono dichiarate nel costruttore @Autowired di questa classe <br>
- * 2) usano @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+ * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
+ * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
+ * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
+ * 3) vengono usate in un un metodo @PostConstruct di questa classe, perché SpringBoot le inietta DOPO init() <br>
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Not annotated with @SpringComponent (sbagliato) perché usa la @Route di VaadinFlow <br>
@@ -44,6 +45,8 @@ public class @ENTITY@ViewList extends AViewList {
 
     /**
      * Icona visibile nel menu (facoltativa)
+     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
@@ -59,7 +62,7 @@ public class @ENTITY@ViewList extends AViewList {
     @Autowired
     public @ENTITY@ViewList(@Qualifier(@QUALIFIER@) IAPresenter presenter, @Qualifier(@QUALIFIER@) IADialog dialog) {
         super(presenter, dialog);
-       // ((@ENTITY@ViewDialog) dialog).fixFunzioni(this::save, this::delete);
+        ((@ENTITY@ViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
 

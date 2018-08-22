@@ -15,6 +15,9 @@ import com.vaadin.flow.shared.ui.LoadMode;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
+import static it.algos.vaadflow.application.FlowCost.TAG_COM;
+import static it.algos.vaadflow.application.FlowCost.TAG_PER;
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -35,12 +38,14 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         setMargin(false);
         setSpacing(false);
         setPadding(false);
-        final AppLayout app = new AppLayout("Layout di test - va sostituito col nome dell'utente?");
+        final AppLayout app = new AppLayout("Vaadinflow");
         app.setMenuItems(
                 new MenuItem("Home", () -> UI.getCurrent().navigate("")),
+				new MenuItem("Address", () -> UI.getCurrent().navigate(TAG_ADD)),
+				new MenuItem("Person", () -> UI.getCurrent().navigate(TAG_PER)),
+				new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),
                 new MenuItem("Wizard", () -> UI.getCurrent().navigate(TAG_WIZ)),
-                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL)),
-                new MenuItem("Delta", () -> UI.getCurrent().navigate("delta"))
+                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL))
 //                new MenuItem("About ...", () -> UI.getCurrent().navigate("about")));
         );
         this.add(app);

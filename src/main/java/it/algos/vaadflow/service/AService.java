@@ -248,7 +248,7 @@ public class AService implements IAService {
                 lista = repository.findAll();
             }// end of if/else cycle
         } catch (Exception unErrore) { // intercetta l'errore
-            log.error(unErrore.toString());
+            log.error(unErrore.toString()+" in AService.findAll(Sort sort)" );
         }// fine del blocco try-catch
 
         return lista;

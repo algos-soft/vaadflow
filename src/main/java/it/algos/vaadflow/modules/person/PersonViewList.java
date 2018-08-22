@@ -1,4 +1,4 @@
-package it.algos.vaadflow.modules.prova;
+package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
@@ -11,20 +11,21 @@ import it.algos.vaadtest.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
+import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 20-ago-2018 21.43.41 <br>
+ * Date: 22-ago-2018 16.12.50 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
- * Invocata da @Route e NON dalla catena @Autowired di SpringBoot <br>
- * Le istanza A VALLE di questa classe vengono iniettate automaticamente da SpringBoot se: <br>
- * 1) vengono dichiarate nel costruttore @Autowired di questa classe <br>
- * 2) usano @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+ * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
+ * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
+ * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
+ * 3) vengono usate in un un metodo @PostConstruct di questa classe, perché SpringBoot le inietta DOPO init() <br>
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Not annotated with @SpringComponent (sbagliato) perché usa la @Route di VaadinFlow <br>
@@ -35,15 +36,17 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRO;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_PRO, layout = MainLayout.class)
-@Qualifier(TAG_PRO)
+@Route(value = TAG_PER, layout = MainLayout.class)
+@Qualifier(TAG_PER)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class ProvaViewList extends AViewList {
+public class PersonViewList extends AViewList {
 
 
     /**
      * Icona visibile nel menu (facoltativa)
+     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
@@ -57,9 +60,9 @@ public class ProvaViewList extends AViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
+    public PersonViewList(@Qualifier(TAG_PER) IAPresenter presenter, @Qualifier(TAG_PER) IADialog dialog) {
         super(presenter, dialog);
-       // ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
+        ((PersonViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
 
