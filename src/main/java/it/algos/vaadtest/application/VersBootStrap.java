@@ -59,7 +59,7 @@ public class VersBootStrap extends AVersBoot {
      * Tutte le aggiunte, modifiche e patch vengono inserite con una versione <br>
      * L'ordine di inserimento è FONDAMENTALE
      */
-    @PostConstruct
+//    @PostConstruct
     public int inizia() {
         int k = 0;
         super.inizia();

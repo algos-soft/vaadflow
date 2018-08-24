@@ -29,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
  * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
- * Annotated with @UIScope (obbligatorio) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>
  * Annotated with @AllArgsConstructor (Lombok) per usare il costruttore completo nel Service <br>
@@ -49,7 +49,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  */
 @SpringComponent
 @Document(collection = "person")
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
