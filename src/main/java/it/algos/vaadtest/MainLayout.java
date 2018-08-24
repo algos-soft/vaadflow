@@ -12,12 +12,16 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
+import it.algos.vaadtest.application.VersBootStrap;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
+import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
+import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -34,6 +38,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
 
+    @Autowired
+    private VersBootStrap vers;
+
     public MainLayout() {
         setMargin(false);
         setSpacing(false);
@@ -41,6 +48,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         final AppLayout app = new AppLayout("Vaadinflow");
         app.setMenuItems(
                 new MenuItem("Home", () -> UI.getCurrent().navigate("")),
+				new MenuItem("Versione", () -> UI.getCurrent().navigate(TAG_VER)),
+				new MenuItem("Preferenza", () -> UI.getCurrent().navigate(TAG_PRE)),
 				new MenuItem("Address", () -> UI.getCurrent().navigate(TAG_ADD)),
 				new MenuItem("Person", () -> UI.getCurrent().navigate(TAG_PER)),
 				new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),

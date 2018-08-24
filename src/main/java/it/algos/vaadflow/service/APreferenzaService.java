@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.Preferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -19,8 +20,8 @@ import java.time.LocalDateTime;
  * Time: 07:03
  */
 @Slf4j
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//@SpringComponent
+@UIScope
 public class APreferenzaService {
 
     /**

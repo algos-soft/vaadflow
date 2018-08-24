@@ -76,7 +76,7 @@ public class AService implements IAService {
     /**
      * Inietta da Spring come 'singleton'
      */
-    @Autowired
+//    @Autowired
     protected APreferenzaService pref;
 
 

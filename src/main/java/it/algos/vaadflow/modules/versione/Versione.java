@@ -1,11 +1,10 @@
-package it.algos.vaadflow.modules.preferenza;
+package it.algos.vaadflow.modules.versione;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
-import it.algos.vaadflow.enumeration.EAPrefType;
 import lombok.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,13 +15,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
+import java.time.LocalDateTime;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 23-ago-2018 14.59.45 <br>
+ * Date: 23-ago-2018 19.27.16 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -46,19 +47,19 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
 @SpringComponent
-@Document(collection = "preferenza")
+@Document(collection = "versione")
 @UIScope
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(TAG_PRE)
-@AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"company", "ordine", "code", "descrizione", "type"})
-@AIForm(fields = {"company", "ordine", "code", "descrizione", "type"})
+@Qualifier(TAG_VER)
+@AIEntity(company = EACompanyRequired.nonUsata)
+@AIList(fields = {"id", "titolo", "nome", "timestamp"})
+@AIForm(fields = {"id", "titolo","nome", "timestamp"})
 @AIScript(sovrascrivibile = false)
-public class Preferenza extends AEntity {
+public class Versione extends AEntity {
 
 
     /**
@@ -68,65 +69,41 @@ public class Preferenza extends AEntity {
 
 
     /**
-     * ordine di presentazione (obbligatorio, unico) <br>
-     * il più importante per primo <br>
-     */
-    @NotNull
-    @Indexed()
-    @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", width = 55)
-    private int ordine;
-
-    /**
-     * codice di riferimento (obbligatorio, unico) <br>
+     * titolo della versione (obbligatorio, non unico) <br>
      */
     @NotNull
     @Indexed()
     @Size(min = 3)
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(width = 210)
-    private String code;
+    @AIColumn(widthPX = 1)
+    public String titolo;
 
     /**
-     * descrizione (obbligatoria, non unica) <br>
+     * nome descrittivo della versione (obbligatorio, unico) <br>
      */
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(width = 370)
-    private String descrizione;
-
+    @AIColumn(widthPX = 12)
+    public String nome;
 
     /**
-     * tipo di dato memorizzato (obbligatorio)
+     * momento in cui si effettua la modifica della versione (obbligatorio, non unica) <br>
+     * inserito automaticamente prima del persist <br>
      */
-    @NotNull
-    @AIField(type = EAFieldType.enumeration, clazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
-    private EAPrefType type;
-
-
-    //--valore della preferenza (obbligatorio)
-    @NotNull
-    @AIField(type = EAFieldType.pref, required = true, name = "Valore", widthEM = 12)
-    private byte[] value;
-
+    @NotNull(message = "Il tempo è obbligatorio")
+    @Size(min = 2, max = 50)
+    @AIField(type = EAFieldType.localdatetime, firstCapital = true, widthEM = 24)
+    @AIColumn(widthPX = 5)
+    public LocalDateTime timestamp;
 
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        return code;
+        return id;
     }// end of method
 
-    @Deprecated
-    public Object getAValue() {
-        return type.bytesToObject(value);
-    }// end of method
-
-    @Deprecated
-    public void setAValue(Object value) {
-        this.value = type.objectToBytes(value);
-    }// end of method
 
 }// end of entity class
