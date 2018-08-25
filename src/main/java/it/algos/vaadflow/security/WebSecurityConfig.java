@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,10 +22,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGOUT_SUCCESS_URL = "/role";
     private static final String LOGIN_PROCESSING_URL = "/login";
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-////        web.debug(true);
-//    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.debug(true);
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

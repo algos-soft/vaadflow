@@ -16,6 +16,7 @@ import it.algos.vaadtest.application.VersBootStrap;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -42,6 +43,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         final AppLayout app = new AppLayout("Vaadinflow");
         app.setMenuItems(
                 new MenuItem("Home", () -> UI.getCurrent().navigate("")),
+				new MenuItem("Utente", () -> UI.getCurrent().navigate(TAG_UTE)),
                 new MenuItem("Wizard", () -> UI.getCurrent().navigate(TAG_WIZ)),
                 new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL)),
                 new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),

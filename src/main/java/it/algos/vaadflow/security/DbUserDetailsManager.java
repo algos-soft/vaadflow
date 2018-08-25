@@ -55,7 +55,7 @@ public class DbUserDetailsManager implements UserDetailsManager {
         String password = "admin";
 //        Utente utente = utenteService.findByUsername(username);
 
-        if (true) {
+        if (false) {
 //            login.setCompany(utente.company);
 
 //            password = utente.getPassword();
