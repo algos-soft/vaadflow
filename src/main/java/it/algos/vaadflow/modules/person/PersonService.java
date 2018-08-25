@@ -1,20 +1,18 @@
 package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
@@ -51,14 +49,16 @@ public class PersonService extends AService {
      * Costruttore <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     @Autowired
     public PersonService(@Qualifier(TAG_PER) MongoRepository repository) {
         super(repository);
-         this.repository = (PersonRepository) repository;
-   }// end of Spring constructor
+        super.entityClass = Person.class;
+        this.repository = (PersonRepository) repository;
+    }// end of Spring constructor
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -117,11 +117,11 @@ public class PersonService extends AService {
         return entity;
     }// end of method
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return ((Person) entityBean).getNome()+((Person) entityBean).getCognome();
-//    }// end of method
+    /**
+     * Property unica (se esiste).
+     */
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Person) entityBean).getNome()+((Person) entityBean).getCognome();
+    }// end of method
 
 }// end of class

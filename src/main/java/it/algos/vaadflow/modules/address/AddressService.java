@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
@@ -50,11 +51,13 @@ public class AddressService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     public AddressService(@Qualifier(TAG_ADD) MongoRepository repository) {
         super(repository);
+        super.entityClass = Address.class;
     }// end of Spring constructor
 
 
@@ -84,7 +87,7 @@ public class AddressService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Address newEntity(String indirizzo, String localita, String cap) {
-        return Address.builder()
+        return Address.builderAddress()
                 .indirizzo(indirizzo)
                 .localita(localita)
                 .cap(cap)

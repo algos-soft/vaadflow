@@ -1,16 +1,12 @@
 package it.algos.vaadflow.modules.versione;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,6 +14,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
@@ -71,14 +71,16 @@ public class VersioneService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     @Autowired
     public VersioneService(@Qualifier(TAG_VER) MongoRepository repository) {
         super(repository);
-         this.repository = (VersioneRepository) repository;
-   }// end of Spring constructor
+        super.entityClass = Versione.class;
+        this.repository = (VersioneRepository) repository;
+    }// end of Spring constructor
 
     /**
      * Crea una entity e la registra <br>
@@ -126,7 +128,7 @@ public class VersioneService extends AService {
         int newOrdine = 0;
         String textOrdine;
 
-        entity = Versione.builder()
+        entity = Versione.builderVersione()
                 .titolo(titolo.equals("") ? null : titolo)
                 .nome(nome.equals("") ? null : nome)
                 .timestamp(timestamp != null ? timestamp : LocalDateTime.now())

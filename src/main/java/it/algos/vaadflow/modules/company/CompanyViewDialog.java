@@ -132,7 +132,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         Company company = super.getCurrentItem();
         company.setContatto(contattoTemporaneo);
         company.setIndirizzo(indirizzoTemporaneo);
-        service.save(company);
+//        service.save(company);
     }// end of method
 
 

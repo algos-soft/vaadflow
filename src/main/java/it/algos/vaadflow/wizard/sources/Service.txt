@@ -58,13 +58,15 @@ public class @ENTITY@Service extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     @Autowired
     public @ENTITY@Service(@Qualifier(@QUALIFIER@) MongoRepository repository) {
         super(repository);
-         this.repository = (@ENTITY@Repository) repository;
+        super.entityClass = @ENTITY@.class;
+        this.repository = (@ENTITY@Repository) repository;
    }// end of Spring constructor
 
     @FIND@
@@ -96,7 +98,7 @@ public class @ENTITY@Service extends AService {
          @ENTITY@ entity = null;
 
          @KEYUNICA@
-         entity = @ENTITY@.builder()@BUILDER@;
+         entity = @ENTITY@.builder@ENTITY@()@BUILDER@;
 
          return entity;
      }// end of method

@@ -1,10 +1,8 @@
 package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.modules.role.RoleData;
-import it.algos.vaadflow.service.APreferenzaService;
+import it.algos.vaadtest.application.VersBootStrap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -30,7 +28,8 @@ public abstract class ABoot implements ServletContextListener {
      * Inietta da Spring come 'singleton'
      */
     @Autowired
-    public RoleData roleData;
+    protected RoleData roleData;
+
 
 //    @Autowired
 //    protected UtenteService utenteService;
@@ -41,8 +40,8 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Inietta da Spring come 'singleton'
      */
-    @Autowired
-    protected APreferenzaService pref;
+//    @Autowired
+//    protected APreferenzaService pref;
 
     /**
      * Layout iniettato da Spring
@@ -60,17 +59,6 @@ public abstract class ABoot implements ServletContextListener {
      * - lanciare gli schedulers in background <br>
      * - costruire e regolare una versione demo <br>
      * - controllare l'esistenza di utenti abilitati all'accesso <br>
-     * <p>
-     * Puo essere (eventualmente) sovrascritto dalla sottoclasse:
-     * Deve (DEVE) richiamare anche il metodo della superclasse (questo)
-     * prima (PRIMA) delle regolazioni specifiche della sottoclasse <br>
-     */
-    @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-    }// end of method
-
-
-    /**
      * Running logic after the Spring context has been initialized
      * Any class that use this @EventListener annotation,
      * will be executed before the application is up and its onApplicationEvent method will be called
@@ -82,11 +70,12 @@ public abstract class ABoot implements ServletContextListener {
      * - controllare l'esistenza di utenti abilitati all'accesso <br>
      * <p>
      * Stampa a video (productionMode) i valori per controllo
+     * Deve essere sovrascritto dalla sottoclasse concreta che invocherà questo metodo()
      */
-    @EventListener
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    protected void inizia() {
         this.iniziaDataStandard();
-        this.iniziaData();
+        this.iniziaDataProgettoSpecifico();
+        this.iniziaVersioni();
         this.regolaInfo();
         this.regolaPreferenze();
         this.addRouteStandard();
@@ -94,21 +83,24 @@ public abstract class ABoot implements ServletContextListener {
     }// end of method
 
     /**
-     * Inizializzazione dei dati standard di alcune collections sul DB Mongo
+     * Inizializzazione dei dati di alcune collections standard sul DB Mongo
      */
     protected void iniziaDataStandard() {
-//        this.roleData.findOrCrea();
-//        this.prefData.findOrCrea();
-
-//        this.logtype.findOrCrea();
-//        this.stato.findOrCrea();
+        this.roleData.inizia();
     }// end of method
 
 
     /**
-     * Inizializzazione dei dati standard di alcune collections sul DB
+     * Inizializzazione dei dati di alcune collections specifiche sul DB Mongo
      */
-    protected void iniziaData() {
+    protected void iniziaDataProgettoSpecifico() {
+    }// end of method
+
+
+    /**
+     * Inizializzazione delle versioni del programma specifico
+     */
+    protected void iniziaVersioni() {
     }// end of method
 
 
@@ -173,7 +165,6 @@ public abstract class ABoot implements ServletContextListener {
      */
     protected void addRouteSpecifiche() {
     }// end of method
-
 
 
     /**

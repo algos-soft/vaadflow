@@ -63,12 +63,14 @@ public class CompanyService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     @Autowired
     public CompanyService(@Qualifier(TAG_COM) MongoRepository repository) {
         super(repository);
+        super.entityClass = Company.class;
         this.repository = (CompanyRepository) repository;
     }// end of Spring constructor
 

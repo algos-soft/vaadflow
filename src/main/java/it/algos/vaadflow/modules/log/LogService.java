@@ -1,27 +1,26 @@
-package it.algos.vaadflow.modules.role;
+package it.algos.vaadflow.modules.log;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.sql.Timestamp;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
-
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
- * Project vaadbase <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-mag-2018 20.31.30 <br>
+ * Date: 24-ago-2018 17.55.51 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -35,10 +34,16 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_ROL)
+@Qualifier(TAG_LOG)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class RoleService extends AService {
+public class LogService extends AService {
+
+
+    /**
+     * versione della classe per la serializzazione
+     */
+    private final static long serialVersionUID = 1L;
 
 
     /**
@@ -46,7 +51,7 @@ public class RoleService extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    private RoleRepository repository;
+    private LogRepository repository;
 
 
     /**
@@ -57,43 +62,25 @@ public class RoleService extends AService {
      *
      * @param repository per la persistenza dei dati
      */
-    public RoleService(@Qualifier(TAG_ROL) MongoRepository repository) {
+    @Autowired
+    public LogService(@Qualifier(TAG_LOG) MongoRepository repository) {
         super(repository);
-        super.entityClass = Role.class;
-        this.repository = (RoleRepository) repository;
+        super.entityClass = Log.class;
+        this.repository = (LogRepository) repository;
     }// end of Spring constructor
-
-
-    /**
-     * Ricerca di una entity (la crea se non la trova) <br>
-     *
-     * @param code di riferimento (obbligatorio ed unico)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Role findOrCrea(String code) {
-        Role entity = findByKeyUnica(code);
-
-        if (entity == null) {
-            crea(code);
-        }// end of if cycle
-
-        return entity;
-    }// end of method
 
     /**
      * Crea una entity e la registra <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param livello     di riferimento (obbligatorio)
+     * @param code        codice di riferimento (obbligatorio)
+     * @param descrizione (facoltativa, non unica)
      *
      * @return la entity appena creata
      */
-    public Role crea(String code) {
-        Role entity;
-
-        entity = newEntity(0, code);
+    public Log crea(Livello livello, String code, String descrizione) {
+        Log entity = newEntity(livello, code, descrizione);
         save(entity);
-
         return entity;
     }// end of method
 
@@ -105,8 +92,8 @@ public class RoleService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     @Override
-    public Role newEntity() {
-        return newEntity(0, "");
+    public Log newEntity() {
+        return newEntity(Livello.info, "", "");
     }// end of method
 
 
@@ -116,26 +103,29 @@ public class RoleService extends AService {
      * All properties <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
-     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
-     * @param code   codice di riferimento (obbligatorio)
+     * @param livello     di riferimento (obbligatorio)
+     * @param code        codice di riferimento (obbligatorio)
+     * @param descrizione (facoltativa, non unica)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Role newEntity(int ordine, String code) {
-        Role entity = null;
+    public Log newEntity(Livello livello, String code, String descrizione) {
+        Log entity = null;
 
         entity = findByKeyUnica(code);
         if (entity != null) {
             return findByKeyUnica(code);
         }// end of if cycle
 
-        entity = Role.builderRole()
-                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                .code(code)
+        entity = Log.builderLog()
+                .livello(livello != null ? livello : Livello.info)
+                .code(code.equals("") ? null : code)
+                .descrizione(descrizione.equals("") ? null : descrizione)
                 .build();
 
         return entity;
     }// end of method
+
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
@@ -144,51 +134,41 @@ public class RoleService extends AService {
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Role findByKeyUnica(String code) {
+    public Log findByKeyUnica(String code) {
         return repository.findByCode(code);
     }// end of method
 
-
     /**
-     * Returns all instances of the type <br>
-     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
-     * Lista ordinata <br>
-     *
-     * @return lista ordinata di tutte le entities
+     * Property unica (se esiste) <br>
      */
     @Override
-    public List<Role> findAll() {
-        return repository.findAllByOrderByOrdineAsc();
-    }// end of method
-
-
-    /**
-     * Property unica (se esiste).
-     */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Role) entityBean).getCode();
+        return ((Log) entityBean).getCode();
     }// end of method
 
+    //--registra un avviso
+    public void debug(String code, String descrizione) {
+        createBase(Livello.debug, code, descrizione);
+    }// fine del metodo
 
-    /**
-     * User role
-     */
-    public Role getUser() {
-        return findByKeyUnica(EARole.user.name());
-    }// end of method
+    //--registra un avviso
+    public void info(String code, String descrizione) {
+        createBase(Livello.info, code, descrizione);
+    }// fine del metodo
 
-    /**
-     * Admin role
-     */
-    public Role getAdmin() {
-        return findByKeyUnica(EARole.admin.name());
-    }// end of method
+    //--registra un avviso
+    public void warning(String code, String descrizione) {
+        createBase(Livello.warn, code, descrizione);
+    }// fine del metodo
 
-    /**
-     * Developer role
-     */
-    public Role getDeveloper() {
-        return findByKeyUnica(EARole.developer.name());
-    }// end of method
+    //--registra un avviso
+    public void error(String code, String descrizione) {
+        createBase(Livello.error, code, descrizione);
+    }// fine del metodo
+
+    //--registra un evento generico
+    private void createBase(Livello livello, String code, String descrizione) {
+        crea(livello,code,descrizione);
+    }// fine del metodo statico
 
 }// end of class

@@ -109,7 +109,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
     protected void writeSpecificFields() {
         Person persona = super.getCurrentItem();
         persona.setIndirizzo(indirizzoTemporaneo);
-        service.save(persona);
+//        service.save(persona);
     }// end of method
 
 

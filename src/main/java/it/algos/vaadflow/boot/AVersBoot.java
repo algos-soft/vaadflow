@@ -1,14 +1,12 @@
 package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.enumeration.EAPrefType;
-import it.algos.vaadflow.enumeration.EAPreferenza;
+import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.Preferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.versione.VersioneService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
  * Time: 15:08
  */
 //@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public abstract class AVersBoot {
 
@@ -32,6 +30,7 @@ public abstract class AVersBoot {
      */
     @Autowired
     protected VersioneService vers;
+
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
      */

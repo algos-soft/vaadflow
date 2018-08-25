@@ -43,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici del Dialog e del Form <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * Inserisce SEMPRE la versione di serializzazione <br>
- * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection'
+ * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
  * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
@@ -77,7 +77,7 @@ public class Person extends AEntity {
     @Size(min = 4, max = 40)
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 20)
     @AIColumn(width = 200)
-    private String nome;
+    public String nome;
 
     /**
      * cognome (obbligatorio, non unica)
@@ -87,14 +87,14 @@ public class Person extends AEntity {
     @Size(min = 4, max = 40)
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 20)
     @AIColumn(width = 200)
-    private String cognome;
+    public String cognome;
 
     /**
      * telefono (facoltativo)
      */
     @AIField(type = EAFieldType.text)
     @AIColumn(width = 160)
-    private String telefono;
+    public String telefono;
 
 
     /**
@@ -102,7 +102,7 @@ public class Person extends AEntity {
      */
     @AIField(type = EAFieldType.email, widthEM = 24)
     @AIColumn(width = 350, name = "Mail")
-    private String email;
+    public String email;
 
 
     /**
@@ -111,7 +111,7 @@ public class Person extends AEntity {
      */
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(width = 400, name = "Indirizzo")
-    private Address indirizzo;
+    public Address indirizzo;
 
 
     /**

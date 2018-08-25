@@ -3,14 +3,11 @@ package it.algos.vaadflow.backend.data;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AAnnotationService;
-import it.algos.vaadflow.service.AMongoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 
 /**
  * Project vbase
@@ -34,33 +31,30 @@ import org.springframework.data.mongodb.repository.support.SimpleMongoRepository
 public abstract class AData {
 
 
-
     /**
-     * Inietta da Spring
+     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      */
-    @Autowired
-    private MongoOperations mongo;
-
-    /**
-     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
-     * Disponibile DOPO l'init() del costruttore <br>
-     * Service usato come libreria <br>
-     */
-    @Autowired
-    protected AAnnotationService annotation;
-
-
-    /**
-     * Nome della collezione su mongoDB <br>
-     * Viene regolato dalla sottoclasse nel costruttore <br>
-     */
-    protected String collectionName;
+    protected MongoOperations mongo;
 
 
     /**
      * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      */
     protected MongoRepository repository;
+
+
+    /**
+     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
+     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
+     * Service usato come libreria <br>
+     */
+    protected AAnnotationService annotation;
+
+    /**
+     * Nome della collezione su mongoDB <br>
+     * Viene regolato dalla sottoclasse nel costruttore <br>
+     */
+    protected String collectionName;
 
 
     public AData() {
@@ -71,10 +65,14 @@ public abstract class AData {
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
+     * @param mongo      service per le operazioni su mongoDB
      * @param repository per la persistenza dei dati
+     * @param annotation service per le @Annotation
      */
-    public AData(MongoRepository repository) {
+    public AData(MongoOperations mongo, MongoRepository repository, AAnnotationService annotation) {
+        this.mongo = mongo;
         this.repository = repository;
+        this.annotation = annotation;
     }// end of Spring constructor
 
 
@@ -102,7 +100,7 @@ public abstract class AData {
      * Creazione di una entity
      */
     public void crea(AEntity entity) {
-        crea(entity,"");
+        crea(entity, "");
     }// end of method
 
 

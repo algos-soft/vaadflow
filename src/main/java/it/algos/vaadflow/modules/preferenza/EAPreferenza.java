@@ -1,7 +1,8 @@
-package it.algos.vaadflow.enumeration;
+package it.algos.vaadflow.modules.preferenza;
 
 
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.enumeration.EAPrefType;
 
 /**
  * Project vaadbase
@@ -23,7 +24,9 @@ public enum EAPreferenza {
     showPerson(FlowCost.SHOW_PERSON, show(), EAPrefType.bool, false),
     showRole(FlowCost.SHOW_ROLE, show(), EAPrefType.bool, false),
     showUser(FlowCost.SHOW_USER, show(), EAPrefType.bool, false),
-    showVersione(FlowCost.SHOW_VERSION, show(), EAPrefType.bool, false),;
+    showVersione(FlowCost.SHOW_VERSION, show(), EAPrefType.bool, false),
+    usaLogMail(FlowCost.USA_LOG_MAIL, "Uso della mail spedita da un log. Di default false", EAPrefType.bool, false),
+    logMailAddress(FlowCost.LOG_MAIL_ADDRESS, "Email a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),;
 
 
     private String code;

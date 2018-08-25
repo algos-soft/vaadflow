@@ -8,6 +8,7 @@ import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.modules.company.Company;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -29,10 +30,10 @@ import java.util.stream.Collectors;
  * Date: ven, 08-dic-2017
  * Time: 07:36
  */
-@SpringComponent
-@Scope("singleton")
+//@SpringComponent
+//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public class AService implements IAService {
+public abstract class AService implements IAService {
 
 
     public final static String FIELD_NAME_ORDINE = "ordine";

@@ -24,29 +24,15 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * <p>
  * Classe eseguita solo quando l'applicazione viene caricata/parte nel server (Tomcat od altri) <br>
  * Eseguita quindi ad ogni avvio/riavvio del server e NON ad ogni sessione <br>
- * È OBBLIGATORIO aggiungere questa classe nei listeners del file web.WEB-INF.web.xml
  */
 @SpringComponent
 @Service
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class VersBootStrap extends AVersBoot {
 
     private final static String CODE_PROJECT = "T";
-
-//    /**
-//     * La injection viene fatta da SpringBoot in automatico <br>
-//     */
-//    @Autowired
-//    private VersioneService vers;
-//
-//
-//    /**
-//     * La injection viene fatta da SpringBoot in automatico <br>
-//     */
-//    @Autowired
-//    private PreferenzaService pref;
 
 
     /**
@@ -59,7 +45,6 @@ public class VersBootStrap extends AVersBoot {
      * Tutte le aggiunte, modifiche e patch vengono inserite con una versione <br>
      * L'ordine di inserimento è FONDAMENTALE
      */
-//    @PostConstruct
     public int inizia() {
         int k = 0;
         super.inizia();

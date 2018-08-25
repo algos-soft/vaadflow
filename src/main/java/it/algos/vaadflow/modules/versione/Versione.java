@@ -33,6 +33,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>
  * Annotated with @AllArgsConstructor (Lombok) per usare il costruttore completo nel Service <br>
+ * Annotated with @Builder (Lombok) con un metodo specifico, per usare quello standard nella (eventuale) sottoclasse <br>
  * Annotated with @Builder (Lombok) lets you automatically produce the code required to have your class
  * be instantiable with code such as: Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
  * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze dellaq classe <br>
@@ -42,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici del Dialog e del Form <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * Inserisce SEMPRE la versione di serializzazione <br>
- * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection'
+ * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
  * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
@@ -52,7 +53,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(builderMethodName = "builderVersione")
 @EqualsAndHashCode(callSuper = false)
 @Qualifier(TAG_VER)
 @AIEntity(company = EACompanyRequired.nonUsata)

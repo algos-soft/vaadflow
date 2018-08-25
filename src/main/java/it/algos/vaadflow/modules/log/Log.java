@@ -1,28 +1,29 @@
-package it.algos.vaadflow.modules.preferenza;
+package it.algos.vaadflow.modules.log;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
-import it.algos.vaadflow.enumeration.EAPrefType;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 23-ago-2018 14.59.45 <br>
+ * Date: 24-ago-2018 17.55.51 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -47,19 +48,19 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
 @SpringComponent
-@Document(collection = "preferenza")
+@Document(collection = "log")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builderPreferenza")
+@Builder(builderMethodName = "builderLog")
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(TAG_PRE)
-@AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"company", "ordine", "code", "descrizione", "type"})
-@AIForm(fields = {"company", "ordine", "code", "descrizione", "type"})
+@Qualifier(TAG_LOG)
+@AIEntity(company = EACompanyRequired.nonUsata)
+@AIList(fields = {"livello", "code", "descrizione", "creazione"})
+@AIForm(fields = {"livello", "code", "descrizione", "creazione"})
 @AIScript(sovrascrivibile = false)
-public class Preferenza extends AEntity {
+public class Log extends AEntity {
 
 
     /**
@@ -69,14 +70,12 @@ public class Preferenza extends AEntity {
 
 
     /**
-     * ordine di presentazione (obbligatorio, unico) <br>
-     * il più importante per primo <br>
+     * livello di riferimento (obbligatorio) <br>
      */
     @NotNull
-    @Indexed()
-    @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", width = 55)
-    public int ordine;
+    @Enumerated(EnumType.ORDINAL)
+    @AIField(type = EAFieldType.enumeration, clazz = Livello.class, required = true, widthEM = 12)
+    public Livello livello;
 
     /**
      * codice di riferimento (obbligatorio, unico) <br>
@@ -97,37 +96,12 @@ public class Preferenza extends AEntity {
     @AIColumn(width = 370)
     public String descrizione;
 
-
-    /**
-     * tipo di dato memorizzato (obbligatorio)
-     */
-    @NotNull
-    @AIField(type = EAFieldType.enumeration, clazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
-    public EAPrefType type;
-
-
-    //--valore della preferenza (obbligatorio)
-    @NotNull
-    @AIField(type = EAFieldType.pref, required = true, name = "Valore", widthEM = 12)
-    public byte[] value;
-
-
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
         return code;
-    }// end of method
-
-    @Deprecated
-    public Object getAValue() {
-        return type.bytesToObject(value);
-    }// end of method
-
-    @Deprecated
-    public void setAValue(Object value) {
-        this.value = type.objectToBytes(value);
     }// end of method
 
 }// end of entity class

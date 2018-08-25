@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 //@SpringComponent
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class APreferenzaService {
 
     /**

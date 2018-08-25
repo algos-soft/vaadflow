@@ -31,6 +31,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>
  * Annotated with @AllArgsConstructor (Lombok) per usare il costruttore completo nel Service <br>
+ * Annotated with @Builder (Lombok) con un metodo specifico, per usare quello standard nella (eventuale) sottoclasse <br>
  * Annotated with @Builder (Lombok) lets you automatically produce the code required to have your class
  * be instantiable with code such as: Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
  * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze dellaq classe <br>
@@ -40,7 +41,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici del Dialog e del Form <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * Inserisce SEMPRE la versione di serializzazione <br>
- * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection'
+ * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
  * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  */
@@ -50,7 +51,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(builderMethodName = "builderAddress")
 @EqualsAndHashCode(callSuper = false)
 @Qualifier(TAG_ADD)
 @AIEntity(company = EACompanyRequired.nonUsata)
@@ -73,7 +74,7 @@ public class Address extends AEntity {
     @Size(min = 2, max = 50)
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
-    private String indirizzo;
+    public String indirizzo;
 
 
     /**
@@ -83,7 +84,7 @@ public class Address extends AEntity {
     @Size(min = 2, max = 50)
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(width = 370)
-    private String localita;
+    public String localita;
 
 
     /**
@@ -92,7 +93,7 @@ public class Address extends AEntity {
     @Size(min = 5, max = 5, message = "Il codice postale deve essere di 5 cifre")
     @AIField(type = EAFieldType.text, widthEM = 5)
     @AIColumn(width = 370)
-    private String cap;
+    public String cap;
 
 
     /**

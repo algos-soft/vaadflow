@@ -15,13 +15,7 @@ import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadtest.application.VersBootStrap;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
-import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
-import static it.algos.vaadflow.application.FlowCost.TAG_COM;
-import static it.algos.vaadflow.application.FlowCost.TAG_PER;
-import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
-import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
-import static it.algos.vaadflow.application.FlowCost.TAG_VER;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -48,13 +42,14 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         final AppLayout app = new AppLayout("Vaadinflow");
         app.setMenuItems(
                 new MenuItem("Home", () -> UI.getCurrent().navigate("")),
-				new MenuItem("Versione", () -> UI.getCurrent().navigate(TAG_VER)),
-				new MenuItem("Preferenza", () -> UI.getCurrent().navigate(TAG_PRE)),
-				new MenuItem("Address", () -> UI.getCurrent().navigate(TAG_ADD)),
-				new MenuItem("Person", () -> UI.getCurrent().navigate(TAG_PER)),
-				new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),
                 new MenuItem("Wizard", () -> UI.getCurrent().navigate(TAG_WIZ)),
-                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL))
+                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL)),
+                new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),
+                new MenuItem("Preferenza", () -> UI.getCurrent().navigate(TAG_PRE)),
+                new MenuItem("Versione", () -> UI.getCurrent().navigate(TAG_VER)),
+                new MenuItem("Log", () -> UI.getCurrent().navigate(TAG_LOG)),
+                new MenuItem("Address", () -> UI.getCurrent().navigate(TAG_ADD)),
+                new MenuItem("Person", () -> UI.getCurrent().navigate(TAG_PER))
 //                new MenuItem("About ...", () -> UI.getCurrent().navigate("about")));
         );
         this.add(app);

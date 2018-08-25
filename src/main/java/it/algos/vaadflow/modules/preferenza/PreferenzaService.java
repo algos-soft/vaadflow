@@ -60,13 +60,15 @@ public class PreferenzaService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
     @Autowired
     public PreferenzaService(@Qualifier(TAG_PRE) MongoRepository repository) {
         super(repository);
-         this.repository = (PreferenzaRepository) repository;
+        super.entityClass = Preferenza.class;
+        this.repository = (PreferenzaRepository) repository;
    }// end of Spring constructor
 
     /**
@@ -158,7 +160,7 @@ public class PreferenzaService extends AService {
             return findByKeyUnica(code);
         }// end of if cycle
 
-        entity = Preferenza.builder()
+        entity = Preferenza.builderPreferenza()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .code(code.equals("") ? null : code)
                 .descrizione(descrizione.equals("") ? null : descrizione)

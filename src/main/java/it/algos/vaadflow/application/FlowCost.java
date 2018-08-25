@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
+	public final static String TAG_PIP = "pippo";
+	public final static String TAG_LOG = "log";
     public final static String TAG_UTE = "utente";
     public final static String TAG_VER = "versione";
     public final static boolean USA_BAKERY_PAGES = false;
@@ -104,6 +106,8 @@ public class FlowCost {
     public final static String USA_DEBUG = "usaDebug";
     public final static String USA_LOG_DEBUG = "usaLogDebug";
     public final static String USA_COMPANY = "usaCompany";
+    public final static String USA_LOG_MAIL = "usaLogMail";
+    public final static String LOG_MAIL_ADDRESS = "logMailAddress";
     // moduli visibili
     public final static String SHOW_COMPANY = "showCompany";
     public final static String SHOW_PREFERENZA = "showPreferenza";
