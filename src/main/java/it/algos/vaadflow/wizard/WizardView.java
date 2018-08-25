@@ -16,9 +16,10 @@ import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import it.algos.vaadflow.wizard.enumeration.Progetto;
 import it.algos.vaadflow.wizard.scripts.TDialogoPackage;
+import it.algos.vaadflow.wizard.scripts.TDialogoUpdateProject;
 import it.algos.vaadflow.wizard.scripts.TElabora;
 import it.algos.vaadflow.wizard.scripts.TRecipient;
-import it.algos.vaadtest.MainLayout;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,8 +97,8 @@ public class WizardView extends VerticalLayout {
     private TDialogoPackage dialogPackage;
     //    @Autowired
 //    private TDialogoNewProject newProject;
-//    @Autowired
-//    private TDialogoUpdateProject updateProject;
+    @Autowired
+    private TDialogoUpdateProject updateProject;
     /**
      * Inietta da Spring nel costruttore come 'singleton'
      */
@@ -179,14 +180,14 @@ public class WizardView extends VerticalLayout {
 //        }));// end of lambda expressions and anonymous inner class
 //        layout.add(buttonUno);
 
-//        buttonDue = new Button("Update project");
-//        buttonDue.addClickListener(event -> updateProject.open(new TRecipient() {
-//            @Override
-//            public void gotInput(Map<Chiave, Object> mappaInput) {
-//                elaboraUpdateProject(mappaInput);
-//            }// end of inner method
-//        }));// end of lambda expressions and anonymous inner class
-//        layout.add(buttonDue);
+        buttonDue = new Button("Update project");
+        buttonDue.addClickListener(event -> updateProject.open(new TRecipient() {
+            @Override
+            public void gotInput(Map<Chiave, Object> mappaInput) {
+                elaboraUpdateProject(mappaInput);
+            }// end of inner method
+        }));// end of lambda expressions and anonymous inner class
+        layout.add(buttonDue);
 
         buttonTre = new Button("Package");
         buttonTre.addClickListener(event -> dialogPackage.open(new TRecipient() {
@@ -210,9 +211,9 @@ public class WizardView extends VerticalLayout {
         currentProject = currentProject.substring(currentProject.lastIndexOf("/") + 1);
         mappaInput.put(Chiave.newProjectName, currentProject);
 
-//        buttonUno = new Button("Update project");
-//        buttonUno.addClickListener(event -> elaboraUpdateProject(mappaInput));
-//        layout.add(buttonUno);
+        buttonUno = new Button("Update project");
+        buttonUno.addClickListener(event -> elaboraUpdateProject(mappaInput));
+        layout.add(buttonUno);
 
         buttonDue = new Button("Package");
         buttonDue.addClickListener(event -> dialogPackage.open(new TRecipient() {
@@ -237,14 +238,14 @@ public class WizardView extends VerticalLayout {
 //    }// end of method
 
 
-//    private void elaboraUpdateProject(Map<Chiave, Object> mappaInput) {
-//        updateProject.close();
-//
-//        if (mappaInput != null) {
-//            elabora.updateProject(mappaInput);
-//        }// end of if cycle
-//
-//    }// end of method
+    private void elaboraUpdateProject(Map<Chiave, Object> mappaInput) {
+        updateProject.close();
+
+        if (mappaInput != null) {
+            elabora.updateProject(mappaInput);
+        }// end of if cycle
+
+    }// end of method
 
 
     private void elaboraPackage(Map<Chiave, Object> mappaInput) {

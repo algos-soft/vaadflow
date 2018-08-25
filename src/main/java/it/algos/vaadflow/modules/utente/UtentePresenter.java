@@ -32,7 +32,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 public class UtentePresenter extends APresenter {
 
     /**
-     * Costruttore <br>
+     * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>

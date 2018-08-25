@@ -8,6 +8,8 @@ import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,7 +71,7 @@ public class PreferenzaService extends AService {
         super(repository);
         super.entityClass = Preferenza.class;
         this.repository = (PreferenzaRepository) repository;
-   }// end of Spring constructor
+    }// end of Spring constructor
 
     /**
      * Ricerca di una entity (la crea se non la trova) <br>
@@ -297,6 +299,17 @@ public class PreferenzaService extends AService {
         return value;
     } // end of method
 
+
+    public LocalDateTime getDate(String code) {
+        LocalDateTime value = null;
+        Object genericValue = getValue(code);
+
+        if (genericValue instanceof LocalDateTime) {
+            value = (LocalDateTime) genericValue;
+        }// end of if cycle
+
+        return value;
+    } // end of method
 
     public Boolean isBool(String keyCode) {
         boolean status = false;

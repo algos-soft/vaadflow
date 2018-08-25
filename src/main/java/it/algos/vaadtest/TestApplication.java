@@ -1,7 +1,6 @@
 package it.algos.vaadtest;
 
 import com.vaadin.flow.spring.annotation.EnableVaadin;
-import it.algos.vaadflow.service.ATextService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -33,8 +32,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Tutte le @route/view devono essere comprese nei paths indicati come String[] in @EnableVaadin
  * Una sola view può avere @Route("")
  */
-@SpringBootApplication(scanBasePackages = {"it.algos.vaadflow","it.algos.vaadtest"})
-@EnableVaadin({"it.algos.vaadflow.modules","it.algos.vaadflow.wizard","it.algos.vaadtest.application","it.algos.vaadtest.modules"})
+@SpringBootApplication(scanBasePackages = {"it.algos.vaadflow", "it.algos.vaadtest"})
+@EnableVaadin({"it.algos.vaadflow.modules", "it.algos.vaadflow.wizard", "it.algos.vaadflow.developer", "it.algos.vaadtest.application", "it.algos.vaadtest.modules"})
 @EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
 @EnableMongoRepositories({"it.algos"})
 public class TestApplication extends SpringBootServletInitializer {

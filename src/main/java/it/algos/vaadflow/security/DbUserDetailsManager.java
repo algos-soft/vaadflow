@@ -46,7 +46,7 @@ public class DbUserDetailsManager implements UserDetailsManager {
     public boolean userExists(String username) {
 //        Utente utente = utenteService.findByUsername(username);
 //        return utente != null;
-        return true;
+        return false;
     }
 
     @Override

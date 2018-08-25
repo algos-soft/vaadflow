@@ -1,4 +1,4 @@
-package it.algos.vaadtest;
+package it.algos.vaadflow.ui;
 
 import com.flowingcode.addons.applayout.AppLayout;
 import com.flowingcode.addons.applayout.menu.MenuItem;
@@ -12,11 +12,12 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
-import it.algos.vaadtest.application.VersBootStrap;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.ATextService;
 
-import static it.algos.vaadflow.application.FlowCost.*;
-import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -33,29 +34,45 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
 
-    @Autowired
-    private VersBootStrap vers;
+    private AAnnotationService annotation = AAnnotationService.getInstance();
+    private ATextService text = ATextService.getInstance();
 
     public MainLayout() {
         setMargin(false);
         setSpacing(false);
         setPadding(false);
+
+        creaAllMenu();
+    }// end of method
+
+
+    protected void creaAllMenu() {
         final AppLayout app = new AppLayout("Vaadinflow");
-        app.setMenuItems(
-                new MenuItem("Home", () -> UI.getCurrent().navigate("")),
-				new MenuItem("Utente", () -> UI.getCurrent().navigate(TAG_UTE)),
-                new MenuItem("Wizard", () -> UI.getCurrent().navigate(TAG_WIZ)),
-                new MenuItem("Role", () -> UI.getCurrent().navigate(TAG_ROL)),
-                new MenuItem("Company", () -> UI.getCurrent().navigate(TAG_COM)),
-                new MenuItem("Preferenza", () -> UI.getCurrent().navigate(TAG_PRE)),
-                new MenuItem("Versione", () -> UI.getCurrent().navigate(TAG_VER)),
-                new MenuItem("Log", () -> UI.getCurrent().navigate(TAG_LOG)),
-                new MenuItem("Address", () -> UI.getCurrent().navigate(TAG_ADD)),
-                new MenuItem("Person", () -> UI.getCurrent().navigate(TAG_PER))
-//                new MenuItem("About ...", () -> UI.getCurrent().navigate("about")));
-        );
+        List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
+        ArrayList<MenuItem> listaMenu = null;
+
+        if (listaClassiMenu != null && listaClassiMenu.size() > 0) {
+            listaMenu = new ArrayList<>();
+            for (Class clazz : listaClassiMenu) {
+                listaMenu.add(creaMenu(clazz));
+            }// end of for cycle
+        }// end of if cycle
+
+        app.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
         this.add(app);
-    }
+    }// end of method
+
+
+    protected MenuItem creaMenu(Class viewClazz) {
+        MenuItem menuItem = null;
+        String linkRoute = annotation.getQualifierName(viewClazz);
+        String menuName = annotation.getViewName(viewClazz);
+        menuName = text.primaMaiuscola(menuName);
+
+        menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
+        return menuItem;
+    }// end of method
+
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {

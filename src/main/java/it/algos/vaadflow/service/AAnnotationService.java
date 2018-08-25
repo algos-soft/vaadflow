@@ -6,9 +6,11 @@ import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
@@ -44,15 +46,15 @@ public class AAnnotationService {
     public final static String TAG_PX = "px";
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Private final property
      */
-    @Autowired
-    public AReflectionService reflection;
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-    @Autowired
-    public ATextService text;
+    private static final AAnnotationService INSTANCE = new AAnnotationService();
+    public AReflectionService reflection = AReflectionService.getInstance();
+//    /**
+//     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+//     */
+//    @Autowired
+//    public ATextService text;
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
@@ -60,6 +62,21 @@ public class AAnnotationService {
     public AArrayService array;
     @Autowired
     Environment env;
+    private ATextService text = ATextService.getInstance();
+    /**
+     * Private constructor to avoid client applications to use constructor
+     */
+    private AAnnotationService() {
+    }// end of constructor
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static AAnnotationService getInstance() {
+        return INSTANCE;
+    }// end of static method
 
 
 //    /**
@@ -112,6 +129,19 @@ public class AAnnotationService {
 
 
     /**
+     * Get the specific annotation of the class.
+     * View class
+     *
+     * @param viewClazz the view class
+     *
+     * @return the Annotation for the specific class
+     */
+    public Qualifier getQualifier(final Class<? extends AViewList> viewClazz) {
+        return viewClazz.getAnnotation(Qualifier.class);
+    }// end of method
+
+
+    /**
      * Get the name of the mongo collection name.
      * Cerca nella classe l'annotation @Document
      * Se non la trova, di default usa il nome (minuscolo) della classe AEntity
@@ -132,6 +162,24 @@ public class AAnnotationService {
         return text.isValid(name) ? name : entityName;
     }// end of method
 
+
+    /**
+     * Get the name of the qualifier.
+     *
+     * @param viewClazz the view class
+     *
+     * @return the qualifier of the spring-view
+     */
+    public String getQualifierName(final Class<? extends AViewList> viewClazz) {
+        String name = "";
+        Qualifier annotation = getQualifier(viewClazz);
+
+        if (annotation != null) {
+            name = annotation.value();
+        }// end of if cycle
+
+        return name;
+    }// end of method
 
     /**
      * Get the specific annotation of the class.
@@ -327,16 +375,16 @@ public class AAnnotationService {
      * Cerca nella classe la property statica MENU_NAME
      * Se non la trova, di default usa l'annotation @Route
      *
-     * @param clazz the entity class
+     * @param viewClazz the view class
      *
      * @return the name of the spring-view
      */
-    public String getViewName(final Class<? extends IAView> clazz) {
-        String name = reflection.getMenuName(clazz);
+    public String getViewName(final Class<? extends IAView> viewClazz) {
+        String name = reflection.getMenuName(viewClazz);
         Route annotation = null;
 
         if (text.isEmpty(name)) {
-            annotation = this.getRoute(clazz);
+            annotation = this.getRoute(viewClazz);
         }// end of if cycle
 
         if (annotation != null) {

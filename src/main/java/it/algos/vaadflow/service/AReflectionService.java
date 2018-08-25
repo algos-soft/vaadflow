@@ -33,6 +33,27 @@ public class AReflectionService {
 
 
     /**
+     * Private final property
+     */
+    private static final AReflectionService INSTANCE = new AReflectionService();
+
+    /**
+     * Private constructor to avoid client applications to use constructor
+     */
+    private AReflectionService() {
+    }// end of constructor
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static AReflectionService getInstance() {
+        return INSTANCE;
+    }// end of static method
+
+
+    /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
     @Autowired
