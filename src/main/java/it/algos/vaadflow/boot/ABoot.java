@@ -13,7 +13,6 @@ import it.algos.vaadflow.modules.role.RoleViewList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
 import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadflow.wizard.WizardView;
-import it.algos.vaadtest.application.VersBootStrap;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
@@ -97,7 +96,7 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Inizializzazione dei dati di alcune collections standard sul DB Mongo
      */
-    protected void iniziaDataStandard() {
+    private void iniziaDataStandard() {
         this.roleData.inizia();
     }// end of method
 
@@ -138,7 +137,7 @@ public abstract class ABoot implements ServletContextListener {
      * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
-    protected void addRouteStandard() {
+    private void addRouteStandard() {
 //        if (pref.isBool(EAPreferenza.showCompany.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
 //        }// end of if cycle

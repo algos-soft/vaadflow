@@ -9,6 +9,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.wizard.WizardView;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,8 @@ public class TDialogoUpdateProject extends TDialogo {
     private static final String SOURCES_NAME = "wizard/sources";
     private static final String DIR_PROJECT_BASE = DIR_JAVA + "/" + PROJECT_BASE_NAME;
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;
-//    @Autowired
+
+    //    @Autowired
 //    private ATextService text;
 //    @Autowired
 //    private AFileService file;

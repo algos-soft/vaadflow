@@ -15,23 +15,23 @@ import java.util.List;
 @Slf4j
 public enum Progetto {
 
-    vaadin("vaadflow", "vaadflow", "vaadtest", "FlowCost"),
-    test("vaadflow", "vaadtest", "vaadtest", "TestCost"),
-    bio("vaadbio", "vaadbio", "vaadbio", "BioCost"),
-    wam("vaadwam", "vaadwam", "vaadwam", "WamCost"),
+    vaadin("vaadflow", "vaadflow", "vaadtest", "Flow"),
+    test("vaadflow", "vaadtest", "vaadtest", "Test"),
+    bio("vaadbio", "vaadbio", "vaadbio", "Bio"),
+    wam("vaadwam", "vaadwam", "vaadwam", "Wam"),
     ;
 
     private String nameProject;
     private String nameModule;
     private String nameLayout;
-    private String nameCost;
+    private String nameShort;
 
 
-    Progetto(String nameProject, String nameModule, String nameLayout, String nameCost) {
+    Progetto(String nameProject, String nameModule, String nameLayout, String nameShort) {
         this.setNameProject(nameProject);
         this.setNameModule(nameModule);
         this.setNameLayout(nameLayout);
-        this.setNameCost(nameCost);
+        this.setNameShort(nameShort);
     }// fine del costruttore
 
     public static List<String> getNames() {
@@ -69,12 +69,12 @@ public enum Progetto {
         this.nameLayout = nameLayout;
     }// end of method
 
-    public String getNameCost() {
-        return nameCost;
+    public String getNameShort() {
+        return nameShort;
     }// end of method
 
-    public void setNameCost(String nameCost) {
-        this.nameCost = nameCost;
+    public void setNameShort(String nameShort) {
+        this.nameShort = nameShort;
     }// end of method
 
 }// end of enumeration class

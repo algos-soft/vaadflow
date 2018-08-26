@@ -18,5 +18,7 @@ public enum Chiave {
     flagDescrizione,
     flagKeyCode,
     flagCompany,
-    flagSovrascrive
+    flagSovrascrive,
+    flagUsaAllPackages
+
 }// end of enumeration

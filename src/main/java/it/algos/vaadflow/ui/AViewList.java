@@ -22,6 +22,7 @@ import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -128,8 +129,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
      * Usare quindi un metodo @PostConstruct per averla disponibile <br>
      */
-//    @Autowired
-//    protected APreferenzaService pref;
+    @Autowired
+    protected PreferenzaService pref;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>

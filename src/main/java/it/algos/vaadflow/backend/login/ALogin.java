@@ -1,6 +1,8 @@
 package it.algos.vaadflow.backend.login;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.company.CompanyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,18 +20,16 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ALogin {
 
-//    @Autowired
-//    private CompanyService service;
-//    private Company company;
+    private Company company;
     private boolean developer = false;
 
-//    public Company getCompany() {
-//        return company;
-//    }// end of method
+    public Company getCompany() {
+        return company;
+    }// end of method
 
-//    public void setCompany(Company company) {
-//        this.company = company;
-//    }// end of method
+    public void setCompany(Company company) {
+        this.company = company;
+    }// end of method
 
     public boolean isDeveloper() {
         return developer;

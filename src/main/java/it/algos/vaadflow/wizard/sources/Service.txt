@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 
 /**
  * Project @MODULELOWER@ <br>

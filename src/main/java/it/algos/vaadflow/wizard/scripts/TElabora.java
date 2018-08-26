@@ -39,11 +39,13 @@ public class TElabora {
     private static final String SEP = "/";
     private static final String JAVA_SUFFIX = ".java";
     private static final String SOURCE_SUFFIX = ".txt";
+    private static final String COST_SUFFIX = "Cost";
     private static final String BOOT_SUFFIX = "Boot";
     private static final String TAG = "TAG_";
     private static final String IMPORT = "import it.algos.";
     private static final String DIR_MAIN = "/src/main";
     private static final String DIR_JAVA = DIR_MAIN + "/java/it/algos";
+    private static final String PREFIX_NAME = "vaad";
     private static final String PROJECT_BASE_NAME = "vaadflow";
     private static final String DIR_PROJECT_BASE = DIR_JAVA + "/" + PROJECT_BASE_NAME;
     private static final String SOURCES_NAME = "wizard/sources";
@@ -73,8 +75,8 @@ public class TElabora {
     private static final String METHOD_READ_COMPANY = METHOD + "ReadCompany" + SOURCE_SUFFIX;
     private static final String VIEW_SUFFIX = "ViewList";
     private static final String POM = "pom";
-    private static final String COST_NAME = "AppCost";
-    private static final String BOOT_NAME = "Boot";
+    //    private static final String COST_NAME = "ProjectCost";
+//    private static final String BOOT_NAME = "Boot";
     private static final String HOME_NAME = "HomeView";
     private static final String DIR_DOC = "documentation";
     private static final String GIT = ".gitignore";
@@ -117,9 +119,12 @@ public class TElabora {
     private String projectJavaPath;     //--projectPath più DIR_JAVA più targetProjectName
     private String applicationPath;     //--projectJavaPath più APP_NAME
     private String bootPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
+    private String costPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
     private String uiPath;              //--projectJavaPath più UI_NAME
     private String entityPath;          //--projectJavaPath più newPackageName
+    private String nameShort;
     private String nameClassCost;
+    private String nameClassBoot;
 
     private String packagePath;         //--entityPath più newPackageName
     private String nameCost;        //--NAME_COST (springvaadin) o NAME_APP_COST (altri progetti)
@@ -249,7 +254,7 @@ public class TElabora {
                 this.targetProjectName = progetto.getNameProject().toLowerCase();
                 this.targetModuleName = progetto.getNameModule().toLowerCase();
                 this.targetLayoutName = progetto.getNameLayout().toLowerCase();
-                this.nameClassCost = progetto.getNameCost();
+                this.nameShort = progetto.getNameShort();
             }// end of if/else cycle
             this.targetModuleCapitalName = text.primaMaiuscola(targetModuleName);
             this.projectPath = ideaProjectRootPath + SEP + targetProjectName;
@@ -257,8 +262,12 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-            //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
-            this.bootPath = applicationPath + SEP + targetModuleCapitalName + BOOT_SUFFIX + JAVA_SUFFIX;
+
+            this.nameClassCost = nameShort + COST_SUFFIX;
+            this.nameClassBoot = nameShort + BOOT_SUFFIX;
+            this.costPath = projectJavaPath + SEP + APP_NAME + SEP + nameClassCost + JAVA_SUFFIX;
+            this.bootPath = projectJavaPath + SEP + APP_NAME + SEP + nameClassBoot + JAVA_SUFFIX;
+
             this.layoutPath = projectPath + DIR_JAVA + SEP + targetLayoutName + SEP + LAYOUT_NAME + JAVA_SUFFIX;
         }// end of if cycle
 
@@ -434,7 +443,7 @@ public class TElabora {
         mappa.put(Token.moduleNameMinuscolo, targetModuleName);
         mappa.put(Token.moduleNameMaiuscolo, targetModuleCapitalName);
         mappa.put(Token.packageName, newPackageName);
-        mappa.put(Token.appCost, nameClassCost);
+        mappa.put(Token.projectCost, nameShort + COST_SUFFIX);
         mappa.put(Token.user, "Gac");
         mappa.put(Token.today, LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
         mappa.put(Token.qualifier, qualifier != null ? qualifier : "");
@@ -845,48 +854,76 @@ public class TElabora {
     }// end of method
 
 
+//    private void addRouteSpecifichePackage() {
+//        String aCapo = "\n\t\t\t\t";
+//        String tagPackage = "";
+//        String tag = "new MenuItem(\"Home\", () -> UI.getCurrent().navigate(\"\")),";
+//        String textUIClass = file.leggeFile(layoutPath);
+//        String max = text.primaMaiuscola(newPackageName);
+//        String viewItem = "new MenuItem(\"" + max + "\", () -> UI.getCurrent().navigate(" + qualifier + ")),";
+//
+//        if (textUIClass.contains(tag)) {
+//            if (textUIClass.contains(viewItem)) {
+//                System.out.println("Nella classe MainLayout esiste già il menu per il package " + newPackageName);
+//            } else {
+//                textUIClass = text.sostituisce(textUIClass, tag, tag + aCapo + viewItem);
+//                file.scriveFile(layoutPath, textUIClass, true);
+//
+//                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto al MainLayout");
+//            }// end of if/else cycle
+//        } else {
+//            System.out.println("Nella classe MainLayout manca il metodo setMenuItems()");
+//        }// end of if/else cycle
+//    }// end of method
+
+
     private void addRouteSpecifichePackage() {
-        String aCapo = "\n\t\t\t\t";
-        String tagPackage = "";
-        String tag = "new MenuItem(\"Home\", () -> UI.getCurrent().navigate(\"\")),";
-        String textUIClass = file.leggeFile(layoutPath);
+        if (targetModuleName.equals(PROJECT_BASE_NAME)) {
+            addRouteFlow();
+        } else {
+            addRouteProject();
+        }// end of if/else cycle
+    }// end of method
+
+    private void addRouteFlow() {
+    }// end of method
+
+    private void addRouteProject() {
+        String aCapo = "\n\t\t";
+        String tag = "protected void addRouteSpecifiche() {";
+        String textBootClass = file.leggeFile(bootPath);
         String max = text.primaMaiuscola(newPackageName);
-        String viewItem = "new MenuItem(\"" + max + "\", () -> UI.getCurrent().navigate(" + qualifier + ")),";
+        String viewItem = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);";
 
-        if (textUIClass.contains(tag)) {
-            if (textUIClass.contains(viewItem)) {
-                System.out.println("Nella classe MainLayout esiste già il menu per il package " + newPackageName);
+        if (textBootClass.contains(tag)) {
+            if (textBootClass.contains(viewItem)) {
+                System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
             } else {
-                textUIClass = text.sostituisce(textUIClass, tag, tag + aCapo + viewItem);
-                file.scriveFile(layoutPath, textUIClass, true);
+                textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + viewItem);
+                file.scriveFile(bootPath, textBootClass, true);
 
-                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto al MainLayout");
+                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
             }// end of if/else cycle
         } else {
-            System.out.println("Nella classe MainLayout manca il metodo setMenuItems()");
+            System.out.println("Nella classe " + nameClassBoot + " manca il metodo addRouteSpecifiche()");
         }// end of if/else cycle
     }// end of method
 
 
     private void addImportPackage() {
         String aCapo = "\n";
-        String tagImport;
-        String tagInizioInserimento = "\n/**";
-        int posIni = 0;
-        String textUIClass = file.leggeFile(layoutPath);
-        String a = "import static it.algos.vaadflow.application.FlowCost.TAG_WIZ";
-        String ae = "import static it.algos.vaadtest.application.TestCost.TAG_WIZ";
-        tagImport = "import static it.algos." + targetModuleName + ".application." + nameClassCost + "." + qualifier+";";
+        String tag = "import it.algos.vaadflow.boot.ABoot;";
+        String textBootClass = file.leggeFile(bootPath);
+        String max = text.primaMaiuscola(newPackageName);
+        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
 
-        if (textUIClass.contains(tagImport)) {
-            System.out.println("Nella classe MainLayout esiste già l'import per il package " + newPackageName);
+        if (textBootClass.contains(tagImport)) {
+            System.out.println("Nella classe " + nameClassBoot + " esiste già l'import per il package " + newPackageName);
         } else {
-            posIni = textUIClass.indexOf(tagInizioInserimento);
-            tagImport = tagImport + aCapo;
-            textUIClass = text.inserisce(textUIClass, tagImport, posIni);
-            file.scriveFile(layoutPath, textUIClass, true);
+            textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + tagImport);
+            file.scriveFile(bootPath, textBootClass, true);
 
-            System.out.println("L'import del file " + " è stato inserito negli import iniziali");
+            System.out.println("L'import del package " + newPackageName + " è stato inserito negli import iniziali di "+nameClassBoot);
         }// end of if/else cycle
     }// end of method
 
@@ -1003,6 +1040,7 @@ public class TElabora {
 
     private void creaApplicationMain() {
         String mainApp = newProjectName + text.primaMaiuscola(APP_NAME);
+        mainApp = text.levaTesta(mainApp, PREFIX_NAME);
         mainApp = text.primaMaiuscola(mainApp);
         String destPath = projectJavaPath + "/" + mainApp + JAVA_SUFFIX;
         String testoApp = leggeFile(APP_NAME + SOURCE_SUFFIX);
@@ -1010,7 +1048,7 @@ public class TElabora {
         testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
         testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
 
-        file.scriveFile(destPath, testoApp, true);
+        checkAndWrite(destPath, testoApp);
     }// end of method
 
     private void creaApplicationDirectory() {
@@ -1029,21 +1067,19 @@ public class TElabora {
 
 
     private void creaCost() {
-        String destPath = projectJavaPath + "/" + APP_NAME + "/" + COST_NAME + JAVA_SUFFIX;
-        String testoCost = leggeFile(COST_NAME + SOURCE_SUFFIX);
+        String testoCost = leggeFile(COST_SUFFIX + SOURCE_SUFFIX);
 
         testoCost = Token.replace(Token.moduleNameMinuscolo, testoCost, newProjectName);
-        checkAndWrite(destPath, testoCost);
+        checkAndWrite(costPath, testoCost);
     }// end of method
 
 
     private void creaBoot() {
-        String destPath = projectJavaPath + "/" + APP_NAME + "/" + text.primaMaiuscola(newProjectName) + BOOT_NAME + JAVA_SUFFIX;
-        String testoBoot = leggeFile(BOOT_NAME + SOURCE_SUFFIX);
+        String testoBoot = leggeFile(BOOT_SUFFIX + SOURCE_SUFFIX);
 
         testoBoot = Token.replace(Token.moduleNameMinuscolo, testoBoot, newProjectName);
         testoBoot = Token.replace(Token.moduleNameMaiuscolo, testoBoot, text.primaMaiuscola(newProjectName));
-        checkAndWrite(destPath, testoBoot);
+        checkAndWrite(bootPath, testoBoot);
     }// end of method
 
     private void creaHome() {

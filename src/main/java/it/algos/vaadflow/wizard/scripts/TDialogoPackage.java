@@ -12,15 +12,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
+import it.algos.vaadflow.wizard.WizardView;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import it.algos.vaadflow.wizard.enumeration.Progetto;
-import it.algos.vaadflow.wizard.scripts.TDialogo;
-import it.algos.vaadflow.wizard.scripts.TRecipient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,9 +45,11 @@ public class TDialogoPackage extends TDialogo {
     public final static boolean DEFAULT_USA_KEY_CODE_SPECIFICA = false;
     public final static boolean DEFAULT_USA_COMPANY = false;
     public final static boolean DEFAULT_USA_SOVRASCRIVE = false;
+    public final static boolean DEFAULT_USA_ALL_PACKAGE = false;
+    private static final String CAPTION = WizardView.VAADFLOW + WizardView.PACKAGE;
     private static Progetto PROGETTO_STANDARD_SUGGERITO = Progetto.vaadin;
     private static String NOME_PACKAGE_STANDARD_SUGGERITO = "prova";
-    private static String CAPTION = "Package";
+    //    private static String CAPTION = "Package";
     private static String RADIO_NEW = "Creazione di un nuovo package";
     private static String RADIO_UPDATE = "Modifica di un package esistente";
     private Button buttonUno;
@@ -72,6 +73,7 @@ public class TDialogoPackage extends TDialogo {
     private Checkbox fieldCheckBoxUsaKeyIdCode;
     private Checkbox fieldCheckBoxCompany;
     private Checkbox fieldCheckBoxSovrascrive;
+    private Checkbox fieldCheckBoxAllPackage;
 
     private boolean progettoBase;
 
@@ -95,30 +97,42 @@ public class TDialogoPackage extends TDialogo {
         currentProject = currentProject.substring(currentProject.lastIndexOf("/") + 1);
         progettoBase = currentProject.equals(PROJECT_BASE_NAME);
 
-        this.add(new Label());
+        this.add(creaTop());
         this.add(creaRadio());
         this.add(creaBody());
+        this.add(creaFlag());
         this.add(creaFooter());
 
         sincroRadio(groupTitolo.getValue());
-        addListener();
+        addListeners();
         sincroPackageNew(packageName);
     }// end of method
 
-    private void addListener() {
+    private void addListeners() {
         groupTitolo.addValueChangeListener(event -> sincroRadio(event.getValue()));//end of lambda expressions
         if (progettoBase) {
             fieldComboProgetti.addValueChangeListener(event -> sincroProject(event.getValue()));//end of lambda expressions
         }// end of if cycle
         fieldTextPackage.addValueChangeListener(event -> sincroPackage(event.getValue()));//end of lambda expressions
         fieldComboPackage.addValueChangeListener(event -> sincroPackage(event.getValue()));//end of lambda expressions
+        fieldCheckBoxAllPackage.addValueChangeListener(event -> sincroAllPackages(event.getValue()));//end of lambda expressions
     }// end of method
 
 
+    private Component creaTop() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        layout.add(new Label(WizardView.VAADFLOW));
+        layout.add(new Label(WizardView.PACKAGE));
+
+        return layout;
+    }// end of method
+
     private Component creaRadio() {
-        VerticalLayout layoutLabel = new VerticalLayout();
-        layoutLabel.setMargin(true);
-        layoutLabel.setSpacing(true);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
 
         groupTitolo = new RadioButtonGroup<>();
         groupTitolo.setItems(RADIO_NEW, RADIO_UPDATE);
@@ -131,32 +145,39 @@ public class TDialogoPackage extends TDialogo {
             groupTitolo.setValue(RADIO_UPDATE);
         }// end of if/else cycle
 
-        layoutLabel.add(groupTitolo);
-        return layoutLabel;
+        layout.add(groupTitolo);
+        return layout;
     }// end of method
 
 
     private Component creaBody() {
-        VerticalLayout layoutText = new VerticalLayout();
-        layoutText.setMargin(true);
-        layoutText.setSpacing(false);
-        VerticalLayout layoutCheck = new VerticalLayout();
-        layoutCheck.setMargin(true);
-        layoutCheck.setSpacing(false);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
 
-        layoutText.add(creaProject());
-        layoutText.add(creaPackage());
-        layoutText.add(creaEntity());
-        layoutText.add(creaTag());
+        layout.add(creaProject());
+        layout.add(creaPackage());
+        layout.add(creaEntity());
+        layout.add(creaTag());
 
-        layoutCheck.add(creaOrdine());
-        layoutCheck.add(creaCode());
-        layoutCheck.add(creaDescrizione());
-        layoutCheck.add(creaKeyIdCode());
-        layoutCheck.add(creaCompany());
-        layoutCheck.add(creaSovrascrive());
+        return layout;
+    }// end of method
 
-        return new VerticalLayout(layoutText, layoutCheck);
+
+    private Component creaFlag() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
+
+        layout.add(creaOrdine());
+        layout.add(creaCode());
+        layout.add(creaDescrizione());
+        layout.add(creaKeyIdCode());
+        layout.add(creaCompany());
+        layout.add(creaSovrascrive());
+        layout.add(creaAllPackage());
+
+        return layout;
     }// end of method
 
 
@@ -165,12 +186,13 @@ public class TDialogoPackage extends TDialogo {
             fieldComboProgetti = new ComboBox<>();
             fieldComboProgetti.setAllowCustomValue(false);
             String label = "Progetto";
-            Progetto[] progetti = Progetto.values();
-
+            ArrayList<Progetto> progetti=new ArrayList<>();
+            progetti.add(Progetto.vaadin);
+            progetti.add(Progetto.test);
             fieldComboProgetti.setLabel(label);
-            fieldComboProgetti.setItems(Arrays.asList(progetti));
+            fieldComboProgetti.setItems(progetti);
 
-            if (Arrays.asList(progetti).contains(project) && isProgettoEsistente()) {
+            if (progetti.contains(project) && isProgettoEsistente()) {
                 fieldComboProgetti.setValue(project);
             } else {
                 fieldComboProgetti.setValue(null);
@@ -228,6 +250,7 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxPropertyOrdine = new Checkbox();
         fieldCheckBoxPropertyOrdine.setLabel("Usa la property Ordine (int)");
         fieldCheckBoxPropertyOrdine.setValue(DEFAULT_USA_ORDINE);
+
         return fieldCheckBoxPropertyOrdine;
     }// end of method
 
@@ -235,6 +258,7 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxPropertyCode = new Checkbox();
         fieldCheckBoxPropertyCode.setLabel("Usa la property Code (String)");
         fieldCheckBoxPropertyCode.setValue(DEFAULT_USA_CODE);
+
         return fieldCheckBoxPropertyCode;
     }// end of method
 
@@ -242,6 +266,7 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxPropertyDescrizione = new Checkbox();
         fieldCheckBoxPropertyDescrizione.setLabel("Usa la property Descrizione (String)");
         fieldCheckBoxPropertyDescrizione.setValue(DEFAULT_USA_DESCRIZIONE);
+
         return fieldCheckBoxPropertyDescrizione;
     }// end of method
 
@@ -249,6 +274,7 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxUsaKeyIdCode = new Checkbox();
         fieldCheckBoxUsaKeyIdCode.setLabel("Usa la property Code (String) come keyID");
         fieldCheckBoxUsaKeyIdCode.setValue(DEFAULT_USA_KEY_CODE_SPECIFICA);
+
         return fieldCheckBoxUsaKeyIdCode;
     }// end of method
 
@@ -256,6 +282,7 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxCompany = new Checkbox();
         fieldCheckBoxCompany.setLabel("Utilizza MultiCompany");
         fieldCheckBoxCompany.setValue(DEFAULT_USA_COMPANY);
+
         return fieldCheckBoxCompany;
     }// end of method
 
@@ -264,7 +291,16 @@ public class TDialogoPackage extends TDialogo {
         fieldCheckBoxSovrascrive = new Checkbox();
         fieldCheckBoxSovrascrive.setLabel("Sovrascrive tutti i files esistenti del package");
         fieldCheckBoxSovrascrive.setValue(DEFAULT_USA_SOVRASCRIVE);
+
         return fieldCheckBoxSovrascrive;
+    }// end of method
+
+    private Component creaAllPackage() {
+        fieldCheckBoxAllPackage = new Checkbox();
+        fieldCheckBoxAllPackage.setLabel("Aggiorna tutti i packages esistenti nel progetto");
+        fieldCheckBoxAllPackage.setValue(DEFAULT_USA_ALL_PACKAGE);
+
+        return fieldCheckBoxAllPackage;
     }// end of method
 
 
@@ -339,7 +375,7 @@ public class TDialogoPackage extends TDialogo {
         String namePackage;
 
         if (!isProgettoEsistente()) {
-            Notification.show("Non esiste il progetto " + nomeProgettoSelezionato + ". Devi modificare il codice: wizard.enumeration.Progetto", DURATA , Notification.Position.MIDDLE);
+            Notification.show("Non esiste il progetto " + nomeProgettoSelezionato + ". Devi modificare il codice: wizard.enumeration.Progetto", DURATA, Notification.Position.MIDDLE);
             project = null;
             fieldTextPackage.setValue("");
             String[] vuota = {""};
@@ -423,6 +459,13 @@ public class TDialogoPackage extends TDialogo {
         fieldTextPackage.setValue(packageName);
         this.packageName = packageName;
     }// end of method
+
+    private void sincroAllPackages(boolean value) {
+        if (value) {
+            Notification.show("Attenzione che vengono sovrascritti TUTTI i package esistenti nel progetto", DURATA*2, Notification.Position.MIDDLE);
+        }// end of if cycle
+    }// end of method
+
 
     private void invalida(boolean status) {
         if (fieldComboPackage != null) {
@@ -587,6 +630,7 @@ public class TDialogoPackage extends TDialogo {
             mappaInput.put(Chiave.flagDescrizione, fieldCheckBoxPropertyDescrizione.getValue());
             mappaInput.put(Chiave.flagCompany, fieldCheckBoxCompany.getValue());
             mappaInput.put(Chiave.flagSovrascrive, fieldCheckBoxSovrascrive.getValue());
+            mappaInput.put(Chiave.flagUsaAllPackages, fieldCheckBoxAllPackage.getValue());
         }// end of if cycle
     }// end of method
 

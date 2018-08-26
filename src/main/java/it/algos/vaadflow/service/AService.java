@@ -443,15 +443,15 @@ public abstract class AService implements IAService {
     }// end of method
 
 
-//    /**
-//     * Se la nuova entity usa la company, la recupera dal login
-//     * Se la campany manca, lancia l'eccezione
-//     *
-//     * @param entityBean da creare
-//     */
-//    protected AEntity addCompany(AEntity entityBean) {
-//        return addCompany(entityBean, (Company) null);
-//    }// end of method
+    /**
+     * Se la nuova entity usa la company, la recupera dal login
+     * Se la campany manca, lancia l'eccezione
+     *
+     * @param entityBean da creare
+     */
+    protected AEntity addCompany(AEntity entityBean) {
+        return addCompany(entityBean, (Company) null);
+    }// end of method
 
     /**
      * Se la nuova entity usa la company, la recupera dal login

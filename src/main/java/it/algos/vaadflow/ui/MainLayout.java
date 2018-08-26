@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
+ * <p>
  * Not annotated with @SpringComponent (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @HtmlImport (obbligatorio) per usare il CSS
  * Annotated with @Push (obbligatorio)

@@ -17,8 +17,7 @@ import it.algos.vaadbase.annotation.AIScript;
  * Not annotated with @Scope (inutile) <br>
  * Annotated with @AIScript (facoltativo) per controllare la ri-creazione di questo file nello script di algos <br>
  */
-@SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @AIScript(sovrascrivibile = false)
-public class AppCost {
+public class @COST@ {
 }// end of static class

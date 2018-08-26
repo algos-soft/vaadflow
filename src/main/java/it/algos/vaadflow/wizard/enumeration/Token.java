@@ -16,7 +16,7 @@ public enum Token {
     moduleNameMinuscolo("MODULELOWER"),
     moduleNameMaiuscolo("MODULEUPPER"),
     packageName("PACKAGE"),
-    appCost("APPCOST"),
+    projectCost("COST"),
     user("USER"),
     today("TODAY"),
     qualifier("QUALIFIER"),

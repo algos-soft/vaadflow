@@ -15,7 +15,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-ago-2018 17.55.51 <br>
+ * Date: 26-ago-2018 9.52.58 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -32,7 +32,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 public class LogPresenter extends APresenter {
 
     /**
-     * Costruttore @Autowired <br>
+     * Costruttore <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>

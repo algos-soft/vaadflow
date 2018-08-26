@@ -17,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-ago-2018 17.55.51 <br>
+ * Date: 26-ago-2018 9.52.58 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -46,7 +46,7 @@ public class LogViewList extends AViewList {
     /**
      * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della route
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 

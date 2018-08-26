@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 
 /**
  * Project @MODULELOWER@ <br>

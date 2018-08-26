@@ -30,39 +30,85 @@ import org.springframework.context.event.EventListener;
 @AIScript(sovrascrivibile = false)
 public class @MODULEUPPER@Boot extends ABoot {
 
+    public final static String PROJECT_NAME = "Vaadwam";
+    public final static String PROJECT_VERSION = "0.3";
+    public final static String DEMO_COMPANY_CODE = "demo";
+
+
+    @Autowired
+    private UtenteService utenteService;
+
+    @Autowired
+    private ALogin login;
+
+    @Autowired
+    private CompanyService companyService;
+
+
     /**
-     * Running logic after the Spring context has been initialized
-     * Any class that use this @EventListener annotation,
-     * will be executed before the application is up and its onApplicationEvent method will be called
-     * <p>
-     * Viene normalmente creata una sottoclasse per l'applicazione specifica:
-     * - per regolare eventualmente alcuni flag in maniera non standard
-     * - per lanciare eventualmente gli schedulers in background
-     * - per costruire e regolare eventualmente una versione demo
-     * - per controllare eventualmente l'esistenza di utenti abilitati all'accesso
-     * <p>
-     * Stampa a video (productionMode) i valori per controllo
+     * Iniettata dal costruttore <br>
      */
-    @EventListener
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        this.iniziaData();
-        this.addAllRouteView();
+    private @MODULEUPPER@VersBoot @MODULELOWER@VersBoot;
+
+
+    /**
+     * Costruttore @Autowired <br>
+     *
+     * @param wamVersBoot Log delle versioni, modifiche e patch installat
+     */
+    @Autowired
+    public @MODULEUPPER@Boot(@MODULEUPPER@VersBoot @MODULELOWER@VersBoot) {
+        super();
+        this.@MODULELOWER@VersBoot = @MODULELOWER@VersBoot;
+    }// end of Spring constructor
+
+    /**
+     * Executed on container startup <br>
+     * Setup non-UI logic here <br>
+     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
+     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
+     * questa sottoclasse concreta può singolarmente modificarle <br>
+     */
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        super.inizia();
     }// end of method
 
+
     /**
-     * Inizializzazione dei dati standard di alcune collections sul DB
+     * Inizializzazione dei dati di alcune collections specifiche sul DB Mongo
      */
-    protected void iniziaData() {
-        super.iniziaDataStandard();
+    protected void iniziaDataProgettoSpecifico() {
     }// end of method
 
 
     /**
-     * Aggiunge tutte le @Route (views) standard e specifiche
+     * Inizializzazione delle versioni del programma specifico
      */
-    protected void addAllRouteView() {
-        super.addRouteStandard();
-        this.addRouteSpecifiche();
+    protected void iniziaVersioni() {
+        wamVersBoot.inizia();
+    }// end of method
+
+
+    /**
+     * Regola alcune informazioni dell'applicazione
+     */
+    protected void regolaInfo() {
+        super.regolaInfo();
+//        footer.project = "Vaadwam";
+//        footer.version = "0.2";
+//        footer.data = LocalDate.of(2018, 8, 1);
+    }// end of method
+
+
+    /**
+     * Regola alcune preferenze iniziali
+     * Se non esistono, le crea
+     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
+     */
+    protected void regolaPreferenze() {
+        super.regolaPreferenze();
+//        pref.setBool(FlowCost.USA_COMPANY, true);
     }// end of method
 
 
@@ -73,9 +119,8 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        BaseCost.MENU_CLAZZ_LIST.add(HomeView.class);
-        BaseCost.MENU_CLAZZ_LIST.add(WizardView.class);
+        FlowCost.MENU_CLAZZ_LIST.add(Xxx.class);
     }// end of method
 
 
-}// end of class
+}// end of boot class

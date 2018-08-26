@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.@MODULELOWER@.application.@APPCOST@.@QUALIFIER@;
+import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 
 /**
  * Project @MODULELOWER@ <br>
