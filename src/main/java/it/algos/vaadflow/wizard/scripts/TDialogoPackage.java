@@ -20,7 +20,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -177,6 +176,7 @@ public class TDialogoPackage extends TDialogo {
         layout.add(creaSovrascrive());
         layout.add(creaAllPackage());
 
+        restartAll();
         return layout;
     }// end of method
 
@@ -186,7 +186,7 @@ public class TDialogoPackage extends TDialogo {
             fieldComboProgetti = new ComboBox<>();
             fieldComboProgetti.setAllowCustomValue(false);
             String label = "Progetto";
-            ArrayList<Progetto> progetti=new ArrayList<>();
+            ArrayList<Progetto> progetti = new ArrayList<>();
             progetti.add(Progetto.vaadin);
             progetti.add(Progetto.test);
             fieldComboProgetti.setLabel(label);
@@ -249,7 +249,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaOrdine() {
         fieldCheckBoxPropertyOrdine = new Checkbox();
         fieldCheckBoxPropertyOrdine.setLabel("Usa la property Ordine (int)");
-        fieldCheckBoxPropertyOrdine.setValue(DEFAULT_USA_ORDINE);
 
         return fieldCheckBoxPropertyOrdine;
     }// end of method
@@ -257,7 +256,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaCode() {
         fieldCheckBoxPropertyCode = new Checkbox();
         fieldCheckBoxPropertyCode.setLabel("Usa la property Code (String)");
-        fieldCheckBoxPropertyCode.setValue(DEFAULT_USA_CODE);
 
         return fieldCheckBoxPropertyCode;
     }// end of method
@@ -265,7 +263,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaDescrizione() {
         fieldCheckBoxPropertyDescrizione = new Checkbox();
         fieldCheckBoxPropertyDescrizione.setLabel("Usa la property Descrizione (String)");
-        fieldCheckBoxPropertyDescrizione.setValue(DEFAULT_USA_DESCRIZIONE);
 
         return fieldCheckBoxPropertyDescrizione;
     }// end of method
@@ -273,7 +270,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaKeyIdCode() {
         fieldCheckBoxUsaKeyIdCode = new Checkbox();
         fieldCheckBoxUsaKeyIdCode.setLabel("Usa la property Code (String) come keyID");
-        fieldCheckBoxUsaKeyIdCode.setValue(DEFAULT_USA_KEY_CODE_SPECIFICA);
 
         return fieldCheckBoxUsaKeyIdCode;
     }// end of method
@@ -281,7 +277,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaCompany() {
         fieldCheckBoxCompany = new Checkbox();
         fieldCheckBoxCompany.setLabel("Utilizza MultiCompany");
-        fieldCheckBoxCompany.setValue(DEFAULT_USA_COMPANY);
 
         return fieldCheckBoxCompany;
     }// end of method
@@ -290,7 +285,6 @@ public class TDialogoPackage extends TDialogo {
     private Component creaSovrascrive() {
         fieldCheckBoxSovrascrive = new Checkbox();
         fieldCheckBoxSovrascrive.setLabel("Sovrascrive tutti i files esistenti del package");
-        fieldCheckBoxSovrascrive.setValue(DEFAULT_USA_SOVRASCRIVE);
 
         return fieldCheckBoxSovrascrive;
     }// end of method
@@ -462,8 +456,49 @@ public class TDialogoPackage extends TDialogo {
 
     private void sincroAllPackages(boolean value) {
         if (value) {
-            Notification.show("Attenzione che vengono sovrascritti TUTTI i package esistenti nel progetto", DURATA*2, Notification.Position.MIDDLE);
-        }// end of if cycle
+            resetAll();
+            Notification.show("Attenzione che vengono sovrascritti TUTTI i package esistenti nel progetto", DURATA * 2, Notification.Position.MIDDLE);
+        } else {
+            restartAll();
+            fieldComboPackage.setEnabled(true);
+            confirmButton.setVisible(false);
+        }// end of if/else cycle
+    }// end of method
+
+    private void resetAll() {
+        fieldCheckBoxPropertyOrdine.setValue(false);
+        fieldCheckBoxPropertyOrdine.setEnabled(false);
+        fieldCheckBoxPropertyCode.setValue(false);
+        fieldCheckBoxPropertyCode.setEnabled(false);
+        fieldCheckBoxPropertyDescrizione.setValue(false);
+        fieldCheckBoxPropertyDescrizione.setEnabled(false);
+        fieldCheckBoxUsaKeyIdCode.setValue(false);
+        fieldCheckBoxUsaKeyIdCode.setEnabled(false);
+        fieldCheckBoxCompany.setValue(false);
+        fieldCheckBoxCompany.setEnabled(false);
+        fieldCheckBoxSovrascrive.setValue(false);
+        fieldCheckBoxSovrascrive.setEnabled(false);
+
+        fieldComboPackage.setValue(null);
+        fieldComboPackage.setEnabled(false);
+
+        groupTitolo.setValue(RADIO_UPDATE);
+        confirmButton.setVisible(true);
+    }// end of method
+
+    private void restartAll() {
+        fieldCheckBoxPropertyOrdine.setValue(DEFAULT_USA_ORDINE);
+        fieldCheckBoxPropertyOrdine.setEnabled(true);
+        fieldCheckBoxPropertyCode.setValue(DEFAULT_USA_CODE);
+        fieldCheckBoxPropertyCode.setEnabled(true);
+        fieldCheckBoxPropertyDescrizione.setValue(DEFAULT_USA_DESCRIZIONE);
+        fieldCheckBoxPropertyDescrizione.setEnabled(true);
+        fieldCheckBoxUsaKeyIdCode.setValue(DEFAULT_USA_KEY_CODE_SPECIFICA);
+        fieldCheckBoxUsaKeyIdCode.setEnabled(true);
+        fieldCheckBoxCompany.setValue(DEFAULT_USA_COMPANY);
+        fieldCheckBoxCompany.setEnabled(true);
+        fieldCheckBoxSovrascrive.setValue(DEFAULT_USA_SOVRASCRIVE);
+        fieldCheckBoxSovrascrive.setEnabled(true);
     }// end of method
 
 
@@ -498,7 +533,7 @@ public class TDialogoPackage extends TDialogo {
     private boolean isPackageEsistente() {
         boolean esiste = false;
         String pathModules = getPathModules();
-        List<String> packagesEsistenti = file.getSubdiretories(pathModules);
+        List<String> packagesEsistenti = file.getSubdirectories(pathModules);
 
         if (packagesEsistenti != null && packagesEsistenti.contains(getPackage())) {
             esiste = true;
@@ -635,7 +670,7 @@ public class TDialogoPackage extends TDialogo {
     }// end of method
 
     private List<String> recuperaPackageEsistenti(String projectName) {
-        return file.getSubdiretories(getPathModules());
+        return file.getSubdirectories(getPathModules());
     }// end of method
 
 }// end of class

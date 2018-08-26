@@ -114,7 +114,7 @@ public class @MODULEUPPER@Boot extends ABoot {
 
     /**
      * Aggiunge le @Route (view) specifiche di questa applicazione
-     * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
+     * Le @Route vengono aggiunte ad una Lista statica mantenuta in FlowCost
      * Vengono aggiunte dopo quelle standard
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */

@@ -3,6 +3,7 @@ package it.algos.vaadtest.application;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.bolla.BollaViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,11 +90,12 @@ public class TestBoot extends ABoot {
 
     /**
      * Aggiunge le @Route (view) specifiche di questa applicazione
-     * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
+     * Le @Route vengono aggiunte ad una Lista statica mantenuta in FlowCost
      * Vengono aggiunte dopo quelle standard
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
+		FlowCost.MENU_CLAZZ_LIST.add(BollaViewList.class);
 		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 

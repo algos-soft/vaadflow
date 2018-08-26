@@ -327,6 +327,7 @@ public class AFileService {
     }// end of method
 
 
+
     /**
      * Scrive un file
      * Se non esiste, lo crea
@@ -443,7 +444,7 @@ public class AFileService {
      *
      * @param pathDirectoryToBeScanned nome completo della directory
      */
-    public List<String> getSubdiretories(String pathDirectoryToBeScanned) {
+    public List<String> getSubdirectories(String pathDirectoryToBeScanned) {
         List<String> subDirectory = null;
         File[] allFiles = null;
         File directory = new File(pathDirectoryToBeScanned);

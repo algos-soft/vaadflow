@@ -45,7 +45,7 @@ public class @ENTITY@ViewDialog extends AViewDialog<@ENTITY@> {
     @Autowired
     public @ENTITY@ViewDialog(@Qualifier(@QUALIFIER@) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
     @READCOMPANY@
 }// end of class

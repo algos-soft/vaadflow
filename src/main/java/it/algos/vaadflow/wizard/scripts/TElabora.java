@@ -111,6 +111,7 @@ public class TElabora {
     private String newPackageName;          //--dal dialogo di input
     private String newEntityTag;            //--dal dialogo di input
     private boolean flagSovrascrive;        //--dal dialogo di input
+    private boolean flagAllPackages;        //--dal dialogo di input
 
 
     //--regolate elaborando i risultati del dialogo
@@ -209,7 +210,46 @@ public class TElabora {
      */
     public void newPackage(Map<Chiave, Object> mappaInput) {
         this.regolazioni(mappaInput);
+
+        if (mappaInput.containsKey(Chiave.flagUsaAllPackages)) {
+            this.flagAllPackages = (boolean) mappaInput.get(Chiave.flagUsaAllPackages);
+        } else {
+            this.flagAllPackages = false;
+        }// end of if/else cycle
+
+        if (flagAllPackages) {
+            allPackages(mappaInput);
+        } else {
+            singoloPackage(mappaInput);
+        }// end of if/else cycle
+    }// end of method
+
+
+    public void allPackages(Map<Chiave, Object> mappaInput) {
+        List<String> packages = recuperaPackagesEsistenti();
+        String name;
+        String tag;
+
+        for (String pack : packages) {
+            mappaInput.put(Chiave.newPackageName, pack);
+
+            name = text.primaMaiuscola(pack);
+            mappaInput.put(Chiave.newEntityName, name);
+
+            tag = pack.substring(0, 3).toUpperCase();
+            mappaInput.put(Chiave.newEntityTag, tag);
+
+            singoloPackage(mappaInput);
+        }// end of for cycle
+
+    }// end of method
+
+
+    public void singoloPackage(Map<Chiave, Object> mappaInput) {
         this.regolaTag(mappaInput);
+        if (text.isEmpty(newEntityName)) {
+            return;
+        }// end of if cycle
         this.creaDirectory();
         this.creaTasks(mappaInput);
         this.addPackageMenu();
@@ -285,6 +325,10 @@ public class TElabora {
     private void regolaTag(Map<Chiave, Object> mappaInput) {
         Progetto progetto;
 
+        if (mappaInput.containsKey(Chiave.newEntityName)) {
+            this.newEntityName = (String) mappaInput.get(Chiave.newEntityName);
+        }// end of if cycle
+
         if (mappaInput.containsKey(Chiave.newPackageName)) {
             this.newPackageName = (String) mappaInput.get(Chiave.newPackageName);
             this.packagePath = entityPath + SEP + newPackageName;
@@ -323,6 +367,11 @@ public class TElabora {
         if (mappaInput.containsKey(Chiave.flagSovrascrive)) {
             this.flagSovrascrive = (boolean) mappaInput.get(Chiave.flagSovrascrive);
         }// end of if cycle
+
+        if (mappaInput.containsKey(Chiave.flagUsaAllPackages)) {
+            this.flagAllPackages = (boolean) mappaInput.get(Chiave.flagUsaAllPackages);
+        }// end of if cycle
+
     }// end of method
 
 
@@ -350,13 +399,11 @@ public class TElabora {
         String sourceTemplatesText = "";
         String newTaskText = "";
 
-        if (mappaInput.containsKey(Chiave.newEntityName)) {
-            this.newEntityName = (String) mappaInput.get(Chiave.newEntityName);
-            nomeFileTextSorgente = task.getSourceName(flagCompany);
-        } else {
+        if (text.isEmpty(newEntityName)) {
             return;
-        }// end of if/else cycle
+        }// end of if cycle
 
+        nomeFileTextSorgente = task.getSourceName(flagCompany);
         sourceTemplatesText = leggeFile(nomeFileTextSorgente);
         newTaskText = replaceText(sourceTemplatesText);
 
@@ -382,24 +429,42 @@ public class TElabora {
         pathFileJava = packagePath + SEP + fileNameJava;
 
         if (flagSovrascrive) {
-            file.scriveFile(pathFileJava, newTaskText, true);
+            file.sovraScriveFile(pathFileJava, newTaskText);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {
             oldFileText = file.leggeFile(pathFileJava);
             if (text.isValid(oldFileText)) {
                 if (checkFile(oldFileText)) {
-                    file.scriveFile(pathFileJava, newTaskText, true);
+                    file.sovraScriveFile(pathFileJava, newTaskText);
                     System.out.println(fileNameJava + " esisteva già ed è stato modificato");
                 } else {
-                    System.out.println(fileNameJava + " esisteva già e NON è stato modificato");
+                    writeDocOnly(pathFileJava, oldFileText, newTaskText);
+                    System.out.println(fileNameJava + " esisteva già ed è stato modificato SOLO nella documentazione");
                 }// end of if/else cycle
             } else {
-                file.scriveFile(pathFileJava, newTaskText, true);
+                file.sovraScriveFile(pathFileJava, newTaskText);
                 System.out.println(fileNameJava + " non esisteva ed è stato creato");
             }// end of if/else cycle
         }// end of if/else cycle
     }// end of method
 
+
+    /**
+     * Sostituisce SOLO la documentazione in testa al file
+     */
+    private void writeDocOnly(String pathFileJava, String oldFileText, String newTaskText) {
+        String tagIni = "/**";
+        String tagEnd = "*/";
+        int oldPosIni = oldFileText.indexOf(tagIni);
+        int oldPosEnd = oldFileText.indexOf(tagEnd, oldPosIni);
+        int newPosIni = newTaskText.indexOf(tagIni);
+        int newPosEnd = newTaskText.indexOf(tagEnd, newPosIni);
+        String oldDoc = oldFileText.substring(oldPosIni, oldPosEnd);
+        String newDoc = newTaskText.substring(newPosIni, newPosEnd);
+        String newFileText = oldFileText.replace(oldDoc, newDoc);
+
+        file.sovraScriveFile(pathFileJava, newFileText);
+    }// end of method
 
     private void checkAndWriteFile(String pathNewFile, String sourceText) {
         String fileNameJava = "";
@@ -923,7 +988,7 @@ public class TElabora {
             textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + tagImport);
             file.scriveFile(bootPath, textBootClass, true);
 
-            System.out.println("L'import del package " + newPackageName + " è stato inserito negli import iniziali di "+nameClassBoot);
+            System.out.println("L'import del package " + newPackageName + " è stato inserito negli import iniziali di " + nameClassBoot);
         }// end of if/else cycle
     }// end of method
 
@@ -1097,6 +1162,9 @@ public class TElabora {
         }// end of if cycle
     }// end of method
 
+    private List<String> recuperaPackagesEsistenti() {
+        return file.getSubdirectories(entityPath);
+    }// end of method
 
 //    private void addTagCost(String tag, String value) {
 //        String aCapo = "\n\t";

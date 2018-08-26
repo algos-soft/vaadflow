@@ -142,7 +142,7 @@ public class TDialogoUpdateProject extends TDialogo {
         String tag = DIR_JAVA + "/" + PROJECT_BASE_NAME;
 
         if (text.isValid(ideaProjectRootPath)) {
-            progettiEsistenti = file.getSubdiretories(ideaProjectRootPath);
+            progettiEsistenti = file.getSubdirectories(ideaProjectRootPath);
         }// end of if cycle
 
         if (progettiEsistenti != null && progettiEsistenti.size() > 0) {
