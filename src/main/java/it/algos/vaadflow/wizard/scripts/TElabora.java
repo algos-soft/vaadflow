@@ -56,6 +56,8 @@ public class TElabora {
     private static final String ENTITIES_NAME = "modules";
     private static final String LAYOUT_NAME = "MainLayout";
     private static final String LIB_NAME = "lib";
+    private static final String DIR_BOOT = "boot";
+    private static final String BOOT_NAME = "ABoot";
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;
     private static final String SUPERCLASS_ENTITY = "AEntity";
     private static final String SUPERCLASS_ENTITY_COMPANY = "ACEntity";
@@ -76,7 +78,6 @@ public class TElabora {
     private static final String VIEW_SUFFIX = "ViewList";
     private static final String POM = "pom";
     //    private static final String COST_NAME = "ProjectCost";
-//    private static final String BOOT_NAME = "Boot";
     private static final String HOME_NAME = "HomeView";
     private static final String DIR_DOC = "documentation";
     private static final String GIT = ".gitignore";
@@ -120,6 +121,7 @@ public class TElabora {
     private String projectJavaPath;     //--projectPath più DIR_JAVA più targetProjectName
     private String applicationPath;     //--projectJavaPath più APP_NAME
     private String bootPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
+    private String flowBootPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
     private String costPath;          //--applicationPath più LAYOUT_SUFFIX più JAVA_SUFFIX
     private String uiPath;              //--projectJavaPath più UI_NAME
     private String entityPath;          //--projectJavaPath più newPackageName
@@ -302,6 +304,7 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
+            this.flowBootPath = applicationPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
 
             this.nameClassCost = nameShort + COST_SUFFIX;
             this.nameClassBoot = nameShort + BOOT_SUFFIX;
@@ -318,6 +321,7 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
+            this.flowBootPath = applicationPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
         }// end of if cycle
     }// end of method
 
@@ -943,22 +947,39 @@ public class TElabora {
 
 
     private void addRouteSpecifichePackage() {
+        String max = text.primaMaiuscola(newPackageName);
+        String viewItem = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);";
+
         if (targetModuleName.equals(PROJECT_BASE_NAME)) {
-            addRouteFlow();
+            addRouteFlow(viewItem);
         } else {
-            addRouteProject();
+            addRouteProject(viewItem);
         }// end of if/else cycle
     }// end of method
 
-    private void addRouteFlow() {
+    private void addRouteFlow(String viewItem) {
+        String aCapo = "\n\t\t";
+        String tag = "private void addRouteStandard() {";
+        String textBootClass = file.leggeFile(flowBootPath);
+
+        if (textBootClass.contains(tag)) {
+            if (textBootClass.contains(viewItem)) {
+                System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
+            } else {
+                textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + viewItem);
+                file.scriveFile(bootPath, textBootClass, true);
+
+                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
+            }// end of if/else cycle
+        } else {
+            System.out.println("Nella classe " + nameClassBoot + " manca il metodo addRouteSpecifiche()");
+        }// end of if/else cycle
     }// end of method
 
-    private void addRouteProject() {
+    private void addRouteProject(String viewItem) {
         String aCapo = "\n\t\t";
         String tag = "protected void addRouteSpecifiche() {";
         String textBootClass = file.leggeFile(bootPath);
-        String max = text.primaMaiuscola(newPackageName);
-        String viewItem = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);";
 
         if (textBootClass.contains(tag)) {
             if (textBootClass.contains(viewItem)) {

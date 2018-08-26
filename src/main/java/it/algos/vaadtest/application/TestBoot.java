@@ -3,8 +3,6 @@ package it.algos.vaadtest.application;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.bolla.BollaViewList;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -95,8 +93,6 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-		FlowCost.MENU_CLAZZ_LIST.add(BollaViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 
 
