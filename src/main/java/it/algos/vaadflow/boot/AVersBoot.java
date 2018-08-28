@@ -79,14 +79,7 @@ public abstract class AVersBoot {
                     vers.crea("Z", "#" + code, "#desc: " + descOld + " -> " + descNew);
                     preferenza.setDescrizione(descNew);
                     pref.save(preferenza);
-                } else {
-                    valueOld = preferenza.getAValue();
-                    if (!valueOld.equals(valueNew)) {
-                        vers.crea("Z", "#" + code, "#value: " + valueOld + " -> " + valueNew);
-                        preferenza.setAValue(valueNew);
-                        pref.save(preferenza);
-                    }// end of if cycle
-                }// end of if/else cycle
+                }// end of if cycle
             }// end of if/else cycle
         }// end of for cycle
 

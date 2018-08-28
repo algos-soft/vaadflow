@@ -48,7 +48,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        final AppLayout app = new AppLayout("Vaadinflow");
+        final AppLayout app = new AppLayout("vaadinflow");
         List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
         ArrayList<MenuItem> listaMenu = null;
 

@@ -304,7 +304,7 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-            this.flowBootPath = applicationPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+            this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
 
             this.nameClassCost = nameShort + COST_SUFFIX;
             this.nameClassBoot = nameShort + BOOT_SUFFIX;
@@ -321,7 +321,7 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-            this.flowBootPath = applicationPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+            this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
         }// end of if cycle
     }// end of method
 
@@ -446,7 +446,7 @@ public class TElabora {
                     System.out.println(fileNameJava + " esisteva già ed è stato modificato SOLO nella documentazione");
                 }// end of if/else cycle
             } else {
-                file.sovraScriveFile(pathFileJava, newTaskText);
+                file.scriveFile(pathFileJava, newTaskText, true);
                 System.out.println(fileNameJava + " non esisteva ed è stato creato");
             }// end of if/else cycle
         }// end of if/else cycle
@@ -918,75 +918,32 @@ public class TElabora {
 
 
     private void addPackageMenu() {
-        addRouteSpecifichePackage();
-        addImportPackage();
-    }// end of method
-
-
-//    private void addRouteSpecifichePackage() {
-//        String aCapo = "\n\t\t\t\t";
-//        String tagPackage = "";
-//        String tag = "new MenuItem(\"Home\", () -> UI.getCurrent().navigate(\"\")),";
-//        String textUIClass = file.leggeFile(layoutPath);
-//        String max = text.primaMaiuscola(newPackageName);
-//        String viewItem = "new MenuItem(\"" + max + "\", () -> UI.getCurrent().navigate(" + qualifier + ")),";
-//
-//        if (textUIClass.contains(tag)) {
-//            if (textUIClass.contains(viewItem)) {
-//                System.out.println("Nella classe MainLayout esiste già il menu per il package " + newPackageName);
-//            } else {
-//                textUIClass = text.sostituisce(textUIClass, tag, tag + aCapo + viewItem);
-//                file.scriveFile(layoutPath, textUIClass, true);
-//
-//                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto al MainLayout");
-//            }// end of if/else cycle
-//        } else {
-//            System.out.println("Nella classe MainLayout manca il metodo setMenuItems()");
-//        }// end of if/else cycle
-//    }// end of method
-
-
-    private void addRouteSpecifichePackage() {
         String max = text.primaMaiuscola(newPackageName);
         String viewItem = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);";
+        String aCapoImport = "\n";
+        String aCapo = "\n\t\t";
 
         if (targetModuleName.equals(PROJECT_BASE_NAME)) {
-            addRouteFlow(viewItem);
+            addRouteFlow(max, aCapo, aCapoImport, viewItem);
         } else {
-            addRouteProject(viewItem);
+            addRouteProject(max, aCapo, aCapoImport, viewItem);
         }// end of if/else cycle
     }// end of method
 
-    private void addRouteFlow(String viewItem) {
-        String aCapo = "\n\t\t";
-        String tag = "private void addRouteStandard() {";
+
+    private void addRouteFlow(  String max, String aCapo, String aCapoImport, String viewItem) {
+        String tagMethod = "private void addRouteStandard() {";
+        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
+        String viewImport = "import it.algos.vaadflow.application.FlowCost;";
         String textBootClass = file.leggeFile(flowBootPath);
 
-        if (textBootClass.contains(tag)) {
+        if (textBootClass.contains(tagMethod)) {
             if (textBootClass.contains(viewItem)) {
                 System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
             } else {
-                textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + viewItem);
-                file.scriveFile(bootPath, textBootClass, true);
-
-                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
-            }// end of if/else cycle
-        } else {
-            System.out.println("Nella classe " + nameClassBoot + " manca il metodo addRouteSpecifiche()");
-        }// end of if/else cycle
-    }// end of method
-
-    private void addRouteProject(String viewItem) {
-        String aCapo = "\n\t\t";
-        String tag = "protected void addRouteSpecifiche() {";
-        String textBootClass = file.leggeFile(bootPath);
-
-        if (textBootClass.contains(tag)) {
-            if (textBootClass.contains(viewItem)) {
-                System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
-            } else {
-                textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + viewItem);
-                file.scriveFile(bootPath, textBootClass, true);
+                textBootClass = text.sostituisce(textBootClass, viewImport, viewImport + aCapoImport + tagImport);
+                textBootClass = text.sostituisce(textBootClass, tagMethod, tagMethod + aCapo + viewItem);
+                file.sovraScriveFile(flowBootPath, textBootClass);
 
                 System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
             }// end of if/else cycle
@@ -996,22 +953,44 @@ public class TElabora {
     }// end of method
 
 
-    private void addImportPackage() {
-        String aCapo = "\n";
-        String tag = "import it.algos.vaadflow.boot.ABoot;";
-        String textBootClass = file.leggeFile(bootPath);
-        String max = text.primaMaiuscola(newPackageName);
+    private void addRouteProject(  String max, String aCapo, String aCapoImport, String viewItem) {
+        String tagMethod = "protected void addRouteSpecifiche() {";
         String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
+        String viewImport = "import it.algos.vaadflow.boot.ABoot;";
+        String textBootClass = file.leggeFile(bootPath);
 
-        if (textBootClass.contains(tagImport)) {
-            System.out.println("Nella classe " + nameClassBoot + " esiste già l'import per il package " + newPackageName);
+        if (textBootClass.contains(tagMethod)) {
+            if (textBootClass.contains(viewItem)) {
+                System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
+            } else {
+                textBootClass = text.sostituisce(textBootClass, viewImport, viewImport + aCapoImport + tagImport);
+                textBootClass = text.sostituisce(textBootClass, tagMethod, tagMethod + aCapo + viewItem);
+                file.scriveFile(bootPath, textBootClass, true);
+
+                System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
+            }// end of if/else cycle
         } else {
-            textBootClass = text.sostituisce(textBootClass, tag, tag + aCapo + tagImport);
-            file.scriveFile(bootPath, textBootClass, true);
-
-            System.out.println("L'import del package " + newPackageName + " è stato inserito negli import iniziali di " + nameClassBoot);
+            System.out.println("Nella classe " + nameClassBoot + " manca il metodo addRouteSpecifiche()");
         }// end of if/else cycle
     }// end of method
+
+
+//    private void addImportPackage() {
+//        String aCapoImport = "\n";
+//        String viewImport = "import it.algos.vaadflow.boot.ABoot;";
+//        String textBootClass = file.leggeFile(bootPath);
+//        String max = text.primaMaiuscola(newPackageName);
+//        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
+//
+//        if (textBootClass.contains(viewImport)) {
+//            System.out.println("Nella classe " + nameClassBoot + " esiste già l'import per il package " + newPackageName);
+//        } else {
+//            textBootClass = text.sostituisce(textBootClass, viewImport, viewImport + aCapoImport + tagImport);
+//            file.scriveFile(bootPath, textBootClass, true);
+//
+//            System.out.println("L'import del package " + newPackageName + " è stato inserito negli import iniziali di " + nameClassBoot);
+//        }// end of if/else cycle
+//    }// end of method
 
 
     //    private boolean isEsisteMetodo(String fileNameUIClass, String textUIClass, String tagMethod) {

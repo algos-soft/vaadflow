@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
+	public final static String TAG_BOL = "bolla";
+	public final static String TAG_MEL = "mela";
+	public final static String TAG_GIO = "giorgio";
 	public final static String TAG_LOG = "log";
     public final static String TAG_UTE = "utente";
     public final static String TAG_VER = "versione";

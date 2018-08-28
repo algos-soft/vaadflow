@@ -62,7 +62,7 @@ public class AAnnotationService {
     public AArrayService array;
     @Autowired
     Environment env;
-    private ATextService text = ATextService.getInstance();
+    public ATextService text = ATextService.getInstance();
     /**
      * Private constructor to avoid client applications to use constructor
      */

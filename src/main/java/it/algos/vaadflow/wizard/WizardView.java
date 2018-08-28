@@ -16,10 +16,7 @@ import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import it.algos.vaadflow.wizard.enumeration.Progetto;
-import it.algos.vaadflow.wizard.scripts.TDialogoPackage;
-import it.algos.vaadflow.wizard.scripts.TDialogoUpdateProject;
-import it.algos.vaadflow.wizard.scripts.TElabora;
-import it.algos.vaadflow.wizard.scripts.TRecipient;
+import it.algos.vaadflow.wizard.scripts.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,7 +68,7 @@ public class WizardView extends VerticalLayout {
     private static Progetto PROGETTO_STANDARD_SUGGERITO_NUOVO = Progetto.vaadin;
     private static Progetto PROGETTO_STANDARD_SUGGERITO_MODIFICA = Progetto.test;
     private static String NOME_PACKAGE_STANDARD_SUGGERITO = "prova";
-    private static String LABEL_A = "Creazione di un nuovo project";
+    private static String PROJECT = "Creazione di un nuovo project";
     private static String LABEL_B = "Update di un project esistente";
     private static String LABEL_C = VAADFLOW + PACKAGE + ", tramite dialogo wizard";
 
@@ -96,8 +93,8 @@ public class WizardView extends VerticalLayout {
      * Inietta da Spring nel costruttore come 'singleton'
      */
     private TDialogoPackage dialogPackage;
-    //    @Autowired
-//    private TDialogoNewProject newProject;
+    @Autowired
+    private TDialogoNewProject newProject;
     @Autowired
     private TDialogoUpdateProject updateProject;
     /**
@@ -148,7 +145,7 @@ public class WizardView extends VerticalLayout {
 
 
     public void iniziaBase() {
-        labelUno = new Label(LABEL_C);
+        labelUno = new Label(VAADFLOW);
         this.add(labelUno);
 //        labelDue = new Label("Aggiornamento di un project esistente, tramite dialogo wizard");
 //        this.add(labelDue);
@@ -172,14 +169,16 @@ public class WizardView extends VerticalLayout {
         layout.setMargin(false);
         layout.setSpacing(true);
 
-//        buttonUno = new Button("New project");
-//        buttonUno.addClickListener(event -> newProject.open(new TRecipient() {
-//            @Override
-//            public void gotInput(Map<Chiave, Object> mappaInput) {
-//                elaboraNewProject(mappaInput);
-//            }// end of inner method
-//        }));// end of lambda expressions and anonymous inner class
-//        layout.add(buttonUno);
+        labelDue = new Label(PROJECT);
+        this.add(labelDue);
+        buttonUno = new Button("New project");
+        buttonUno.addClickListener(event -> newProject.open(new TRecipient() {
+            @Override
+            public void gotInput(Map<Chiave, Object> mappaInput) {
+                elaboraNewProject(mappaInput);
+            }// end of inner method
+        }));// end of lambda expressions and anonymous inner class
+        this.add(buttonUno);
 
 //        buttonDue = new Button("Update project");
 //        buttonDue.addClickListener(event -> updateProject.open(new TRecipient() {
@@ -190,6 +189,8 @@ public class WizardView extends VerticalLayout {
 //        }));// end of lambda expressions and anonymous inner class
 //        layout.add(buttonDue);
 
+        labelDue = new Label(PACKAGE);
+        this.add(labelDue);
         buttonDue = new Button("Nuovo package");
         buttonDue.addClickListener(event -> dialogPackage.open(new TRecipient() {
             @Override
@@ -238,14 +239,14 @@ public class WizardView extends VerticalLayout {
     }// end of method
 
 
-//    private void elaboraNewProject(Map<Chiave, Object> mappaInput) {
-//        newProject.close();
-//
-//        if (mappaInput != null) {
-//            elabora.newProject(mappaInput);
-//        }// end of if cycle
-//
-//    }// end of method
+    private void elaboraNewProject(Map<Chiave, Object> mappaInput) {
+        newProject.close();
+
+        if (mappaInput != null) {
+            elabora.newProject(mappaInput);
+        }// end of if cycle
+
+    }// end of method
 
 
     private void elaboraUpdateProject(Map<Chiave, Object> mappaInput) {

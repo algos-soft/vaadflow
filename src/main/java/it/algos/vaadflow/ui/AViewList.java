@@ -34,6 +34,7 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -698,12 +699,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     public void updateView() {
-        List items = service != null ? service.findFilter(searchField.getValue()) : null;
+        Collection items = service != null ? service.findFilter(searchField.getValue()) : null;
 
         if (items != null) {
             try { // prova ad eseguire il codice
                 grid.deselectAll();
-                grid.setItems(items);
+                grid.setItems( items);
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error(unErrore.toString());
             }// fine del blocco try-catch

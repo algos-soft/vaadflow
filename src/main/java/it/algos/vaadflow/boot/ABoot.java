@@ -138,32 +138,32 @@ public abstract class ABoot implements ServletContextListener {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
-//        if (pref.isBool(EAPreferenza.showCompany.getCode())) {
+        if (pref.isBool(EAPreferenza.showCompany.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
-//        }// end of if cycle
+        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
 //        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showRole.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
 //        }// end of if cycle
         if (pref.isBool(EAPreferenza.showAddress.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
         }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showPerson.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
 //        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
+        FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
 //        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showWizard.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
+        FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
 //        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showVersione.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
 //        }// end of if cycle
 //        if (pref.isBool(EAPreferenza.showUser.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
 //        }// end of if cycle
     }// end of method
 
