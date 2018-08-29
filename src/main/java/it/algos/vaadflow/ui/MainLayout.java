@@ -57,10 +57,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             for (Class clazz : listaClassiMenu) {
                 listaMenu.add(creaMenu(clazz));
             }// end of for cycle
+            app.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
+            this.add(app);
         }// end of if cycle
-
-        app.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
-        this.add(app);
     }// end of method
 
 

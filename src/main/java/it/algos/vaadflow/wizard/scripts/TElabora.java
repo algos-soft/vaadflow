@@ -196,12 +196,18 @@ public class TElabora {
         this.creaApplicationDirectory();
         this.creaApplicationFolderContent();
         this.creaModulesDirectory();
+        this.copiaExtra();
+    }// end of method
+
+    private void copiaExtra() {
         this.copiaResources();
         this.copiaPom();
         this.copiaRead();
         this.copiaWebapp();
         this.copiaDocumentation();
         this.copiaGit();
+        this.copiaLinks();
+        this.copiaSnippets();
     }// end of method
 
 
@@ -297,6 +303,14 @@ public class TElabora {
                 this.targetModuleName = progetto.getNameModule().toLowerCase();
                 this.targetLayoutName = progetto.getNameLayout().toLowerCase();
                 this.nameShort = progetto.getNameShort();
+            } else {
+                if (projectValue instanceof String) {
+                    projectName = (String) projectValue;
+                    this.targetProjectName = projectName.toLowerCase();
+                    this.targetModuleName = projectName.toLowerCase();
+                    this.targetLayoutName = projectName.toLowerCase();
+                    this.nameShort = projectName.substring(0, 3).toUpperCase();
+                }// end of if cycle
             }// end of if/else cycle
             this.targetModuleCapitalName = text.primaMaiuscola(targetModuleName);
             this.projectPath = ideaProjectRootPath + SEP + targetProjectName;
@@ -322,7 +336,15 @@ public class TElabora {
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
             this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
-        }// end of if cycle
+        } else {
+            this.newProjectName = targetProjectName;
+            this.projectPath = ideaProjectRootPath + SEP + newProjectName;
+            this.projectJavaPath = projectPath + DIR_JAVA + SEP + newProjectName;
+            this.applicationPath = projectJavaPath + SEP + APP_NAME;
+            this.uiPath = projectJavaPath + SEP + UI_NAME;
+            this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
+            this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+        }// end of if/else cycle
     }// end of method
 
 
@@ -1098,6 +1120,14 @@ public class TElabora {
             file.copyFile(srcPath, destPath);
         }// end of if cycle
     }// end of method
+
+    private void copiaLinks() {
+    }// end of method
+
+
+    private void copiaSnippets() {
+    }// end of method
+
 
     private void creaProjectModule() {
         file.creaDirectory(projectJavaPath);
