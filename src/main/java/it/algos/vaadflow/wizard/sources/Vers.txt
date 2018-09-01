@@ -1,9 +1,11 @@
 package it.algos.@MODULELOWER@.application;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadbase.annotation.AIScript;
-import it.algos.vaadbase.modules.preferenza.PreferenzaService;
-import it.algos.vaadbase.modules.versione.VersioneService;
+import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.boot.AVersBoot;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.modules.versione.VersioneService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,8 +19,6 @@ import javax.persistence.Query;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.Date;
-
-import static it.algos.vaadbase.application.BaseCost.TAG_VER;
 
 /**
  * Log delle versioni, modifiche e patch installate
@@ -34,8 +34,10 @@ import static it.algos.vaadbase.application.BaseCost.TAG_VER;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class VersBootStrap  {
+public class @MODULEUPPER@Vers extends AVersBoot {
 
+
+    private final static String CODE_PROJECT = "@FIRSTCHARPROJECT@";
 
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
@@ -61,26 +63,27 @@ public class VersBootStrap  {
      * Tutte le aggiunte, modifiche e patch vengono inserite con una versione <br>
      * L'ordine di inserimento è FONDAMENTALE
      */
-    @PostConstruct
-    public void inizia() {
-        int k = 0;
+    public int inizia() {
+        int k = 1;
+        codeProject = CODE_PROJECT;
 
         //--prima installazione del programma
         //--non fa nulla, solo informativo
-        if (vers.installa(++k)) {
-            vers.crea("Setup", "Installazione iniziale");
+        if (installa(++k)) {
+            crea("Setup", "Installazione iniziale");
         }// fine del blocco if
 
         //--creata una nuova preferenza
-        if (vers.installa(++k)) {
-            vers.creaPrefBool(AppCost.USA_DEBUG, "Flag generale di debug (ce ne possono essere di specifici, validi solo se questo è vero)");
+        if (installa(++k)) {
+            creaPrefBool(FlowCost.USA_DEBUG, "Flag generale di debug (ce ne possono essere di specifici, validi solo se questo è vero)");
         }// fine del blocco if
 
         //--creata una nuova preferenza
-        if (vers.installa(++k)) {
-            vers.creaPrefBool(AppCost.USA_LOG_DEBUG, "Uso del log di registrazione per il livello debug. Di default true");
+        if (installa(++k)) {
+            creaPrefBool(FlowCost.USA_LOG_DEBUG, "Uso del log di registrazione per il livello debug. Di default true");
         }// fine del blocco if
 
+        return k;
     }// end of method
 
 

@@ -46,7 +46,7 @@ public class RoleService extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    private RoleRepository repository;
+    public RoleRepository repository;
 
 
     /**

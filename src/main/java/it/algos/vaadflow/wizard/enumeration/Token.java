@@ -15,6 +15,7 @@ public enum Token {
     projectName("PROJECT"),
     moduleNameMinuscolo("MODULELOWER"),
     moduleNameMaiuscolo("MODULEUPPER"),
+    first("FIRSTCHARPROJECT"),
     packageName("PACKAGE"),
     projectCost("COST"),
     user("USER"),

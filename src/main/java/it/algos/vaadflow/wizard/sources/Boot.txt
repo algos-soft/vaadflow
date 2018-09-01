@@ -1,18 +1,20 @@
 package it.algos.@MODULELOWER@.application;
 
-import it.algos.vaadbase.application.BaseCost;
-import it.algos.vaadbase.boot.ABoot;
-import it.algos.vaadbase.wizard.ui.WizardView;
-import it.algos.vaadbase.annotation.AIScript;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.boot.ABoot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import javax.servlet.ServletContextEvent;
+import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
  * Project @MODULELOWER@
- * Created by Algos
+ * Created by Algos flowbase
  * User: gac
  * Date: ven, 8-mag-2018
  * <p>
@@ -35,21 +37,6 @@ public class @MODULEUPPER@Boot extends ABoot {
     public final static String DEMO_COMPANY_CODE = "demo";
 
 
-    @Autowired
-    private UtenteService utenteService;
-
-    @Autowired
-    private ALogin login;
-
-    @Autowired
-    private CompanyService companyService;
-
-
-    /**
-     * Iniettata dal costruttore <br>
-     */
-    private @MODULEUPPER@VersBoot @MODULELOWER@VersBoot;
-
 
     /**
      * Costruttore @Autowired <br>
@@ -57,9 +44,8 @@ public class @MODULEUPPER@Boot extends ABoot {
      * @param wamVersBoot Log delle versioni, modifiche e patch installat
      */
     @Autowired
-    public @MODULEUPPER@Boot(@MODULEUPPER@VersBoot @MODULELOWER@VersBoot) {
+    public @MODULEUPPER@Boot() {
         super();
-        this.@MODULELOWER@VersBoot = @MODULELOWER@VersBoot;
     }// end of Spring constructor
 
     /**
@@ -71,7 +57,6 @@ public class @MODULEUPPER@Boot extends ABoot {
      */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        super.inizia();
     }// end of method
 
 
@@ -86,7 +71,6 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Inizializzazione delle versioni del programma specifico
      */
     protected void iniziaVersioni() {
-        wamVersBoot.inizia();
     }// end of method
 
 
@@ -94,7 +78,8 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Regola alcune informazioni dell'applicazione
      */
     protected void regolaInfo() {
-        super.regolaInfo();
+            PROJECT_NAME = "@MODULELOWER@";
+
 //        footer.project = "Vaadwam";
 //        footer.version = "0.2";
 //        footer.data = LocalDate.of(2018, 8, 1);
@@ -107,7 +92,6 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Se esistono, sostituisce i valori esistenti con quelli indicati qui
      */
     protected void regolaPreferenze() {
-        super.regolaPreferenze();
 //        pref.setBool(FlowCost.USA_COMPANY, true);
     }// end of method
 
@@ -119,7 +103,6 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowCost.MENU_CLAZZ_LIST.add(Xxx.class);
     }// end of method
 
 

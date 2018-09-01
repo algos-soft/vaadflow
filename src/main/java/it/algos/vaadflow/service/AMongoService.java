@@ -1,13 +1,15 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Project vaadflow
@@ -27,7 +29,7 @@ public class AMongoService {
      * Inietta da Spring
      */
     @Autowired
-    private MongoOperations mongo;
+    public MongoOperations mongo;
 
 
     /**
@@ -73,9 +75,35 @@ public class AMongoService {
 //
 //    //insert a list of user objects
 //	mongoOperation.insert(listofUser);
-
     public void insert(Object item, String collection) {
         mongo.insert(item, collection);
     }// end of method
+
+
+    /**
+     * Find all
+     *
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    public List findAll(Class clazz) {
+        return mongo.findAll(clazz);
+    }// end of single test
+
+
+    /**
+     * Inserts multiple documents into a collection.
+     *
+     * @param lista di elementi da inserire
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    public void insertMany(Collection lista, Class clazz) {
+         mongo.insert(lista, clazz);
+    }// end of single test
+
+
 
 }// end of class

@@ -5,7 +5,14 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleViewList;
+import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.AArrayService;
+import it.algos.vaadflow.service.AReflectionService;
+import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.ui.IAView;
+import org.junit.jupiter.api.BeforeAll;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -21,6 +28,15 @@ import java.util.List;
  * Time: 09:54
  */
 public class ATest {
+
+    @InjectMocks
+    public AArrayService array;
+    @InjectMocks
+    public ATextService text;
+    @InjectMocks
+    protected AAnnotationService annotation;
+    @InjectMocks
+    protected AReflectionService reflection;
 
     protected final static String FIELD_NAME_KEY = "id";
     protected final static String FIELD_NAME_ORDINE = "ordine";
@@ -84,6 +100,22 @@ public class ATest {
     protected final static LocalDate LOCAL_DATE_QUATTRO = LocalDate.of(2014, 3, 8);
     protected final static LocalDateTime LOCAL_DATE_TIME_UNO = LocalDateTime.of(2014, 10, 21, 7, 12);
     protected final static LocalDateTime LOCAL_DATE_TIME_DUE = LocalDateTime.of(2014, 10, 5, 7, 4);
+
+
+    protected void setUpTest() {
+        MockitoAnnotations.initMocks(annotation);
+        MockitoAnnotations.initMocks(reflection);
+        MockitoAnnotations.initMocks(array);
+        MockitoAnnotations.initMocks(text);
+        annotation.reflection = reflection;
+        annotation.text = text;
+        array.text = text;
+        annotation.array = array;
+        reflection.array = array;
+        FIELD_ORDINE = reflection.getField(ROLE_ENTITY_CLASS, NAME_ORDINE);
+        FIELD_CODE = reflection.getField(ROLE_ENTITY_CLASS, NAME_CODE);
+    }// end of method
+
 
     protected void print(String message, String sorgente, Object ottenuto) {
         System.out.println(message + SEP1 + sorgente + SEP2 + ottenuto);

@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Scope;
 
 import javax.servlet.ServletContextEvent;
 
+import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -75,6 +77,7 @@ public class TestBoot extends ABoot {
      * Regola alcune informazioni dell'applicazione
      */
     protected void regolaInfo() {
+        PROJECT_NAME = "test";
     }// end of method
 
 
@@ -94,7 +97,7 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 
 

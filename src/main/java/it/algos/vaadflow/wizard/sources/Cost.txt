@@ -3,7 +3,7 @@ package it.algos.@MODULELOWER@.application;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import it.algos.vaadbase.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIScript;
 
 /**
  * Project @MODULELOWER@
@@ -19,5 +19,5 @@ import it.algos.vaadbase.annotation.AIScript;
  */
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @AIScript(sovrascrivibile = false)
-public class @COST@ {
+public class @MODULEUPPER@Cost {
 }// end of static class

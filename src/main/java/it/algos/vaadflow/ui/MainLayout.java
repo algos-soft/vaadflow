@@ -19,6 +19,8 @@ import it.algos.vaadflow.service.ATextService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
  * <p>
@@ -48,7 +50,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        final AppLayout app = new AppLayout("vaadinflow");
+        final AppLayout app = new AppLayout(PROJECT_NAME);
         List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
         ArrayList<MenuItem> listaMenu = null;
 

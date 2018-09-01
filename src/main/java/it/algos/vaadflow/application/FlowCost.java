@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
-	public final static String TAG_BOL = "bolla";
-	public final static String TAG_MEL = "mela";
-	public final static String TAG_GIO = "giorgio";
-	public final static String TAG_LOG = "log";
+    public final static String TAG_ROM = "roma";
+    public final static String TAG_LOG = "log";
     public final static String TAG_UTE = "utente";
     public final static String TAG_VER = "versione";
     public final static boolean USA_BAKERY_PAGES = false;
@@ -121,6 +119,8 @@ public class FlowCost {
     public final static String SHOW_VERSION = "showVersion";
     public final static String SHOW_USER = "showUser";
     public final static String SHOW_LOGGER = "showLogger";
+    public final static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
+    public  static String PROJECT_NAME = "vaadinflow";
     private final static String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
     public final static List<String> ESCLUSI_ALL = Arrays.asList(esclusiAll);
     private final static String[] esclusiList = {PROPERTY_ID, PROPERTY_SERIAL, PROPERTY_COMPANY, PROPERTY_NOTE, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
@@ -131,6 +131,5 @@ public class FlowCost {
     public final static List<String> ESCLUSI = Arrays.asList(esclusiMatrice);
     private final static String[] companyMatrice = {COMPANY_CODE, COMPANY_UNICO};
     public final static List<String> COMPANY_OPTIONAL = Arrays.asList(companyMatrice);
-    public static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
 
 }// end of static class

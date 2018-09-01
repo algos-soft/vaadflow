@@ -160,7 +160,7 @@ public class ATextService {
      *
      * @return test formattato in uscita
      */
-    public String primaMaiuscola(final String testoIn) {
+    public String primaMaiuscola( String testoIn) {
         return primoCarattere(testoIn, EAFirstChar.maiuscolo);
     }// end of method
 
@@ -175,7 +175,7 @@ public class ATextService {
      *
      * @return test formattato in uscita
      */
-    public String primaMinuscola(final String testoIn) {
+    public String primaMinuscola( String testoIn) {
         return primoCarattere(testoIn, EAFirstChar.minuscolo);
     }// end of method
 
@@ -191,7 +191,7 @@ public class ATextService {
      *
      * @return test ridotto in uscita
      */
-    public String levaTesta(final String testoIn, String tagIniziale) {
+    public String levaTesta( String testoIn, String tagIniziale) {
         String testoOut = testoIn.trim();
 
         if (this.isValid(testoOut) && this.isValid(tagIniziale)) {

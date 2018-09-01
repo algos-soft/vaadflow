@@ -34,35 +34,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AAnnotationServiceTest extends ATest {
 
 
-    @InjectMocks
-    public AArrayService array;
-    @InjectMocks
-    public ATextService text;
-    @InjectMocks
-    private AAnnotationService service;
-    @InjectMocks
-    private AReflectionService reflection;
-
-//    @InjectMocks
-//    public ASessionService session;
-
     @BeforeAll
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        MockitoAnnotations.initMocks(service);
-        MockitoAnnotations.initMocks(reflection);
-        MockitoAnnotations.initMocks(array);
-        MockitoAnnotations.initMocks(text);
-//        MockitoAnnotations.initMocks(session);
-        service.reflection = reflection;
-//        service.session = session;
-        service.text = text;
-        array.text = text;
-        service.array = array;
-        reflection.array = array;
-        FIELD_ORDINE = reflection.getField(ROLE_ENTITY_CLASS, NAME_ORDINE);
-        FIELD_CODE = reflection.getField(ROLE_ENTITY_CLASS, NAME_CODE);
-//        FIELD_ROLE = reflection.getField(USER_ENTITY_CLASS, NAME_ROLE);
+        super.setUpTest();
     }// end of method
 
 
@@ -93,7 +67,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getAIEntity() {
-        AIEntity ottenuto = service.getAIEntity(ROLE_ENTITY_CLASS);
+        AIEntity ottenuto = annotation.getAIEntity(ROLE_ENTITY_CLASS);
         assertNotNull(ottenuto);
     }// end of single test
 
@@ -111,7 +85,7 @@ public class AAnnotationServiceTest extends ATest {
     public void getAIList() {
         AIList ottenuto;
 
-        ottenuto = service.getAIList(ROLE_ENTITY_CLASS);
+        ottenuto = annotation.getAIList(ROLE_ENTITY_CLASS);
         assertNotNull(ottenuto);
 
 //        ottenuto = service.getAIList(USER_ENTITY_CLASS);
@@ -130,7 +104,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getAIForm() {
-        AIForm ottenuto = service.getAIForm(ROLE_ENTITY_CLASS);
+        AIForm ottenuto = annotation.getAIForm(ROLE_ENTITY_CLASS);
         assertNotNull(ottenuto);
     }// end of single test
 
@@ -149,7 +123,7 @@ public class AAnnotationServiceTest extends ATest {
 //        AIView ottenutoList = service.getAIView(ROLE_VIEW_CLASS_LIST);
 //        assertNotNull(ottenutoList);
 
-        AIView ottenutoForm = service.getAIView(ROLE_VIEW_CLASS);
+        AIView ottenutoForm = annotation.getAIView(ROLE_VIEW_CLASS);
 //        assertNull(ottenutoForm);
     }// end of single test
 
@@ -165,7 +139,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getRoute() {
-        Route ottenuto = service.getRoute(ROLE_VIEW_CLASS);
+        Route ottenuto = annotation.getRoute(ROLE_VIEW_CLASS);
         assertNotNull(ottenuto);
     }// end of single test
 
@@ -182,10 +156,10 @@ public class AAnnotationServiceTest extends ATest {
     public void getAIColumn() {
         AIColumn ottenuto;
 
-        ottenuto = service.getAIColumn(FIELD_CODE);
+        ottenuto = annotation.getAIColumn(FIELD_CODE);
         assertNotNull(ottenuto);
 
-        ottenuto = service.getAIColumn(ROLE_ENTITY_CLASS, FIELD_NAME_NOTE);
+        ottenuto = annotation.getAIColumn(ROLE_ENTITY_CLASS, FIELD_NAME_NOTE);
         assertNotNull(ottenuto);
     }// end of single test
 
@@ -200,7 +174,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getAIField() {
-        AIField ottenuto = service.getAIField(FIELD_CODE);
+        AIField ottenuto = annotation.getAIField(FIELD_CODE);
         assertNotNull(ottenuto);
     }// end of single test
 
@@ -217,7 +191,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getAIField2() {
         AIField ottenuto;
-        ottenuto = service.getAIField(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
+        ottenuto = annotation.getAIField(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
         assertNotNull(ottenuto);
     }// end of method
 
@@ -232,7 +206,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getViewName() {
         previsto = "role";
-        ottenuto = service.getViewName(ROLE_VIEW_CLASS);
+        ottenuto = annotation.getViewName(ROLE_VIEW_CLASS);
         assertEquals(previsto, ottenuto);
     }// end of single test
 
@@ -269,7 +243,7 @@ public class AAnnotationServiceTest extends ATest {
         String[] stringArray = {"ordine", "code"};
         previstoList = Arrays.asList(stringArray);
 
-        ottenutoList = service.getGridPropertiesName(ROLE_ENTITY_CLASS);
+        ottenutoList = annotation.getGridPropertiesName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
     }// end of single test
 
@@ -288,7 +262,7 @@ public class AAnnotationServiceTest extends ATest {
         String[] stringArray = {"ordine", "code"};
         previstoList = Arrays.asList(stringArray);
 
-        ottenutoList = service.getFormPropertiesName(ROLE_ENTITY_CLASS);
+        ottenutoList = annotation.getFormPropertiesName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
     }// end of single test
 
@@ -306,7 +280,7 @@ public class AAnnotationServiceTest extends ATest {
         String[] stringArray = {"ordine", "code"};
         previstoList = Arrays.asList(stringArray);
 
-        ottenutoList = service.getFormFieldsName(ROLE_ENTITY_CLASS);
+        ottenutoList = annotation.getFormFieldsName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
 
 //        ottenutoList = service.getFormFieldsName(USER_ENTITY_CLASS);
@@ -327,11 +301,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getColumnName() {
         previsto = HEADER_ORDINE;
-        ottenuto = service.getColumnName(FIELD_ORDINE);
+        ottenuto = annotation.getColumnName(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = HEADER_CODE;
-        ottenuto = service.getColumnName(FIELD_CODE);
+        ottenuto = annotation.getColumnName(FIELD_CODE);
         assertEquals(previsto, ottenuto);
     }// end of single test
 
@@ -383,11 +357,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getColumnWith() {
         previstoIntero = 55;
-        ottenutoIntero = service.getColumnWith(FIELD_ORDINE);
+        ottenutoIntero = annotation.getColumnWith(FIELD_ORDINE);
         assertEquals(previstoIntero, ottenutoIntero);
 
         previstoIntero = 210;
-        ottenutoIntero = service.getColumnWith(FIELD_CODE);
+        ottenutoIntero = annotation.getColumnWith(FIELD_CODE);
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
@@ -403,11 +377,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getFormType() {
         previstoType = EAFieldType.integer;
-        ottenutoType = service.getFormType(ROLE_ENTITY_CLASS, FIELD_NAME_ORDINE);
+        ottenutoType = annotation.getFormType(ROLE_ENTITY_CLASS, FIELD_NAME_ORDINE);
         assertEquals(previstoType, ottenutoType);
 
         previstoType = EAFieldType.text;
-        ottenutoType = service.getFormType(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
+        ottenutoType = annotation.getFormType(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
         assertEquals(previstoType, ottenutoType);
     }// end of single test
 
@@ -424,11 +398,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getFormFieldName() {
         previsto = text.primaMaiuscola(NAME_ORDINE);
-        ottenuto = service.getFormFieldNameCapital(FIELD_ORDINE);
+        ottenuto = annotation.getFormFieldNameCapital(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = text.primaMaiuscola(NAME_CODE);
-        ottenuto = service.getFormFieldNameCapital(FIELD_CODE);
+        ottenuto = annotation.getFormFieldNameCapital(FIELD_CODE);
         assertEquals(previsto, ottenuto);
     }// end of single test
 
@@ -446,28 +420,28 @@ public class AAnnotationServiceTest extends ATest {
         previsto = FIELD_NAME_ORDINE + INT_NULL;
         previsto = text.primaMaiuscola(previsto);
 
-        ottenuto = service.getMessage(FIELD_ORDINE);
+        ottenuto = annotation.getMessage(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
-        ottenuto = service.getMessageNull(FIELD_ORDINE);
+        ottenuto = annotation.getMessageNull(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = "";
-        ottenuto = service.getMessageSize(FIELD_ORDINE);
+        ottenuto = annotation.getMessageSize(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = FIELD_NAME_CODE + TESTO_NULL;
         previsto = text.primaMaiuscola(previsto);
-        ottenuto = service.getMessage(FIELD_CODE);
+        ottenuto = annotation.getMessage(FIELD_CODE);
         assertEquals(previsto, ottenuto);
-        ottenuto = service.getMessageNull(FIELD_CODE);
+        ottenuto = annotation.getMessageNull(FIELD_CODE);
         assertEquals(previsto, ottenuto);
 
         previsto = FIELD_NAME_CODE + " deve contenere almeno 3 caratteri";
         previsto = text.primaMaiuscola(previsto);
-        ottenuto = service.getMessage(FIELD_CODE);
+        ottenuto = annotation.getMessage(FIELD_CODE);
         assertNotEquals(previsto, ottenuto);
-        ottenuto = service.getMessageSize(FIELD_CODE);
+        ottenuto = annotation.getMessageSize(FIELD_CODE);
         assertEquals(previsto, ottenuto);
     }// end of single test
 
@@ -535,11 +509,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void isFocus() {
         previstoBooleano = false;
-        ottenutoBooleano = service.isFocus(FIELD_ORDINE);
+        ottenutoBooleano = annotation.isFocus(FIELD_ORDINE);
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         previstoBooleano = true;
-        ottenutoBooleano = service.isFocus(FIELD_CODE);
+        ottenutoBooleano = annotation.isFocus(FIELD_CODE);
         assertEquals(previstoBooleano, ottenutoBooleano);
     }// end of single test
 
@@ -554,7 +528,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     public void getComboClass() {
         Class previstoClass = Role.class;
-        Class ottenutoClass = service.getComboClass(FIELD_CODE);
+        Class ottenutoClass = annotation.getComboClass(FIELD_CODE);
         assertEquals(previstoClass, ottenutoClass);
     }// end of method
 
@@ -570,11 +544,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getWidth() {
         previstoIntero = 3;
-        ottenutoIntero = service.getWidth(FIELD_ORDINE);
+        ottenutoIntero = annotation.getWidth(FIELD_ORDINE);
         assertEquals(previstoIntero, ottenutoIntero);
 
         previstoIntero = 12;
-        ottenutoIntero = service.getWidth(FIELD_CODE);
+        ottenutoIntero = annotation.getWidth(FIELD_CODE);
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
@@ -590,11 +564,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getWidthEM() {
         previsto = "3em";
-        ottenuto = service.getWidthEM(FIELD_ORDINE);
+        ottenuto = annotation.getWidthEM(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = "12em";
-        ottenuto = service.getWidthEM(FIELD_CODE);
+        ottenuto = annotation.getWidthEM(FIELD_CODE);
         assertEquals(previsto, ottenuto);
     }// end of single test
 
@@ -610,11 +584,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void isRequired() {
         previstoBooleano = false;
-        ottenutoBooleano = service.isRequired(FIELD_ORDINE);
+        ottenutoBooleano = annotation.isRequired(FIELD_ORDINE);
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         previstoBooleano = true;
-        ottenutoBooleano = service.isRequired(FIELD_CODE);
+        ottenutoBooleano = annotation.isRequired(FIELD_CODE);
         assertEquals(previstoBooleano, ottenutoBooleano);
     }// end of single test
 

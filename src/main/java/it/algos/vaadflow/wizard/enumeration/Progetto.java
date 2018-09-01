@@ -36,7 +36,6 @@ public enum Progetto {
 
     public static List<String> getNames() {
         List<String> nomi = new ArrayList<>();
-        Progetto[] allProgetti = Progetto.values();
 
         for (Progetto progetto : Progetto.values()) {
             nomi.add(progetto.nameProject);
@@ -44,6 +43,16 @@ public enum Progetto {
 
         return nomi;
     }// end of method
+
+    public static Progetto getProgetto(String nameProject) {
+        for (Progetto progetto : Progetto.values()) {
+            if (progetto.getNameProject().equals(nameProject)) {
+                return progetto;
+            }// end of if cycle
+        }// end of for cycle
+
+        return null;
+    }// end of static method
 
     public String getNameProject() {
         return nameProject;

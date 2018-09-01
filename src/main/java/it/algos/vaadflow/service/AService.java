@@ -1,6 +1,5 @@
 package it.algos.vaadflow.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
@@ -8,12 +7,8 @@ import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.modules.company.Company;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.lang.reflect.Field;
@@ -249,7 +244,7 @@ public abstract class AService implements IAService {
                 lista = repository.findAll();
             }// end of if/else cycle
         } catch (Exception unErrore) { // intercetta l'errore
-            log.error(unErrore.toString()+" in AService.findAll(Sort sort)" );
+            log.error(unErrore.toString() + " in AService.findAll(Sort sort)");
         }// fine del blocco try-catch
 
         return lista;
@@ -547,7 +542,7 @@ public abstract class AService implements IAService {
      */
     @Override
     public AEntity save(AEntity oldBean, AEntity modifiedBean) {
-//        AEntity savedBean = null;
+        AEntity savedBean = null;
 //        EACompanyRequired tableCompanyRequired = annotation.getCompanyRequired(modifiedBean.getClass());
 //        Map mappa = null;
 //        boolean nuovaEntity = oldBean == null || text.isEmpty(modifiedBean.id);
@@ -614,8 +609,12 @@ public abstract class AService implements IAService {
 //        }// end of if cycle
 //
 //        return savedBean;
+        Object obj = repository.save(modifiedBean);
+        if (obj != null && obj instanceof AEntity) {
+            savedBean = (AEntity) obj;
+        }// end of if cycle
 
-        return (AEntity) repository.save(modifiedBean);
+        return savedBean;
     }// end of method
 
 

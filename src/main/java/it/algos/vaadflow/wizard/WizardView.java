@@ -217,10 +217,13 @@ public class WizardView extends VerticalLayout {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setMargin(false);
         layout.setSpacing(true);
+        Progetto currentProject = null;
 
-        String currentProject = System.getProperty("user.dir");
-        currentProject = currentProject.substring(currentProject.lastIndexOf("/") + 1);
-        mappaInput.put(Chiave.targetProjectName, currentProject);
+        String nomeProgetto = System.getProperty("user.dir");
+        nomeProgetto = nomeProgetto.substring(nomeProgetto.lastIndexOf("/") + 1);
+        currentProject = Progetto.getProgetto(nomeProgetto);
+
+        mappaInput.put(Chiave.targetProjectName, currentProject != null ? currentProject : nomeProgetto);
 
         buttonUno = new Button("Update this project");
         buttonUno.addClickListener(event -> elaboraUpdateProject(mappaInput));

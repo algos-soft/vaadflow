@@ -7,6 +7,7 @@ import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.utente.Utente;
 import lombok.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,11 +57,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Builder(builderMethodName = "builderPerson")
 @EqualsAndHashCode(callSuper = false)
 @Qualifier(TAG_PER)
-@AIEntity(company = EACompanyRequired.nonUsata)
+@AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"nome", "cognome"})
 @AIForm(fields = {"nome", "cognome", "telefono", "email", "indirizzo"})
 @AIScript(sovrascrivibile = false)
-public class Person extends AEntity {
+public class Person extends Utente {
 
 
     /**
