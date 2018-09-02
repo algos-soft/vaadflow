@@ -1,12 +1,7 @@
 package it.algos.vaadflow.modules.company;
 
-import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.person.Person;
-import it.algos.vaadflow.modules.person.PersonService;
-import it.algos.vaadflow.service.AAnnotationService;
-import it.algos.vaadflow.service.ATextService;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.person.EAPerson;
 
 /**
  * Project vaadflow
@@ -17,23 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public enum EACompany {
 
-    algos("algos", "Company ALGOS di prova", "02.453677", "gac@algos.it"),
-    demo("demo", "Company demo", "338 678932", "gates@win.com"),
-    test("test", "Company di test", "345 786631", "alfa@libero.it");
+    algos("algos", "Company ALGOS di prova", EAPerson.uno, "02.453677", "gac@algos.it", EAAddress.quattro),
+    demo("demo", "Company demo", EAPerson.due, "338 678932", "gates@win.com", EAAddress.cinque),
+    test("test", "Company di test", EAPerson.tre, "345 786631", "alfa@libero.it", EAAddress.sei);
 
 
     private String code;
     private String descrizione;
+    private EAPerson person;
     private String telefono;
     private String email;
+    private EAAddress address;
 
 
-    EACompany(String code, String descrizione, String telefono, String email) {
+    EACompany(String code, String descrizione, EAPerson person, String telefono, String email, EAAddress address) {
         this.setCode(code);
         this.setDescrizione(descrizione);
+        this.setPerson(person);
         this.setTelefono(telefono);
         this.setEmail(email);
+        this.setAddress(address);
     }// fine del costruttore
+
 
 
     public String getCode() {
@@ -52,6 +52,14 @@ public enum EACompany {
         this.descrizione = descrizione;
     }// end of method
 
+    public EAPerson getPerson() {
+        return person;
+    }// end of method
+
+    public void setPerson(EAPerson person) {
+        this.person = person;
+    }// end of method
+
     public String getTelefono() {
         return telefono;
     }// end of method
@@ -66,6 +74,14 @@ public enum EACompany {
 
     public void setEmail(String email) {
         this.email = email;
+    }// end of method
+
+    public EAAddress getAddress() {
+        return address;
+    }// end of method
+
+    public void setAddress(EAAddress address) {
+        this.address = address;
     }// end of method
 
 }// end of enumeration class

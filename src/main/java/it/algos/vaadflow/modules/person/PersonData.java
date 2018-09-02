@@ -31,7 +31,7 @@ public class PersonData extends AData {
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
-    protected AddressService address;
+    protected AddressService addressService;
 
 
     /**
@@ -83,7 +83,7 @@ public class PersonData extends AData {
         String telefono;
         String email;
         EAAddress eaAddress;
-        Address indirizzo = null;
+        Address indirizzo;
 
         for (EAPerson persona : EAPerson.values()) {
             nome = persona.getNome();
@@ -91,11 +91,7 @@ public class PersonData extends AData {
             telefono = persona.getTelefono();
             email = persona.getEmail();
             eaAddress = persona.getAddress();
-            if (eaAddress != null) {
-                indirizzo = creaAddress(eaAddress);
-            } else {
-                indirizzo = null;
-            }// end of if/else cycle
+            indirizzo = addressService.newEntity(eaAddress);
 
             service.crea(nome, cognome, telefono, email, indirizzo);
             num++;
@@ -104,19 +100,5 @@ public class PersonData extends AData {
         return num;
     }// end of method
 
-    /**
-     * Creazione del singolo indirizzo
-     */
-    private Address creaAddress(EAAddress eaAddress) {
-        String indirizzo = "";
-        String localita = "";
-        String cap = "";
-
-        indirizzo = eaAddress.getIndirizzo();
-        localita = eaAddress.getLocalita();
-        cap = eaAddress.getCap();
-
-        return address.newEntity(indirizzo, localita, cap);
-    }// end of method
 
 }// end of class

@@ -124,7 +124,7 @@ public abstract class ABoot implements ServletContextListener {
         this.role.loadData();
         this.address.loadData();
         this.person.loadData();
-//        this.company.loadData();
+        this.company.loadData();
     }// end of method
 
 

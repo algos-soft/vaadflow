@@ -5,6 +5,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.address.EAAddress;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,12 @@ public class PersonService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected AddressService addressService;
 
     /**
      * Costruttore <br>
@@ -152,11 +160,43 @@ public class PersonService extends AService {
         return (Person) creaIdKeySpecifica(entity);
     }// end of method
 
+
     /**
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
         return ((Person) entityBean).getNome() + ((Person) entityBean).getCognome();
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     *
+     * @param eaPerson: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntity(EAPerson eaPerson) {
+        String nome;
+        String cognome;
+        String telefono;
+        String email;
+        EAAddress eaAddress;
+        Address indirizzo;
+
+        if (eaPerson != null) {
+            nome = eaPerson.getNome();
+            cognome = eaPerson.getCognome();
+            telefono = eaPerson.getTelefono();
+            email = eaPerson.getEmail();
+            eaAddress = eaPerson.getAddress();
+            indirizzo = addressService.newEntity(eaAddress);
+
+            return newEntity(nome, cognome, telefono, email, indirizzo);
+        } else {
+            return null;
+        }// end of if/else cycle
     }// end of method
 
 }// end of class

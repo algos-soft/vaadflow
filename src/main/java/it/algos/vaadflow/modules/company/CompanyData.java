@@ -3,7 +3,11 @@ package it.algos.vaadflow.modules.company;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
 import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.person.EAPerson;
 import it.algos.vaadflow.modules.person.Person;
+import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,18 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @Slf4j
 public class CompanyData extends AData {
 
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected AddressService addressService;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected PersonService personService;
 
     /**
      * Il service viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -57,7 +73,7 @@ public class CompanyData extends AData {
         int numRec = super.count();
 
         if (numRec == 0) {
-            this.crea();
+            numRec = creaAll();
             log.warn("Algos - Creazione dati iniziali CompanyData.inizia(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Company è presente: " + numRec + " schede");
@@ -68,23 +84,32 @@ public class CompanyData extends AData {
     /**
      * Creazione della collezione
      */
-    private void crea() {
+    private int creaAll() {
+        int num = 0;
         String code;
         String descrizione;
+        EAPerson eaPerson;
         Person contatto;
         String telefono;
         String email;
+        EAAddress eaAddress;
         Address indirizzo;
 
         for (EACompany company : EACompany.values()) {
             code = company.getCode();
             descrizione = company.getDescrizione();
+            eaPerson = company.getPerson();
+            contatto = personService.newEntity(eaPerson);
             telefono = company.getTelefono();
             email = company.getEmail();
+            eaAddress = company.getAddress();
+            indirizzo = addressService.newEntity(eaAddress);
 
-            service.crea(code,  descrizione,null, telefono, email, null);
+            service.crea(code, descrizione, contatto, telefono, email, indirizzo);
+            num++;
         }// end of for cycle
-    }// end of method
 
+        return num;
+    }// end of method
 
 }// end of class

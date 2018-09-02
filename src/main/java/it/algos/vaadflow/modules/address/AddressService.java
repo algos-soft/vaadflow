@@ -2,8 +2,6 @@ package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.modules.company.Company;
-import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,7 +69,7 @@ public class AddressService extends AService {
     public Address crea(String indirizzo, String localita, String cap) {
         Address entity;
 
-        entity = newEntity( indirizzo,localita,cap);
+        entity = newEntity(indirizzo, localita, cap);
         save(entity);
 
         return entity;
@@ -112,6 +110,31 @@ public class AddressService extends AService {
                 .build();
 
         return (Address) creaIdKeySpecifica(entity);
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     *
+     * @param eaAddress: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Address newEntity(EAAddress eaAddress) {
+        String indirizzo;
+        String localita;
+        String cap;
+
+        if (eaAddress != null) {
+            indirizzo = eaAddress.getIndirizzo();
+            localita = eaAddress.getLocalita();
+            cap = eaAddress.getCap();
+
+            return newEntity(indirizzo, localita, cap);
+        } else {
+            return null;
+        }// end of if/else cycle
     }// end of method
 
 }// end of class
