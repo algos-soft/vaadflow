@@ -61,6 +61,41 @@ public class PersonService extends AService {
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
+     */
+    public static Person getNewPerson(String nome, String cognome) {
+        Person entity = null;
+        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
+
+        if (istanza != null) {
+            entity = istanza.newEntity(nome, cognome);
+        }// end of if cycle
+
+        return entity;
+    }// end of method
+
+    /**
+     * Crea una entity <br>
+     * Se esiste già, la cancella prima di ricrearla <br>
+     *
+     * @param nome:      obbligatorio
+     * @param cognome:   obbligatorio
+     * @param telefono:  facoltativo
+     * @param email:     facoltativo
+     * @param indirizzo: via, nome e numero (facoltativo)
+     *
+     * @return la entity trovata o appena creata
+     */
+    public Person crea(String nome, String cognome, String telefono, String email, Address indirizzo) {
+        Person entity;
+
+        entity = newEntity(nome, cognome, telefono, email, indirizzo);
+        save(entity);
+
+        return entity;
+    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -122,22 +157,6 @@ public class PersonService extends AService {
      */
     public String getPropertyUnica(AEntity entityBean) {
         return ((Person) entityBean).getNome() + ((Person) entityBean).getCognome();
-    }// end of method
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
-     */
-    public static Person getNewPerson(String nome, String cognome) {
-        Person entity = null;
-        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
-
-        if (istanza != null) {
-            entity = istanza.newEntity(nome, cognome);
-        }// end of if cycle
-
-        return entity;
     }// end of method
 
 }// end of class

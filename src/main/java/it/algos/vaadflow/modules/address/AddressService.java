@@ -2,6 +2,8 @@ package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,6 +57,25 @@ public class AddressService extends AService {
         super.entityClass = Address.class;
     }// end of Spring constructor
 
+
+    /**
+     * Crea una entity <br>
+     * Se esiste già, la cancella prima di ricrearla <br>
+     *
+     * @param indirizzo: via, nome e numero (obbligatoria, non unica)
+     * @param localita:  località (obbligatoria, non unica)
+     * @param cap:       codice di avviamento postale (obbligatoria, non unica)
+     *
+     * @return la entity trovata o appena creata
+     */
+    public Address crea(String indirizzo, String localita, String cap) {
+        Address entity;
+
+        entity = newEntity( indirizzo,localita,cap);
+        save(entity);
+
+        return entity;
+    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata

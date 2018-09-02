@@ -56,7 +56,7 @@ public class RoleData extends AData {
         int numRec = super.count();
 
         if (numRec == 0) {
-            this.crea();
+            numRec = creaAll();
             log.warn("Algos - Creazione dati iniziali RoleData.inizia(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Role è presente: " + numRec + " schede");
@@ -67,10 +67,15 @@ public class RoleData extends AData {
     /**
      * Creazione della collezione
      */
-    private void crea() {
+    private int creaAll() {
+        int num = 0;
+
         for (EARole ruolo : EARole.values()) {
             service.findOrCrea(ruolo.toString());
+            num++;
         }// end of for cycle
+
+        return num;
     }// end of method
 
 

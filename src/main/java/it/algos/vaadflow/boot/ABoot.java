@@ -2,9 +2,11 @@ package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.developer.DeveloperView;
+import it.algos.vaadflow.modules.address.AddressData;
 import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.company.CompanyData;
 import it.algos.vaadflow.modules.company.CompanyViewList;
+import it.algos.vaadflow.modules.person.PersonData;
 import it.algos.vaadflow.modules.person.PersonViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -41,6 +43,20 @@ public abstract class ABoot implements ServletContextListener {
      */
     @Autowired
     private RoleData role;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private AddressData address;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private PersonData person;
 
 
     /**
@@ -106,7 +122,9 @@ public abstract class ABoot implements ServletContextListener {
      */
     private void iniziaDataStandard() {
         this.role.loadData();
-        this.company.loadData();
+        this.address.loadData();
+        this.person.loadData();
+//        this.company.loadData();
     }// end of method
 
 

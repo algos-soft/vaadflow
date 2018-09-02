@@ -1,9 +1,6 @@
 package it.algos.vaadflow.modules.person;
 
-import lombok.extern.slf4j.Slf4j;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import it.algos.vaadflow.modules.address.EAAddress;
 
 /**
  * Project vaadflow
@@ -13,22 +10,24 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Time: 15:51
  */
 public enum EAPerson {
-    algos("Mario", "Rossi", "06.785556", "assurbanipal@gmail.com.it"),
-    demo("demo", "Company demo", "338 678932", "gates@win.com"),
-    test("test", "Company di test", "345 786631", "alfa@libero.it");
+    uno("Mario", "Rossi", "06.785556", "assurbanipal@gmail.com.it", EAAddress.uno),
+    due("Aldo", "Guzzini", "338 678932", "gates@win.com", null),
+    tre("Lucia", "Portella", "345 786631", "alfa@libero.it",null);
 
 
     private String nome;
     private String cognome;
     private String telefono;
     private String email;
+    private EAAddress address;
 
 
-    EAPerson(String nome, String cognome, String telefono, String email) {
+    EAPerson(String nome, String cognome, String telefono, String email, EAAddress address) {
         this.setNome(nome);
         this.setCognome(cognome);
         this.setTelefono(telefono);
         this.setEmail(email);
+        this.setAddress(address);
     }// fine del costruttore
 
 
@@ -64,4 +63,11 @@ public enum EAPerson {
         this.email = email;
     }// end of method
 
+    public EAAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(EAAddress address) {
+        this.address = address;
+    }
 }// end of enumeration class
