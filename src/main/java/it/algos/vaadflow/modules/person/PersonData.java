@@ -1,36 +1,38 @@
-package it.algos.vaadflow.modules.company;
+package it.algos.vaadflow.modules.person;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.person.Person;
+import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.company.CompanyService;
+import it.algos.vaadflow.modules.company.EACompany;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
+import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Project vaadflow
  * Created by Algos
  * User: gac
  * Date: dom, 02-set-2018
- * Time: 09:18
+ * Time: 15:08
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public class CompanyData extends AData {
-
+public class PersonData extends AData {
 
     /**
      * Il service viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    private CompanyService service;
+    private PersonService service;
 
 
     /**
@@ -42,9 +44,9 @@ public class CompanyData extends AData {
      * @param service di collegamento per la Repository
      */
     @Autowired
-    public CompanyData(@Qualifier(TAG_COM) IAService service) {
-        super(Company.class, service);
-        this.service = (CompanyService) service;
+    public PersonData(@Qualifier(TAG_PER) IAService service) {
+        super(Person.class, service);
+        this.service = (PersonService) service;
     }// end of Spring constructor
 
 
@@ -58,9 +60,9 @@ public class CompanyData extends AData {
 
         if (numRec == 0) {
             this.crea();
-            log.warn("Algos - Creazione dati iniziali CompanyData.inizia(): " + numRec + " schede");
+            log.warn("Algos - Creazione dati iniziali PersonData.inizia(): " + numRec + " schede");
         } else {
-            log.info("Algos - Data. La collezione Company è presente: " + numRec + " schede");
+            log.info("Algos - Data. La collezione Person è presente: " + numRec + " schede");
         }// end of if/else cycle
     }// end of method
 
@@ -82,9 +84,8 @@ public class CompanyData extends AData {
             telefono = company.getTelefono();
             email = company.getEmail();
 
-            service.crea(code,  descrizione,null, telefono, email, null);
+//            service.crea(code,  descrizione,null, telefono, email, null);
         }// end of for cycle
     }// end of method
-
 
 }// end of class

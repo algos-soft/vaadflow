@@ -175,6 +175,10 @@ public class AFieldService {
                     ((ATextField) field).focus();
                 }// end of if cycle
                 break;
+            case email:
+                field = new ATextField(caption);
+                binder.forField(field).bind(fieldName);
+                break;
             case textarea:
                 field = new ATextArea(caption);
                 binder.forField(field).bind(fieldName);

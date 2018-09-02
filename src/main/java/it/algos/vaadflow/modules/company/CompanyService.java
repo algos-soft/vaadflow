@@ -73,32 +73,59 @@ public class CompanyService extends AService {
         this.repository = (CompanyRepository) repository;
     }// end of Spring constructor
 
-    /**
-     * Ricerca di una entity (la crea se non la trova) <br>
-     *
-     * @param code di riferimento interno (obbligatorio ed unico)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Company findOrCrea(String code) {
-        return findOrCrea(code, "");
-    }// end of method
+//    /**
+//     * Ricerca di una entity (la crea se non la trova) <br>
+//     *
+//     * @param code di riferimento interno (obbligatorio ed unico)
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Company findOrCrea(String code) {
+//        return findOrCrea(code, "");
+//    }// end of method
+//
+//    /**
+//     * Ricerca di una entity (la crea se non la trova) <br>
+//     *
+//     * @param code        di riferimento interno (obbligatorio ed unico)
+//     * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Company findOrCrea(String code, String descrizione) {
+//        Company entity = findByKeyUnica(code);
+//
+//        if (entity == null) {
+//            entity = newEntity(code, descrizione);
+//            save(entity);
+//        }// end of if cycle
+//
+//        return entity;
+//    }// end of method
+
 
     /**
-     * Ricerca di una entity (la crea se non la trova) <br>
+     * Crea una entity <br>
+     * Se esiste già, la cancella prima di ricrearla <br>
      *
      * @param code        di riferimento interno (obbligatorio ed unico)
      * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
+     * @param contatto    persona di riferimento (facoltativo)
+     * @param telefono    della company (facoltativo)
+     * @param email       della company (facoltativo)
+     * @param indirizzo   della company (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
-    public Company findOrCrea(String code, String descrizione) {
+    public Company crea(String code, String descrizione, Person contatto, String telefono, String email, Address indirizzo) {
         Company entity = findByKeyUnica(code);
 
-        if (entity == null) {
-            entity = newEntity(code, descrizione);
-            save(entity);
+        if (entity != null) {
+            delete(entity);
         }// end of if cycle
+
+        entity = newEntity(code, descrizione, contatto, telefono, email, indirizzo);
+        save(entity);
 
         return entity;
     }// end of method

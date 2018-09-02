@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.service.AService;
@@ -60,6 +61,7 @@ public class PersonService extends AService {
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
      * Eventuali regolazioni iniziali delle property
@@ -71,7 +73,6 @@ public class PersonService extends AService {
     public Person newEntity() {
         return newEntity("", "");
     }// end of method
-
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -87,7 +88,6 @@ public class PersonService extends AService {
     public Person newEntity(String nome, String cognome) {
         return newEntity(nome, cognome, "", "", (Address) null);
     }// end of method
-
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -114,14 +114,30 @@ public class PersonService extends AService {
                 .indirizzo(indirizzo)
                 .build();
 
-        return (Person)creaIdKeySpecifica(entity);
+        return (Person) creaIdKeySpecifica(entity);
     }// end of method
 
     /**
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Person) entityBean).getNome()+((Person) entityBean).getCognome();
+        return ((Person) entityBean).getNome() + ((Person) entityBean).getCognome();
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
+     */
+    public static Person getNewPerson(String nome, String cognome) {
+        Person entity = null;
+        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
+
+        if (istanza != null) {
+            entity = istanza.newEntity(nome, cognome);
+        }// end of if cycle
+
+        return entity;
     }// end of method
 
 }// end of class
