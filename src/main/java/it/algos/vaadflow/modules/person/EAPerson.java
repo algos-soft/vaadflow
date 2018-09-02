@@ -11,8 +11,8 @@ import it.algos.vaadflow.modules.address.EAAddress;
  */
 public enum EAPerson {
     uno("Mario", "Rossi", "06.785556", "assurbanipal@gmail.com.it", EAAddress.uno),
-    due("Aldo", "Guzzini", "338 678932", "gates@win.com", null),
-    tre("Lucia", "Portella", "345 786631", "alfa@libero.it",null);
+    due("Aldo", "Guzzini", "338 678932", "gates@win.com", EAAddress.due),
+    tre("Lucia", "Portella", "345 786631", "alfa@libero.it",EAAddress.tre);
 
 
     private String nome;

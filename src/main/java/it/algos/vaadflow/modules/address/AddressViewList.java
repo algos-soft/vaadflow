@@ -69,6 +69,7 @@ public class AddressViewList extends AViewList {
      * Le preferenze sovrascritte nella sottoclasse
      */
     protected void fixPreferenzeSpecifiche() {
+        super.isEntityDeveloper = true;
         super.isEntityEmbadded = true;
     }// end of method
 

@@ -65,5 +65,12 @@ public class PersonViewList extends AViewList {
         ((PersonViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    protected void fixPreferenzeSpecifiche() {
+        super.isEntityDeveloper = true;
+        super.isEntityEmbadded = true;
+    }// end of method
 
 }// end of class

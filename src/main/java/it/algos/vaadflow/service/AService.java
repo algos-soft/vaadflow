@@ -328,7 +328,7 @@ public abstract class AService implements IAService {
                 if (lista != null) {
                     lista = lista.stream()
                             .filter(entity -> {
-                                boolean status = false;
+                                boolean status = true;
 //                                boolean esisteCompany = ((ACEntity) entity).company != null;
 //                                if (esisteCompany) {
 //                                    status = ((ACEntity) entity).company.getCode().equals(companyCode);

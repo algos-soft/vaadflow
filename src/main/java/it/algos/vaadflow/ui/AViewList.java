@@ -231,6 +231,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
+    protected boolean isEntityDeveloper;
+
+
+    /**
+     * * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
+     */
     protected boolean isEntityEmbadded;
 
 
@@ -300,6 +306,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
+
+        //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
+        isEntityDeveloper = false;
 
         //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
         isEntityEmbadded = false;
@@ -481,10 +490,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected VerticalLayout addCaption(VerticalLayout layout) {
 
-        if (isEntityEmbadded) {
+        if (isEntityDeveloper) {
             layout.add(new Label("Lista visibile solo al developer"));
+        }// end of if cycle
+
+        if (isEntityEmbadded) {
             layout.add(new Label("Questa lista non dovrebbe mai essere usata (serve come test o per le sottoclassi specifiche)"));
             layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+            layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
         }// end of if cycle
 
         return layout;

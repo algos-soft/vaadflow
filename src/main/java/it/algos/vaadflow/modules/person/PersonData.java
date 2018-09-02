@@ -83,7 +83,7 @@ public class PersonData extends AData {
         String telefono;
         String email;
         EAAddress eaAddress;
-        Address indirizzo;
+        Address indirizzo = null;
 
         for (EAPerson persona : EAPerson.values()) {
             nome = persona.getNome();
@@ -91,7 +91,11 @@ public class PersonData extends AData {
             telefono = persona.getTelefono();
             email = persona.getEmail();
             eaAddress = persona.getAddress();
-            indirizzo = creaAddress(eaAddress);
+            if (eaAddress != null) {
+                indirizzo = creaAddress(eaAddress);
+            } else {
+                indirizzo = null;
+            }// end of if/else cycle
 
             service.crea(nome, cognome, telefono, email, indirizzo);
             num++;
@@ -104,15 +108,15 @@ public class PersonData extends AData {
      * Creazione del singolo indirizzo
      */
     private Address creaAddress(EAAddress eaAddress) {
-        String indirizzo;
-        String localita;
-        String cap;
+        String indirizzo = "";
+        String localita = "";
+        String cap = "";
 
         indirizzo = eaAddress.getIndirizzo();
         localita = eaAddress.getLocalita();
         cap = eaAddress.getCap();
 
-        return address.crea(indirizzo, localita, cap);
+        return address.newEntity(indirizzo, localita, cap);
     }// end of method
 
 }// end of class
