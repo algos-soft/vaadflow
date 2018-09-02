@@ -49,7 +49,7 @@ public class PersonService extends AService {
      * Costruttore <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -107,14 +107,14 @@ public class PersonService extends AService {
         Person entity = null;
 
         entity = Person.builderPerson()
-                .nome(nome)
-                .cognome(cognome)
+                .nome(nome.equals("") ? null : nome)
+                .cognome(cognome.equals("") ? null : cognome)
                 .telefono(telefono.equals("") ? null : telefono)
                 .email(email.equals("") ? null : email)
                 .indirizzo(indirizzo)
                 .build();
 
-        return entity;
+        return (Person)creaIdKeySpecifica(entity);
     }// end of method
 
     /**

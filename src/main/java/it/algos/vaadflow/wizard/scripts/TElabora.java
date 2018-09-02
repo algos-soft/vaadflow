@@ -186,7 +186,7 @@ public class TElabora {
 
 
     /**
-     * Directory vaadbase
+     * Directory it.algos.vaadflow
      */
     public void directoryBase(Map<Chiave, Object> mappaInput) {
         this.copiaDirectoriesBase();

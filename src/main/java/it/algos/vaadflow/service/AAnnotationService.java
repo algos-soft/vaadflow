@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -49,20 +48,23 @@ public class AAnnotationService {
      * Private final property
      */
     private static final AAnnotationService INSTANCE = new AAnnotationService();
-    public AReflectionService reflection = AReflectionService.getInstance();
-//    /**
-//     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-//     */
-//    @Autowired
-//    public ATextService text;
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AArrayService array;
-    @Autowired
-    Environment env;
+    public AReflectionService reflection = AReflectionService.getInstance();
+
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AArrayService array = AArrayService.getInstance();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
     public ATextService text = ATextService.getInstance();
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
@@ -79,28 +81,6 @@ public class AAnnotationService {
     }// end of static method
 
 
-//    /**
-//     * Libreria di servizio. Inietta da Spring come 'singleton'
-//     */
-//    @Autowired
-//    public ASessionService session;
-//
-//
-//    @Autowired
-//    public ALogin login;
-
-
-//    /**
-//     * Get the specific annotation of the class.
-//     * Spring view class
-//     *
-//     * @param viewClazz the view class
-//     *
-//     * @return the Annotation for the specific class
-//     */
-//    public IAView getSpringView(final Class<? extends IAView> viewClazz) {
-//        return viewClazz.getAnnotation(IAView.class);
-//    }// end of method
 
     /**
      * Get the specific annotation of the class.
@@ -111,7 +91,7 @@ public class AAnnotationService {
      * @return the Annotation for the specific class
      */
     public AIEntity getAIEntity(final Class<? extends AEntity> entityClazz) {
-        return entityClazz.getAnnotation(AIEntity.class);
+        return entityClazz != null ? entityClazz.getAnnotation(AIEntity.class) : null;
     }// end of method
 
 

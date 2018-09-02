@@ -28,7 +28,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
+ * Annotated with @Document (facoltativo) per avere un nome della collection (DB mongo) diverso dal nome della Entity <br>
  * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>

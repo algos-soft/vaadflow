@@ -14,7 +14,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_DEV;
 
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: dom, 20-mag-2018

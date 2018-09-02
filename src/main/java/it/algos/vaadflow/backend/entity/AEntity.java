@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
  * Sottoclassi annotated (facoltativo) with @AllArgsConstructor (Lombok) per usare il costruttore completo nel Service
  * <p>
  * La classe NON può usare la Annotation @Setter (contrariamente alle altre classi di Entity),
- * perché 'oscurerebbe' la gestione automatica della key property ObjectId da parte di Mongo
+ * perché 'oscurerebbe' la gestione automatica della key property ObjectId da parte di mongo
  * Le property sono tutte pubbliche (contrariamente alle altre classi di Entity),
  * per essere accessibili visto che mancano i 'setters'
  * <p>
@@ -42,10 +42,10 @@ public abstract class AEntity implements Serializable {
 
     /**
      * key property ObjectId
-     * di default gestita direttamente da Mongo
+     * di default gestita direttamente da mongo
      * può essere usata direttamente per identificare la entity con key 'leggibili'
      * NON va usato @NotEmpty, perchè altrimenti binder.validate().isOk() va in errore
-     * Ci pensa Mongo a riempire il valore
+     * Ci pensa mongo a riempire il valore
      */
     @AIField(name = "Key", required = true, roleTypeVisibility = EARoleType.developer, dev = EAFieldAccessibility.showOnly)
     @AIColumn(widthEM = 2)

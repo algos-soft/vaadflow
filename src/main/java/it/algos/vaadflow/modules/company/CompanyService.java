@@ -1,7 +1,6 @@
 package it.algos.vaadflow.modules.company;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
@@ -63,7 +62,7 @@ public class CompanyService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -157,15 +156,15 @@ public class CompanyService extends AService {
         }// end of if cycle
 
         entity = Company.builderCompany()
-                .code(code)
-                .descrizione(descrizione)
+                .code(code != null ? code : "")
+                .descrizione(descrizione.equals("") ? null : descrizione)
                 .contatto(contatto)
                 .telefono(telefono.equals("") ? null : telefono)
                 .email(email.equals("") ? null : email)
                 .indirizzo(indirizzo)
                 .build();
 
-        return entity;
+        return (Company) creaIdKeySpecifica(entity);
     }// end of method
 
 

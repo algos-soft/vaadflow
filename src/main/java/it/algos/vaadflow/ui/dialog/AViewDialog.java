@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: sab, 05-mag-2018

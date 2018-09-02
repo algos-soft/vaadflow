@@ -2,6 +2,7 @@ package it.algos.vaadtest;
 
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: gio, 05-apr-2018

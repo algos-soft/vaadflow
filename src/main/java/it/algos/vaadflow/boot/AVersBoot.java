@@ -1,5 +1,6 @@
 package it.algos.vaadflow.boot;
 
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.Preferenza;

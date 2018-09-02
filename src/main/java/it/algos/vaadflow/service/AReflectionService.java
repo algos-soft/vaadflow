@@ -6,7 +6,6 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -36,6 +35,22 @@ public class AReflectionService {
      * Private final property
      */
     private static final AReflectionService INSTANCE = new AReflectionService();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AArrayService array = AArrayService.getInstance();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AAnnotationService annotation = AAnnotationService.getInstance();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text = ATextService.getInstance();
+
 
     /**
      * Private constructor to avoid client applications to use constructor
@@ -53,33 +68,11 @@ public class AReflectionService {
     }// end of static method
 
 
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-    @Autowired
-    public AArrayService array;
-
-
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-    @Autowired
-    public AAnnotationService annotation;
-
-
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-    @Autowired
-    public ATextService text;
-
-
 //    /**
 //     * Inietta da Spring come 'session'
 //     */
 //    @Autowired
 //    public ALogin login;
-
 
     /**
      * Mappa di tutti i valori delle properties di una classe

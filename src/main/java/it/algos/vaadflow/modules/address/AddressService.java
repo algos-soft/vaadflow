@@ -1,20 +1,15 @@
 package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
@@ -51,7 +46,7 @@ public class AddressService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -87,11 +82,15 @@ public class AddressService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Address newEntity(String indirizzo, String localita, String cap) {
-        return Address.builderAddress()
-                .indirizzo(indirizzo)
-                .localita(localita)
-                .cap(cap)
+        Address entity = null;
+
+        entity = Address.builderAddress()
+                .indirizzo(indirizzo.equals("") ? null : indirizzo)
+                .localita(localita.equals("") ? null : localita)
+                .cap(cap.equals("") ? null : cap)
                 .build();
+
+        return (Address) creaIdKeySpecifica(entity);
     }// end of method
 
 }// end of class

@@ -4,7 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.AEntity;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: sab, 05-mag-2018

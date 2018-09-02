@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: mer, 11-lug-2018

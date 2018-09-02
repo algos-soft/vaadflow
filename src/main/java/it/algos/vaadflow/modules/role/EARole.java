@@ -1,7 +1,7 @@
 package it.algos.vaadflow.modules.role;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: gio, 22-mar-2018

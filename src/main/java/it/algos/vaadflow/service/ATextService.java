@@ -4,7 +4,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.enumeration.EAFirstChar;
 import it.algos.vaadflow.enumeration.EAPrefType;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -52,10 +51,11 @@ public class ATextService {
      */
     private static final ATextService INSTANCE = new ATextService();
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AArrayService array;
+    public AArrayService array = AArrayService.getInstance();
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
@@ -160,7 +160,7 @@ public class ATextService {
      *
      * @return test formattato in uscita
      */
-    public String primaMaiuscola( String testoIn) {
+    public String primaMaiuscola(String testoIn) {
         return primoCarattere(testoIn, EAFirstChar.maiuscolo);
     }// end of method
 
@@ -175,7 +175,7 @@ public class ATextService {
      *
      * @return test formattato in uscita
      */
-    public String primaMinuscola( String testoIn) {
+    public String primaMinuscola(String testoIn) {
         return primoCarattere(testoIn, EAFirstChar.minuscolo);
     }// end of method
 
@@ -191,7 +191,7 @@ public class ATextService {
      *
      * @return test ridotto in uscita
      */
-    public String levaTesta( String testoIn, String tagIniziale) {
+    public String levaTesta(String testoIn, String tagIniziale) {
         String testoOut = testoIn.trim();
 
         if (this.isValid(testoOut) && this.isValid(tagIniziale)) {

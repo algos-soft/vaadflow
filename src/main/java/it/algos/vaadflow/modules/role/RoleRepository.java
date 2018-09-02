@@ -13,7 +13,7 @@ import java.util.List;
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
- * Project vaadbase <br>
+ * Project it.algos.vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
  * Date: 24-mag-2018 20.31.30 <br>

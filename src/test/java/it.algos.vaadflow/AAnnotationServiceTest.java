@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.*;

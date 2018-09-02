@@ -37,38 +37,47 @@ public abstract class AService implements IAService {
     public final static String FIELD_NAME_COMPANY = "company";
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AAnnotationService annotation;
+    public AAnnotationService annotation = AAnnotationService.getInstance();
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
     @Autowired
-    public AFieldService field;
+    public AFieldService field = AFieldService.getInstance();
 
-    @Autowired
-    public AReflectionService reflection;
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AReflectionService reflection = AReflectionService.getInstance();
 
-    @Autowired
-    public AArrayService array;
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AArrayService array = AArrayService.getInstance();
 
 
-    //    @Autowired
-//    public ASessionService session;
-    @Autowired
-    public ATextService text;
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text = ATextService.getInstance();
+
     /**
      * Inietta da Spring come 'session'
      */
     @Autowired
     public ALogin login;
-    //    @Autowired
-//    public AArrayService array;
+
     //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
     public MongoRepository repository;
+
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
+
     /**
      * Inietta da Spring come 'singleton'
      */
@@ -160,6 +169,18 @@ public abstract class AService implements IAService {
 
 
     /**
+     * Ricerca una entity <br>
+     * Se non esiste, la crea <br>
+     *
+     * @param idKey di riferimento (obbligatorio ed unico)
+     *
+     * @return la entity trovata o appena creata
+     */
+    public AEntity findOrCrea(String idKey) {
+        return null;
+    }// end of method
+
+    /**
      * Retrieves an entity by its id.
      *
      * @param id must not be {@literal null}.
@@ -192,7 +213,7 @@ public abstract class AService implements IAService {
      * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
      * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
-     * Altrimenti, ordinate in ordine di inserimento nel DB Mongo <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
      * @return all ordered entities
      */
@@ -493,7 +514,7 @@ public abstract class AService implements IAService {
                 break;
         } // end of switch statement
 
-        return entityBean;
+        return creaIdKeySpecifica(entityBean);
     }// end of method
 
 
@@ -621,17 +642,19 @@ public abstract class AService implements IAService {
     /*
      * Opportunità di usare una idKey specifica. <br>
      * Invocato appena prima del save(), solo per una nuova entity (vuol dire che arriva con entityBean.id=null) <br>
-     * Se idKey è vuota, uso la standard random Mongo (lasciando entityBean.id = null) <br>
+     * Se idKey è vuota, uso la standard random mongo (lasciando entityBean.id = null) <br>
      *
      * @param entityBean da salvare
      */
-    public void creaIdKeySpecifica(AEntity entityBean) {
+    public AEntity creaIdKeySpecifica(AEntity entityBean) {
         String idKey = getKeyUnica(entityBean);
         if (text.isValid(idKey)) {
             entityBean.id = idKey;
         } else {
             entityBean.id = null;
         }// end of if/else cycle
+
+        return entityBean;
     }// end of method
 
 
@@ -672,7 +695,7 @@ public abstract class AService implements IAService {
      *
      * @param entityBean da regolare
      *
-     * @return chiave univoca da usare come idKey nel DB Mongo
+     * @return chiave univoca da usare come idKey nel DB mongo
      */
     public String getKeyUnica(AEntity entityBean) {
         String keyUnica = "";

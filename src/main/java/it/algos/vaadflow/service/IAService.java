@@ -1,7 +1,6 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.company.Company;
 
 import java.util.List;
 
@@ -50,6 +49,16 @@ public interface IAService {
      */
 //    public int countByCompany(Company company) ;
 
+
+    /**
+     * Ricerca una entity <br>
+     * Se non esiste, la crea <br>
+     *
+     * @param idKey di riferimento (obbligatorio ed unico)
+     *
+     * @return la entity trovata o appena creata
+     */
+    public AEntity findOrCrea(String idKey);
 
     /**
      * Retrieves an entity by its id.
@@ -205,18 +214,18 @@ public interface IAService {
      *
      * @param entityBean nuova da creare
      */
-    public boolean isEsisteEntityKeyUnica(AEntity entityBean) ;
+    public boolean isEsisteEntityKeyUnica(AEntity entityBean);
 
 
-        /**
-          * Deletes a given entity.
-          *
-          * @param entityBean must not be null
-          *
-          * @return true, se la entity è stata effettivamente cancellata
-          *
-          * @throws IllegalArgumentException in case the given entity is {@literal null}.
-          */
+    /**
+     * Deletes a given entity.
+     *
+     * @param entityBean must not be null
+     *
+     * @return true, se la entity è stata effettivamente cancellata
+     *
+     * @throws IllegalArgumentException in case the given entity is {@literal null}.
+     */
     public boolean delete(AEntity entityBean);
 
 

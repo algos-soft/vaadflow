@@ -68,7 +68,7 @@ public class UtenteService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -190,7 +190,7 @@ public class UtenteService extends AService {
                 .role(role != null ? role : roleService.getUser())
                 .build();
 
-        return entity;
+        return (Utente)creaIdKeySpecifica(entity);
     }// end of method
 
 

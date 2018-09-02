@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: sab, 05-mag-2018
@@ -68,7 +68,7 @@ import java.util.List;
  * un footer (obbligatorio) con informazioni generali
  * <p>
  * Le injections vengono fatta da SpringBoot nel metodo @PostConstruct DOPO init() automatico
- * Le preferenze vengono (eventualmente) lette da Mongo e (eventualmente) sovrascritte nella sottoclasse
+ * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
  * <p>
  * Annotation @Route(value = "") per la vista iniziale - Ce ne pouò essere solo una per applicazione
  * ATTENZIONE: se rimangono due (o più) classi con @Route(value = ""), in fase di compilazione appare l'errore:
@@ -259,7 +259,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
      * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-     * Le preferenze vengono (eventualmente) lette da Mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     @PostConstruct
     private void initView() {
@@ -280,7 +280,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
-     * Le preferenze vengono (eventualmente) lette da Mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     private void fixPreferenze() {
         //--Flag di preferenza per usare la searchBar. Normalmente true.
@@ -323,7 +323,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * CSS specifico
      * Sempre presente il campo edit di ricerca/selezione
      * Sempre presente il bottone di reset del valore del campo di ricerca/selezione
-     * Facoltativo (presente di default) il bottone New (flag da Mongo eventualmente sovrascritto)
+     * Facoltativo (presente di default) il bottone New (flag da mongo eventualmente sovrascritto)
      */
     protected void creaSearchBar() {
         Div viewToolbar = new Div();
@@ -376,8 +376,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     /**
      * Crea il corpo centrale della view
      * Componente grafico obbligatorio
-     * Alcune regolazioni vengono (eventualmente) lette da Mongo e (eventualmente) sovrascritte nella sottoclasse
-     * Facoltativo (presente di default) il bottone Edit (flag da Mongo eventualmente sovrascritto)
+     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
      */
     protected void creaGrid() {
         FlexLayout layout = new FlexLayout();

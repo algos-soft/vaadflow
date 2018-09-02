@@ -1,13 +1,11 @@
 package it.algos.vaadflow.backend.data;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * Project vbase
@@ -31,24 +29,29 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public abstract class AData {
 
 
-    /**
-     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
-     */
-    protected MongoOperations mongo;
+//    /**
+//     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
+//     */
+//    protected MongoOperations mongo;
+
+
+//    /**
+//     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
+//     */
+//    protected MongoRepository mongoRepository;
 
 
     /**
-     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
+     * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
+     * La repository è gestita direttamente dal service
      */
-    protected MongoRepository repository;
-
+    protected IAService service;
 
     /**
-     * Istanza di classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), iniettata da Spring <br>
-     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
-     * Service usato come libreria <br>
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AAnnotationService annotation;
+    protected AAnnotationService annotation = AAnnotationService.getInstance();
 
     /**
      * Nome della collezione su mongoDB <br>
@@ -67,12 +70,11 @@ public abstract class AData {
      *
      * @param mongo      service per le operazioni su mongoDB
      * @param repository per la persistenza dei dati
-     * @param annotation service per le @Annotation
      */
-    public AData(MongoOperations mongo, MongoRepository repository, AAnnotationService annotation) {
-        this.mongo = mongo;
-        this.repository = repository;
-        this.annotation = annotation;
+//    public AData(MongoOperations mongo, MongoRepository repository, IAService service) {
+    public AData(Class entityClazz, IAService service) {
+        this.collectionName = annotation.getCollectionName(entityClazz);
+        this.service = service;
     }// end of Spring constructor
 
 
@@ -82,7 +84,7 @@ public abstract class AData {
      * @return the number of entities
      */
     public int count() {
-        return (int) repository.count();
+        return (int) service.count();
     }// end of method
 
 
@@ -96,21 +98,21 @@ public abstract class AData {
     }// end of method
 
 
-    /**
-     * Creazione di una entity
-     */
-    public void crea(AEntity entity) {
-        crea(entity, "");
-    }// end of method
-
-
-    /**
-     * Creazione di una entity
-     */
-    public void crea(AEntity entity, String keyID) {
-        entity.id = keyID;
-        mongo.insert(entity, collectionName);
-    }// end of method
+//    /**
+//     * Creazione di una entity
+//     */
+//    public void crea(AEntity entity) {
+//        crea(entity, "");
+//    }// end of method
+//
+//
+//    /**
+//     * Creazione di una entity
+//     */
+//    public void crea(AEntity entity, String keyID) {
+//        entity.id = keyID;
+//        mongo.insert(entity, collectionName);
+//    }// end of method
 
 
     /**

@@ -38,7 +38,8 @@ public class AArrayService {
     private static final AArrayService INSTANCE = new AArrayService();
 
     /**
-     * Service recuperato come istanza dalla classe singleton
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
 

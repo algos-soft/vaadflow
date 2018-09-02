@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Scope;
 import java.util.List;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: sab, 12-mag-2018

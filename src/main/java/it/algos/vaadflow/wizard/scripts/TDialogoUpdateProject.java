@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: gio, 03-mag-2018
@@ -34,7 +34,7 @@ public class TDialogoUpdateProject extends TDialogo {
 
 
     private static final String SEP = "/";
-    private static final String PROJECT_BASE_NAME = "vaadbase";
+    private static final String PROJECT_BASE_NAME = "it.algos.vaadflow";
     private static final String SOURCES_NAME = "wizard/sources";
     private static final String DIR_PROJECT_BASE = DIR_JAVA + "/" + PROJECT_BASE_NAME;
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;

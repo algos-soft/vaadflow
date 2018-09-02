@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.PostConstruct;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: ven, 11-mag-2018

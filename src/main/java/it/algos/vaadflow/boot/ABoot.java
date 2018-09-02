@@ -3,6 +3,7 @@ package it.algos.vaadflow.boot;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
+import it.algos.vaadflow.modules.company.CompanyData;
 import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.person.PersonViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
@@ -19,7 +20,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: dom, 06-mag-2018
@@ -36,10 +37,17 @@ import javax.servlet.ServletContextListener;
 public abstract class ABoot implements ServletContextListener {
 
     /**
-     * Inietta da Spring come 'singleton'
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
-    protected RoleData roleData;
+    private RoleData role;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private CompanyData company;
 
 
 //    @Autowired
@@ -94,15 +102,16 @@ public abstract class ABoot implements ServletContextListener {
     }// end of method
 
     /**
-     * Inizializzazione dei dati di alcune collections standard sul DB Mongo
+     * Inizializzazione dei dati di alcune collections standard sul DB mongo
      */
     private void iniziaDataStandard() {
-        this.roleData.inizia();
+        this.role.loadData();
+        this.company.loadData();
     }// end of method
 
 
     /**
-     * Inizializzazione dei dati di alcune collections specifiche sul DB Mongo
+     * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
     }// end of method

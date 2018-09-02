@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.Preferenza;

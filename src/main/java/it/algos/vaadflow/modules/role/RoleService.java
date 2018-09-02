@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 
 /**
- * Project vaadbase <br>
+ * Project it.algos.vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
  * Date: 24-mag-2018 20.31.30 <br>
@@ -53,7 +52,7 @@ public class RoleService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -65,7 +64,8 @@ public class RoleService extends AService {
 
 
     /**
-     * Ricerca di una entity (la crea se non la trova) <br>
+     * Ricerca una entity <br>
+     * Se non esiste, la crea <br>
      *
      * @param code di riferimento (obbligatorio ed unico)
      *
@@ -75,27 +75,13 @@ public class RoleService extends AService {
         Role entity = findByKeyUnica(code);
 
         if (entity == null) {
-            crea(code);
+            entity = newEntity(0, code);
+            save(entity);
         }// end of if cycle
 
         return entity;
     }// end of method
 
-    /**
-     * Crea una entity e la registra <br>
-     *
-     * @param code di riferimento (obbligatorio ed unico)
-     *
-     * @return la entity appena creata
-     */
-    public Role crea(String code) {
-        Role entity;
-
-        entity = newEntity(0, code);
-        save(entity);
-
-        return entity;
-    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -122,19 +108,16 @@ public class RoleService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Role newEntity(int ordine, String code) {
-        Role entity = null;
+        Role entity = findByKeyUnica(code);
 
-        entity = findByKeyUnica(code);
-        if (entity != null) {
-            return findByKeyUnica(code);
+        if (entity == null) {
+            entity = Role.builderRole()
+                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                    .code(code.equals("") ? null : code)
+                    .build();
         }// end of if cycle
 
-        entity = Role.builderRole()
-                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                .code(code)
-                .build();
-
-        return entity;
+        return (Role) creaIdKeySpecifica(entity);
     }// end of method
 
     /**

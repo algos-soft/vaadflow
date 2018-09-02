@@ -71,7 +71,7 @@ public class VersioneService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -138,7 +138,7 @@ public class VersioneService extends AService {
         textOrdine = newOrdine < 10 ? TAG + newOrdine : "" + newOrdine;
         entity.id = sigla + textOrdine;
 
-        return entity;
+        return (Versione)creaIdKeySpecifica(entity);
     }// end of method
 
 
@@ -192,7 +192,7 @@ public class VersioneService extends AService {
      * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
      * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
-     * Altrimenti, ordinate in ordine di inserimento nel DB Mongo <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
      * @return all ordered entities
      */

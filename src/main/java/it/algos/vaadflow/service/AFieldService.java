@@ -25,36 +25,57 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: ven, 11-mag-2018
  * Time: 17:43
  * NON deve essere astratta, altrimenti Spring non la costruisce
  */
-@Slf4j
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Slf4j
 public class AFieldService {
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Private final property
      */
-    @Autowired
-    public AAnnotationService annotation;
+    private static final AFieldService INSTANCE = new AFieldService();
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Private constructor to avoid client applications to use constructor
      */
-    @Autowired
-    public AReflectionService reflection;
+    private AFieldService() {
+    }// end of constructor
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static AFieldService getInstance() {
+        return INSTANCE;
+    }// end of static method
+
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AAnnotationService annotation = AAnnotationService.getInstance();
+
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AReflectionService reflection = AReflectionService.getInstance();
 
 
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public ATextService text;
+    public ATextService text = ATextService.getInstance();
+
 
     @Autowired
     private AConverterPrefByte prefConverter;

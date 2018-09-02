@@ -3,6 +3,12 @@ package it.algos.vaadtest.application;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.modules.address.AddressViewList;
+import it.algos.vaadflow.modules.company.CompanyViewList;
+import it.algos.vaadflow.modules.person.PersonViewList;
+import it.algos.vaadflow.modules.role.RoleViewList;
+import it.algos.vaadflow.modules.utente.UtenteViewList;
+import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +65,7 @@ public class TestBoot extends ABoot {
 
 
     /**
-     * Inizializzazione dei dati di alcune collections specifiche sul DB Mongo
+     * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
     }// end of method
@@ -97,6 +103,12 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
+        FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 

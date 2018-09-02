@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.modules.role.Role;

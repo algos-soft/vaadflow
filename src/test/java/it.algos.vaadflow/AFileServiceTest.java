@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
@@ -27,12 +27,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AFileServiceTest extends ATest {
 
 
-    private static String PATH = "/Users/gac/Documents/IdeaProjects/vaadbase/src/main/java/it/algos/vaadbase/";
+    private static String PATH = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/";
     private static String SOURCES = PATH + "wizard/sources/";
     private static String MODULES = PATH + "modules/";
     private static String DIR = SOURCES + "Prova";
     private static String READ = "README.txt";
-    private static String PACKAGE = "package it.algos.vaadbase;\n";
+    private static String PACKAGE = "package it.algos.it.algos.vaadflow;\n";
     private static String TESTO = PACKAGE + "public class Alfa {}";
     private static String NOME_FILE = PATH + "Alfa.java";
     @InjectMocks
@@ -275,13 +275,13 @@ public class AFileServiceTest extends ATest {
         service.deleteFile(nomeFile);
         System.out.println("*leggeFile - fine");
 
-        nomeFile = "/Users/gac/Documents/IdeaProjects/vaadbase/src/main/java/it/algos/vaadbase/application/BaseCost.java";
+        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCost.java";
         testoOttenuto = service.leggeFile(nomeFile);
         assertNotNull(testoOttenuto);
         assertTrue(testoOttenuto.length() > 0);
         System.out.println(testoOttenuto);
 
-        nomeFile = "/Users/gac/Documents/IdeaProjects/vaadbase/src/main/java/it/algos/vaadbase/application/BaseCostDeleted.java";
+        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCostDeleted.java";
         testoOttenuto = service.leggeFile(nomeFile);
         assertEquals("", testoOttenuto);
         assertTrue(testoOttenuto.length() == 0);

@@ -3,7 +3,7 @@ package it.algos.vaadflow.ui.fields;
 import com.vaadin.flow.component.AbstractField;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: ven, 11-mag-2018

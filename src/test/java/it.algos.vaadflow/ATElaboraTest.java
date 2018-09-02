@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import it.algos.vaadflow.wizard.scripts.TElabora;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: mar, 05-giu-2018

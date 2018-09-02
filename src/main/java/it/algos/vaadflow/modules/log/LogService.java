@@ -58,7 +58,7 @@ public class LogService extends AService {
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Regola nella superclasse il modello-dati specifico <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -123,7 +123,7 @@ public class LogService extends AService {
                 .descrizione(descrizione.equals("") ? null : descrizione)
                 .build();
 
-        return entity;
+        return (Log)creaIdKeySpecifica(entity);
     }// end of method
 
 

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import java.time.LocalDateTime;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: mer, 30-mag-2018

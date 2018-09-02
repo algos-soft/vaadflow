@@ -1,4 +1,4 @@
-package it.algos.vaadbase;
+package it.algos.vaadflow;
 
 import it.algos.vaadflow.service.ADateService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;

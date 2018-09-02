@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
- * Project vaadbase <br>
+ * Project it.algos.vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
  * Date: 24-mag-2018 20.31.30 <br>
@@ -27,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
+ * Annotated with @Document (facoltativo) per avere un nome della collection (DB mongo) diverso dal nome della Entity <br>
  * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>

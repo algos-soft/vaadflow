@@ -5,7 +5,7 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.enumeration.EAPrefType;
 
 /**
- * Project vaadbase
+ * Project it.algos.vaadflow
  * Created by Algos
  * User: gac
  * Date: mer, 30-mag-2018
@@ -17,14 +17,14 @@ public enum EAPreferenza {
     usaLogDebug(FlowCost.USA_LOG_DEBUG, "Uso del log di registrazione per il livello debug. Di default false", EAPrefType.bool, false),
     usaCompany(FlowCost.USA_COMPANY, "L'applicazione è multiCompany ", EAPrefType.bool, false),
     showCompany(FlowCost.SHOW_COMPANY, show(), EAPrefType.bool, false),
-    showPreferenza(FlowCost.SHOW_PREFERENZA, show(), EAPrefType.bool, false),
-    showWizard(FlowCost.SHOW_WIZARD, show(), EAPrefType.bool, false),
-    showDeveloper(FlowCost.SHOW_DEVELOPER, show(), EAPrefType.bool, false),
+    showPreferenza(FlowCost.SHOW_PREFERENZA, show(), EAPrefType.bool, true),
+    showWizard(FlowCost.SHOW_WIZARD, show(), EAPrefType.bool, true),
+    showDeveloper(FlowCost.SHOW_DEVELOPER, show(), EAPrefType.bool, true),
     showAddress(FlowCost.SHOW_ADDRESS, show(), EAPrefType.bool, false),
     showPerson(FlowCost.SHOW_PERSON, show(), EAPrefType.bool, false),
     showRole(FlowCost.SHOW_ROLE, show(), EAPrefType.bool, false),
     showUser(FlowCost.SHOW_USER, show(), EAPrefType.bool, false),
-    showVersione(FlowCost.SHOW_VERSION, show(), EAPrefType.bool, false),
+    showVersione(FlowCost.SHOW_VERSION, show(), EAPrefType.bool, true),
     usaLogMail(FlowCost.USA_LOG_MAIL, "Uso della mail spedita da un log. Di default false", EAPrefType.bool, false),
     logMailAddress(FlowCost.LOG_MAIL_ADDRESS, "Email a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),;
 

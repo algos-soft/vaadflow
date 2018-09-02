@@ -100,7 +100,7 @@ public class @ENTITY@Service extends AService {
          @KEYUNICA@
          entity = @ENTITY@.builder@ENTITY@()@BUILDER@;
 
-         return entity;
+         return (@ENTITY@)creaIdKeySpecifica(entity);
      }// end of method
 
 
