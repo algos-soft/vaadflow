@@ -8,6 +8,7 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.company.CompanyService;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * Project springvaadin
@@ -27,6 +28,7 @@ public abstract class ACEntity extends AEntity {
      * riferimento dinamico CON @DBRef
      */
     @DBRef
+    @Field("comp")
     @AIField(type = EAFieldType.combo, clazz = CompanyService.class, dev = EAFieldAccessibility.newOnly, admin = EAFieldAccessibility.showOnly)
     @AIColumn(name = "Company", width = 115)
     public Company company;

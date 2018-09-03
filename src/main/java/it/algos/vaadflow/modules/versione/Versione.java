@@ -10,8 +10,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,6 +51,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  */
 @SpringComponent
 @Document(collection = "versione")
+@TypeAlias("versione")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -75,6 +78,7 @@ public class Versione extends AEntity {
     @NotNull
     @Indexed()
     @Size(min = 3)
+    @Field("tit")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(widthPX = 1)
     public String titolo;
@@ -84,6 +88,7 @@ public class Versione extends AEntity {
      */
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
+    @Field("nom")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(widthPX = 12)
     public String nome;
@@ -94,6 +99,7 @@ public class Versione extends AEntity {
      */
     @NotNull(message = "Il tempo è obbligatorio")
     @Size(min = 2, max = 50)
+    @Field("time")
     @AIField(type = EAFieldType.localdatetime, firstCapital = true, widthEM = 24)
     @AIColumn(widthPX = 5)
     public LocalDateTime timestamp;

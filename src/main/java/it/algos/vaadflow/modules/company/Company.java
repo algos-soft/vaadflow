@@ -14,8 +14,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -51,6 +53,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
  */
 @SpringComponent
 @Document(collection = "company")
+@TypeAlias("company")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -78,6 +81,7 @@ public class Company extends AEntity {
     @NotNull
     @Indexed()
     @Size(min = 3)
+    @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
     public String code;
@@ -87,6 +91,7 @@ public class Company extends AEntity {
      */
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
+    @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(width = 370)
     public String descrizione;
@@ -95,6 +100,7 @@ public class Company extends AEntity {
      * persona di riferimento (facoltativo)
      * riferimento statico SENZA @DBRef
      */
+    @Field("cont")
     @AIField(type = EAFieldType.link, clazz = PersonPresenter.class, help = "Riferimento")
     @AIColumn(width = 220, name = "Riferimento")
     public Person contatto;
@@ -103,6 +109,7 @@ public class Company extends AEntity {
     /**
      * telefono (facoltativo)
      */
+    @Field("tel")
     @AIField(type = EAFieldType.text)
     @AIColumn(width = 170)
     public String telefono;
@@ -111,6 +118,7 @@ public class Company extends AEntity {
     /**
      * posta elettronica (facoltativo)
      */
+    @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
     @AIColumn(width = 350, name = "Mail")
     public String email;
@@ -120,6 +128,7 @@ public class Company extends AEntity {
      * indirizzo (facoltativo)
      * riferimento statico SENZA @DBRef
      */
+    @Field("ind")
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(width = 400, name = "Indirizzo")
     public Address indirizzo;

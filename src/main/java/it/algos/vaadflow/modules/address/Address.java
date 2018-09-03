@@ -10,8 +10,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,6 +49,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  */
 @SpringComponent
 @Document(collection = "address")
+@TypeAlias("address")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -72,6 +75,7 @@ public class Address extends AEntity {
      */
     @NotNull(message = "L'indirizzo è obbligatorio")
     @Size(min = 2, max = 50)
+    @Field("ind")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
     public String indirizzo;
@@ -82,6 +86,7 @@ public class Address extends AEntity {
      */
     @NotNull(message = "La località è obbligatoria")
     @Size(min = 2, max = 50)
+    @Field("loc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(width = 370)
     public String localita;
@@ -91,6 +96,7 @@ public class Address extends AEntity {
      * codice di avviamento postale (facoltativo, non unica)
      */
     @Size(min = 5, max = 5, message = "Il codice postale deve essere di 5 cifre")
+    @Field("cap")
     @AIField(type = EAFieldType.text, widthEM = 5)
     @AIColumn(width = 370)
     public String cap;

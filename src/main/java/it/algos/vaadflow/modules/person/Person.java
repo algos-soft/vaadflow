@@ -13,8 +13,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -50,6 +52,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  */
 @SpringComponent
 @Document(collection = "person")
+@TypeAlias("person")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -76,6 +79,7 @@ public class Person extends Utente {
     @NotNull
     @Indexed()
     @Size(min = 4, max = 40)
+    @Field("nom")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 20)
     @AIColumn(width = 200)
     public String nome;
@@ -86,6 +90,7 @@ public class Person extends Utente {
     @NotNull
     @Indexed()
     @Size(min = 4, max = 40)
+    @Field("cog")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 20)
     @AIColumn(width = 200)
     public String cognome;
@@ -93,6 +98,7 @@ public class Person extends Utente {
     /**
      * telefono (facoltativo)
      */
+    @Field("tel")
     @AIField(type = EAFieldType.text)
     @AIColumn(width = 160)
     public String telefono;
@@ -101,6 +107,7 @@ public class Person extends Utente {
     /**
      * posta elettronica (facoltativo)
      */
+    @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
     @AIColumn(width = 350, name = "Mail")
     public String email;
@@ -110,6 +117,7 @@ public class Person extends Utente {
      * indirizzo (facoltativo, non unica)
      * riferimento statico SENZA @DBRef (embedded)
      */
+    @Field("ind")
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(width = 400, name = "Indirizzo")
     public Address indirizzo;

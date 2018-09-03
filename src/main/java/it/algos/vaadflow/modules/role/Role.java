@@ -10,8 +10,10 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,6 +50,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  */
 @SpringComponent
 @Document(collection = "role")
+@TypeAlias("role")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -74,6 +77,7 @@ public class Role extends AEntity {
      */
     @NotNull
     @Indexed()
+    @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", width = 55)
     public int ordine;
@@ -85,6 +89,7 @@ public class Role extends AEntity {
     @NotNull
     @Indexed()
     @Size(min = 3)
+    @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
     public String code;

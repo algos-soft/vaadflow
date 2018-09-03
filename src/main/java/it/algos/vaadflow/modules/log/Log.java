@@ -9,8 +9,10 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -49,6 +51,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  */
 @SpringComponent
 @Document(collection = "log")
+@TypeAlias("log")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -74,6 +77,7 @@ public class Log extends AEntity {
      */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
+    @Field("liv")
     @AIField(type = EAFieldType.enumeration, clazz = Livello.class, required = true, widthEM = 12)
     public Livello livello;
 
@@ -83,6 +87,7 @@ public class Log extends AEntity {
     @NotNull
     @Indexed()
     @Size(min = 3)
+    @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
     public String code;
@@ -92,6 +97,7 @@ public class Log extends AEntity {
      */
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
+    @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(width = 370)
     public String descrizione;

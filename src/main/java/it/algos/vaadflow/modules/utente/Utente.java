@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,6 +54,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  */
 @SpringComponent
 @Document(collection = "utente")
+@TypeAlias("utente")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -79,12 +82,15 @@ public class Utente extends ACEntity {
     public UtenteService service;
 
 
+    @Field("user")
     @AIField(type = EAFieldType.text)
     public String username;
 
+    @Field("pass")
     @AIField(type = EAFieldType.text)
     public String password;
 
+    @Field("ena")
     @AIField(type = EAFieldType.checkbox)
     public boolean enabled;
 
@@ -93,6 +99,7 @@ public class Utente extends ACEntity {
      * riferimento dinamico con @DBRef (obbligatorio per il ComboBox)
      */
     @DBRef
+    @Field("role")
     @AIField(type = EAFieldType.combo, required = true, clazz = RoleService.class)
     @AIColumn(name = "Ruolo", width = 200)
     public Role role;

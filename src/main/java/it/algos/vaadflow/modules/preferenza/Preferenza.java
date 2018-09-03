@@ -11,8 +11,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,6 +50,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  */
 @SpringComponent
 @Document(collection = "preferenza")
+@TypeAlias("preferenza")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
@@ -74,6 +77,7 @@ public class Preferenza extends AEntity {
      */
     @NotNull
     @Indexed()
+    @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", width = 55)
     public int ordine;
@@ -84,6 +88,7 @@ public class Preferenza extends AEntity {
     @NotNull
     @Indexed()
     @Size(min = 3)
+    @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
     public String code;
@@ -93,6 +98,7 @@ public class Preferenza extends AEntity {
      */
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
+    @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
     @AIColumn(width = 370)
     public String descrizione;
@@ -102,12 +108,14 @@ public class Preferenza extends AEntity {
      * tipo di dato memorizzato (obbligatorio)
      */
     @NotNull
+    @Field("type")
     @AIField(type = EAFieldType.enumeration, clazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
     public EAPrefType type;
 
 
     //--valore della preferenza (obbligatorio)
     @NotNull
+    @Field("val")
     @AIField(type = EAFieldType.pref, required = true, name = "Valore", widthEM = 12)
     public byte[] value;
 
