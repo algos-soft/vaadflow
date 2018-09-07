@@ -59,6 +59,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             for (Class clazz : listaClassiMenu) {
                 listaMenu.add(creaMenu(clazz));
             }// end of for cycle
+            listaMenu.add(creaMenuLogout());
+
             app.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
             this.add(app);
         }// end of if cycle
@@ -72,6 +74,17 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         menuName = text.primaMaiuscola(menuName);
 
         menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
+        return menuItem;
+    }// end of method
+
+
+    protected MenuItem creaMenuLogout() {
+        MenuItem menuItem = null;
+        String linkRoute ="login" ;
+        String menuName = "Logout";
+
+//        menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
+        menuItem = new MenuItem(menuName, () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
         return menuItem;
     }// end of method
 

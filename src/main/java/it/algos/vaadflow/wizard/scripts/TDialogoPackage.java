@@ -654,7 +654,9 @@ public class TDialogoPackage extends TDialogo {
             if (progettoBase) {
                 mappaInput.put(Chiave.targetProjectName, fieldComboProgetti.getValue());
             } else {
-                mappaInput.put(Chiave.targetProjectName, fieldTextProject.getValue());
+                String nameCurrentProject = fieldTextProject.getValue();
+                Progetto currentProject = Progetto.getProgetto(nameCurrentProject);
+                mappaInput.put(Chiave.targetProjectName, currentProject != null ? currentProject : nameCurrentProject);
             }// end of if/else cycle
             mappaInput.put(Chiave.newPackageName, getPackage());
             mappaInput.put(Chiave.newEntityName, text.primaMaiuscola(fieldTextEntity.getValue()));

@@ -17,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 22-ago-2018 16.13.08 <br>
+ * Date: 3-set-2018 20.32.35 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -46,7 +46,7 @@ public class AddressViewList extends AViewList {
     /**
      * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della route
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
@@ -65,12 +65,5 @@ public class AddressViewList extends AViewList {
         ((AddressViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    protected void fixPreferenzeSpecifiche() {
-        super.isEntityDeveloper = true;
-        super.isEntityEmbadded = true;
-    }// end of method
 
 }// end of class

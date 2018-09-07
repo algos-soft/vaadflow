@@ -17,10 +17,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 
 /**
- * Project it.algos.vaadflow <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-mag-2018 20.31.30 <br>
+ * Date: 3-set-2018 20.32.35 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>

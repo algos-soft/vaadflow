@@ -11,19 +11,17 @@ import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
-
 /**
- * Project it.algos.vaadflow <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-mag-2018 20.31.30 <br>
+ * Date: 3-set-2018 20.32.35 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
- * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -48,12 +46,12 @@ public class RoleViewList extends AViewList {
     /**
      * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della route
+     * Se manca il MENU_NAME, di default usa il 'name' della view
      */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.KEY;
+    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -67,11 +65,5 @@ public class RoleViewList extends AViewList {
         ((RoleViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    protected void fixPreferenzeSpecifiche() {
-        super.isEntityDeveloper = true;
-    }// end of method
 
 }// end of class

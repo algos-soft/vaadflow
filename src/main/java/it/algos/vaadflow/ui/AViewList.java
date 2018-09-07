@@ -540,18 +540,19 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 }));
                 break;
             case combo:
-                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-                    ComboBox combo = new ComboBox();
-                    Object entityBean = reflection.getPropertyValue(entity, property);
-                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll();
-                    if (array.isValid(items)) {
-                        combo.setItems(items);
-                        combo.setValue(entityBean);
-                    }// end of if cycle
-                    combo.setEnabled(false);
-                    return combo;
-                }));
+                colonna = grid.addColumn(property);
+//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+//                    ComboBox combo = new ComboBox();
+//                    Object entityBean = reflection.getPropertyValue(entity, property);
+//                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+//                    List items = ((IAService) service).findAll();
+//                    if (array.isValid(items)) {
+//                        combo.setItems(items);
+//                        combo.setValue(entityBean);
+//                    }// end of if cycle
+//                    combo.setEnabled(false);
+//                    return combo;
+//                }));
                 break;
             case localdate:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -589,6 +590,18 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 break;
             case email:
                 colonna = grid.addColumn(property);
+                break;
+            case link:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Object obj = null;
+                    Field field = reflection.getField(entityClazz, property);
+                    try { // prova ad eseguire il codice
+                        obj = field.get(entity);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                    return new Label(obj != null ? obj.toString() : "");
+                }));
                 break;
             default:
                 log.warn("Switch - caso non definito");
@@ -712,12 +725,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     public void updateView() {
-        Collection items = service != null ? service.findFilter(searchField.getValue()) : null;
+//        Collection items = service != null ? service.findFilter(searchField.getValue()) : null;
+        Collection items = service != null ? service.findAll() : null;
 
         if (items != null) {
             try { // prova ad eseguire il codice
                 grid.deselectAll();
-                grid.setItems( items);
+                grid.setItems(items);
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error(unErrore.toString());
             }// fine del blocco try-catch

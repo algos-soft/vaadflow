@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 23-ago-2018 19.27.16
+ * Date: 3-set-2018 20.32.36
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -45,7 +45,7 @@ public class VersioneViewDialog extends AViewDialog<Versione> {
     @Autowired
     public VersioneViewDialog(@Qualifier(TAG_VER) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
     
 }// end of class

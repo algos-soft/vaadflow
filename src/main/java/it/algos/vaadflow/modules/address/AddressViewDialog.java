@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 22-ago-2018 16.13.08
+ * Date: 3-set-2018 20.32.35
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -45,13 +45,7 @@ public class AddressViewDialog extends AViewDialog<Address> {
     @Autowired
     public AddressViewDialog(@Qualifier(TAG_ADD) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
-    public void close() {
-        super.close();
-        if (itemAnnulla != null) {
-            itemAnnulla.accept(null);
-        }// end of if cycle
-    }// end of method
-
+    
 }// end of class

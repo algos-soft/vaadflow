@@ -6,16 +6,17 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
-
 /**
- * Project it.algos.vaadflow <br>
+ * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 24-mag-2018 20.31.30
+ * Date: 3-set-2018 20.32.35
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -34,16 +35,17 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 public class RoleViewDialog extends AViewDialog<Role> {
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere dall'interfaccia la sottoclasse specifica <br>
+     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
      * @param presenter per gestire la business logic del package
      */
+    @Autowired
     public RoleViewDialog(@Qualifier(TAG_ROL) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
-
+    
 }// end of class

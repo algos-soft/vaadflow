@@ -301,7 +301,7 @@ public class TElabora {
         Progetto progetto;
         String projectName;
 
-        if (mappaInput.containsKey(Chiave.targetProjectName)) {
+        if (mappaInput.containsKey(Chiave.targetProjectName) && mappaInput.get(Chiave.targetProjectName) != null) {
             projectValue = mappaInput.get(Chiave.targetProjectName);
             if (projectValue instanceof Progetto) {
                 progetto = (Progetto) projectValue;
@@ -334,14 +334,14 @@ public class TElabora {
             this.versPath = projectJavaPath + SEP + APP_NAME + SEP + nameClassVers + JAVA_SUFFIX;
 
             this.layoutPath = projectPath + DIR_JAVA + SEP + targetLayoutName + SEP + LAYOUT_NAME + JAVA_SUFFIX;
-            if (mappaInput.containsKey(Chiave.newProjectName)) {
+            if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
                 this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
             } else {
                 this.newProjectName = targetProjectName;
             }// end of if/else cycle
             this.firstCharProject = nameShort.substring(0, 1);
         } else {
-            if (mappaInput.containsKey(Chiave.newProjectName)) {
+            if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
                 this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
                 this.projectPath = ideaProjectRootPath + SEP + newProjectName;
                 this.projectJavaPath = projectPath + DIR_JAVA + SEP + newProjectName;
@@ -360,7 +360,7 @@ public class TElabora {
             }// end of if/else cycle
         }// end of if/else cycle
 
-        if (mappaInput.containsKey(Chiave.newEntityTag)) {
+        if (mappaInput.containsKey(Chiave.newEntityTag) && text.isValid(mappaInput.get(Chiave.newEntityTag))) {
             this.newEntityTag = (String) mappaInput.get(Chiave.newEntityTag);
             this.firstCharProject = newEntityTag.substring(0, 1);
         }// end of if cycle
@@ -855,38 +855,11 @@ public class TElabora {
     }// end of method
 
 
-//    private String creaAddCompany() {
-//        methodAddCompanyText = "";
-//
-//        if (flagCompany) {
-//            methodAddCompanyText = "(" + newEntityName + ") addCompany(entity, company)";
-//        } else {
-//            methodAddCompanyText = "entity";
-//        }// end of if/else cycle
-//
-//        return methodAddCompanyText;
-//    }// end of method
-
-
     private String creaBuilder() {
         methodBuilderText = "";
-//        String stringa = "String";
-//        String intero = "int";
         String tab4 = "\t\t\t\t";
         String aCapo = "\n" + tab4;
         String companyText = flagCompany ? "company" : "";
-
-
-//        methodBuilderText += text.primaMaiuscola(newEntityName);
-//        methodBuilderText += ".builder()";
-//        if (flagOrdine) {
-//            methodBuilderText += ".ordine(getNewOrdine())";
-//        }// end of if cycle
-
-//        if (flagCompany) {
-//            methodBuilderText = "addCompany(" + methodBuilderText + ")";
-//        }// end of if cycle
-
 
         if (flagOrdine) {
             methodBuilderText += aCapo + ".ordine(ordine != 0 ? ordine : this.getNewOrdine(" + companyText + "))";

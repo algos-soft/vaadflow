@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 26-ago-2018 9.52.58
+ * Date: 3-set-2018 20.32.35
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -45,7 +45,7 @@ public class LogViewDialog extends AViewDialog<Log> {
     @Autowired
     public LogViewDialog(@Qualifier(TAG_LOG) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
     
 }// end of class

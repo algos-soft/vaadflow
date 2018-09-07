@@ -1,33 +1,22 @@
 package it.algos.vaadflow.modules.person;
 
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
-import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.address.AddressViewDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
-import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-
-import java.util.function.Consumer;
-
-import static it.algos.vaadflow.application.FlowCost.FLASH;
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Date: 22-ago-2018 16.12.50
+ * Date: 3-set-2018 20.32.35
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -46,16 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 public class PersonViewDialog extends AViewDialog<Person> {
 
 
-    private final static String INDIRIZZO = "indirizzo";
-    private AddressPresenter addressPresenter;
-    private AddressService addressService;
-    private AddressViewDialog addressDialog;
-    private Address indirizzoTemporaneo;
-    private ATextField indirizzoField;
-    private Consumer<Person> itemAnnulla;
-
-
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -65,100 +45,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
     @Autowired
     public PersonViewDialog(@Qualifier(TAG_PER) IAPresenter presenter) {
         super(presenter);
-    }// end of constructor
+    }// end of Spring constructor
 
-
-    /**
-     * Aggiunge al binder eventuali fields specifici, prima di trascrivere la entityBean nel binder
-     * Sovrascritto
-     * Aggiunge il field al binder
-     * Aggiunge il field alla fieldList interna
-     */
-    @Override
-    protected void addSpecificAlgosFields() {
-        addressPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
-        addressService = (AddressService) addressPresenter.getService();
-
-        addressDialog = StaticContextAccessor.getBean(AddressViewDialog.class);
-        addressDialog.setPresenter(addressPresenter);
-        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
-        addressDialog.fixConfermaAndNotRegistrazione();
-
-        indirizzoField = (ATextField) getField(INDIRIZZO);
-        if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), Operation.EDIT));
-        }// end of if cycle
-    }// end of method
-
-    /**
-     * Regola in lettura eventuali valori NON associati al binder
-     * Dal DB alla UI
-     * Sovrascritto
-     */
-    protected void readSpecificFields() {
-        indirizzoTemporaneo = getIndirizzoCorrente();
-        indirizzoField.setValue(indirizzoTemporaneo != null ? indirizzoTemporaneo.toString() : "");
-    }// end of method
-
-
-    /**
-     * Regola in scrittura eventuali valori NON associati al binder
-     * Dallla  UI al DB
-     * Sovrascritto
-     */
-    protected void writeSpecificFields() {
-        Person persona = super.getCurrentItem();
-        persona.setIndirizzo(indirizzoTemporaneo);
-//        service.save(persona);
-    }// end of method
-
-
-    private void saveUpdate(Address entityBean, AViewDialog.Operation operation) {
-        indirizzoTemporaneo = entityBean;
-        indirizzoField.setValue(entityBean.toString());
-        focusOnPost(INDIRIZZO);
-        Notification.show("La modifica di indirizzo è stata confermata ma devi registrare questa persona per renderla definitiva", FLASH, Notification.Position.BOTTOM_START);
-    }// end of method
-
-
-    private void deleteUpdate(Address entityBean) {
-        indirizzoTemporaneo = null;
-        indirizzoField.setValue("");
-        focusOnPost(INDIRIZZO);
-    }// end of method
-
-
-    protected void annullaUpdate(Address entityBean) {
-        cancelButton.focus();
-    }// end of method
-
-    private Address getIndirizzoCorrente() {
-        Address indirizzo = null;
-        Person persona = getCurrentItem();
-
-        if (persona != null) {
-            indirizzo = persona.getIndirizzo();
-        }// end of if cycle
-
-        return indirizzo;
-    }// end of method
-
-
-    private Address getIndirizzo() {
-        Address indirizzo = getIndirizzoCorrente();
-
-        if (indirizzo == null) {
-            indirizzo = addressService.newEntity();
-        }// end of if cycle
-
-        return indirizzo;
-    }// end of method
-
-    public void close() {
-        super.close();
-        if (itemAnnulla != null) {
-            itemAnnulla.accept(null);
-        }// end of if cycle
-    }// end of method
-
+    
 }// end of class

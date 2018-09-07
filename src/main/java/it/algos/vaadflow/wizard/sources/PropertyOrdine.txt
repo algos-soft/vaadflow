@@ -4,6 +4,7 @@
      */
     @NotNull
     @Indexed()
+    @Field("ind")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", width = 55)
     public int ordine;

@@ -25,12 +25,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 24-ago-2018 17.55.51 <br>
+ * Date: 3-set-2018 20.32.35 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Document (facoltativo) per avere un nome della collection (DB mongo) diverso dal nome della Entity <br>
+ * Annotated with @Document (facoltativo) per avere un nome della collection (DB Mongo) diverso dal nome della Entity <br>
+ * Annotated with @TypeAlias (facoltativo) to replace the fully qualified class name with a different value. <br>
  * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  * Annotated with @Data (Lombok) for automatic use of Getter and Setter <br>
  * Annotated with @NoArgsConstructor (Lombok) for JavaBean specifications <br>
@@ -38,7 +39,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Annotated with @Builder (Lombok) con un metodo specifico, per usare quello standard nella (eventuale) sottoclasse <br>
  * Annotated with @Builder (Lombok) lets you automatically produce the code required to have your class
  * be instantiable with code such as: Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
- * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze dellaq classe <br>
+ * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze della classe <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la sottoclasse specifica <br>
  * Annotated with @AIEntity (facoltativo Algos) per alcuni parametri generali del modulo <br>
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Lista  <br>
@@ -46,8 +47,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * Inserisce SEMPRE la versione di serializzazione <br>
  * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
- * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
+ * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
  */
 @SpringComponent
 @Document(collection = "log")

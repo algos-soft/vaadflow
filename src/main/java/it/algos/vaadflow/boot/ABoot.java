@@ -1,6 +1,7 @@
 package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.modules.log.LogViewList;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressData;
 import it.algos.vaadflow.modules.address.AddressViewList;
@@ -165,6 +166,7 @@ public abstract class ABoot implements ServletContextListener {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
+		FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
         if (pref.isBool(EAPreferenza.showCompany.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
         }// end of if cycle
