@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
  * Date: sab, 14-lug-2018
  * Time: 15:08
  */
-//@SpringComponent
-//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public abstract class AVersBoot {
 
