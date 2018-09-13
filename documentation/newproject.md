@@ -74,3 +74,8 @@ Usa Vaadin 10.0.0 e IntelliJ Idea 2018.1.5
    <br>Confermare -> _OK_
 
 3. Regolare il vcs su GitHub
+
+
+###Installazione JAR
+1. Da Maven Projects, lanciare Lifecycle->install
+2. Da terminale 

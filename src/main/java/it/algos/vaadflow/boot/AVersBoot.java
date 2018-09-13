@@ -76,11 +76,11 @@ public abstract class AVersBoot {
                 k++;
             } else {
                 descOld = preferenza.getDescrizione();
-                if (!descOld.equals(descNew)) {
-                    vers.crea("Z", "#" + code, "#desc: " + descOld + " -> " + descNew);
-                    preferenza.setDescrizione(descNew);
-                    pref.save(preferenza);
-                }// end of if cycle
+//                if (!descOld.equals(descNew)) {
+//                    vers.crea("Z", "#" + code, "#desc: " + descOld + " -> " + descNew);
+//                    preferenza.setDescrizione(descNew);
+//                    pref.save(preferenza);
+//                }// end of if cycle
             }// end of if/else cycle
         }// end of for cycle
 
