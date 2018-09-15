@@ -4,12 +4,12 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.security.SecurityUtils;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
@@ -35,7 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 public class RoleViewDialog extends AViewDialog<Role> {
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -47,5 +47,5 @@ public class RoleViewDialog extends AViewDialog<Role> {
         super(presenter);
     }// end of Spring constructor
 
-    
+
 }// end of class

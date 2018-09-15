@@ -1,5 +1,6 @@
 package it.algos.vaadflow.security;
 
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String LOGOUT_SUCCESS_URL = "/role";//@todo cambiare in Tabellone
 
     private final UserDetailsService userDetailsService;
+
+    /**
+     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     */
+    @Autowired
+    public RoleService roleService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -92,8 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
 
                 // Allow all requests by logged in users.
-                // todo recuperare la lista di tutti i ruoli
-                .anyRequest().hasAnyAuthority(new String[]{"admin", "user"})
+                .anyRequest().hasAnyAuthority(roleService.getAllRoles())
 
                 // Configure the login page.
                 .and().formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)

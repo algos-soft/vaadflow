@@ -1,17 +1,21 @@
 package it.algos.vaadflow.security;
 
+import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -23,15 +27,17 @@ import java.util.Collections;
 @Primary
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UtenteService userRepository;
+    private final UtenteService utenteService;
+    private final RoleService roleService;
 
     public PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserDetailsServiceImpl(UtenteService userRepository) {
-        this.userRepository = userRepository;
-    }// end of method
+    public UserDetailsServiceImpl(UtenteService utenteService, RoleService roleService) {
+        this.utenteService = utenteService;
+        this.roleService = roleService;
+    }// end of Spring constructor
 
     /**
      * Recovers the {@link Utente} from the database using the e-mail address supplied
@@ -43,14 +49,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String passwordHash = "";
-        Utente  user = userRepository.findByUserName(username);
+        Collection<? extends GrantedAuthority> authorities;
+        Utente utente = utenteService.findByUserName(username);
 
-        if (null == user) {
+        if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
-            passwordHash = passwordEncoder.encode(user.getPasswordInChiaro());
-            return new org.springframework.security.core.userdetails.User(user.getUserName(), passwordHash,
-                    Collections.singletonList(new SimpleGrantedAuthority("user")));
+            passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
+            authorities = roleService.getAuthorities(utente);
+            return new User(utente.getUserName(), passwordHash, authorities);
         }// end of if/else cycle
 
     }// end of method

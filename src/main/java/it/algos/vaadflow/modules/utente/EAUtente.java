@@ -1,5 +1,6 @@
 package it.algos.vaadflow.modules.utente;
 
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 
 import java.util.List;
@@ -12,18 +13,18 @@ import java.util.List;
  * Time: 15:39
  */
 public enum EAUtente {
-    uno("gac", "fulvia", null, "gac@algos.it"),
-    due("alex", "axel01", null, "alex@algos.it");
+    uno("gac", "fulvia", EARole.developer, "gac@algos.it"),
+    due("alex", "axel01", EARole.developer, "alex@algos.it");
 
     public String userName;
     public String passwordInChiaro;
-    public List<Role> ruoli;
+    public EARole ruolo;
     public String mail;
 
-    EAUtente(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+    EAUtente(String userName, String passwordInChiaro, EARole ruolo, String mail) {
         this.setUserName(userName);
         this.setPasswordInChiaro(passwordInChiaro);
-        this.setRuoli(ruoli);
+        this.setRuolo(ruolo);
         this.setMail(mail);
     }// fine del costruttore
 
@@ -43,12 +44,12 @@ public enum EAUtente {
         this.passwordInChiaro = passwordInChiaro;
     }// end of method
 
-    public List<Role> getRuoli() {
-        return ruoli;
+    public EARole getRuolo() {
+        return ruolo;
     }// end of method
 
-    public void setRuoli(List<Role> ruoli) {
-        this.ruoli = ruoli;
+    public void setRuolo(EARole ruolo) {
+        this.ruolo = ruolo;
     }// end of method
 
     public String getMail() {

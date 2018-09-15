@@ -2,15 +2,15 @@ package it.algos.vaadflow.modules.utente;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
-import it.algos.vaadflow.security.SecurityConfiguration;
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -34,6 +34,8 @@ public class UtenteData extends AData {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     private UtenteService service;
+    @Autowired
+    private RoleService roleService;
 
 
     /**
@@ -75,13 +77,15 @@ public class UtenteData extends AData {
         int num = 0;
         String userName;
         String passwordInChiaro;
+        EARole ruolo;
         List<Role> ruoli;
         String mail;
 
         for (EAUtente utente : EAUtente.values()) {
             userName = utente.getUserName();
             passwordInChiaro = utente.getPasswordInChiaro();
-            ruoli = utente.getRuoli();
+            ruolo = utente.getRuolo();
+            ruoli = roleService.getRoles(ruolo);
             mail = utente.getMail();
 
             service.crea(userName, passwordInChiaro, ruoli, mail);

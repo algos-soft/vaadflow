@@ -3,7 +3,6 @@ package it.algos.vaadflow.modules.utente;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.security.SecurityConfiguration;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -159,7 +157,7 @@ public class UtenteService extends AService {
         entity = Utente.builderUtente()
                 .userName(userName.equals("") ? null : userName)
                 .passwordInChiaro(passwordInChiaro.equals("") ? null : passwordInChiaro)
-//                .ruoli(ruoli != null ? ruoli : roleService.getUser())
+                .ruoli(ruoli)
                 .mail(mail.equals("") ? null : mail)
                 .build();
 
