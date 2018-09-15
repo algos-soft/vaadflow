@@ -15,7 +15,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 3-set-2018 20.31.07 <br>
+ * Fix date: 13-set-2018 18.30.18 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>

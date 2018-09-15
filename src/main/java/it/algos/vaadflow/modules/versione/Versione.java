@@ -25,7 +25,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 3-set-2018 20.32.36 <br>
+ * Fix date: 13-set-2018 18.32.18 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -45,10 +45,15 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Lista  <br>
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici del Dialog e del Form <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * <p>
  * Inserisce SEMPRE la versione di serializzazione <br>
  * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
+ * Le singole property sono annotate con @Field("xxx") (facoltativo)
+ * -which gives a name to the key to be used to store the field inside the document.
+ * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
+ * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
 @SpringComponent
 @Document(collection = "versione")

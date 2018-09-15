@@ -16,7 +16,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * Project @MODULELOWER@ <br>
  * Created by Algos
  * User: @USER@
- * Date: @TODAY@
+ * Fix date: @TODAY@ <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>

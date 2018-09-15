@@ -34,7 +34,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Una sola view può avere @Route("")
  */
 @SpringBootApplication(scanBasePackages = {"it.algos.vaadflow", "it.algos.vaadtest"})
-@EnableVaadin({"it.algos.vaadflow.modules", "it.algos.vaadflow.wizard", "it.algos.vaadflow.developer", "it.algos.vaadtest.application", "it.algos.vaadtest.modules"})
+@EnableVaadin({"it.algos.vaadflow.modules", "it.algos.vaadflow.wizard", "it.algos.vaadflow.developer","it.algos.vaadflow.ui", "it.algos.vaadtest.application", "it.algos.vaadtest.modules"})
 @EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
 @EnableMongoRepositories({"it.algos"})
 public class TestApplication extends SpringBootServletInitializer {

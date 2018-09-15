@@ -22,7 +22,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 3-set-2018 20.32.35 <br>
+ * Fix date: 13-set-2018 18.32.17 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -91,15 +91,15 @@ public class PersonService extends AService {
      * @param nome:      obbligatorio
      * @param cognome:   obbligatorio
      * @param telefono:  facoltativo
-     * @param email:     facoltativo
+     * @param mail:      facoltativo
      * @param indirizzo: via, nome e numero (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
-    public Person crea(String nome, String cognome, String telefono, String email, Address indirizzo) {
+    public Person crea(String nome, String cognome, String telefono, String mail, Address indirizzo) {
         Person entity;
 
-        entity = newEntity(nome, cognome, telefono, email, indirizzo);
+        entity = newEntity(nome, cognome, telefono, mail, indirizzo);
         save(entity);
 
         return entity;
@@ -141,21 +141,25 @@ public class PersonService extends AService {
      * @param nome:      obbligatorio
      * @param cognome:   obbligatorio
      * @param telefono:  facoltativo
-     * @param email:     facoltativo
+     * @param mail:      facoltativo
      * @param indirizzo: via, nome e numero (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Person newEntity(String nome, String cognome, String telefono, String email, Address indirizzo) {
+    public Person newEntity(String nome, String cognome, String telefono, String mail, Address indirizzo) {
         Person entity = null;
 
         entity = Person.builderPerson()
                 .nome(nome.equals("") ? null : nome)
                 .cognome(cognome.equals("") ? null : cognome)
                 .telefono(telefono.equals("") ? null : telefono)
-                .email(email.equals("") ? null : email)
                 .indirizzo(indirizzo)
                 .build();
+
+        //--regola una property della superclasse
+        if (text.isValid(mail)) {
+            entity.mail = mail;
+        }// end of if cycle
 
         return (Person) creaIdKeySpecifica(entity);
     }// end of method

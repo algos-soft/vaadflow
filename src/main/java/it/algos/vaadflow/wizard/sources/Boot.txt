@@ -32,10 +32,8 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 @AIScript(sovrascrivibile = false)
 public class @MODULEUPPER@Boot extends ABoot {
 
-    public final static String PROJECT_NAME = "Vaadwam";
     public final static String PROJECT_VERSION = "0.3";
     public final static String DEMO_COMPANY_CODE = "demo";
-
 
 
     /**
@@ -46,6 +44,7 @@ public class @MODULEUPPER@Boot extends ABoot {
     @Autowired
     public @MODULEUPPER@Boot() {
         super();
+        FlowCost.PROJECT_NAME = PROJECT_NAME;
     }// end of Spring constructor
 
     /**

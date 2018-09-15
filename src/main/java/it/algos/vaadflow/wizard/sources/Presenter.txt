@@ -15,7 +15,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * Project @MODULELOWER@ <br>
  * Created by Algos <br>
  * User: @USER@ <br>
- * Date: @TODAY@ <br>
+ * Fix date: @TODAY@ <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>

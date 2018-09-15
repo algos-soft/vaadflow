@@ -2,33 +2,29 @@ package it.algos.vaadflow.modules.utente;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
-import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 3-set-2018 20.32.36 <br>
+ * Fix date: 13-set-2018 18.32.18 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -48,10 +44,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Lista  <br>
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici del Dialog e del Form <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * <p>
  * Inserisce SEMPRE la versione di serializzazione <br>
  * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
  * Le singole property sono annotate con @AIColumn (facoltativo Algos) per il tipo di Column nella Grid <br>
  * Le singole property sono annotate con @AIField (obbligatorio Algos) per il tipo di Field nel Dialog e nel Form <br>
+ * Le singole property sono annotate con @Field("xxx") (facoltativo)
+ * -which gives a name to the key to be used to store the field inside the document.
+ * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
+ * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
+ */
+
+/**
+ * Vengono usate SOLO le property indispensabili per la gestione della security <br>
+ * Altre property, anche generiche, vanno nella sottoclasse anagrafica Person <br>
  */
 @SpringComponent
 @Document(collection = "utente")
@@ -64,10 +70,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @EqualsAndHashCode(callSuper = false)
 @Qualifier(TAG_UTE)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"username", "password", "enabled", "role"})
-@AIForm(fields = {"username", "password", "enabled", "role"})
+@AIList(fields = {"userName", "passwordInChiaro", "locked", "mail"})
+@AIForm(fields = {"userName", "ruoli", "passwordInChiaro", "locked", "mail"})
 @AIScript(sovrascrivibile = false)
-public class Utente extends ACEntity {
+public class Utente extends AEntity {
 
 
     /**
@@ -76,45 +82,67 @@ public class Utente extends ACEntity {
     private final static long serialVersionUID = 1L;
 
 
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    public UtenteService service;
+
+
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * userName o nickName (obbligatorio, unico)
      */
-    @Autowired
-    public UtenteService service;
-
-
+    @NotNull(message = "User's first name must not be null")
     @Field("user")
     @AIField(type = EAFieldType.text)
-    public String username;
+    public String userName;
 
-    @Field("pass")
-    @AIField(type = EAFieldType.text)
-    public String password;
-
-    @Field("ena")
-    @AIField(type = EAFieldType.checkbox)
-    public boolean enabled;
 
     /**
-     * ruolo (obbligatorio, non unico)
-     * riferimento dinamico con @DBRef (obbligatorio per il ComboBox)
+     * password in chiaro (obbligatoria, non unica)
      */
-    @DBRef
+    @Field("pass")
+    @AIField(type = EAFieldType.text)
+    public String passwordInChiaro;
+
+
+    /**
+     * flag locked (obbligatorio, di default false)
+     */
+    @Field("lock")
+    @AIField(type = EAFieldType.checkbox)
+    public boolean locked;
+
+
+    /**
+     * Ruoli attribuiti a questo utente (obbligatorio, non unico)
+     * Siccome sono 'embedded' in utente, non serve @OneToMany() o @ManyToOne()
+     */
     @Field("role")
-    @AIField(type = EAFieldType.combo, required = true, clazz = RoleService.class)
+    @AIField(type = EAFieldType.noone, required = true, clazz = RoleService.class)
     @AIColumn(name = "Ruolo", width = 200)
-    public Role role;
+    public List<Role> ruoli;
 
-    public boolean isUser() {
-        return service.isUser(this);
-    }// end of method
 
-    public boolean isAdmin() {
-        return service.isAdmin(this);
-    }// end of method
+    /**
+     * posta elettronica (facoltativo)
+     */
+    @Field("mail")
+    @AIField(type = EAFieldType.email, widthEM = 24)
+    @AIColumn(width = 350, name = "Mail")
+    public String mail;
 
-    public boolean isDev() {
-        return service.isDev(this);
-    }// end of method
+
+//    public boolean isUser() {
+//        return service.isUser(this);
+//    }// end of method
+//
+//    public boolean isAdmin() {
+//        return service.isAdmin(this);
+//    }// end of method
+//
+//    public boolean isDev() {
+//        return service.isDev(this);
+//    }// end of method
 
 }// end of entity class

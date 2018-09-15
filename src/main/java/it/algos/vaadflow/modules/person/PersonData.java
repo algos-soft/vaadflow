@@ -66,7 +66,7 @@ public class PersonData extends AData {
 
         if (numRec == 0) {
             numRec = creaAll();
-            log.warn("Algos - Creazione dati iniziali PersonData.inizia(): " + numRec + " schede");
+            log.warn("Algos - Creazione dati iniziali PersonData.loadData(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Person è presente: " + numRec + " schede");
         }// end of if/else cycle

@@ -14,6 +14,7 @@ import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
 import it.algos.vaadflow.modules.role.RoleData;
 import it.algos.vaadflow.modules.role.RoleViewList;
+import it.algos.vaadflow.modules.utente.UtenteData;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
 import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadflow.wizard.WizardView;
@@ -44,6 +45,13 @@ public abstract class ABoot implements ServletContextListener {
      */
     @Autowired
     private RoleData role;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private UtenteData utente;
 
 
     /**
@@ -123,6 +131,7 @@ public abstract class ABoot implements ServletContextListener {
      */
     private void iniziaDataStandard() {
         this.role.loadData();
+        this.utente.loadData();
         this.address.loadData();
         this.person.loadData();
         this.company.loadData();

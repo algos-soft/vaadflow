@@ -78,4 +78,6 @@ Usa Vaadin 10.0.0 e IntelliJ Idea 2018.1.5
 
 ###Installazione JAR
 1. Da Maven Projects, lanciare Lifecycle->install
-2. Da terminale 
+2. (locale) Da terminale java -jar 'nomefile'
+3. (server) Da terminale scp /Users/gac/Documents/IdeaProjects/vaadwam/target/vaadwam-1.jar root@54.37.64.27:/root/springboot/vaadwam.jar
+

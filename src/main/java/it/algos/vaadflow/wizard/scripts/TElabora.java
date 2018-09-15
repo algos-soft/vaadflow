@@ -1097,6 +1097,10 @@ public class TElabora {
             return;
         }// end of if cycle
 
+        if (file.isEsisteFile(destPath)) {
+            return;
+        }// end of if cycle
+
         if (text.isValid(newProjectName)) {
             dirCancellata = file.deleteFile(destPath);
         }// end of if cycle

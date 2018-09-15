@@ -1,29 +1,31 @@
 package it.algos.vaadflow.modules.utente;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
+import it.algos.vaadflow.security.SecurityConfiguration;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Date: 3-set-2018 20.32.36 <br>
+ * Fix date: 13-set-2018 18.32.18 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -48,13 +50,17 @@ public class UtenteService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
-
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
     @Autowired
     public RoleService roleService;
 
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private SecurityConfiguration securityConfiguration;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -77,41 +83,22 @@ public class UtenteService extends AService {
         super(repository);
         super.entityClass = Utente.class;
         this.repository = (UtenteRepository) repository;
-   }// end of Spring constructor
-
-    /**
-     * Ricerca di una entity (la crea se non la trova) <br>
-     *
-     * @param username di riferimento (obbligatorio, unico per tutta l'applicazione)
-     * @param password (obbligatoria, non unica)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Utente findOrCrea(String username, String password) {
-        Utente entity = findByUsername(username);
-
-        if (entity == null) {
-            crea(username, password);
-        }// end of if cycle
-
-        return entity;
-    }// end of method
-
+    }// end of Spring constructor
 
     /**
      * Crea una entity e la registra <br>
      *
-     * @param company (obbligatoria)
-     * @param username di riferimento (obbligatorio, unico per tutta l'applicazione)
-     * @param password (obbligatoria, non unica)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
+     * @param mail             posta elettronica (facoltativo)
      *
      * @return la entity appena creata
      */
-    public Utente crea(Company company, String username, String password) {
+    public Utente crea(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
         Utente entity;
 
-        entity = newEntity(username, password);
-        entity.company = company;
+        entity = newEntity(userName, passwordInChiaro, ruoli, mail);
         save(entity);
 
         return entity;
@@ -119,33 +106,16 @@ public class UtenteService extends AService {
 
 
     /**
-     * Crea una entity e la registra <br>
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Eventuali regolazioni iniziali delle property
+     * Senza properties per compatibilità con la superclasse
      *
-     * @param username di riferimento (obbligatorio, unico per tutta l'applicazione)
-     * @param password (obbligatoria, non unica)
-     *
-     * @return la entity appena creata
+     * @return la nuova entity appena creata (non salvata)
      */
-    public Utente crea(String username, String password) {
-        Utente entity;
-
-        entity = newEntity(username, password);
-        save(entity);
-
-        return entity;
+    @Override
+    public Utente newEntity() {
+        return newEntity("", "user", (List<Role>) null);
     }// end of method
-
-     /**
-      * Creazione in memoria di una nuova entity che NON viene salvata
-      * Eventuali regolazioni iniziali delle property
-      * Senza properties per compatibilità con la superclasse
-      *
-      * @return la nuova entity appena creata (non salvata)
-      */
-     @Override
-     public Utente newEntity() {
-         return newEntity("", "", (Role) null);
-     }// end of method
 
 
     /**
@@ -154,14 +124,16 @@ public class UtenteService extends AService {
      * Properties obbligatorie <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
-     * @param username di riferimento (obbligatorio, unico per tutta l'applicazione)
-     * @param password (obbligatoria, non unica)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String username, String password) {
-        return newEntity(username, password, (Role) null);
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli) {
+        return newEntity(userName, passwordInChiaro, ruoli, "");
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -169,28 +141,29 @@ public class UtenteService extends AService {
      * All properties <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
-     * @param username di riferimento (obbligatorio, unico per tutta l'applicazione)
-     * @param password (obbligatoria, non unica)
-     * @param role     ruolo (obbligatorio, non unico)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
+     * @param mail             posta elettronica (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String username, String password, Role role) {
-        Utente entity = null;
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        Utente entity;
 
-        entity = findByUsername(username);
+        entity = findByUserName(userName);
         if (entity != null) {
-            return findByUsername(username);
+            return findByUserName(userName);
         }// end of if cycle
 
         entity = Utente.builderUtente()
-                .username(username.equals("") ? null : username)
-                .password(password.equals("") ? null : password)
-                .enabled(true)
-                .role(role != null ? role : roleService.getUser())
+                .userName(userName.equals("") ? null : userName)
+                .passwordInChiaro(passwordInChiaro.equals("") ? null : passwordInChiaro)
+//                .ruoli(ruoli != null ? ruoli : roleService.getUser())
+                .mail(mail.equals("") ? null : mail)
                 .build();
 
-        return (Utente)creaIdKeySpecifica(entity);
+        return (Utente) creaIdKeySpecifica(entity);
     }// end of method
 
 
@@ -198,30 +171,32 @@ public class UtenteService extends AService {
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Utente) entityBean).getUsername();
+        return ((Utente) entityBean).getUserName();
     }// end of method
+
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param username di riferimento (obbligatorio)
+     * @param userName userName o nickName (obbligatorio, unico)
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Utente findByUsername(String username) {
-        return repository.findByUsername(username);
+    public Utente findByUserName(String userName) {
+        return repository.findByUserName(userName);
     }// end of method
 
-    public boolean isUser(Utente utente) {
-        return utente.role == roleService.getUser() || isAdmin(utente);
-    }// end of method
 
-    public boolean isAdmin(Utente utente) {
-        return utente.role == roleService.getAdmin() || isDev(utente);
-    }// end of method
-
-    public boolean isDev(Utente utente) {
-        return utente.role == roleService.getDeveloper();
-    }// end of method
+//    public boolean isUser(Utente utente) {
+//        return utente.role == roleService.getUser() || isAdmin(utente);
+//    }// end of method
+//
+//    public boolean isAdmin(Utente utente) {
+//        return utente.role == roleService.getAdmin() || isDev(utente);
+//    }// end of method
+//
+//    public boolean isDev(Utente utente) {
+//        return utente.role == roleService.getDeveloper();
+//    }// end of method
 
 }// end of class
