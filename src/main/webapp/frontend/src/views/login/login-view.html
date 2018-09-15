@@ -37,7 +37,7 @@
       }
 
       .info {
-        background-image: url(../../../images/login-banner.jpg);
+        background-image: url(../../../images/ambulanza.jpg);
         background-size: cover;
         background-position-x: center;
         width: 100%;
@@ -46,7 +46,7 @@
 
       .info__header {
         font-weight: 300;
-        color: var(--lumo-base-color);
+        color: var(--lumo-success-color-50pct);
         margin-top: 2em;
         margin-bottom: 0;
       }
@@ -138,20 +138,19 @@
     </style>
     <div class="container">
       <div class="info">
-        <h1 class="info__header">Backery</h1>
+        <h1 class="info__header">WebAmbulanze</h1>
         <p class="info__text">
-          admin@vaadin.com + admin <br>
-          barista@vaadin.com + barista
+          admin@vaadin.com + admin
         </p>
       </div>
       <iron-form class="login" id="form" allow-redirect>
         <form method="post" action="login">
-          <h2 class="login__header">Sign in</h2>
+          <h2 class="login__header">Entra</h2>
           <div class="login__layout">
-            <vaadin-text-field id="username" name="username" label="Email" autofocus required></vaadin-text-field>
+            <vaadin-text-field id="username" name="username" label="Username" autofocus required></vaadin-text-field>
             <vaadin-password-field id="password" name="password" label="Password" required on-keydown="_onPasswordKeydown"></vaadin-password-field>
             <vaadin-button class="login__button" on-tap="login" theme="primary">
-              Sign In
+              Entra
             </vaadin-button>
           </div>
           <template is="dom-if" if="[[error]]">
@@ -182,26 +181,6 @@
         };
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this._measureLoadPerformance();
-      }
-
-      // // This method is used to measure the page load performance and can be safely removed
-      // // if there is no need for that.
-      // _measureLoadPerformance() {
-      //   const banner = new Image();
-      //   banner.onload = () => {
-      //     window.performance.mark && window.performance.mark('bakery-page-loaded');
-      //   };
-      //
-      //   const info = this.shadowRoot.querySelector('.info');
-      //   const cssBackgroundImage = window.getComputedStyle(info).getPropertyValue('background-image');
-      //   const match = cssBackgroundImage.match(/url\("?(.+?)"?\)/i);
-      //   if (match) {
-      //     banner.src = match[1];
-      //   }
-      // }
 
       login() {
         if (!this.$.username.invalid && !this.$.password.invalid) {

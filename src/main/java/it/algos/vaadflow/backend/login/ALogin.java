@@ -2,11 +2,13 @@ package it.algos.vaadflow.backend.login;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.modules.company.Company;
-import it.algos.vaadflow.modules.company.CompanyService;
+import it.algos.vaadflow.modules.utente.Utente;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Project vaadwam
@@ -20,8 +22,17 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ALogin {
 
+    private Utente utente;
     private Company company;
     private boolean developer = false;
+
+    public Utente getUtente() {
+        return utente;
+    }// end of method
+
+    public void setUtente(Utente utente) {
+        this.utente = utente;
+    }// end of method
 
     public Company getCompany() {
         return company;
@@ -37,6 +48,21 @@ public class ALogin {
 
     public void setDeveloper(boolean developer) {
         this.developer = developer;
+    }// end of method
+
+    public Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }// end of method
+
+    /**
+     * Checks if the user is logged in.
+     *
+     * @return true if the user is logged in. False otherwise.
+     */
+    public boolean isUserLoggedIn() {
+        Authentication authentication = getAuthentication();
+
+        return authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
     }// end of method
 
 }// end of class

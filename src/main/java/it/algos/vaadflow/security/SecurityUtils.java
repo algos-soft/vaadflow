@@ -70,7 +70,7 @@ public final class SecurityUtils {
 		SecurityContext context = SecurityContextHolder.getContext();
 		return context.getAuthentication() != null
 				&& !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
-	}
+	}// end of method
 
 	/**
 	 * Tests if the request is an internal framework request. The test consists of
