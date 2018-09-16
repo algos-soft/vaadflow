@@ -54,7 +54,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
-
 /**
  * Vengono usate SOLO le property indispensabili per la gestione della security <br>
  * Altre property, anche generiche, vanno nella sottoclasse anagrafica Person <br>
@@ -92,7 +91,7 @@ public class Utente extends AEntity {
     /**
      * userName o nickName (obbligatorio, unico)
      */
-    @NotNull(message = "User's first name must not be null")
+    @NotNull(message = "UserName, anche detto nickName, non può essere lasciato vuoto")
     @Field("user")
     @AIField(type = EAFieldType.text)
     public String userName;
@@ -100,6 +99,7 @@ public class Utente extends AEntity {
 
     /**
      * password in chiaro (obbligatoria, non unica)
+     * con inserimento automatico (prima del 'save') se è nulla
      */
     @Field("pass")
     @AIField(type = EAFieldType.text)
@@ -115,7 +115,9 @@ public class Utente extends AEntity {
 
 
     /**
-     * Ruoli attribuiti a questo utente (obbligatorio, non unico)
+     * Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     * con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     * lista modificabile solo da developer ed admin
      * Siccome sono 'embedded' in utente, non serve @OneToMany() o @ManyToOne()
      */
     @Field("role")

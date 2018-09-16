@@ -2,7 +2,6 @@ package it.algos.vaadflow.ui;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
@@ -18,7 +17,6 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAFieldType;
@@ -199,9 +197,15 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
-     * Flag di preferenza per usare il bottone new. Normalmente true.
+     * Flag di preferenza per usare il campo-testo di ricerca e selezione. Normalmente true.
      */
-    protected boolean usaBottoneNew;
+    protected boolean usaSearchTextField;
+
+
+    /**
+     * Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
+     */
+    protected boolean usaSearchBottoneNew;
 
 
     /**
@@ -276,7 +280,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         creaSearchBar();
         creaDeveloperAlert();
         creaTopLayout();
-        creaCaption();
+        creaCaption("");
         creaGrid();
         creaBottomLayout();
         creaFooter();
@@ -292,8 +296,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per usare la searchBar. Normalmente true.
         usaSearchBar = true;
 
-        //--Flag di preferenza per usare il bottone new. Normalmente true.
-        usaBottoneNew = true;
+        //--Flag di preferenza per usare il campo-testo di ricerca e selezione. Normalmente true.
+        usaSearchTextField = true;
+
+        //--Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
+        usaSearchBottoneNew = true;
 
         //--Flag di preferenza per mostrare una caption sopra la grid. Normalmente true.
         usaCaption = true;
@@ -343,17 +350,19 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             return;
         }// end of if cycle
 
-        searchField.setPrefixComponent(new Icon("lumo", "search"));
-        searchField.addClassName("view-toolbar__search-field");
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        searchField.addValueChangeListener(e -> updateView());
+        if (usaSearchTextField) {
+            searchField.setPrefixComponent(new Icon("lumo", "search"));
+            searchField.addClassName("view-toolbar__search-field");
+            searchField.setValueChangeMode(ValueChangeMode.EAGER);
+            searchField.addValueChangeListener(e -> updateView());
 
-        Button clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-        clearFilterTextBtn.addClickListener(e -> searchField.clear());
+            Button clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+            clearFilterTextBtn.addClickListener(e -> searchField.clear());
 
-        viewToolbar.add(searchField, clearFilterTextBtn);
+            viewToolbar.add(searchField, clearFilterTextBtn);
+        }// end of if cycle
 
-        if (usaBottoneNew) {
+        if (usaSearchBottoneNew) {
             newButton = new Button("New entity", new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
@@ -438,12 +447,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected VerticalLayout creaCaption() {
+    protected VerticalLayout creaCaption(String testo) {
         VerticalLayout layout = new VerticalLayout();
         layout.setPadding(false);
         layout.setMargin(false);
         layout.setSpacing(false);
-        String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
+        testo += entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
         int count = 0;
         String siglaCompany = "";
 //        Company company = login.getCompany();

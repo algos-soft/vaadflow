@@ -41,6 +41,24 @@ public class AFieldService {
      * Private final property
      */
     private static final AFieldService INSTANCE = new AFieldService();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AAnnotationService annotation = AAnnotationService.getInstance();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AReflectionService reflection = AReflectionService.getInstance();
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text = ATextService.getInstance();
+    @Autowired
+    private AConverterPrefByte prefConverter;
+
 
     /**
      * Private constructor to avoid client applications to use constructor
@@ -56,29 +74,6 @@ public class AFieldService {
     public static AFieldService getInstance() {
         return INSTANCE;
     }// end of static method
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AReflectionService reflection = AReflectionService.getInstance();
-
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public ATextService text = ATextService.getInstance();
-
-
-    @Autowired
-    private AConverterPrefByte prefConverter;
 
     /**
      * Create a single field.
@@ -115,6 +110,7 @@ public class AFieldService {
         boolean notNull;
         String stringMessage = "Code must contain at least 3 printable characters";
         String intMessage = " deve contenere solo caratteri numerici";
+        String messageNotNull = "";
         String mess = "";
         StringLengthValidator stringValidator = null;
         StringToIntegerConverter integerConverter = null;
@@ -126,6 +122,7 @@ public class AFieldService {
         notNull = annotation.isNotNull(reflectionJavaField);
         message = annotation.getMessage(reflectionJavaField);
         messageSize = annotation.getMessageSize(reflectionJavaField);
+        messageNotNull = annotation.getMessageNull(reflectionJavaField);
         min = annotation.getSizeMin(reflectionJavaField);
         type = annotation.getFormType(reflectionJavaField);
         String caption = annotation.getFormFieldNameCapital(reflectionJavaField);
@@ -135,7 +132,7 @@ public class AFieldService {
         boolean focus = annotation.isFocus(reflectionJavaField);
 //        boolean enabled = annotation.isFieldEnabled(reflectedJavaField, nuovaEntity);
         Class targetClazz = annotation.getComboClass(reflectionJavaField);
-        AStringNullValidator nullValidator = new AStringNullValidator();
+        AStringNullValidator nullValidator = new AStringNullValidator(messageNotNull);
         AIntegerZeroValidator zeroValidator = new AIntegerZeroValidator();
 
         if (type == null) {

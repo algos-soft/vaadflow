@@ -547,9 +547,21 @@ public abstract class AService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        return save((AEntity) null, entityBean);
+        return save((AEntity) null, beforeSave(entityBean));
     }// end of method
 
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     *
+     * @return the modified entity
+     */
+    public AEntity beforeSave(AEntity entityBean) {
+        return entityBean;
+    }// end of method
 
     /**
      * Saves a given entity.

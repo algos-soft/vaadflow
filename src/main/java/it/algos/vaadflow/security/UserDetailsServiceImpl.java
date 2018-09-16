@@ -1,6 +1,6 @@
 package it.algos.vaadflow.security;
 
-import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -27,6 +26,7 @@ import java.util.List;
 @Primary
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    private final ALogin login;
     private final UtenteService utenteService;
     private final RoleService roleService;
 
@@ -34,7 +34,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Autowired
-    public UserDetailsServiceImpl(UtenteService utenteService, RoleService roleService) {
+    public UserDetailsServiceImpl(ALogin login, UtenteService utenteService, RoleService roleService) {
+        this.login = login;
         this.utenteService = utenteService;
         this.roleService = roleService;
     }// end of Spring constructor

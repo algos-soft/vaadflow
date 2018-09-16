@@ -20,6 +20,14 @@ import org.springframework.context.annotation.Scope;
 @Slf4j
 public class AStringNullValidator implements Validator {
     private static final long serialVersionUID = 1L;
+    private String message = "";
+
+    public AStringNullValidator() {
+    }// end of costructor
+
+    public AStringNullValidator(String message) {
+        this.message = message;
+    }// end of costructor
 
     @Override
     public ValidationResult apply(Object obj, ValueContext valueContext) {
@@ -28,12 +36,20 @@ public class AStringNullValidator implements Validator {
         if (obj instanceof String) {
             testo = (String) obj;
             if (testo.length() == 0) {
-                return ValidationResult.error("Il contenuto di questo campo non può essere vuoto");
+                if (message.equals("")) {
+                    return ValidationResult.error("Il contenuto di questo campo non può essere vuoto");
+                } else {
+                    return ValidationResult.error(message);
+                }// end of if/else cycle
             } else {
                 return ValidationResult.ok();
             }// end of if/else cycle
         } else {
-            return ValidationResult.error("Il contenuto di questo campo non può essere vuoto");
+            if (message.equals("")) {
+                return ValidationResult.error("Il contenuto di questo campo non può essere vuoto");
+            } else {
+                return ValidationResult.error(message);
+            }// end of if/else cycle
         }// end of if/else cycle
     }// end of methodù
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Collection;
 import java.util.List;
@@ -79,6 +80,17 @@ public class AMongoService {
         mongo.insert(item, collection);
     }// end of method
 
+
+    /**
+     * Count all
+     *
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    public int count(Class clazz) {
+        return (int) mongo.count(new Query(), clazz);
+    }// end of single test
 
     /**
      * Find all

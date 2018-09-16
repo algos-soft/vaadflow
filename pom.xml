@@ -33,7 +33,7 @@
 
         <!-- Dependencies -->
         <!-- Va tenuta aggiornata la versione di VAADIN 10.0.x -->
-        <vaadin.version>10.0.4</vaadin.version>
+        <vaadin.version>10.0.5</vaadin.version>
 
         <!-- Va tenuta aggiornata la versione di spring-boot -->
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
@@ -124,17 +124,9 @@
         </dependency>
 
         <!-- Security -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--</dependency>-->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.webjars.bowergithub.polymerelements</groupId>
@@ -154,10 +146,6 @@
             <version>2.1.0</version>
             <scope>test</scope>
         </dependency>  <!--<dependency>-->
-        <!--<groupId>de.flapdoodle.embed</groupId>-->
-        <!--<artifactId>de.flapdoodle.embed.mongo</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
 
         <!-- Old JPA -->

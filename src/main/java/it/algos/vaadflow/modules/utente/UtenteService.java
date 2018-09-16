@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @AIScript(sovrascrivibile = false)
 public class UtenteService extends AService {
 
-
+    private final static String SUFFIX = "123";
     /**
      * versione della classe per la serializzazione
      */
@@ -88,7 +88,10 @@ public class UtenteService extends AService {
      *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
      *
      * @return la entity appena creata
@@ -112,7 +115,7 @@ public class UtenteService extends AService {
      */
     @Override
     public Utente newEntity() {
-        return newEntity("", "user", (List<Role>) null);
+        return newEntity("", "", (List<Role>) null);
     }// end of method
 
 
@@ -124,7 +127,10 @@ public class UtenteService extends AService {
      *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -141,7 +147,10 @@ public class UtenteService extends AService {
      *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     * @param ruoli            ruoli attribuiti a questo utente (obbligatorio, non unico)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
@@ -164,6 +173,29 @@ public class UtenteService extends AService {
         return (Utente) creaIdKeySpecifica(entity);
     }// end of method
 
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean) {
+        Utente utente = (Utente) super.beforeSave(entityBean);
+
+        if (text.isEmpty(utente.passwordInChiaro)) {
+            utente.passwordInChiaro = utente.userName + SUFFIX;
+        }// end of if cycle
+
+        if (utente.ruoli == null) {
+            utente.ruoli = roleService.getUserRole();
+        }// end of if cycle
+
+        return utente;
+    }// end of method
 
     /**
      * Property unica (se esiste).

@@ -80,7 +80,7 @@ public class Person extends Utente {
 
 
     /**
-     * nome (obbligatorio, non unica)
+     * nome (obbligatorio, non unico)
      */
     @NotNull
     @Indexed()

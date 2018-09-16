@@ -7,6 +7,8 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.utente.Utente;
+import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
+
+/**
+ * La newEntity() usa il metodo newEntity() della superclasse per usare 'builderUtente' <br>
+ */
 @SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -47,6 +53,12 @@ public class PersonService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected UtenteService utenteService;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -138,9 +150,9 @@ public class PersonService extends AService {
      * All properties <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
-     * @param nome:      obbligatorio
-     * @param cognome:   obbligatorio
-     * @param telefono:  facoltativo
+     * @param nome:       (obbligatorio, non unico)
+     * @param cognome:   (obbligatorio, non unico)
+     * @param telefono:  (facoltativo)
      * @param mail:      facoltativo
      * @param indirizzo: via, nome e numero (facoltativo)
      *
@@ -148,6 +160,7 @@ public class PersonService extends AService {
      */
     public Person newEntity(String nome, String cognome, String telefono, String mail, Address indirizzo) {
         Person entity = null;
+        Utente entityDellaSuperClasseUtente = utenteService.newEntity(nome,cognome,null,"");
 
         entity = Person.builderPerson()
                 .nome(nome.equals("") ? null : nome)

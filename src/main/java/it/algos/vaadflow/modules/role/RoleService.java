@@ -193,6 +193,15 @@ public class RoleService extends AService {
     /**
      * User roles
      */
+    public List<Role> getUserRole() {
+        List<Role> lista = new ArrayList<>();
+        lista.add(getUser());
+        return lista;
+    }// end of method
+
+    /**
+     * User roles
+     */
     public List<Role> getAllUserRoles() {
         List<Role> lista = getAllGuestRoles();
         lista.add(getUser());

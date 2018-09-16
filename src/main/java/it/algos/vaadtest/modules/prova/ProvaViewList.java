@@ -65,5 +65,11 @@ public class ProvaViewList extends AViewList {
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+    }
 }// end of class
