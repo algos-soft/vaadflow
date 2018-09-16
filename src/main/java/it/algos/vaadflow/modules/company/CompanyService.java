@@ -112,19 +112,19 @@ public class CompanyService extends AService {
      * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
      * @param contatto    persona di riferimento (facoltativo)
      * @param telefono    della company (facoltativo)
-     * @param email       della company (facoltativo)
+     * @param mail       della company (facoltativo)
      * @param indirizzo   della company (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
-    public Company crea(String code, String descrizione, Person contatto, String telefono, String email, Address indirizzo) {
+    public Company crea(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
         Company entity = findByKeyUnica(code);
 
         if (entity != null) {
             delete(entity);
         }// end of if cycle
 
-        entity = newEntity(code, descrizione, contatto, telefono, email, indirizzo);
+        entity = newEntity(code, descrizione, contatto, telefono, mail, indirizzo);
         save(entity);
 
         return entity;
@@ -169,12 +169,12 @@ public class CompanyService extends AService {
      * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
      * @param contatto    persona di riferimento (facoltativo)
      * @param telefono    della company (facoltativo)
-     * @param email       della company (facoltativo)
+     * @param mail       della company (facoltativo)
      * @param indirizzo   della company (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Company newEntity(String code, String descrizione, Person contatto, String telefono, String email, Address indirizzo) {
+    public Company newEntity(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
         Company entity = null;
 
         entity = findByKeyUnica(code);
@@ -187,7 +187,7 @@ public class CompanyService extends AService {
                 .descrizione(descrizione.equals("") ? null : descrizione)
                 .contatto(contatto)
                 .telefono(telefono.equals("") ? null : telefono)
-                .email(email.equals("") ? null : email)
+                .mail(mail.equals("") ? null : mail)
                 .indirizzo(indirizzo)
                 .build();
 

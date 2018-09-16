@@ -89,7 +89,8 @@ public class @ENTITY@Service extends AService {
       * Eventuali regolazioni iniziali delle property <br>
       * All properties <br>
       * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
-      *
+      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
+     *
       @PARAMETERSDOC@
       *
       * @return la nuova entity appena creata (non salvata)

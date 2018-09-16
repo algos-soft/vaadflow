@@ -73,7 +73,7 @@ public abstract class AService implements IAService {
     public ALogin login;
 
     //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
-    public MongoRepository repository;
+    protected MongoRepository repository;
 
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
@@ -128,7 +128,11 @@ public abstract class AService implements IAService {
      */
     @Override
     public int count() {
-        return (int) repository.count();
+        if (repository!=null) {
+            return (int) repository.count();
+        } else {
+            return 134;
+        }// end of if/else cycle
     }// end of method
 
 

@@ -69,6 +69,12 @@ public class UtenteService extends AService {
 
 
     /**
+     * Default constructor
+     */
+    public UtenteService() {
+    }// end of constructor
+
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -184,17 +190,17 @@ public class UtenteService extends AService {
      */
     @Override
     public AEntity beforeSave(AEntity entityBean) {
-        Utente utente = (Utente) super.beforeSave(entityBean);
+        Utente entity = (Utente) super.beforeSave(entityBean);
 
-        if (text.isEmpty(utente.passwordInChiaro)) {
-            utente.passwordInChiaro = utente.userName + SUFFIX;
+        if (text.isEmpty(entity.passwordInChiaro)) {
+            entity.passwordInChiaro = entity.userName + SUFFIX;
         }// end of if cycle
 
-        if (utente.ruoli == null) {
-            utente.ruoli = roleService.getUserRole();
+        if (entity.ruoli == null) {
+            entity.ruoli = roleService.getUserRole();
         }// end of if cycle
 
-        return utente;
+        return entity;
     }// end of method
 
     /**

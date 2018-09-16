@@ -65,7 +65,7 @@ public class PersonData extends AData {
         int numRec = super.count();
 
         if (numRec == 0) {
-            numRec = creaAll();
+//            numRec = creaAll();
             log.warn("Algos - Creazione dati iniziali PersonData.loadData(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Person è presente: " + numRec + " schede");
@@ -73,32 +73,32 @@ public class PersonData extends AData {
     }// end of method
 
 
-    /**
-     * Creazione della collezione
-     */
-    private int creaAll() {
-        int num = 0;
-        String nome;
-        String cognome;
-        String telefono;
-        String email;
-        EAAddress eaAddress;
-        Address indirizzo;
-
-        for (EAPerson persona : EAPerson.values()) {
-            nome = persona.getNome();
-            cognome = persona.getCognome();
-            telefono = persona.getTelefono();
-            email = persona.getEmail();
-            eaAddress = persona.getAddress();
-            indirizzo = addressService.newEntity(eaAddress);
-
-            service.crea(nome, cognome, telefono, email, indirizzo);
-            num++;
-        }// end of for cycle
-
-        return num;
-    }// end of method
+//    /**
+//     * Creazione della collezione
+//     */
+//    private int creaAll() {
+//        int num = 0;
+//        String nome;
+//        String cognome;
+//        String telefono;
+//        String email;
+//        EAAddress eaAddress;
+//        Address indirizzo;
+//
+//        for (EAPerson persona : EAPerson.values()) {
+//            nome = persona.getNome();
+//            cognome = persona.getCognome();
+//            telefono = persona.getTelefono();
+//            email = persona.getEmail();
+//            eaAddress = persona.getAddress();
+//            indirizzo = addressService.newEntity(eaAddress);
+//
+//            service.crea(nome, cognome, telefono, indirizzo);
+//            num++;
+//        }// end of for cycle
+//
+//        return num;
+//    }// end of method
 
 
 }// end of class

@@ -56,6 +56,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
+/**
+ * Alcune property vengono gestite dalla superclasse Utente <br>
+ * La classe PersonService deve estendere UtenteService per usare il metodo newEntity della superclasse <br>
+ */
 @SpringComponent
 @Document(collection = "person")
 @TypeAlias("person")

@@ -2,11 +2,11 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AService;
@@ -17,6 +17,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
@@ -60,11 +62,25 @@ public class PersonService extends AService {
     @Autowired
     protected UtenteService utenteService;
 
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected AddressService addressService;
+
+    /**
+     * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
+     * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
+     * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
+     */
+    private PersonRepository repository;
+
+    /**
+     * Default constructor
+     */
+    public PersonService() {
+    }// end of constructor
 
     /**
      * Costruttore <br>
@@ -76,42 +92,57 @@ public class PersonService extends AService {
      */
     @Autowired
     public PersonService(@Qualifier(TAG_PER) MongoRepository repository) {
-        super(repository);
+        super();
         super.entityClass = Person.class;
+
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
-     */
-    public static Person getNewPerson(String nome, String cognome) {
-        Person entity = null;
-        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
-
-        if (istanza != null) {
-            entity = istanza.newEntity(nome, cognome);
-        }// end of if cycle
-
-        return entity;
-    }// end of method
+//    /**
+//     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+//     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
+//     */
+//    public static Person getNewPerson(String nome, String cognome) {
+//        Person entity = null;
+//        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
+//
+//        if (istanza != null) {
+//            entity = istanza.newEntity(nome, cognome);
+//        }// end of if cycle
+//
+//        return entity;
+//    }// end of method
 
     /**
      * Crea una entity <br>
      * Se esiste già, la cancella prima di ricrearla <br>
      *
-     * @param nome:      obbligatorio
-     * @param cognome:   obbligatorio
-     * @param telefono:  facoltativo
-     * @param mail:      facoltativo
-     * @param indirizzo: via, nome e numero (facoltativo)
+     * @param nome:            (obbligatorio, non unico)
+     * @param cognome:         (obbligatorio, non unico)
+     * @param telefono:        (facoltativo)
+     * @param indirizzo:       via, nome e numero (facoltativo)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
+     * @param mail             posta elettronica (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
-    public Person crea(String nome, String cognome, String telefono, String mail, Address indirizzo) {
+    public Person crea(
+            String nome,
+            String cognome,
+            String telefono,
+            Address indirizzo,
+            String userName,
+            String passwordInChiaro,
+            List<Role> ruoli,
+            String mail) {
         Person entity;
 
-        entity = newEntity(nome, cognome, telefono, mail, indirizzo);
+        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail);
         save(entity);
 
         return entity;
@@ -141,7 +172,23 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity(String nome, String cognome) {
-        return newEntity(nome, cognome, "", "", (Address) null);
+        return newEntity(nome, cognome, "", (Address) null);
+    }// end of method
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Eventuali regolazioni iniziali delle property
+     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok)
+     *
+     * @param nome:      (obbligatorio, non unico)
+     * @param cognome:   (obbligatorio, non unico)
+     * @param telefono:  (facoltativo)
+     * @param indirizzo: via, nome e numero (facoltativo)
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntity(String nome, String cognome, String telefono, Address indirizzo) {
+        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "");
     }// end of method
 
     /**
@@ -149,32 +196,60 @@ public class PersonService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
+     * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param nome:       (obbligatorio, non unico)
-     * @param cognome:   (obbligatorio, non unico)
-     * @param telefono:  (facoltativo)
-     * @param mail:      facoltativo
-     * @param indirizzo: via, nome e numero (facoltativo)
+     * @param nome:            (obbligatorio, non unico)
+     * @param cognome:         (obbligatorio, non unico)
+     * @param telefono:        (facoltativo)
+     * @param indirizzo:       via, nome e numero (facoltativo)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
+     * @param mail             posta elettronica (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Person newEntity(String nome, String cognome, String telefono, String mail, Address indirizzo) {
+    public Person newEntity(
+            String nome,
+            String cognome,
+            String telefono,
+            Address indirizzo,
+            String userName,
+            String passwordInChiaro,
+            List<Role> ruoli,
+            String mail) {
         Person entity = null;
-        Utente entityDellaSuperClasseUtente = utenteService.newEntity(nome,cognome,null,"");
+        Utente entityDellaSuperClasseUtente = utenteService.newEntity(nome, cognome, ruoli, mail);
 
-        entity = Person.builderPerson()
-                .nome(nome.equals("") ? null : nome)
-                .cognome(cognome.equals("") ? null : cognome)
-                .telefono(telefono.equals("") ? null : telefono)
-                .indirizzo(indirizzo)
-                .build();
+        //--casting dalla superclasse alla classe attuale
+        entity = (Person) entityDellaSuperClasseUtente;
 
-        //--regola una property della superclasse
-        if (text.isValid(mail)) {
-            entity.mail = mail;
-        }// end of if cycle
+        //--regola le property di questa classe
+        entity.setNome(nome.equals("") ? null : nome);
+        entity.setCognome(cognome.equals("") ? null : cognome);
+        entity.setTelefono(telefono.equals("") ? null : telefono);
+        entity.setIndirizzo(indirizzo);
 
         return (Person) creaIdKeySpecifica(entity);
+    }// end of method
+
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean) {
+        Person entity = (Person) super.beforeSave(entityBean);
+
+        return entity;
     }// end of method
 
 
@@ -194,6 +269,7 @@ public class PersonService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Deprecated
     public Person newEntity(EAPerson eaPerson) {
         String nome;
         String cognome;
@@ -210,7 +286,7 @@ public class PersonService extends AService {
             eaAddress = eaPerson.getAddress();
             indirizzo = addressService.newEntity(eaAddress);
 
-            return newEntity(nome, cognome, telefono, email, indirizzo);
+            return newEntity(nome, cognome, telefono, indirizzo);
         } else {
             return null;
         }// end of if/else cycle

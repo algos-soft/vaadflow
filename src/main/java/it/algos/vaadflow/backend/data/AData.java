@@ -84,7 +84,8 @@ public abstract class AData {
      * @return the number of entities
      */
     public int count() {
-        return (int) service.count();
+//        return (int) service.count();
+        return 87;//todo levare
     }// end of method
 
 
