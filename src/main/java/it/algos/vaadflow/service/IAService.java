@@ -102,14 +102,25 @@ public interface IAService {
 
 
     /**
-     * Saves a given entity.
-     * Use the returned instance for further operations
-     * as the save operation might have changed the entity instance completely.
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
      *
-     * @param entityBean to be saved
+     * @param entityBean da regolare prima del save
      *
-     * @return the saved entity
+     * @return the modified entity
      */
+    public AEntity beforeSave(AEntity entityBean) ;
+
+
+        /**
+          * Saves a given entity.
+          * Use the returned instance for further operations
+          * as the save operation might have changed the entity instance completely.
+          *
+          * @param entityBean to be saved
+          *
+          * @return the saved entity
+          */
     public AEntity save(AEntity entityBean);
 
 

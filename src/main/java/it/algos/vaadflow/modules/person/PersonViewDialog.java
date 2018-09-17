@@ -71,22 +71,6 @@ public class PersonViewDialog extends AViewDialog<Person> {
     }// end of constructor
 
 
-//    /**
-//     * Costruisce una lista di nomi delle properties nella sottoclasse specifica
-//     */
-//    @Override
-//    protected List<String> getSpecificFormPropertiesName(List<String> properties) {
-//        List<String> specificOrderedProperties = new ArrayList<>();
-//
-//        if (pref.isBool(FlowCost.USA_SECURITY)) {
-//            specificOrderedProperties = Arrays.asList("userName", "passwordInChiaro", "locked", "nome", "cognome", "telefono", "mail", "indirizzo");
-//        } else {
-//            specificOrderedProperties = Arrays.asList("nome", "cognome", "telefono", "mail", "indirizzo");
-//        }// end of if/else cycle
-//
-//        return specificOrderedProperties;
-//    }// end of method
-
     /**
      * Costruisce eventuali fields specifici (costruiti non come standard type)
      * Aggiunge i fields specifici al binder
@@ -128,7 +112,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
     protected void writeSpecificFields() {
         Person persona = super.getCurrentItem();
         persona.setIndirizzo(indirizzoTemporaneo);
-        service.save(persona);
+//        service.save(persona);
     }// end of method
 
 

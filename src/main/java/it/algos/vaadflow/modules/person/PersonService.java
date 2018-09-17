@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -264,7 +263,7 @@ public class PersonService extends AService {
      */
     @Override
     public AEntity beforeSave(AEntity entityBean) {
-        if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+        if (pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             entityBean = (Utente) utenteService.beforeSave(entityBean);
         }// end of if cycle
         Person entity = (Person) super.beforeSave(entityBean);
@@ -294,7 +293,7 @@ public class PersonService extends AService {
         String nome = persona.nome != null ? persona.nome : "";
         String cognome = persona.cognome != null ? persona.cognome : "";
 
-        return nome + cognome;
+        return pref.isBool(FlowCost.USA_SECURITY) ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
     }// end of method
 
 

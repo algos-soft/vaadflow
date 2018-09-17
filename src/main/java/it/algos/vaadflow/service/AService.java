@@ -550,7 +550,7 @@ public abstract class AService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        return save((AEntity) null, beforeSave(entityBean));
+        return save((AEntity) null, entityBean);
     }// end of method
 
 
