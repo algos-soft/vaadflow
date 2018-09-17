@@ -17,9 +17,11 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -400,7 +402,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected void creaGrid() {
         FlexLayout layout = new FlexLayout();
 //        layout.setHeight("30em");
-        List<String> gridPropertiesName = service != null ? service.getGridPropertiesName() : null;
+
+        //--Costruisce una lista di nomi delle properties della Grid nell'ordine:
+        //--1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
+        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList() : null;
 
         if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             try { // prova ad eseguire il codice
@@ -417,8 +424,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             grid.removeColumn(column);
         }// end of for cycle
 
-        if (gridPropertiesName != null) {
-            for (String property : gridPropertiesName) {
+        if (gridPropertyNamesList != null) {
+            for (String property : gridPropertyNamesList) {
                 addColonna(property);
             }// end of for cycle
         }// end of if cycle
@@ -548,6 +555,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                     return new Checkbox(status);
                 }));
                 break;
+            case enumeration:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Object obj = reflection.getPropertyValue(entity, property);
+                    return new Label(obj.toString());
+                }));
+                break;
             case combo:
                 colonna = grid.addColumn(property);
 //                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -610,6 +623,25 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch
                     return new Label(obj != null ? obj.toString() : "");
+                }));
+                break;
+            case pref:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    EAPrefType typePref = (EAPrefType) reflection.getPropertyValue(entity, "type");
+                    byte[] bytes = null;
+                    Object value = null;
+                    Field field = reflection.getField(entityClazz, property);
+                    try { // prova ad eseguire il codice
+                        bytes = (byte[]) field.get(entity);
+                        value = typePref.bytesToObject(bytes);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                    if (typePref == EAPrefType.bool && pref.isBool(FlowCost.USA_CHECK_BOX)) {
+                        return new Checkbox((boolean) value ? "si" : "no", (boolean) value);
+                    } else {
+                        return new Label(value != null ? value.toString() : "");
+                    }// end of if/else cycle
                 }));
                 break;
             default:

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
@@ -15,9 +16,10 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static it.algos.vaadflow.application.FlowCost.FLASH;
@@ -52,6 +54,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
     private AddressViewDialog addressDialog;
     private Address indirizzoTemporaneo;
     private ATextField indirizzoField;
+    private ATextField mailField;
     private Consumer<Person> itemAnnulla;
 
 
@@ -68,11 +71,27 @@ public class PersonViewDialog extends AViewDialog<Person> {
     }// end of constructor
 
 
+//    /**
+//     * Costruisce una lista di nomi delle properties nella sottoclasse specifica
+//     */
+//    @Override
+//    protected List<String> getSpecificFormPropertiesName(List<String> properties) {
+//        List<String> specificOrderedProperties = new ArrayList<>();
+//
+//        if (pref.isBool(FlowCost.USA_SECURITY)) {
+//            specificOrderedProperties = Arrays.asList("userName", "passwordInChiaro", "locked", "nome", "cognome", "telefono", "mail", "indirizzo");
+//        } else {
+//            specificOrderedProperties = Arrays.asList("nome", "cognome", "telefono", "mail", "indirizzo");
+//        }// end of if/else cycle
+//
+//        return specificOrderedProperties;
+//    }// end of method
+
     /**
-     * Aggiunge al binder eventuali fields specifici, prima di trascrivere la entityBean nel binder
-     * Sovrascritto
-     * Aggiunge il field al binder
-     * Aggiunge il field alla fieldList interna
+     * Costruisce eventuali fields specifici (costruiti non come standard type)
+     * Aggiunge i fields specifici al binder
+     * Aggiunge i fields specifici alla fieldMap
+     * Sovrascritto nella sottoclasse
      */
     @Override
     protected void addSpecificAlgosFields() {

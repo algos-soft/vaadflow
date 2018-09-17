@@ -13,7 +13,7 @@ import java.time.ZoneOffset;
  */
 public enum EAPrefType {
 
-    string("stringa", EAFieldType.text) {
+    string("string", EAFieldType.text) {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
@@ -34,7 +34,7 @@ public enum EAPrefType {
         }// end of method
     },// end of single enumeration
 
-    bool("booleano", EAFieldType.checkbox) {
+    bool("bool", EAFieldType.checkbox) {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
@@ -84,7 +84,7 @@ public enum EAPrefType {
 //        }// end of method
 //    },// end of single enumeration
 
-    integer("intero", EAFieldType.integer) {
+    integer("int", EAFieldType.integer) {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];

@@ -65,5 +65,12 @@ public class PreferenzaViewList extends AViewList {
         ((PreferenzaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.usaBottoneEdit = true;
+    }// end of method
 
 }// end of class

@@ -236,7 +236,7 @@ public class CompanyService extends AService {
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Company) entityBean).getCode();
+        return text.isValid(((Company) entityBean).getCode()) ? ((Company) entityBean).getCode() : "";
     }// end of method
 
 

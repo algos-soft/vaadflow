@@ -10,24 +10,26 @@ import it.algos.vaadflow.modules.address.EAAddress;
  * Time: 15:51
  */
 public enum EAPerson {
-    uno("Mario", "Rossi", "06.785556", "assurbanipal@gmail.com.it", EAAddress.uno),
-    due("Aldo", "Guzzini", "338 678932", "gates@win.com", EAAddress.due),
-    tre("Lucia", "Portella", "345 786631", "alfa@libero.it",EAAddress.tre);
+    uno("Mario", "Rossi", "06.785556", "assurbanipal@gmail.com.it", EAAddress.uno, "alfio71"),
+    due("Aldo", "Guzzini", "338 678932", "gates@win.com", EAAddress.due, "dibolik"),
+    tre("Lucia", "Portella", "345 786631", "alfa@libero.it", EAAddress.tre, "alba");
 
 
+    public String userName;
     private String nome;
     private String cognome;
     private String telefono;
-    private String email;
+    private String mail;
     private EAAddress address;
 
 
-    EAPerson(String nome, String cognome, String telefono, String email, EAAddress address) {
+    EAPerson(String nome, String cognome, String telefono, String mail, EAAddress address, String userName) {
         this.setNome(nome);
         this.setCognome(cognome);
         this.setTelefono(telefono);
-        this.setEmail(email);
+        this.setMail(mail);
         this.setAddress(address);
+        this.setUserName(userName);
     }// fine del costruttore
 
 
@@ -55,19 +57,28 @@ public enum EAPerson {
         this.telefono = telefono;
     }// end of method
 
-    public String getEmail() {
-        return email;
+    public String getMail() {
+        return mail;
     }// end of method
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMail(String mail) {
+        this.mail = mail;
     }// end of method
 
     public EAAddress getAddress() {
         return address;
-    }
+    }// end of method
 
     public void setAddress(EAAddress address) {
         this.address = address;
-    }
+    }// end of method
+
+    public String getUserName() {
+        return userName;
+    }// end of method
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }// end of method
+
 }// end of enumeration class

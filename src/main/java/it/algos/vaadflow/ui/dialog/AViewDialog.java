@@ -15,6 +15,7 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.shared.Registration;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.IAView;
@@ -48,11 +49,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected final Button cancelButton = new Button("Annulla");
     protected final Button deleteButton = new Button("Elimina");
     protected final FormLayout formLayout = new FormLayout();
+    protected final HorizontalLayout buttonBar = new HorizontalLayout(saveButton, cancelButton, deleteButton);
     private final H2 titleField = new H2();
     private final String confirmText = "Conferma";
-    protected final HorizontalLayout buttonBar = new HorizontalLayout(saveButton, cancelButton, deleteButton);
     private final ConfirmationDialog<T> confirmationDialog = new ConfirmationDialog<>();
     public Consumer<T> itemAnnulla;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected PreferenzaService pref;
 
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
@@ -189,49 +196,56 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     /**
      * Crea i fields (non esiste ancora la entityBean, che arriva nel metodo open())
      * <p>
-     * Crea un nuovo binder per questo Dialog e questa Entity
-     * Crea una mappa fieldMap, per recuperare i fields dal nome
-     * Costruisce una lista di properties
+     * Crea un nuovo binder (vuoto) per questo Dialog e questa Entity
+     * Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
+     * Costruisce una lista di nomi delle properties. Ordinata. Sovrascrivibile.
+     * <p>
      * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service
      * Inizializza le properties grafiche (caption, visible, editable, width, ecc)
      * Aggiunge i fields al binder
      * Aggiunge i fields alla mappa fieldMap
+     * <p>
      * Aggiunge eventuali fields specifici (costruiti non come standard type) al binder ed alla fieldMap
      * Aggiunge i fields della fieldMap al layout grafico
      * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
      */
-    protected void creaFields() {
-        List<String> properties;
-        AbstractField newField = null;
+    private void creaFields() {
+        List<String> propertyNames;
+        AbstractField propertyField = null;
 
         //--controllo iniziale di sicurezza
         if (service == null) {
             return;
         }// end of if cycle
 
-        //--Crea un nuovo binder per questo Dialog e questa Entity
+        //--Crea un nuovo binder (vuoto) per questo Dialog e questa Entity
         binder = new Binder(binderClass);
 
-        //--Crea una mappa fieldMap, per recuperare i fiels dal nome
+        //--Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
         fieldMap = new LinkedHashMap<>();
 
-        //--Costruisce una lista di nomi delle properties
-        properties = getFieldsList();
+        //--Costruisce una lista di nomi delle properties del Form nell'ordine:
+        //--1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+        List<String> formPropertyNamesList = service != null ? service.getFormPropertyNamesList() : null;
 
         //--Costruisce ogni singolo field
         //--Aggiunge il field al binder, nel metodo create() del fieldService
         //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
-        for (String fieldName : properties) {
-            newField = fieldService.create(binder, binderClass, fieldName);
-            if (newField != null) {
-                fieldMap.put(fieldName, newField);
+        for (String propertyName : formPropertyNamesList) {
+            propertyField = fieldService.create(binder, binderClass, propertyName);
+            if (propertyField != null) {
+                fieldMap.put(propertyName, propertyField);
             }// end of if cycle
         }// end of for cycle
 
-        //--Aggiunge eventuali fields specifici (costruiti non come standard type) al binder ed alla fieldMap
+        //--Costruisce eventuali fields specifici (costruiti non come standard type)
+        //--Aggiunge i fields specifici al binder (facoltativo, alcuni fields non funzionano col binder)
+        //--Aggiunge i fields specifici alla fieldMap (obbligatorio)
         addSpecificAlgosFields();
 
-        //--Aggiunge ogni singolo field al layout grafico
+        //--Aggiunge ogni singolo field della fieldMap al layout grafico
         addFieldsToLayout();
 
         //--Eventuali aggiustamenti finali al layout
@@ -246,35 +260,38 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
+//    /**
+//     * Costruisce una lista di nomi delle properties nell'ordine:
+//     * 1) Cerca nell'annotation @AIForm della Entity
+//     * 2) Utilizza tutte le properties della Entity (e delle sue superclassi)
+//     * 3) Sovrascrive la lista nel metodo getSpecificFormPropertiesName() della sottoclasse specifica
+//     */
+//    private List<String> getFormPropertiesNameList() {
+//        List<String> properties = null;
+//
+//        if (service != null) {
+//            properties = service.getFormPropertiesName();
+//        }// end of if cycle
+//
+//        return getSpecificFormPropertiesName(properties);
+//    }// end of method
+
+
     /**
-     * Costruisce una lista di nomi delle properties nell'ordine:
-     * 1) Cerca nell'annotation @AIForm della Entity
-     * 2) Utilizza tutte le properties della Entity (e delle sue superclassi)
-     * 3) Sovrascrive la lista nel metodo getSpecificFieldsList() della sottoclasse specifica
+     * Costruisce una lista di nomi delle properties nella sottoclasse specifica <br>
+     * Se serve, modifica l'ordine della lista <br>
+     * Sovrasritto nella sottoclasse <br>
      */
-    protected List<String> getFieldsList() {
-        List<String> properties = null;
-
-        if (service != null) {
-            properties = service.getFormPropertiesName();
-        }// end of if cycle
-
-        return getSpecificFieldsList(properties);
-    }// end of method
-
-
-    /**
-     * Costruisce una lista di nomi delle properties nella sottoclasse specifica
-     */
-    protected List<String> getSpecificFieldsList(List<String> properties) {
+    protected List<String> getSpecificFormPropertiesName(List<String> properties) {
         return properties;
     }// end of method
 
 
     /**
-     * Aggiunge eventuali fields specifici (costruiti non come standard type)
-     * Aggiunge i fields al binder
-     * Aggiunge i fields alla fieldMap
+     * Costruisce eventuali fields specifici (costruiti non come standard type)
+     * Aggiunge i fields specifici al binder
+     * Aggiunge i fields specifici alla fieldMap
+     * Sovrascritto nella sottoclasse
      */
     protected void addSpecificAlgosFields() {
     }// end of method
@@ -282,7 +299,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     /**
      * Aggiunge ogni singolo field della fieldMap al layout grafico
-     * Eventuali posizionamenti ed ordinamenti diversi dalla standard, possono essere sovrascritti
      */
     protected void addFieldsToLayout() {
         getFormLayout().removeAll();
@@ -294,6 +310,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     /**
      * Eventuali aggiustamenti finali al layout
      * Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
+     * Sovrascritto nella sottoclasse
      */
     protected void fixLayout() {
     }// end of method

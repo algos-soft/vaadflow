@@ -150,7 +150,7 @@ public class RoleService extends AService {
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Role) entityBean).getCode();
+        return text.isValid(((Role) entityBean).getCode()) ? ((Role) entityBean).getCode() : "";
     }// end of method
 
     /**

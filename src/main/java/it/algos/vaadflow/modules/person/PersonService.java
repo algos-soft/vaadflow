@@ -2,10 +2,12 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
@@ -49,6 +53,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @AIScript(sovrascrivibile = false)
 public class PersonService extends AService {
 
+    public final static List<String> GRID_PROPERTIES_SECURED =
+            Arrays.asList("userName", "passwordInChiaro", "locked", "nome", "cognome", "telefono", "mail", "indirizzo");
+    public final static List<String> GRID_PROPERTIES_NOT_SECURED =
+            Arrays.asList("nome", "cognome", "telefono", "mail", "indirizzo");
 
     /**
      * versione della classe per la serializzazione
@@ -76,11 +84,6 @@ public class PersonService extends AService {
      */
     private PersonRepository repository;
 
-    /**
-     * Default constructor
-     */
-    public PersonService() {
-    }// end of constructor
 
     /**
      * Costruttore <br>
@@ -92,9 +95,8 @@ public class PersonService extends AService {
      */
     @Autowired
     public PersonService(@Qualifier(TAG_PER) MongoRepository repository) {
-        super();
+        super(repository);
         super.entityClass = Person.class;
-
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
@@ -222,11 +224,26 @@ public class PersonService extends AService {
             List<Role> ruoli,
             String mail) {
         Person entity = null;
-        Utente entityDellaSuperClasseUtente = utenteService.newEntity(nome, cognome, ruoli, mail);
+        Utente entityDellaSuperClasseUtente = null;
 
-        //--casting dalla superclasse alla classe attuale
-        entity = (Person) entityDellaSuperClasseUtente;
+        //--controlla il flag generale dell'applicazione
+        //--se usa la security, la persona eredità tutte le property della superclasse Utente
+        //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
+        //--poi vengono ricopiati i valori in Persona
+        //--poi vengono aggiunte le property specifiche di Persona
+        //--se non usa la security, utilizza il metodo builderPerson
+        if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+            //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
+            entityDellaSuperClasseUtente = utenteService.newEntity(userName, passwordInChiaro, ruoli, mail);
 
+            //--poi vengono ricopiati i valori in Persona
+            //--casting dalla superclasse alla classe attuale
+            entity = (Person) super.cast(entityDellaSuperClasseUtente, new Person());
+        } else {
+            entity = Person.builderPerson().build();
+        }// end of if/else cycle
+
+        //--poi vengono aggiunte le property specifiche di Persona
         //--regola le property di questa classe
         entity.setNome(nome.equals("") ? null : nome);
         entity.setCognome(cognome.equals("") ? null : cognome);
@@ -247,7 +264,23 @@ public class PersonService extends AService {
      */
     @Override
     public AEntity beforeSave(AEntity entityBean) {
+        if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+            entityBean = (Utente) utenteService.beforeSave(entityBean);
+        }// end of if cycle
         Person entity = (Person) super.beforeSave(entityBean);
+
+        if (entity == null) {
+            log.error("entity è nullo in PersonService.beforeSave()");
+            return null;
+        }// end of if cycle
+
+        if (text.isValid(entity.nome)) {
+            entity.nome = text.primaMaiuscola(entity.nome);
+        }// end of if cycle
+
+        if (text.isValid(entity.cognome)) {
+            entity.cognome = text.primaMaiuscola(entity.cognome);
+        }// end of if cycle
 
         return entity;
     }// end of method
@@ -257,39 +290,78 @@ public class PersonService extends AService {
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Person) entityBean).getNome() + ((Person) entityBean).getCognome();
+        Person persona = (Person) entityBean;
+        String nome = persona.nome != null ? persona.nome : "";
+        String cognome = persona.cognome != null ? persona.cognome : "";
+
+        return nome + cognome;
     }// end of method
 
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Creazione in memoria di una nuova entity che NON viene salvata, per essere usata anche embedded <br>
      * Eventuali regolazioni iniziali delle property <br>
      *
      * @param eaPerson: enumeration di dati iniziali di prova
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Deprecated
     public Person newEntity(EAPerson eaPerson) {
         String nome;
         String cognome;
         String telefono;
-        String email;
         EAAddress eaAddress;
         Address indirizzo;
+        String mail;
+        String userName;
 
         if (eaPerson != null) {
             nome = eaPerson.getNome();
             cognome = eaPerson.getCognome();
             telefono = eaPerson.getTelefono();
-            email = eaPerson.getEmail();
             eaAddress = eaPerson.getAddress();
             indirizzo = addressService.newEntity(eaAddress);
+            mail = eaPerson.getMail();
+            userName = eaPerson.getUserName();
 
-            return newEntity(nome, cognome, telefono, indirizzo);
+            if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail);
+            } else {
+                return newEntity(nome, cognome, telefono, indirizzo);
+            }// end of if/else cycle
+
         } else {
             return null;
         }// end of if/else cycle
     }// end of method
+
+
+    /**
+     * Costruisce una lista di nomi delle properties della Grid nell'ordine:
+     * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica
+     *
+     * @return lista di nomi di properties
+     */
+    @Override
+    public List<String> getGridPropertyNamesList() {
+        return pref.isBool(FlowCost.USA_SECURITY) ? GRID_PROPERTIES_SECURED : GRID_PROPERTIES_NOT_SECURED;
+    }// end of method
+
+
+    /**
+     * Costruisce una lista di nomi delle properties del Form nell'ordine:
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     *
+     * @return lista di nomi di properties
+     */
+    @Override
+    public List<String> getFormPropertyNamesList() {
+        return pref.isBool(FlowCost.USA_SECURITY) ? GRID_PROPERTIES_SECURED : GRID_PROPERTIES_NOT_SECURED;
+    }// end of method
+
 
 }// end of class

@@ -54,12 +54,12 @@ public class PreferenzaServiceTest extends ATest {
 
         preferenza.setValue(vuoto);
         previstoBooleano = false;
-        ottenutoBooleano = (boolean) preferenza.getAValue();
+        ottenutoBooleano = (boolean) service.getValue(keyCode);
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         preferenza.setValue(pieno);
         previstoBooleano = true;
-        ottenutoBooleano = (boolean) preferenza.getAValue();
+        ottenutoBooleano = (boolean) service.getValue(keyCode);
         assertEquals(previstoBooleano, ottenutoBooleano);
     }// end of single test
 

@@ -81,13 +81,6 @@ public class Utente extends AEntity {
     private final static long serialVersionUID = 1L;
 
 
-//    /**
-//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-//     */
-//    @Autowired
-//    public UtenteService service;
-
-
     /**
      * userName o nickName (obbligatorio, unico)
      */

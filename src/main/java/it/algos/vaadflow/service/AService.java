@@ -1,10 +1,12 @@
 package it.algos.vaadflow.service;
 
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -65,24 +67,20 @@ public abstract class AService implements IAService {
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
-
     /**
      * Inietta da Spring come 'session'
      */
     @Autowired
     public ALogin login;
-
-    //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
-    protected MongoRepository repository;
-
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
-
     /**
-     * Inietta da Spring come 'singleton'
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-//    @Autowired
-    protected APreferenzaService pref;
+    @Autowired
+    protected PreferenzaService pref;
+    //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
+    protected MongoRepository repository;
 
 
     /**
@@ -128,7 +126,7 @@ public abstract class AService implements IAService {
      */
     @Override
     public int count() {
-        if (repository!=null) {
+        if (repository != null) {
             return (int) repository.count();
         } else {
             return 134;
@@ -412,16 +410,17 @@ public abstract class AService implements IAService {
 
 
     /**
-     * Nomi delle properties della Grid, estratti dalle @Annotation della Entity
-     * Se la classe AEntity->@AIList prevede una lista specifica, usa quella lista (con o senza ID)
-     * Se l'annotation @AIList non esiste od è vuota,
-     * restituisce tutte le colonne (properties della classe e superclasse)
-     * Sovrascrivibile
+     * Costruisce una lista di nomi delle properties della Grid nell'ordine:
+     * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica
+     * todo ancora da sviluppare
      *
-     * @return lista di nomi di property, oppure null se non esiste l'Annotation specifica @AIList() nella Entity
+     * @return lista di nomi di properties
      */
-    public ArrayList<String> getGridPropertiesName() {
-        ArrayList<String> lista = annotation.getGridPropertiesName(entityClass);
+    @Override
+    public List<String> getGridPropertyNamesList() {
+        List<String> lista = annotation.getGridPropertiesName(entityClass);
 
         if (lista.contains(FIELD_NAME_COMPANY) && !login.isDeveloper()) {
             lista.remove(FIELD_NAME_COMPANY);
@@ -431,16 +430,16 @@ public abstract class AService implements IAService {
     }// end of method
 
     /**
-     * Nomi delle properties del, estratti dalle @Annotation della Entity
-     * Se la classe AEntity->@AIForm prevede una lista specifica, usa quella lista (con o senza ID)
-     * Se l'annotation @AIForm non esiste od è vuota,
-     * restituisce tutti i campi (properties della classe e superclasse)
-     * Sovrascrivibile
+     * Costruisce una lista di nomi delle properties del Form nell'ordine:
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     * todo ancora da sviluppare
      *
-     * @return lista di nomi di property, oppure null se non esiste l'Annotation specifica @AIForm() nella Entity
+     * @return lista di nomi di properties
      */
     @Override
-    public ArrayList<String> getFormPropertiesName() {
+    public List<String> getFormPropertyNamesList() {
         ArrayList<String> lista = annotation.getFormPropertiesName(entityClass);
 
         if (lista.contains(FIELD_NAME_COMPANY) && !login.isDeveloper()) {
@@ -580,6 +579,8 @@ public abstract class AService implements IAService {
     @Override
     public AEntity save(AEntity oldBean, AEntity modifiedBean) {
         AEntity savedBean = null;
+        Object obj = null;
+
 //        EACompanyRequired tableCompanyRequired = annotation.getCompanyRequired(modifiedBean.getClass());
 //        Map mappa = null;
 //        boolean nuovaEntity = oldBean == null || text.isEmpty(modifiedBean.id);
@@ -646,7 +647,12 @@ public abstract class AService implements IAService {
 //        }// end of if cycle
 //
 //        return savedBean;
-        Object obj = repository.save(modifiedBean);
+
+        //--controlla l'integrità dei dati, elaborati dalle sottoclassi nei metodi beforeSave()
+        if (modifiedBean.id == null || !modifiedBean.id.equals(FlowCost.STOP_SAVE)) {
+            obj = repository.save(modifiedBean);
+        }// end of if cycle
+
         if (obj != null && obj instanceof AEntity) {
             savedBean = (AEntity) obj;
         }// end of if cycle
@@ -1057,5 +1063,28 @@ public abstract class AService implements IAService {
 //        return repository.count() == 0;
 //    }// end of method
 
+    /**
+     * Casting da una superclasse ad una sottoclasse <br>
+     * Viene creata una nuova istanza VUOTA della sottoclasse <br>
+     * Tutti i valori delle property della superclasse vengono ricopiati nella sottoclasse <br>
+     * Le rimanenti property della sottoclasse rimangono vuote e verranno regolate successivamente <br>
+     */
+    public AEntity cast(AEntity entitySopra, AEntity entitySotto) {
+        Object value;
+        Field fieldSotto;
+        List<Field> lista = reflection.getAllFields(entitySopra.getClass());
+
+        try { // prova ad eseguire il codice
+            for (Field fieldSopra : lista) {
+                value = reflection.getPropertyValue(entitySopra, fieldSopra.getName());
+                fieldSotto = reflection.getField(entitySotto.getClass(), fieldSopra.getName());
+                fieldSotto.set(entitySotto, value);
+            }// end of for cycle
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
+
+        return entitySotto;
+    }// end of method
 
 }// end of class

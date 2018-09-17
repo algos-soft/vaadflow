@@ -6,6 +6,7 @@ import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.person.PersonViewList;
+import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.role.RoleViewList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
 import it.algos.vaadflow.modules.versione.VersioneViewList;
@@ -93,6 +94,7 @@ public class TestBoot extends ABoot {
      * Se esistono, sostituisce i valori esistenti con quelli indicati qui
      */
     protected void regolaPreferenze() {
+        pref.saveValue(EAPreferenza.usaCompany.getCode(),true);
     }// end of method
 
 

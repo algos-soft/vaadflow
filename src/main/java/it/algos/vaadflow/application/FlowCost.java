@@ -33,7 +33,6 @@ public class FlowCost {
     public final static String TAG_ROL = "role";
     public final static String TAG_PRE = "preferenza";
 
-
     public static final String PAGE_ROOT = "";
     public static final String PAGE_WIZARD = "wizard";
     public static final String PAGE_ADDRESS = "address";
@@ -105,6 +104,8 @@ public class FlowCost {
     // generali
     public final static String USA_DEBUG = "usaDebug";
     public final static String USA_LOG_DEBUG = "usaLogDebug";
+    public final static String USA_SECURITY = "usaSecurity";
+    public final static String USA_CHECK_BOX = "usaCheckbox";
     public final static String USA_COMPANY = "usaCompany";
     public final static String USA_LOG_MAIL = "usaLogMail";
     public final static String LOG_MAIL_ADDRESS = "logMailAddress";
@@ -131,5 +132,7 @@ public class FlowCost {
     public final static List<String> ESCLUSI = Arrays.asList(esclusiMatrice);
     private final static String[] companyMatrice = {COMPANY_CODE, COMPANY_UNICO};
     public final static List<String> COMPANY_OPTIONAL = Arrays.asList(companyMatrice);
+
+    public final static String STOP_SAVE = "nonRegistrare";
 
 }// end of static class

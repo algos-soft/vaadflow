@@ -292,7 +292,7 @@ public class PreferenzaService extends AService {
         Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null) {
-            value = pref.getAValue();
+            value = pref.getType().bytesToObject(pref.value);
         }// end of if cycle
 
         return value;

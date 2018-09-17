@@ -126,43 +126,28 @@ public interface IAService {
     public AEntity save(AEntity oldBean, AEntity modifiedBean) throws Exception;
 
 
-//    /**
-//     * Colonne visibili (e ordinate) nella Grid
-//     * Sovrascrivibile
-//     * La colonna key ID normalmente non si visualizza
-//     * 1) Se questo metodo viene sovrascritto, si utilizza la lista della sottoclasse specifica (con o senza ID)
-//     * 2) Se la classe AEntity->@AIList(columns = ...) prevede una lista specifica, usa quella lista (con o senza ID)
-//     * 3) Se non trova AEntity->@AIList, usa tutti i campi della AEntity (senza ID)
-//     * 4) Se trova AEntity->@AIList(showsID = true), questo viene aggiunto, indipendentemente dalla lista
-//     * 5) Vengono visualizzati anche i campi delle superclassi della classe AEntity
-//     * Ad esempio: company2 della classe ACompanyEntity
-//     *
-//     * @return lista di fields visibili nella Grid
-//     */
-//    public List<Field> getListFields();
-
     /**
-     * Nomi delle properties della Grid, estratti dalle @Annotation della Entity
-     * Se la classe AEntity->@AIList prevede una lista specifica, usa quella lista (con o senza ID)
-     * Se l'annotation @AIList non esiste od è vuota,
-     * restituisce tutte le colonne (properties della classe e superclasse)
-     * Sovrascrivibile
+     * Costruisce una lista di nomi delle properties della Grid nell'ordine:
+     * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
      *
-     * @return lista di nomi di property, oppure null se non esiste l'Annotation specifica @AIList() nella Entity
+     * @return lista di nomi di properties
      */
-    public List<String> getGridPropertiesName();
+    public List<String> getGridPropertyNamesList();
 
 
     /**
-     * Nomi delle properties del, estratti dalle @Annotation della Entity
-     * Se la classe AEntity->@AIForm prevede una lista specifica, usa quella lista (con o senza ID)
-     * Se l'annotation @AIForm non esiste od è vuota,
-     * restituisce tutti i campi (properties della classe e superclasse)
-     * Sovrascrivibile
+     * Costruisce una lista di nomi delle properties del Form nell'ordine:
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
      *
-     * @return lista di nomi di property, oppure null se non esiste l'Annotation specifica @AIForm() nella Entity
+     * @return lista di nomi di properties
      */
-    public List<String> getFormPropertiesName();
+    public List<String> getFormPropertyNamesList();
+
+
 
 //    /**
 //     * Fields visibili (e ordinati) nel Form

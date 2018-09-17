@@ -2,14 +2,12 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.utente.Utente;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
@@ -56,6 +55,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
+
 /**
  * Alcune property vengono gestite dalla superclasse Utente <br>
  * La classe PersonService deve estendere UtenteService per usare il metodo newEntity della superclasse <br>
@@ -72,7 +72,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Qualifier(TAG_PER)
 @AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"nome", "cognome", "telefono", "mail", "indirizzo"})
-@AIForm(fields = {"nome", "cognome", "telefono", "mail", "indirizzo"})
+@AIForm(fields = {"nome", "passwordInChiaro", "cognome", "telefono", "indirizzo", "mail"})
 @AIScript(sovrascrivibile = false)
 public class Person extends Utente {
 

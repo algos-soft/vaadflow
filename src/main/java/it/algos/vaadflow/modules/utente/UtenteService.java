@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.utente;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
@@ -67,12 +68,6 @@ public class UtenteService extends AService {
      */
     private UtenteRepository repository;
 
-
-    /**
-     * Default constructor
-     */
-    public UtenteService() {
-    }// end of constructor
 
     /**
      * Costruttore @Autowired <br>
@@ -192,6 +187,11 @@ public class UtenteService extends AService {
     public AEntity beforeSave(AEntity entityBean) {
         Utente entity = (Utente) super.beforeSave(entityBean);
 
+        if (text.isEmpty(entity.userName)) {
+            entity.id = FlowCost.STOP_SAVE;
+            log.error("userName è vuoto in UtenteService.beforeSave()");
+        }// end of if cycle
+
         if (text.isEmpty(entity.passwordInChiaro)) {
             entity.passwordInChiaro = entity.userName + SUFFIX;
         }// end of if cycle
@@ -207,7 +207,7 @@ public class UtenteService extends AService {
      * Property unica (se esiste).
      */
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Utente) entityBean).getUserName();
+        return text.isValid(((Utente) entityBean).getUserName()) ? ((Utente) entityBean).getUserName() : "";
     }// end of method
 
 

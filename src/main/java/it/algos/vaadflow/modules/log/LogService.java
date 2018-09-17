@@ -143,7 +143,7 @@ public class LogService extends AService {
      */
     @Override
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Log) entityBean).getCode();
+        return text.isValid(((Log) entityBean).getCode()) ? ((Log) entityBean).getCode() : "";
     }// end of method
 
     //--registra un avviso

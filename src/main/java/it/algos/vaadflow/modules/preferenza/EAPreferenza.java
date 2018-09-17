@@ -15,7 +15,9 @@ public enum EAPreferenza {
 
     usaDebug(FlowCost.USA_DEBUG, "Flag generale di debug (ce ne possono essere di specifici, validi solo se questo è vero)", EAPrefType.bool, false),
     usaLogDebug(FlowCost.USA_LOG_DEBUG, "Uso del log di registrazione per il livello debug. Di default false", EAPrefType.bool, false),
-    usaCompany(FlowCost.USA_COMPANY, "L'applicazione è multiCompany ", EAPrefType.bool, false),
+    usaCompany(FlowCost.USA_COMPANY, "L'applicazione è multiCompany", EAPrefType.bool, false),
+    usaSecurity(FlowCost.USA_SECURITY, "L'applicazione usa la security", EAPrefType.bool, false),
+    usaCheckBox(FlowCost.USA_CHECK_BOX, "Uso del checkbox in lista, per i valori booleani", EAPrefType.bool, true),
     showCompany(FlowCost.SHOW_COMPANY, show(), EAPrefType.bool, false),
     showPreferenza(FlowCost.SHOW_PREFERENZA, show(), EAPrefType.bool, true),
     showWizard(FlowCost.SHOW_WIZARD, show(), EAPrefType.bool, true),
