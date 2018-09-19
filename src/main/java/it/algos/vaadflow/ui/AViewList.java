@@ -1,5 +1,9 @@
 package it.algos.vaadflow.ui;
 
+import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
@@ -545,6 +549,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 break;
             case checkbox:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Checkbox checkbox;
                     Boolean status = false;
                     Field field = reflection.getField(entityClazz, property);
                     try { // prova ad eseguire il codice
@@ -552,7 +557,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch
-                    return new Checkbox(status);
+                    checkbox = new Checkbox(status);
+                    return checkbox;
                 }));
                 break;
             case enumeration:

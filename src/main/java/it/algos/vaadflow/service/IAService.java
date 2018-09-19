@@ -156,7 +156,7 @@ public interface IAService {
      *
      * @return lista di nomi di properties
      */
-    public List<String> getFormPropertyNamesList();
+    public List<String> getFormPropertyNamesList(AEntity curremtItem);
 
 
 

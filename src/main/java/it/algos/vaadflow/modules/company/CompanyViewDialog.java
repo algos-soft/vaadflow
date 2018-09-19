@@ -217,7 +217,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         Person persona = getContattoCorrente();
 
         if (persona == null) {
-            persona = contattoService.newEntity();
+            persona = contattoService.newEntityNoSuperclasse();
         }// end of if cycle
 
         return persona;

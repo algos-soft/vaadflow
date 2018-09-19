@@ -54,22 +54,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     private final String confirmText = "Conferma";
     private final ConfirmationDialog<T> confirmationDialog = new ConfirmationDialog<>();
     public Consumer<T> itemAnnulla;
-
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    protected PreferenzaService pref;
-
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
     @Autowired
     public AAnnotationService annotation;
-
     @Autowired
     public ADateService date;
-
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected PreferenzaService pref;
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
@@ -210,7 +206,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
      */
     private void creaFields() {
-        List<String> propertyNames;
+        List<String> formPropertyNamesList;
         AbstractField propertyField = null;
 
         //--controllo iniziale di sicurezza
@@ -228,7 +224,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
         //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
         //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        List<String> formPropertyNamesList = service != null ? service.getFormPropertyNamesList() : null;
+        formPropertyNamesList = service != null ? service.getFormPropertyNamesList((AEntity) currentItem) : null;
 
         //--Costruisce ogni singolo field
         //--Aggiunge il field al binder, nel metodo create() del fieldService

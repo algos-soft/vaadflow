@@ -58,10 +58,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Alcune property vengono gestite dalla superclasse Utente <br>
- * La classe PersonService deve estendere UtenteService per usare il metodo newEntity della superclasse <br>
  */
 @SpringComponent
-@Document(collection = "person")
+@Document(collection = "utente")
 @TypeAlias("person")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
@@ -72,7 +71,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Qualifier(TAG_PER)
 @AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"nome", "cognome", "telefono", "mail", "indirizzo"})
-@AIForm(fields = {"nome", "passwordInChiaro", "cognome", "telefono", "indirizzo", "mail"})
+@AIForm(fields = {"nome", "cognome", "telefono", "indirizzo", "mail"})
 @AIScript(sovrascrivibile = false)
 public class Person extends Utente {
 
@@ -82,6 +81,7 @@ public class Person extends Utente {
      */
     private final static long serialVersionUID = 1L;
 
+    public transient boolean usaSuperClasse;
 
     /**
      * nome (obbligatorio, non unico)

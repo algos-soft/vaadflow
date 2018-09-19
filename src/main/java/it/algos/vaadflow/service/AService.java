@@ -439,7 +439,7 @@ public abstract class AService implements IAService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList() {
+    public List<String> getFormPropertyNamesList(AEntity curremtItem) {
         ArrayList<String> lista = annotation.getFormPropertiesName(entityClass);
 
         if (lista.contains(FIELD_NAME_COMPANY) && !login.isDeveloper()) {

@@ -52,9 +52,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @AIScript(sovrascrivibile = false)
 public class PersonService extends AService {
 
-    public final static List<String> GRID_PROPERTIES_SECURED =
+    public final static List<String> PROPERTIES_SECURED =
             Arrays.asList("userName", "passwordInChiaro", "locked", "nome", "cognome", "telefono", "mail", "indirizzo");
-    public final static List<String> GRID_PROPERTIES_NOT_SECURED =
+    public final static List<String> PROPERTIES_NOT_SECURED =
             Arrays.asList("nome", "cognome", "telefono", "mail", "indirizzo");
 
     /**
@@ -99,21 +99,6 @@ public class PersonService extends AService {
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
-//    /**
-//     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-//     * Recupera da StaticContextAccessor una istanza di questa stessa classe <br>
-//     */
-//    public static Person getNewPerson(String nome, String cognome) {
-//        Person entity = null;
-//        PersonService istanza = StaticContextAccessor.getBean(PersonService.class);
-//
-//        if (istanza != null) {
-//            entity = istanza.newEntity(nome, cognome);
-//        }// end of if cycle
-//
-//        return entity;
-//    }// end of method
-
     /**
      * Crea una entity <br>
      * Se esiste già, la cancella prima di ricrearla <br>
@@ -129,6 +114,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param flagUsaUtente    per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
@@ -140,10 +126,11 @@ public class PersonService extends AService {
             String userName,
             String passwordInChiaro,
             List<Role> ruoli,
-            String mail) {
+            String mail,
+            boolean flagUsaUtente) {
         Person entity;
 
-        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail);
+        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, flagUsaUtente);
         save(entity);
 
         return entity;
@@ -160,6 +147,18 @@ public class PersonService extends AService {
     public Person newEntity() {
         return newEntity("", "");
     }// end of method
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Non usa le properties di security della superclasse Utente
+     * Usato come record 'embedded' in altre classi (Company,...)
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntityNoSuperclasse() {
+        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false);
+    }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -189,7 +188,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity(String nome, String cognome, String telefono, Address indirizzo) {
-        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "");
+        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", true);
     }// end of method
 
     /**
@@ -210,6 +209,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param usaSuperClasse   per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -221,25 +221,29 @@ public class PersonService extends AService {
             String userName,
             String passwordInChiaro,
             List<Role> ruoli,
-            String mail) {
+            String mail,
+            boolean usaSuperClasse) {
         Person entity = null;
         Utente entityDellaSuperClasseUtente = null;
 
+        //--controlla il flag passato come parametro e specifico di questa entity (entity embedded non usano Utente)
         //--controlla il flag generale dell'applicazione
         //--se usa la security, la persona eredità tutte le property della superclasse Utente
         //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
         //--poi vengono ricopiati i valori in Persona
         //--poi vengono aggiunte le property specifiche di Persona
         //--se non usa la security, utilizza il metodo builderPerson
-        if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+        if (usaSuperClasse && pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
             entityDellaSuperClasseUtente = utenteService.newEntity(userName, passwordInChiaro, ruoli, mail);
 
             //--poi vengono ricopiati i valori in Persona
             //--casting dalla superclasse alla classe attuale
             entity = (Person) super.cast(entityDellaSuperClasseUtente, new Person());
+            entity.usaSuperClasse = true;
         } else {
             entity = Person.builderPerson().build();
+            entity.usaSuperClasse = false;
         }// end of if/else cycle
 
         //--poi vengono aggiunte le property specifiche di Persona
@@ -263,8 +267,8 @@ public class PersonService extends AService {
      */
     @Override
     public AEntity beforeSave(AEntity entityBean) {
-        if (pref.isBool(EAPreferenza.usaSecurity.getCode())) {
-            entityBean = (Utente) utenteService.beforeSave(entityBean);
+        if (((Person) entityBean).usaSuperClasse) {
+            entityBean = utenteService.beforeSave(entityBean);
         }// end of if cycle
         Person entity = (Person) super.beforeSave(entityBean);
 
@@ -324,7 +328,7 @@ public class PersonService extends AService {
             userName = eaPerson.getUserName();
 
             if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
-                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail);
+                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail, false);
             } else {
                 return newEntity(nome, cognome, telefono, indirizzo);
             }// end of if/else cycle
@@ -334,8 +338,7 @@ public class PersonService extends AService {
         }// end of if/else cycle
     }// end of method
 
-
-    /**
+     /**
      * Costruisce una lista di nomi delle properties della Grid nell'ordine:
      * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
      * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
@@ -345,7 +348,7 @@ public class PersonService extends AService {
      */
     @Override
     public List<String> getGridPropertyNamesList() {
-        return pref.isBool(FlowCost.USA_SECURITY) ? GRID_PROPERTIES_SECURED : GRID_PROPERTIES_NOT_SECURED;
+        return pref.isBool(FlowCost.USA_SECURITY) ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
 
 
@@ -358,9 +361,8 @@ public class PersonService extends AService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList() {
-        return pref.isBool(FlowCost.USA_SECURITY) ? GRID_PROPERTIES_SECURED : GRID_PROPERTIES_NOT_SECURED;
+    public List<String> getFormPropertyNamesList(AEntity curremtItem) {
+        return ((Person) curremtItem).usaSuperClasse ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
-
 
 }// end of class
