@@ -127,7 +127,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
      * Dallla  UI al DB
      * Sovrascritto
      */
-    protected void writeSpecificFields() {
+    protected void writeSpecificFields2() {
         Company company = super.getCurrentItem();
         company.setContatto(contattoTemporaneo);
         company.setIndirizzo(indirizzoTemporaneo);
@@ -136,9 +136,13 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
 
     protected void saveUpdateCon(Person entityBean, AViewDialog.Operation operation) {
+        Company company = super.getCurrentItem();
         entityBean = (Person)contattoService.beforeSave(entityBean);
         contattoTemporaneo = entityBean;
+
+        company.setContatto(contattoTemporaneo);
         contattoField.setValue(entityBean.toString());
+
         focusOnPost(CONTATTO);
         Notification.show("La modifica di persona è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
     }// end of method
@@ -158,10 +162,13 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
 
     protected void saveUpdateInd(Address entityBean, AViewDialog.Operation operation) {
+        Company company = super.getCurrentItem();
         entityBean = (Address) indirizzoService.beforeSave(entityBean);
         indirizzoTemporaneo = entityBean;
+
+        company.setIndirizzo(indirizzoTemporaneo);
         indirizzoField.setValue(entityBean.toString());
-        Object a= entityBean.toString();
+
         focusOnPost(INDIRIZZO);
         Notification.show("La modifica di indirizzo è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
     }// end of method

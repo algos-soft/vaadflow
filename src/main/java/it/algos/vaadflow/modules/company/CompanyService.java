@@ -73,36 +73,6 @@ public class CompanyService extends AService {
         this.repository = (CompanyRepository) repository;
     }// end of Spring constructor
 
-//    /**
-//     * Ricerca di una entity (la crea se non la trova) <br>
-//     *
-//     * @param code di riferimento interno (obbligatorio ed unico)
-//     *
-//     * @return la entity trovata o appena creata
-//     */
-//    public Company findOrCrea(String code) {
-//        return findOrCrea(code, "");
-//    }// end of method
-//
-//    /**
-//     * Ricerca di una entity (la crea se non la trova) <br>
-//     *
-//     * @param code        di riferimento interno (obbligatorio ed unico)
-//     * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
-//     *
-//     * @return la entity trovata o appena creata
-//     */
-//    public Company findOrCrea(String code, String descrizione) {
-//        Company entity = findByKeyUnica(code);
-//
-//        if (entity == null) {
-//            entity = newEntity(code, descrizione);
-//            save(entity);
-//        }// end of if cycle
-//
-//        return entity;
-//    }// end of method
-
 
     /**
      * Crea una entity <br>
@@ -219,17 +189,6 @@ public class CompanyService extends AService {
         return entity;
     }// end of method
 
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param code di riferimento (obbligatorio)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Company findByKeyUnica(String code) {
-        return repository.findByCode(code);
-    }// end of method
-
 
     /**
      * Returns all instances of the type <br>
@@ -255,6 +214,18 @@ public class CompanyService extends AService {
 
         return lista;
     }// end of method
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param code di riferimento (obbligatorio)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Company findByKeyUnica(String code) {
+        return repository.findByCode(code);
+    }// end of method
+
 
     /**
      * Property unica (se esiste).
