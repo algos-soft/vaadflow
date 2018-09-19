@@ -81,6 +81,8 @@ public class WizardView extends VerticalLayout {
     private Label labelDue;
     private Label labelTre;
     private Label labelQuattro;
+    private Button buttonProject;
+    private Button buttonPackage;
     private Button buttonUno;
     private Button buttonDue;
     private Button buttonTre;
@@ -138,7 +140,8 @@ public class WizardView extends VerticalLayout {
             this.add(creaMenuBase());
         } else {
             iniziaProject();
-            this.add(creaMenuProject());
+            this.add(updateProject());
+            this.add(updatePackage());
         }// end of if/else cycle
 
     }// end of method
@@ -213,7 +216,7 @@ public class WizardView extends VerticalLayout {
     }// end of method
 
 
-    private Component creaMenuProject() {
+    private Component updateProject() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setMargin(false);
         layout.setSpacing(true);
@@ -222,27 +225,39 @@ public class WizardView extends VerticalLayout {
         String nomeProgetto = System.getProperty("user.dir");
         nomeProgetto = nomeProgetto.substring(nomeProgetto.lastIndexOf("/") + 1);
         currentProject = Progetto.getProgetto(nomeProgetto);
-
         mappaInput.put(Chiave.targetProjectName, currentProject != null ? currentProject : nomeProgetto);
 
-        buttonUno = new Button("Update this project");
-        buttonUno.addClickListener(event -> elaboraUpdateProject(mappaInput));
-        layout.add(buttonUno);
+        buttonProject = new Button("Update this project");
+        buttonProject.addClickListener(e -> {
+            elaboraUpdateProject(mappaInput);
+            layout.add(new Checkbox("Fatto", true));
+        });//end of lambda expressions
+        layout.add(buttonProject);
 
-        buttonDue = new Button("Package");
-        buttonDue.addClickListener(event -> dialogPackage.open(new TRecipient() {
-            @Override
-            public void gotInput(Map<Chiave, Object> mappaInput) {
-                elaboraPackage(mappaInput);
-            }// end of inner method
-        }, newPackage, PROGETTO_STANDARD_SUGGERITO_NUOVO, NOME_PACKAGE_STANDARD_SUGGERITO));// end of lambda expressions and anonymous inner class
-        layout.add(buttonDue);
-
+        this.add(layout);
         return layout;
     }// end of method
 
+    private Component updatePackage() {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(true);
 
-    private void elaboraNewProject(Map<Chiave, Object> mappaInput) {
+        buttonPackage = new Button("Package");
+        buttonPackage.addClickListener(event -> dialogPackage.open(new TRecipient() {
+                    @Override
+                    public void gotInput(Map<Chiave, Object> mappaInput) {
+                        elaboraPackage(mappaInput);
+                    }// end of inner method
+                }, newPackage, PROGETTO_STANDARD_SUGGERITO_NUOVO, NOME_PACKAGE_STANDARD_SUGGERITO)
+        );// end of lambda expressions and anonymous inner class
+        layout.add(buttonPackage);
+
+        this.add(layout);
+        return layout;
+    }// end of method
+
+        private void elaboraNewProject(Map<Chiave, Object> mappaInput) {
         newProject.close();
 
         if (mappaInput != null) {
