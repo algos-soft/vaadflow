@@ -281,8 +281,15 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     private void initView() {
         addClassName("categories-list");
         setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
+        this.setMargin(false);
+        this.setSpacing(false);
 
+        //--Le preferenze standard
         fixPreferenze();
+
+        //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+        fixPreferenzeSpecifiche();
+
         creaSearchBar();
         creaDeveloperAlert();
         creaTopLayout();
@@ -315,7 +322,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         isEntityModificabile = true;
 
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-        usaBottoneEdit = false;
+        usaBottoneEdit = true;
 
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
@@ -329,12 +336,10 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
         usaRefresh = true;
 
-        //--Le preferenze sovrascritte nella sottoclasse
-        fixPreferenzeSpecifiche();
     }// end of method
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
      */
     protected void fixPreferenzeSpecifiche() {
     }// end of method

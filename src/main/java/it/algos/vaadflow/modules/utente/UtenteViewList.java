@@ -81,11 +81,20 @@ public class UtenteViewList extends AViewList {
 
 
     /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityDeveloper = true;
+    }// end of method
+
+    /**
      * Eventuale aggiunta alla caption sopra la grid
      */
     protected VerticalLayout addCaption(VerticalLayout layout) {
+        layout = super.addCaption(layout);
 
-        layout.add(new Label("Lista visibile solo al developer"));
         layout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente"));
         layout.add(new Label("Serve per la creazione e gestione interna degli accessi della security"));
         layout.add(new Label("La entity 'utente' fa da superclasse per le anagrafiche: Persona, Milite, ecc."));

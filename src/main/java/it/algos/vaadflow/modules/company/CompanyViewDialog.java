@@ -19,8 +19,7 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 
 /**
@@ -105,7 +104,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), Operation.EDIT));
+            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), Operation.EDIT, INDIRIZZO));
         }// end of if cycle
     }// end of method
 
@@ -137,6 +136,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
 
     protected void saveUpdateCon(Person entityBean, AViewDialog.Operation operation) {
+        entityBean = (Person)contattoService.beforeSave(entityBean);
         contattoTemporaneo = entityBean;
         contattoField.setValue(entityBean.toString());
         focusOnPost(CONTATTO);
@@ -158,8 +158,10 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
 
     protected void saveUpdateInd(Address entityBean, AViewDialog.Operation operation) {
+        entityBean = (Address) indirizzoService.beforeSave(entityBean);
         indirizzoTemporaneo = entityBean;
         indirizzoField.setValue(entityBean.toString());
+        Object a= entityBean.toString();
         focusOnPost(INDIRIZZO);
         Notification.show("La modifica di indirizzo è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
     }// end of method

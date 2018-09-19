@@ -68,7 +68,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @EqualsAndHashCode(callSuper = false)
 @Qualifier(TAG_COM)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"code", "descrizione", "telefono", "mail"})
+@AIList(fields = {"code", "descrizione", "contatto","telefono", "mail"})
 @AIForm(fields = {"code", "descrizione", "contatto", "telefono", "mail", "indirizzo", "note"})
 @AIScript(sovrascrivibile = false)
 public class Company extends AEntity {

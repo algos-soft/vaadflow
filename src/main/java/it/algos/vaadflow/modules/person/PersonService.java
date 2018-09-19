@@ -114,7 +114,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
-     * @param flagUsaUtente    per utilizzare le properties di Security della superclasse Utente (facoltativo)
+     * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la entity trovata o appena creata
      */
@@ -127,10 +127,10 @@ public class PersonService extends AService {
             String passwordInChiaro,
             List<Role> ruoli,
             String mail,
-            boolean flagUsaUtente) {
+            boolean usaSuperClasse) {
         Person entity;
 
-        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, flagUsaUtente);
+        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, usaSuperClasse);
         save(entity);
 
         return entity;
@@ -209,7 +209,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
-     * @param usaSuperClasse   per utilizzare le properties di Security della superclasse Utente (facoltativo)
+     * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */

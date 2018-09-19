@@ -65,5 +65,14 @@ public class AddressViewList extends AViewList {
         ((AddressViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityEmbadded = true;
+        super.isEntityDeveloper = true;
+    }// end of method
 
 }// end of class

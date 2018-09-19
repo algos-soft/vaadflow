@@ -196,6 +196,30 @@ public class CompanyService extends AService {
 
 
     /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean) {
+        Company entity = (Company) super.beforeSave(entityBean);
+
+        if (entity == null) {
+            log.error("entity è nullo in CompanyService.beforeSave()");
+            return null;
+        }// end of if cycle
+
+        if (text.isValid(entity.descrizione)) {
+            entity.descrizione = text.primaMaiuscola(entity.descrizione);
+        }// end entityBean if cycle
+
+        return entity;
+    }// end of method
+
+    /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
      * @param code di riferimento (obbligatorio)

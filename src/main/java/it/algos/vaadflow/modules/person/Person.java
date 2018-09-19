@@ -60,7 +60,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Alcune property vengono gestite dalla superclasse Utente <br>
  */
 @SpringComponent
-@Document(collection = "utente")
+@Document(collection = "person")
 @TypeAlias("person")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
