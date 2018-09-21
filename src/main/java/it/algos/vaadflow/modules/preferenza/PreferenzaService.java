@@ -163,8 +163,8 @@ public class PreferenzaService extends AService {
 
         entity = Preferenza.builderPreferenza()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                .code(code.equals("") ? null : code)
-                .descrizione(descrizione.equals("") ? null : descrizione)
+                .code(text.isValid(code) ? code : null)
+                .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .type(type != null ? type : EAPrefType.string)
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();

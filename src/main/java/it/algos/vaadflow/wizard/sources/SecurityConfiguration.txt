@@ -1,8 +1,10 @@
-package it.algos.vaadflow.security;
+package it.algos.vaadtest.security;
 
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
+import it.algos.vaadflow.security.CustomRequestCache;
+import it.algos.vaadflow.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;

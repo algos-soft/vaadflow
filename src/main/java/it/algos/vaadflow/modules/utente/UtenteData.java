@@ -88,7 +88,7 @@ public class UtenteData extends AData {
             ruoli = roleService.getRoles(ruolo);
             mail = utente.getMail();
 
-            service.crea(userName, passwordInChiaro, ruoli, mail);
+            service.crea(userName, passwordInChiaro, ruoli, mail, false);
             num++;
         }// end of for cycle
 

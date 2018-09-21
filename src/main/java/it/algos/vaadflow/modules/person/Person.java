@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -81,7 +82,8 @@ public class Person extends Utente {
      */
     private final static long serialVersionUID = 1L;
 
-    public transient boolean usaSuperClasse;
+    @Transient
+    public boolean usaSuperClasse;
 
     /**
      * nome (obbligatorio, non unico)
@@ -91,7 +93,7 @@ public class Person extends Utente {
     @Size(min = 4, max = 40)
     @Field("nome")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 20)
-    @AIColumn(width = 200)
+    @AIColumn(width = 200,name="nome")
     public String nome;
 
     /**
@@ -102,7 +104,7 @@ public class Person extends Utente {
     @Size(min = 4, max = 40)
     @Field("cognome")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 20)
-    @AIColumn(width = 200)
+    @AIColumn(width = 200,name="cognome")
     public String cognome;
 
     /**
@@ -110,7 +112,7 @@ public class Person extends Utente {
      */
     @Field("tel")
     @AIField(type = EAFieldType.text)
-    @AIColumn(width = 160)
+    @AIColumn(width = 160,name="tel")
     public String telefono;
 
 
@@ -120,7 +122,7 @@ public class Person extends Utente {
      */
     @Field("ind")
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
-    @AIColumn(width = 400, name = "Indirizzo")
+    @AIColumn(width = 400, name = "ind")
     public Address indirizzo;
 
 

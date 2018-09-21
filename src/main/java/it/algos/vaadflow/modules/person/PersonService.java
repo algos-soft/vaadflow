@@ -99,6 +99,7 @@ public class PersonService extends AService {
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
+
     /**
      * Crea una entity <br>
      * Se esiste già, la cancella prima di ricrearla <br>
@@ -114,6 +115,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param locked           flag locked (facoltativo, di default false)
      * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la entity trovata o appena creata
@@ -127,10 +129,11 @@ public class PersonService extends AService {
             String passwordInChiaro,
             List<Role> ruoli,
             String mail,
+            boolean locked,
             boolean usaSuperClasse) {
         Person entity;
 
-        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, usaSuperClasse);
+        entity = newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, locked, usaSuperClasse);
         save(entity);
 
         return entity;
@@ -156,7 +159,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntityNoSuperclasse() {
-        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false);
+        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
     }// end of method
 
 
@@ -188,7 +191,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity(String nome, String cognome, String telefono, Address indirizzo) {
-        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", true);
+        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, true);
     }// end of method
 
     /**
@@ -209,6 +212,7 @@ public class PersonService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param locked           flag locked (facoltativo, di default false)
      * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
@@ -222,6 +226,7 @@ public class PersonService extends AService {
             String passwordInChiaro,
             List<Role> ruoli,
             String mail,
+            boolean locked,
             boolean usaSuperClasse) {
         Person entity = null;
         Utente entityDellaSuperClasseUtente = null;
@@ -235,7 +240,7 @@ public class PersonService extends AService {
         //--se non usa la security, utilizza il metodo builderPerson
         if (usaSuperClasse && pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
-            entityDellaSuperClasseUtente = utenteService.newEntity(userName, passwordInChiaro, ruoli, mail);
+            entityDellaSuperClasseUtente = utenteService.newEntity(userName, passwordInChiaro, ruoli, mail, locked);
 
             //--poi vengono ricopiati i valori in Persona
             //--casting dalla superclasse alla classe attuale
@@ -248,9 +253,9 @@ public class PersonService extends AService {
 
         //--poi vengono aggiunte le property specifiche di Persona
         //--regola le property di questa classe
-        entity.setNome(nome.equals("") ? null : nome);
-        entity.setCognome(cognome.equals("") ? null : cognome);
-        entity.setTelefono(telefono.equals("") ? null : telefono);
+        entity.setNome(text.isValid(nome) ? nome : null);
+        entity.setCognome(text.isValid(cognome) ? cognome : null);
+        entity.setTelefono(text.isValid(telefono) ? telefono : null);
         entity.setIndirizzo(indirizzo);
 
         return (Person) creaIdKeySpecifica(entity);
@@ -328,7 +333,7 @@ public class PersonService extends AService {
             userName = eaPerson.getUserName();
 
             if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
-                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail, false);
+                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail, false, false);
             } else {
                 return newEntity(nome, cognome, telefono, indirizzo);
             }// end of if/else cycle
@@ -338,7 +343,7 @@ public class PersonService extends AService {
         }// end of if/else cycle
     }// end of method
 
-     /**
+    /**
      * Costruisce una lista di nomi delle properties della Grid nell'ordine:
      * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
      * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)

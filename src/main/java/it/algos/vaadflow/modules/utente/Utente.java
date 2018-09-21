@@ -87,6 +87,7 @@ public class Utente extends AEntity {
     @NotNull(message = "UserName, anche detto nickName, non può essere lasciato vuoto")
     @Field("user")
     @AIField(type = EAFieldType.text)
+    @AIColumn(name = "user")
     public String userName;
 
 
@@ -96,14 +97,16 @@ public class Utente extends AEntity {
      */
     @Field("pass")
     @AIField(type = EAFieldType.text)
+    @AIColumn(name = "pass")
     public String passwordInChiaro;
 
 
     /**
-     * flag locked (obbligatorio, di default false)
+     * flag locked (facoltativo, di default false)
      */
     @Field("lock")
     @AIField(type = EAFieldType.checkbox)
+    @AIColumn(name = "lock")
     public boolean locked;
 
 
@@ -115,7 +118,7 @@ public class Utente extends AEntity {
      */
     @Field("role")
     @AIField(type = EAFieldType.noone, required = true, clazz = RoleService.class)
-    @AIColumn(name = "Ruolo", width = 200)
+    @AIColumn(name = "ruolo", width = 200)
     public List<Role> ruoli;
 
 
@@ -124,7 +127,7 @@ public class Utente extends AEntity {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(width = 350, name = "Mail")
+    @AIColumn(width = 350, name = "eMail")
     public String mail;
 
 

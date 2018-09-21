@@ -153,11 +153,11 @@ public class CompanyService extends AService {
         }// end of if cycle
 
         entity = Company.builderCompany()
-                .code(code != null ? code : "")
-                .descrizione(descrizione.equals("") ? null : descrizione)
+                .code(text.isValid(code) ? code : null)
+                .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .contatto(contatto)
-                .telefono(telefono.equals("") ? null : telefono)
-                .mail(mail.equals("") ? null : mail)
+                .telefono(text.isValid(telefono) ? telefono : null)
+                .mail(text.isValid(mail) ? mail : null)
                 .indirizzo(indirizzo)
                 .build();
 

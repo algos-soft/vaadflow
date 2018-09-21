@@ -116,7 +116,7 @@ public class RoleService extends AService {
         if (entity == null) {
             entity = Role.builderRole()
                     .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                    .code(code.equals("") ? null : code)
+                    .code(text.isValid(code) ? code : null)
                     .build();
         }// end of if cycle
 

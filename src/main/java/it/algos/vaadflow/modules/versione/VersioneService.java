@@ -129,8 +129,8 @@ public class VersioneService extends AService {
         String textOrdine;
 
         entity = Versione.builderVersione()
-                .titolo(titolo.equals("") ? null : titolo)
-                .nome(nome.equals("") ? null : nome)
+                .titolo(text.isValid(titolo) ? titolo : null)
+                .nome(text.isValid(nome) ? nome : null)
                 .timestamp(timestamp != null ? timestamp : LocalDateTime.now())
                 .build();
 

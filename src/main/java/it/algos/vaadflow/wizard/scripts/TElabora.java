@@ -51,6 +51,7 @@ public class TElabora {
     private static final String DIR_PROJECT_BASE = DIR_JAVA + "/" + PROJECT_BASE_NAME;
     private static final String SOURCES_NAME = "wizard/sources";
     private static final String APP_NAME = "application";
+    private static final String SECURITY_NAME = "security";
     private static final String RESOURCES_NAME = "/resources";
     private static final String WEB_NAME = "/webapp";
     private static final String UI_NAME = "ui";
@@ -80,6 +81,8 @@ public class TElabora {
     private static final String POM = "pom";
     //    private static final String COST_NAME = "ProjectCost";
     private static final String HOME_NAME = "HomeView";
+    private static final String DETAILS_NAME = "AUserDetailsService";
+    private static final String CONFIGURATION_NAME = "SecurityConfiguration";
     private static final String DIR_DOC = "documentation";
     private static final String DIR_LINKS = "links";
     private static final String DIR_SNIPPETS = "snippets";
@@ -201,6 +204,8 @@ public class TElabora {
         this.creaApplicationMain();
         this.creaApplicationDirectory();
         this.creaApplicationFolderContent();
+        this.creaSecurityDirectory();
+        this.creaSecurityFolderContent();
         this.creaModulesDirectory();
         this.copiaExtra();
     }// end of method
@@ -865,10 +870,10 @@ public class TElabora {
             methodBuilderText += aCapo + ".ordine(ordine != 0 ? ordine : this.getNewOrdine(" + companyText + "))";
         }// end of if cycle
         if (flagCode) {
-            methodBuilderText += aCapo + ".code(code.equals(\"\") ? null : code)";
+            methodBuilderText += aCapo + ".code(text.isValid(code) ? code : null)";
         }// end of if cycle
         if (flagDescrizione) {
-            methodBuilderText += aCapo + ".descrizione(descrizione.equals(\"\") ? null : descrizione)";
+            methodBuilderText += aCapo + ".descrizione(text.isValid(descrizione) ? descrizione : null)";
         }// end of if cycle
         methodBuilderText += aCapo + ".build()";
 
@@ -1161,6 +1166,10 @@ public class TElabora {
         file.creaDirectory(projectJavaPath + "/" + APP_NAME);
     }// end of method
 
+    private void creaSecurityDirectory() {
+        file.creaDirectory(projectJavaPath + "/" + SECURITY_NAME);
+    }// end of method
+
     private void creaModulesDirectory() {
         file.creaDirectory(projectJavaPath + "/" + ENTITIES_NAME);
     }// end of method
@@ -1207,6 +1216,26 @@ public class TElabora {
         testoVers = Token.replace(Token.moduleNameMaiuscolo, testoVers, text.primaMaiuscola(nameShort));
         testoVers = Token.replace(Token.first, testoVers, firstCharProject);
         checkAndWrite(versPath, testoVers);
+    }// end of method
+
+    private void creaSecurityFolderContent() {
+        creaConfiguration();
+        creaDetails();
+    }// end of method
+
+    private void creaConfiguration() {
+        String destPath = projectJavaPath + "/" + SECURITY_NAME + "/" + CONFIGURATION_NAME + JAVA_SUFFIX;
+        String testoHome = leggeFile(CONFIGURATION_NAME + SOURCE_SUFFIX);
+
+        checkAndWrite(destPath, testoHome);
+    }// end of method
+
+    private void creaDetails() {
+        String destPath = projectJavaPath + "/" + SECURITY_NAME + "/" + DETAILS_NAME + JAVA_SUFFIX;
+        String testoHome = leggeFile(DETAILS_NAME + SOURCE_SUFFIX);
+
+        testoHome = Token.replace(Token.moduleNameMinuscolo, testoHome, newProjectName);
+        checkAndWrite(destPath, testoHome);
     }// end of method
 
 

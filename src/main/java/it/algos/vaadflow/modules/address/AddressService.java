@@ -104,9 +104,9 @@ public class AddressService extends AService {
         Address entity = null;
 
         entity = Address.builderAddress()
-                .indirizzo(indirizzo.equals("") ? null : indirizzo)
-                .localita(localita.equals("") ? null : localita)
-                .cap(cap.equals("") ? null : cap)
+                .indirizzo(text.isValid(indirizzo) ? indirizzo : null)
+                .localita(text.isValid(localita) ? localita : null)
+                .cap(text.isValid(cap) ? cap : null)
                 .build();
 
         return (Address) creaIdKeySpecifica(entity);

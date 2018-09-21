@@ -1,12 +1,12 @@
 package it.algos.vaadflow.modules.utente;
 
+import com.sun.org.apache.xerces.internal.parsers.SecurityConfiguration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.security.SecurityConfiguration;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +58,8 @@ public class UtenteService extends AService {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-    @Autowired
-    private SecurityConfiguration securityConfiguration;
+//    @Autowired
+//    private SecurityConfiguration securityConfiguration;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -94,13 +94,14 @@ public class UtenteService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param locked           flag locked (facoltativo, di default false)
      *
      * @return la entity appena creata
      */
-    public Utente crea(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+    public Utente crea(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
         Utente entity;
 
-        entity = newEntity(userName, passwordInChiaro, ruoli, mail);
+        entity = newEntity(userName, passwordInChiaro, ruoli, mail, locked);
         save(entity);
 
         return entity;
@@ -136,7 +137,7 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli) {
-        return newEntity(userName, passwordInChiaro, ruoli, "");
+        return newEntity(userName, passwordInChiaro, ruoli, "", false);
     }// end of method
 
 
@@ -153,10 +154,11 @@ public class UtenteService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
+     * @param locked           flag locked (facoltativo, di default false)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
         Utente entity;
 
         entity = findByUserName(userName);
@@ -165,10 +167,11 @@ public class UtenteService extends AService {
         }// end of if cycle
 
         entity = Utente.builderUtente()
-                .userName(userName.equals("") ? null : userName)
-                .passwordInChiaro(passwordInChiaro.equals("") ? null : passwordInChiaro)
-                .ruoli(ruoli)
-                .mail(mail.equals("") ? null : mail)
+                .userName(text.isValid(userName) ? userName : null)
+                .passwordInChiaro(text.isValid(passwordInChiaro) ? passwordInChiaro : null)
+                .ruoli(ruoli != null ? ruoli : roleService.getUserRole())
+                .mail(text.isValid(mail) ? mail : null)
+                .locked(locked)
                 .build();
 
         return (Utente) creaIdKeySpecifica(entity);

@@ -119,8 +119,8 @@ public class LogService extends AService {
 
         entity = Log.builderLog()
                 .livello(livello != null ? livello : Livello.info)
-                .code(code.equals("") ? null : code)
-                .descrizione(descrizione.equals("") ? null : descrizione)
+                .code(text.isValid(code) ? code : null)
+                .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .build();
 
         return (Log)creaIdKeySpecifica(entity);

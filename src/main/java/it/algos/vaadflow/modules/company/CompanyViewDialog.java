@@ -88,7 +88,6 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         contattoDialog.setPresenter(contattoPresenter);
         contattoDialog.fixFunzioni(this::saveUpdateCon, this::deleteUpdateCon, this::annullaCon);
         contattoDialog.fixConfermaAndNotRegistrazione();
-
         contattoField = (ATextField) getField(CONTATTO);
         if (contattoField != null) {
             contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), Operation.EDIT, CONTATTO));
@@ -101,7 +100,6 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         indirizzoDialog.setPresenter(indirizzoPresenter);
         indirizzoDialog.fixFunzioni(this::saveUpdateInd, this::deleteUpdateInd, this::annullaInd);
         indirizzoDialog.fixConfermaAndNotRegistrazione();
-
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
             indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), Operation.EDIT, INDIRIZZO));
@@ -131,7 +129,6 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         Company company = super.getCurrentItem();
         company.setContatto(contattoTemporaneo);
         company.setIndirizzo(indirizzoTemporaneo);
-//        service.save(company);
     }// end of method
 
 
@@ -148,19 +145,6 @@ public class CompanyViewDialog extends AViewDialog<Company> {
     }// end of method
 
 
-    protected void deleteUpdateCon(Person entityBean) {
-        contattoTemporaneo = null;
-        contattoField.setValue("");
-        focusOnPost(CONTATTO);
-        Notification.show("La cancellazione di persona è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
-    }// end of method
-
-
-    protected void annullaCon(Person entityBean) {
-        focusOnPost(CONTATTO);
-    }// end of method
-
-
     protected void saveUpdateInd(Address entityBean, AViewDialog.Operation operation) {
         Company company = super.getCurrentItem();
         entityBean = (Address) indirizzoService.beforeSave(entityBean);
@@ -174,11 +158,24 @@ public class CompanyViewDialog extends AViewDialog<Company> {
     }// end of method
 
 
+    protected void deleteUpdateCon(Person entityBean) {
+        contattoTemporaneo = null;
+        contattoField.setValue("");
+        focusOnPost(CONTATTO);
+        Notification.show("La cancellazione di persona è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
+    }// end of method
+
+
     protected void deleteUpdateInd(Address entityBean) {
         indirizzoTemporaneo = null;
         indirizzoField.setValue("");
         focusOnPost(INDIRIZZO);
         Notification.show("La cancellazione di indirizzo è stata confermata ma devi registrare questa company per renderla definitiva", 3000, Notification.Position.BOTTOM_START);
+    }// end of method
+
+
+    protected void annullaCon(Person entityBean) {
+        focusOnPost(CONTATTO);
     }// end of method
 
 
