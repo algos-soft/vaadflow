@@ -119,8 +119,8 @@ public class FlowCost {
     public final static String SHOW_ROLE = "showRole";
     public final static String SHOW_VERSION = "showVersion";
     public final static String SHOW_USER = "showUser";
-    public final static String SHOW_LOGGER = "showLogger";
-    public final static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
+    public final static String SHOW_LOG = "showLog";
+    public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
     public  static String PROJECT_NAME = "vaadinflow";
     private final static String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
     public final static List<String> ESCLUSI_ALL = Arrays.asList(esclusiAll);

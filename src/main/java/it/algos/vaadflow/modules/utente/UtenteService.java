@@ -1,6 +1,5 @@
 package it.algos.vaadflow.modules.utente;
 
-import com.sun.org.apache.xerces.internal.parsers.SecurityConfiguration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
@@ -226,16 +225,34 @@ public class UtenteService extends AService {
     }// end of method
 
 
-//    public boolean isUser(Utente utente) {
-//        return utente.role == roleService.getUser() || isAdmin(utente);
-//    }// end of method
-//
-//    public boolean isAdmin(Utente utente) {
-//        return utente.role == roleService.getAdmin() || isDev(utente);
-//    }// end of method
-//
-//    public boolean isDev(Utente utente) {
-//        return utente.role == roleService.getDeveloper();
-//    }// end of method
+    public boolean isUser(Utente utente) {
+        for (Role role : utente.ruoli) {
+            if (role.code.equals(roleService.getUser().code)) {
+                return true;
+            }// end of if cycle
+        }// end of for cycle
+
+        return false;
+    }// end of method
+
+    public boolean isAdmin(Utente utente) {
+        for (Role role : utente.ruoli) {
+            if (role.code.equals(roleService.getAdmin().code)) {
+                return true;
+            }// end of if cycle
+        }// end of for cycle
+
+        return false;
+    }// end of method
+
+    public boolean isDev(Utente utente) {
+        for (Role role : utente.ruoli) {
+            if (role.code.equals(roleService.getDeveloper().code)) {
+                return true;
+            }// end of if cycle
+        }// end of for cycle
+
+        return false;
+    }// end of method
 
 }// end of class

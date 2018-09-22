@@ -1,9 +1,12 @@
 package it.algos.vaadtest.security;
 
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
+import it.algos.vaadflow.service.ABootService;
+import it.algos.vaadtest.modules.prova.ProvaViewList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +36,12 @@ public class AUserDetailsService implements UserDetailsService {
     public PasswordEncoder passwordEncoder;
 
 
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected ABootService boot;
+
     @Autowired
     public AUserDetailsService(ALogin login, UtenteService utenteService, RoleService roleService) {
         this.login = login;
@@ -52,6 +61,16 @@ public class AUserDetailsService implements UserDetailsService {
         String passwordHash = "";
         Collection<? extends GrantedAuthority> authorities;
         Utente utente = utenteService.findByUserName(username);
+
+        if (utenteService.isDev(utente)) {
+            boot.creaRouteStandardDeveloper();
+        } else {
+            if (utenteService.isAdmin(utente)) {
+                boot.creaRouteStandardAdmin();
+            }// end of if/else cycle
+        }// end of if/else cycle
+        //--menu specifici
+        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
 
         if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + username);

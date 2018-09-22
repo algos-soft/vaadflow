@@ -1,23 +1,12 @@
 package it.algos.vaadflow.boot;
 
-import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.modules.log.LogViewList;
-import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressData;
-import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.company.CompanyData;
-import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.person.PersonData;
-import it.algos.vaadflow.modules.person.PersonViewList;
-import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
 import it.algos.vaadflow.modules.role.RoleData;
-import it.algos.vaadflow.modules.role.RoleViewList;
 import it.algos.vaadflow.modules.utente.UtenteData;
-import it.algos.vaadflow.modules.utente.UtenteViewList;
-import it.algos.vaadflow.modules.versione.VersioneViewList;
-import it.algos.vaadflow.wizard.WizardView;
+import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
@@ -44,55 +33,37 @@ public abstract class ABoot implements ServletContextListener {
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
+    protected PreferenzaService pref;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected ABootService boot;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
     private RoleData role;
-
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private UtenteData utente;
-
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private AddressData address;
-
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private PersonData person;
-
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private CompanyData company;
-
-
-//    @Autowired
-//    protected UtenteService utenteService;
-
-//    @Autowired
-//    protected CompanyService companyService;
-
-    /**
-     * Inietta da Spring come 'singleton'
-     */
-    @Autowired
-    protected PreferenzaService pref;
-
-    /**
-     * Layout iniettato da Spring
-     */
-//    @Autowired
-//    protected AFooter footer;
-
 
     /**
      * Executed on container startup
@@ -169,44 +140,25 @@ public abstract class ABoot implements ServletContextListener {
 
 
     /**
+     * Questa classe viene invocata PRIMA della chiamata del browser
+     * Se NON usa la security, le @Route vengono create solo qui
+     * Se USA la security, le @Route vengono sovrascritte all'apertura del brose nella classe AUserDetailsService
+     * <p>
      * Aggiunge le @Route (view) standard
      * Nella sottoclasse concreta che invoca questo metodo, aggiunge le @Route (view) specifiche dell'applicazione
      * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
-		FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
-        if (pref.isBool(EAPreferenza.showCompany.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showRole.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showAddress.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showPerson.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showWizard.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showVersione.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showUser.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
-        }// end of if cycle
+        boot.creaRouteStandard();
     }// end of method
 
 
     /**
+     * Questa classe viene invocata PRIMA della chiamata del browser
+     * Se NON usa la security, le @Route vengono create solo qui
+     * Se USA la security, le @Route vengono sovrascritte all'apertura del brose nella classe AUserDetailsService
+     * <p>
      * Aggiunge le @Route (view) specifiche di questa applicazione
      * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
      * Vengono aggiunte dopo quelle standard

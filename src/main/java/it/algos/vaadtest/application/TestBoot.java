@@ -99,18 +99,16 @@ public class TestBoot extends ABoot {
 
 
     /**
+     * Questa classe viene invocata PRIMA della chiamata del browser
+     * Se NON usa la security, le @Route vengono create solo qui
+     * Se USA la security, le @Route vengono sovrascritte all'apertura del brose nella classe AUserDetailsService
+     * <p>
      * Aggiunge le @Route (view) specifiche di questa applicazione
-     * Le @Route vengono aggiunte ad una Lista statica mantenuta in FlowCost
+     * Le @Route vengono aggiunte ad una Lista statica mantenuta in BaseCost
      * Vengono aggiunte dopo quelle standard
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 

@@ -1227,6 +1227,7 @@ public class TElabora {
         String destPath = projectJavaPath + "/" + SECURITY_NAME + "/" + CONFIGURATION_NAME + JAVA_SUFFIX;
         String testoHome = leggeFile(CONFIGURATION_NAME + SOURCE_SUFFIX);
 
+        testoHome = Token.replace(Token.moduleNameMinuscolo, testoHome, newProjectName);
         checkAndWrite(destPath, testoHome);
     }// end of method
 

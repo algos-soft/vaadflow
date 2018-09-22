@@ -1,5 +1,6 @@
-package it.algos.vaadtest.security;
+package it.algos.@MODULELOWER@.security;
 
+import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -31,6 +32,7 @@ import javax.annotation.PostConstruct;
  */
 @EnableWebSecurity
 @Configuration
+@AIScript(sovrascrivibile = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_PROCESSING_URL = "/login";
@@ -56,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     protected void inizia() {
-        ((UserDetailsServiceImpl) userDetailsService).passwordEncoder = passwordEncoder();
+        ((AUserDetailsService) userDetailsService).passwordEncoder = passwordEncoder();
     }// end of method
 
     /**
