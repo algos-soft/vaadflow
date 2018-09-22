@@ -166,6 +166,11 @@ public class LogService extends AService {
         createBase(Livello.error, code, descrizione);
     }// fine del metodo
 
+    //--registra un avviso
+    public void importo(String code, String descrizione) {
+        createBase(Livello.importo, code, descrizione);
+    }// fine del metodo
+
     //--registra un evento generico
     private void createBase(Livello livello, String code, String descrizione) {
         crea(livello,code,descrizione);

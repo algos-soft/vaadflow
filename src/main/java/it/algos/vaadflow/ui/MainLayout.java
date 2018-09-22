@@ -5,6 +5,7 @@ import com.flowingcode.addons.applayout.menu.MenuItem;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.PageTitle;
@@ -53,6 +54,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         final AppLayout app = new AppLayout(PROJECT_NAME);
         List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
         ArrayList<MenuItem> listaMenu = null;
+        
 
         if (listaClassiMenu != null && listaClassiMenu.size() > 0) {
             listaMenu = new ArrayList<>();
@@ -72,15 +74,15 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         String linkRoute = annotation.getQualifierName(viewClazz);
         String menuName = annotation.getViewName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
-
-        menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
+        String icon = VaadinIcon.MAGIC.toString();
+        menuItem = new MenuItem(menuName, icon, () -> UI.getCurrent().navigate(linkRoute));
         return menuItem;
     }// end of method
 
 
     protected MenuItem creaMenuLogout() {
         MenuItem menuItem = null;
-        String linkRoute ="login" ;
+        String linkRoute = "login";
         String menuName = "Logout";
 
 //        menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));

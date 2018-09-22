@@ -35,7 +35,6 @@ public class AUserDetailsService implements UserDetailsService {
 
     public PasswordEncoder passwordEncoder;
 
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
