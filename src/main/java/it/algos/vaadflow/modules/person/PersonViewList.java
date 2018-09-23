@@ -6,19 +6,18 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 13-set-2018 18.32.17 <br>
+ * Fix date: 22-set-2018 21.34.26 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -66,13 +65,5 @@ public class PersonViewList extends AViewList {
         ((PersonViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.isEntityDeveloper = true;
-        super.isEntityEmbadded = true;
-    }// end of method
 
 }// end of class

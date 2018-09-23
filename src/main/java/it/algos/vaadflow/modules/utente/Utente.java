@@ -24,7 +24,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 13-set-2018 18.32.18 <br>
+ * Fix date: 22-set-2018 21.34.26 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>

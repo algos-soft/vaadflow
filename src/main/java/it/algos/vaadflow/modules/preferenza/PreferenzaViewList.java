@@ -17,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 13-set-2018 18.32.17 <br>
+ * Fix date: 22-set-2018 21.34.26 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -65,13 +65,5 @@ public class PreferenzaViewList extends AViewList {
         ((PreferenzaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    protected void fixPreferenzeSpecifiche() {
-        super.usaSearchTextField = false;
-        super.usaBottoneEdit = true;
-        super.isEntityDeveloper = true;
-    }// end of method
 
 }// end of class

@@ -10,10 +10,7 @@ import it.algos.vaadflow.annotation.AIField;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.converter.AConverterPrefByte;
 import it.algos.vaadflow.enumeration.EAFieldType;
-import it.algos.vaadflow.ui.fields.AComboBox;
-import it.algos.vaadflow.ui.fields.AIntegerField;
-import it.algos.vaadflow.ui.fields.ATextArea;
-import it.algos.vaadflow.ui.fields.ATextField;
+import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.validator.AIntegerZeroValidator;
 import it.algos.vaadflow.validator.AStringNullValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +27,11 @@ import java.util.List;
  * User: gac
  * Date: ven, 11-mag-2018
  * Time: 17:43
- * NON deve essere astratta, altrimenti Spring non la costruisce
+ * Classe di libreria; NON deve essere astratta, altrimenti Spring non la costruisce
+ * Implementa il 'pattern' SINGLETON; l'istanza può essere richiamata con:
+ * 1) StaticContextAccessor.getBean(AFieldService.class);
+ * 2) AFieldService.getInstance();
+ * 3) @Autowired private AFieldService fieldService;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -56,6 +57,7 @@ public class AFieldService {
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
+
     @Autowired
     private AConverterPrefByte prefConverter;
 
@@ -75,16 +77,17 @@ public class AFieldService {
         return INSTANCE;
     }// end of static method
 
+
     /**
      * Create a single field.
      * The field type is chosen according to the annotation @AIField.
      *
-     * @param binder      collegamento tra i fields e la entityBean
-     * @param binderClass della Entity di riferimento
-     * @param fieldName   della property
+     * @param binder       collegamento tra i fields e la entityBean
+     * @param binderClass  della Entity di riferimento
+     * @param propertyName della property
      */
-    public AbstractField create(Binder binder, Class binderClass, String fieldName) {
-        Field reflectionJavaField = reflection.getField(binderClass, fieldName);
+    public AbstractField create(Binder binder, Class binderClass, String propertyName) {
+        Field reflectionJavaField = reflection.getField(binderClass, propertyName);
 
         if (reflectionJavaField != null) {
             return create(binder, reflectionJavaField);
@@ -219,6 +222,10 @@ public class AFieldService {
                 break;
             case checkbox:
                 field = new Checkbox(caption);
+                binder.forField(field).bind(fieldName);
+                break;
+            case localdate:
+                field = new ADatePicker(caption);
                 binder.forField(field).bind(fieldName);
                 break;
             case localdatetime:

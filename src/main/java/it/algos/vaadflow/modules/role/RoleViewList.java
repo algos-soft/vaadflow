@@ -1,26 +1,23 @@
 package it.algos.vaadflow.modules.role;
 
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 13-set-2018 18.32.17 <br>
+ * Fix date: 22-set-2018 21.34.26 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -54,7 +51,7 @@ public class RoleViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -68,26 +65,5 @@ public class RoleViewList extends AViewList {
         ((RoleViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.usaSearchTextField = false;
-        super.isEntityDeveloper = true;
-    }// end of method
-
-
-    /**
-     * Eventuale aggiunta alla caption sopra la grid
-     */
-    protected VerticalLayout addCaption(VerticalLayout layout) {
-        layout = super.addCaption(layout);
-
-        layout.add(new Label("Serve per aggiungere altri eventuali 'authority' specifiche dell'applicazione"));
-
-        return layout;
-    }// end of method
 
 }// end of class

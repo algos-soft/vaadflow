@@ -225,6 +225,10 @@ public abstract class AService implements IAService {
         String sortName = "";
         Sort sort;
 
+        if (entityClass == null) {
+            return null;
+        }// end of if cycle
+
         if (reflection.isEsiste(entityClass, FIELD_NAME_ORDINE)) {
             sortName = FIELD_NAME_ORDINE;
         } else {
