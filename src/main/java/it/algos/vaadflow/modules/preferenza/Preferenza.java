@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.preferenza;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
+import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
@@ -68,7 +69,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @AIList(fields = {"company", "ordine", "code", "descrizione", "type", "value"})
 @AIForm(fields = {"company", "ordine", "code", "descrizione", "type"})
 @AIScript(sovrascrivibile = false)
-public class Preferenza extends AEntity {
+public class Preferenza extends ACEntity {
 
 
     /**

@@ -55,10 +55,20 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     private final ConfirmationDialog<T> confirmationDialog = new ConfirmationDialog<>();
     public Consumer<T> itemAnnulla;
     /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected AReflectionService reflection;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     public AAnnotationService annotation;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
     @Autowired
     public ADateService date;
     /**
