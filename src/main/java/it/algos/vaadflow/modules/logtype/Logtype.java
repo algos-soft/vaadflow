@@ -1,14 +1,12 @@
-package it.algos.vaadflow.modules.log;
+package it.algos.vaadflow.modules.logtype;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
-import it.algos.vaadflow.modules.logtype.Logtype;
-import it.algos.vaadflow.modules.logtype.LogtypeService;
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -17,20 +15,15 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import java.time.LocalDateTime;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 22-set-2018 21.34.26 <br>
+ * Fix date: 25-set-2018 21.04.21 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -61,20 +54,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
 @SpringComponent
-@Document(collection = "log")
-@TypeAlias("log")
+@Document(collection = "logtype")
+@TypeAlias("logtype")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builderLog")
+@Builder(builderMethodName = "builderLogtype")
 @EqualsAndHashCode(callSuper = false)
-@Qualifier(TAG_LOG)
+@Qualifier(TAG_TYP)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"livello", "type", "descrizione", "evento"})
-@AIForm(fields = {"livello", "type", "descrizione", "evento"})
+@AIList(fields = {"ordine", "code"})
+@AIForm(fields = {"ordine", "code"})
 @AIScript(sovrascrivibile = false)
-public class Log extends AEntity {
+public class Logtype extends AEntity {
 
 
     /**
@@ -82,55 +75,37 @@ public class Log extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-
-    /**
-     * rilevanza del log (obbligatorio) <br>
-     */
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Field("liv")
-    @AIField(type = EAFieldType.enumeration, clazz = Livello.class, required = true, widthEM = 12)
-    public Livello livello;
-
-    /**
-     * raggruppamento logico dei log per type di eventi (obbligatorio)
-     */
-    @NotEmpty(message = "La tipologia del log è obbligatoria")
-    @Indexed()
-    @Field("type")
-    @AIField(type = EAFieldType.combo, clazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
-    @AIColumn(width = 140)
-    private Logtype type;
-
-
-    /**
-     * descrizione (obbligatoria, non unica) <br>
-     */
-    @NotNull(message = "La descrizione è obbligatoria")
-    @Size(min = 2, max = 50)
-    @Field("desc")
-    @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(width = 370)
-    public String descrizione;
-
-    /**
-     * Data dell'evento (obbligatoria, non modificabile)
-     * Gestita in automatico
-     * Field visibile solo al buttonAdmin
+    
+	/**
+     * ordine di presentazione (obbligatorio, unico) <br>
+     * il più importante per primo <br>
      */
     @NotNull
     @Indexed()
-    @AIField(type = EAFieldType.localdatetime, name = "Data dell'evento di log")
-    @AIColumn(name = "eve")
-    public LocalDateTime evento;
-
+    @Field("ord")
+    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIColumn(name = "#", width = 55)
+    public int ordine;
+    
+	/**
+     * codice di riferimento (obbligatorio, unico) <br>
+     */
+    @NotNull
+    @Indexed()
+    @Size(min = 3)
+    @Field("cod")
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
+    @AIColumn(width = 210)
+    public String code;
+    
 
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        return getType() + " - " + getDescrizione();
+        return code;
     }// end of method
+
 
 }// end of entity class

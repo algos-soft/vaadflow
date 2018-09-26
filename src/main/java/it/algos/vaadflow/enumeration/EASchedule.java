@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Scope;
  *
  * @see http://www.sauronsoftware.it/projects/cron4j/manual.php
  */
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Slf4j
 public enum EASchedule {
 
     giorno("0 0 * * *", "ogni giorno a mezzanotte"),

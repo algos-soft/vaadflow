@@ -55,7 +55,7 @@ public class AddressData extends AData {
 
         if (numRec == 0) {
             numRec = creaAll();
-            log.warn("Algos - Creazione dati iniziali AddressData.inizia(): " + numRec + " schede");
+            log.warn("Algos - Creazione dati iniziali AddressData.loadData(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Address è presente: " + numRec + " schede");
         }// end of if/else cycle

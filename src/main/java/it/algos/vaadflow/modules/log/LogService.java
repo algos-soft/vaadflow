@@ -2,7 +2,11 @@ package it.algos.vaadflow.modules.log;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EALogType;
+import it.algos.vaadflow.modules.logtype.Logtype;
+import it.algos.vaadflow.modules.logtype.LogtypeService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
@@ -47,6 +51,13 @@ public class LogService extends AService {
 
 
     /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected LogtypeService logtype;
+
+
+    /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
@@ -72,14 +83,27 @@ public class LogService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
-     * @param livello     di riferimento (obbligatorio)
-     * @param code        codice di riferimento (obbligatorio)
-     * @param descrizione (facoltativa, non unica)
+     * @param descrizione (obbligatoria, non unica) <br>
      *
      * @return la entity appena creata
      */
-    public Log crea(Livello livello, String code, String descrizione) {
-        Log entity = newEntity(livello, code, descrizione);
+    public Log crea(String descrizione) {
+        Log entity = newEntity(descrizione);
+        save(entity);
+        return entity;
+    }// end of method
+
+    /**
+     * Crea una entity e la registra <br>
+     *
+     * @param livello     rilevanza del log (obbligatorio)
+     * @param type        raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
+     *
+     * @return la entity appena creata
+     */
+    public Log crea(Livello livello, Logtype type, String descrizione) {
+        Log entity = newEntity(livello, type, descrizione);
         save(entity);
         return entity;
     }// end of method
@@ -93,9 +117,22 @@ public class LogService extends AService {
      */
     @Override
     public Log newEntity() {
-        return newEntity(Livello.info, "", "");
+        return newEntity((Livello) null, (Logtype) null, "");
     }// end of method
 
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Properties obbligatorie <br>
+     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
+     *
+     * @param descrizione (obbligatoria, non unica) <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Log newEntity(String descrizione) {
+        return newEntity((Livello) null, (Logtype) null, descrizione);
+    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -103,77 +140,65 @@ public class LogService extends AService {
      * All properties <br>
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
-     * @param livello     di riferimento (obbligatorio)
-     * @param code        codice di riferimento (obbligatorio)
-     * @param descrizione (facoltativa, non unica)
+     * @param livello     rilevanza del log (obbligatorio)
+     * @param type        raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Log newEntity(Livello livello, String code, String descrizione) {
-        Log entity = null;
-
-        entity = findByKeyUnica(code);
-        if (entity != null) {
-            return findByKeyUnica(code);
-        }// end of if cycle
+    public Log newEntity(Livello livello, Logtype type, String descrizione) {
+        Log entity;
 
         entity = Log.builderLog()
                 .livello(livello != null ? livello : Livello.info)
-                .code(text.isValid(code) ? code : null)
+                .type(type != null ? type : logtype.getEdit())
                 .descrizione(text.isValid(descrizione) ? descrizione : null)
+                .evento(LocalDateTime.now())
                 .build();
 
-        return (Log)creaIdKeySpecifica(entity);
+        return (Log) creaIdKeySpecifica(entity);
     }// end of method
 
-
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param code di riferimento (obbligatorio)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Log findByKeyUnica(String code) {
-        return repository.findByCode(code);
-    }// end of method
 
     /**
      * Property unica (se esiste) <br>
      */
     @Override
     public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Log) entityBean).getCode()) ? ((Log) entityBean).getCode() : "";
+        String code = "";
+        Log log = ((Log) entityBean);
+
+        code += log.getType().code;
+        code += log.getEvento().toString();
+
+        return code;
     }// end of method
 
+
     //--registra un avviso
-    public void debug(String code, String descrizione) {
-        createBase(Livello.debug, code, descrizione);
+    public void debug(Logtype type, String descrizione) {
+        createBase(Livello.debug, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
-    public void info(String code, String descrizione) {
-        createBase(Livello.info, code, descrizione);
+    public void info(Logtype type, String descrizione) {
+        createBase(Livello.info, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
-    public void warning(String code, String descrizione) {
-        createBase(Livello.warn, code, descrizione);
+    public void warning(Logtype type, String descrizione) {
+        createBase(Livello.warn, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
-    public void error(String code, String descrizione) {
-        createBase(Livello.error, code, descrizione);
+    public void error(Logtype type, String descrizione) {
+        createBase(Livello.error, type, descrizione);
     }// fine del metodo
 
-    //--registra un avviso
-    public void importo(String code, String descrizione) {
-        createBase(Livello.importo, code, descrizione);
-    }// fine del metodo
 
     //--registra un evento generico
-    private void createBase(Livello livello, String code, String descrizione) {
-        crea(livello,code,descrizione);
+    private void createBase(Livello livello, Logtype type, String descrizione) {
+        crea(livello, type, descrizione);
     }// fine del metodo statico
 
 }// end of class

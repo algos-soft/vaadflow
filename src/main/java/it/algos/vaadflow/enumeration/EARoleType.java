@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
  * Date: dom, 01-ott-2017
  * Time: 09:01
  */
-@Slf4j
 public enum EARoleType {
     nobody, developer, admin, user, guest, asEntity;
 

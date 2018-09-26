@@ -69,12 +69,13 @@ public class CompanyData extends AData {
      * <p>
      * Creazione di una collezione - Solo se non ci sono records
      */
+    @Override
     public void loadData() {
         int numRec = super.count();
 
         if (numRec == 0) {
             numRec = creaAll();
-            log.warn("Algos - Creazione dati iniziali CompanyData.inizia(): " + numRec + " schede");
+            log.warn("Algos - Creazione dati iniziali CompanyData.loadData(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Company è presente: " + numRec + " schede");
         }// end of if/else cycle

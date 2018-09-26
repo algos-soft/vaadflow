@@ -1,4 +1,4 @@
-package it.algos.vaadtest.modules.prova;
+package it.algos.vaadflow.modules.logtype;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.vaadtest.application.TestCost.TAG_PRO;
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
- * Project vaadtest <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-set-2018 7.27.58 <br>
+ * Fix date: 25-set-2018 21.04.21 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -27,9 +27,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  */
 @SpringComponent
 @UIScope
-@Qualifier(TAG_PRO)
+@Qualifier(TAG_TYP)
 @AIScript(sovrascrivibile = true)
-public class ProvaPresenter extends APresenter {
+public class LogtypePresenter extends APresenter {
 
     /**
      * Costruttore @Autowired <br>
@@ -40,8 +40,8 @@ public class ProvaPresenter extends APresenter {
      * @param service layer di collegamento per la Repository e la Business Logic
      */
     @Autowired
-    public ProvaPresenter(@Qualifier(TAG_PRO) IAService service) {
-        super(Prova.class, service);
+    public LogtypePresenter(@Qualifier(TAG_TYP) IAService service) {
+        super(Logtype.class, service);
      }// end of Spring constructor
 
 

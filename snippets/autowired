@@ -60,6 +60,12 @@
     protected RoleData roleData;
 
     /**
+     * Istanza (@Scope = 'prototype') inietta da Spring ogni volta che necessita<br>
+     */
+    @Autowired
+    private TurnoCell turno;
+
+    /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>

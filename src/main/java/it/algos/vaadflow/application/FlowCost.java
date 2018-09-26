@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
-    public final static String TAG_ROM = "roma";
-    public final static String TAG_LOG = "log";
+	public final static String TAG_LOG = "log";
+	public final static String TAG_TYP = "logtype";
     public final static String TAG_UTE = "utente";
     public final static String TAG_VER = "versione";
-    public final static boolean USA_BAKERY_PAGES = false;
     public static final Locale APP_LOCALE = Locale.US;
     public final static boolean DEBUG = false;
 
@@ -100,7 +99,15 @@ public class FlowCost {
     public final static String PROPERTY_MODIFICA = "modifica";
     public final static String COMPANY_CODE = "code";
     public final static String COMPANY_UNICO = "codeCompanyUnico";
-    public final static String VIEW_ROL = "roleview";
+
+
+    //log type
+    public final static String SETUP = "Setup";
+    public final static String NEW = "New";
+    public final static String EDIT = "Edit";
+    public final static String DELETE = "Delete";
+    public final static String IMPORT = "Import";
+
     // generali
     public final static String USA_DEBUG = "usaDebug";
     public final static String USA_LOG_DEBUG = "usaLogDebug";
@@ -109,6 +116,7 @@ public class FlowCost {
     public final static String USA_COMPANY = "usaCompany";
     public final static String USA_LOG_MAIL = "usaLogMail";
     public final static String LOG_MAIL_ADDRESS = "logMailAddress";
+
     // moduli visibili
     public final static String SHOW_COMPANY = "showCompany";
     public final static String SHOW_PREFERENZA = "showPreferenza";

@@ -1,6 +1,8 @@
 package it.algos.vaadflow.modules.role;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -39,7 +41,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @Route(value = TAG_ROL, layout = MainLayout.class)
 @Qualifier(TAG_ROL)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class RoleViewList extends AViewList {
 
 
@@ -65,5 +67,23 @@ public class RoleViewList extends AViewList {
         ((RoleViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityDeveloper = true;
+    }// end of method
+
+
+    /**
+     * Eventuale aggiunta alla caption sopra la grid
+     */
+    protected VerticalLayout addCaption(VerticalLayout layout) {
+        layout = super.addCaption(layout);
+        layout.add(new Label("Serve per aggiungere altri eventuali 'authority' specifiche dell'applicazione"));
+        return layout;
+    }// end of method
 
 }// end of class

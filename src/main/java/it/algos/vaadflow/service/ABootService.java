@@ -2,6 +2,7 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.modules.logtype.LogtypeViewList;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.company.CompanyViewList;
@@ -93,7 +94,9 @@ public class ABootService {
         FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
-    }// end of method
+    
+		FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
+	}// end of method
 
 
     public void creaRouteStandardAdmin() {

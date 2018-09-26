@@ -57,7 +57,7 @@ public class RoleData extends AData {
 
         if (numRec == 0) {
             numRec = creaAll();
-            log.warn("Algos - Creazione dati iniziali RoleData.inizia(): " + numRec + " schede");
+            log.warn("Algos - Creazione dati iniziali RoleData.loadData(): " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione Role è presente: " + numRec + " schede");
         }// end of if/else cycle

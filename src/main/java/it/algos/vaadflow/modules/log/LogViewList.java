@@ -39,7 +39,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 @Route(value = TAG_LOG, layout = MainLayout.class)
 @Qualifier(TAG_LOG)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class LogViewList extends AViewList {
 
 
@@ -65,5 +65,13 @@ public class LogViewList extends AViewList {
         ((LogViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityDeveloper = true;
+    }// end of method
 
 }// end of class

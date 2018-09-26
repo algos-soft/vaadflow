@@ -1,16 +1,11 @@
 package it.algos.vaadtest.application;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadflow.modules.address.AddressViewList;
-import it.algos.vaadflow.modules.company.CompanyViewList;
-import it.algos.vaadflow.modules.person.PersonViewList;
-import it.algos.vaadflow.modules.preferenza.EAPreferenza;
-import it.algos.vaadflow.modules.role.RoleViewList;
-import it.algos.vaadflow.modules.utente.UtenteViewList;
-import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
+import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -32,6 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
+@AIScript(sovrascrivibile = true)
 public class TestBoot extends ABoot {
 
 
@@ -94,7 +90,7 @@ public class TestBoot extends ABoot {
      * Se esistono, sostituisce i valori esistenti con quelli indicati qui
      */
     protected void regolaPreferenze() {
-        pref.saveValue(EAPreferenza.usaCompany.getCode(),true);
+        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
     }// end of method
 
 
@@ -109,8 +105,9 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-    }// end of method
+        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
+		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+	}// end of method
 
 
 }// end of boot class

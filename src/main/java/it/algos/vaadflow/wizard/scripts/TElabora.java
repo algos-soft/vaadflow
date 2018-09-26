@@ -58,8 +58,8 @@ public class TElabora {
     private static final String ENTITIES_NAME = "modules";
     private static final String LAYOUT_NAME = "MainLayout";
     private static final String LIB_NAME = "lib";
-    private static final String DIR_BOOT = "boot";
-    private static final String BOOT_NAME = "ABoot";
+    private static final String DIR_FLOW_BOOT = "service";
+    private static final String FLOW_BOOT_NAME = "ABootService";
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;
     private static final String SUPERCLASS_ENTITY = "AEntity";
     private static final String SUPERCLASS_ENTITY_COMPANY = "ACEntity";
@@ -87,7 +87,7 @@ public class TElabora {
     private static final String DIR_LINKS = "links";
     private static final String DIR_SNIPPETS = "snippets";
     private static final String GIT = ".gitignore";
-
+    private static final String END = "}// end of method";
     /**
      * Libreria di servizio. Inietta da Spring come 'singleton'
      */
@@ -306,6 +306,9 @@ public class TElabora {
         Progetto progetto;
         String projectName;
 
+//        if (targetModuleName.equals(PROJECT_BASE_NAME)) {
+//        }// end of if cycle
+
         if (mappaInput.containsKey(Chiave.targetProjectName) && mappaInput.get(Chiave.targetProjectName) != null) {
             projectValue = mappaInput.get(Chiave.targetProjectName);
             if (projectValue instanceof Progetto) {
@@ -329,7 +332,7 @@ public class TElabora {
             this.applicationPath = projectJavaPath + SEP + APP_NAME;
             this.uiPath = projectJavaPath + SEP + UI_NAME;
             this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-            this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+            this.flowBootPath = projectJavaPath + SEP + DIR_FLOW_BOOT + SEP + FLOW_BOOT_NAME + JAVA_SUFFIX;
 
             this.nameClassCost = nameShort + COST_SUFFIX;
             this.nameClassBoot = nameShort + BOOT_SUFFIX;
@@ -353,7 +356,7 @@ public class TElabora {
                 this.applicationPath = projectJavaPath + SEP + APP_NAME;
                 this.uiPath = projectJavaPath + SEP + UI_NAME;
                 this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-                this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+                this.flowBootPath = projectJavaPath + SEP + DIR_FLOW_BOOT + SEP + FLOW_BOOT_NAME + JAVA_SUFFIX;
             } else {
                 this.newProjectName = targetProjectName;
                 this.projectPath = ideaProjectRootPath + SEP + newProjectName;
@@ -361,7 +364,7 @@ public class TElabora {
                 this.applicationPath = projectJavaPath + SEP + APP_NAME;
                 this.uiPath = projectJavaPath + SEP + UI_NAME;
                 this.entityPath = projectJavaPath + SEP + ENTITIES_NAME;
-                this.flowBootPath = projectJavaPath + SEP + DIR_BOOT + SEP + BOOT_NAME + JAVA_SUFFIX;
+                this.flowBootPath = projectJavaPath + SEP + DIR_FLOW_BOOT + SEP + FLOW_BOOT_NAME + JAVA_SUFFIX;
             }// end of if/else cycle
         }// end of if/else cycle
 
@@ -940,30 +943,42 @@ public class TElabora {
 
     private void addPackageMenu() {
         String max = text.primaMaiuscola(newPackageName);
-        String viewItem = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);";
         String aCapoImport = "\n";
-        String aCapo = "\n\t\t";
+        String aCapoPre = "\t";
+        String aCapoPost = "\n\t";
+        String tagRoute = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);" + aCapoPost;
+        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
 
         if (targetModuleName.equals(PROJECT_BASE_NAME)) {
-            addRouteFlow(max, aCapo, aCapoImport, viewItem);
+            addRouteFlow(tagImport, aCapoPre, aCapoImport, tagRoute);
         } else {
-            addRouteProject(max, aCapo, aCapoImport, viewItem);
+            addRouteProject(tagImport, aCapoPre, aCapoImport, tagRoute);
         }// end of if/else cycle
     }// end of method
 
 
-    private void addRouteFlow(String max, String aCapo, String aCapoImport, String viewItem) {
-        String tagMethod = "private void addRouteStandard() {";
-        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
-        String viewImport = "import it.algos.vaadflow.application.FlowCost;";
+    private void addRouteFlow(String tagImport, String aCapo, String aCapoImport, String tagRoute) {
+        String refMethod = "public void creaRouteStandardDeveloper() {";
+        String refMethodEnd = END;
+        String refImport = "import it.algos.vaadflow.application.FlowCost;";
         String textBootClass = file.leggeFile(flowBootPath);
+        String textCorpoMetodo = "";
+        int posIni = 0;
+        int posEnd = 0;
 
-        if (textBootClass.contains(tagMethod)) {
-            if (textBootClass.contains(viewItem)) {
-                System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
+        if (textBootClass.contains(refMethod)) {
+            if (textBootClass.contains(tagRoute)) {
+                System.out.println("Nella classe ABootService esiste già la route per il package " + newPackageName);
             } else {
-                textBootClass = text.sostituisce(textBootClass, viewImport, viewImport + aCapoImport + tagImport);
-                textBootClass = text.sostituisce(textBootClass, tagMethod, tagMethod + aCapo + viewItem);
+                //--sostituisce import
+                textBootClass = text.sostituisce(textBootClass, refImport, refImport + aCapoImport + tagImport);
+
+                //--sostituisce riga di aggiunta a Array di menu
+                posIni = textBootClass.indexOf(refMethod);
+                posEnd = textBootClass.indexOf(refMethodEnd, posIni + refMethod.length());
+                textCorpoMetodo = textBootClass.substring(posIni, posEnd);
+
+                textBootClass = text.sostituisce(textBootClass, textCorpoMetodo, textCorpoMetodo + aCapo + tagRoute);
                 file.sovraScriveFile(flowBootPath, textBootClass);
 
                 System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
@@ -974,19 +989,30 @@ public class TElabora {
     }// end of method
 
 
-    private void addRouteProject(String max, String aCapo, String aCapoImport, String viewItem) {
-        String tagMethod = "protected void addRouteSpecifiche() {";
-        String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
-        String viewImport = "import it.algos.vaadflow.boot.ABoot;";
+    private void addRouteProject(String tagImport, String aCapo, String aCapoImport, String tagRoute) {
+        String refMethod = "protected void addRouteSpecifiche() {";
+        String refMethodEnd = END;
+        String refImport = "import it.algos.vaadflow.boot.ABoot;";
         String textBootClass = file.leggeFile(bootPath);
+        String textCorpoMetodo = "";
+        int posIni = 0;
+        int posEnd = 0;
+        String textNew = "";
 
-        if (textBootClass.contains(tagMethod)) {
-            if (textBootClass.contains(viewItem)) {
+        if (textBootClass.contains(refMethod)) {
+            if (textBootClass.contains(tagRoute)) {
                 System.out.println("Nella classe " + nameClassBoot + " esiste già la route per il package " + newPackageName);
             } else {
-                textBootClass = text.sostituisce(textBootClass, viewImport, viewImport + aCapoImport + tagImport);
-                textBootClass = text.sostituisce(textBootClass, tagMethod, tagMethod + aCapo + viewItem);
-                file.scriveFile(bootPath, textBootClass, true);
+                //--sostituisce import
+                textBootClass = text.sostituisce(textBootClass, refImport, refImport + aCapoImport + tagImport);
+
+                //--sostituisce riga di aggiunta a Array di menu
+                posIni = textBootClass.indexOf(refMethod);
+                posEnd = textBootClass.indexOf(refMethodEnd, posIni + refMethod.length());
+                textCorpoMetodo = textBootClass.substring(posIni, posEnd);
+                textNew = textCorpoMetodo + aCapo + tagRoute;
+                textBootClass = text.sostituisce(textBootClass, textCorpoMetodo, textNew);
+                checkAndWrite(bootPath, textBootClass);
 
                 System.out.println("Il package " + text.primaMaiuscola(newPackageName) + " è stato aggiunto a " + nameClassBoot);
             }// end of if/else cycle

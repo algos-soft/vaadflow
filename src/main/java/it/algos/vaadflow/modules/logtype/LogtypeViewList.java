@@ -1,6 +1,8 @@
-package it.algos.vaadtest.modules.prova;
+package it.algos.vaadflow.modules.logtype;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -11,13 +13,13 @@ import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.vaadtest.application.TestCost.TAG_PRO;
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
- * Project vaadtest <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-set-2018 7.27.58 <br>
+ * Fix date: 25-set-2018 21.04.21 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -36,11 +38,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_PRO, layout = MainLayout.class)
-@Qualifier(TAG_PRO)
+@Route(value = TAG_TYP, layout = MainLayout.class)
+@Qualifier(TAG_TYP)
 @Slf4j
-@AIScript(sovrascrivibile = true)
-public class ProvaViewList extends AViewList {
+@AIScript(sovrascrivibile = false)
+public class LogtypeViewList extends AViewList {
 
 
     /**
@@ -60,10 +62,27 @@ public class ProvaViewList extends AViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
+    public LogtypeViewList(@Qualifier(TAG_TYP) IAPresenter presenter, @Qualifier(TAG_TYP) IADialog dialog) {
         super(presenter, dialog);
-        ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
+        ((LogtypeViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityDeveloper = true;
+    }// end of method
+
+    /**
+     * Eventuale aggiunta alla caption sopra la grid
+     */
+    protected VerticalLayout addCaption(VerticalLayout layout) {
+        layout = super.addCaption(layout);
+        layout.add(new Label("Serve per aggiungere altri eventuali 'type' specifiche per i logs dell'applicazione"));
+        return layout;
+    }// end of method
 
 }// end of class

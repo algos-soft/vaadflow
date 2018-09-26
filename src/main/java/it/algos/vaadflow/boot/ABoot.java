@@ -2,6 +2,7 @@ package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.modules.address.AddressData;
 import it.algos.vaadflow.modules.company.CompanyData;
+import it.algos.vaadflow.modules.logtype.LogtypeData;
 import it.algos.vaadflow.modules.person.PersonData;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.role.RoleData;
@@ -64,6 +65,11 @@ public abstract class ABoot implements ServletContextListener {
      */
     @Autowired
     private CompanyData company;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private LogtypeData logtype;
 
     /**
      * Executed on container startup
@@ -106,6 +112,7 @@ public abstract class ABoot implements ServletContextListener {
         this.address.loadData();
         this.person.loadData();
         this.company.loadData();
+        this.logtype.loadData();
     }// end of method
 
 

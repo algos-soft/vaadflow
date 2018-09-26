@@ -39,7 +39,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @Route(value = TAG_PRE, layout = MainLayout.class)
 @Qualifier(TAG_PRE)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class PreferenzaViewList extends AViewList {
 
 
@@ -65,5 +65,13 @@ public class PreferenzaViewList extends AViewList {
         ((PreferenzaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.usaBottoneEdit = true;
+        super.isEntityDeveloper = true;
+    }// end of method
 
 }// end of class
