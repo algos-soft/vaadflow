@@ -195,6 +195,10 @@ public class LogService extends AService {
         createBase(Livello.error, type, descrizione);
     }// fine del metodo
 
+    //--registra un avviso
+    public void importo(String descrizione) {
+        createBase(Livello.debug, logtype.getImport(),descrizione);
+    }// fine del metodo
 
     //--registra un evento generico
     private void createBase(Livello livello, Logtype type, String descrizione) {
