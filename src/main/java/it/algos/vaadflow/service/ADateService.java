@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.enumeration.EATime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -145,6 +146,44 @@ public class ADateService {
      */
     public LocalDate localDateTimeToLocalDate(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate();
+    }// end of method
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     *
+     * @param localDate da rappresentare
+     * @param patternEnum   enumeration di pattern per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDate localDate, EATime patternEnum) {
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern(patternEnum.getPattern());
+        return format.format(localDateToDate(localDate));
+    }// end of method
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     *
+     * @param localDate da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDate localDate, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern(pattern);
+        return format.format(localDateToDate(localDate));
     }// end of method
 
 

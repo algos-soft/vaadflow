@@ -554,8 +554,13 @@ public abstract class AService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        entityBean = beforeSave(entityBean);
-        return save((AEntity) null, entityBean);
+        AEntity entityValida = beforeSave(entityBean);
+
+        if (entityValida != null) {
+            entityValida = save( null, entityValida);
+        }// end of if cycle
+
+        return entityValida;
     }// end of method
 
 

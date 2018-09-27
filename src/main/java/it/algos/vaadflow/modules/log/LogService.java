@@ -7,6 +7,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
+import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
@@ -63,6 +65,7 @@ public class LogService extends AService {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     private LogRepository repository;
+
 
 
     /**
@@ -159,6 +162,21 @@ public class LogService extends AService {
         return (Log) creaIdKeySpecifica(entity);
     }// end of method
 
+    /**
+     * Returns all entities of the type <br>
+     * <p>
+     * Se esiste la property 'ordine', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
+     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
+     *
+     * @return all ordered entities
+     */
+    @Override
+    public List<? extends AEntity> findAll() {
+        return repository.findAll();
+    }// end of method
 
     /**
      * Property unica (se esiste) <br>
@@ -177,32 +195,29 @@ public class LogService extends AService {
 
     //--registra un avviso
     public void debug(Logtype type, String descrizione) {
-        createBase(Livello.debug, type, descrizione);
+        crea(Livello.debug, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
     public void info(Logtype type, String descrizione) {
-        createBase(Livello.info, type, descrizione);
+        crea(Livello.info, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
     public void warning(Logtype type, String descrizione) {
-        createBase(Livello.warn, type, descrizione);
+        crea(Livello.warn, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
     public void error(Logtype type, String descrizione) {
-        createBase(Livello.error, type, descrizione);
+        crea(Livello.error, type, descrizione);
     }// fine del metodo
 
     //--registra un avviso
     public void importo(String descrizione) {
-        createBase(Livello.debug, logtype.getImport(),descrizione);
+        crea(Livello.debug, logtype.getImport(),descrizione);
     }// fine del metodo
 
-    //--registra un evento generico
-    private void createBase(Livello livello, Logtype type, String descrizione) {
-        crea(livello, type, descrizione);
-    }// fine del metodo statico
+
 
 }// end of class

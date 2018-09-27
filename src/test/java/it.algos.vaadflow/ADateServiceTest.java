@@ -1,5 +1,6 @@
 package it.algos.vaadflow;
 
+import it.algos.vaadflow.enumeration.EATime;
 import it.algos.vaadflow.service.ADateService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
@@ -9,7 +10,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("data")
+@Tag("date")
 @DisplayName("Test sul service di elaborazione date")
 public class ADateServiceTest extends ATest {
 
@@ -590,6 +590,32 @@ public class ADateServiceTest extends ATest {
         System.out.println("LocalDateTime di riferimento " + LOCAL_DATE_TIME_DUE);
     }// end of single test
 
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     *
+     * @param localDate   da rappresentare
+     * @param patternEnum enumeration di pattern per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    @Test
+    public void patternEnumeration() {
+        System.out.println("*************");
+        System.out.println("Enumeration di possibili formattazioni della data: " + LOCAL_DATE_DUE);
+        System.out.println("*************");
+
+        for (EATime eaTime : EATime.values()) {
+            ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
+            System.out.println("Tipo: " + eaTime.getTag()+" -> " + ottenuto);
+        }// end of for cycle
+        System.out.println("*************");
+        System.out.println("");
+    }// end of single test
 
 
 }// end of class
