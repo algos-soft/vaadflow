@@ -1,9 +1,6 @@
 package it.algos.vaadflow.modules.utente;
 
 import it.algos.vaadflow.modules.role.EARole;
-import it.algos.vaadflow.modules.role.Role;
-
-import java.util.List;
 
 /**
  * Project vaadflow
@@ -16,7 +13,8 @@ public enum EAUtente {
     uno("gac", "fulvia", EARole.developer, "gac@algos.it"),
     due("alex", "axel01", EARole.developer, "alex@algos.it"),
     tre("admin", "admin", EARole.admin, "info@algos.it"),
-    quattro("anonymous", "anonymous", EARole.user, "");
+    quattro("anonymous", "anonymous", EARole.user, ""),
+    cinque("Addabbo Andrea", "addabbo123", EARole.user, "");
 
     public String userName;
     public String passwordInChiaro;

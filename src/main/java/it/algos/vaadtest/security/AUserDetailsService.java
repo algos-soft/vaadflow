@@ -63,15 +63,15 @@ public class AUserDetailsService implements UserDetailsService {
 
         login.setUtente(utente);
         if (utenteService.isDev(utente)) {
-            login.setDeveloper(true);
-            boot.creaRouteStandardDeveloper();
+//            login.setDeveloper(true);
+//            boot.creaRouteStandardDeveloper();
         } else {
             if (utenteService.isAdmin(utente)) {
-                boot.creaRouteStandardAdmin();
+//                boot.creaRouteStandardAdmin();
             }// end of if/else cycle
         }// end of if/else cycle
         //--menu specifici
-        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+//        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
 
         if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + username);

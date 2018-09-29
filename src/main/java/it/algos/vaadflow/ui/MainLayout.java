@@ -21,11 +21,16 @@ import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.enumeration.EARoleType;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.ATextService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
@@ -41,6 +46,7 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 @HtmlImport(value = "styles/shared-styles.html", loadMode = LoadMode.INLINE)
 @Push
 @PageTitle(value = MainLayout.SITE_TITLE)
+@Slf4j
 public class MainLayout extends VerticalLayout implements RouterLayout, PageConfigurator {
 
 
@@ -64,32 +70,33 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), PROJECT_NAME);
-        List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
+        String title = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
+        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
-        MenuItem developerItems;
         MenuItem menu = null;
+        Map<EARole, List<Class>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
 
-        if (listaClassiMenu != null && listaClassiMenu.size() > 0) {
+        if (mappaClassi != null && mappaClassi.size() > 0) {
             listaMenu = new ArrayList<>();
 
-            //--crea i menu del developer, inserendoli come sub-menus
-            developerItems = creaMenuDeveloper(listaClassiMenu);
-            if (developerItems != null) {
-                listaMenu.add(developerItems);
+            //--crea i menu del developer, inserendoli come sub-menu
+            if (login != null && login.isDeveloper()) {
+                if (mappaClassi.get(EARole.developer) != null) {
+                    this.addDev(listaMenu, mappaClassi.get(EARole.developer));
+                }// end of if cycle
             }// end of if cycle
 
-            //--crea gli altri menu, esclusi quelli del developer che sono già inseriti
-            for (Class viewClazz : listaClassiMenu) {
-                menu = null;
-                if (!annotation.getViewAccessibilityDev(viewClazz)) {
-                    menu = creaMenu(viewClazz);
+            //--crea i menu di admin, inserendoli come sub-menu
+            if (login != null && login.isAdmin()) {
+                if (mappaClassi.get(EARole.admin) != null) {
+                    this.addAdmin(listaMenu, mappaClassi.get(EARole.admin));
                 }// end of if cycle
+            }// end of if cycle
 
-                if (menu != null) {
-                    listaMenu.add(menu);
-                }// end of if cycle
-            }// end of for cycle
+            //--crea gli altri menu, esclusi quelli del developer e di admin che sono già inseriti
+            if (mappaClassi.get(EARole.user) != null) {
+                this.addUser(listaMenu, mappaClassi.get(EARole.user));
+            }// end of if cycle
 
             //--crea il logout
             listaMenu.add(creaMenuLogout());
@@ -107,6 +114,85 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         }// end of if cycle
     }// end of method
 
+    private Map<EARole, List<Class>> creaMappa(List<Class> listaClassiMenu) {
+        Map<EARole, List<Class>> mappa = new HashMap<>();
+        ArrayList<Class> devClazzList = new ArrayList<>();
+        ArrayList<Class> adminClazzList = new ArrayList<>();
+        ArrayList<Class> utenteClazzList = new ArrayList<>();
+        EARoleType type = null;
+
+        for (Class viewClazz : listaClassiMenu) {
+            type = annotation.getViewRoleType(viewClazz);
+
+            switch (type) {
+                case developer:
+                    devClazzList.add(viewClazz);
+                    break;
+                case admin:
+                    adminClazzList.add(viewClazz);
+                    break;
+                case user:
+                    utenteClazzList.add(viewClazz);
+                    break;
+                default:
+                    utenteClazzList.add(viewClazz);
+                    log.warn("Switch - caso non definito");
+                    break;
+            } // end of switch statement
+        }// end of for cycle
+
+        mappa.put(EARole.developer, devClazzList);
+        mappa.put(EARole.admin, adminClazzList);
+        mappa.put(EARole.user, utenteClazzList);
+
+        return mappa;
+    }// end of method
+
+
+    private void addDev(ArrayList<MenuItem> listaMenu, List<Class> devClazzList) {
+        MenuItem developerItem;
+        MenuItem[] matrice;
+        ArrayList<MenuItem> listaSubMenuDev = new ArrayList<>();
+        MenuItem menu;
+
+        for (Class viewClazz : devClazzList) {
+            menu = creaMenu(viewClazz);
+            listaSubMenuDev.add(menu);
+        }// end of for cycle
+
+        matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
+        developerItem = new MenuItem("Developer", "star", matrice);
+        listaMenu.add(developerItem);
+    }// end of method
+
+
+    private void addAdmin(ArrayList<MenuItem> listaMenu, List<Class> adminClazzList) {
+        MenuItem adminItem;
+        MenuItem[] matrice;
+        ArrayList<MenuItem> listaSubMenuDev = new ArrayList<>();
+        MenuItem menu;
+
+        for (Class viewClazz : adminClazzList) {
+            menu = creaMenu(viewClazz);
+            listaSubMenuDev.add(menu);
+        }// end of for cycle
+
+        matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
+        adminItem = new MenuItem("Admin", "star", matrice);
+        listaMenu.add(adminItem);
+    }// end of method
+
+
+    private void addUser(ArrayList<MenuItem> listaMenu, List<Class> userClazzList) {
+        MenuItem menu;
+
+        for (Class viewClazz : userClazzList) {
+            menu = creaMenu(viewClazz);
+            listaMenu.add(menu);
+        }// end of for cycle
+
+    }// end of method
+
 
     private Component createAvatarComponent() {
         Div container = new Div();
@@ -122,24 +208,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         }// end of if/else cycle
 
         return container;
-    }// end of method
-
-
-    private MenuItem creaMenuDeveloper(List<Class> listaClassiMenu) {
-        MenuItem[] matrice;
-        ArrayList<MenuItem> listaMenuDev = new ArrayList<>();
-        MenuItem menu;
-
-        for (Class viewClazz : listaClassiMenu) {
-            if (annotation.getViewAccessibilityDev(viewClazz)) {
-                menu = creaMenu(viewClazz);
-                listaMenuDev.add(menu);
-            }// end of if cycle
-        }// end of for cycle
-
-        matrice = listaMenuDev.toArray(new MenuItem[listaMenuDev.size()]);
-
-        return new MenuItem("Developer", "star", matrice);
     }// end of method
 
 

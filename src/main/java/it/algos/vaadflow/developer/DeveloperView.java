@@ -6,6 +6,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +24,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_DEV;
  */
 @Route(value = TAG_DEV, layout = MainLayout.class)
 @Qualifier(TAG_DEV)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 public class DeveloperView extends VerticalLayout {
 

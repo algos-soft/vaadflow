@@ -40,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 @UIScope
 @Route(value = TAG_LOG, layout = MainLayout.class)
 @Qualifier(TAG_LOG)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogViewList extends AViewList {
