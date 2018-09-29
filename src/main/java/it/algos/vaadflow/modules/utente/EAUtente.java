@@ -15,7 +15,8 @@ import java.util.List;
 public enum EAUtente {
     uno("gac", "fulvia", EARole.developer, "gac@algos.it"),
     due("alex", "axel01", EARole.developer, "alex@algos.it"),
-    tre("admin", "admin", EARole.admin, "info@algos.it");
+    tre("admin", "admin", EARole.admin, "info@algos.it"),
+    quattro("anonymous", "anonymous", EARole.user, "");
 
     public String userName;
     public String passwordInChiaro;

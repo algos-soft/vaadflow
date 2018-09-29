@@ -34,6 +34,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static it.algos.vaadflow.application.FlowCost.*;
+
 /**
  * Project it.algos.vaadflow
  * Created by Algos
@@ -45,9 +47,9 @@ import java.util.stream.Collectors;
 public abstract class AViewDialog<T extends Serializable> extends Dialog implements IADialog {
 
 
-    protected final Button saveButton = new Button("Registra");
-    protected final Button cancelButton = new Button("Annulla");
-    protected final Button deleteButton = new Button("Elimina");
+    protected final Button saveButton = new Button(REGISTRA);
+    protected final Button cancelButton = new Button(ANNULLA);
+    protected final Button deleteButton = new Button(DELETE);
     protected final FormLayout formLayout = new FormLayout();
     protected final HorizontalLayout buttonBar = new HorizontalLayout(saveButton, cancelButton, deleteButton);
     private final H2 titleField = new H2();
@@ -58,19 +60,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
-    protected AReflectionService reflection;
-
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
     public AAnnotationService annotation;
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     public ADateService date;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected AReflectionService reflection;
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */

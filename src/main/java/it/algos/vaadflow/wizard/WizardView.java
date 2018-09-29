@@ -12,6 +12,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
@@ -51,6 +53,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
 @UIScope
 @Route(value = TAG_WIZ, layout = MainLayout.class)
 @Qualifier(TAG_WIZ)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 public class WizardView extends VerticalLayout {
 

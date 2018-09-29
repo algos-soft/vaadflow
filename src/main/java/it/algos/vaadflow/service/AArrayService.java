@@ -1,7 +1,6 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -24,7 +23,7 @@ import java.util.*;
  * Due possibilità d'uso: <br>
  * 1) l'istanza singleton può essere iniettata da SpringBoot in automatico (se all'interno della catena di @Autowired) <br>
  * 2) l'istanza singleton può essere recuperata col metodo statico getInstance() (se creata con new AArrayService) <br>
- *
+ * <p>
  * Testata in AArrayServiceTest
  */
 @SpringComponent
@@ -424,6 +423,30 @@ public class AArrayService {
      */
     public List<Long> estraeSublistaLong(List<Long> listaTotale, int dimBlocco, int cicloCorrente) {
         return estraeSublista(listaTotale, dimBlocco, cicloCorrente);
+    }// end of method
+
+
+    /**
+     * Posizione di un valore nella lista
+     *
+     * @param lista da esaminare
+     * @param value di trovare
+     *
+     * @return posizione
+     */
+    public int getPos(List lista, Object value) {
+        int pos = 0;
+
+        if (isValid(lista)) {
+            for (Object obj : lista) {
+                pos++;
+                if (obj.equals(value)) {
+                    return pos;
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
+        return pos;
     }// end of method
 
 }// end of singleton class

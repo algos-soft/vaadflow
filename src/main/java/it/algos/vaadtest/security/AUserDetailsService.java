@@ -61,7 +61,9 @@ public class AUserDetailsService implements UserDetailsService {
         Collection<? extends GrantedAuthority> authorities;
         Utente utente = utenteService.findByUserName(username);
 
+        login.setUtente(utente);
         if (utenteService.isDev(utente)) {
+            login.setDeveloper(true);
             boot.creaRouteStandardDeveloper();
         } else {
             if (utenteService.isAdmin(utente)) {

@@ -7,6 +7,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
@@ -46,6 +48,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @UIScope
 @Route(value = TAG_UTE, layout = MainLayout.class)
 @Qualifier(TAG_UTE)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class UtenteViewList extends AViewList {

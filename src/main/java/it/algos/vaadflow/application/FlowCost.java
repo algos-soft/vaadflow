@@ -23,7 +23,7 @@ public class FlowCost {
 
     public final static int FLASH = 2000;
 
-    public final static String TAG_HOM = "";
+    public final static String TAG_HOME = "home";
     public final static String TAG_WIZ = "wizard";
     public final static String TAG_DEV = "developer";
     public final static String TAG_ADD = "address";
@@ -100,6 +100,10 @@ public class FlowCost {
     public final static String COMPANY_CODE = "code";
     public final static String COMPANY_UNICO = "codeCompanyUnico";
 
+    //--bottoni della scheda/form/dialog
+    public final static String REGISTRA = "Save";
+    public final static String ANNULLA = "Back";
+    public final static String CANCELLA = "Delete";
 
     //log type
     public final static String SETUP = "Setup";
@@ -142,5 +146,6 @@ public class FlowCost {
     public final static List<String> COMPANY_OPTIONAL = Arrays.asList(companyMatrice);
 
     public final static String STOP_SAVE = "nonRegistrare";
+
 
 }// end of static class

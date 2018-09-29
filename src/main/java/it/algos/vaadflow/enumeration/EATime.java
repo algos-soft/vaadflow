@@ -18,6 +18,7 @@ public enum EATime {
     medium("medium", "d-MMMM-yy"),
     lunga("lunga", "d-MMMM-yyy"),
     completa("completa", "EEEE, d-MMMM-yyy"),
+    meseCorrente("meseCorrente", "MMMM yyy"),
     ;
 
     private String tag;

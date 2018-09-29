@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Collection;
@@ -116,6 +117,18 @@ public class AMongoService {
          mongo.insert(lista, clazz);
     }// end of single test
 
+    /**
+     * Delete from a collection.
+     *
+     * @param lista di elementi da inserire
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    public void deleteWhere(Class clazz, String property, String value) {
+        Query searchQuery = new Query(Criteria.where(property).is(value));
+        mongo.remove(searchQuery, clazz);
+    }// end of single test
 
 
 }// end of class

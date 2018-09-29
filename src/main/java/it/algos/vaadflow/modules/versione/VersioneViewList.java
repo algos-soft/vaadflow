@@ -4,6 +4,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -38,6 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @UIScope
 @Route(value = TAG_VER, layout = MainLayout.class)
 @Qualifier(TAG_VER)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class VersioneViewList extends AViewList {

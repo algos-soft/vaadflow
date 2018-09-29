@@ -6,10 +6,10 @@ import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -79,7 +79,6 @@ public class AAnnotationService {
     public static AAnnotationService getInstance() {
         return INSTANCE;
     }// end of static method
-
 
 
     /**
@@ -498,26 +497,40 @@ public class AAnnotationService {
 //    }// end of method
 
 
-//    /**
-//     * Get the roleTypeVisibility of the View class.
-//     * La Annotation @AIView ha un suo valore di default per la property @AIView.roleTypeVisibility()
-//     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-//     *
-//     * @param clazz the entity class
-//     *
-//     * @return the roleTypeVisibility of the class
-//     */
-//    @SuppressWarnings("all")
-//    public EARoleType getViewRoleType(final Class<? extends IAView> clazz) {
-//        EARoleType roleTypeVisibility = null;
-//        AIView annotation = this.getAIView(clazz);
-//
-//        if (annotation != null) {
-//            roleTypeVisibility = annotation.roleTypeVisibility();
-//        }// end of if cycle
-//
-//        return roleTypeVisibility != null ? roleTypeVisibility : EARoleType.user;
-//    }// end of method
+    /**
+     * Get the roleTypeVisibility of the View class.
+     * La Annotation @AIView ha un suo valore di default per la property @AIView.roleTypeVisibility()
+     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
+     *
+     * @param clazz the view class
+     *
+     * @return the roleTypeVisibility of the class
+     */
+    @SuppressWarnings("all")
+    public EARoleType getViewRoleType(final Class<? extends IAView> clazz) {
+        EARoleType roleTypeVisibility = null;
+        AIView annotation = this.getAIView(clazz);
+
+        if (annotation != null) {
+            roleTypeVisibility = annotation.roleTypeVisibility();
+        }// end of if cycle
+
+        return roleTypeVisibility != null ? roleTypeVisibility : EARoleType.user;
+    }// end of method
+
+
+    /**
+     * Get the accessibility status of the class for the developer login.
+     *
+     * @param clazz the view class
+     *
+     * @return true if the class is visible
+     */
+    @SuppressWarnings("all")
+    public boolean getViewAccessibilityDev(final Class<? extends IAView> clazz) {
+        EARoleType roleTypeVisibility = getViewRoleType(clazz);
+        return (roleTypeVisibility != null && roleTypeVisibility == EARoleType.developer);
+    }// end of method
 
 
 //    /**

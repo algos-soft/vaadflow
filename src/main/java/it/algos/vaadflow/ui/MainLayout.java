@@ -3,9 +3,14 @@ package it.algos.vaadflow.ui;
 import com.flowingcode.addons.applayout.AppLayout;
 import com.flowingcode.addons.applayout.menu.MenuItem;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.PageTitle;
@@ -14,6 +19,8 @@ import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.ATextService;
 
@@ -36,10 +43,16 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 @PageTitle(value = MainLayout.SITE_TITLE)
 public class MainLayout extends VerticalLayout implements RouterLayout, PageConfigurator {
 
-    public static final String SITE_TITLE = "World Cup 2018 Stats";
 
+    public static final String SITE_TITLE = "World Cup 2018 Stats";
+    /**
+     * Recupera da StaticContextAccessor una istanza della classe <br>
+     * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>
+     */
+    public ALogin login = StaticContextAccessor.getBean(ALogin.class);
     private AAnnotationService annotation = AAnnotationService.getInstance();
     private ATextService text = ATextService.getInstance();
+
 
     public MainLayout() {
         setMargin(false);
@@ -51,32 +64,96 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        final AppLayout app = new AppLayout(PROJECT_NAME);
+        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), PROJECT_NAME);
         List<Class> listaClassiMenu = FlowCost.MENU_CLAZZ_LIST;
         ArrayList<MenuItem> listaMenu = null;
-        
+        MenuItem developerItems;
+        MenuItem menu = null;
 
         if (listaClassiMenu != null && listaClassiMenu.size() > 0) {
             listaMenu = new ArrayList<>();
-            for (Class clazz : listaClassiMenu) {
-                listaMenu.add(creaMenu(clazz));
+
+            //--crea i menu del developer, inserendoli come sub-menus
+            developerItems = creaMenuDeveloper(listaClassiMenu);
+            if (developerItems != null) {
+                listaMenu.add(developerItems);
+            }// end of if cycle
+
+            //--crea gli altri menu, esclusi quelli del developer che sono già inseriti
+            for (Class viewClazz : listaClassiMenu) {
+                menu = null;
+                if (!annotation.getViewAccessibilityDev(viewClazz)) {
+                    menu = creaMenu(viewClazz);
+                }// end of if cycle
+
+                if (menu != null) {
+                    listaMenu.add(menu);
+                }// end of if cycle
             }// end of for cycle
+
+            //--crea il logout
             listaMenu.add(creaMenuLogout());
 
-            app.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
-            this.add(app);
+            //--aggiunge i menu
+            appLayout.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
+
+            //--crea la barra di bottoni, in alto a destra
+            appLayout.setToolbarIconButtons(new MenuItem("Delete", "logout", () -> Notification.show("Delete action")),
+                    new MenuItem("Search", "ABACUS", () -> Notification.show("Search action")),
+                    new MenuItem("Close", "close", () -> Notification.show("Close action"))
+            );
+
+            this.add(appLayout);
         }// end of if cycle
     }// end of method
 
 
+    private Component createAvatarComponent() {
+        Div container = new Div();
+        H5 userName;
+        container.getElement().setAttribute("style", "text-align: center;");
+        Image i = new Image("/frontend/images/avatar.png", "avatar");
+        i.getElement().setAttribute("style", "width: 60px; margin-top:10px");
+
+        if (login != null && login.getUtente() != null) {
+            container.add(i, new H5(login.getUtente().userName));
+        } else {
+            container.add(i);
+        }// end of if/else cycle
+
+        return container;
+    }// end of method
+
+
+    private MenuItem creaMenuDeveloper(List<Class> listaClassiMenu) {
+        MenuItem[] matrice;
+        ArrayList<MenuItem> listaMenuDev = new ArrayList<>();
+        MenuItem menu;
+
+        for (Class viewClazz : listaClassiMenu) {
+            if (annotation.getViewAccessibilityDev(viewClazz)) {
+                menu = creaMenu(viewClazz);
+                listaMenuDev.add(menu);
+            }// end of if cycle
+        }// end of for cycle
+
+        matrice = listaMenuDev.toArray(new MenuItem[listaMenuDev.size()]);
+
+        return new MenuItem("Developer", "star", matrice);
+    }// end of method
+
+
     protected MenuItem creaMenu(Class viewClazz) {
-        MenuItem menuItem = null;
-        String linkRoute = annotation.getQualifierName(viewClazz);
-        String menuName = annotation.getViewName(viewClazz);
+        String linkRoute;
+        String menuName;
+        String icon;
+
+        linkRoute = annotation.getQualifierName(viewClazz);
+        menuName = annotation.getViewName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
-        String icon = VaadinIcon.MAGIC.toString();
-        menuItem = new MenuItem(menuName, icon, () -> UI.getCurrent().navigate(linkRoute));
-        return menuItem;
+        icon = VaadinIcon.MAGIC.toString();
+
+        return new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
     }// end of method
 
 

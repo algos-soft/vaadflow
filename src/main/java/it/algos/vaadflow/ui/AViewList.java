@@ -275,7 +275,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     @PostConstruct
-    private void initView() {
+    protected void initView() {
         addClassName("categories-list");
         setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
         this.setMargin(false);
