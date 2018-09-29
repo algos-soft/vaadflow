@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public abstract class AService implements IAService {
 
 
+    public final static String FIELD_NAME_ID = "id";
     public final static String FIELD_NAME_ORDINE = "ordine";
     public final static String FIELD_NAME_CODE = "code";
     public final static String FIELD_NAME_DESCRIZIONE = "descrizione";

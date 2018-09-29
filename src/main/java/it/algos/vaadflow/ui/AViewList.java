@@ -18,6 +18,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -76,6 +77,7 @@ import java.util.List;
 public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
 
     protected final static String EDIT_NAME = "Edit";
+    protected final static String SHOW_NAME = "Show";
     protected final TextField searchField = new TextField("", "Search");
 
     /**
@@ -147,8 +149,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
      * Usare quindi un metodo @PostConstruct per averla disponibile <br>
      */
-//    @Autowired
-//    protected AFooter footer;
+    @Autowired
+    protected AFooter footer;
 
 
     /**
@@ -549,7 +551,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-    private Button createEditButton(AEntity entityBean) {
+    protected Button createEditButton(AEntity entityBean) {
         Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
@@ -576,10 +578,10 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     protected void creaFooter() {
-//        if (footer != null) {
-//            footer.setAppMessage("");
-//            this.add(footer);
-//        }// end of if cycle
+        if (footer != null) {
+            footer.setAppMessage("");
+            this.add(footer);
+        }// end of if cycle
     }// end of method
 
 

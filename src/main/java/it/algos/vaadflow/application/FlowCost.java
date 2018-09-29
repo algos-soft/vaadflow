@@ -134,6 +134,7 @@ public class FlowCost {
     public final static String SHOW_LOG = "showLog";
     public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
     public  static String PROJECT_NAME = "vaadinflow";
+    public  static String PROJECT_VERSION = "0.1";
     private final static String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
     public final static List<String> ESCLUSI_ALL = Arrays.asList(esclusiAll);
     private final static String[] esclusiList = {PROPERTY_ID, PROPERTY_SERIAL, PROPERTY_COMPANY, PROPERTY_NOTE, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};

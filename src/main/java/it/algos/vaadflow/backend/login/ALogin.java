@@ -41,13 +41,15 @@ public class ALogin {
 
     public void setUtente(Utente utente) {
         this.utente = utente;
+        this.setDeveloper(false);
+        this.setAdmin(false);
 
         List<Role> ruoli = utente.getRuoli();
         if (ruoli.contains(roleService.getDeveloper())) {
-            setDeveloper(true);
+            this.setDeveloper(true);
         }// end of if cycle
         if (ruoli.contains(roleService.getAdmin())) {
-            setAdmin(true);
+            this.setAdmin(true);
         }// end of if cycle
 
     }// end of method
