@@ -67,6 +67,8 @@ public class WizardView extends VerticalLayout {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.MAGIC;
+    public static final String IRON_ICON = "build";
+
     private static final String PROJECT_BASE_NAME = "vaadflow";
     private static Progetto PROGETTO_STANDARD_SUGGERITO_NUOVO = Progetto.vaadin;
     private static Progetto PROGETTO_STANDARD_SUGGERITO_MODIFICA = Progetto.test;

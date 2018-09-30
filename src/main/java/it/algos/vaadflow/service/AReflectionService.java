@@ -159,6 +159,24 @@ public class AReflectionService {
 
 
     /**
+     * Valore della IronIcon di una view
+     *
+     * @param viewClazz classe view su cui operare la riflessione
+     */
+    public String getIronIcon(final Class<?> viewClazz) {
+        String icon = null;
+        String iconNameProperty = "IRON_ICON";
+        Object genericValue = getPropertyValue(viewClazz, iconNameProperty);
+
+        if (genericValue != null && genericValue instanceof String) {
+            icon = (String) genericValue;
+        }// end of if cycle
+
+        return icon;
+    }// end of method
+
+
+    /**
      * Valore della MENU_NAME di una view
      *
      * @param viewClazz classe view su cui operare la riflessione

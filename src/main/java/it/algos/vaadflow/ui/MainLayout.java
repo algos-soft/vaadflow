@@ -9,7 +9,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
@@ -24,6 +23,7 @@ import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +57,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      */
     public ALogin login = StaticContextAccessor.getBean(ALogin.class);
     private AAnnotationService annotation = AAnnotationService.getInstance();
+    private AReflectionService reflection = AReflectionService.getInstance();
     private ATextService text = ATextService.getInstance();
 
 
@@ -105,10 +106,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             appLayout.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
 
             //--crea la barra di bottoni, in alto a destra
-            appLayout.setToolbarIconButtons(new MenuItem("Delete", "logout", () -> Notification.show("Delete action")),
-                    new MenuItem("Search", "ABACUS", () -> Notification.show("Search action")),
-                    new MenuItem("Close", "close", () -> Notification.show("Close action"))
-            );
+            appLayout.setToolbarIconButtons(new MenuItem("Logout", "exit-to-app", () -> Notification.show("Logged out")));
 
             this.add(appLayout);
         }// end of if cycle
@@ -161,7 +159,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         }// end of for cycle
 
         matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
-        developerItem = new MenuItem("Developer", "star", matrice);
+        developerItem = new MenuItem("Developer", "build", matrice);
         listaMenu.add(developerItem);
     }// end of method
 
@@ -178,7 +176,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         }// end of for cycle
 
         matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
-        adminItem = new MenuItem("Admin", "star", matrice);
+        adminItem = new MenuItem("Admin", "apps", matrice);
         listaMenu.add(adminItem);
     }// end of method
 
@@ -211,7 +209,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
-    protected MenuItem creaMenu(Class viewClazz) {
+    protected MenuItem creaMenu(Class<? extends AViewList> viewClazz) {
         String linkRoute;
         String menuName;
         String icon;
@@ -219,9 +217,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         linkRoute = annotation.getQualifierName(viewClazz);
         menuName = annotation.getViewName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
-        icon = VaadinIcon.MAGIC.toString();
+        icon = reflection.getIronIcon(viewClazz);
 
-        return new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
+        return new MenuItem(menuName, icon, () -> UI.getCurrent().navigate(linkRoute));
     }// end of method
 
 
@@ -230,8 +228,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         String linkRoute = "login";
         String menuName = "Logout";
 
-//        menuItem = new MenuItem(menuName, () -> UI.getCurrent().navigate(linkRoute));
-        menuItem = new MenuItem(menuName, () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
+        menuItem = new MenuItem(menuName, "exit-to-app",() -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
         return menuItem;
     }// end of method
 

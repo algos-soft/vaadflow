@@ -157,7 +157,7 @@ public abstract class ABoot implements ServletContextListener {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
-        boot.creaRouteStandard();
+        boot.creaRouteStandardDeveloper();
     }// end of method
 
 
