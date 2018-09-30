@@ -5,7 +5,6 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +21,6 @@ import java.util.List;
  * Date: gio, 10-mag-2018
  * Time: 16:23
  */
-@Slf4j
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ALogin {
@@ -40,16 +38,24 @@ public class ALogin {
     }// end of method
 
     public void setUtente(Utente utente) {
-        this.utente = utente;
-        this.setDeveloper(false);
-        this.setAdmin(false);
+        this.setUtenteAndCompany(utente, (Company) null);
+    }// end of method
 
-        List<Role> ruoli = utente.getRuoli();
-        if (ruoli.contains(roleService.getDeveloper())) {
-            this.setDeveloper(true);
-        }// end of if cycle
-        if (ruoli.contains(roleService.getAdmin())) {
-            this.setAdmin(true);
+
+    public void setUtenteAndCompany(Utente utente, Company company) {
+        this.utente = utente;
+        this.company = company;
+        this.developer = false;
+        this.admin = false;
+
+        if (utente != null) {
+            List<Role> ruoli = utente.getRuoli();
+            if (ruoli.contains(roleService.getDeveloper())) {
+                this.developer = true;
+            }// end of if cycle
+            if (ruoli.contains(roleService.getAdmin())) {
+                this.admin = true;
+            }// end of if cycle
         }// end of if cycle
 
     }// end of method
@@ -58,24 +64,12 @@ public class ALogin {
         return company;
     }// end of method
 
-    public void setCompany(Company company) {
-        this.company = company;
-    }// end of method
-
     public boolean isDeveloper() {
         return developer;
     }// end of method
 
-    public void setDeveloper(boolean developer) {
-        this.developer = developer;
-    }// end of method
-
     public boolean isAdmin() {
         return admin;
-    }// end of method
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
     }// end of method
 
     public Authentication getAuthentication() {

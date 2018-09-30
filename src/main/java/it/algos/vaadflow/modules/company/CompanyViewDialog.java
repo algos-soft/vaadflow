@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.company;
 
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.modules.address.Address;
@@ -136,7 +135,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
     protected void saveUpdateCon(Person entityBean, AViewDialog.Operation operation) {
         Company company = super.getCurrentItem();
-        entityBean = (Person)contattoService.beforeSave(entityBean);
+        entityBean = (Person) contattoService.beforeSave(entityBean,operation);
         contattoTemporaneo = entityBean;
 
         company.setContatto(contattoTemporaneo);
@@ -149,7 +148,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
 
     protected void saveUpdateInd(Address entityBean, AViewDialog.Operation operation) {
         Company company = super.getCurrentItem();
-        entityBean = (Address) indirizzoService.beforeSave(entityBean);
+        entityBean = (Address) indirizzoService.beforeSave(entityBean, operation);
         indirizzoTemporaneo = entityBean;
 
         company.setIndirizzo(indirizzoTemporaneo);

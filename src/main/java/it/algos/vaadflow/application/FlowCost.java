@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
-	public final static String TAG_LOG = "logtype";
 	public final static String TAG_LOG = "log";
 	public final static String TAG_TYP = "logtype";
     public final static String TAG_UTE = "utente";

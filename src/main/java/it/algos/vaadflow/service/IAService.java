@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 
 import java.util.List;
 
@@ -106,10 +107,11 @@ public interface IAService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
+     * @param operation del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean) ;
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) ;
 
 
         /**

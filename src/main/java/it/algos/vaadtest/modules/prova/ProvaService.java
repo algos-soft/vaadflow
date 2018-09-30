@@ -1,19 +1,20 @@
 package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -67,7 +68,7 @@ public class ProvaService extends AService {
         super(repository);
         super.entityClass = Prova.class;
         this.repository = (ProvaRepository) repository;
-   }// end of Spring constructor
+    }// end of Spring constructor
 
     /**
      * Ricerca di una entity (la crea se non la trova) <br>
@@ -94,48 +95,48 @@ public class ProvaService extends AService {
      * @return la entity appena creata
      */
     public Prova crea(String code) {
-         return (Prova)save(newEntity(0, code));
+        return (Prova) save(newEntity(0, code));
     }// end of method
 
-     /**
-      * Creazione in memoria di una nuova entity che NON viene salvata
-      * Eventuali regolazioni iniziali delle property
-      * Senza properties per compatibilità con la superclasse
-      *
-      * @return la nuova entity appena creata (non salvata)
-      */
-     @Override
-     public Prova newEntity() {
-         return newEntity(0, "");
-     }// end of method
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Eventuali regolazioni iniziali delle property
+     * Senza properties per compatibilità con la superclasse
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    @Override
+    public Prova newEntity() {
+        return newEntity(0, "");
+    }// end of method
 
 
-     /**
-      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-      * Eventuali regolazioni iniziali delle property <br>
-      * All properties <br>
-      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
-      *
-      * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)
-	* @param code        codice di riferimento (obbligatorio)
-      *
-      * @return la nuova entity appena creata (non salvata)
-      */
-     public Prova newEntity(int ordine, String code) {
-         Prova entity = null;
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
+     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
+     *
+     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
+     * @param code   codice di riferimento (obbligatorio)
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Prova newEntity(int ordine, String code) {
+        Prova entity = null;
 
-         entity = findByKeyUnica(code);
-		if (entity != null) {
-			return findByKeyUnica(code);
-		}// end of if cycle
-		
-         entity = Prova.builderProva()
-				.ordine(ordine != 0 ? ordine : this.getNewOrdine())
-				.code(code.equals("") ? null : code)
-				.build();
+        entity = findByKeyUnica(code);
+        if (entity != null) {
+            return findByKeyUnica(code);
+        }// end of if cycle
 
-         return (Prova)creaIdKeySpecifica(entity);
-     }// end of method
+        entity = Prova.builderProva()
+                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                .code(code.equals("") ? null : code)
+                .build();
+
+        return (Prova) creaIdKeySpecifica(entity);
+    }// end of method
 
 
     /**
@@ -149,7 +150,6 @@ public class ProvaService extends AService {
         return repository.findByCode(code);
     }// end of method
 
-    
 
     /**
      * Ordine di presentazione (obbligatorio, unico per tutte le eventuali company), <br>
@@ -168,4 +168,16 @@ public class ProvaService extends AService {
         return ordine + 1;
     }// end of method
 
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        return super.beforeSave(entityBean, operation);
+    }// end of method
 }// end of class

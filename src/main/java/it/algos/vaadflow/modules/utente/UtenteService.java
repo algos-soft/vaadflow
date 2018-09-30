@@ -7,6 +7,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -182,12 +183,13 @@ public class UtenteService extends AService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean) {
-        Utente entity = (Utente) super.beforeSave(entityBean);
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Utente entity = (Utente) super.beforeSave(entityBean,operation);
 
         if (text.isEmpty(entity.userName)) {
             entity.id = FlowCost.STOP_SAVE;

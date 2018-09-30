@@ -7,6 +7,7 @@ import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -555,10 +556,10 @@ public abstract class AService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        AEntity entityValida = beforeSave(entityBean);
+        AEntity entityValida = beforeSave(entityBean, AViewDialog.Operation.EDIT);
 
         if (entityValida != null) {
-            entityValida = save( null, entityValida);
+            entityValida = save(null, entityValida);
         }// end of if cycle
 
         return entityValida;
@@ -570,12 +571,14 @@ public abstract class AService implements IAService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean) {
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
         return entityBean;
     }// end of method
+
 
     /**
      * Saves a given entity.

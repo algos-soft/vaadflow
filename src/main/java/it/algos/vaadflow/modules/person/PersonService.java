@@ -12,6 +12,7 @@ import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -267,15 +268,16 @@ public class PersonService extends AService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean) {
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
         if (((Person) entityBean).usaSuperClasse) {
-            entityBean = utenteService.beforeSave(entityBean);
+            entityBean = utenteService.beforeSave(entityBean, operation);
         }// end of if cycle
-        Person entity = (Person) super.beforeSave(entityBean);
+        Person entity = (Person) super.beforeSave(entityBean, operation);
 
         if (entity == null) {
             log.error("entity è nullo in PersonService.beforeSave()");

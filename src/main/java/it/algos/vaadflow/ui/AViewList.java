@@ -592,7 +592,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     protected void save(AEntity entityBean, AViewDialog.Operation operation) {
-        entityBean = service.beforeSave(entityBean);
+        entityBean = service.beforeSave(entityBean, operation);
         switch (operation) {
             case ADD:
                 if (service.isEsisteEntityKeyUnica(entityBean)) {

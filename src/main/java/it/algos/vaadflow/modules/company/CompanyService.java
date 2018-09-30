@@ -6,6 +6,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -82,7 +83,7 @@ public class CompanyService extends AService {
      * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
      * @param contatto    persona di riferimento (facoltativo)
      * @param telefono    della company (facoltativo)
-     * @param mail       della company (facoltativo)
+     * @param mail        della company (facoltativo)
      * @param indirizzo   della company (facoltativo)
      *
      * @return la entity trovata o appena creata
@@ -139,7 +140,7 @@ public class CompanyService extends AService {
      * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
      * @param contatto    persona di riferimento (facoltativo)
      * @param telefono    della company (facoltativo)
-     * @param mail       della company (facoltativo)
+     * @param mail        della company (facoltativo)
      * @param indirizzo   della company (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
@@ -170,12 +171,13 @@ public class CompanyService extends AService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean) {
-        Company entity = (Company) super.beforeSave(entityBean);
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Company entity = (Company) super.beforeSave(entityBean, operation);
 
         if (entity == null) {
             log.error("entity è nullo in CompanyService.beforeSave()");
