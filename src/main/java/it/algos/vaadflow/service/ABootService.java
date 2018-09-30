@@ -2,6 +2,14 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.modules.company.CompanyViewList;
+import it.algos.vaadflow.modules.utente.UtenteViewList;
+import it.algos.vaadflow.modules.versione.VersioneViewList;
+import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
+import it.algos.vaadflow.modules.log.LogViewList;
+import it.algos.vaadflow.modules.address.AddressViewList;
+import it.algos.vaadflow.modules.person.PersonViewList;
+import it.algos.vaadflow.modules.role.RoleViewList;
 import it.algos.vaadflow.modules.logtype.LogtypeViewList;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
@@ -96,6 +104,14 @@ public class ABootService {
         FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
     
 		FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
 	}// end of method
 
 

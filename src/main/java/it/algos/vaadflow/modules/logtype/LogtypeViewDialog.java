@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 25-set-2018 21.04.21 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -29,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(TAG_TYP)
+@Qualifier(TAG_LOG)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class LogtypeViewDialog extends AViewDialog<Logtype> {
@@ -43,7 +43,7 @@ public class LogtypeViewDialog extends AViewDialog<Logtype> {
      * @param presenter per gestire la business logic del package
      */
     @Autowired
-    public LogtypeViewDialog(@Qualifier(TAG_TYP) IAPresenter presenter) {
+    public LogtypeViewDialog(@Qualifier(TAG_LOG) IAPresenter presenter) {
         super(presenter);
     }// end of Spring constructor
 

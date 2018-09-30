@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 25-set-2018 21.04.21 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -27,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  */
 @SpringComponent
 @UIScope
-@Qualifier(TAG_TYP)
+@Qualifier(TAG_LOG)
 @AIScript(sovrascrivibile = true)
 public class LogtypePresenter extends APresenter {
 
@@ -40,7 +40,7 @@ public class LogtypePresenter extends APresenter {
      * @param service layer di collegamento per la Repository e la Business Logic
      */
     @Autowired
-    public LogtypePresenter(@Qualifier(TAG_TYP) IAService service) {
+    public LogtypePresenter(@Qualifier(TAG_LOG) IAService service) {
         super(Logtype.class, service);
      }// end of Spring constructor
 

@@ -4,23 +4,20 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 22-set-2018 21.34.26 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -41,7 +38,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM, layout = MainLayout.class)
 @Qualifier(TAG_COM)
-@AIView(roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class CompanyViewList extends AViewList {
@@ -55,7 +51,7 @@ public class CompanyViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>

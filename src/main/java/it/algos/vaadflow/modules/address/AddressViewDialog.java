@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 22-set-2018 21.34.26 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>

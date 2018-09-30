@@ -23,7 +23,8 @@ import java.time.LocalDateTime;
  * 4) la sottoclasse deve implementare l'annotation Serializable (lo fa in questa classe)
  * 5) la sottoclasse non deve contenere nessun metodo per la gestione degli eventi
  * <p>
- * Annotated with @Getter (Lombok) for automatic use of Getter
+ * Annotated with @Getter (Lombok) for automatic use of Getter (obbligatorio)
+ * - per rendere visibili le properties ai Binder delle sottoclassi
  * Sottoclassi annotated (obbligatorio) with @SpringComponent
  * Sottoclassi annotated (facoltativo) with @Data (Lombok) for automatic use of Getter and Setter
  * Sottoclassi annotated (facoltativo) with @NoArgsConstructor (Lombok) for JavaBean specifications

@@ -21,7 +21,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 25-set-2018 21.04.21 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>

@@ -19,7 +19,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 22-set-2018 21.34.26 <br>
+ * Fix date: 30-set-2018 16.14.56 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
