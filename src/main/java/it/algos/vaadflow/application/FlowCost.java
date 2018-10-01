@@ -132,6 +132,7 @@ public class FlowCost {
     public final static String SHOW_VERSION = "showVersion";
     public final static String SHOW_USER = "showUser";
     public final static String SHOW_LOG = "showLog";
+    public final static String SHOW_LOGTYPE = "showLogType";
     public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
     public  static String PROJECT_NAME = "vaadinflow";
     public  static String PROJECT_VERSION = "0.1";

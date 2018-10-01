@@ -60,7 +60,7 @@ public class UtenteViewList extends AViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
-    public static final String IRON_ICON = "people";
+    public static final String IRON_ICON = "account-circle";
 
 
     /**

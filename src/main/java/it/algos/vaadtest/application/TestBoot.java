@@ -105,7 +105,7 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
+//        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
 		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
 	}// end of method
 

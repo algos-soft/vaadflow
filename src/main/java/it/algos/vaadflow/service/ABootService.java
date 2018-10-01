@@ -2,19 +2,11 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.modules.company.CompanyViewList;
-import it.algos.vaadflow.modules.utente.UtenteViewList;
-import it.algos.vaadflow.modules.versione.VersioneViewList;
-import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
-import it.algos.vaadflow.modules.log.LogViewList;
-import it.algos.vaadflow.modules.address.AddressViewList;
-import it.algos.vaadflow.modules.person.PersonViewList;
-import it.algos.vaadflow.modules.role.RoleViewList;
-import it.algos.vaadflow.modules.logtype.LogtypeViewList;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.log.LogViewList;
+import it.algos.vaadflow.modules.logtype.LogtypeViewList;
 import it.algos.vaadflow.modules.person.PersonViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -52,6 +44,7 @@ public class ABootService {
     public void creaRouteStandard() {
         FlowCost.MENU_CLAZZ_LIST = new ArrayList<>();
 
+        //--developer
         if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
         }// end of if cycle
@@ -64,17 +57,9 @@ public class ABootService {
         if (pref.isBool(EAPreferenza.showWizard.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
         }// end of if cycle
-
-        if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+        if (pref.isBool(EAPreferenza.showLogType.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
         }// end of if cycle
-        if (pref.isBool(EAPreferenza.showVersione.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showLog.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
-        }// end of if cycle
-
         if (pref.isBool(EAPreferenza.showCompany.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
         }// end of if cycle
@@ -84,6 +69,18 @@ public class ABootService {
         if (pref.isBool(EAPreferenza.showPerson.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
         }// end of if cycle
+        if (pref.isBool(EAPreferenza.showVersione.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
+        }// end of if cycle
+
+        //--admin
+        if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+        }// end of if cycle
+        if (pref.isBool(EAPreferenza.showLog.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
+        }// end of if cycle
+
     }// end of method
 
 
@@ -102,17 +99,17 @@ public class ABootService {
         FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
-    
-		FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
-	}// end of method
+
+        FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
+    }// end of method
 
 
     public void creaRouteStandardAdmin() {

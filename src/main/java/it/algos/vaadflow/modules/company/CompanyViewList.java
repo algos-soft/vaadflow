@@ -4,6 +4,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -38,6 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM, layout = MainLayout.class)
 @Qualifier(TAG_COM)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class CompanyViewList extends AViewList {
@@ -66,5 +69,13 @@ public class CompanyViewList extends AViewList {
         ((CompanyViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityDeveloper = true;
+    }// end of method
 
 }// end of class

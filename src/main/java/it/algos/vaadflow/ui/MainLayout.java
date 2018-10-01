@@ -106,7 +106,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             appLayout.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
 
             //--crea la barra di bottoni, in alto a destra
-            appLayout.setToolbarIconButtons(new MenuItem("Logout", "exit-to-app", () -> Notification.show("Logged out")));
+            appLayout.setToolbarIconButtons(new MenuItem("Logout", "exit-to-app", () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
 
             this.add(appLayout);
         }// end of if cycle

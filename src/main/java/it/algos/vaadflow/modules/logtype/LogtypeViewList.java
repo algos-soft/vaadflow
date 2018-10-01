@@ -85,7 +85,7 @@ public class LogtypeViewList extends AViewList {
      */
     protected VerticalLayout addCaption(VerticalLayout layout) {
         layout = super.addCaption(layout);
-        layout.add(new Label("Serve per aggiungere altri eventuali 'type' specifiche per i logs dell'applicazione"));
+        layout.add(new Label("Serve per aggiungere altri eventuali 'type' specifici per i logs dell'applicazione"));
         return layout;
     }// end of method
 
