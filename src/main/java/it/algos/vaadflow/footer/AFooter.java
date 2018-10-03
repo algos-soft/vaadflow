@@ -8,6 +8,7 @@ import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.ATextService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
@@ -32,7 +33,7 @@ import static it.algos.vaadflow.application.FlowCost.USA_COMPANY;
  * Company selezionata (nel caso di applicazione multiCompany)
  */
 @SpringComponent
-@Scope("session")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AFooter extends VerticalLayout {
 
     private final static String DEVELOPER_COMPANY = "Algos® ";

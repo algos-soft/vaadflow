@@ -402,6 +402,58 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
+     * Eventuale caption sopra la grid
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected VerticalLayout creaCaption(String testo) {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setPadding(false);
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        testo += entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
+        int count = 0;
+        String siglaCompany = "";
+//        Company company = login.getCompany();
+//        if (company != null) {
+//            siglaCompany = " (" + company.getCode() + ")";
+//        }// end of if cycle
+
+        if (usaCaption) {
+//            if (pref.isBool(BaseCost.USA_COMPANY)) {
+//                count = service != null ? service.countByCompany(company) : 0;
+//            } else {
+            count = service != null ? service.count() : 0;
+//            }// end of if/else cycle
+
+            switch (count) {
+                case 0:
+//                    if (pref.isBool(BaseCost.USA_COMPANY)) {
+//                        testo += "Non ci sono elementi di questa company";
+//                    } else {
+                    testo += "Al momento non ci sono elementi in questa collezione";
+//                    }// end of if/else cycle
+                    break;
+                case 1:
+                    testo += "Collezione con un solo elemento";
+                    break;
+                default:
+                    testo += "Collezione di " + text.format(count) + " elementi";
+                    break;
+            } // end of switch statement
+            testo += siglaCompany;
+            layout.add(new Label(testo));
+
+            this.addCaption(layout);
+
+            this.add(layout);
+        }// end of if cycle
+
+        return layout;
+    }// end of method
+
+
+    /**
      * Crea il corpo centrale della view
      * Componente grafico obbligatorio
      * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
@@ -457,56 +509,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-    /**
-     * Eventuale caption sopra la grid
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected VerticalLayout creaCaption(String testo) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setPadding(false);
-        layout.setMargin(false);
-        layout.setSpacing(false);
-        testo += entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
-        int count = 0;
-        String siglaCompany = "";
-//        Company company = login.getCompany();
-//        if (company != null) {
-//            siglaCompany = " (" + company.getCode() + ")";
-//        }// end of if cycle
-
-        if (usaCaption) {
-//            if (pref.isBool(BaseCost.USA_COMPANY)) {
-//                count = service != null ? service.countByCompany(company) : 0;
-//            } else {
-            count = service != null ? service.count() : 0;
-//            }// end of if/else cycle
-
-            switch (count) {
-                case 0:
-//                    if (pref.isBool(BaseCost.USA_COMPANY)) {
-//                        testo += "Non ci sono elementi di questa company";
-//                    } else {
-                    testo += "Al momento non ci sono elementi in questa collezione";
-//                    }// end of if/else cycle
-                    break;
-                case 1:
-                    testo += "Collezione con un solo elemento";
-                    break;
-                default:
-                    testo += "Collezione di " + text.format(count) + " elementi";
-                    break;
-            } // end of switch statement
-            testo += siglaCompany;
-            layout.add(new Label(testo));
-
-            this.addCaption(layout);
-
-            this.add(layout);
-        }// end of if cycle
-
-        return layout;
-    }// end of method
 
 
     /**

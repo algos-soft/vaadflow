@@ -10,7 +10,6 @@ import it.algos.vaadflow.backend.entity.AEntity;
  * Date: sab, 05-mag-2018
  * Time: 18:56
  */
-@SpringComponent
 public interface IADialog<T> {
 
     /**

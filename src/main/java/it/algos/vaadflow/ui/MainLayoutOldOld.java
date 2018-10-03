@@ -4,6 +4,7 @@ import com.flowingcode.addons.applayout.AppLayout;
 import com.flowingcode.addons.applayout.menu.MenuItem;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
@@ -12,20 +13,30 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.modules.role.EARole;
+import it.algos.vaadflow.security.SecurityUtils;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.ui.components.AppNavigation;
+import it.algos.vaadflow.ui.components.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+import static it.algos.vaadflow.application.FlowCost.VIEWPORT;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -43,11 +55,14 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
  * Annotated with @PageTitle (facoltativo)
  */
 @SuppressWarnings("serial")
-@HtmlImport(value = "styles/shared-styles.html", loadMode = LoadMode.INLINE)
-@Push
-@PageTitle(value = MainLayout.SITE_TITLE)
+@Tag("main-view")
+@HtmlImport("src/main-view.html")
+//@HtmlImport(value = "styles/shared-styles.html", loadMode = LoadMode.INLINE)
+//@Push
+//@PageTitle(value = MainLayout.SITE_TITLE)
 @Slf4j
-public class MainLayout extends VerticalLayout implements RouterLayout, PageConfigurator {
+@Viewport(VIEWPORT)
+public class MainLayoutOldOld extends PolymerTemplate<TemplateModel> implements RouterLayout, BeforeEnterObserver {
 
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
@@ -60,58 +75,23 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     private AReflectionService reflection = AReflectionService.getInstance();
     private ATextService text = ATextService.getInstance();
 
+    @Id("appNavigation")
+    private AppNavigation appNavigation;
 
-    public MainLayout() {
-        setMargin(false);
-        setSpacing(false);
-        setPadding(false);
 
+    public MainLayoutOldOld() {
         creaAllMenu();
     }// end of method
 
 
     protected void creaAllMenu() {
-        String title = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
-        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
-        ArrayList<MenuItem> listaMenu = null;
-        MenuItem menu = null;
-        Map<EARole, List<Class>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
+        List<PageInfo> pages = new ArrayList<>();
 
-        if (mappaClassi != null && mappaClassi.size() > 0) {
-            listaMenu = new ArrayList<>();
-
-            //--crea i menu del developer, inserendoli come sub-menu
-            if (login != null && login.isDeveloper()) {
-                if (mappaClassi.get(EARole.developer) != null) {
-                    this.addDev(listaMenu, mappaClassi.get(EARole.developer));
-                }// end of if cycle
-            }// end of if cycle
-
-            //--crea i menu di admin, inserendoli come sub-menu
-            if (login != null && login.isAdmin()) {
-                if (mappaClassi.get(EARole.admin) != null) {
-                    this.addAdmin(listaMenu, mappaClassi.get(EARole.admin));
-                }// end of if cycle
-            }// end of if cycle
-
-            //--crea gli altri menu, esclusi quelli del developer e di admin che sono già inseriti
-            if (mappaClassi.get(EARole.user) != null) {
-                this.addUser(listaMenu, mappaClassi.get(EARole.user));
-            }// end of if cycle
-
-            //--crea il logout
-            listaMenu.add(creaMenuLogout());
-//            listaMenu.add(new MenuItem("Alfa2", () -> UI.getCurrent().navigate("alfa2")));
-//            listaMenu.add(new MenuItem("Beta2", () -> UI.getCurrent().navigate("beta2")));
-
-            //--aggiunge i menu
-            appLayout.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
-
-            //--crea la barra di bottoni, in alto a destra
-            appLayout.setToolbarIconButtons(new MenuItem("Logout", "exit-to-app", () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
-
-            this.add(appLayout);
-        }// end of if cycle
+        pages.add(new PageInfo("role", null, "role"));
+        pages.add(new PageInfo("prova", null, "prova"));
+        pages.add(new PageInfo("alfa", null, "alfa"));
+        pages.add(new PageInfo("beta", null, "beta"));
+        appNavigation.init(pages, "role", "prova");
     }// end of method
 
     private Map<EARole, List<Class>> creaMappa(List<Class> listaClassiMenu) {
@@ -240,12 +220,12 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         super.onAttach(attachEvent);
     }// end of method
 
+
     @Override
-    public void configurePage(final InitialPageSettings settings) {
-        settings.addMetaTag("viewport", "width=device-width, initial-scale=1.0");
-        settings.addLink("shortcut icon", "/frontend/images/favicons/favicon-96x96.png");
-        settings.addLink("manifest", "/manifest.json");
-        settings.addFavIcon("icon", "/frontend/images/favicons/favicon-96x96.png", "96x96");
-    }// end of method
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
+            event.rerouteToError(AccessDeniedException.class);
+        }
+    }
 
 }// end of class

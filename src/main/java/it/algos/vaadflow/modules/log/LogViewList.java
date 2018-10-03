@@ -37,7 +37,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@UIScope
 @Route(value = TAG_LOG, layout = MainLayout.class)
 @Qualifier(TAG_LOG)
 @AIView(roleTypeVisibility = EARoleType.admin)

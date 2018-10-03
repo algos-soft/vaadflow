@@ -4,6 +4,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -15,6 +16,8 @@ import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
@@ -39,7 +42,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@UIScope
 @Route(value = TAG_ROL, layout = MainLayout.class)
 @Qualifier(TAG_ROL)
 @AIView(roleTypeVisibility = EARoleType.developer)

@@ -16,7 +16,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class TestCost {
+	public final static String TAG_BET = "beta";
+	public final static String TAG_ALF = "alfa";
 	public final static String TAG_BOL = "bolla";
-	public final static String TAG_CUN = "cuneo";
 	public final static String TAG_PRO = "prova";
 }// end of class
