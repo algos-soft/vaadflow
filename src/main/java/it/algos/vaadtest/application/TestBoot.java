@@ -4,8 +4,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.beta.BetaViewList;
-import it.algos.vaadtest.modules.alfa.AlfaViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import lombok.extern.slf4j.Slf4j;
@@ -107,10 +105,7 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-//        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
 		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(AlfaViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(BetaViewList.class);
 	}// end of method
 
 

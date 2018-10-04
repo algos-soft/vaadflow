@@ -21,11 +21,13 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EARoleType;
+import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
+
+
     /**
      * Recupera da StaticContextAccessor una istanza della classe <br>
      * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>

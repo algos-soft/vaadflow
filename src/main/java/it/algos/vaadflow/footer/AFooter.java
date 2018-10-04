@@ -15,9 +15,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
-import static it.algos.vaadflow.application.FlowCost.PROJECT_VERSION;
-import static it.algos.vaadflow.application.FlowCost.USA_COMPANY;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Created by gac on 12/06/17
@@ -44,13 +42,6 @@ public class AFooter extends VerticalLayout {
     private final static String DEV_TAG = "Dev: ";
     private final static String ADMIN_TAG = "Admin: ";
     private final static String USER_TAG = "User: ";
-
-    /**
-     * La injection viene fatta da SpringBoot in automatico <br>
-     */
-    @Autowired
-    private PreferenzaService pref;
-
     /**
      * Inietta da Spring come 'session'
      */
@@ -62,6 +53,11 @@ public class AFooter extends VerticalLayout {
      */
     @Autowired
     public ATextService text;
+    /**
+     * La injection viene fatta da SpringBoot in automatico <br>
+     */
+    @Autowired
+    private PreferenzaService pref;
     private String message = "";
     private Label label;
 
@@ -78,6 +74,7 @@ public class AFooter extends VerticalLayout {
     protected void inizia() {
         this.setMargin(false);
         this.setSpacing(false);
+        this.setPadding(false);
 
         if (FlowCost.DEBUG) {// @TODO costante provvisoria da sostituire con preferenzeService
 //            this.addStyleName("greenBg");
@@ -86,14 +83,14 @@ public class AFooter extends VerticalLayout {
         this.start();
     }// end of method
 
-    public void setAppMessage(String message) {
+    public Label setAppMessage(String message) {
         this.message = message;
-        this.start();
+        return this.start();
     }// end of method
 
 
-    public void start() {
-        String message="";
+    public Label start() {
+        String message = "";
         String sep = " - ";
         String spazio = " ";
         String tag = "all companies";
@@ -134,7 +131,7 @@ public class AFooter extends VerticalLayout {
         }// end of if cycle
         if (text.isValid(userName)) {
             message += sep;
-            message += "loggato come "+userName;
+            message += "loggato come " + userName;
 //            switch (login.getTypeLogged()) {
 //                case user:
 //                    message += sep;
@@ -152,7 +149,10 @@ public class AFooter extends VerticalLayout {
 //                    break;
 //            } // end of switch statement
         }// end of if cycle
-        this.add(new Label(message));
+        label = new Label(message);
+        this.add(label);
+
+        return label;
     }// end of method
 
 }// end of class

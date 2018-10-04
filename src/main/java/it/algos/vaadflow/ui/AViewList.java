@@ -282,6 +282,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
         this.setMargin(false);
         this.setSpacing(false);
+        this.removeAll();
 
         //--Le preferenze standard
         fixPreferenze();
@@ -509,8 +510,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-
-
     /**
      * Eventuale aggiunta alla caption sopra la grid
      */
@@ -581,8 +580,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     protected void creaFooter() {
         if (footer != null) {
-            footer.setAppMessage("");
-            this.add(footer);
+            this.add(footer.setAppMessage(""));
         }// end of if cycle
     }// end of method
 
@@ -644,7 +642,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 log.error(unErrore.toString());
             }// fine del blocco try-catch
         }// end of if cycle
-        creaFooter();
+//        creaFooter();
     }// end of method
 
 
