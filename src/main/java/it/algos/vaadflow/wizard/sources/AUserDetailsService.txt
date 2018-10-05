@@ -68,12 +68,11 @@ public class AUserDetailsService implements UserDetailsService {
                  boot.creaRouteStandardAdmin();
              }// end of if/else cycle
          }// end of if/else cycle
-         //--menu specifici
-         //FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
 
         if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
+            login.setUtenteAndCompany(utente, null);
             passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
             authorities = roleService.getAuthorities(utente);
             return new User(utente.getUserName(), passwordHash, authorities);

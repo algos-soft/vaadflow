@@ -53,7 +53,7 @@ public class TElabora {
     private static final String APP_NAME = "application";
     private static final String SECURITY_NAME = "security";
     private static final String RESOURCES_NAME = "/resources";
-    private static final String WEB_NAME = "/webapp";
+    private static final String META_NAME = "/META-INF";
     private static final String UI_NAME = "ui";
     private static final String ENTITIES_NAME = "modules";
     private static final String LAYOUT_NAME = "MainLayout";
@@ -210,11 +210,12 @@ public class TElabora {
         this.copiaExtra();
     }// end of method
 
+
     private void copiaExtra() {
         this.copiaPom();
         this.copiaRead();
         this.copiaResources();
-        this.copiaWebapp();
+        this.copiaMetaInf();
         this.copiaGit();
         this.copiaDocumentation();
         this.copiaLinks();
@@ -1083,7 +1084,9 @@ public class TElabora {
         }// end of if cycle
     }// end of method
 
-
+    /**
+     * File MAVEN di script
+     */
     private void copiaPom() {
         String destPath = ideaProjectRootPath + "/" + newProjectName + "/" + POM + ".xml";
         String sourceText = leggeFile(POM);
@@ -1092,7 +1095,9 @@ public class TElabora {
         checkAndWriteFile(destPath, sourceText);
     }// end of method
 
-
+    /**
+     * File README di text
+     */
     private void copiaRead() {
         String fileName = "/" + READ + SOURCE_SUFFIX;
         String srcPath = sourcePath + fileName;
@@ -1100,6 +1105,10 @@ public class TElabora {
         file.copyFile(srcPath, destPath);
     }// end of method
 
+
+    /**
+     * File application di properties
+     */
     private void copiaResources() {
         String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + "/application.properties";
 
@@ -1109,16 +1118,28 @@ public class TElabora {
         checkAndWriteFile(destPath, sourceText);
     }// end of method
 
-    private void copiaWebapp() {
-        boolean webCopiato = false;
-        String srcPath = projectBasePath + DIR_MAIN + WEB_NAME;
-        String destPath = projectPath + DIR_MAIN + WEB_NAME;
+
+    /**
+     * Cartella di resources META-INF
+     */
+    private void copiaMetaInf() {
+        String srcPath = projectBasePath + DIR_MAIN + RESOURCES_NAME + META_NAME;
+        String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + META_NAME;
+        boolean dirCancellata = false;
 
         if (text.isValid(newProjectName)) {
-            webCopiato = file.copyDirectory(srcPath, destPath);
+            dirCancellata = file.deleteDirectory(destPath);
+        }// end of if cycle
+
+        if (dirCancellata || !file.isEsisteDirectory(destPath)) {
+            file.copyDirectory(srcPath, destPath);
         }// end of if cycle
     }// end of method
 
+
+    /**
+     * File di esclusioni GIT di text
+     */
     private void copiaGit() {
         boolean dirCancellata = false;
         String srcPath = projectBasePath + "/" + GIT;
@@ -1141,16 +1162,26 @@ public class TElabora {
         }// end of if cycle
     }// end of method
 
+
+    /**
+     * Cartella di documentazione (in formati vari)
+     */
     private void copiaDocumentation() {
         copiaCartellaExtra(DIR_DOC);
     }// end of method
 
 
+    /**
+     * Cartella di LINKS utili in text
+     */
     private void copiaLinks() {
         copiaCartellaExtra(DIR_LINKS);
     }// end of method
 
 
+    /**
+     * Cartella di snippets utili in text
+     */
     private void copiaSnippets() {
         copiaCartellaExtra(DIR_SNIPPETS);
     }// end of method

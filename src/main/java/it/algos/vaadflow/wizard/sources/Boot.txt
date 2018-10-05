@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.application.FlowCost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -35,6 +36,10 @@ public class @MODULEUPPER@Boot extends ABoot {
     public final static String PROJECT_VERSION = "0.3";
     public final static String DEMO_COMPANY_CODE = "demo";
 
+    /**
+     * Iniettata dal costruttore <br>
+     */
+    private @MODULEUPPER@Vers @MODULELOWER@Vers;
 
     /**
      * Costruttore @Autowired <br>
@@ -42,9 +47,9 @@ public class @MODULEUPPER@Boot extends ABoot {
      * @param wamVersBoot Log delle versioni, modifiche e patch installat
      */
     @Autowired
-    public @MODULEUPPER@Boot() {
+    public @MODULEUPPER@Boot(@MODULEUPPER@Vers @MODULELOWER@Vers) {
         super();
-        FlowCost.PROJECT_NAME = PROJECT_NAME;
+        this.@MODULELOWER@Vers = @MODULELOWER@Vers;
     }// end of Spring constructor
 
     /**
@@ -56,6 +61,7 @@ public class @MODULEUPPER@Boot extends ABoot {
      */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        super.inizia();
     }// end of method
 
 
@@ -70,6 +76,7 @@ public class @MODULEUPPER@Boot extends ABoot {
      * Inizializzazione delle versioni del programma specifico
      */
     protected void iniziaVersioni() {
+        @MODULELOWER@Vers.inizia();
     }// end of method
 
 

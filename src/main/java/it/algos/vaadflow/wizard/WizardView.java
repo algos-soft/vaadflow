@@ -94,7 +94,6 @@ public class WizardView extends VerticalLayout {
     private Button buttonQuattro;
     private NativeButton confirmButton;
     private NativeButton cancelButton;
-    private boolean newPackage = false;
 
     /**
      * Inietta da Spring nel costruttore come 'singleton'
@@ -254,7 +253,7 @@ public class WizardView extends VerticalLayout {
                     public void gotInput(Map<Chiave, Object> mappaInput) {
                         elaboraPackage(mappaInput);
                     }// end of inner method
-                }, newPackage, PROGETTO_STANDARD_SUGGERITO_NUOVO, NOME_PACKAGE_STANDARD_SUGGERITO)
+                }, true, PROGETTO_STANDARD_SUGGERITO_NUOVO, NOME_PACKAGE_STANDARD_SUGGERITO)
         );// end of lambda expressions and anonymous inner class
         layout.add(buttonPackage);
 

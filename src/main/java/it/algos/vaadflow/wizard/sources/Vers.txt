@@ -65,6 +65,7 @@ public class @MODULEUPPER@Vers extends AVersBoot {
      */
     public int inizia() {
         int k = 1;
+        super.inizia();
         codeProject = CODE_PROJECT;
 
         //--prima installazione del programma
