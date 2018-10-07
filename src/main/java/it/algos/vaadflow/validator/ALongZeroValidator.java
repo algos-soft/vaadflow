@@ -9,16 +9,16 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 /**
- * Project it.algos.vaadflow
+ * Project vaadflow
  * Created by Algos
  * User: gac
- * Date: gio, 07-giu-2018
- * Time: 17:03
+ * Date: dom, 07-ott-2018
+ * Time: 08:15
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public class AIntegerZeroValidator implements Validator {
+public class ALongZeroValidator implements Validator {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,8 +33,8 @@ public class AIntegerZeroValidator implements Validator {
     public ValidationResult apply(Object obj, ValueContext valueContext) {
         String testo;
 
-        if (obj instanceof Integer) {
-            if ((Integer) obj == 0) {
+        if (obj instanceof Long) {
+            if ((Long) obj == 0) {
                 return ValidationResult.error("Il valore deve essere maggiore di zero");
             } else {
                 return ValidationResult.ok();
@@ -43,6 +43,7 @@ public class AIntegerZeroValidator implements Validator {
 
         return ValidationResult.error("Qualcosa non ha funzionato");
     }// end of method
+
 
     /**
      * Applies this function to the given arguments.
@@ -55,5 +56,6 @@ public class AIntegerZeroValidator implements Validator {
     @Override
     public Object apply(Object o, Object o2) {
         return null;
-    }
+    }// end of method
+
 }// end of class
