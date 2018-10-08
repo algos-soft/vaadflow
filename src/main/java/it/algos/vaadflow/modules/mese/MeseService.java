@@ -1,7 +1,8 @@
-package it.algos.vaadflow.modules.logtype;
+package it.algos.vaadflow.modules.mese;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.TAG_MES;
+
 
 /**
- * Project vaadflow <br>
+ * Project vaadwiki <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 7-ott-2018 21.00.40 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -31,10 +33,10 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_TYP)
+@Qualifier(TAG_MES)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class LogtypeService extends AService {
+public class MeseService extends AService {
 
 
     /**
@@ -48,7 +50,7 @@ public class LogtypeService extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    public LogtypeRepository repository;
+    public MeseRepository repository;
 
 
     /**
@@ -60,23 +62,26 @@ public class LogtypeService extends AService {
      * @param repository per la persistenza dei dati
      */
     @Autowired
-    public LogtypeService(@Qualifier(TAG_TYP) MongoRepository repository) {
+    public MeseService(@Qualifier(TAG_MES) MongoRepository repository) {
         super(repository);
-        super.entityClass = Logtype.class;
-        this.repository = (LogtypeRepository) repository;
+        super.entityClass = Mese.class;
+        this.repository = (MeseRepository) repository;
     }// end of Spring constructor
 
 
     /**
      * Crea una entity e la registra <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param titoloLungo nome completo (obbligatorio, unico)
+     * @param titoloBreve nome abbreviato di tre cifre (obbligatorio, unico)
+     * @param giorni      numero di giorni presenti (obbligatorio)
      *
      * @return la entity appena creata
      */
-    public Logtype crea(String code) {
-        return (Logtype) save(newEntity(0, code));
+    public Mese crea(String titoloLungo, String titoloBreve, int giorni) {
+        return (Mese) save(newEntity(titoloLungo, titoloBreve, giorni));
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -86,8 +91,8 @@ public class LogtypeService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     @Override
-    public Logtype newEntity() {
-        return newEntity(0, "");
+    public Mese newEntity() {
+        return newEntity("", "", 0);
     }// end of method
 
 
@@ -98,83 +103,48 @@ public class LogtypeService extends AService {
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
-     * @param code   codice di riferimento (obbligatorio)
+     * @param titoloLungo nome completo (obbligatorio, unico)
+     * @param titoloBreve nome abbreviato di tre cifre (obbligatorio, unico)
+     * @param giorni      numero di giorni presenti (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Logtype newEntity(int ordine, String code) {
-        Logtype entity = findByKeyUnica(code);
+    public Mese newEntity(String titoloLungo, String titoloBreve, int giorni) {
+        Mese entity = null;
 
-        if (entity == null) {
-            entity = Logtype.builderLogtype()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                    .code(text.isValid(code) ? code : null)
-                    .build();
+        entity = findByKeyUnica(titoloLungo);
+        if (entity != null) {
+            return findByKeyUnica(titoloLungo);
         }// end of if cycle
 
-        return (Logtype) creaIdKeySpecifica(entity);
+        entity = Mese.builderMese()
+                .titoloLungo(titoloLungo)
+                .titoloBreve(titoloBreve)
+                .giorni(giorni)
+                .build();
+
+        return (Mese) creaIdKeySpecifica(entity);
+    }// end of method
+
+
+    /**
+     * Property unica (se esiste).
+     */
+    public String getPropertyUnica(AEntity entityBean) {
+        return text.isValid(((Mese) entityBean).getTitoloLungo()) ? ((Mese) entityBean).getTitoloLungo() : "";
     }// end of method
 
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param code di riferimento (obbligatorio)
+     * @param titoloLungo nome completo (obbligatorio, unico)
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Logtype findByKeyUnica(String code) {
-        return repository.findByCode(code);
+    public Mese findByKeyUnica(String titoloLungo) {
+        return repository.findByTitoloLungo(titoloLungo);
     }// end of method
 
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (nuova entity)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getSetup() {
-        return findByKeyUnica(SETUP);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (nuova entity)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getNew() {
-        return findByKeyUnica(NEW);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (entity modificata)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getEdit() {
-        return findByKeyUnica(EDIT);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (entity cancellata)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getDelete() {
-        return findByKeyUnica(DELETE);
-    }// end of method
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (import di dati)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getImport() {
-        return findByKeyUnica(IMPORT);
-    }// end of method
 
 }// end of class

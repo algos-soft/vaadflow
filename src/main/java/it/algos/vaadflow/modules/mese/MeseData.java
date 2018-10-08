@@ -1,10 +1,8 @@
-package it.algos.vaadflow.modules.person;
+package it.algos.vaadflow.modules.mese;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
-import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.enumeration.EAMese;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +10,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_PER;
+import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 
 /**
- * Project vaadflow
+ * Project vaadwiki
  * Created by Algos
  * User: gac
- * Date: dom, 02-set-2018
- * Time: 15:08
+ * Date: lun, 08-ott-2018
+ * Time: 07:24
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public class PersonData extends AData {
+public class MeseData extends AData {
 
 
     /**
@@ -36,25 +34,24 @@ public class PersonData extends AData {
      * @param service di collegamento per la Repository
      */
     @Autowired
-    public PersonData(@Qualifier(TAG_PER) IAService service) {
-        super(Person.class, service);
+    public MeseData(@Qualifier(TAG_MES) IAService service) {
+        super(Mese.class, service);
     }// end of Spring constructor
 
 
     /**
      * Creazione della collezione
+     * Crea i dodici mesi
      */
     protected int creaAll() {
         int num = 0;
-        Person entity;
 
-        for (EAPerson eaPersona : EAPerson.values()) {
-            ((PersonService)service).crea(eaPersona);
+        for (EAMese eaMese : EAMese.values()) {
+            ((MeseService)service).crea(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni());
             num++;
         }// end of for cycle
 
         return num;
     }// end of method
-
 
 }// end of class

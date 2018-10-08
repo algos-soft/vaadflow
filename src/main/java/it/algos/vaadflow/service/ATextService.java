@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Scope;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
+
 /**
  * Project springvaadin
  * Created by Algos
@@ -42,14 +44,7 @@ public class ATextService {
      * tag per il carattere barra
      */
     public static final String BARRA = "/";
-    /**
-     * tag per la stringa vuota
-     */
-    public static final String VUOTA = "";
-    public static final String SPAZIO = " ";
     public static final String VIRGOLA = ",";
-
-
     public static final String REF = "<ref";
     public static final String NOTE = "<!--";
     public static final String GRAFFE = "{{";

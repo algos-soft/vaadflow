@@ -51,7 +51,7 @@ public enum EAMese {
      *
      * @return Numero di giorni del mese
      */
-    public int getGiorni(int numMeseDellAnno, int anno) {
+    public static int getGiorni(int numMeseDellAnno, int anno) {
         int giorniDelMese = 0;
         EAMese mese = getMese(numMeseDellAnno);
 
@@ -64,7 +64,7 @@ public enum EAMese {
         }// fine del blocco if
 
         return giorniDelMese;
-    }// end of method
+    }// end of static method
 
 
     /**
@@ -74,7 +74,7 @@ public enum EAMese {
      *
      * @return Mese
      */
-    public EAMese getMese(int numMeseDellAnno) {
+    public static EAMese getMese(int numMeseDellAnno) {
         EAMese mese = null;
 
         if (numMeseDellAnno > 0 && numMeseDellAnno < 13) {
@@ -87,7 +87,7 @@ public enum EAMese {
         }// fine del blocco if
 
         return mese;
-    }// end of method
+    }// end of static method
 
 
     /**
@@ -135,7 +135,7 @@ public enum EAMese {
 
 
     // l'anno parte da gennaio che è il numero 1
-    private String getMese(int ord, boolean flagBreve) {
+    private static String getMese(int ord, boolean flagBreve) {
         String nome = "";
         EAMese mese = null;
 
@@ -149,7 +149,7 @@ public enum EAMese {
         }// fine del blocco if
 
         return nome;
-    }// end of method
+    }// end of static method
 
 
     /**
@@ -171,9 +171,9 @@ public enum EAMese {
      *
      * @return Nome breve del mese
      */
-    public String getLong(int numMeseDellAnno) {
+    public static String getLong(int numMeseDellAnno) {
         return getMese(numMeseDellAnno, false);
-    }// end of method
+    }// end of static method
 
 
     /**

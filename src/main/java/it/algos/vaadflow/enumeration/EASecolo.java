@@ -77,7 +77,7 @@ public enum EASecolo {
         this.setAnteCristo(anteCristo);
     } // fine del costruttore
 
-    public  EASecolo getSecoloAC(int anno) {
+    public  static EASecolo getSecoloAC(int anno) {
         EASecolo secolo = null;
         int inizio;
         int fine;
@@ -106,7 +106,7 @@ public enum EASecolo {
         return titolo;
     }// end of method
 
-    public  EASecolo getSecoloDC(int anno) {
+    public static  EASecolo getSecoloDC(int anno) {
         EASecolo secolo = null;
         int inizio;
         int fine;

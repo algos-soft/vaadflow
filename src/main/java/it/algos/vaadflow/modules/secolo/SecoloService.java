@@ -1,8 +1,10 @@
-package it.algos.vaadflow.modules.logtype;
+package it.algos.vaadflow.modules.secolo;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,13 +13,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
+
 
 /**
- * Project vaadflow <br>
+ * Project vaadwiki <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 8-ott-2018 14.55.17 <br>
  * <br>
  * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
  * <br>
@@ -31,10 +34,10 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_TYP)
+@Qualifier(TAG_SEC)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class LogtypeService extends AService {
+public class SecoloService extends AService {
 
 
     /**
@@ -48,7 +51,7 @@ public class LogtypeService extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    public LogtypeRepository repository;
+    public SecoloRepository repository;
 
 
     /**
@@ -60,22 +63,25 @@ public class LogtypeService extends AService {
      * @param repository per la persistenza dei dati
      */
     @Autowired
-    public LogtypeService(@Qualifier(TAG_TYP) MongoRepository repository) {
+    public SecoloService(@Qualifier(TAG_SEC) MongoRepository repository) {
         super(repository);
-        super.entityClass = Logtype.class;
-        this.repository = (LogtypeRepository) repository;
+        super.entityClass = Secolo.class;
+        this.repository = (SecoloRepository) repository;
     }// end of Spring constructor
 
 
     /**
      * Crea una entity e la registra <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param titolo     (obbligatorio, unico)
+     * @param inizio     (obbligatorio, unico)
+     * @param fine       (obbligatorio, unico)
+     * @param anteCristo flag per i secoli prima di cristo (obbligatorio)
      *
      * @return la entity appena creata
      */
-    public Logtype crea(String code) {
-        return (Logtype) save(newEntity(0, code));
+    public Secolo crea(String titolo, int inizio, int fine, boolean anteCristo) {
+        return (Secolo) save(newEntity(titolo, inizio, fine, anteCristo));
     }// end of method
 
     /**
@@ -86,8 +92,8 @@ public class LogtypeService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     @Override
-    public Logtype newEntity() {
-        return newEntity(0, "");
+    public Secolo newEntity() {
+        return newEntity("", 0, 0, false);
     }// end of method
 
 
@@ -98,83 +104,72 @@ public class LogtypeService extends AService {
      * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
-     * @param code   codice di riferimento (obbligatorio)
+     * @param titolo     (obbligatorio, unico)
+     * @param inizio     (obbligatorio, unico)
+     * @param fine       (obbligatorio, unico)
+     * @param anteCristo flag per i secoli prima di cristo (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Logtype newEntity(int ordine, String code) {
-        Logtype entity = findByKeyUnica(code);
+    public Secolo newEntity(String titolo, int inizio, int fine, boolean anteCristo) {
+        Secolo entity = null;
 
-        if (entity == null) {
-            entity = Logtype.builderLogtype()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                    .code(text.isValid(code) ? code : null)
-                    .build();
+        entity = findByKeyUnica(titolo);
+        if (entity != null) {
+            return findByKeyUnica(titolo);
         }// end of if cycle
 
-        return (Logtype) creaIdKeySpecifica(entity);
+        entity = Secolo.builderSecolo()
+                .titolo(titolo)
+                .inizio(inizio)
+                .fine(fine)
+                .anteCristo(anteCristo)
+                .build();
+
+        return (Secolo) creaIdKeySpecifica(entity);
+    }// end of method
+
+
+    /**
+     * Property unica (se esiste).
+     */
+    public String getPropertyUnica(AEntity entityBean) {
+        return text.isValid(((Secolo) entityBean).getTitolo()) ? ((Secolo) entityBean).getTitolo() : "";
+    }// end of method
+
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Secolo entity = (Secolo) super.beforeSave(entityBean, operation);
+
+        if (text.isEmpty(entity.titolo) || entity.inizio == 0 || entity.fine == 0) {
+            entity = null;
+            log.error("entity incompleta in SecoloService.beforeSave()");
+        }// end of if cycle
+
+        return entity;
     }// end of method
 
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param code di riferimento (obbligatorio)
+     * @param titolo (obbligatorio, unico)
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Logtype findByKeyUnica(String code) {
-        return repository.findByCode(code);
+    public Secolo findByKeyUnica(String titolo) {
+        return repository.findByTitolo(titolo);
     }// end of method
 
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (nuova entity)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getSetup() {
-        return findByKeyUnica(SETUP);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (nuova entity)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getNew() {
-        return findByKeyUnica(NEW);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (entity modificata)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getEdit() {
-        return findByKeyUnica(EDIT);
-    }// end of method
-
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (entity cancellata)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getDelete() {
-        return findByKeyUnica(DELETE);
-    }// end of method
-
-    /**
-     * Raggruppamento logico dei log per type di eventi (import di dati)
-     *
-     * @return la entity appena trovata
-     */
-    public Logtype getImport() {
-        return findByKeyUnica(IMPORT);
-    }// end of method
 
 }// end of class
