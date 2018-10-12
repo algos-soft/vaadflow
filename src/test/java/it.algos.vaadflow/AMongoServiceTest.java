@@ -440,7 +440,7 @@ public class AMongoServiceTest extends ATest {
     public void updateList() {
         long durata;
         List<Prova> listaOriginale = this.getLista("alfa");
-        List<Prova> listaUpdateSingle = this.getLista("beta ");
+        List<Prova> listaUpdateSingle = this.getLista("beta");
         List<Prova> listaUpdateBulk = this.getLista("gamma");
         reset();
 
