@@ -1,5 +1,6 @@
 package it.algos.vaadflow.service;
 
+import com.mongodb.Mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -291,7 +292,7 @@ public class AMongoService {
      * Delete a list of entities.
      *
      * @param listaEntities di elementi da cancellare
-     * @param clazz della collezione
+     * @param clazz         della collezione
      *
      * @return lista
      */
@@ -302,7 +303,7 @@ public class AMongoService {
             listaId.add(new ObjectId(entity.id));
         }// end of for cycle
 
-        return deleteBulk(listaId,clazz);
+        return deleteBulk(listaId, clazz);
     }// end of method
 
 
@@ -315,13 +316,9 @@ public class AMongoService {
      * @return lista
      */
     public DeleteResult deleteBulk(List<ObjectId> listaId, Class<? extends AEntity> clazz) {
-        DeleteResult result = null;
-
         Bson condition = new Document("$in", listaId);
         Bson filter = new Document("_id", condition);
-        result = getCollection(clazz).deleteMany(filter);
-
-        return result;
+        return getCollection(clazz).deleteMany(filter);
     }// end of method
 
 
@@ -356,9 +353,9 @@ public class AMongoService {
      * @param property da controllare
      * @param value    da considerare
      */
-    public void deleteWhere(Class<? extends AEntity> clazz, String property, String value) {
+    public DeleteResult deleteByProperty(Class<? extends AEntity> clazz, String property, String value) {
         Query searchQuery = new Query(Criteria.where(property).is(value));
-        mongo.remove(searchQuery, clazz);
+        return this.mongo.remove(searchQuery, clazz);
     }// end of method
 
 
