@@ -297,10 +297,10 @@ public class AMongoService {
      * @return lista
      */
     public DeleteResult delete(List<? extends AEntity> listaEntities, Class<? extends AEntity> clazz) {
-        List<ObjectId> listaId = new ArrayList<ObjectId>();
+        List<String> listaId = new ArrayList<String>();
 
         for (AEntity entity : listaEntities) {
-            listaId.add(new ObjectId(entity.id));
+            listaId.add(entity.id);
         }// end of for cycle
 
         return deleteBulk(listaId, clazz);
@@ -315,7 +315,7 @@ public class AMongoService {
      *
      * @return lista
      */
-    public DeleteResult deleteBulk(List<ObjectId> listaId, Class<? extends AEntity> clazz) {
+    public DeleteResult deleteBulk(List<String> listaId, Class<? extends AEntity> clazz) {
         Bson condition = new Document("$in", listaId);
         Bson filter = new Document("_id", condition);
         return getCollection(clazz).deleteMany(filter);

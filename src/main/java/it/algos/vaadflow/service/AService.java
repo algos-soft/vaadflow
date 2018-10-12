@@ -1051,10 +1051,10 @@ public abstract class AService implements IAService {
      * @return numero di elementi cancellati
      */
     public int delete(List<? extends AEntity> listaEntities, Class<? extends AEntity> clazz) {
-        List<ObjectId> listaId = new ArrayList<ObjectId>();
+        List<String> listaId = new ArrayList<String>();
 
         for (AEntity entity : listaEntities) {
-            listaId.add(new ObjectId(entity.id));
+            listaId.add(entity.id);
         }// end of for cycle
 
         return deleteBulk(listaId, clazz);
@@ -1069,7 +1069,7 @@ public abstract class AService implements IAService {
      *
      * @return numero di elementi cancellati
      */
-    public int deleteBulk(List<ObjectId> listaId, Class<? extends AEntity> clazz) {
+    public int deleteBulk(List<String> listaId, Class<? extends AEntity> clazz) {
         int cancellati = 0;
         DeleteResult result = mongo.deleteBulk(listaId, clazz);
 

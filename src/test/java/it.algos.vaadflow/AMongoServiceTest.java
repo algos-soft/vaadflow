@@ -535,15 +535,15 @@ public class AMongoServiceTest extends ATest {
     @Test
     public void delete2() {
         long durata;
-        List<Prova> listaEntitiesUno = new ArrayList<>();
+        List<Prova> listaEntitiesUno = this.getLista("alfa");
         List<Prova> listaEntitiesDue = this.getLista("beta");
         DeleteResult result;
         reset();
 
-        for (int k = 0; k < 1000; k++) {
-            listaEntitiesUno.add(new Prova(k, "alfa" + k));
-        }// end of for cycle
-//        mongoService.insert(listaEntitiesUno, Prova.class);
+//        for (int k = 0; k < 1000; k++) {
+//            listaEntitiesUno.add(new Prova(k, "alfa" + k));
+//        }// end of for cycle
+        mongoService.insert(listaEntitiesUno, Prova.class);
 
         previstoIntero = listaEntitiesUno.size();
         result = mongoService.delete(listaEntitiesUno, PROVA_ENTITY_CLASS);
@@ -582,7 +582,7 @@ public class AMongoServiceTest extends ATest {
     public void deleteBulk() {
         long durata;
         List<Prova> listaEntities = this.getLista("delta");
-        List<ObjectId> listaId = new ArrayList<ObjectId>();
+        List<String> listaId = new ArrayList<String>();
         reset();
 
 //        for (int k = 0; k < cicli; k++) {
@@ -591,7 +591,7 @@ public class AMongoServiceTest extends ATest {
         mongoService.insert(listaEntities, Prova.class);
 
         for (AEntity entity : listaEntities) {
-            listaId.add(new ObjectId(entity.id));
+            listaId.add(entity.id);
         }// end of for cycle
 
         previstoIntero = listaId.size();
