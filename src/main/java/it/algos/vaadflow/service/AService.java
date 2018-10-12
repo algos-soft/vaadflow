@@ -1,5 +1,6 @@
 package it.algos.vaadflow.service;
 
+import com.mongodb.client.result.DeleteResult;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -9,9 +10,9 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.lang.reflect.Field;
@@ -77,19 +78,17 @@ public abstract class AService implements IAService {
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
     /**
+     * Inietta da Spring
+     */
+    @Autowired
+    public AMongoService mongo;
+    /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected PreferenzaService pref;
     //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
     protected MongoRepository repository;
-
-
-    /**
-     * Inietta da Spring
-     */
-    @Autowired
-    protected MongoOperations mongo;
 
 
 //    @Autowired
@@ -128,11 +127,7 @@ public abstract class AService implements IAService {
      */
     @Override
     public int count() {
-        if (repository != null) {
-            return (int) repository.count();
-        } else {
-            return 134;
-        }// end of if/else cycle
+        return mongo.count(entityClass);
     }// end of method
 
 
@@ -1034,11 +1029,55 @@ public abstract class AService implements IAService {
      */
     @Override
     public boolean delete(AEntity entityBean) {
-        repository.delete(entityBean);
-//        logDeleteBean(entityBean);
+        boolean status = false;
+        DeleteResult result;
 
-        //@todo aggiungere controllo se il record è stato cancellato
-        return true;
+        result = mongo.delete(entityBean);
+
+        if (result.getDeletedCount() == 1) {
+            status = true;
+        }// end of if cycle
+
+        return status;
+    }// end of method
+
+
+    /**
+     * Delete a list of entities.
+     *
+     * @param listaEntities di elementi da cancellare
+     * @param clazz         della collezione
+     *
+     * @return numero di elementi cancellati
+     */
+    public int delete(List<? extends AEntity> listaEntities, Class<? extends AEntity> clazz) {
+        List<ObjectId> listaId = new ArrayList<ObjectId>();
+
+        for (AEntity entity : listaEntities) {
+            listaId.add(new ObjectId(entity.id));
+        }// end of for cycle
+
+        return deleteBulk(listaId, clazz);
+    }// end of method
+
+
+    /**
+     * Delete a list of entities.
+     *
+     * @param listaId di ObjectId da cancellare
+     * @param clazz   della collezione
+     *
+     * @return numero di elementi cancellati
+     */
+    public int deleteBulk(List<ObjectId> listaId, Class<? extends AEntity> clazz) {
+        int cancellati = 0;
+        DeleteResult result = mongo.deleteBulk(listaId, clazz);
+
+        if (result != null) {
+            cancellati = (int) result.getDeletedCount();
+        }// end of if cycle
+
+        return cancellati;
     }// end of method
 
     /**
@@ -1046,13 +1085,8 @@ public abstract class AService implements IAService {
      */
     @Override
     public boolean deleteAll() {
-
-        for (AEntity entityBean : findAll()) {
-            repository.delete(entityBean);
-        }// end of for cycle
-
-        //@todo aggiungere controllo se i records sono stati cancellati
-        return true;
+        mongo.drop(entityClass);
+        return count() == 0;
     }// end of method
 
 

@@ -1,21 +1,16 @@
 package it.algos.vaadflow;
 
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-//import de.flapdoodle.embed.mongo.MongodExecutable;
-//import de.flapdoodle.embed.mongo.MongodStarter;
-//import de.flapdoodle.embed.mongo.config.IMongodConfig;
-//import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
-//import de.flapdoodle.embed.mongo.config.Net;
-//import de.flapdoodle.embed.mongo.distribution.Version;
-//import de.flapdoodle.embed.process.runtime.Network;
+import com.mongodb.client.result.DeleteResult;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadtest.TestApplication;
 import it.algos.vaadtest.modules.prova.Prova;
-import it.algos.vaadtest.modules.prova.ProvaRepository;
 import it.algos.vaadtest.modules.prova.ProvaService;
-import org.junit.jupiter.api.*;
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
@@ -23,12 +18,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+//import de.flapdoodle.embed.mongo.MongodExecutable;
+//import de.flapdoodle.embed.mongo.MongodStarter;
+//import de.flapdoodle.embed.mongo.config.IMongodConfig;
+//import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+//import de.flapdoodle.embed.mongo.config.Net;
+//import de.flapdoodle.embed.mongo.distribution.Version;
+//import de.flapdoodle.embed.process.runtime.Network;
 
 /**
  * Project vaadflow
@@ -46,105 +49,226 @@ import java.util.List;
 @SpringBootTest(classes = TestApplication.class)
 public class AMongoServiceTest extends ATest {
 
-
-//    private MongodExecutable mongodExecutable;
-//    private MongoTemplate mongoTemplate;
-//
-//    @AfterEach
-//    void clean() {
-//        mongodExecutable.stop();
-//    }// end of method
-//
-//    @BeforeEach
-//    void  setup() throws Exception {
-//        String ip = "localhost";
-//        int port = 27017;
-//
-//        IMongodConfig mongodConfig = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
-//                .net(new Net(ip, port, Network.localhostIsIPv6()))
-//                .build();
-//
-//        MongodStarter starter = MongodStarter.getDefaultInstance();
-//        mongodExecutable = starter.prepare(mongodConfig);
-//        mongodExecutable.start();
-//        mongoTemplate = new MongoTemplate(new MongoClient(ip, port), "alfa");
-//    }// end of method
-//
-//
-//        @Test
-//    void test() throws Exception {
-//        // given
-//        DBObject objectToSave = BasicDBObjectBuilder.start()
-//                .add("key", "value")
-//                .get();
-//
-//        Prova prova=new Prova();
-//        prova.id="17";
-//        prova.code="domani";
-//        mongoTemplate.save(prova, "prova");
-//
-//        Prova prova2=new Prova();
-//        prova2.id="15";
-//        prova2.code="domani";
-//        mongoTemplate.save(prova2, "prova");
-//
-//        Object listaProva=mongoTemplate.findAll(Prova.class, "prova");
-//
-//        // when
-//        mongoTemplate.save(objectToSave, "collection");
-//
-//        // then
-//        Object lista=mongoTemplate.findAll(DBObject.class, "collection");
-//        int a=867;
-//    }
-
-
-
-
-
-//    @InjectMocks
-//    private AMongoService mongoService;
-
-//    @InjectMocks
-//    MongoEntityInformation metadata;
-
-//    @InjectMocks
-//    MongoTemplate mongoOperations;
-
-//    @InjectMocks
-//    private ProvaRepositoryImpl repository;
-
+    private static Class PROVA_ENTITY_CLASS = Prova.class;
+    @Autowired
+    public MongoOperations mongoOperations;
     @InjectMocks
-    private ProvaService service;
-
-//    @InjectMocks
-//    private Prova prova;
-
-//    private MongoOperations mongo;
-//    private MongoClient client;
-//    private SimpleMongoDbFactory factory;
+    private AMongoService mongoService;
+    @InjectMocks
+    private ProvaService provaService;
+    @InjectMocks
+    private AAnnotationService annotation;
+    private List listaProve = new ArrayList();
+    private String collectionName = "prova";
+    private Prova prova;
 
 
     @BeforeAll
     public void setUp() {
-//        super.setUpTest();
         MockitoAnnotations.initMocks(this);
-//        MockitoAnnotations.initMocks(mongoService);
-//        MockitoAnnotations.initMocks(metadata);
-//        MockitoAnnotations.initMocks(mongoOperations);
-        MockitoAnnotations.initMocks(service);
-//        MockitoAnnotations.initMocks(prova);
-//        MockitoAnnotations.initMocks(repository);
-//        client = new MongoClient("localhost", 27017);
-//        factory = new SimpleMongoDbFactory(client, "vaadtest");
-//        mongo = new MongoTemplate(factory);
-//        mongoService.mongo = mongo;
-//        service.repository = (ProvaRepository)repository;
-        service.array = array;
-        service.text = text;
-        service.annotation = annotation;
-        service.reflection = reflection;
+        MockitoAnnotations.initMocks(provaService);
+        MockitoAnnotations.initMocks(mongoOperations);
+        MockitoAnnotations.initMocks(mongoService);
+        MockitoAnnotations.initMocks(annotation);
+        provaService.array = array;
+        provaService.text = text;
+        provaService.annotation = annotation;
+        provaService.reflection = reflection;
+        provaService.mongo = mongoService;
+        mongoService.mongo = mongoOperations;
+        mongoService.annotation = annotation;
     }// end of method
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Delete a collection.
+     *
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void drop() {
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        if (ottenutoIntero == 0) {
+            previstoIntero = 1;
+            prova = new Prova(91, "alfa1");
+            mongoService.insert(prova, collectionName);
+            ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+            assertEquals(previstoIntero, ottenutoIntero);
+        }// end of if cycle
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertTrue(ottenutoIntero > 0);
+
+        mongoService.drop(PROVA_ENTITY_CLASS);
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(0, ottenutoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Delete a collection.
+     *
+     * @param collectionName della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void drop2() {
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        if (ottenutoIntero == 0) {
+            previstoIntero = 1;
+            prova = new Prova(91, "alfa1");
+            mongoService.insert(prova, collectionName);
+            ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+            assertEquals(previstoIntero, ottenutoIntero);
+        }// end of if cycle
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertTrue(ottenutoIntero > 0);
+
+        mongoService.drop(collectionName);
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(0, ottenutoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Count all
+     *
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void count() {
+        previstoIntero = 4;
+        ottenutoIntero = mongoService.count(ROLE_ENTITY_CLASS);
+        assertEquals(previstoIntero, ottenutoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Find single entity
+     *
+     * @param clazz della collezione
+     * @param keyId chiave id
+     *
+     * @return entity
+     */
+    @Test
+    public void find() {
+        String keyId = "pippoz";
+        int intUno = 935;
+        int intDue = 114;
+        int intTre = 767;
+        String codeUno = "alfa211";
+        String codeDue = "altravolta";
+        String codeTre = "nessuno";
+        reset();
+
+        prova = null;
+        prova = new Prova(intUno, codeUno);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = new Prova(intDue, codeDue);
+        prova.id = keyId;
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = new Prova(intTre, codeTre);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = (Prova) mongoService.findById(PROVA_ENTITY_CLASS, keyId);
+        assertNotNull(prova);
+        assertEquals(codeDue, prova.code);
+
+        reset();
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Find single entity
+     *
+     * @param clazz della collezione
+     * @param entityBean da cercare
+     *
+     * @return entity
+     */
+    @Test
+    public void find2() {
+        String keyId = "paperinox";
+        Prova provaFind;
+        int intUno = 449;
+        int intDue = 121;
+        int intTre = 538;
+        String codeUno = "mancoadesso";
+        String codeDue = "forse";
+        String codeTre = "provaci";
+        reset();
+
+        prova = null;
+        prova = new Prova(intUno, codeUno);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = new Prova(intDue, codeDue);
+        prova.id = keyId;
+        provaFind = prova;
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = new Prova(intTre, codeTre);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = (Prova) mongoService.findByEntity(PROVA_ENTITY_CLASS, provaFind);
+        assertNotNull(prova);
+        assertEquals(codeDue, prova.code);
+
+        reset();
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Find single entity
+     *
+     * @param clazz    della collezione
+     * @param property da controllare
+     * @param value    da considerare
+     *
+     * @return lista
+     */
+    @Test
+    public void find3() {
+        int intUno = 935;
+        int intDue = 114;
+        int intTre = 767;
+        String codeUno = "alfa211";
+        String codeDue = "altravolta";
+        String codeTre = "nessuno";
+        reset();
+        prova = new Prova(intUno, codeUno);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+        prova = new Prova(intDue, codeDue);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+        prova = new Prova(intTre, codeTre);
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = (Prova) mongoService.findByProperty(PROVA_ENTITY_CLASS, NAME_ORDINE, intDue);
+        assertNotNull(prova);
+        assertEquals(codeDue, prova.code);
+
+        reset();
+    }// end of single test
 
 
     @SuppressWarnings("javadoc")
@@ -157,21 +281,399 @@ public class AMongoServiceTest extends ATest {
      */
     @Test
     public void findAll() {
-//        List objLst = mongoService.findAll(Prova.class);
-        int a = 87;
+        previstoIntero = 4;
+        ottenutoList = mongoService.findAll(ROLE_ENTITY_CLASS);
+        assertNotNull(ottenutoList);
+        ottenutoIntero = ottenutoList.size();
+        assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
 
-    public void test(@Autowired MongoTemplate mongoTemplate) {
+    @SuppressWarnings("javadoc")
+    /**
+     * Insert single document into a collection.
+     *
+     * @param item  da inserire
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void insert() {
+        sorgenteIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        prova = new Prova(935, "alfa211");
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(sorgenteIntero + 1, ottenutoIntero);
 
-        Prova objectToSave = new Prova();
-        Object beta = service.newEntity(3, "pippo");
-        mongoTemplate.save(objectToSave, "prova");
+        reset();
+    }// end of method
 
-        Object lista = mongoTemplate.findAll(Prova.class, "prova");
-        int a = 87;
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Insert single document into a collection.
+     *
+     * @param item  da inserire
+     * @param collectionName della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void insert2() {
+        sorgenteIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        prova = new Prova(874, "alfa874");
+        mongoService.insert(prova, collectionName);
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(sorgenteIntero + 1, ottenutoIntero);
+
+        reset();
+    }// end of method
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Insert single document into a collection.
+     *
+     * @param item  da inserire
+     * @param collectionName della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void insert3() {
+        boolean status;
+        String keyId = "xx";
+        String prima = "provainsert";
+        String dopo = "risultato";
+        prova = new Prova(999, prima);
+        prova.id = keyId;
+        reset();
+        status = mongoService.insert(prova, PROVA_ENTITY_CLASS);
+        assertTrue(status);
+
+        prova = new Prova(777, dopo);
+        prova.id = keyId;
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        previsto = dopo;
+        ottenuto = prova.code;
+        assertEquals(previsto, ottenuto);
+
+        mongoService.drop(collectionName);
+    }// end of method
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Inserts multiple documents into a collection.
+     *
+     * @param lista di elementi da inserire
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void insertMany() {
+        int cicli = 10000;
+        long durata;
+        List<Prova> lista = new ArrayList<>();
+        reset();
+
+        for (int k = 0; k < cicli; k++) {
+            lista.add(new Prova(k, "alfa" + k));
+        }// end of for cycle
+
+        long inizio = System.currentTimeMillis();
+        mongoService.insert(lista, PROVA_ENTITY_CLASS);
+        long fine = System.currentTimeMillis();
+
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(lista.size(), ottenutoIntero);
+        durata = fine - inizio;
+        System.out.println("Tempo per inserire: " + lista.size() + " elementi di prova = " + durata + " millisec.");
+
+        reset();
     }// end of single test
 
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Update single document into a collection.
+     *
+     * @param item  da modificare
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void update() {
+        String keyId = "pippoz";
+        int intUno = 935;
+        int intDue = 114;
+        String codeUno = "alfa211";
+        String codeDue = "altravolta";
+        reset();
+
+        prova = null;
+        prova = new Prova(intUno, codeUno);
+        prova.id = keyId;
+        mongoService.insert(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = new Prova(intDue, codeDue);
+        prova.id = keyId;
+        mongoService.update(prova, PROVA_ENTITY_CLASS);
+
+        prova = null;
+        prova = (Prova) mongoService.findById(PROVA_ENTITY_CLASS, keyId);
+        assertNotNull(prova);
+        assertEquals(codeDue, prova.code);
+
+        reset();
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Update multiple documents of a collection.
+     *
+     * @param lista di elementi da modificare
+     * @param clazz della collezione
+     */
+    @Test
+    public void updateList() {
+        int cicli = 1000;
+        long durata;
+        List<Prova> listaOriginale = new ArrayList<>();
+        List<Prova> listaUpdateSingle = new ArrayList<>();
+        List<Prova> listaUpdateBulk = new ArrayList<>();
+        reset();
+
+        for (int k = 0; k < cicli; k++) {
+            prova = new Prova(k, "alfa" + k);
+            prova.id = "alfa" + k;
+            listaOriginale.add(prova);
+        }// end of for cycle
+        mongoService.insert(listaOriginale, PROVA_ENTITY_CLASS);
+
+        for (int k = 0; k < cicli; k++) {
+            prova = new Prova(k, "beta" + k);
+            prova.id = "alfa" + k;
+            listaUpdateSingle.add(prova);
+        }// end of for cycle
+
+        for (int k = 0; k < cicli; k++) {
+            prova = new Prova(k, "gamma" + k);
+            prova.id = "alfa" + k;
+            listaUpdateBulk.add(prova);
+        }// end of for cycle
+
+        long inizio = System.currentTimeMillis();
+        mongoService.update(listaUpdateSingle, PROVA_ENTITY_CLASS);
+        long fine = System.currentTimeMillis();
+
+        prova = null;
+        prova = (Prova) mongoService.findByProperty(PROVA_ENTITY_CLASS, NAME_ORDINE, 3);
+        assertNotNull(prova);
+        assertEquals("beta3", prova.code);
+
+        long inizio2 = System.currentTimeMillis();
+        mongoService.updateBulk(listaUpdateBulk, PROVA_ENTITY_CLASS);
+        long fine2 = System.currentTimeMillis();
+
+        prova = null;
+        prova = (Prova) mongoService.findByProperty(PROVA_ENTITY_CLASS, NAME_ORDINE, 3);
+        assertNotNull(prova);
+        assertEquals("gamma3", prova.code);
+
+
+        durata = fine - inizio;
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Aggiornati " + cicli + " elementi di prova");
+        System.out.println("UpdateList (singolo) in: " + durata + " millisec.");
+        durata = fine2 - inizio2;
+        System.out.println("updateMany (bulk) in: " + durata + " millisec.");
+        System.out.println("");
+        System.out.println("");
+
+        reset();
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Delete a single entity.
+     *
+     * @param entity da cancellare
+     *
+     * @return lista
+     */
+    @Test
+    public void delete() {
+        boolean status;
+        reset();
+
+        prova = new Prova(427, "alfa932");
+        mongoService.insert(prova, collectionName);
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(1, ottenutoIntero);
+        mongoService.delete(prova);
+        vuoto();
+
+        prova = new Prova(219, "beta151");
+        mongoService.insert(prova, collectionName);
+        status = provaService.delete(prova);
+        assertTrue(status);
+        vuoto();
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Delete a list of entities.
+     *
+     * @param lista di elementi da cancellare
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void delete2() {
+        int cicli = 1000;
+        long durata;
+        List<Prova> listaEntitiesUno = new ArrayList<>();
+        List<Prova> listaEntitiesDue = new ArrayList<>();
+        DeleteResult result;
+        reset();
+
+        for (int k = 0; k < cicli; k++) {
+            listaEntitiesUno.add(new Prova(k, "alfa" + k));
+        }// end of for cycle
+        mongoService.insert(listaEntitiesUno, Prova.class);
+
+        result = mongoService.delete(listaEntitiesUno, PROVA_ENTITY_CLASS);
+        assertNotNull(result);
+        assertEquals(cicli, result.getDeletedCount());
+        vuoto();
+
+        for (int k = 0; k < cicli; k++) {
+            listaEntitiesDue.add(new Prova(k, "beta" + k));
+        }// end of for cycle
+        previstoIntero = cicli;
+        mongoService.insert(listaEntitiesDue, Prova.class);
+
+        long inizio = System.currentTimeMillis();
+        ottenutoIntero = provaService.delete(listaEntitiesDue, PROVA_ENTITY_CLASS);
+        long fine = System.currentTimeMillis();
+
+        assertEquals(previstoIntero, ottenutoIntero);
+        durata = fine - inizio;
+        System.out.println("");
+        System.out.println("Delete in AService di " + ottenutoIntero + " elementi di prova in " + durata + " millisec.");
+        vuoto();
+    }// end of method
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Delete a list of entities.
+     *
+     * @param lista di ObjectId da cancellare
+     * @param clazz della collezione
+     *
+     * @return lista
+     */
+    @Test
+    public void deleteBulk() {
+        int cicli = 1000;
+        long durata;
+        List<Prova> listaEntities = new ArrayList<>();
+        List<ObjectId> listaId = new ArrayList<ObjectId>();
+        reset();
+
+        for (int k = 0; k < cicli; k++) {
+            listaEntities.add(new Prova(k, "delta" + k));
+        }// end of for cycle
+        mongoService.insert(listaEntities, Prova.class);
+
+        for (AEntity entity : listaEntities) {
+            listaId.add(new ObjectId(entity.id));
+        }// end of for cycle
+
+        previstoIntero = cicli;
+        long inizio = System.currentTimeMillis();
+        ottenutoIntero = provaService.deleteBulk(listaId, PROVA_ENTITY_CLASS);
+        long fine = System.currentTimeMillis();
+
+        assertEquals(previstoIntero, ottenutoIntero);
+        durata = fine - inizio;
+        System.out.println("");
+        System.out.println("BulkDelete in AService di " + ottenutoIntero + " elementi di prova in " + durata + " millisec.");
+        vuoto();
+    }// end of method
+
+
+    /**
+     * Deletes all entities of the collection.
+     */
+    /**
+     * Pulisce la collection con drop()
+     * Inserisce un notevole numero di entities
+     * Usa deleteAll() per controllare i tempi di esecuzione rispetto al ciclo delete(singleEntity)
+     */
+    @Test
+    public void deleteAll() {
+        int cicli = 1000;
+        int records;
+        boolean cancellati;
+        long durata;
+        List<Prova> listaSingleDelete = new ArrayList<>();
+        List<Prova> listaBulkDelete = new ArrayList<>();
+
+        for (int k = 0; k < cicli; k++) {
+            listaSingleDelete.add(new Prova(k, "alfa" + k));
+            listaBulkDelete.add(new Prova(k, "beta" + k));
+        }// end of for cycle
+
+        mongoService.insert(listaSingleDelete, Prova.class);
+
+        long inizio = System.currentTimeMillis();
+        for (AEntity entityBean : listaSingleDelete) {
+            provaService.delete(entityBean);
+        }// end of for cycle
+        long fine = System.currentTimeMillis();
+
+        mongoService.insert(listaBulkDelete, Prova.class);
+
+
+        long inizio2 = System.currentTimeMillis();
+        cancellati = provaService.deleteAll();
+        long fine2 = System.currentTimeMillis();
+
+
+        durata = fine - inizio;
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Cancellati tutti = " + cancellati);
+        System.out.println("Tempo delete singolo di: " + listaSingleDelete.size() + " elementi di prova = " + durata + " millisec.");
+        durata = fine2 - inizio2;
+        System.out.println("Tempo per bulk delete di: " + listaSingleDelete.size() + " elementi di prova = " + durata + " millisec.");
+        System.out.println("");
+        System.out.println("");
+    }// end of single test
+
+    //    public void test(@Autowired MongoTemplate mongoTemplate) {
+//
+//        Prova objectToSave = new Prova();
+//        Object beta = provaService.newEntity(3, "pippo");
+//        mongoTemplate.save(objectToSave, "prova");
+//
+//        Object lista = mongoTemplate.findAll(Prova.class, "prova");
+//        int a = 87;
+//    }// end of single test
+//
 //    @SuppressWarnings("javadoc")
 //    /**
 //     * Inserts multiple documents into a collection.
@@ -204,5 +706,16 @@ public class AMongoServiceTest extends ATest {
 //        mongoService.insertMany(lista, Prova.class);
 //        int a = 87;
 //    }// end of single test
+
+    private void reset() {
+        mongoService.drop(PROVA_ENTITY_CLASS);
+        vuoto();
+    }// end of method
+
+
+    private void vuoto() {
+        ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
+        assertEquals(0, ottenutoIntero);
+    }// end of method
 
 }// end of class

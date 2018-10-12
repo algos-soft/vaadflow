@@ -87,7 +87,6 @@ public class AddressService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param indirizzo: via, nome e numero (obbligatoria, non unica)
      * @param localita:  località (obbligatoria, non unica)

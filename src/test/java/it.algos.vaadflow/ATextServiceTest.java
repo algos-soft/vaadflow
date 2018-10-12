@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -498,7 +499,7 @@ public class ATextServiceTest extends ATest {
         ottenuto = service.estrae(sorgente, tagIni, tagEnd);
         assertEquals(previsto, ottenuto);
 
-        tag="\"";
+        tag = "\"";
         sorgente = "Questo testo \"non comprende ancora\" e manca la fine";
         ottenuto = service.estrae(sorgente, tag);
         assertEquals(previsto, ottenuto);
@@ -521,6 +522,16 @@ public class ATextServiceTest extends ATest {
         previsto = "1.534";
         ottenuto = service.format(sorgenteIntero);
         assertEquals(previsto, ottenuto);
+
+        String[] stringArray = {"ordine", "code", "secondo", "ultimo"};
+        previsto = "4";
+        ottenuto = service.format(stringArray);
+        assertEquals(previsto, ottenuto);
+
+        List sorgenteList = Arrays.asList(stringArray);
+        ottenuto = service.format(sorgenteList);
+        assertEquals(previsto, ottenuto);
+
 
         sorgenteIntero = 4;
         previsto = "04";

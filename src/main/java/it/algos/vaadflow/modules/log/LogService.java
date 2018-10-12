@@ -127,7 +127,6 @@ public class LogService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Properties obbligatorie <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param descrizione (obbligatoria, non unica) <br>
      *
@@ -141,7 +140,6 @@ public class LogService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param livello     rilevanza del log (obbligatorio)
      * @param type        raggruppamento logico dei log per type di eventi (obbligatorio)

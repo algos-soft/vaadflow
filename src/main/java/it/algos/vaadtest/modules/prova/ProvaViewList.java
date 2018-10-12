@@ -4,13 +4,19 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -51,7 +57,7 @@ public class ProvaViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>

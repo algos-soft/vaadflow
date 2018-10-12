@@ -99,7 +99,6 @@ public class GiornoService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
      * @param mese        di riferimento (obbligatorio)

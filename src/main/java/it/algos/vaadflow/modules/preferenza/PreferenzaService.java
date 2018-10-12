@@ -125,7 +125,6 @@ public class PreferenzaService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Properties obbligatorie
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param code        codice di riferimento (obbligatorio)
      * @param descrizione (facoltativa)
@@ -142,7 +141,6 @@ public class PreferenzaService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param company     di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)

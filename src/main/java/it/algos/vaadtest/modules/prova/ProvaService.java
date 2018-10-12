@@ -115,7 +115,6 @@ public class ProvaService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Gli argomenti (parametri) della new Entity DEVONO essere ordinati come nella Entity (costruttore lombok) <br>
      *
      * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code   codice di riferimento (obbligatorio)
@@ -131,8 +130,8 @@ public class ProvaService extends AService {
         }// end of if cycle
 
         entity = Prova.builderProva()
-                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .code(code.equals("") ? null : code)
+                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .build();
 
         return (Prova) creaIdKeySpecifica(entity);
