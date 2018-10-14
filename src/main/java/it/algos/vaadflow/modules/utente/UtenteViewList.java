@@ -97,7 +97,7 @@ public class UtenteViewList extends AViewList {
      * Eventuale aggiunta alla caption sopra la grid
      */
     protected VerticalLayout addCaption(VerticalLayout layout) {
-        layout = super.addCaption(layout);
+//        layout = super.addCaption(layout);
 
         layout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente"));
         layout.add(new Label("Serve per la creazione e gestione interna degli accessi della security"));

@@ -1,6 +1,5 @@
 package it.algos.vaadflow.service;
 
-import com.mongodb.Mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -8,7 +7,6 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -241,37 +239,21 @@ public class AMongoService {
      * Update multiple documents of a collection.
      * Spazzola la lista e cancella/insert ogni singola entity
      *
-     * @param lista di elementi da modificare
-     * @param clazz della collezione
+     * @param listaEntities di elementi da modificare
+     * @param clazz         della collezione
      */
-    public boolean update(List<? extends AEntity> lista, Class<? extends AEntity> clazz) {
-        boolean status = true;
+    public boolean updateBulk(List<? extends AEntity> listaEntities, Class<? extends AEntity> clazz) {
+        boolean status = false;
+        DeleteResult result;
 
-        for (AEntity entityBean : lista) {
-            if (!update(entityBean, clazz)) {
-                status = false;
-            }// end of if cycle
-        }// end of for cycle
+        try { // prova ad eseguire il codice
+            result = delete(listaEntities, clazz);
+            insert(listaEntities, clazz);
+            status = true;
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
 
-        return status;
-    }// end of method
-
-
-    /**
-     * Update multiple documents of a collection.
-     * Cancella tutte le entities della lista e poi un unico insert bulk
-     *
-     * @param lista di elementi da modificare
-     * @param clazz della collezione
-     */
-    public boolean updateBulk(List<? extends AEntity> lista, Class<? extends AEntity> clazz) {
-        boolean status = true;
-
-        for (AEntity entityBean : lista) {
-            delete(entityBean);
-        }// end of for cycle
-
-        insert(lista, clazz);
         return status;
     }// end of method
 
@@ -300,7 +282,11 @@ public class AMongoService {
         List<String> listaId = new ArrayList<String>();
 
         for (AEntity entity : listaEntities) {
-            listaId.add(entity.id);
+            if (entity != null) {
+                listaId.add(entity.id);
+            } else {
+                log.error("Algos - Manca una entity in AMongoService.delete()");
+            }// end of if/else cycle
         }// end of for cycle
 
         return deleteBulk(listaId, clazz);
@@ -310,7 +296,7 @@ public class AMongoService {
     /**
      * Delete a list of entities.
      *
-     * @param listaId di ObjectId da cancellare
+     * @param listaId di keyID da cancellare
      * @param clazz   della collezione
      *
      * @return lista

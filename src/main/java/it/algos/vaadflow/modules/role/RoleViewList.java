@@ -87,7 +87,7 @@ public class RoleViewList extends AViewList {
      * Eventuale aggiunta alla caption sopra la grid
      */
     protected VerticalLayout addCaption(VerticalLayout layout) {
-        layout = super.addCaption(layout);
+//        layout = super.addCaption(layout);
         layout.add(new Label("Serve per aggiungere altri eventuali 'authority' specifiche dell'applicazione"));
         return layout;
     }// end of method

@@ -1,21 +1,19 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.AEditDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -71,5 +69,40 @@ public class ProvaViewList extends AViewList {
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+        super.isEntityDeveloper = true;
+        super.isEntityEmbadded = true;
+    }// end of method
+
+    /**
+     * Placeholder (eventuale, presente di default) SOPRA la Grid
+     * - con o senza campo edit search, regolato da preferenza o da parametro
+     * - con o senza bottone New, regolato da preferenza o da parametro
+     * - con eventuali altri bottoni specifici
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void creaTopLayout() {
+        super.creaTopLayout();
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        layout.setPadding(false);
+
+        AEditDialog dialog = new AEditDialog("Alfa", "Sottotitolo", "Inserisci");
+        Button testButton = new Button("Dialogo");
+        testButton.addClickListener(event -> dialog.open());
+        testButton.getElement().setAttribute("theme", "secondary");
+
+        layout.add(testButton);
+        topLayout.add(layout);
+    }// end of method
 
 }// end of class

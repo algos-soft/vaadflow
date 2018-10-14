@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * @param <T>
  *            The type of the action's subject
  */
-class ConfirmationDialog<T extends Serializable> extends Dialog {
+public class ConfirmationDialog<T extends Serializable> extends Dialog {
 
     private final H2 titleField = new H2();
     private final Div messageLabel = new Div();
@@ -46,15 +46,15 @@ class ConfirmationDialog<T extends Serializable> extends Dialog {
      * Constructor.
      */
     public ConfirmationDialog() {
-        setCloseOnEsc(true);
+        setCloseOnEsc(false);
         setCloseOnOutsideClick(false);
 
         getElement().getClassList().add("confirm-dialog");
         confirmButton.addClickListener(e -> close());
-        confirmButton.getElement().setAttribute("theme", "tertiary");
+        confirmButton.getElement().setAttribute("theme", "primary");
         confirmButton.setAutofocus(true);
         cancelButton.addClickListener(e -> close());
-        cancelButton.getElement().setAttribute("theme", "tertiary");
+        cancelButton.getElement().setAttribute("theme", "primary");
 
         HorizontalLayout buttonBar = new HorizontalLayout(confirmButton,
                 cancelButton);

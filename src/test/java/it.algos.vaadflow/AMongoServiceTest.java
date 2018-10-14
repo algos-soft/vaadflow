@@ -440,31 +440,13 @@ public class AMongoServiceTest extends ATest {
     public void updateList() {
         long durata;
         List<Prova> listaOriginale = this.getLista("alfa");
-        List<Prova> listaUpdateSingle = this.getLista("beta");
-        List<Prova> listaUpdateBulk = this.getLista("gamma");
+        List<Prova> listaUpdateBulk = this.getLista("beta");
         reset();
 
-//        for (int k = 0; k < cicli; k++) {
-//            prova = new Prova(k, "alfa" + k);
-//            prova.id = "alfa" + k;
-//            listaOriginale.add(prova);
-//        }// end of for cycle
         mongoService.insert(listaOriginale, PROVA_ENTITY_CLASS);
 
-//        for (int k = 0; k < cicli; k++) {
-//            prova = new Prova(k, "beta" + k);
-//            prova.id = "alfa" + k;
-//            listaUpdateSingle.add(prova);
-//        }// end of for cycle
-
-//        for (int k = 0; k < cicli; k++) {
-//            prova = new Prova(k, "gamma" + k);
-//            prova.id = "alfa" + k;
-//            listaUpdateBulk.add(prova);
-//        }// end of for cycle
-
         long inizio = System.currentTimeMillis();
-        mongoService.update(listaUpdateSingle, PROVA_ENTITY_CLASS);
+        mongoService.updateBulk(listaUpdateBulk, PROVA_ENTITY_CLASS);
         long fine = System.currentTimeMillis();
 
         prova = null;
@@ -472,22 +454,11 @@ public class AMongoServiceTest extends ATest {
         assertNotNull(prova);
         assertEquals("beta3", prova.code);
 
-        long inizio2 = System.currentTimeMillis();
-        mongoService.updateBulk(listaUpdateBulk, PROVA_ENTITY_CLASS);
-        long fine2 = System.currentTimeMillis();
-
-        prova = null;
-        prova = (Prova) mongoService.findByProperty(PROVA_ENTITY_CLASS, NAME_ORDINE, 3);
-        assertNotNull(prova);
-        assertEquals("gamma3", prova.code);
-
         durata = fine - inizio;
         System.out.println("");
         System.out.println("");
-        System.out.println("Aggiornati " + listaUpdateSingle.size() + " elementi di prova");
-        System.out.println("UpdateList (singolo) in: " + durata + " millisec.");
-        durata = fine2 - inizio2;
-        System.out.println("updateMany (bulk) in: " + durata + " millisec.");
+        System.out.println("Aggiornati " + listaUpdateBulk.size() + " elementi di prova");
+        System.out.println("updateBulk  in: " + durata + " millisec.");
         System.out.println("");
         System.out.println("");
 
@@ -540,23 +511,15 @@ public class AMongoServiceTest extends ATest {
         DeleteResult result;
         reset();
 
-//        for (int k = 0; k < 1000; k++) {
-//            listaEntitiesUno.add(new Prova(k, "alfa" + k));
-//        }// end of for cycle
         mongoService.insert(listaEntitiesUno, Prova.class);
-
         previstoIntero = listaEntitiesUno.size();
         result = mongoService.delete(listaEntitiesUno, PROVA_ENTITY_CLASS);
         assertNotNull(result);
         assertEquals(previstoIntero, result.getDeletedCount());
         vuoto();
 
-//        for (int k = 0; k < cicli; k++) {
-//            listaEntitiesDue.add(new Prova(k, "beta" + k));
-//        }// end of for cycle
-        previstoIntero = listaEntitiesDue.size();
         mongoService.insert(listaEntitiesDue, Prova.class);
-
+        previstoIntero = listaEntitiesDue.size();
         long inizio = System.currentTimeMillis();
         ottenutoIntero = provaService.delete(listaEntitiesDue, PROVA_ENTITY_CLASS);
         long fine = System.currentTimeMillis();
@@ -585,9 +548,6 @@ public class AMongoServiceTest extends ATest {
         List<String> listaId = new ArrayList<String>();
         reset();
 
-//        for (int k = 0; k < cicli; k++) {
-//            listaEntities.add(new Prova(k, "delta" + k));
-//        }// end of for cycle
         mongoService.insert(listaEntities, Prova.class);
 
         for (AEntity entity : listaEntities) {
@@ -638,10 +598,6 @@ public class AMongoServiceTest extends ATest {
         List<Prova> listaSingleDelete = this.getLista("alfa");
         List<Prova> listaBulkDelete = this.getLista("beta");
 
-//        for (int k = 0; k < cicli; k++) {
-//            listaSingleDelete.add(new Prova(k, "alfa" + k));
-//            listaBulkDelete.add(new Prova(k, "beta" + k));
-//        }// end of for cycle
 
         mongoService.insert(listaSingleDelete, Prova.class);
 

@@ -9,7 +9,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -55,11 +54,15 @@ import java.util.List;
  * Annotated with @Route (obbligatorio) per la selezione della vista.
  * <p>
  * Graficamente abbiamo:
- * una SearchBar (eventuale, presente di default); con o senza bottone New, regolato da preferenza o da parametro
- * un avviso (eventuale) per il developer
- * un layout top (eventuale) con bottoni aggiuntivi
+ * un topLayout (eventuale, presente di default)
+ * - con o senza campo edit search, regolato da preferenza o da parametro
+ * - con o senza bottone New, regolato da preferenza o da parametro
+ * - con eventuali altri bottoni specifici
+ * un layout di avviso (eventuale) con label o altro per informazioni specifiche; di norma per il developer
+ * una header della Grid (obbligatoria) con informazioni sugli elementi della lista
  * una Grid (obbligatoria); alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
- * un layout bottom (eventuale) con bottoni aggiuntivi
+ * una bottom della Grid (eventuale) con informazioni sugli elementi della lista; di norma delle somme
+ * un bottomLayout (eventuale) con bottoni aggiuntivi
  * un footer (obbligatorio) con informazioni generali
  * <p>
  * Le injections vengono fatta da SpringBoot nel metodo @PostConstruct DOPO init() automatico
@@ -79,8 +82,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     protected final static String EDIT_NAME = "Edit";
     protected final static String SHOW_NAME = "Show";
-    protected final TextField searchField = new TextField("", "Search");
-
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -88,7 +89,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     public ALogin login;
-
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -96,7 +96,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     public AAnnotationService annotation;
-
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -104,7 +103,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     public AReflectionService reflection;
-
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -112,7 +110,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     public AColumnService column;
-
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -120,7 +117,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     public AArrayService array;
-
+    protected TextField searchField;
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
@@ -144,14 +141,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     protected ADateService date;
-
-    /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
-     */
-    @Autowired
-    protected AFooter footer;
 
 
     /**
@@ -180,82 +169,95 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
-     * Placeholder per (eventuali) bottoni SOPRA della Grid <br>
+     * Placeholder (eventuale, presente di default) SOPRA la Grid
+     * - con o senza campo edit search, regolato da preferenza o da parametro
+     * - con o senza bottone New, regolato da preferenza o da parametro
+     * - con eventuali altri bottoni specifici
      */
-    protected HorizontalLayout topLayout = new HorizontalLayout();
+    protected Div topLayout;
 
 
     /**
-     * Placeholder per (eventuali) bottoni SOTTO la Grid <br>
+     * Placeholder (eventuale) SOPRA la Grid <br>
+     * Label o altro per informazioni specifiche; di norma per il developer
      */
-    protected HorizontalLayout bottomLayout = new HorizontalLayout();
+    protected Div alertLayout;
 
 
     /**
-     * Griglia principale <br>
+     * Label (obbligatoria)  che appare nell'header della Grid.
+     * Informazioni sugli elementi della lista
+     */
+    protected Label headerHolder;
+
+    /**
+     * Griglia principale (obbligatoria)
+     * Alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
      */
     protected Grid<AEntity> grid;
-
     /**
-     * Flag di preferenza per usare la searchBar. Normalmente true.
+     * Placeholder (eventuale) SOTTO la Grid <br>
+     * Eventuali bottoni aggiuntivi
      */
-    protected boolean usaSearchBar;
-
-
+    protected Div bottomLayout;
+    /**
+     * Placeholder (obbligatorio) SOTTO la Grid con informazioni generali <br>
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
+     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     */
+    @Autowired
+    protected AFooter footer;
     /**
      * Flag di preferenza per usare il campo-testo di ricerca e selezione. Normalmente true.
      */
     protected boolean usaSearchTextField;
-
-
     /**
-     * Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
+     * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true.
      */
     protected boolean usaSearchBottoneNew;
-
-
+    /**
+     * Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
+     */
+    protected boolean usaTopAlert;
+    /**
+     * Flag di preferenza per la Label nell'header della Grid grid. Normalmente true.
+     */
+    protected boolean usaHaederGrid;
     /**
      * Flag di preferenza per mostrare una caption sopra la grid. Normalmente true.
      */
+    @Deprecated
     protected boolean usaCaption;
-
-
-    /**
-     * Flag di preferenza per modificare la entity. Normalmente true.
-     */
-    protected boolean isEntityModificabile;
-
-
     /**
      * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente false.
      */
     protected boolean usaBottoneEdit;
-
-
     /**
      * Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
      */
     protected String testoBottoneEdit;
-
-
+    /**
+     * Flag di preferenza per usare il placeholder di bottoni ggiuntivi sotto la Grid. Normalmente false.
+     */
+    protected boolean usaBottomLayout;
     /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityDeveloper;
-
-
+    /**
+     * Flag di preferenza per modificare la entity. Normalmente true.
+     */
+    protected boolean isEntityModificabile;
     /**
      * * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityEmbadded;
-
-
     /**
      * Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
      */
     protected boolean usaRefresh;
 
-    private Label headerHolder;
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -293,22 +295,18 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
         fixPreferenzeSpecifiche();
 
-        creaSearchBar();
-        creaDeveloperAlert();
         creaTopLayout();
-        creaCaption("");
+        creaTopAlert();
+//        creaHeader();
         creaGrid();
         creaBottomLayout();
-        creaFooter();
+        creaFooterLayout();
     }// end of method
-
 
     /**
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     private void fixPreferenze() {
-        //--Flag di preferenza per usare la searchBar. Normalmente true.
-        usaSearchBar = true;
 
         //--Flag di preferenza per usare il campo-testo di ricerca e selezione. Normalmente true.
         usaSearchTextField = true;
@@ -316,8 +314,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
         usaSearchBottoneNew = true;
 
-        //--Flag di preferenza per mostrare una caption sopra la grid. Normalmente false.
-        usaCaption = false;
+        //--Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
+        usaTopAlert = false;
+
+        //--Flag di preferenza per la Label nell'header della Grid grid. Normalmente true.
+        usaHaederGrid = true;
 
         //--Flag di preferenza per modificare la entity. Normalmente true.
         isEntityModificabile = true;
@@ -327,6 +328,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
+
+        //--Flag di preferenza per usare il placeholder di botoni ggiuntivi sotto la Grid. Normalmente false.
+        usaBottomLayout = false;
 
         //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
         isEntityDeveloper = false;
@@ -345,33 +349,31 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected void fixPreferenzeSpecifiche() {
     }// end of method
 
-
     /**
-     * Costruisce la searchBar
-     * CSS specifico
-     * Sempre presente il campo edit di ricerca/selezione
-     * Sempre presente il bottone di reset del valore del campo di ricerca/selezione
-     * Facoltativo (presente di default) il bottone New (flag da mongo eventualmente sovrascritto)
+     * Placeholder (eventuale, presente di default) SOPRA la Grid
+     * - con o senza campo edit search, regolato da preferenza o da parametro
+     * - con o senza bottone New, regolato da preferenza o da parametro
+     * - con eventuali altri bottoni specifici
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
-    protected void creaSearchBar() {
-        Div viewToolbar = new Div();
-        Button newButton = null;
-        viewToolbar.addClassName("view-toolbar");
-
-        if (!usaSearchBar) {
-            return;
-        }// end of if cycle
+    protected void creaTopLayout() {
+        topLayout = new Div();
+        topLayout.addClassName("view-toolbar");
+        Button clearFilterTextBtn;
+        Button newButton;
 
         if (usaSearchTextField) {
+            searchField = new TextField("", "Search");
             searchField.setPrefixComponent(new Icon("lumo", "search"));
             searchField.addClassName("view-toolbar__search-field");
             searchField.setValueChangeMode(ValueChangeMode.EAGER);
             searchField.addValueChangeListener(e -> updateView());
 
-            Button clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+            clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
             clearFilterTextBtn.addClickListener(e -> searchField.clear());
 
-            viewToolbar.add(searchField, clearFilterTextBtn);
+            topLayout.add(searchField, clearFilterTextBtn);
         }// end of if cycle
 
         if (usaSearchBottoneNew) {
@@ -379,29 +381,45 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
             newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD));
-            viewToolbar.add(newButton);
+            topLayout.add(newButton);
         }// end of if cycle
 
-        add(viewToolbar);
-    }// end of method
-
-
-    /**
-     * Costruisce un (eventuale) layout per informazioni ad uso esclusivo del developer
-     */
-    protected void creaDeveloperAlert() {
-    }// end of method
-
-
-    /**
-     * Costruisce un (eventuale) layout con bottoni aggiuntivi
-     * Facoltativo (assente di default); eventualmente sovrascritto
-     */
-    protected void creaTopLayout() {
-        topLayout = new HorizontalLayout();
         this.add(topLayout);
     }// end of method
 
+    /**
+     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
+     * Normalmente ad uso esclusivo del developer
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected void creaTopAlert() {
+        alertLayout = new Div();
+        alertLayout.addClassName("view-toolbar");
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        layout.setPadding(false);
+
+        if (isEntityDeveloper || isEntityEmbadded) {
+            usaTopAlert = true;
+        }// end of if cycle
+
+        if (usaTopAlert) {
+            if (isEntityDeveloper) {
+                layout.add(new Label("Lista visibile solo al developer"));
+            }// end of if cycle
+
+            if (isEntityEmbadded) {
+                layout.add(new Label("Questa lista non dovrebbe mai essere usata (serve come test o per le sottoclassi specifiche)"));
+                layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+                layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
+            }// end of if cycle
+
+            alertLayout.add(layout);
+            this.add(alertLayout);
+        }// end of if cycle
+    }// end of method
 
     /**
      * Eventuale caption sopra la grid
@@ -416,7 +434,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         testo += getHeaderText(0);
 
         layout.add(new Label(testo));
-        this.addCaption(layout);
+//        this.addCaption(layout);
 
         if (usaCaption) {
             this.add(layout);
@@ -424,7 +442,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         return layout;
     }// end of method
-
 
     /**
      * Crea il corpo centrale della view
@@ -492,14 +509,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         informationCell.setComponent(headerHolder);
     }// end of method
 
-
     /**
      * Eventuale header text
      */
     protected String getHeaderText() {
         return getHeaderText(service != null ? service.count() : 0);
     }// end of method
-
 
     /**
      * Eventuale aggiunta alla caption sopra la grid
@@ -522,24 +537,23 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         return testo;
     }// end of method
 
-    /**
-     * Eventuale aggiunta alla caption sopra la grid
-     */
-    protected VerticalLayout addCaption(VerticalLayout layout) {
-
-        if (isEntityDeveloper) {
-            layout.add(new Label("Lista visibile solo al developer"));
-        }// end of if cycle
-
-        if (isEntityEmbadded) {
-            layout.add(new Label("Questa lista non dovrebbe mai essere usata (serve come test o per le sottoclassi specifiche)"));
-            layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
-            layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
-        }// end of if cycle
-
-        return layout;
-    }// end of method
-
+//    /**
+//     * Eventuale aggiunta alla caption sopra la grid
+//     */
+//    protected VerticalLayout addCaption(VerticalLayout layout) {
+//
+//        if (isEntityDeveloper) {
+//            layout.add(new Label("Lista visibile solo al developer"));
+//        }// end of if cycle
+//
+//        if (isEntityEmbadded) {
+//            layout.add(new Label("Questa lista non dovrebbe mai essere usata (serve come test o per le sottoclassi specifiche)"));
+//            layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+//            layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
+//        }// end of if cycle
+//
+//        return layout;
+//    }// end of method
 
     /**
      * Aggiunge eventuali colonne calcolate
@@ -563,7 +577,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         }// end of if/else cycle
     }// end of method
 
-
     protected Button createEditButton(AEntity entityBean) {
         Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT));
         edit.setIcon(new Icon("lumo", "edit"));
@@ -582,15 +595,21 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     /**
      * Costruisce un (eventuale) layout con bottoni aggiuntivi
-     * Facoltativo (assente di default); eventualmente sovrascritto
+     * Facoltativo (assente di default)
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     protected void creaBottomLayout() {
-        bottomLayout = new HorizontalLayout();
-        this.add(bottomLayout);
+        bottomLayout = new Div();
+        bottomLayout.addClassName("view-toolbar");
+
+        if (usaBottomLayout) {
+            this.add(bottomLayout);
+        }// end of if cycle
     }// end of method
 
 
-    protected void creaFooter() {
+    protected void creaFooterLayout() {
         if (footer != null) {
             this.add(footer.setAppMessage(""));
         }// end of if cycle
