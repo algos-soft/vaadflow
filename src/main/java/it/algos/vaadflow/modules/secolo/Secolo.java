@@ -110,7 +110,7 @@ public class Secolo extends AEntity {
     @Field("cod")
     @AIField(type = EAFieldType.checkbox, required = true, focus = true, widthEM = 12)
     @AIColumn(width = 210)
-    private boolean anteCristo;
+    public boolean anteCristo;
 
 
     /**

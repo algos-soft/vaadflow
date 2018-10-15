@@ -200,6 +200,23 @@ public class VersioneService extends AService {
         return findAll((Sort) null);
     }// end of method
 
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        return num;
+    }// end of method
+
     /**
      * Crea una entity di Versione e la registra <br>
      * Crea una nuova preferenza (solo se non esistente) <br>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 
 /**
@@ -29,5 +31,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 public interface AnnoRepository extends MongoRepository<Anno, String> {
 
     public Anno findByTitolo(String titolo);
+    public List<Anno> findTop100ByOrderByOrdine();
 
 }// end of class

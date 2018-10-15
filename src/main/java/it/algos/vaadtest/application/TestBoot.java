@@ -4,17 +4,18 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadtest.modules.categoria.CategoriaViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
-import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.servlet.ServletContextEvent;
+import java.time.LocalDate;
 
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow
@@ -82,6 +83,8 @@ public class TestBoot extends ABoot {
      */
     protected void regolaInfo() {
         PROJECT_NAME = "test";
+        PROJECT_VERSION = "0.1";
+        PROJECT_DATE = LocalDate.of(2018, 10, 14);
     }// end of method
 
 
@@ -106,9 +109,9 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-		FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-		FlowCost.MENU_CLAZZ_LIST.add(CategoriaViewList.class);
-	}// end of method
+        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(CategoriaViewList.class);
+    }// end of method
 
 
 }// end of boot class

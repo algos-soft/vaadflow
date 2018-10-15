@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.logtype;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +126,28 @@ public class LogtypeService extends AService {
      */
     public Logtype findByKeyUnica(String code) {
         return repository.findByCode(code);
+    }// end of method
+
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        for (EALogType type : EALogType.values()) {
+            crea(type.getTag());
+            num++;
+        }// end of for cycle
+
+        return num;
     }// end of method
 
 

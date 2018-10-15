@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -44,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 @AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class GiornoViewList extends AViewList {
+public class GiornoViewList extends ACronoViewList {
 
 
     /**
@@ -55,7 +56,7 @@ public class GiornoViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -69,5 +70,14 @@ public class GiornoViewList extends AViewList {
         ((GiornoViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+        super.usaBottoneEdit = false;
+    }// end of method
 
 }// end of class

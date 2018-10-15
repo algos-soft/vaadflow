@@ -4,7 +4,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.person.EAPerson;
 import it.algos.vaadflow.modules.person.Person;
+import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +53,19 @@ public class CompanyService extends AService {
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected AddressService addressService;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected PersonService personService;
 
 
     /**
@@ -225,6 +242,45 @@ public class CompanyService extends AService {
      */
     public Company findByKeyUnica(String code) {
         return repository.findByCode(code);
+    }// end of method
+
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+        String code;
+        String descrizione;
+        EAPerson eaPerson;
+        Person contatto;
+        String telefono;
+        String email;
+        EAAddress eaAddress;
+        Address indirizzo;
+
+        for (EACompany company : EACompany.values()) {
+            code = company.getCode();
+            descrizione = company.getDescrizione();
+            eaPerson = company.getPerson();
+            contatto = personService.newEntity(eaPerson);
+            telefono = company.getTelefono();
+            email = company.getEmail();
+            eaAddress = company.getAddress();
+            indirizzo = addressService.newEntity(eaAddress);
+
+            this.crea(code, descrizione, contatto, telefono, email, indirizzo);
+            num++;
+        }// end of for cycle
+
+        return num;
     }// end of method
 
 

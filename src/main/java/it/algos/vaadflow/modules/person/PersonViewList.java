@@ -74,6 +74,8 @@ public class PersonViewList extends AViewList {
      */
     @Override
     protected void fixPreferenzeSpecifiche() {
+        super.usaBottoneDeleteAll = true;
+        super.usaBottoneReset = true;
         super.isEntityDeveloper = true;
         super.isEntityEmbadded = true;
     }// end of method

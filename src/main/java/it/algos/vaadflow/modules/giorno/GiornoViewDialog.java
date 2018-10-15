@@ -35,7 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 public class GiornoViewDialog extends AViewDialog<Giorno> {
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -47,5 +47,5 @@ public class GiornoViewDialog extends AViewDialog<Giorno> {
         super(presenter);
     }// end of Spring constructor
 
-    
+
 }// end of class

@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.service.AService;
@@ -224,6 +225,38 @@ public class UtenteService extends AService {
         return repository.findByUserName(userName);
     }// end of method
 
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        String userName;
+        String passwordInChiaro;
+        EARole ruolo;
+        List<Role> ruoli;
+        String mail;
+
+        for (EAUtente utente : EAUtente.values()) {
+            userName = utente.getUserName();
+            passwordInChiaro = utente.getPasswordInChiaro();
+            ruolo = utente.getRuolo();
+            ruoli = roleService.getRoles(ruolo);
+            mail = utente.getMail();
+
+            this.crea(userName, passwordInChiaro, ruoli, mail, false);
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
     public boolean isUser(Utente utente) {
         for (Role role : utente.ruoli) {

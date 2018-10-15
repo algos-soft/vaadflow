@@ -215,6 +215,31 @@ public class PreferenzaService extends AService {
         return lista;
     }// end of method
 
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        for (EAPreferenza prefTemp : EAPreferenza.values()) {
+            String code = prefTemp.getCode();
+            String descNew = prefTemp.getDesc();
+            EAPrefType type = prefTemp.getType();
+            Object valueNew = prefTemp.getValue();
+
+            this.findOrCrea(code, descNew, type, valueNew);
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
 //    /**
 //     * Fetches the entities whose 'main text property' matches the given filter text.

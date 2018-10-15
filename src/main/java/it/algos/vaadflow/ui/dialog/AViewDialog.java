@@ -1,9 +1,7 @@
 package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -54,7 +52,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected final HorizontalLayout buttonBar = new HorizontalLayout(saveButton, cancelButton, deleteButton);
     private final H2 titleField = new H2();
     private final String confirmText = "Conferma";
-    private final ConfirmationDialog<T> confirmationDialog = new ConfirmationDialog<>();
+    private final AConfirmDialog<T> confirmDialog = new AConfirmDialog<>();
     public Consumer<T> itemAnnulla;
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -539,11 +537,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Azione proveniente dal click sul bottone Cancella (delete)
      */
     private void deleteClicked() {
-        if (confirmationDialog.getElement().getParent() == null) {
-            getUI().ifPresent(ui -> ui.add(confirmationDialog));
-        }
-        confirmDelete();
-    }// end of method
+//        if (confirmDialog.getElement().getParent() == null) {
+//            getUI().ifPresent(ui -> ui.add(confirmDialog));
+//        }
+        openConfirmDialog();
+    }// end of method\
 
     /**
      * Azione proveniente dal click sul bottone Annulla
@@ -556,43 +554,47 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         }// end of if cycle
     }// end of method
 
-//    /**
-//     * Opens the confirmation dialog before deleting the current item.
-//     * <p>
-//     * The dialog will display the given title and message(s), then call
-//     * {@link #deleteConfirmed(Serializable)} if the Delete button is clicked.
-//     *
-//     * @param title             The title text
-//     * @param message           Detail message (optional, may be empty)
-//     * @param additionalMessage Additional message (optional, may be empty)
-//     */
-//    protected final void openConfirmationDialog(String title, String message, String additionalMessage) {
+    /**
+     * Opens the confirmation dialog before deleting the current item.
+     * <p>
+     * The dialog will display the given title and message(s), then call
+     * {@link #deleteConfirmed(Serializable)} if the Delete button is clicked.
+     * <p>
+     * //     * @param title             The title text
+     * //     * @param message           Detail message (optional, may be empty)
+     * //     * @param additionalMessage Additional message (optional, may be empty)
+     */
+    protected final void openConfirmDialog() {
+        String title = BOT_DELETE;
+        String message = "Vuoi veramente cancellare questo elemento ?";
+        String additionalMessage = "L'operazione non è reversibile";
+        AConfirmDialog dialog = new AConfirmDialog();
 //        close();
-//        confirmationDialog.open(title, message, additionalMessage, "Elimina",
-//                true, getCurrentItem(), this::deleteConfirmed,
-//                this::open);
-//    }
-
-    protected void confirmDelete() {
-        ConfirmDialog dialog = new ConfirmDialog(
-                "Elimina",
-                "Vuoi veramente cancellare " + getCurrentItem().toString() + "? \nL'operazione non è reversibile",
-                "Elimina",
-                new ComponentEventListener<ConfirmDialog.ConfirmEvent>() {
-                    @Override
-                    public void onComponentEvent(ConfirmDialog.ConfirmEvent confirmEvent) {
-                        deleteConfirmed(getCurrentItem());
-                    }
-                },
-                "Annulla",
-                new ComponentEventListener<ConfirmDialog.CancelEvent>() {
-                    @Override
-                    public void onComponentEvent(ConfirmDialog.CancelEvent cancelEvent) {
-                        open();
-                    }
-                });
-        dialog.open();
+        confirmDialog.open(title, message, additionalMessage, BOT_DELETE,
+                true, getCurrentItem(), this::deleteConfirmed,
+                this::open);
     }// end of method
+
+//    protected void confirmDelete() {
+//        ConfirmDialog dialog = new ConfirmDialog(
+//                "Elimina",
+//                "Vuoi veramente cancellare " + getCurrentItem().toString() + "? \nL'operazione non è reversibile",
+//                "Elimina",
+//                new ComponentEventListener<ConfirmDialog.ConfirmEvent>() {
+//                    @Override
+//                    public void onComponentEvent(ConfirmDialog.ConfirmEvent confirmEvent) {
+//                        deleteConfirmed(getCurrentItem());
+//                    }
+//                },
+//                "Annulla",
+//                new ComponentEventListener<ConfirmDialog.CancelEvent>() {
+//                    @Override
+//                    public void onComponentEvent(ConfirmDialog.CancelEvent cancelEvent) {
+//                        open();
+//                    }
+//                });
+//        dialog.open();
+//    }// end of method
 
 
     private void deleteConfirmed(T item) {

@@ -10,7 +10,6 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -1110,6 +1109,42 @@ public abstract class AService implements IAService {
 //        repository.deleteAll();
 //        return repository.count() == 0;
 //    }// end of method
+
+
+    /**
+     * Metodo invocato da ABoot (o da una sua sottoclasse) <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * Creazione di una collezione - Solo se non ci sono records
+     */
+    @Override
+    public void loadData() {
+        int numRec = this.count();
+        String collectionName = annotation.getCollectionName(entityClass);
+
+        if (numRec == 0) {
+            numRec = reset();
+            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
+        }// end of if/else cycle
+
+    }// end of method
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        this.deleteAll();
+        return 0;
+    }// end of method
+
 
     /**
      * Casting da una superclasse ad una sottoclasse <br>

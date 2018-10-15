@@ -2,17 +2,17 @@ package it.algos.vaadflow.modules.versione;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
@@ -54,7 +54,7 @@ public class VersioneViewList extends AViewList {
     public static final String IRON_ICON = "drafts";
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -74,6 +74,7 @@ public class VersioneViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.usaSearchTextField = false;
+        super.usaSearchBottoneNew = false;
         super.isEntityDeveloper = true;
     }// end of method
 

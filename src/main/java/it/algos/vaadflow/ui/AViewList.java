@@ -3,12 +3,12 @@ package it.algos.vaadflow.ui;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -174,14 +174,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * - con o senza bottone New, regolato da preferenza o da parametro
      * - con eventuali altri bottoni specifici
      */
-    protected Div topLayout;
+    protected HorizontalLayout topLayout;
 
 
     /**
      * Placeholder (eventuale) SOPRA la Grid <br>
      * Label o altro per informazioni specifiche; di norma per il developer
      */
-    protected Div alertLayout;
+    protected VerticalLayout alertLayout;
 
 
     /**
@@ -199,7 +199,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Placeholder (eventuale) SOTTO la Grid <br>
      * Eventuali bottoni aggiuntivi
      */
-    protected Div bottomLayout;
+    protected HorizontalLayout bottomLayout;
     /**
      * Placeholder (obbligatorio) SOTTO la Grid con informazioni generali <br>
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -242,17 +242,33 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected boolean usaBottomLayout;
     /**
+     * Flag di preferenza per cancellare tutti gli elementi. Normalmente false.
+     */
+    protected boolean usaBottoneDeleteAll;
+    /**
+     * Flag di preferenza per resettare le condizioni standard di partenza. Normalmente false.
+     */
+    protected boolean usaBottoneReset;
+    /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityDeveloper;
+    /**
+     * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
+     */
+    protected boolean isEntityAdmin;
     /**
      * Flag di preferenza per modificare la entity. Normalmente true.
      */
     protected boolean isEntityModificabile;
     /**
-     * * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
+     * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityEmbadded;
+    /**
+     * Flag di preferenza se si caricano dati demo alla creazione. Resettabili. Normalmente false.
+     */
+    protected boolean isEntityUsaDatiDemo;
     /**
      * Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
      */
@@ -332,11 +348,23 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per usare il placeholder di botoni ggiuntivi sotto la Grid. Normalmente false.
         usaBottomLayout = false;
 
+        //--Flag di preferenza per cancellare tutti gli elementi. Normalmente false.
+        usaBottoneDeleteAll = false;
+
+        //--Flag di preferenza per resettare le condizioni standard di partenza. Normalmente false.
+        usaBottoneReset = false;
+
         //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
         isEntityDeveloper = false;
 
         //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
+        isEntityAdmin = false;
+
+        //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
         isEntityEmbadded = false;
+
+        //--Flag di preferenza se si caricano dati demo alla creazione. Resettabili. Normalmente false.
+        isEntityUsaDatiDemo = false;
 
         //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
         usaRefresh = true;
@@ -345,6 +373,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     protected void fixPreferenzeSpecifiche() {
     }// end of method
@@ -358,10 +388,34 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Invocare PRIMA il metodo della superclasse
      */
     protected void creaTopLayout() {
-        topLayout = new Div();
+        topLayout = new HorizontalLayout();
         topLayout.addClassName("view-toolbar");
+        Button deleteAllButton;
+        Button resetButton;
         Button clearFilterTextBtn;
         Button newButton;
+
+        if (usaBottoneDeleteAll) {
+            deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
+            deleteAllButton.getElement().setAttribute("theme", "error");
+            deleteAllButton.addClassName("view-toolbar__button");
+            deleteAllButton.addClickListener(e -> {
+                service.deleteAll();
+                updateView();
+            });
+            topLayout.add(deleteAllButton);
+        }// end of if cycle
+
+        if (usaBottoneReset) {
+            resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
+            resetButton.getElement().setAttribute("theme", "error");
+            resetButton.addClassName("view-toolbar__button");
+            resetButton.addClickListener(e -> {
+                service.reset();
+                updateView();
+            });
+            topLayout.add(resetButton);
+        }// end of if cycle
 
         if (usaSearchTextField) {
             searchField = new TextField("", "Search");
@@ -393,32 +447,41 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected void creaTopAlert() {
-        alertLayout = new Div();
+    protected VerticalLayout creaTopAlert() {
+        alertLayout = new VerticalLayout();
         alertLayout.addClassName("view-toolbar");
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
         layout.setSpacing(false);
         layout.setPadding(false);
 
-        if (isEntityDeveloper || isEntityEmbadded) {
+        if (isEntityDeveloper || isEntityAdmin || isEntityEmbadded || isEntityUsaDatiDemo) {
             usaTopAlert = true;
         }// end of if cycle
 
         if (usaTopAlert) {
             if (isEntityDeveloper) {
-                layout.add(new Label("Lista visibile solo al developer"));
+                layout.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
+            }// end of if cycle
+
+            if (isEntityAdmin) {
+                layout.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
             }// end of if cycle
 
             if (isEntityEmbadded) {
-                layout.add(new Label("Questa lista non dovrebbe mai essere usata (serve come test o per le sottoclassi specifiche)"));
+                layout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
                 layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+            }// end of if cycle
+
+            if (isEntityEmbadded || isEntityUsaDatiDemo) {
                 layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
             }// end of if cycle
 
             alertLayout.add(layout);
             this.add(alertLayout);
         }// end of if cycle
+
+        return layout;
     }// end of method
 
     /**
@@ -600,7 +663,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Invocare PRIMA il metodo della superclasse
      */
     protected void creaBottomLayout() {
-        bottomLayout = new Div();
+        bottomLayout = new HorizontalLayout();
         bottomLayout.addClassName("view-toolbar");
 
         if (usaBottomLayout) {

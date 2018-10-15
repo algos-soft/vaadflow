@@ -17,6 +17,9 @@ public enum EALogType {
     nuovo(FlowCost.NEW),
     edit(FlowCost.EDIT),
     delete(FlowCost.DELETE),
+    info(FlowCost.INFO),
+    warn(FlowCost.WARN),
+    error(FlowCost.ERROR),
     importo(FlowCost.IMPORT);
 
     private String tag;

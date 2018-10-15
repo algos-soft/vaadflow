@@ -1,12 +1,15 @@
 package it.algos.vaadflow.modules.secolo;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -43,8 +46,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @Qualifier(TAG_SEC)
 @AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
-@AIScript(sovrascrivibile = true)
-public class SecoloViewList extends AViewList {
+@AIScript(sovrascrivibile = false)
+public class SecoloViewList extends ACronoViewList {
 
 
     /**

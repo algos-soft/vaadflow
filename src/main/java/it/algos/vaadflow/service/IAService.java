@@ -107,22 +107,22 @@ public interface IAService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, EDIT)
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) ;
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation);
 
 
-        /**
-          * Saves a given entity.
-          * Use the returned instance for further operations
-          * as the save operation might have changed the entity instance completely.
-          *
-          * @param entityBean to be saved
-          *
-          * @return the saved entity
-          */
+    /**
+     * Saves a given entity.
+     * Use the returned instance for further operations
+     * as the save operation might have changed the entity instance completely.
+     *
+     * @param entityBean to be saved
+     *
+     * @return the saved entity
+     */
     public AEntity save(AEntity entityBean);
 
 
@@ -159,7 +159,6 @@ public interface IAService {
      * @return lista di nomi di properties
      */
     public List<String> getFormPropertyNamesList(AEntity curremtItem);
-
 
 
 //    /**
@@ -231,5 +230,24 @@ public interface IAService {
      * Deletes all entities of the collection.
      */
     public boolean deleteAll();
+
+
+    /**
+     * Metodo invocato da ABoot (o da una sua sottoclasse) <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * Creazione di una collezione - Solo se non ci sono records
+     */
+    public void loadData();
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    public int reset();
 
 }// end of interface

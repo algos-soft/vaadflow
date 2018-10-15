@@ -60,8 +60,8 @@ import javax.validation.constraints.Size;
 @Builder(builderMethodName = "builderGiorno")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordinamento", "mese", "titolo"})
-@AIForm(fields = {"ordinamento", "mese", "titolo"})
+@AIList(fields = {"ordine", "mese", "titolo"})
+@AIForm(fields = {"ordine", "mese", "titolo"})
 @AIScript(sovrascrivibile = false)
 public class Giorno extends AEntity {
 
@@ -92,7 +92,7 @@ public class Giorno extends AEntity {
     @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", width = 55)
-    public int ordinamento;
+    public int ordine;
 
 
     /**
@@ -104,7 +104,7 @@ public class Giorno extends AEntity {
     @Field("mese")
     @AIField(type = EAFieldType.combo, clazz = MeseService.class)
     @AIColumn(width = 140)
-    private Mese mese;
+    public Mese mese;
 
 
     /**

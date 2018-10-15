@@ -130,4 +130,33 @@ public class AddressService extends AService {
         }// end of if/else cycle
     }// end of method
 
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+        String indirizzo;
+        String localita;
+        String cap;
+
+        for (EAAddress address : EAAddress.values()) {
+            indirizzo = address.getIndirizzo();
+            localita = address.getLocalita();
+            cap = address.getCap();
+
+            this.crea(indirizzo, localita, cap);
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
+
 }// end of class

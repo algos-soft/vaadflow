@@ -76,6 +76,8 @@ public class AddressViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.usaSearchTextField = false;
+        super.usaBottoneDeleteAll = true;
+        super.usaBottoneReset = true;
         super.isEntityEmbadded = true;
         super.isEntityDeveloper = true;
     }// end of method

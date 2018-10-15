@@ -5,7 +5,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.enumeration.EATime;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -38,7 +40,6 @@ public class AFooter extends VerticalLayout {
 
     //    @Autowired
 //    public AHtmlService html;
-    private final static LocalDate DATA = LocalDate.now();
     private final static String DEV_TAG = "Dev: ";
     private final static String ADMIN_TAG = "Admin: ";
     private final static String USER_TAG = "User: ";
@@ -53,6 +54,11 @@ public class AFooter extends VerticalLayout {
      */
     @Autowired
     public ATextService text;
+    /**
+     * Inietta da Spring come 'session'
+     */
+    @Autowired
+    public ADateService date;
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
      */
@@ -119,12 +125,11 @@ public class AFooter extends VerticalLayout {
 
 //        label = new LabelRosso(DEVELOPER_NAME + message);
 
-        String data;
         message = DEVELOPER_COMPANY + sep + PROJECT_NAME;
         message += spazio;
         message += PROJECT_VERSION;
         message += " del ";
-        message += DATA.toString();
+        message += date.get(PROJECT_DATE, EATime.normal);
         if (text.isValid(companyName)) {
             message += sep;
             message += companyName;

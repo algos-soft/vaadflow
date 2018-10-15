@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.logtype;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
-import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +32,7 @@ public class LogtypeData extends AData {
      * @param service iniettato da Spring come sottoclasse concreta specificata dal @Qualifier
      */
     public LogtypeData(@Qualifier(TAG_TYP) IAService service) {
-        super(Logtype.class,service);
+        super(Logtype.class, service);
     }// end of Spring constructor
 
 
@@ -41,14 +40,7 @@ public class LogtypeData extends AData {
      * Creazione della collezione
      */
     protected int creaAll() {
-        int num = 0;
-
-        for (EALogType type : EALogType.values()) {
-            ((LogtypeService)service).findOrCrea(type.getTag());
-            num++;
-        }// end of for cycle
-
-        return num;
+        return service.reset();
     }// end of method
 
 

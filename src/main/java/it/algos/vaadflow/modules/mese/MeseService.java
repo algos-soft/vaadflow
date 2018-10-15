@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.mese;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAMese;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,5 +146,26 @@ public class MeseService extends AService {
         return repository.findByTitoloLungo(titoloLungo);
     }// end of method
 
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        for (EAMese eaMese : EAMese.values()) {
+            this.crea(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni());
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
 }// end of class

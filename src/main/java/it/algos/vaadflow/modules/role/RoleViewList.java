@@ -80,16 +80,23 @@ public class RoleViewList extends AViewList {
     protected void fixPreferenzeSpecifiche() {
         super.usaSearchTextField = false;
         super.isEntityDeveloper = true;
+        super.usaBottoneDeleteAll = true;
+        super.usaBottoneReset = true;
     }// end of method
 
 
     /**
-     * Eventuale aggiunta alla caption sopra la grid
+     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
+     * Normalmente ad uso esclusivo del developer
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
-    protected VerticalLayout addCaption(VerticalLayout layout) {
-//        layout = super.addCaption(layout);
+    @Override
+    protected VerticalLayout creaTopAlert() {
+        VerticalLayout layout = super.creaTopAlert();
         layout.add(new Label("Serve per aggiungere altri eventuali 'authority' specifiche dell'applicazione"));
         return layout;
     }// end of method
+
 
 }// end of class

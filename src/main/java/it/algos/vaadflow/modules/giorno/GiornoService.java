@@ -4,6 +4,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.mese.Mese;
+import it.algos.vaadflow.modules.mese.MeseService;
+import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadwiki <br>
@@ -45,6 +52,18 @@ public class GiornoService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private ADateService dateService;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private MeseService meseService;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -102,12 +121,12 @@ public class GiornoService extends AService {
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
      * @param mese        di riferimento (obbligatorio)
-     * @param ordinamento (obbligatorio, unico)
+     * @param ordine (obbligatorio, unico)
      * @param titolo      (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Giorno newEntity(Mese mese, int ordinamento, String titolo) {
+    public Giorno newEntity(Mese mese, int ordine, String titolo) {
         Giorno entity = null;
 
         entity = findByKeyUnica(titolo);
@@ -117,7 +136,7 @@ public class GiornoService extends AService {
 
         entity = Giorno.builderGiorno()
                 .mese(mese)
-                .ordinamento(ordinamento)
+                .ordine(ordine)
                 .titolo(titolo)
                 .build();
 
@@ -146,7 +165,7 @@ public class GiornoService extends AService {
     public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
         Giorno entity = (Giorno) super.beforeSave(entityBean, operation);
 
-        if (entity.getMese() == null || entity.ordinamento == 0 || text.isEmpty(entity.titolo)) {
+        if (entity.getMese() == null || entity.ordine == 0 || text.isEmpty(entity.titolo)) {
             entity = null;
             log.error("entity incompleta in GiornoService.beforeSave()");
         }// end of if cycle
@@ -168,6 +187,36 @@ public class GiornoService extends AService {
 
 
     /**
+     * Returns all entities of the type <br>
+     * <p>
+     * Se esiste la property 'ordine', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
+     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
+     *
+     * @return all ordered entities
+     */
+    @Override
+    public List<? extends AEntity> findAll() {
+        return super.findAll();
+    }
+
+    /**
+     * Returns all entities of the type <br>
+     * <p>
+     * Ordinate secondo l'ordinamento previsto
+     *
+     * @param sort ordinamento previsto
+     *
+     * @return all ordered entities
+     */
+    @Override
+    protected List<? extends AEntity> findAll(Sort sort) {
+        return super.findAll(sort);
+    }
+
+    /**
      * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
      * @param titolo (obbligatorio, unico)
@@ -178,5 +227,34 @@ public class GiornoService extends AService {
         return findByKeyUnica(titolo) != null;
     }// end of method
 
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        ArrayList<HashMap> lista;
+        String titolo;
+        int bisestile;
+        Mese mese ;
+
+        //costruisce i 366 records
+        lista = dateService.getAllGiorni();
+        for (HashMap mappaGiorno : lista) {
+            titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
+            bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
+            mese = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            this.crea(mese, bisestile, titolo);
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
 }// end of class

@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.enumeration.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -43,8 +44,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @Qualifier(TAG_ANN)
 @AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
-@AIScript(sovrascrivibile = true)
-public class AnnoViewList extends AViewList {
+@AIScript(sovrascrivibile = false)
+public class AnnoViewList extends ACronoViewList {
 
 
     /**
@@ -69,5 +70,14 @@ public class AnnoViewList extends AViewList {
         ((AnnoViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
+    /**
+     * Le preferenze sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+        super.usaBottoneEdit = false;
+    }// end of method
 
 }// end of class

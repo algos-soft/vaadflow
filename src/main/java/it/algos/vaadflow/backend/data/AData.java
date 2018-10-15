@@ -29,17 +29,6 @@ import org.springframework.context.annotation.Scope;
 public abstract class AData {
 
 
-//    /**
-//     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
-//     */
-//    protected MongoOperations mongo;
-
-
-//    /**
-//     * L'istanza viene dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
-//     */
-//    protected MongoRepository mongoRepository;
-
 
     /**
      * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
@@ -68,8 +57,6 @@ public abstract class AData {
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
-     * @param mongo      service per le operazioni su mongoDB
-     * @param repository per la persistenza dei dati
      */
 //    public AData(MongoOperations mongo, MongoRepository repository, IAService service) {
     public AData(Class entityClazz, IAService service) {

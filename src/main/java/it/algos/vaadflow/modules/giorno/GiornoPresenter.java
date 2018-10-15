@@ -41,7 +41,7 @@ public class GiornoPresenter extends APresenter {
     @Autowired
     public GiornoPresenter(@Qualifier(TAG_GIO) IAService service) {
         super(Giorno.class, service);
-     }// end of Spring constructor
+    }// end of Spring constructor
 
 
 }// end of class

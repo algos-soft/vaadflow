@@ -4,6 +4,7 @@ import com.vaadin.flow.router.RouterLayout;
 import it.algos.vaadflow.ui.MainLayout;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,14 +76,14 @@ public class FlowCost {
     public static final String DASHBOARD_ORDER_CARD_STYLE = "dashboard-order-card";
     public static final String STOREFRONT_ORDER_CARD_STYLE = "storefront-order-card";
 
-    public final static String BOT_ACCETTA = "accetta";
-    public final static String BOT_CONFERMA = "conferma";
-    public final static String BOT_ANNULLA = "annulla";
-    public final static String BOT_BACK = "back";
-    public final static String BOT_CREATE = "nuovo";
-    public final static String BOT_DELETE = "elimina";
-    public final static String BOT_EDIT = "edit";
-    public final static String BOT_SHOW = "show";
+    public final static String BOT_ACCETTA = "Accetta";
+    public final static String BOT_CONFERMA = "Conferma";
+    public final static String BOT_ANNULLA = "Annulla";
+    public final static String BOT_BACK = "Back";
+    public final static String BOT_CREATE = "Nuovo";
+    public final static String BOT_DELETE = "Elimina";
+    public final static String BOT_EDIT = "Edit";
+    public final static String BOT_SHOW = "Show";
     public final static String BOT_IMAGE = "immagine";
     public final static String BOT_IMPORT = "import";
     public final static String BOT_LINK_ACCETTA = "linkaccetta";
@@ -117,6 +118,9 @@ public class FlowCost {
     public final static String NEW = "New";
     public final static String EDIT = "Edit";
     public final static String DELETE = "Delete";
+    public final static String INFO = "Info";
+    public final static String WARN = "Warn";
+    public final static String ERROR = "Error";
     public final static String IMPORT = "Import";
 
     // generali
@@ -147,6 +151,7 @@ public class FlowCost {
     public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
     public  static String PROJECT_NAME = "vaadinflow";
     public  static String PROJECT_VERSION = "0.1";
+    public  static LocalDate PROJECT_DATE = LocalDate.of(2018,1,1);
     private final static String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
     public final static List<String> ESCLUSI_ALL = Arrays.asList(esclusiAll);
     private final static String[] esclusiList = {PROPERTY_ID, PROPERTY_SERIAL, PROPERTY_COMPANY, PROPERTY_NOTE, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};

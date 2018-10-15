@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.role;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
@@ -161,6 +162,28 @@ public class RoleService extends AService {
      */
     public String getPropertyUnica(AEntity entityBean) {
         return text.isValid(((Role) entityBean).getCode()) ? ((Role) entityBean).getCode() : "";
+    }// end of method
+
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        for (EARole ruolo : EARole.values()) {
+            this.crea(ruolo.toString());
+            num++;
+        }// end of for cycle
+
+        return num;
     }// end of method
 
     /**

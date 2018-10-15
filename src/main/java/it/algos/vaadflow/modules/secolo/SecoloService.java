@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.secolo;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EASecolo;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -170,5 +171,26 @@ public class SecoloService extends AService {
         return repository.findByTitolo(titolo);
     }// end of method
 
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int num = super.reset();
+
+        for (EASecolo eaSecolo : EASecolo.values()) {
+            this.crea(eaSecolo.getTitolo(), eaSecolo.getInizio(), eaSecolo.getFine(), eaSecolo.isAnteCristo());
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
 }// end of class

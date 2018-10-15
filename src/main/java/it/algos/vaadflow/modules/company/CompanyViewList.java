@@ -70,12 +70,18 @@ public class CompanyViewList extends AViewList {
     }// end of Spring constructor
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.usaSearchTextField = false;
+        super.usaBottoneDeleteAll = true;
+        super.usaBottoneReset = true;
         super.isEntityDeveloper = true;
+        super.isEntityUsaDatiDemo=true;
     }// end of method
+
 
 }// end of class
