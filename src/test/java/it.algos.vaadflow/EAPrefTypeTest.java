@@ -1,6 +1,6 @@
 package it.algos.vaadflow;
 
-import it.algos.vaadflow.enumeration.EAPrefType;
+import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;

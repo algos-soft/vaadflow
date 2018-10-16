@@ -2,7 +2,7 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.enumeration.EAFirstChar;
-import it.algos.vaadflow.enumeration.EAPrefType;
+import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

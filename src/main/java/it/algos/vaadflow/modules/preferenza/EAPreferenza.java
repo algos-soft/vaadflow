@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.preferenza;
 
 
 import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.enumeration.EAPrefType;
 
 /**
  * Project it.algos.vaadflow

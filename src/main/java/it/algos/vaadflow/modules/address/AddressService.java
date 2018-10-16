@@ -60,6 +60,19 @@ public class AddressService extends AService {
      * Crea una entity <br>
      * Se esiste già, la cancella prima di ricrearla <br>
      *
+     * @param eaAddress: enumeration di dati iniziali di prova
+     *
+     * @return la entity trovata o appena creata
+     */
+    public Address crea(EAAddress eaAddress) {
+        return (Address) save(newEntity(eaAddress));
+    }// end of method
+
+
+    /**
+     * Crea una entity <br>
+     * Se esiste già, la cancella prima di ricrearla <br>
+     *
      * @param indirizzo: via, nome e numero (obbligatoria, non unica)
      * @param localita:  località (obbligatoria, non unica)
      * @param cap:       codice di avviamento postale (obbligatoria, non unica)
@@ -88,6 +101,20 @@ public class AddressService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
+     * @param eaAddress: enumeration di dati iniziali di prova
+     *
+     * @return la entity trovata o appena creata
+     */
+    public Address newEntity(EAAddress eaAddress) {
+        return  newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
+     *
      * @param indirizzo: via, nome e numero (obbligatoria, non unica)
      * @param localita:  località (obbligatoria, non unica)
      * @param cap:       codice di avviamento postale (obbligatoria, non unica)
@@ -106,32 +133,6 @@ public class AddressService extends AService {
 
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
-     *
-     * @param eaAddress: enumeration di dati iniziali di prova
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Address newEntity(EAAddress eaAddress) {
-        String indirizzo;
-        String localita;
-        String cap;
-
-        if (eaAddress != null) {
-            indirizzo = eaAddress.getIndirizzo();
-            localita = eaAddress.getLocalita();
-            cap = eaAddress.getCap();
-
-            return newEntity(indirizzo, localita, cap);
-        } else {
-            return null;
-        }// end of if/else cycle
-    }// end of method
-
-
-    /**
      * Creazione di alcuni dati demo iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
      * La collezione viene svuotata <br>
@@ -143,16 +144,9 @@ public class AddressService extends AService {
     @Override
     public int reset() {
         int num = super.reset();
-        String indirizzo;
-        String localita;
-        String cap;
 
         for (EAAddress address : EAAddress.values()) {
-            indirizzo = address.getIndirizzo();
-            localita = address.getLocalita();
-            cap = address.getCap();
-
-            this.crea(indirizzo, localita, cap);
+            this.crea(address);
             num++;
         }// end of for cycle
 

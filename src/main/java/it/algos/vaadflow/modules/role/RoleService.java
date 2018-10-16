@@ -3,7 +3,6 @@ package it.algos.vaadflow.modules.role;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;

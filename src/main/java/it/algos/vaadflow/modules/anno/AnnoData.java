@@ -2,7 +2,7 @@ package it.algos.vaadflow.modules.anno;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
-import it.algos.vaadflow.enumeration.EASecolo;
+import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.IAService;

@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.secolo;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.data.AData;
-import it.algos.vaadflow.enumeration.EASecolo;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

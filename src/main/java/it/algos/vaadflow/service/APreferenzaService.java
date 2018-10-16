@@ -1,16 +1,10 @@
 package it.algos.vaadflow.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
-import it.algos.vaadflow.enumeration.EAPrefType;
-import it.algos.vaadflow.modules.preferenza.Preferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-
-import java.time.LocalDateTime;
 
 /**
  * Project it.algos.vaadflow
