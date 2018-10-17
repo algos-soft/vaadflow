@@ -49,7 +49,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected final Button cancelButton = new Button(ANNULLA);
     protected final Button deleteButton = new Button(DELETE);
     protected final FormLayout formLayout = new FormLayout();
-    protected final HorizontalLayout buttonBar = new HorizontalLayout(saveButton, cancelButton, deleteButton);
     private final H2 titleField = new H2();
     private final String confirmText = "Conferma";
     private final AConfirmDialog<T> confirmDialog = new AConfirmDialog<>();
@@ -64,6 +63,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Autowired
     public ADateService date;
+    protected HorizontalLayout buttonBar;
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -74,6 +74,21 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Autowired
     protected PreferenzaService pref;
+
+    /**
+     * Flag di preferenza per usare il bottone Save. Normalmente true.
+     */
+    protected boolean usaSaveButton;
+
+    /**
+     * Flag di preferenza per usare il bottone Cancel. Normalmente true.
+     */
+    protected boolean usaCancelButton;
+
+    /**
+     * Flag di preferenza per usare il bottone delete. Normalmente true.
+     */
+    protected boolean usaDeleteButton;
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
@@ -139,6 +154,13 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             this.saveButton.setText(confirmText);
         }// end of if cycle
 
+        //--Le preferenze standard
+        fixPreferenze();
+
+        //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+        fixPreferenzeSpecifiche();
+
+
         initTitle();
         initFormLayout();
         initButtonBar();
@@ -173,6 +195,28 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
+    /**
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     */
+    private void fixPreferenze() {
+        //--Flag di preferenza per usare il bottone Save. Normalmente true.
+        usaSaveButton = true;
+
+        //--Flag di preferenza per usare il bottone Cancel. Normalmente true.
+        usaCancelButton = true;
+
+        //--Flag di preferenza per usare il bottone Delete. Normalmente true.
+        usaDeleteButton = true;
+    }// end of method
+
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected void fixPreferenzeSpecifiche() {
+    }// end of method
+
     private void initTitle() {
         add(titleField);
     }
@@ -187,13 +231,27 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
     protected void initButtonBar() {
-        saveButton.getElement().setAttribute("theme", "primary");
-        cancelButton.addClickListener(e -> close());
-        deleteButton.addClickListener(e -> deleteClicked());
-        deleteButton.getElement().setAttribute("theme", "tertiary danger");
+        buttonBar = new HorizontalLayout();
         buttonBar.setClassName("buttons");
         buttonBar.setSpacing(true);
         buttonBar.setMargin(true);
+
+        if (usaSaveButton) {
+            saveButton.getElement().setAttribute("theme", "primary");
+            buttonBar.add(saveButton);
+        }// end of if cycle
+
+        if (usaCancelButton) {
+            cancelButton.addClickListener(e -> close());
+            buttonBar.add(cancelButton);
+        }// end of if cycle
+
+        if (usaDeleteButton) {
+            deleteButton.addClickListener(e -> deleteClicked());
+            deleteButton.getElement().setAttribute("theme", "tertiary danger");
+            buttonBar.add(deleteButton);
+        }// end of if cycle
+
         add(buttonBar);
     }// end of method
 

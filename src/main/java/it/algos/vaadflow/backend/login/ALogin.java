@@ -64,6 +64,10 @@ public class ALogin {
         return company;
     }// end of method
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }// end of method
+
     public boolean isDeveloper() {
         return developer;
     }// end of method

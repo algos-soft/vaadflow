@@ -55,4 +55,14 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         super(presenter);
     }// end of Spring constructor
 
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+        super.usaSaveButton=false;
+    }
 }// end of class
