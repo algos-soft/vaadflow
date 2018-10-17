@@ -19,8 +19,8 @@ import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
-import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.role.EARole;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -72,7 +70,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        String title = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
+//        String title = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
+        String title = FlowCost.LAYOUT_TITLE;
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
         MenuItem menu = null;
@@ -231,7 +230,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         String linkRoute = "login";
         String menuName = "Logout";
 
-        menuItem = new MenuItem(menuName, "exit-to-app",() -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
+        menuItem = new MenuItem(menuName, "exit-to-app", () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
         return menuItem;
     }// end of method
 

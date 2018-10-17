@@ -1,25 +1,15 @@
 package it.algos.vaadflow.boot;
 
-import it.algos.vaadflow.modules.address.AddressData;
 import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.anno.AnnoData;
 import it.algos.vaadflow.modules.anno.AnnoService;
-import it.algos.vaadflow.modules.company.CompanyData;
 import it.algos.vaadflow.modules.company.CompanyService;
-import it.algos.vaadflow.modules.giorno.GiornoData;
 import it.algos.vaadflow.modules.giorno.GiornoService;
-import it.algos.vaadflow.modules.logtype.LogtypeData;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
-import it.algos.vaadflow.modules.mese.MeseData;
 import it.algos.vaadflow.modules.mese.MeseService;
-import it.algos.vaadflow.modules.person.PersonData;
 import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.role.RoleData;
 import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.modules.secolo.SecoloData;
 import it.algos.vaadflow.modules.secolo.SecoloService;
-import it.algos.vaadflow.modules.utente.UtenteData;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;

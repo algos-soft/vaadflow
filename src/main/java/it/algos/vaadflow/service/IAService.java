@@ -250,4 +250,12 @@ public interface IAService {
      */
     public int reset();
 
+    /**
+     * Importazione di dati <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return true se sono stati importati correttamente
+     */
+    public boolean importa();
+
 }// end of interface

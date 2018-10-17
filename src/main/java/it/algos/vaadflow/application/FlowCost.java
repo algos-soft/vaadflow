@@ -149,6 +149,7 @@ public class FlowCost {
     public final static String SHOW_MESE = "showMese";
     public final static String SHOW_GIORNO = "showGiorno";
     public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
+    public  static String LAYOUT_TITLE = "";
     public  static String PROJECT_NAME = "vaadinflow";
     public  static String PROJECT_VERSION = "0.1";
     public  static LocalDate PROJECT_DATE = LocalDate.of(2018,1,1);

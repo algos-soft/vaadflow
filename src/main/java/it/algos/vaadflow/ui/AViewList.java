@@ -394,8 +394,10 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         Button resetButton;
         Button clearFilterTextBtn;
         Button newButton;
+        boolean isDeveloper = login.isDeveloper();
+        boolean isAdmin = login.isAdmin();
 
-        if (usaBottoneDeleteAll) {
+        if (usaBottoneDeleteAll && isDeveloper) {
             deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
@@ -406,7 +408,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             topLayout.add(deleteAllButton);
         }// end of if cycle
 
-        if (usaBottoneReset) {
+        if (usaBottoneReset && isDeveloper) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");

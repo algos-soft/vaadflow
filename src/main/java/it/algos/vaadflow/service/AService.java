@@ -1145,6 +1145,15 @@ public abstract class AService implements IAService {
         return 0;
     }// end of method
 
+    /**
+     * Importazione di dati <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return true se sono stati importati correttamente
+     */
+    public boolean importa() {
+        return false;
+    }// end of method
 
     /**
      * Casting da una superclasse ad una sottoclasse <br>
