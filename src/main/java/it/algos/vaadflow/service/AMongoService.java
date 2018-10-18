@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,47 @@ import java.util.List;
  * User: gac
  * Date: mar, 21-ago-2018
  * Time: 16:04
- * Diversamente dagli altri service, questo è un SINGLETON <br>
- * Può essere utilizzato PRIMA della chiamata al browser e PRIMA della UI <br>
+ * Gestione degli accessi al database MongoDB <br>
+ * Classe di libreria; NON deve essere astratta, altrimenti Spring non la costruisce <br>
+ * Implementa il 'pattern' SINGLETON; l'istanza può essere richiamata con: <br>
+ * 1) StaticContextAccessor.getBean(AMongoService.class); <br>
+ * 2) AMongoService.getInstance(); <br>
+ * 3) @Autowired private AMongoService mongoService; <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, basta il 'pattern') <br>
+ * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Service
 @Slf4j
-public class AMongoService {
+public class AMongoService extends AbstractService {
+
+    /**
+     * versione della classe per la serializzazione
+     */
+    private final static long serialVersionUID = 1L;
+
+    /**
+     * Private final property
+     */
+    private static final AMongoService INSTANCE = new AMongoService();
+
+    /**
+     * Private constructor to avoid client applications to use constructor
+     */
+    private AMongoService() {
+    }// end of constructor
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static AMongoService getInstance() {
+        return INSTANCE;
+    }// end of static method
+
 
     /**
      * Inietta da Spring
@@ -41,18 +76,6 @@ public class AMongoService {
     @Autowired
     public MongoTemplate template;
 
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    public AAnnotationService annotation;
-
-
-    /**
-     * Default constructor
-     */
-    public AMongoService() {
-    }// end of constructor
 
 
     /**

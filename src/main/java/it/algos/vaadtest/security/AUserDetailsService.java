@@ -2,12 +2,18 @@ package it.algos.vaadtest.security;
 
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.ABootService;
+import it.algos.vaadflow.service.AMongoService;
+import it.algos.vaadtest.modules.prova.Prova;
+import it.algos.vaadtest.modules.prova.ProvaViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +31,7 @@ import java.util.Collection;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+import static it.algos.vaadflow.application.FlowCost.SHOW_ROLE;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -67,6 +74,8 @@ public class AUserDetailsService implements UserDetailsService {
         String passwordHash = "";
         Collection<? extends GrantedAuthority> authorities;
         Utente utente = utenteService.findByUserName(username);
+
+//        int a=AMongoService.getInstance().count(Role.class);
 
         login.setUtente(utente);
         FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;

@@ -4,7 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,23 +26,25 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * User: Gac <br>
  * Fix date: 30-set-2018 16.14.56 <br>
  * <br>
- * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
- * <br>
- * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Service (ridondante) <br>
+ * Business logic del modulo. Layer di collegamento per la Repository. <br>
+ * <p>
+ * L'istanza può essere richiamata con: <br>
+ * 1) StaticContextAccessor.getBean(PreferenzaService.class); <br>
+ * 2) @Autowired private PreferenzaService preferenzaService; <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
  * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PRE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class PreferenzaService extends AService {
-
 
     /**
      * versione della classe per la serializzazione
@@ -70,6 +74,7 @@ public class PreferenzaService extends AService {
         super.entityClass = Preferenza.class;
         this.repository = (PreferenzaRepository) repository;
     }// end of Spring constructor
+
 
     /**
      * Ricerca di una entity (la crea se non la trova) <br>

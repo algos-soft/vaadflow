@@ -8,6 +8,7 @@ import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,36 +22,33 @@ import java.util.Map;
  * User: gac
  * Date: gio, 07-dic-2017
  * Time: 22:11
- * Classe di Libreria
- * NON deve essere astratta, altrimenti Spring non la costruisce
+ * <p>
  * Utility per recuperare property e metodi da altre classi
+ * <p>
+ * Classe di libreria; NON deve essere astratta, altrimenti Spring non la costruisce <br>
+ * Implementa il 'pattern' SINGLETON; l'istanza può essere richiamata con: <br>
+ * 1) StaticContextAccessor.getBean(AReflectionService.class); <br>
+ * 2) AReflectionService.getInstance(); <br>
+ * 3) @Autowired private AReflectionService reflectionService; <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, basta il 'pattern') <br>
+ * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  */
+@Service
 @Slf4j
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class AReflectionService {
+public class AReflectionService extends AbstractService {
 
+    /**
+     * versione della classe per la serializzazione
+     */
+    private final static long serialVersionUID = 1L;
 
     /**
      * Private final property
      */
     private static final AReflectionService INSTANCE = new AReflectionService();
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AArrayService array = AArrayService.getInstance();
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public ATextService text = ATextService.getInstance();
-
 
     /**
      * Private constructor to avoid client applications to use constructor
@@ -67,12 +65,6 @@ public class AReflectionService {
         return INSTANCE;
     }// end of static method
 
-
-//    /**
-//     * Inietta da Spring come 'session'
-//     */
-//    @Autowired
-//    public ALogin login;
 
     /**
      * Mappa di tutti i valori delle properties di una classe

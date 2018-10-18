@@ -1,7 +1,7 @@
 package it.algos.vaadflow.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
@@ -14,6 +14,8 @@ import it.algos.vaadflow.modules.person.PersonViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
+import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.role.RoleViewList;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
@@ -21,8 +23,7 @@ import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadflow.wizard.WizardView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
@@ -32,17 +33,58 @@ import java.util.ArrayList;
  * User: gac
  * Date: ven, 21-set-2018
  * Time: 19:31
+ * <p>
+ * Gestisce la creazione delle liste standard di menu <br>
+ * <p>
+ * Classe di libreria; NON deve essere astratta, altrimenti Spring non la costruisce <br>
+ * Implementa il 'pattern' SINGLETON; l'istanza può essere richiamata con: <br>
+ * 1) StaticContextAccessor.getBean(ABootService.class); <br>
+ * 2) ABootService.getInstance(); <br>
+ * 3) @Autowired private ABootService bootService; <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, basta il 'pattern') <br>
+ * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
+ * <p>
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Service
 @Slf4j
-public class ABootService {
+public class ABootService extends AbstractService {
+
+    /**
+     * versione della classe per la serializzazione
+     */
+    private final static long serialVersionUID = 1L;
+
+
+    /**
+     * Private final property
+     */
+    private static final ABootService INSTANCE = new ABootService();
+
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected PreferenzaService pref;
+
+
+    /**
+     * Private constructor to avoid client applications to use constructor
+     */
+    private ABootService() {
+    }// end of constructor
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static ABootService getInstance() {
+        return INSTANCE;
+    }// end of static method
 
 
     public void creaRouteStandard() {
