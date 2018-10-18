@@ -74,6 +74,7 @@ public abstract class AService implements IAService {
      */
     @Autowired
     public ALogin login;
+
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
     /**
@@ -1152,6 +1153,21 @@ public abstract class AService implements IAService {
      * @return true se sono stati importati correttamente
      */
     public boolean importa() {
+        this.deleteAll();
+        return false;
+    }// end of method
+
+    /**
+     * Importazione di dati <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @param company di riferimento
+     *
+     * @return true se sono stati importati correttamente
+     */
+    @Override
+    public boolean importa(Company company) {
+        this.deleteAll();
         return false;
     }// end of method
 

@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 
 import java.util.List;
@@ -257,5 +258,15 @@ public interface IAService {
      * @return true se sono stati importati correttamente
      */
     public boolean importa();
+
+    /**
+     * Importazione di dati <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @param company di riferimento
+     *
+     * @return true se sono stati importati correttamente
+     */
+    public boolean importa(Company company);
 
 }// end of interface

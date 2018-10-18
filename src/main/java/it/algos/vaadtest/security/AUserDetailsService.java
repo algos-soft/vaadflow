@@ -1,7 +1,9 @@
 package it.algos.vaadtest.security;
 
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -15,9 +17,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
@@ -64,6 +70,10 @@ public class AUserDetailsService implements UserDetailsService {
 
         login.setUtente(utente);
         FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        session.setAttribute(KEY_CONTEXT, new AContext(login,(Company)null));
 
         //--menu specifici
 //        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);

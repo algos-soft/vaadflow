@@ -16,8 +16,8 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.LoadMode;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
@@ -25,11 +25,16 @@ import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -48,13 +53,12 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
-
-
-    /**
-     * Recupera da StaticContextAccessor una istanza della classe <br>
-     * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>
-     */
-    public ALogin login = StaticContextAccessor.getBean(ALogin.class);
+    //    /**
+//     * Recupera da StaticContextAccessor una istanza della classe <br>
+//     * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>
+//     */
+//    public ALogin login = StaticContextAccessor.getBean(ALogin.class);
+    private ALogin login;
     private AAnnotationService annotation = AAnnotationService.getInstance();
     private AReflectionService reflection = AReflectionService.getInstance();
     private ATextService text = ATextService.getInstance();
@@ -65,12 +69,13 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         setSpacing(false);
         setPadding(false);
 
+        login = getLogin();
+
         creaAllMenu();
     }// end of method
 
 
     protected void creaAllMenu() {
-//        String title = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
         String title = FlowCost.LAYOUT_TITLE;
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
@@ -246,6 +251,19 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         settings.addLink("shortcut icon", "/frontend/images/favicons/favicon-96x96.png");
         settings.addLink("manifest", "/manifest.json");
         settings.addFavIcon("icon", "/frontend/images/favicons/favicon-96x96.png", "96x96");
+    }// end of method
+
+
+    private ALogin getLogin() {
+        ALogin login ;
+        AContext context;
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true); // true == allow create
+        context = (AContext) session.getAttribute(KEY_CONTEXT);
+        login = context.getLogin();
+
+        return login;
     }// end of method
 
 }// end of class

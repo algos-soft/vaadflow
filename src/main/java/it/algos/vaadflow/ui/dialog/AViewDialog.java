@@ -13,6 +13,7 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.shared.Registration;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -24,6 +25,7 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -89,6 +91,14 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Flag di preferenza per usare il bottone delete. Normalmente true.
      */
     protected boolean usaDeleteButton;
+
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected ALogin login;
+
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
      */
@@ -153,7 +163,16 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (confermaSenzaRegistrare) {
             this.saveButton.setText(confirmText);
         }// end of if cycle
+    }// end of constructor
 
+    /**
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     */
+    @PostConstruct
+    protected void initView() {
         //--Le preferenze standard
         fixPreferenze();
 
@@ -176,8 +195,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
                 getElement().removeFromParent();
             }
         });
-    }// end of constructor
-
+    }// end of method
 
     public void fixFunzioni(BiConsumer<T, AViewDialog.Operation> itemSaver, Consumer<T> itemDeleter) {
         fixFunzioni(itemSaver, itemDeleter, null);

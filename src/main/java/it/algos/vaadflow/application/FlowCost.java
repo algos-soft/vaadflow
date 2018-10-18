@@ -176,4 +176,6 @@ public class FlowCost {
     public final static String KEY_MAPPA_GIORNI_TITOLO = "titolo";
     public final static String KEY_MAPPA_GIORNI_MESE_MESE = "meseMese";
 
+    public final static String KEY_CONTEXT = "context";
+
 }// end of static class

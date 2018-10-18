@@ -16,6 +16,8 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.server.VaadinSession;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.footer.AFooter;
@@ -26,10 +28,15 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 
 /**
  * Project it.algos.vaadflow
@@ -274,6 +281,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected boolean usaRefresh;
 
+    protected AContext context;
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -305,6 +313,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.setSpacing(false);
         this.removeAll();
 
+        //--Context della sessione
+        fixContext();
+
         //--Le preferenze standard
         fixPreferenze();
 
@@ -318,6 +329,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         creaBottomLayout();
         creaFooterLayout();
     }// end of method
+
+    /**
+     * Context della sessione
+     */
+    private void fixContext() {
+        context = getContext();
+    }// end of method
+
 
     /**
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
@@ -742,6 +761,15 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     }// end of method
 
+    private AContext getContext() {
+        AContext context;
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        context = (AContext) session.getAttribute(KEY_CONTEXT);
+
+        return context;
+    }// end of method
 
     @Override
     public String getName() {
