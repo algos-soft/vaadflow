@@ -59,10 +59,10 @@ public class AColumnService extends AbstractService {
     public PreferenzaService pref;
 
     /**
-     * Private constructor to avoid client applications to use constructor
+     * Protected constructor to avoid client applications to use constructor
      */
-    private AColumnService() {
-        pref = StaticContextAccessor.getBean(PreferenzaService.class);
+    protected AColumnService() {
+        super();
     }// end of constructor
 
     /**
@@ -84,6 +84,7 @@ public class AColumnService extends AbstractService {
      * @param propertyName della property
      */
     public void create(Grid<AEntity> grid, Class<? extends AEntity> entityClazz, String propertyName) {
+        pref = StaticContextAccessor.getBean(PreferenzaService.class);
         Grid.Column<AEntity> colonna = null;
         EAFieldType type = annotation.getFormType(entityClazz, propertyName);
         String header = annotation.getColumnName(entityClazz, propertyName);

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 //@SpringComponent
 //@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public abstract class AService implements IAService {
+public abstract class AService extends AbstractService implements IAService {
 
 
     public final static String FIELD_NAME_ID = "id";
@@ -40,35 +40,35 @@ public abstract class AService implements IAService {
     public final static String FIELD_NAME_DESCRIZIONE = "descrizione";
     public final static String FIELD_NAME_COMPANY = "company";
 
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-    @Autowired
-    public AFieldService field = AFieldService.getInstance();
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AReflectionService reflection = AReflectionService.getInstance();
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public AArrayService array = AArrayService.getInstance();
-
-
-    /**
-     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    public ATextService text = ATextService.getInstance();
+//    /**
+//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+//     */
+//    public AAnnotationService annotation = AAnnotationService.getInstance();
+//    /**
+//     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+//     */
+//    @Autowired
+//    public AFieldService field = AFieldService.getInstance();
+//
+//    /**
+//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+//     */
+//    public AReflectionService reflection = AReflectionService.getInstance();
+//
+//    /**
+//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+//     */
+//    public AArrayService array = AArrayService.getInstance();
+//
+//
+//    /**
+//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
+//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+//     */
+//    public ATextService text = ATextService.getInstance();
     /**
      * Inietta da Spring come 'session'
      */

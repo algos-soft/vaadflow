@@ -16,7 +16,6 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
@@ -90,48 +89,51 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected final static String EDIT_NAME = "Edit";
     protected final static String SHOW_NAME = "Show";
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Viene recuperato dal context della sessione <br>
      */
-    @Autowired
     public ALogin login;
+
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AAnnotationService annotation;
+    public AAnnotationService annotation = AAnnotationService.getInstance();
+
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AReflectionService reflection;
+    public AArrayService array = AArrayService.getInstance();
+
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AColumnService column;
+    public AColumnService column = AColumnService.getInstance();
+
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    public AArrayService array;
-    protected TextField searchField;
+    public ADateService date = ADateService.getInstance();
+
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    @Autowired
-    protected ATextService text;
+    public AFieldService field = AFieldService.getInstance();
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AReflectionService reflection = AReflectionService.getInstance();
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text = ATextService.getInstance();
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -141,14 +143,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     @Autowired
     protected PreferenzaService pref;
 
-    /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
-     */
-    @Autowired
-    protected ADateService date;
 
+    protected TextField searchField;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -335,6 +331,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     private void fixContext() {
         context = getContext();
+        login = getLogin();
     }// end of method
 
 
@@ -769,6 +766,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         context = (AContext) session.getAttribute(KEY_CONTEXT);
 
         return context;
+    }// end of method
+
+
+    private ALogin getLogin() {
+        return getContext().getLogin();
     }// end of method
 
     @Override

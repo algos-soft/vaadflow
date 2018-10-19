@@ -106,8 +106,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
             //--crea il logout
             listaMenu.add(creaMenuLogout());
-//            listaMenu.add(new MenuItem("Alfa2", () -> UI.getCurrent().navigate("alfa2")));
-//            listaMenu.add(new MenuItem("Beta2", () -> UI.getCurrent().navigate("beta2")));
 
             //--aggiunge i menu
             appLayout.setMenuItems(listaMenu.toArray(new MenuItem[listaMenu.size()]));
@@ -232,7 +230,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     protected MenuItem creaMenuLogout() {
         MenuItem menuItem = null;
-        String linkRoute = "login";
         String menuName = "Logout";
 
         menuItem = new MenuItem(menuName, "exit-to-app", () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')"));
@@ -254,12 +251,18 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
+    /**
+     * Recupera il context che era stato inserito nella sessione al termine della security <br>
+     * Estrae il login dal context <br>
+     *
+     * @return il login
+     */
     private ALogin getLogin() {
-        ALogin login ;
+        ALogin login;
         AContext context;
 
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true); // true == allow create
+        HttpSession session = attr.getRequest().getSession(true);
         context = (AContext) session.getAttribute(KEY_CONTEXT);
         login = context.getLogin();
 

@@ -61,11 +61,11 @@ public class AFieldService extends AbstractService {
 //    @Autowired
 //    private AConverterPrefByte prefConverter;
 
-
     /**
-     * Private constructor to avoid client applications to use constructor
+     * Protected constructor to avoid client applications to use constructor
      */
-    private AFieldService() {
+    protected AFieldService() {
+        super();
     }// end of constructor
 
     /**

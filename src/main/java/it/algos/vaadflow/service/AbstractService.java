@@ -1,7 +1,8 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Project vaadflow
@@ -20,30 +21,117 @@ public abstract class AbstractService {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
+    public AAnnotationService annotation;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AReflectionService reflection = AReflectionService.getInstance();
+    public AArrayService array;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AArrayService array = AArrayService.getInstance();
+    public AColumnService column;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
+    public ADateService date;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ADateService date = ADateService.getInstance();
+    public AFieldService field;
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AReflectionService reflection;
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text;
+
+//    /**
+//     * Protected constructor to avoid client applications to use constructor
+//     */
+//    private AbstractService() {
+//        int a=87;
+//    }// end of constructor
+
+    /**
+     * Protected constructor to avoid client applications to use constructor
+     */
+    @PostConstruct
+    protected  void pippo() {
+        this.annotation = AAnnotationService.getInstance();
+        this.array = AArrayService.getInstance();
+        this.column = AColumnService.getInstance();
+        this.date = ADateService.getInstance();
+        this.field = AFieldService.getInstance();
+        this.reflection = AReflectionService.getInstance();
+        this.text = ATextService.getInstance();
+
+        fix();
+    }// end of constructor
+
+
+    protected  void fix() {
+        this.annotation.array = array;
+        this.annotation.column = column;
+        this.annotation.date = date;
+        this.annotation.field = field;
+        this.annotation.reflection = reflection;
+        this.annotation.text = text;
+
+        this.array.annotation = annotation;
+        this.array.column = column;
+        this.array.date = date;
+        this.array.field = field;
+        this.array.reflection = reflection;
+        this.array.text = text;
+
+        this.column.annotation = annotation;
+        this.column.array = array;
+        this.column.date = date;
+        this.column.field = field;
+        this.column.reflection = reflection;
+        this.column.text = text;
+
+        this.date.annotation = annotation;
+        this.date.array = array;
+        this.date.column = column;
+        this.date.field = field;
+        this.date.reflection = reflection;
+        this.date.text = text;
+
+        this.field.annotation = annotation;
+        this.field.array = array;
+        this.field.column = column;
+        this.field.date = date;
+        this.field.reflection = reflection;
+        this.field.text = text;
+
+        this.reflection.annotation = annotation;
+        this.reflection.array = array;
+        this.reflection.column = column;
+        this.reflection.date = date;
+        this.reflection.field = field;
+        this.reflection.text = text;
+
+        this.text.annotation = annotation;
+        this.text.array = array;
+        this.text.column = column;
+        this.text.date = date;
+        this.text.field = field;
+        this.text.reflection = reflection;
+    }// end of method
 
 }// end of class

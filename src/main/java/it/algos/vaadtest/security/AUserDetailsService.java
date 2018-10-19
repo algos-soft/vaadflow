@@ -75,17 +75,13 @@ public class AUserDetailsService implements UserDetailsService {
         Collection<? extends GrantedAuthority> authorities;
         Utente utente = utenteService.findByUserName(username);
 
-//        int a=AMongoService.getInstance().count(Role.class);
-
         login.setUtente(utente);
         FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
 
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession(true);
-        session.setAttribute(KEY_CONTEXT, new AContext(login,(Company)null));
+        session.setAttribute(KEY_CONTEXT, new AContext(login));
 
-        //--menu specifici
-//        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
 
         if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + username);

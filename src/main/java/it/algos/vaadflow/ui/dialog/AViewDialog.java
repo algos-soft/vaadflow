@@ -93,11 +93,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected boolean usaDeleteButton;
 
 
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    protected ALogin login;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    protected ALogin login;
 
     /**
      * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
