@@ -59,10 +59,9 @@ public class AColumnService extends AbstractService {
     public PreferenzaService pref;
 
     /**
-     * Protected constructor to avoid client applications to use constructor
+     * Private constructor to avoid client applications to use constructor
      */
-    protected AColumnService() {
-        super();
+    private AColumnService() {
     }// end of constructor
 
     /**

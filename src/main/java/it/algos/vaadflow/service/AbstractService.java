@@ -59,18 +59,9 @@ public abstract class AbstractService {
      */
     public ATextService text;
 
-//    /**
-//     * Protected constructor to avoid client applications to use constructor
-//     */
-//    private AbstractService() {
-//        int a=87;
-//    }// end of constructor
 
-    /**
-     * Protected constructor to avoid client applications to use constructor
-     */
     @PostConstruct
-    protected  void pippo() {
+    protected  void postConstruct() {
         this.annotation = AAnnotationService.getInstance();
         this.array = AArrayService.getInstance();
         this.column = AColumnService.getInstance();
@@ -79,11 +70,11 @@ public abstract class AbstractService {
         this.reflection = AReflectionService.getInstance();
         this.text = ATextService.getInstance();
 
-        fix();
+        fixIncrociati();
     }// end of constructor
 
 
-    protected  void fix() {
+    protected  void fixIncrociati() {
         this.annotation.array = array;
         this.annotation.column = column;
         this.annotation.date = date;

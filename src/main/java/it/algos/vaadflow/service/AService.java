@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import com.mongodb.client.result.DeleteResult;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -41,47 +42,20 @@ public abstract class AService extends AbstractService implements IAService {
     public final static String FIELD_NAME_COMPANY = "company";
 
 //    /**
-//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-//     */
-//    public AAnnotationService annotation = AAnnotationService.getInstance();
-//    /**
-//     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+//     * Inietta da Spring come 'session'
 //     */
 //    @Autowired
-//    public AFieldService field = AFieldService.getInstance();
-//
-//    /**
-//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-//     */
-//    public AReflectionService reflection = AReflectionService.getInstance();
-//
-//    /**
-//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-//     */
-//    public AArrayService array = AArrayService.getInstance();
-//
-//
-//    /**
-//     * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
-//     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-//     */
-//    public ATextService text = ATextService.getInstance();
-    /**
-     * Inietta da Spring come 'session'
-     */
-    @Autowired
-    public ALogin login;
+//    public ALogin login2;
 
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
+
     /**
      * Inietta da Spring
      */
     @Autowired
     public AMongoService mongo;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -287,6 +261,7 @@ public abstract class AService extends AbstractService implements IAService {
      * @return the list of matching entities
      */
     @Override
+    @Deprecated
     public List<? extends AEntity> findFilter(String filter) {
         List<? extends AEntity> lista = null;
         String normalizedFilter = filter.toLowerCase();
@@ -297,7 +272,7 @@ public abstract class AService extends AbstractService implements IAService {
         boolean mancaCompany = mancaCompanyNecessaria();
 //        Company companyLoggata = login.getCompany();
 //        boolean nonEsisteCompany = companyLoggata == null;
-        boolean notDeveloper = !login.isDeveloper();
+//        boolean notDeveloper = !login.isDeveloper();
 //        String companyCode = companyLoggata != null ? companyLoggata.getCode() : "";
 
         if (mancaCompany) {
@@ -400,7 +375,7 @@ public abstract class AService extends AbstractService implements IAService {
         boolean entityUsaCompany = annotation.getCompanyRequired(entityClass) == EACompanyRequired.obbligatoria;
 //        Company company = login.getCompany();
 //        boolean nonEsisteCompany = company == null;
-        boolean notDeveloper = !login.isDeveloper();
+//        boolean notDeveloper = !login.isDeveloper();
 
 //        if (appUsaCompany && entityUsaCompany && nonEsisteCompany) {
 //            status = true;
@@ -417,13 +392,15 @@ public abstract class AService extends AbstractService implements IAService {
      * 3) Sovrascrive la lista nella sottoclasse specifica
      * todo ancora da sviluppare
      *
+     * @param context legato alla sessione
+     *
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getGridPropertyNamesList() {
+    public List<String> getGridPropertyNamesList(AContext context) {
         List<String> lista = annotation.getGridPropertiesName(entityClass);
 
-        if (lista.contains(FIELD_NAME_COMPANY) && !login.isDeveloper()) {
+        if (lista.contains(FIELD_NAME_COMPANY) && !context.getLogin().isDeveloper()) {
             lista.remove(FIELD_NAME_COMPANY);
         }// end of if cycle
 
@@ -437,13 +414,15 @@ public abstract class AService extends AbstractService implements IAService {
      * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
      * todo ancora da sviluppare
      *
+     * @param context legato alla sessione
+     *
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList(AEntity curremtItem) {
+    public List<String> getFormPropertyNamesList(AEntity curremtItem, AContext context) {
         ArrayList<String> lista = annotation.getFormPropertiesName(entityClass);
 
-        if (lista.contains(FIELD_NAME_COMPANY) && !login.isDeveloper()) {
+        if (lista.contains(FIELD_NAME_COMPANY) && !context.getLogin().isDeveloper()) {
             lista.remove(FIELD_NAME_COMPANY);
         }// end of if cycle
 
@@ -489,9 +468,9 @@ public abstract class AService extends AbstractService implements IAService {
         }// end of if cycle
 
         if (company == null) {
-            if (login != null) {
+//            if (login != null) {
 //                company = login.getCompany();
-            }// end of if cycle
+//            }// end of if cycle
         }// end of if cycle
 
         //--controlla l'obbligatorietà della Company
@@ -803,9 +782,9 @@ public abstract class AService extends AbstractService implements IAService {
     public Company getCompany() {
         Company company = null;
 
-        if (login != null) {
+//        if (login != null) {
 //            company = login.getCompany();
-        }// end of if cycle
+//        }// end of if cycle
 
         return company;
     }// end of method
@@ -894,9 +873,9 @@ public abstract class AService extends AbstractService implements IAService {
         ACEntity companyEntity;
         String companyCode;
 
-        if (login != null) {
+//        if (login != null) {
 //            company = login.getCompany();
-        }// end of if cycle
+//        }// end of if cycle
 
         if (company != null) {
 //            companyCode = company.getCode();

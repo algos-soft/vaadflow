@@ -1,6 +1,6 @@
 package it.algos.vaadflow.ui.dialog;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 
 /**
@@ -15,8 +15,7 @@ public interface IADialog<T> {
     /**
      * Opens the given item for editing in the dialog.
      *
-     * @param item      The item to edit; it may be an existing or a newly created
-     *                  instance
+     * @param item      The item to edit; it may be an existing or a newly created instance
      * @param operation The operation being performed on the item
      */
     public void open(AEntity item, AViewDialog.Operation operation);
@@ -25,11 +24,21 @@ public interface IADialog<T> {
     /**
      * Opens the given item for editing in the dialog.
      *
-     * @param item      The item to edit; it may be an existing or a newly created
-     *                  instance
+     * @param item      The item to edit; it may be an existing or a newly created instance
      * @param operation The operation being performed on the item
-     * @param title of the window dialog
+     * @param context   legato alla sessione
      */
-    public void open(AEntity item, AViewDialog.Operation operation, String title);
+    public void open(AEntity item, AViewDialog.Operation operation, AContext context);
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     *
+     * @param item      The item to edit; it may be an existing or a newly created instance
+     * @param operation The operation being performed on the item
+     * @param context   legato alla sessione
+     * @param title     of the window dialog
+     */
+    public void open(AEntity item, AViewDialog.Operation operation, AContext context, String title);
 
 }// end of interface

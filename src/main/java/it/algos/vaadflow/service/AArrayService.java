@@ -44,10 +44,9 @@ public class AArrayService extends AbstractService {
 
 
     /**
-     * Protected constructor to avoid client applications to use constructor
+     * Private constructor to avoid client applications to use constructor
      */
-    protected AArrayService() {
-        super();
+    private AArrayService() {
     }// end of constructor
 
     /**

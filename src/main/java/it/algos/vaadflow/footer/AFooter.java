@@ -3,6 +3,7 @@ package it.algos.vaadflow.footer;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EATime;
@@ -11,11 +12,9 @@ import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 
 import static it.algos.vaadflow.application.FlowCost.*;
 
@@ -47,18 +46,13 @@ public class AFooter extends VerticalLayout {
      * Inietta da Spring come 'session'
      */
     @Autowired
-    @Lazy
-    public ALogin login;
-    /**
-     * Inietta da Spring come 'session'
-     */
-    @Autowired
     public ATextService text;
     /**
      * Inietta da Spring come 'session'
      */
     @Autowired
     public ADateService date;
+    private ALogin login;
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
      */
@@ -86,17 +80,10 @@ public class AFooter extends VerticalLayout {
 //            this.addStyleName("greenBg");
         }// end of if cycle
 
-        this.start();
     }// end of method
 
-    public Label setAppMessage(String message) {
-        this.message = message;
-        return this.start();
-    }// end of method
-
-
-    public Label start() {
-        String message = "";
+    public Label setAppMessage(String message, AContext context) {
+        ALogin login=context.getLogin();
         String sep = " - ";
         String spazio = " ";
         String tag = "all companies";

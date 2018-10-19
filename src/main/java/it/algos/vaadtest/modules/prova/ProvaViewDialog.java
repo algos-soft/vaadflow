@@ -63,6 +63,5 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
-        super.usaSaveButton=false;
     }
 }// end of class

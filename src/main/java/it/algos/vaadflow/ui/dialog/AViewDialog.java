@@ -12,8 +12,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.shared.Registration;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -47,6 +47,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
 public abstract class AViewDialog<T extends Serializable> extends Dialog implements IADialog {
 
 
+    public final static int DURATA = 4000;
     protected final Button saveButton = new Button(REGISTRA);
     protected final Button cancelButton = new Button(ANNULLA);
     protected final Button deleteButton = new Button(DELETE);
@@ -92,6 +93,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected boolean usaDeleteButton;
 
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la AViewList. Passato poi anche alla AViewDialog.
+     */
+    protected AContext context;
 
 //    /**
 //     * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -308,7 +313,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
         //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
         //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        formPropertyNamesList = service != null ? service.getFormPropertyNamesList((AEntity) currentItem) : null;
+        formPropertyNamesList = service != null ? service.getFormPropertyNamesList((AEntity) currentItem, context) : null;
 
         //--Costruisce ogni singolo field
         //--Aggiunge il field al binder, nel metodo create() del fieldService
@@ -455,15 +460,25 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     /**
      * Opens the given item for editing in the dialog.
      *
-     * @param item      The item to edit; it may be an existing or a newly created
-     *                  instance
+     * @param item      The item to edit; it may be an existing or a newly created instance
      * @param operation The operation being performed on the item
      */
     @Override
     public void open(AEntity item, AViewDialog.Operation operation) {
-        open(item, operation, "");
+        open(item, operation, (AContext) null);
     }// end of method
 
+    /**
+     * Opens the given item for editing in the dialog.
+     *
+     * @param item      The item to edit; it may be an existing or a newly created instance
+     * @param operation The operation being performed on the item
+     * @param context   legato alla sessione
+     */
+    @Override
+    public void open(AEntity item, Operation operation, AContext context) {
+        open(item, operation, context, "");
+    }// end of method
 
     /**
      * Opens the given item for editing in the dialog.
@@ -472,20 +487,23 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      *
      * @param item      The item to edit; it may be an existing or a newly created instance
      * @param operation The operation being performed on the item
+     * @param context   legato alla sessione
+     * @param title     of the window dialog
      */
     @Override
-    public void open(AEntity item, AViewDialog.Operation operation, String title) {
+    public void open(AEntity item, Operation operation, AContext context, String title) {
         if (((AService) service).mancaCompanyNecessaria()) {
-            Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", 3000, Notification.Position.BOTTOM_START);
+            Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
         if (item == null) {
-            Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", 3000, Notification.Position.BOTTOM_START);
+            Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
 
         this.currentItem = (T) item;
         this.operation = operation;
+        this.context = context;
         Object view = presenter.getView();
         if (view != null) {
             this.itemType = presenter.getView().getName();

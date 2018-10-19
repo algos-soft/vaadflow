@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
@@ -392,7 +393,7 @@ public class PersonService extends AService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getGridPropertyNamesList() {
+    public List<String> getGridPropertyNamesList(AContext context) {
         return pref.isBool(FlowCost.USA_SECURITY) ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
 
@@ -406,7 +407,7 @@ public class PersonService extends AService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList(AEntity curremtItem) {
+    public List<String> getFormPropertyNamesList(AEntity curremtItem,AContext context) {
         return ((Person) curremtItem).usaSuperClasse ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
 

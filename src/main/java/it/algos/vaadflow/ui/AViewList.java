@@ -277,6 +277,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected boolean usaRefresh;
 
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la AViewList. Passato poi anche alla AViewDialog.
+     */
     protected AContext context;
 
     /**
@@ -452,7 +455,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton = new Button("New entity", new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD));
+            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD, context));
             topLayout.add(newButton);
         }// end of if cycle
 
@@ -538,7 +541,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
         //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
         //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList() : null;
+        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
 
         if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             try { // prova ad eseguire il codice
@@ -659,7 +662,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
     protected Button createEditButton(AEntity entityBean) {
-        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT));
+        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT, context));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -669,7 +672,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     private void apreDialogo(SingleSelectionEvent evento, AViewDialog.Operation operation) {
         if (evento != null && evento.getOldValue() != evento.getValue()) {
             if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
-                dialog.open((AEntity) evento.getValue(), operation);
+                dialog.open((AEntity) evento.getValue(), operation, context);
             }// end of if cycle
         }// end of if cycle
     }// end of method
@@ -692,7 +695,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     protected void creaFooterLayout() {
         if (footer != null) {
-            this.add(footer.setAppMessage(""));
+            this.add(footer.setAppMessage("", context));
         }// end of if cycle
     }// end of method
 

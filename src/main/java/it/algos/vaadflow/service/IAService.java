@@ -1,5 +1,6 @@
 package it.algos.vaadflow.service;
 
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -146,9 +147,11 @@ public interface IAService {
      * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
      * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
      *
+     * @param context legato alla sessione
+     *
      * @return lista di nomi di properties
      */
-    public List<String> getGridPropertyNamesList();
+    public List<String> getGridPropertyNamesList(AContext context);
 
 
     /**
@@ -157,9 +160,11 @@ public interface IAService {
      * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
      * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
      *
+     * @param context legato alla sessione
+     *
      * @return lista di nomi di properties
      */
-    public List<String> getFormPropertyNamesList(AEntity curremtItem);
+    public List<String> getFormPropertyNamesList(AEntity curremtItem, AContext context);
 
 
 //    /**

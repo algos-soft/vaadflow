@@ -69,10 +69,9 @@ public class ADateService extends AbstractService {
 
 
     /**
-     * Protected constructor to avoid client applications to use constructor
+     * Private constructor to avoid client applications to use constructor
      */
-    protected ADateService() {
-        super();
+    private ADateService() {
     }// end of constructor
 
     /**

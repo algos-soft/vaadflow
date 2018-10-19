@@ -65,10 +65,9 @@ public class ATextService extends AbstractService {
 
 
     /**
-     * Protected constructor to avoid client applications to use constructor
+     * Private constructor to avoid client applications to use constructor
      */
-    protected ATextService() {
-        super();
+    private ATextService() {
     }// end of constructor
 
     /**
