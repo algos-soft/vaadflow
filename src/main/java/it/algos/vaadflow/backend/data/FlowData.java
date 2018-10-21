@@ -1,27 +1,43 @@
 package it.algos.vaadflow.backend.data;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.anno.Anno;
 import it.algos.vaadflow.modules.anno.AnnoService;
-import it.algos.vaadflow.modules.company.CompanyService;
+import it.algos.vaadflow.modules.giorno.Giorno;
 import it.algos.vaadflow.modules.giorno.GiornoService;
+import it.algos.vaadflow.modules.logtype.EALogType;
+import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
+import it.algos.vaadflow.modules.mese.EAMese;
+import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.modules.person.PersonService;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
+import it.algos.vaadflow.modules.secolo.EASecolo;
+import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
+import it.algos.vaadflow.modules.utente.EAUtente;
+import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
-import it.algos.vaadtest.TestApplication;
+import it.algos.vaadflow.service.AMongoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.modules.anno.AnnoService.*;
 
 /**
  * Project vaadflow
@@ -31,7 +47,7 @@ import javax.annotation.PostConstruct;
  * Time: 08:53
  * <p>
  * Poiché siamo in fase di boot, la sessione non esiste ancora <br>
- * Questo vuol dire che le classe @VaadinSessionScope (come i xxxService dei moduli)
+ * Questo vuol dire che le classi @VaadinSessionScope (come i xxxService dei moduli)
  * NON possono essere iniettate automaticamente da Spring <br>
  * Vengono costruite con la BeanFactory <br>
  * Non riesco, però, a costruire classi con classi annidate come Person e Company che usano Address <br>
@@ -40,7 +56,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public class FlowData {
+public class FlowData extends AData {
 
 
     @Autowired
@@ -58,10 +74,6 @@ public class FlowData {
      */
     private AnnoService anno;
 
-    /**
-     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
-     */
-    private CompanyService company;
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
@@ -86,63 +98,175 @@ public class FlowData {
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    private RoleService role;
+    @Autowired
+    private AMongoService mongoService;
+
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    private SecoloService secolo;
+    @Autowired
+    private RoleService roleService;
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    private UtenteService utente;
+    @Autowired
+    private UtenteService utenteService;
 
+    /**
+     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
+     */
+    @Autowired
+    private SecoloService secoloService;
 
-    @PostConstruct
-    public void postCostruct() {
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-        beanFactory = applicationContext.getAutowireCapableBeanFactory();
-
-        this.role = beanFactory.createBean(RoleService.class);
-//        this.utente = beanFactory.createBean(UtenteService.class);
-//        this.logtype = beanFactory.createBean(LogtypeService.class);
-//
-//        this.address = beanFactory.createBean(AddressService.class);
-//
-//        this.mese = beanFactory.createBean(MeseService.class);
-//        this.secolo = beanFactory.createBean(SecoloService.class);
-//        this.anno = beanFactory.createBean(AnnoService.class);
-//        this.giorno = beanFactory.createBean(GiornoService.class);
-
-//        this.role = new RoleService(null);
-//        this.utente = new UtenteService(null);
-//        this.logtype = new LogtypeService(null);
-//
-//        this.address = new AddressService(null);
-//
-//        this.mese = new MeseService(null);
-//        this.secolo = new SecoloService(null);
-//        this.anno = new AnnoService(null);
-//        this.giorno = new GiornoService(null);
-    }// end of method
+    /**
+     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
+     */
+    @Autowired
+    private MeseService meseService;
 
 
     /**
      * Inizializzazione dei dati di alcune collections standard sul DB mongo <br>
      */
-    public void loadData() {
-        this.role.loadData();
-//        this.utente.loadData();
-//        this.logtype.loadData();
-//
-//        this.address.loadData();
-//
-//        this.mese.loadData();
-//        this.secolo.loadData();
-//        this.anno.loadData();
-//        this.giorno.loadData();
+    public void loadAllData() {
+        roleService.reset();
+        utenteService.reset();
+        this.loadLogtype();
+        this.loadAddress();
+        meseService.reset();
+        secoloService.reset();
+        this.loadAnno();
+        this.loadGiorno();
     }// end of method
 
+
+
+
+    /**
+     * Inizializzazione dei dati della collection indicata <br>
+     */
+    public int loadLogtype() {
+        int ordine = 0;
+        Logtype entity;
+        String code;
+
+        for (EALogType type : EALogType.values()) {
+            code = type.getTag();
+            entity = Logtype.builderLogtype()
+                    .ordine(++ordine)
+                    .code(text.isValid(code) ? code : null)
+                    .build();
+            entity.id = entity.code;
+            mongoService.insert(entity, annotation.getCollectionName(Logtype.class));
+        }// end of for cycle
+
+        return ordine;
+    }// end of method
+
+
+    /**
+     * Inizializzazione dei dati della collection indicata <br>
+     */
+    public int loadAddress() {
+        int num = 0;
+        Address entity;
+
+        for (EAAddress address : EAAddress.values()) {
+            entity = Address.builderAddress()
+                    .indirizzo(text.isValid(address.getIndirizzo()) ? address.getIndirizzo() : null)
+                    .localita(text.isValid(address.getLocalita()) ? address.getLocalita() : null)
+                    .cap(text.isValid(address.getCap()) ? address.getCap() : null)
+                    .build();
+            mongoService.insert(entity, annotation.getCollectionName(Address.class));
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
+
+
+
+    /**
+     * Inizializzazione dei dati della collection indicata <br>
+     */
+    public int loadAnno() {
+        int num = 0;
+        int ordine = 0;
+        Anno entity;
+        String titoloAnno;
+        EASecolo secoloEnum;
+        Secolo secoloBean;
+        String titoloSecolo;
+
+        //costruisce gli anni prima di cristo dal 1000
+        for (int k = ANTE_CRISTO; k > 0; k--) {
+            ordine = ANNO_INIZIALE - k;
+            titoloAnno = k + EASecolo.TAG_AC;
+            secoloEnum = EASecolo.getSecoloAC(k);
+            titoloSecolo = secoloEnum.getTitolo();
+            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            if (ordine != ANNO_INIZIALE) {
+                entity = Anno.builderAnno()
+                        .secolo(secoloBean)
+                        .ordine(ordine)
+                        .titolo(titoloAnno)
+                        .build();
+                mongoService.insert(entity, annotation.getCollectionName(Anno.class));
+                num++;
+            }// end of if cycle
+        }// end of for cycle
+
+        //costruisce gli anni dopo cristo fino al 2030
+        for (int k = 1; k <= DOPO_CRISTO; k++) {
+            ordine = k + ANNO_INIZIALE;
+            titoloAnno = k + VUOTA;
+            secoloEnum = EASecolo.getSecoloDC(k);
+            titoloSecolo = secoloEnum.getTitolo();
+            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            if (ordine != ANNO_INIZIALE) {
+                entity = Anno.builderAnno()
+                        .secolo(secoloBean)
+                        .ordine(ordine)
+                        .titolo(titoloAnno)
+                        .build();
+                mongoService.insert(entity, annotation.getCollectionName(Anno.class));
+                num++;
+            }// end of if cycle
+        }// end of for cycle
+
+        return num;
+    }// end of method
+
+    /**
+     * Inizializzazione dei dati della collection indicata <br>
+     */
+    public int loadGiorno() {
+        int num = 0;
+        int ordine = 0;
+        Giorno entity;
+        ArrayList<HashMap> lista;
+        String titolo;
+        int bisestile;
+        Mese meseEntity;
+
+        //costruisce i 366 records
+        lista = date.getAllGiorni();
+        for (HashMap mappaGiorno : lista) {
+            titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
+            bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
+            meseEntity = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            entity = Giorno.builderGiorno()
+                    .mese(meseEntity)
+                    .ordine(ordine)
+                    .titolo(titolo)
+                    .build();
+            mongoService.insert(entity, annotation.getCollectionName(Giorno.class));
+            num++;
+        }// end of for cycle
+
+        return num;
+    }// end of method
 
 }// end of class

@@ -3,6 +3,7 @@ package it.algos.vaadflow.service;
 import com.mongodb.client.result.DeleteResult;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
@@ -49,6 +50,12 @@ public abstract class AService extends AbstractService implements IAService {
 
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected FlowData flow;
 
     /**
      * Inietta da Spring

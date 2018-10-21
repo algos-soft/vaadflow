@@ -52,9 +52,9 @@ public class AMongoService extends AbstractService {
      * Inietta da Spring
      */
     @Autowired
-    public MongoOperations mongo;
-    @Autowired
-    public MongoTemplate template;
+    public MongoOperations mongoOp;
+//    @Autowired
+//    public MongoTemplate template;
 
 
     /**
@@ -73,13 +73,13 @@ public class AMongoService extends AbstractService {
     }// end of static method
 
 
-    /**
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti
-     */
-//    public AMongoService(MongoRepository repository, MongoOperations mongo) {
-//        this.repository = repository;
+//    /**
+//     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation
+//     * Si usa un @Qualifier(), per avere la sottoclasse specifica
+//     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti
+//     */
+//    public AMongoService(MongoTemplate template, MongoOperations mongo) {
+//        this.template = template;
 //        this.mongo = mongo;
 //    }// end of Spring constructor
 
@@ -118,7 +118,7 @@ public class AMongoService extends AbstractService {
      * @return num recs
      */
     public int count(Class<? extends AEntity> clazz) {
-        return (int) mongo.count(new Query(), clazz);
+        return (int) mongoOp.count(new Query(), clazz);
     }// end of method
 
 
@@ -145,7 +145,7 @@ public class AMongoService extends AbstractService {
      */
     public AEntity findById(Class<? extends AEntity> clazz, String keyId) {
         AEntity entity = null;
-        Object obj = mongo.findById(keyId, clazz);
+        Object obj = mongoOp.findById(keyId, clazz);
 
         if (obj != null && obj instanceof AEntity) {
             entity = (AEntity) obj;
@@ -169,7 +169,7 @@ public class AMongoService extends AbstractService {
         Object lista;
 
         Query searchQuery = new Query(Criteria.where(property).is(value));
-        lista = mongo.find(searchQuery, clazz);
+        lista = mongoOp.find(searchQuery, clazz);
 
         if (lista != null && ((List) lista).size() == 1) {
             entity = (AEntity) ((List) lista).get(0);
@@ -187,7 +187,7 @@ public class AMongoService extends AbstractService {
      * @return lista
      */
     public List findAll(Class<? extends AEntity> clazz) {
-        return mongo.findAll(clazz);
+        return mongoOp.findAll(clazz);
     }// end of method
 
 
@@ -212,7 +212,7 @@ public class AMongoService extends AbstractService {
         boolean status = false;
 
         try { // prova ad eseguire il codice
-            mongo.insert(item, collectionName);
+            mongoOp.insert(item, collectionName);
             status = true;
         } catch (Exception unErrore) { // intercetta l'errore
             log.error(unErrore.toString());
@@ -229,7 +229,7 @@ public class AMongoService extends AbstractService {
      * @param clazz della collezione
      */
     public void insert(List<? extends AEntity> lista, Class<? extends AEntity> clazz) {
-        mongo.insert(lista, clazz);
+        mongoOp.insert(lista, clazz);
     }// end of method
 
 
@@ -245,7 +245,7 @@ public class AMongoService extends AbstractService {
         entity = findByEntity(clazz, entityBean);
 
         if (entity != null) {
-            mongo.remove(entity);
+            mongoOp.remove(entity);
         }// end of if cycle
 
         return insert(entityBean, clazz);
@@ -283,7 +283,7 @@ public class AMongoService extends AbstractService {
      * @return lista
      */
     public DeleteResult delete(AEntity entityBean) {
-        return mongo.remove(entityBean);
+        return mongoOp.remove(entityBean);
     }// end of method
 
 
@@ -345,7 +345,7 @@ public class AMongoService extends AbstractService {
      * @return lista
      */
     public void drop(String collectionName) {
-        this.mongo.dropCollection(collectionName);
+        this.mongoOp.dropCollection(collectionName);
     }// end of method
 
 
@@ -358,7 +358,7 @@ public class AMongoService extends AbstractService {
      */
     public DeleteResult deleteByProperty(Class<? extends AEntity> clazz, String property, String value) {
         Query searchQuery = new Query(Criteria.where(property).is(value));
-        return this.mongo.remove(searchQuery, clazz);
+        return this.mongoOp.remove(searchQuery, clazz);
     }// end of method
 
 
@@ -388,7 +388,7 @@ public class AMongoService extends AbstractService {
      * @return lista
      */
     public MongoCollection<Document> getCollection(Class<? extends AEntity> clazz) {
-        return mongo.getCollection(getCollectionName(clazz));
+        return mongoOp.getCollection(getCollectionName(clazz));
     }// end of method
 
 
@@ -400,7 +400,7 @@ public class AMongoService extends AbstractService {
      * @return lista
      */
     public MongoCollection<Document> getCollection(String collectionName) {
-        return mongo.getCollection(collectionName);
+        return mongoOp.getCollection(collectionName);
     }// end of method
 
 

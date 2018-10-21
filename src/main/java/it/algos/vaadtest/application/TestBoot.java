@@ -4,7 +4,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,10 @@ import static it.algos.vaadflow.application.FlowCost.*;
  * Date: ven, 24-ago-2018
  * Time: 16:48
  * <p>
- * Running logic after the Spring context has been initialized
+ * Running logic after the Spring context has been initialized <br>
+ * Parte perché SpringBoot chiama il metodo contextInitialized() <br>
+ * Invoca alcuni metodi della superclasse <br>
+ * Di norma dovrebbe esserci una sola classe di questo tipo nel programma <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -110,8 +112,8 @@ public class TestBoot extends ABoot {
      */
     protected void addRouteSpecifiche() {
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-    	FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-	}// end of method
+        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+    }// end of method
 
 
 }// end of boot class

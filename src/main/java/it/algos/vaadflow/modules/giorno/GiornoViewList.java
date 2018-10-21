@@ -4,7 +4,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
@@ -38,9 +41,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 @UIScope
 @Route(value = TAG_GIO, layout = MainLayout.class)
 @Qualifier(TAG_GIO)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
-@AIScript(sovrascrivibile = true)
-public class GiornoViewList extends AViewList {
+@AIScript(sovrascrivibile = false)
+public class GiornoViewList extends ACronoViewList {
 
 
     /**

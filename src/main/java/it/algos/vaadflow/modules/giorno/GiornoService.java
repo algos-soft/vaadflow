@@ -239,23 +239,7 @@ public class GiornoService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-
-        ArrayList<HashMap> lista;
-        String titolo;
-        int bisestile;
-        Mese mese ;
-
-        //costruisce i 366 records
-        lista = dateService.getAllGiorni();
-        for (HashMap mappaGiorno : lista) {
-            titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
-            bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            mese = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
-            this.crea(mese, bisestile, titolo);
-        }// end of for cycle
-
-        return num;
+        return flow.loadGiorno();
     }// end of method
 
 }// end of class

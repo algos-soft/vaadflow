@@ -92,12 +92,9 @@ public abstract class ABoot implements ServletContextListener {
 //     */
 //    @Autowired
 //    private AnnoService anno;
-//    /**
-//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-//     */
-//    @Autowired
-//    private GiornoService giorno;
-
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
     @Autowired
     private FlowData flow;
 
@@ -134,20 +131,10 @@ public abstract class ABoot implements ServletContextListener {
     }// end of method
 
     /**
-     * Inizializzazione dei dati di alcune collections standard sul DB mongo
+     * Inizializzazione dei dati di alcune collections standard sul DB mongo <br>
      */
     private void iniziaDataStandard() {
-        flow.loadData();
-//        this.role.loadData();
-//        this.utente.loadData();
-//        this.address.loadData();
-//        this.person.loadData();
-//        this.company.loadData();
-//        this.logtype.loadData();
-//        this.secolo.loadData();
-//        this.mese.loadData();
-//        this.anno.loadData();
-//        this.giorno.loadData();
+        flow.loadAllData();
     }// end of method
 
 

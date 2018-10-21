@@ -41,7 +41,7 @@ public class LogtypePresenter extends APresenter {
      * @param service layer di collegamento per la Repository e la Business Logic
      */
     @Autowired
-    public LogtypePresenter(@Qualifier(TAG_LOG) IAService service) {
+    public LogtypePresenter(@Qualifier(TAG_TYP) IAService service) {
         super(Logtype.class, service);
      }// end of Spring constructor
 

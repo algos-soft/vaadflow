@@ -70,13 +70,4 @@ public class AnnoViewList extends ACronoViewList {
     }// end of Spring constructor
 
 
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
-        super.usaBottoneEdit = false;
-    }// end of method
-
 }// end of class

@@ -784,7 +784,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Inserisce il context come attributo nella vaadSession <br>
      */
     private void fixLoginAndContext() {
-        AContext context;
         String uniqueUserName = "";
         Utente utente;
         VaadinSession vaadSession = UI.getCurrent().getSession();

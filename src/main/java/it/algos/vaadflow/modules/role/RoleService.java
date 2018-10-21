@@ -1,7 +1,5 @@
 package it.algos.vaadflow.modules.role;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.utente.Utente;
@@ -38,6 +36,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
+
 /**
  * In deroga a quanto scritto sopra (valido per gli altri xxxService, questa classe è 'singleton' <br>
  * Viene iniettata da SprinBoot in AUserDetailsService, prima che esista la VaadinSession <br>
@@ -50,7 +49,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class RoleService extends AService {
-
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -190,6 +188,7 @@ public class RoleService extends AService {
         }// end of for cycle
 
         return num;
+//        return flow.loadRole();
     }// end of method
 
     /**
@@ -307,10 +306,12 @@ public class RoleService extends AService {
         List<GrantedAuthority> listAuthority = new ArrayList<>();
         GrantedAuthority authority;
 
-        for (Role ruolo : ruoli) {
-            authority = new SimpleGrantedAuthority(ruolo.code);
-            listAuthority.add(authority);
-        }// end of for cycle
+        if (array.isValid(ruoli)) {
+            for (Role ruolo : ruoli) {
+                authority = new SimpleGrantedAuthority(ruolo.code);
+                listAuthority.add(authority);
+            }// end of for cycle
+        }// end of if cycle
 
         return listAuthority;
     }// end of method

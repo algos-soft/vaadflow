@@ -140,14 +140,7 @@ public class LogtypeService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-
-        for (EALogType type : EALogType.values()) {
-            crea(type.getTag());
-            num++;
-        }// end of for cycle
-
-        return num;
+        return flow.loadLogtype();
     }// end of method
 
 

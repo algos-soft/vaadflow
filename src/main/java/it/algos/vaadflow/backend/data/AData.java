@@ -2,6 +2,7 @@ package it.algos.vaadflow.backend.data;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.AbstractService;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Scope;
  * <p>
  * Superclasse astratta per la costruzione inziale delle Collections <br>
  * Viene invocata PRIMA della chiamata del browser, tramite un metodo @PostConstruct della sottoclasse <br>
- * Non si possono quindi usare i service specifici dei package che sono @UIScope <br>
+ * Non si possono quindi usare i service specifici dei package che sono @VaadinSessionScope <br>
  * Viceversa le repository specifiche dei package sono delle interfacce e pertanto vengono 'create' al volo <br>
  * <p>
  * Annotated with @SpringComponent (obbligatorio per le injections) <br>
@@ -26,8 +27,7 @@ import org.springframework.context.annotation.Scope;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-public abstract class AData {
-
+public abstract class AData extends AbstractService {
 
 
     /**
@@ -56,7 +56,6 @@ public abstract class AData {
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
      */
 //    public AData(MongoOperations mongo, MongoRepository repository, IAService service) {
     public AData(Class entityClazz, IAService service) {

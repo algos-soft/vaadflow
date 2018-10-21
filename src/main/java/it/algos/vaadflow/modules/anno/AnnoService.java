@@ -53,10 +53,10 @@ public class AnnoService extends AService {
 
 
     //--usato nell'ordinamento delle categorie
-    static final int ANNO_INIZIALE = 2000;
+    public   static final int ANNO_INIZIALE = 2000;
 
-    static final int ANTE_CRISTO = 1000;
-    static final int DOPO_CRISTO = 2030;
+    public   static final int ANTE_CRISTO = 1000;
+    public    static final int DOPO_CRISTO = 2030;
 
 
     /**
@@ -217,38 +217,7 @@ public class AnnoService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-        int progressivo;
-        String titoloAnno;
-        EASecolo secoloEnum;
-        Secolo secolo;
-        String titoloSecolo;
-
-        //costruisce gli anni prima di cristo dal 1000
-        for (int k = ANTE_CRISTO; k > 0; k--) {
-            progressivo = ANNO_INIZIALE - k;
-            titoloAnno = k + EASecolo.TAG_AC;
-            secoloEnum = EASecolo.getSecoloAC(k);
-            titoloSecolo = secoloEnum.getTitolo();
-            secolo = secoloService.findByKeyUnica(titoloSecolo);
-            if (progressivo != ANNO_INIZIALE) {
-                this.crea(secolo, progressivo, titoloAnno);
-            }// end of if cycle
-        }// end of for cycle
-
-        //costruisce gli anni dopo cristo fino al 2030
-        for (int k = 1; k <= DOPO_CRISTO; k++) {
-            progressivo = k + ANNO_INIZIALE;
-            titoloAnno = k + VUOTA;
-            secoloEnum = EASecolo.getSecoloDC(k);
-            titoloSecolo = secoloEnum.getTitolo();
-            secolo = secoloService.findByKeyUnica(titoloSecolo);
-            if (progressivo != ANNO_INIZIALE) {
-                this.crea(secolo, progressivo, titoloAnno);
-            }// end of if cycle
-        }// end of for cycle
-
-        return num;
+        return flow.loadAnno();
     }// end of method
 
     /**

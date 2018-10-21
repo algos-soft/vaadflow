@@ -144,14 +144,7 @@ public class AddressService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-
-        for (EAAddress address : EAAddress.values()) {
-            this.crea(address);
-            num++;
-        }// end of for cycle
-
-        return num;
+        return flow.loadAddress();
     }// end of method
 
 }// end of class

@@ -75,7 +75,7 @@ public class AMongoServiceTest extends ATest {
         provaService.annotation = annotation;
         provaService.reflection = reflection;
         provaService.mongo = mongoService;
-        mongoService.mongo = mongoOperations;
+        mongoService.mongoOp = mongoOperations;
         mongoService.annotation = annotation;
     }// end of method
 
