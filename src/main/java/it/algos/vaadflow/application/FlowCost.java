@@ -177,6 +177,7 @@ public class FlowCost {
     public final static String KEY_MAPPA_GIORNI_TITOLO = "titolo";
     public final static String KEY_MAPPA_GIORNI_MESE_MESE = "meseMese";
 
+    public final static String KEY_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     public final static String KEY_LOGGED_USER = "loggedUser";
     public final static String KEY_UNIQUE_USER_NAME = "uniqueUserName";
     public final static String KEY_CONTEXT = "context";

@@ -15,6 +15,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
@@ -22,11 +23,13 @@ import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.utente.Utente;
+import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -37,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.KEY_LOGGED_USER;
+import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
 import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
@@ -57,21 +60,17 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
-    //    /**
-//     * Recupera da StaticContextAccessor una istanza della classe <br>
-//     * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>
-//     */
-//    public ALogin login = StaticContextAccessor.getBean(ALogin.class);
 
-//    @Autowired
     private ALogin login;
     private AAnnotationService annotation = AAnnotationService.getInstance();
     private AReflectionService reflection = AReflectionService.getInstance();
     private ATextService text = ATextService.getInstance();
 
+    private UtenteService utenteService;
 
-    public MainLayout() {
-        this.login=login;
+    public MainLayout(UtenteService utenteService, ALogin login) {
+        this.utenteService = utenteService;
+        this.login = login;
         setMargin(false);
         setSpacing(false);
         setPadding(false);
@@ -81,7 +80,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        ALogin login = getLogin();
+        fixLoginAndContext();
         String title = FlowCost.LAYOUT_TITLE;
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
@@ -256,40 +255,37 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         settings.addFavIcon("icon", "/frontend/images/favicons/favicon-96x96.png", "96x96");
     }// end of method
 
-
-    private ALogin getLogin() {
-        ALogin login ;
+    /**
+     * Crea il login ed il context <br>
+     * Controlla che non esista già il context nella vaadSession
+     * (non è chiaro se passa prima da MainLayout o da AViewList) <br>
+     * <p>
+     * Recupera l'user dall'attributo della sessione HttpSession al termine della security <br>
+     * Crea il login <br>
+     * Crea il context <br>
+     * Inserisce il context come attributo nella vaadSession <br>
+     */
+    private void fixLoginAndContext() {
         AContext context;
+        String uniqueUserName = "";
+        Utente utente;
+        VaadinSession vaadSession = UI.getCurrent().getSession();
 
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true); // true == allow create
-        context = (AContext) session.getAttribute(KEY_CONTEXT);
-        login = context.getLogin();
+        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+        if (context == null) {
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession httpSession = attr.getRequest().getSession(true);
+            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
+            User springUser = (User) securityContext.getAuthentication().getPrincipal();
+            uniqueUserName = springUser.getUsername();
+            utente = utenteService.findByUserName(uniqueUserName);
 
-        return login;
+            login.setUtente(utente);
+            context = new AContext(login);
+            vaadSession.setAttribute(KEY_CONTEXT, context);
+        }// end of if cycle
+
+        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
     }// end of method
-
-//    /**
-//     * Recupera il context che era stato inserito nella sessione al termine della security <br>
-//     * Estrae il login dal context <br>
-//     *
-//     * @return il login
-//     */
-//    private ALogin getLogin() {
-//        AContext context;
-//        Utente utente;
-//
-//        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-//        HttpSession session = attr.getRequest().getSession(true);
-//
-//        utente = (Utente) session.getAttribute(KEY_LOGGED_USER);
-//        login.setUtente(utente);
-//        context = new AContext(login);
-//        session.setAttribute(KEY_CONTEXT, context);
-//
-//        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
-//
-//        return login;
-//    }// end of method
 
 }// end of class

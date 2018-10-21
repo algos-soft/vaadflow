@@ -1,5 +1,7 @@
 package it.algos.vaadtest.security;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.company.Company;
@@ -35,7 +37,6 @@ import static it.algos.vaadflow.application.FlowCost.KEY_LOGGED_USER;
 @Primary
 public class AUserDetailsService implements UserDetailsService {
 
-    private final ALogin login;
     private final UtenteService utenteService;
     private final RoleService roleService;
 
@@ -48,8 +49,7 @@ public class AUserDetailsService implements UserDetailsService {
     protected ABootService boot;
 
     @Autowired
-    public AUserDetailsService(ALogin login, UtenteService utenteService, RoleService roleService) {
-        this.login = login;
+    public AUserDetailsService(UtenteService utenteService, RoleService roleService) {
         this.utenteService = utenteService;
         this.roleService = roleService;
     }// end of Spring constructor
@@ -67,21 +67,9 @@ public class AUserDetailsService implements UserDetailsService {
         Collection<? extends GrantedAuthority> authorities;
         Utente utente = utenteService.findByUserName(uniqueUserName);
 
-//        login.setUtente(utente);
-//        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
-
-
         if (null == utente) {
             throw new UsernameNotFoundException("No user present with username: " + uniqueUserName);
         } else {
-            //--parcheggia provvisoriamente l'utente nella Sessione
-            //--in MainLayout verrà costruita l'istanza di Login, dopo che è partita la UI
-//            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-//            HttpSession session = attr.getRequest().getSession(true);
-//            session.setAttribute(KEY_LOGGED_USER, utente);
-
-            this.setContext(utente);
-
             passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
             authorities = roleService.getAuthorities(utente);
             return new User(utente.getUserName(), passwordHash, authorities);
@@ -89,17 +77,5 @@ public class AUserDetailsService implements UserDetailsService {
 
     }// end of method
 
-
-    /**
-     * parcheggia provvisoriamente l'utente nella Sessione
-     * in MainLayout verrà costruita l'istanza di Login, dopo che è partita la UI
-     */
-    public void setContext(Utente utente) {
-        login.setUtente(utente);
-
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        session.setAttribute(KEY_CONTEXT, new AContext(login, (Company) null));
-    }// end of method
 
 }// end of class

@@ -1,7 +1,5 @@
 package it.algos.vaadflow.modules.versione;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
@@ -36,6 +34,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ */
+
+/**
+ * In deroga a quanto scritto sopra (valido per gli altri xxxService, questa classe è 'singleton' <br>
+ * Viene iniettata da SprinBott in ABoot, prima che esista la VaadinSession <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -138,7 +143,7 @@ public class VersioneService extends AService {
         textOrdine = newOrdine < 10 ? TAG + newOrdine : "" + newOrdine;
         entity.id = sigla + textOrdine;
 
-        return (Versione)creaIdKeySpecifica(entity);
+        return (Versione) creaIdKeySpecifica(entity);
     }// end of method
 
 

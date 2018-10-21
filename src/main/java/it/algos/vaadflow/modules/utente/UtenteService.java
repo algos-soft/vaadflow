@@ -1,7 +1,5 @@
 package it.algos.vaadflow.modules.utente;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -37,6 +35,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ */
+
+/**
+ * In deroga a quanto scritto sopra (valido per gli altri xxxService, questa classe è 'singleton' <br>
+ * Viene iniettata da SprinBoot in AUserDetailsService, prima che esista la VaadinSession <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -189,7 +194,7 @@ public class UtenteService extends AService {
      */
     @Override
     public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
-        Utente entity = (Utente) super.beforeSave(entityBean,operation);
+        Utente entity = (Utente) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.userName)) {
             entity.id = FlowCost.STOP_SAVE;

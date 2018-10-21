@@ -23,8 +23,8 @@ import java.util.List;
  * Time: 16:23
  */
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-//@VaadinSessionScope
+//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@VaadinSessionScope
 public class ALogin {
 
     private Utente utente;

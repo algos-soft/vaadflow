@@ -1,5 +1,6 @@
 package it.algos.vaadflow.ui;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
@@ -16,17 +17,23 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.modules.utente.Utente;
+import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,6 +43,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
+import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
+import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
  * Project it.algos.vaadflow
@@ -91,7 +100,10 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     /**
      * Viene recuperato dal context della sessione <br>
      */
+    @Autowired
     public ALogin login;
+    @Autowired
+    protected UtenteService utenteService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
@@ -312,8 +324,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.setSpacing(false);
         this.removeAll();
 
-        //--Context della sessione
-        fixContext();
+        //--Login and context della sessione
+        fixLoginAndContext();
 
         //--Le preferenze standard
         fixPreferenze();
@@ -329,13 +341,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         creaFooterLayout();
     }// end of method
 
-    /**
-     * Context della sessione
-     */
-    private void fixContext() {
-        context = getContext();
-        login = getLogin();
-    }// end of method
+//    /**
+//     * Login and context della sessione
+//     */
+//    private void fixLoginAndContext() {
+//        context = getContext();
+//        login = getLogin();
+//    }// end of method
 
 
     /**
@@ -761,20 +773,37 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     }// end of method
 
-    private AContext getContext() {
+    /**
+     * Crea il login ed il context <br>
+     * Controlla che non esista già il context nella vaadSession
+     * (non è chiaro se passa prima da MainLayout o da AViewList) <br>
+     * <p>
+     * Recupera l'user dall'attributo della sessione HttpSession al termine della security <br>
+     * Crea il login <br>
+     * Crea il context <br>
+     * Inserisce il context come attributo nella vaadSession <br>
+     */
+    private void fixLoginAndContext() {
         AContext context;
+        String uniqueUserName = "";
+        Utente utente;
+        VaadinSession vaadSession = UI.getCurrent().getSession();
 
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        context = (AContext) session.getAttribute(KEY_CONTEXT);
+        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+        if (context == null) {
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession httpSession = attr.getRequest().getSession(true);
+            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
+            User springUser = (User) securityContext.getAuthentication().getPrincipal();
+            uniqueUserName = springUser.getUsername();
+            utente = utenteService.findByUserName(uniqueUserName);
 
-        return context;
+            login.setUtente(utente);
+            context = new AContext(login);
+            vaadSession.setAttribute(KEY_CONTEXT, context);
+        }// end of if cycle
     }// end of method
 
-
-    private ALogin getLogin() {
-        return getContext().getLogin();
-    }// end of method
 
     @Override
     public String getName() {
