@@ -7,14 +7,15 @@ import it.algos.vaadflow.presenter.APresenter;
 import it.algos.vaadflow.service.IAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2018 21.01.15 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -41,7 +42,7 @@ public class GiornoPresenter extends APresenter {
     @Autowired
     public GiornoPresenter(@Qualifier(TAG_GIO) IAService service) {
         super(Giorno.class, service);
-    }// end of Spring constructor
+     }// end of Spring constructor
 
 
 }// end of class

@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2018 21.00.40 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>

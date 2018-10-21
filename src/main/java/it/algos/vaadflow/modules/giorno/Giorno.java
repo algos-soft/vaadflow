@@ -18,10 +18,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2018 21.01.15 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class FlowCost {
+	public final static String TAG_LOGTYPE = "logtype";
 	public final static String TAG_LOG = "log";
 	public final static String TAG_TYP = "logtype";
     public final static String TAG_UTE = "utente";
@@ -176,6 +177,8 @@ public class FlowCost {
     public final static String KEY_MAPPA_GIORNI_TITOLO = "titolo";
     public final static String KEY_MAPPA_GIORNI_MESE_MESE = "meseMese";
 
+    public final static String KEY_LOGGED_USER = "loggedUser";
+    public final static String KEY_UNIQUE_USER_NAME = "uniqueUserName";
     public final static String KEY_CONTEXT = "context";
 
 }// end of static class

@@ -1,19 +1,12 @@
 package it.algos.vaadtest.security;
 
 import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.company.Company;
-import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.ABootService;
-import it.algos.vaadflow.service.AMongoService;
-import it.algos.vaadtest.modules.prova.Prova;
-import it.algos.vaadtest.modules.prova.ProvaViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,8 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Collection;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
-import static it.algos.vaadflow.application.FlowCost.SHOW_ROLE;
+import static it.algos.vaadflow.application.FlowCost.KEY_LOGGED_USER;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -70,27 +62,44 @@ public class AUserDetailsService implements UserDetailsService {
      * @param username User's e-mail address
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String uniqueUserName) throws UsernameNotFoundException {
         String passwordHash = "";
         Collection<? extends GrantedAuthority> authorities;
-        Utente utente = utenteService.findByUserName(username);
+        Utente utente = utenteService.findByUserName(uniqueUserName);
 
-        login.setUtente(utente);
-        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
-
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        session.setAttribute(KEY_CONTEXT, new AContext(login));
+//        login.setUtente(utente);
+//        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
 
 
         if (null == utente) {
-            throw new UsernameNotFoundException("No user present with username: " + username);
+            throw new UsernameNotFoundException("No user present with username: " + uniqueUserName);
         } else {
+            //--parcheggia provvisoriamente l'utente nella Sessione
+            //--in MainLayout verrà costruita l'istanza di Login, dopo che è partita la UI
+//            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+//            HttpSession session = attr.getRequest().getSession(true);
+//            session.setAttribute(KEY_LOGGED_USER, utente);
+
+            this.setContext(utente);
+
             passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
             authorities = roleService.getAuthorities(utente);
             return new User(utente.getUserName(), passwordHash, authorities);
         }// end of if/else cycle
 
+    }// end of method
+
+
+    /**
+     * parcheggia provvisoriamente l'utente nella Sessione
+     * in MainLayout verrà costruita l'istanza di Login, dopo che è partita la UI
+     */
+    public void setContext(Utente utente) {
+        login.setUtente(utente);
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        session.setAttribute(KEY_CONTEXT, new AContext(login, (Company) null));
     }// end of method
 
 }// end of class

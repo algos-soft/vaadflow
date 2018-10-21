@@ -1,6 +1,7 @@
 package it.algos.vaadflow.backend.login;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//@VaadinSessionScope
 public class ALogin {
 
     private Utente utente;

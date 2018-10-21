@@ -1,6 +1,19 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.modules.company.CompanyViewList;
+import it.algos.vaadflow.modules.anno.AnnoViewList;
+import it.algos.vaadflow.modules.utente.UtenteViewList;
+import it.algos.vaadflow.modules.versione.VersioneViewList;
+import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
+import it.algos.vaadflow.modules.log.LogViewList;
+import it.algos.vaadflow.modules.address.AddressViewList;
+import it.algos.vaadflow.modules.mese.MeseViewList;
+import it.algos.vaadflow.modules.giorno.GiornoViewList;
+import it.algos.vaadflow.modules.person.PersonViewList;
+import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadflow.modules.role.RoleViewList;
+import it.algos.vaadflow.modules.logtype.LogtypeViewList;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.address.AddressViewList;
@@ -167,7 +180,20 @@ public class ABootService extends AbstractService {
         FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
-    }// end of method
+    	FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(PersonViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(MeseViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(AddressViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(LogViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(PreferenzaViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(AnnoViewList.class);
+		FlowCost.MENU_CLAZZ_LIST.add(CompanyViewList.class);
+	}// end of method
 
 
     public void creaRouteStandardAdmin() {

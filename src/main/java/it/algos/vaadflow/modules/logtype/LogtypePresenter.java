@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la classe astratta APresenter che gestisce la business logic del package <br>
  * <br>
@@ -29,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @SpringComponent
 @UIScope
 @Qualifier(TAG_TYP)
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class LogtypePresenter extends APresenter {
 
     /**
@@ -41,7 +41,7 @@ public class LogtypePresenter extends APresenter {
      * @param service layer di collegamento per la Repository e la Business Logic
      */
     @Autowired
-    public LogtypePresenter(@Qualifier(TAG_TYP) IAService service) {
+    public LogtypePresenter(@Qualifier(TAG_LOG) IAService service) {
         super(Logtype.class, service);
      }// end of Spring constructor
 

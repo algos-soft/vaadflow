@@ -4,23 +4,20 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.ACronoViewList;
-import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2018 21.01.15 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -41,10 +38,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 @UIScope
 @Route(value = TAG_GIO, layout = MainLayout.class)
 @Qualifier(TAG_GIO)
-@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class GiornoViewList extends ACronoViewList {
+public class GiornoViewList extends AViewList {
 
 
     /**
@@ -55,7 +51,7 @@ public class GiornoViewList extends ACronoViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -69,14 +65,5 @@ public class GiornoViewList extends ACronoViewList {
         ((GiornoViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-
-    /**
-     * Le preferenze sovrascritte nella sottoclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
-        super.usaBottoneEdit = false;
-    }// end of method
 
 }// end of class

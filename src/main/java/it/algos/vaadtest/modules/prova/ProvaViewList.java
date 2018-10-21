@@ -1,29 +1,23 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.dialog.AEditDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-set-2018 7.27.58 <br>
+ * Fix date: 20-ott-2018 18.52.31 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -57,7 +51,7 @@ public class ProvaViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -71,40 +65,5 @@ public class ProvaViewList extends AViewList {
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
-
-    /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
-        super.isEntityDeveloper = true;
-        super.isEntityEmbadded = true;
-    }// end of method
-
-    /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    @Override
-    protected void creaTopLayout() {
-        super.creaTopLayout();
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.setMargin(false);
-        layout.setSpacing(false);
-        layout.setPadding(false);
-
-        AEditDialog dialog = new AEditDialog("Alfa", "Sottotitolo", "Inserisci");
-        Button testButton = new Button("Dialogo");
-        testButton.addClickListener(event -> dialog.open());
-        testButton.getElement().setAttribute("theme", "secondary");
-
-        layout.add(testButton);
-        topLayout.add(layout);
-    }// end of method
 
 }// end of class

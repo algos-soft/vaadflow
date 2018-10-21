@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.role;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.utente.Utente;
@@ -25,18 +26,18 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
- * Estende la classe astratta AService. Layer di collegamento per la Repository. <br>
+ * Business class. Layer di collegamento per la Repository. <br>
  * <br>
- * Annotated with @SpringComponent (obbligatorio) <br>
- * Annotated with @Service (ridondante) <br>
- * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * Annotated with @VaadinSessionScope (obbligatorio) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ROL)

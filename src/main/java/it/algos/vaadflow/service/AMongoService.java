@@ -2,14 +2,11 @@ package it.algos.vaadflow.service;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -25,6 +22,7 @@ import java.util.List;
  * User: gac
  * Date: mar, 21-ago-2018
  * Time: 16:04
+ * <p>
  * Gestione degli accessi al database MongoDB <br>
  * Classe di libreria; NON deve essere astratta, altrimenti Spring non la costruisce <br>
  * Implementa il 'pattern' SINGLETON; l'istanza può essere richiamata con: <br>
@@ -50,6 +48,14 @@ public class AMongoService extends AbstractService {
      * Private final property
      */
     private static final AMongoService INSTANCE = new AMongoService();
+    /**
+     * Inietta da Spring
+     */
+    @Autowired
+    public MongoOperations mongo;
+    @Autowired
+    public MongoTemplate template;
+
 
     /**
      * Private constructor to avoid client applications to use constructor
@@ -65,17 +71,6 @@ public class AMongoService extends AbstractService {
     public static AMongoService getInstance() {
         return INSTANCE;
     }// end of static method
-
-
-    /**
-     * Inietta da Spring
-     */
-    @Autowired
-    public MongoOperations mongo;
-
-    @Autowired
-    public MongoTemplate template;
-
 
 
     /**
@@ -114,7 +109,6 @@ public class AMongoService extends AbstractService {
 //
 //    //insert a list of user objects
 //	mongoOperation.insert(listofUser);
-
 
     /**
      * Count all

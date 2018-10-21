@@ -16,7 +16,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>

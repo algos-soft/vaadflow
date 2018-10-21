@@ -4,8 +4,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.prova.ProvaViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
-import it.algos.vaadtest.modules.categoria.CategoriaViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,8 +110,8 @@ public class TestBoot extends ABoot {
      */
     protected void addRouteSpecifiche() {
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(CategoriaViewList.class);
-    }// end of method
+    	FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+	}// end of method
 
 
 }// end of boot class

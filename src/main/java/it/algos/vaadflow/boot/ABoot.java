@@ -1,5 +1,6 @@
 package it.algos.vaadflow.boot;
 
+import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.anno.AnnoService;
 import it.algos.vaadflow.modules.company.CompanyService;
@@ -45,56 +46,60 @@ public abstract class ABoot implements ServletContextListener {
      */
     @Autowired
     protected PreferenzaService pref;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
+
+    //    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private RoleService role;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private UtenteService utente;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+////    @Autowired
+////    private AddressService address;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+////    @Autowired
+////    private PersonService person;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+////    @Autowired
+////    private CompanyService company;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private LogtypeService logtype;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private SecoloService secolo;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private MeseService mese;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private AnnoService anno;
+//    /**
+//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+//     */
+//    @Autowired
+//    private GiornoService giorno;
+
     @Autowired
-    private RoleService role;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private UtenteService utente;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private AddressService address;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private PersonService person;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private CompanyService company;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private LogtypeService logtype;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private SecoloService secolo;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private MeseService mese;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private AnnoService anno;
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private GiornoService giorno;
+    private FlowData flow;
 
     /**
      * Executed on container startup
@@ -132,16 +137,17 @@ public abstract class ABoot implements ServletContextListener {
      * Inizializzazione dei dati di alcune collections standard sul DB mongo
      */
     private void iniziaDataStandard() {
-        this.role.loadData();
-        this.utente.loadData();
-        this.address.loadData();
-        this.person.loadData();
-        this.company.loadData();
-        this.logtype.loadData();
-        this.secolo.loadData();
-        this.mese.loadData();
-        this.anno.loadData();
-        this.giorno.loadData();
+        flow.loadData();
+//        this.role.loadData();
+//        this.utente.loadData();
+//        this.address.loadData();
+//        this.person.loadData();
+//        this.company.loadData();
+//        this.logtype.loadData();
+//        this.secolo.loadData();
+//        this.mese.loadData();
+//        this.anno.loadData();
+//        this.giorno.loadData();
     }// end of method
 
 

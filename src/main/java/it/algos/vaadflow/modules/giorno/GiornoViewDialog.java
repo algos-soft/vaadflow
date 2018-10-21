@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.giorno;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -9,14 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 7-ott-2018 21.01.15 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -35,7 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 public class GiornoViewDialog extends AViewDialog<Giorno> {
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -47,5 +47,5 @@ public class GiornoViewDialog extends AViewDialog<Giorno> {
         super(presenter);
     }// end of Spring constructor
 
-
+    
 }// end of class

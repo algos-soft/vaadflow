@@ -4,8 +4,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -19,7 +17,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 30-set-2018 16.14.56 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -40,7 +38,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM, layout = MainLayout.class)
 @Qualifier(TAG_COM)
-@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class CompanyViewList extends AViewList {
@@ -52,7 +49,6 @@ public class CompanyViewList extends AViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
-    public static final String IRON_ICON = "account-balance";
 
 
    /**
@@ -68,20 +64,6 @@ public class CompanyViewList extends AViewList {
         super(presenter, dialog);
         ((CompanyViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
-
-    /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.usaSearchTextField = false;
-        super.usaBottoneDeleteAll = true;
-        super.usaBottoneReset = true;
-        super.isEntityDeveloper = true;
-        super.isEntityUsaDatiDemo=true;
-    }// end of method
 
 
 }// end of class

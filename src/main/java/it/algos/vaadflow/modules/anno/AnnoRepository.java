@@ -12,10 +12,10 @@ import java.util.List;
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 
 /**
- * Project vaadwiki <br>
+ * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2018 21.01.29 <br>
+ * Fix date: 20-ott-2018 18.52.54 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>
