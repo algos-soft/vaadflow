@@ -1,10 +1,9 @@
 package it.algos.vaadflow.modules.anno;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.AService;
@@ -12,15 +11,12 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
-import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow <br>
@@ -46,26 +42,20 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 public class AnnoService extends AService {
 
 
+    //--usato nell'ordinamento delle categorie
+    public static final int ANNO_INIZIALE = 2000;
+    public static final int ANTE_CRISTO = 1000;
+    public static final int DOPO_CRISTO = 2030;
     /**
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
-
-
-    //--usato nell'ordinamento delle categorie
-    public   static final int ANNO_INIZIALE = 2000;
-
-    public   static final int ANTE_CRISTO = 1000;
-    public    static final int DOPO_CRISTO = 2030;
-
-
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public AnnoRepository repository;
-
 
 
     /**
@@ -105,14 +95,15 @@ public class AnnoService extends AService {
 
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Anno newEntity() {
+    public Anno newEntity(AContext context) {
         return newEntity((Secolo) null, 0, "");
     }// end of method
 
@@ -196,10 +187,12 @@ public class AnnoService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
+     * @param context della sessione
+     *
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll() {
+    public List<Anno> findAll(AContext context) {
         return repository.findTop100ByOrderByOrdine();
     }// end of method
 
@@ -209,14 +202,13 @@ public class AnnoService extends AService {
      * La collezione viene svuotata <br>
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
-     * <p>
-     * Ante cristo dal 1000
-     * Dopo cristo fino al 2030
+     *
+     * @param context della sessione
      *
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
+    public int reset(AContext context) {
         return flow.loadAnno();
     }// end of method
 

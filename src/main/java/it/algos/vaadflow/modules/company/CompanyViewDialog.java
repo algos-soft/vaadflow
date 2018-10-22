@@ -201,7 +201,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         Address indirizzo = getIndirizzoCorrente();
 
         if (indirizzo == null) {
-            indirizzo = indirizzoService.newEntity();
+            indirizzo = indirizzoService.newEntity(context);
         }// end of if cycle
 
         return indirizzo;

@@ -11,18 +11,13 @@ import it.algos.vaadflow.modules.giorno.GiornoService;
 import it.algos.vaadflow.modules.logtype.EALogType;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
-import it.algos.vaadflow.modules.mese.EAMese;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.modules.person.PersonService;
-import it.algos.vaadflow.modules.role.EARole;
-import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
-import it.algos.vaadflow.modules.utente.EAUtente;
-import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AMongoService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +29,6 @@ import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.*;
 import static it.algos.vaadflow.modules.anno.AnnoService.*;
@@ -131,17 +125,15 @@ public class FlowData extends AData {
      * Inizializzazione dei dati di alcune collections standard sul DB mongo <br>
      */
     public void loadAllData() {
-        roleService.reset();
-        utenteService.reset();
+        roleService.reset(null);
+        utenteService.reset(null);
         this.loadLogtype();
         this.loadAddress();
-        meseService.reset();
-        secoloService.reset();
+        meseService.reset(null);
+        secoloService.reset(null);
         this.loadAnno();
         this.loadGiorno();
     }// end of method
-
-
 
 
     /**
@@ -187,7 +179,6 @@ public class FlowData extends AData {
     }// end of method
 
 
-
     /**
      * Inizializzazione dei dati della collection indicata <br>
      */
@@ -213,6 +204,7 @@ public class FlowData extends AData {
                         .ordine(ordine)
                         .titolo(titoloAnno)
                         .build();
+                entity.id = entity.titolo;
                 mongoService.insert(entity, annotation.getCollectionName(Anno.class));
                 num++;
             }// end of if cycle
@@ -231,6 +223,7 @@ public class FlowData extends AData {
                         .ordine(ordine)
                         .titolo(titoloAnno)
                         .build();
+                entity.id = entity.titolo;
                 mongoService.insert(entity, annotation.getCollectionName(Anno.class));
                 num++;
             }// end of if cycle
@@ -262,6 +255,7 @@ public class FlowData extends AData {
                     .ordine(ordine)
                     .titolo(titolo)
                     .build();
+            entity.id = entity.titolo;
             mongoService.insert(entity, annotation.getCollectionName(Giorno.class));
             num++;
         }// end of for cycle

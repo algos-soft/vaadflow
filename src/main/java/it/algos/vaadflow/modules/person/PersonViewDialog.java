@@ -153,7 +153,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
         Address indirizzo = getIndirizzoCorrente();
 
         if (indirizzo == null) {
-            indirizzo = addressService.newEntity();
+            indirizzo = addressService.newEntity(context);
         }// end of if cycle
 
         return indirizzo;

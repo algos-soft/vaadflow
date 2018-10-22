@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.role;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
@@ -77,15 +78,16 @@ public class RoleService extends AService {
      * Ricerca una entity <br>
      * Se non esiste, la crea <br>
      *
+     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity trovata o appena creata
      */
-    public Role findOrCrea(String code) {
+    public Role findOrCrea(AContext context,String code) {
         Role entity = findByKeyUnica(code);
 
         if (entity == null) {
-            entity = newEntity(0, code);
+            entity = newEntity(context,0, code);
             save(entity);
         }// end of if cycle
 
@@ -95,24 +97,26 @@ public class RoleService extends AService {
     /**
      * Crea una entity <br>
      *
+     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity trovata o appena creata
      */
-    public Role crea(String code) {
-        return (Role) save(newEntity(0, code));
+    public Role crea(AContext context,String code) {
+        return (Role) save(newEntity(context,0, code));
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Role newEntity() {
-        return newEntity(0, "");
+    public Role newEntity(AContext context){
+        return newEntity(context,0, "");
     }// end of method
 
     /**
@@ -120,17 +124,18 @@ public class RoleService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
+     * @param context della sessione
      * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code   codice di riferimento (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Role newEntity(int ordine, String code) {
+    public Role newEntity(AContext context,int ordine, String code) {
         Role entity = findByKeyUnica(code);
 
         if (entity == null) {
             entity = Role.builderRole()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                    .ordine(ordine != 0 ? ordine : this.getNewOrdine(context))
                     .code(text.isValid(code) ? code : null)
                     .build();
         }// end of if cycle
@@ -154,10 +159,11 @@ public class RoleService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
+     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Role> findAll() {
+    public List<Role> findAll(AContext context) {
         return repository.findAllByOrderByOrdineAsc();
     }// end of method
 
@@ -176,19 +182,19 @@ public class RoleService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
-        int num = super.reset();
+    public int reset(AContext context) {
+        int num = super.reset(context);
 
         for (EARole ruolo : EARole.values()) {
-            this.crea(ruolo.toString());
+            this.crea(context,ruolo.toString());
             num++;
         }// end of for cycle
 
         return num;
-//        return flow.loadRole();
     }// end of method
 
     /**

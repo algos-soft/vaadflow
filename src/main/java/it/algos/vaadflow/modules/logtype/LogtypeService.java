@@ -3,6 +3,8 @@ package it.algos.vaadflow.modules.logtype;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,24 +73,26 @@ public class LogtypeService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
+     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity appena creata
      */
-    public Logtype crea(String code) {
-        return (Logtype) save(newEntity(0, code));
+    public Logtype crea(AContext context,String code) {
+        return (Logtype) save(newEntity(context,0, code));
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Logtype newEntity() {
-        return newEntity(0, "");
+    public Logtype newEntity(AContext context){
+        return newEntity(context,0, "");
     }// end of method
 
 
@@ -98,17 +102,18 @@ public class LogtypeService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
+     * @param context della sessione
      * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code   codice di riferimento (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Logtype newEntity(int ordine, String code) {
+    public Logtype newEntity(AContext context,int ordine, String code) {
         Logtype entity = findByKeyUnica(code);
 
         if (entity == null) {
             entity = Logtype.builderLogtype()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                    .ordine(ordine != 0 ? ordine : this.getNewOrdine(context))
                     .code(text.isValid(code) ? code : null)
                     .build();
         }// end of if cycle
@@ -136,10 +141,11 @@ public class LogtypeService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
+    public int reset(AContext context) {
         return flow.loadLogtype();
     }// end of method
 

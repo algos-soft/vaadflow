@@ -7,15 +7,14 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import it.algos.vaadflow.annotation.AIField;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.converter.AConverterPrefByte;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.validator.AIntegerZeroValidator;
 import it.algos.vaadflow.validator.ALongZeroValidator;
 import it.algos.vaadflow.validator.AStringNullValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -81,15 +80,16 @@ public class AFieldService extends AbstractService {
      * Create a single field.
      * The field type is chosen according to the annotation @AIField.
      *
+     * @param context      della sessione
      * @param binder       collegamento tra i fields e la entityBean
      * @param binderClass  della Entity di riferimento
      * @param propertyName della property
      */
-    public AbstractField create(Binder binder, Class binderClass, String propertyName) {
+    public AbstractField create(AContext context, Binder binder, Class binderClass, String propertyName) {
         Field reflectionJavaField = reflection.getField(binderClass, propertyName);
 
         if (reflectionJavaField != null) {
-            return create(binder, reflectionJavaField);
+            return create(context, binder, reflectionJavaField);
         } else {
             return null;
         }// end of if/else cycle
@@ -100,10 +100,11 @@ public class AFieldService extends AbstractService {
      * Create a single field.
      * The field type is chosen according to the annotation @AIField.
      *
+     * @param context             della sessione
      * @param binder              collegamento tra i fields e la entityBean
      * @param reflectionJavaField di riferimento per estrarre le Annotation
      */
-    public AbstractField create(Binder binder, Field reflectionJavaField) {
+    public AbstractField create(AContext context, Binder binder, Field reflectionJavaField) {
         AbstractField field = null;
         String fieldName = reflectionJavaField.getName();
 //        int minDefault = 3;
@@ -217,7 +218,7 @@ public class AFieldService extends AbstractService {
                 field = new AComboBox(caption);
                 if (clazz != null) {
                     IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll();
+                    List items = ((IAService) service).findAll(context);
                     if (items != null) {
                         ((AComboBox) field).setItems(items);
                     }// end of if cycle

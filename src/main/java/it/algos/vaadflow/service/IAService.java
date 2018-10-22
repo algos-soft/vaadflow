@@ -85,9 +85,11 @@ public interface IAService {
      * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
      * Eseguo qui la conversione, che rimane trasparente al resto del programma
      *
+     * @param context della sessione
+     *
      * @return all entities
      */
-    public List<? extends AEntity> findAll();
+    public List<? extends AEntity> findAll(AContext context);
 
 
     /**
@@ -97,11 +99,12 @@ public interface IAService {
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
-     * @param filter the filter text
+     * @param context della sessione
+     * @param filter  the filter text
      *
      * @return the list of matching entities
      */
-    public List<? extends AEntity> findFilter(String filter);
+    public List<? extends AEntity> findFilter(AContext context, String filter);
 
 
     /**
@@ -202,13 +205,15 @@ public interface IAService {
 
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public AEntity newEntity();
+    public AEntity newEntity(AContext context);
 
 
     /**
@@ -242,8 +247,9 @@ public interface IAService {
      * Metodo invocato da ABoot (o da una sua sottoclasse) <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
      * Creazione di una collezione - Solo se non ci sono records
+     * @param context della sessione
      */
-    public void loadData();
+    public void loadData(AContext context);
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -252,9 +258,10 @@ public interface IAService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
-    public int reset();
+    public int reset(AContext context);
 
     /**
      * Importazione di dati <br>

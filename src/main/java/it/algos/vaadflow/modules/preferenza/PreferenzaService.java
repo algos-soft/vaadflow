@@ -1,6 +1,7 @@
 package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.AService;
@@ -114,14 +115,15 @@ public class PreferenzaService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Preferenza newEntity() {
+    public AEntity newEntity(AContext context){
         return newEntity(null, 0, "", "", null, null);
     }// end of method
 
@@ -183,13 +185,14 @@ public class PreferenzaService extends AService {
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
+     * @param context della sessione
      * @param filter the filter text
      *
      * @return the list of matching entities
      */
     @Override
-    public List<? extends AEntity> findFilter(String filter) {
-        return findAll(); //@todo PROVVISORIO
+    public List<? extends AEntity> findFilter(AContext context,String filter) {
+        return findAll(context); //@todo PROVVISORIO
     }
 
     /**
@@ -209,10 +212,11 @@ public class PreferenzaService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
+     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Preferenza> findAll() {
+    public List<Preferenza> findAll(AContext context) {
         List<Preferenza> lista = null;
 
         lista = repository.findAllByOrderByOrdineAsc();
@@ -227,11 +231,12 @@ public class PreferenzaService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
-        int num = super.reset();
+    public int reset(AContext context) {
+        int num = super.reset(context);
 
         for (EAPreferenza prefTemp : EAPreferenza.values()) {
             String code = prefTemp.getCode();

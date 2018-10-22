@@ -3,6 +3,7 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -102,14 +103,15 @@ public class ProvaService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Prova newEntity() {
+    public Prova newEntity(AContext context){
         return newEntity(0, "");
     }// end of method
 
@@ -169,6 +171,23 @@ public class ProvaService extends AService {
 
         return ordine + 1;
     }// end of method
+
+    /**
+     * Returns all entities of the type <br>
+     * <p>
+     * Se esiste la property 'ordine', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
+     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
+     *
+     * @param context della sessione
+     * @return all ordered entities
+     */
+    @Override
+    public List<? extends AEntity> findAll(AContext context) {
+        return super.findAll(context);
+    }
 
     /**
      * Operazioni eseguite PRIMA del save <br>

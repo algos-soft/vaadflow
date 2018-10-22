@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.log;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
@@ -110,14 +111,15 @@ public class LogService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Log newEntity() {
+    public Log newEntity(AContext context){
         return newEntity((Livello) null, (Logtype) null, "");
     }// end of method
 
@@ -167,10 +169,11 @@ public class LogService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
+     * @param context della sessione
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll() {
+    public List<? extends AEntity> findAll(AContext context) {
         return repository.findAll();
     }// end of method
 

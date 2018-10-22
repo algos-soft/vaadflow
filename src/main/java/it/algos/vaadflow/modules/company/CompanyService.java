@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.company;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
@@ -122,14 +123,15 @@ public class CompanyService extends AService {
 
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Company newEntity() {
+    public Company newEntity(AContext context){
         return newEntity("", "");
     }// end of method
 
@@ -215,10 +217,11 @@ public class CompanyService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
+     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Company> findAll() {
+    public List<Company> findAll(AContext context) {
         List<Company> lista = null;
 
         try { // prova ad eseguire il codice
@@ -254,11 +257,12 @@ public class CompanyService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
-        int num = super.reset();
+    public int reset(AContext context) {
+        int num = super.reset(context);
         String code;
         String descrizione;
         EAPerson eaPerson;

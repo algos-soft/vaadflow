@@ -152,14 +152,15 @@ public class PersonService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Person newEntity() {
+    public Person newEntity(AContext context){
         return newEntity("", "");
     }// end of method
 
@@ -323,11 +324,12 @@ public class PersonService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
-        int num = super.reset();
+    public int reset(AContext context) {
+        int num = super.reset(context);
 
         for (EAPerson eaPersona : EAPerson.values()) {
             this.crea(eaPersona);

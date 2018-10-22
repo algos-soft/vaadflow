@@ -1,13 +1,11 @@
 package it.algos.vaadflow.modules.address;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -85,14 +83,15 @@ public class AddressService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Address newEntity() {
+    public Address newEntity(AContext context) {
         return newEntity("", "", "");
     }// end of method
 
@@ -107,7 +106,7 @@ public class AddressService extends AService {
      * @return la entity trovata o appena creata
      */
     public Address newEntity(EAAddress eaAddress) {
-        return  newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
+        return newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
     }// end of method
 
 
@@ -137,13 +136,15 @@ public class AddressService extends AService {
      * Creazione di alcuni dati demo iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
      * La collezione viene svuotata <br>
-     * I dati possono essere presi da una Enumeration o creati direttamente <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @param context della sessione
      *
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
+    public int reset(AContext context) {
         return flow.loadAddress();
     }// end of method
 

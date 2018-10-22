@@ -1,8 +1,8 @@
 package it.algos.vaadflow.modules.giorno;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
@@ -12,17 +12,13 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 
 /**
  * Project vaadflow <br>
@@ -52,26 +48,22 @@ public class GiornoService extends AService {
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
-
-
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private ADateService dateService;
-
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-    @Autowired
-    private MeseService meseService;
-
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public GiornoRepository repository;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private ADateService dateService;
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private MeseService meseService;
 
 
     /**
@@ -103,14 +95,15 @@ public class GiornoService extends AService {
     }// end of method
 
     /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Senza properties per compatibilità con la superclasse
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    @Override
-    public Giorno newEntity() {
+    public Giorno newEntity(AContext context) {
         return newEntity((Mese) null, 0, "");
     }// end of method
 
@@ -121,9 +114,9 @@ public class GiornoService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param mese        di riferimento (obbligatorio)
+     * @param mese   di riferimento (obbligatorio)
      * @param ordine (obbligatorio, unico)
-     * @param titolo      (obbligatorio, unico)
+     * @param titolo (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -196,26 +189,29 @@ public class GiornoService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
+     * @param context della sessione
+     *
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll() {
-        return super.findAll();
-    }
+    public List<? extends AEntity> findAll(AContext context) {
+        return super.findAll(context);
+    }// end of method
 
     /**
      * Returns all entities of the type <br>
      * <p>
      * Ordinate secondo l'ordinamento previsto
      *
-     * @param sort ordinamento previsto
+     * @param context della sessione
+     * @param sort    ordinamento previsto
      *
      * @return all ordered entities
      */
     @Override
-    protected List<? extends AEntity> findAll(Sort sort) {
-        return super.findAll(sort);
-    }
+    protected List<? extends AEntity> findAll(AContext context, Sort sort) {
+        return super.findAll(context, sort);
+    }// end of method
 
     /**
      * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
@@ -235,10 +231,11 @@ public class GiornoService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
+     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset() {
+    public int reset(AContext context) {
         return flow.loadGiorno();
     }// end of method
 
