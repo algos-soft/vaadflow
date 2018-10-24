@@ -187,12 +187,11 @@ public class SecoloService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
 
         for (EASecolo eaSecolo : EASecolo.values()) {
             this.crea(eaSecolo.getTitolo(), eaSecolo.getInizio(), eaSecolo.getFine(), eaSecolo.isAnteCristo());

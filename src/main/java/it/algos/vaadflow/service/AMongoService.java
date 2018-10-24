@@ -8,7 +8,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -145,7 +144,11 @@ public class AMongoService extends AbstractService {
      */
     public AEntity findById(Class<? extends AEntity> clazz, String keyId) {
         AEntity entity = null;
-        Object obj = mongoOp.findById(keyId, clazz);
+        Object obj = null;
+
+        if (text.isValid(keyId)) {
+            obj = mongoOp.findById(keyId, clazz);
+        }// end of if cycle
 
         if (obj != null && obj instanceof AEntity) {
             entity = (AEntity) obj;
@@ -198,7 +201,19 @@ public class AMongoService extends AbstractService {
      * @param clazz della collezione
      */
     public boolean insert(AEntity item, Class<? extends AEntity> clazz) {
-        return insert(item, getCollectionName(clazz));
+        boolean status = false;
+        String collectionName = annotation.getCollectionName(clazz);
+
+        if (findByEntity(clazz, item) == null) {
+            try { // prova ad eseguire il codice
+                mongoOp.insert(item, collectionName);
+                status = true;
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        return status;
     }// end of method
 
 
@@ -208,6 +223,7 @@ public class AMongoService extends AbstractService {
      * @param item           da inserire
      * @param collectionName della collezione
      */
+    @Deprecated
     public boolean insert(AEntity item, String collectionName) {
         boolean status = false;
 

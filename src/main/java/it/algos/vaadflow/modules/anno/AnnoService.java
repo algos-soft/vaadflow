@@ -187,12 +187,11 @@ public class AnnoService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
      *
      * @return all ordered entities
      */
     @Override
-    public List<Anno> findAll(AContext context) {
+    public List<Anno> findAll() {
         return repository.findTop100ByOrderByOrdine();
     }// end of method
 
@@ -203,12 +202,11 @@ public class AnnoService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      *
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
+    public int reset() {
         return flow.loadAnno();
     }// end of method
 

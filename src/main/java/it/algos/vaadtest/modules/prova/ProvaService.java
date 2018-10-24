@@ -1,6 +1,7 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
@@ -10,13 +11,12 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -111,7 +111,7 @@ public class ProvaService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Prova newEntity(AContext context){
+    public Prova newEntity(AContext context) {
         return newEntity(0, "");
     }// end of method
 
@@ -181,13 +181,17 @@ public class ProvaService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
+     *
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll(AContext context) {
-        return super.findAll(context);
+    public List<? extends AEntity> findAll() {
+        VaadinSession vaadSession = UI.getCurrent().getSession();
+        AContext context2 = getContext();
+
+        return super.findAll();
     }
+
 
     /**
      * Operazioni eseguite PRIMA del save <br>

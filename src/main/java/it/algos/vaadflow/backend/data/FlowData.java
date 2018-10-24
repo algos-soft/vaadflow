@@ -125,12 +125,12 @@ public class FlowData extends AData {
      * Inizializzazione dei dati di alcune collections standard sul DB mongo <br>
      */
     public void loadAllData() {
-        roleService.reset(null);
-        utenteService.reset(null);
+        roleService.loadData();
+        utenteService.loadData();
         this.loadLogtype();
         this.loadAddress();
-        meseService.reset(null);
-        secoloService.reset(null);
+        meseService.loadData();
+        secoloService.loadData();
         this.loadAnno();
         this.loadGiorno();
     }// end of method
@@ -140,21 +140,29 @@ public class FlowData extends AData {
      * Inizializzazione dei dati della collection indicata <br>
      */
     public int loadLogtype() {
+        int numRec = mongoService.count(Logtype.class);
         int ordine = 0;
         Logtype entity;
         String code;
+        String collectionName = annotation.getCollectionName(Logtype.class);
 
-        for (EALogType type : EALogType.values()) {
-            code = type.getTag();
-            entity = Logtype.builderLogtype()
-                    .ordine(++ordine)
-                    .code(text.isValid(code) ? code : null)
-                    .build();
-            entity.id = entity.code;
-            mongoService.insert(entity, annotation.getCollectionName(Logtype.class));
-        }// end of for cycle
+        if (numRec == 0) {
+            for (EALogType type : EALogType.values()) {
+                code = type.getTag();
+                entity = Logtype.builderLogtype()
+                        .ordine(++ordine)
+                        .code(text.isValid(code) ? code : null)
+                        .build();
+                entity.id = entity.code;
+                mongoService.insert(entity, Logtype.class);
+                numRec++;
+            }// end of for cycle
+            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
+        }// end of if/else cycle
 
-        return ordine;
+        return numRec;
     }// end of method
 
 
@@ -162,20 +170,27 @@ public class FlowData extends AData {
      * Inizializzazione dei dati della collection indicata <br>
      */
     public int loadAddress() {
-        int num = 0;
+        int numRec = mongoService.count(Address.class);
         Address entity;
+        String collectionName = annotation.getCollectionName(Address.class);
 
-        for (EAAddress address : EAAddress.values()) {
-            entity = Address.builderAddress()
-                    .indirizzo(text.isValid(address.getIndirizzo()) ? address.getIndirizzo() : null)
-                    .localita(text.isValid(address.getLocalita()) ? address.getLocalita() : null)
-                    .cap(text.isValid(address.getCap()) ? address.getCap() : null)
-                    .build();
-            mongoService.insert(entity, annotation.getCollectionName(Address.class));
-            num++;
-        }// end of for cycle
+        if (numRec == 0) {
+            for (EAAddress address : EAAddress.values()) {
+                entity = Address.builderAddress()
+                        .indirizzo(text.isValid(address.getIndirizzo()) ? address.getIndirizzo() : null)
+                        .localita(text.isValid(address.getLocalita()) ? address.getLocalita() : null)
+                        .cap(text.isValid(address.getCap()) ? address.getCap() : null)
+                        .build();
+                entity.id = entity.indirizzo;
+                mongoService.insert(entity, Address.class);
+                numRec++;
+            }// end of for cycle
+            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
+        }// end of if/else cycle
 
-        return num;
+        return numRec;
     }// end of method
 
 
@@ -183,84 +198,96 @@ public class FlowData extends AData {
      * Inizializzazione dei dati della collection indicata <br>
      */
     public int loadAnno() {
-        int num = 0;
+        int numRec = mongoService.count(Anno.class);
         int ordine = 0;
         Anno entity;
         String titoloAnno;
         EASecolo secoloEnum;
         Secolo secoloBean;
         String titoloSecolo;
+        String collectionName = annotation.getCollectionName(Anno.class);
 
-        //costruisce gli anni prima di cristo dal 1000
-        for (int k = ANTE_CRISTO; k > 0; k--) {
-            ordine = ANNO_INIZIALE - k;
-            titoloAnno = k + EASecolo.TAG_AC;
-            secoloEnum = EASecolo.getSecoloAC(k);
-            titoloSecolo = secoloEnum.getTitolo();
-            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
-            if (ordine != ANNO_INIZIALE) {
-                entity = Anno.builderAnno()
-                        .secolo(secoloBean)
-                        .ordine(ordine)
-                        .titolo(titoloAnno)
-                        .build();
-                entity.id = entity.titolo;
-                mongoService.insert(entity, annotation.getCollectionName(Anno.class));
-                num++;
-            }// end of if cycle
-        }// end of for cycle
+        if (numRec == 0) {
+            //costruisce gli anni prima di cristo dal 1000
+            for (int k = ANTE_CRISTO; k > 0; k--) {
+                ordine = ANNO_INIZIALE - k;
+                titoloAnno = k + EASecolo.TAG_AC;
+                secoloEnum = EASecolo.getSecoloAC(k);
+                titoloSecolo = secoloEnum.getTitolo();
+                secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+                if (ordine != ANNO_INIZIALE) {
+                    entity = Anno.builderAnno()
+                            .secolo(secoloBean)
+                            .ordine(ordine)
+                            .titolo(titoloAnno)
+                            .build();
+                    entity.id = entity.titolo;
+                    mongoService.insert(entity, Anno.class);
+                    numRec++;
+                }// end of if cycle
+            }// end of for cycle
 
-        //costruisce gli anni dopo cristo fino al 2030
-        for (int k = 1; k <= DOPO_CRISTO; k++) {
-            ordine = k + ANNO_INIZIALE;
-            titoloAnno = k + VUOTA;
-            secoloEnum = EASecolo.getSecoloDC(k);
-            titoloSecolo = secoloEnum.getTitolo();
-            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
-            if (ordine != ANNO_INIZIALE) {
-                entity = Anno.builderAnno()
-                        .secolo(secoloBean)
-                        .ordine(ordine)
-                        .titolo(titoloAnno)
-                        .build();
-                entity.id = entity.titolo;
-                mongoService.insert(entity, annotation.getCollectionName(Anno.class));
-                num++;
-            }// end of if cycle
-        }// end of for cycle
+            //costruisce gli anni dopo cristo fino al 2030
+            for (int k = 1; k <= DOPO_CRISTO; k++) {
+                ordine = k + ANNO_INIZIALE;
+                titoloAnno = k + VUOTA;
+                secoloEnum = EASecolo.getSecoloDC(k);
+                titoloSecolo = secoloEnum.getTitolo();
+                secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+                if (ordine != ANNO_INIZIALE) {
+                    entity = Anno.builderAnno()
+                            .secolo(secoloBean)
+                            .ordine(ordine)
+                            .titolo(titoloAnno)
+                            .build();
+                    entity.id = entity.titolo;
+                    mongoService.insert(entity, Anno.class);
+                    numRec++;
+                }// end of if cycle
+            }// end of for cycle
+            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
+        }// end of if/else cycle
 
-        return num;
+        return numRec;
     }// end of method
 
     /**
      * Inizializzazione dei dati della collection indicata <br>
      */
     public int loadGiorno() {
-        int num = 0;
+        int numRec = mongoService.count(Giorno.class);
         int ordine = 0;
         Giorno entity;
         ArrayList<HashMap> lista;
         String titolo;
         int bisestile;
         Mese meseEntity;
+        String collectionName = annotation.getCollectionName(Giorno.class);
 
-        //costruisce i 366 records
-        lista = date.getAllGiorni();
-        for (HashMap mappaGiorno : lista) {
-            titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
-            bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            meseEntity = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
-            entity = Giorno.builderGiorno()
-                    .mese(meseEntity)
-                    .ordine(ordine)
-                    .titolo(titolo)
-                    .build();
-            entity.id = entity.titolo;
-            mongoService.insert(entity, annotation.getCollectionName(Giorno.class));
-            num++;
-        }// end of for cycle
+        if (numRec == 0) {
+            //costruisce i 366 records
+            lista = date.getAllGiorni();
+            for (HashMap mappaGiorno : lista) {
+                titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
+                bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
+                meseEntity = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+                entity = Giorno.builderGiorno()
+                        .mese(meseEntity)
+                        .ordine(ordine)
+                        .titolo(titolo)
+                        .build();
+                entity.id = entity.titolo;
+                mongoService.insert(entity, Giorno.class);
+                numRec++;
+            }// end of for cycle
+            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+        } else {
+            log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
+        }// end of if/else cycle
 
-        return num;
+        return numRec;
     }// end of method
 
 }// end of class

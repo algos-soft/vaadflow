@@ -169,11 +169,10 @@ public class LogService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll(AContext context) {
+    public List<? extends AEntity> findAll() {
         return repository.findAll();
     }// end of method
 

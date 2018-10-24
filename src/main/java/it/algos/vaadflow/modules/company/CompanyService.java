@@ -217,11 +217,10 @@ public class CompanyService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
-     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Company> findAll(AContext context) {
+    public List<Company> findAll() {
         List<Company> lista = null;
 
         try { // prova ad eseguire il codice
@@ -257,12 +256,11 @@ public class CompanyService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
         String code;
         String descrizione;
         EAPerson eaPerson;

@@ -185,14 +185,13 @@ public class PreferenzaService extends AService {
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
-     * @param context della sessione
      * @param filter the filter text
      *
      * @return the list of matching entities
      */
     @Override
-    public List<? extends AEntity> findFilter(AContext context,String filter) {
-        return findAll(context); //@todo PROVVISORIO
+    public List<? extends AEntity> findFilter(String filter) {
+        return findAll(); //@todo PROVVISORIO
     }
 
     /**
@@ -212,11 +211,10 @@ public class PreferenzaService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
-     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Preferenza> findAll(AContext context) {
+    public List<Preferenza> findAll() {
         List<Preferenza> lista = null;
 
         lista = repository.findAllByOrderByOrdineAsc();
@@ -231,12 +229,11 @@ public class PreferenzaService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
 
         for (EAPreferenza prefTemp : EAPreferenza.values()) {
             String code = prefTemp.getCode();

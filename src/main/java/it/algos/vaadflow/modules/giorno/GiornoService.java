@@ -189,13 +189,12 @@ public class GiornoService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
      *
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll(AContext context) {
-        return super.findAll(context);
+    public List<? extends AEntity> findAll() {
+        return super.findAll();
     }// end of method
 
     /**
@@ -203,14 +202,13 @@ public class GiornoService extends AService {
      * <p>
      * Ordinate secondo l'ordinamento previsto
      *
-     * @param context della sessione
      * @param sort    ordinamento previsto
      *
      * @return all ordered entities
      */
     @Override
-    protected List<? extends AEntity> findAll(AContext context, Sort sort) {
-        return super.findAll(context, sort);
+    protected List<? extends AEntity> findAll( Sort sort) {
+        return super.findAll( sort);
     }// end of method
 
     /**
@@ -231,11 +229,10 @@ public class GiornoService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
+    public int reset() {
         return flow.loadGiorno();
     }// end of method
 

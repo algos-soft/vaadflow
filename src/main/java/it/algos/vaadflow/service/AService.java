@@ -1,6 +1,8 @@
 package it.algos.vaadflow.service;
 
 import com.mongodb.client.result.DeleteResult;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.data.FlowData;
@@ -21,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 
 /**
  * Project springvaadin
@@ -191,12 +195,10 @@ public abstract class AService extends AbstractService implements IAService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
-     *
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll(AContext context) {
+    public List<? extends AEntity> findAll() {
         List<? extends AEntity> lista = null;
         String sortName = "";
         Sort sort;
@@ -219,9 +221,9 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (text.isValid(sortName)) {
             sort = new Sort(Sort.Direction.ASC, sortName);
-            lista = findAll(context, sort);
+            lista = findAll( sort);
         } else {
-            lista = findAll(context, (Sort) null);
+            lista = findAll((Sort) null);
         }// end of if/else cycle
 
         return lista;
@@ -233,12 +235,11 @@ public abstract class AService extends AbstractService implements IAService {
      * <p>
      * Ordinate secondo l'ordinamento previsto
      *
-     * @param context della sessione
      * @param sort    ordinamento previsto
      *
      * @return all ordered entities
      */
-    protected List<? extends AEntity> findAll(AContext context, Sort sort) {
+    protected List<? extends AEntity> findAll( Sort sort) {
         List<? extends AEntity> lista = null;
 
         try { // prova ad eseguire il codice
@@ -262,14 +263,13 @@ public abstract class AService extends AbstractService implements IAService {
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
-     * @param context della sessione
      * @param filter  the filter text
      *
      * @return the list of matching entities
      */
     @Override
     @Deprecated
-    public List<? extends AEntity> findFilter(AContext context, String filter) {
+    public List<? extends AEntity> findFilter( String filter) {
         List<? extends AEntity> lista = null;
         String normalizedFilter = filter.toLowerCase();
 //        boolean appUsaCompany = pref.isBool(EAPreferenza.usaCompany.getCode());
@@ -288,7 +288,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (entityUsaCompanyObbligatoria || entityUsaCompanyFacoltativa) {
             if (entityUsaCompanyObbligatoria) {
-                lista = findAll(context);
+                lista = findAll();
                 lista = lista.stream()
 //                        .filter(entity -> ((ACEntity) entity).company != null)
 //                        .filter(entity -> ((ACEntity) entity).company.getCode().equals(companyCode))
@@ -309,7 +309,7 @@ public abstract class AService extends AbstractService implements IAService {
                         })
                         .collect(Collectors.toList());
             } else {
-                lista = findAll(context);
+                lista = findAll();
                 if (lista != null) {
                     lista = lista.stream()
                             .filter(entity -> {
@@ -343,7 +343,7 @@ public abstract class AService extends AbstractService implements IAService {
                 }// end of if cycle
             }// end of if/else cycle
         } else {
-            lista = findAll(context);
+            lista = findAll();
             if (lista != null) {
                 lista = lista.stream()
                         .filter(entity -> {
@@ -442,11 +442,9 @@ public abstract class AService extends AbstractService implements IAService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public AEntity newEntity(AContext context) {
+    public AEntity newEntity() {
         return null;
     }// end of method
 
@@ -826,10 +824,8 @@ public abstract class AService extends AbstractService implements IAService {
      * Viene calcolato in automatico alla creazione della entity <br>
      * Recupera dal DB il valore massimo pre-esistente della property <br>
      * Incrementa di uno il risultato <br>
-     *
-     * @param context della sessione
      */
-    public int getNewOrdine(AContext context) {
+    public int getNewOrdine() {
         int ordine = 0;
         AEntity entityBean = null;
         Sort sort;
@@ -843,9 +839,9 @@ public abstract class AService extends AbstractService implements IAService {
 
         sort = new Sort(Sort.Direction.DESC, FIELD_NAME_ORDINE);
         if (usaCompany()) {
-            lista = findAllByCompany(context, sort);
+            lista = findAllByCompany( sort);
         } else {
-            lista = findAll(context, sort);
+            lista = findAll( sort);
         }// end of if/else cycle
 
         if (array.isValid(lista)) {
@@ -875,11 +871,9 @@ public abstract class AService extends AbstractService implements IAService {
      * Adatta SOLO per collections non troppo lunghe <br>
      * Per colelctions con centinaia o migliaia di entities, usare una chiamata nella repository specifica <br>
      *
-     * @param context della sessione
-     *
      * @return lista ordinata delle entities della company corrente
      */
-    private List<? extends AEntity> findAllByCompany(AContext context, Sort sort) {
+    private List<? extends AEntity> findAllByCompany( Sort sort) {
         List<AEntity> listByCompany = null;
         List<? extends AEntity> listAllEntities = null;
         Company company = null;
@@ -892,7 +886,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (company != null) {
 //            companyCode = company.getCode();
-            listAllEntities = findAll(context, sort);
+            listAllEntities = findAll( sort);
             if (array.isValid(listAllEntities)) {
                 listByCompany = new ArrayList<>();
                 for (AEntity entity : listAllEntities) {
@@ -1108,16 +1102,14 @@ public abstract class AService extends AbstractService implements IAService {
      * Metodo invocato da ABoot (o da una sua sottoclasse) <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
      * Creazione di una collezione - Solo se non ci sono records
-     *
-     * @param context della sessione
      */
     @Override
-    public void loadData(AContext context) {
+    public void loadData() {
         int numRec = this.count();
         String collectionName = annotation.getCollectionName(entityClass);
 
         if (numRec == 0) {
-            numRec = reset(context);
+            numRec = reset();
             log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
@@ -1132,12 +1124,10 @@ public abstract class AService extends AbstractService implements IAService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
-     *
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
+    public int reset() {
         this.deleteAll();
         return 0;
     }// end of method
@@ -1165,6 +1155,29 @@ public abstract class AService extends AbstractService implements IAService {
     public boolean importa(Company company) {
         this.deleteAll();
         return false;
+    }// end of method
+
+    /**
+     * Recupera il context della session <br>
+     * Controlla che la session sia attiva <br>
+     *
+     * @return context della sessione
+     */
+    public AContext getContext() {
+        AContext context = null;
+        UI ui;
+        VaadinSession vaadSession = null;
+
+        ui = UI.getCurrent();
+        if (ui != null) {
+            vaadSession = ui.getSession();
+        }// end of if cycle
+
+        if (vaadSession != null) {
+            context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+        }// end of if cycle
+
+        return context;
     }// end of method
 
     /**

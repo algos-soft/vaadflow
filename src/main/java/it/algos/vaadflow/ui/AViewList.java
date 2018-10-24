@@ -444,7 +444,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");
             resetButton.addClickListener(e -> {
-                service.reset(context);
+                service.reset();
                 updateView();
             });
             topLayout.add(resetButton);
@@ -467,7 +467,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton = new Button("New entity", new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(e -> dialog.open(service.newEntity(context), AViewDialog.Operation.ADD, context));
+            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD, context));
             topLayout.add(newButton);
         }// end of if cycle
 
@@ -758,7 +758,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     public void updateView() {
-        Collection items = service != null ? service.findAll(context) : null;
+        Collection items = service != null ? service.findAll() : null;
 
 
         if (items != null) {

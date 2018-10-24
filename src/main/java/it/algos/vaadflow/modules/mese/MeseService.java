@@ -163,12 +163,11 @@ public class MeseService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
 
         for (EAMese eaMese : EAMese.values()) {
             this.crea(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni());

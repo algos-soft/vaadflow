@@ -46,7 +46,7 @@ public abstract class AVersBoot {
      * L'ordine di inserimento è FONDAMENTALE
      */
     public int inizia() {
-        int k = 1;
+        int k = 0;
         codeProject = CODE_PROJECT;
 
         //--prima installazione del programma

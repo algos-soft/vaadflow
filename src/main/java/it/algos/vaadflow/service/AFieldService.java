@@ -80,16 +80,15 @@ public class AFieldService extends AbstractService {
      * Create a single field.
      * The field type is chosen according to the annotation @AIField.
      *
-     * @param context      della sessione
      * @param binder       collegamento tra i fields e la entityBean
      * @param binderClass  della Entity di riferimento
      * @param propertyName della property
      */
-    public AbstractField create(AContext context, Binder binder, Class binderClass, String propertyName) {
+    public AbstractField create( Binder binder, Class binderClass, String propertyName) {
         Field reflectionJavaField = reflection.getField(binderClass, propertyName);
 
         if (reflectionJavaField != null) {
-            return create(context, binder, reflectionJavaField);
+            return create( binder, reflectionJavaField);
         } else {
             return null;
         }// end of if/else cycle
@@ -100,11 +99,10 @@ public class AFieldService extends AbstractService {
      * Create a single field.
      * The field type is chosen according to the annotation @AIField.
      *
-     * @param context             della sessione
      * @param binder              collegamento tra i fields e la entityBean
      * @param reflectionJavaField di riferimento per estrarre le Annotation
      */
-    public AbstractField create(AContext context, Binder binder, Field reflectionJavaField) {
+    public AbstractField create( Binder binder, Field reflectionJavaField) {
         AbstractField field = null;
         String fieldName = reflectionJavaField.getName();
 //        int minDefault = 3;
@@ -218,7 +216,7 @@ public class AFieldService extends AbstractService {
                 field = new AComboBox(caption);
                 if (clazz != null) {
                     IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll(context);
+                    List items = ((IAService) service).findAll();
                     if (items != null) {
                         ((AComboBox) field).setItems(items);
                     }// end of if cycle

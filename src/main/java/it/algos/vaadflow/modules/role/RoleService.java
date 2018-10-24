@@ -78,16 +78,15 @@ public class RoleService extends AService {
      * Ricerca una entity <br>
      * Se non esiste, la crea <br>
      *
-     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity trovata o appena creata
      */
-    public Role findOrCrea(AContext context,String code) {
+    public Role findOrCrea(String code) {
         Role entity = findByKeyUnica(code);
 
         if (entity == null) {
-            entity = newEntity(context,0, code);
+            entity = newEntity(0, code);
             save(entity);
         }// end of if cycle
 
@@ -97,13 +96,12 @@ public class RoleService extends AService {
     /**
      * Crea una entity <br>
      *
-     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity trovata o appena creata
      */
-    public Role crea(AContext context,String code) {
-        return (Role) save(newEntity(context,0, code));
+    public Role crea(String code) {
+        return (Role) save(newEntity(0, code));
     }// end of method
 
     /**
@@ -111,12 +109,11 @@ public class RoleService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Role newEntity(AContext context){
-        return newEntity(context,0, "");
+    public Role newEntity(){
+        return newEntity(0, "");
     }// end of method
 
     /**
@@ -124,18 +121,17 @@ public class RoleService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param context della sessione
      * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code   codice di riferimento (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Role newEntity(AContext context,int ordine, String code) {
+    public Role newEntity(int ordine, String code) {
         Role entity = findByKeyUnica(code);
 
         if (entity == null) {
             entity = Role.builderRole()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine(context))
+                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                     .code(text.isValid(code) ? code : null)
                     .build();
         }// end of if cycle
@@ -159,11 +155,10 @@ public class RoleService extends AService {
      * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
      * Lista ordinata <br>
      *
-     * @param context della sessione
      * @return lista ordinata di tutte le entities
      */
     @Override
-    public List<Role> findAll(AContext context) {
+    public List<Role> findAll() {
         return repository.findAllByOrderByOrdineAsc();
     }// end of method
 
@@ -182,15 +177,14 @@ public class RoleService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
 
         for (EARole ruolo : EARole.values()) {
-            this.crea(context,ruolo.toString());
+            this.crea(ruolo.toString());
             num++;
         }// end of for cycle
 

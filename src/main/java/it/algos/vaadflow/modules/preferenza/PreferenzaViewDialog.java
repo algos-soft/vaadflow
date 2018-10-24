@@ -82,7 +82,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
         companyField = (AComboBox) getField("company");
 
         if (companyField != null) {
-            List items = companyService.findAll(context);
+            List items = companyService.findAll();
 
             if (items != null) {
                 companyField.setItems(items);

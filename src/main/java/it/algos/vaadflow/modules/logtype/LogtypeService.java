@@ -113,7 +113,7 @@ public class LogtypeService extends AService {
 
         if (entity == null) {
             entity = Logtype.builderLogtype()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine(context))
+                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                     .code(text.isValid(code) ? code : null)
                     .build();
         }// end of if cycle
@@ -141,11 +141,10 @@ public class LogtypeService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
+    public int reset() {
         return flow.loadLogtype();
     }// end of method
 

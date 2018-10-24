@@ -112,7 +112,7 @@ public class VersioneService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Versione newEntity(AContext context){
+    public Versione newEntity(AContext context) {
         return newEntity("", 0, "", "", (LocalDateTime) null);
     }// end of method
 
@@ -142,10 +142,9 @@ public class VersioneService extends AService {
                 .build();
 
         newOrdine = getNewOrdine(sigla, ordine);
-        textOrdine = newOrdine < 10 ? TAG + newOrdine : "" + newOrdine;
-        entity.id = sigla + textOrdine;
+        entity.id = getIdKey(sigla, newOrdine);
 
-        return (Versione) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
@@ -166,6 +165,7 @@ public class VersioneService extends AService {
                 idKey = lista.get(lista.size() - 1).getId();
                 idKey = idKey.substring(1);
                 idKey = idKey.startsWith(TAG) ? text.levaTesta(idKey, TAG) : idKey;
+                idKey = idKey.startsWith(TAG) ? text.levaTesta(idKey, TAG) : idKey;//doppio per numeri sopra i 10 e fino a 100
             }// end of if cycle
 
             try { // prova ad eseguire il codice
@@ -179,16 +179,24 @@ public class VersioneService extends AService {
     }// end of method
 
 
+    public String getIdKey(String codeUnCarattere, int numProgressivo) {
+        if (numProgressivo < 100) {
+            if (numProgressivo < 10) {
+                return codeUnCarattere + TAG + TAG + numProgressivo;
+            } else {
+                return codeUnCarattere + TAG + numProgressivo;
+            }// end of if/else cycle
+        } else {
+            return codeUnCarattere + numProgressivo;
+        }// end of if/else cycle
+    }// end of method
+
     /**
      * Retrieves an entity by its id.
      * Codice formato da un carattere, un separatore ed un numero
      */
     public Versione findByCode(String codeUnCarattere, int numProgressivo) {
-        if (numProgressivo < 10) {
-            return (Versione) findById(codeUnCarattere + TAG + numProgressivo);
-        } else {
-            return (Versione) findById(codeUnCarattere + numProgressivo);
-        }// end of if/else cycle
+        return (Versione) findById(getIdKey(codeUnCarattere, numProgressivo));
     }// end of method
 
 
@@ -201,12 +209,11 @@ public class VersioneService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     * @param context della sessione
      * @return all ordered entities
      */
     @Override
-    public List<? extends AEntity> findAll(AContext context) {
-        return findAll(context,(Sort) null);
+    public List<? extends AEntity> findAll() {
+        return findAll((Sort) null);
     }// end of method
 
 
@@ -217,12 +224,11 @@ public class VersioneService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
-        int num = super.reset(context);
+    public int reset() {
+        int num = super.reset();
 
         return num;
     }// end of method

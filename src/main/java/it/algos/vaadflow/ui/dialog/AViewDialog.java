@@ -319,7 +319,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Aggiunge il field al binder, nel metodo create() del fieldService
         //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
         for (String propertyName : formPropertyNamesList) {
-            propertyField = fieldService.create(context, binder, binderClass, propertyName);
+            propertyField = fieldService.create( binder, binderClass, propertyName);
             if (propertyField != null) {
                 fieldMap.put(propertyName, propertyField);
             }// end of if cycle

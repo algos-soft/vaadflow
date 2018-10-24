@@ -139,12 +139,10 @@ public class AddressService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     * @param context della sessione
-     *
      * @return numero di elementi creato
      */
     @Override
-    public int reset(AContext context) {
+    public int reset() {
         return flow.loadAddress();
     }// end of method
 
