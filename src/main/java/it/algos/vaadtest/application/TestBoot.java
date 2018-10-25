@@ -61,7 +61,7 @@ public class TestBoot extends ABoot {
      */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        super.inizia();
+//        super.inizia();
     }// end of method
 
 

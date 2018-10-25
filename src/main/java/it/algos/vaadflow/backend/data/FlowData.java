@@ -99,25 +99,25 @@ public class FlowData extends AData {
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    @Autowired
+//    @Autowired
     private RoleService roleService;
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    @Autowired
+//    @Autowired
     private UtenteService utenteService;
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    @Autowired
+//    @Autowired
     private SecoloService secoloService;
 
     /**
      * Istanza @VaadinSessionScope inietta da BeanFactory <br>
      */
-    @Autowired
+//    @Autowired
     private MeseService meseService;
 
 

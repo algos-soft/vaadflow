@@ -80,7 +80,7 @@ public class ABootService extends AbstractService {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-    @Autowired
+//    @Autowired
     protected PreferenzaService pref;
 
 

@@ -39,13 +39,13 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-    @Autowired
+//    @Autowired
     protected ABootService boot;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-    @Autowired
+//    @Autowired
     protected PreferenzaService pref;
 
     //    /**
@@ -96,7 +96,7 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-    @Autowired
+//    @Autowired
     private FlowData flow;
 
     /**

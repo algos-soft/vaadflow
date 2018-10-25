@@ -1,5 +1,6 @@
 package it.algos.vaadflow.modules.utente;
 
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
@@ -12,8 +13,6 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,15 +36,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-
-/**
- * In deroga a quanto scritto sopra (valido per gli altri xxxService, questa classe è 'singleton' <br>
- * Viene iniettata da SprinBoot in AUserDetailsService, prima che esista la VaadinSession <br>
- * NOT annotated with @VaadinSessionScope (sbagliato) <br>
- * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
- */
 @Service
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@VaadinSessionScope
 @Qualifier(TAG_UTE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -125,7 +117,7 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(AContext context){
+    public Utente newEntity(AContext context) {
         return newEntity("", "", (List<Role>) null);
     }// end of method
 
@@ -278,7 +270,7 @@ public class UtenteService extends AService {
 
     public boolean isAdmin(Utente utente) {
         for (Role role : utente.ruoli) {
-            if (role.code.equals(roleService.getAdmin().code)) {
+            if (role.code.equals("admin")) {
                 return true;
             }// end of if cycle
         }// end of for cycle

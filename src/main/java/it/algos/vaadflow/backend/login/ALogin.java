@@ -32,8 +32,8 @@ public class ALogin {
     private boolean developer = false;
     private boolean admin = false;
 
-    @Autowired
-    private RoleService roleService;
+//    @Autowired
+//    private RoleService roleService;
 
     public Utente getUtente() {
         return utente;
@@ -51,15 +51,9 @@ public class ALogin {
         this.admin = false;
 
         if (utente != null) {
-            List<Role> ruoli = utente.getRuoli();
-            if (ruoli.contains(roleService.getDeveloper())) {
-                this.developer = true;
-            }// end of if cycle
-            if (ruoli.contains(roleService.getAdmin())) {
-                this.admin = true;
-            }// end of if cycle
+            this.admin = utente.isAdmin();
+            this.developer = utente.isDev();
         }// end of if cycle
-
     }// end of method
 
     public Company getCompany() {

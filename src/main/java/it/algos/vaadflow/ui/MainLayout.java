@@ -19,12 +19,14 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AAnnotationService;
+import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
@@ -68,19 +70,20 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     private UtenteService utenteService;
 
-    public MainLayout(UtenteService utenteService, ALogin login) {
-        this.utenteService = utenteService;
-        this.login = login;
+    //    public MainLayout(UtenteService utenteService, ALogin login) {
+    public MainLayout() {
+//        this.utenteService = utenteService;
+//        this.login = login;
         setMargin(false);
         setSpacing(false);
         setPadding(false);
 
+        fixLoginAndContext();
         creaAllMenu();
     }// end of method
 
 
     protected void creaAllMenu() {
-        fixLoginAndContext();
         String title = FlowCost.LAYOUT_TITLE;
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
@@ -270,6 +273,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         String uniqueUserName = "";
         Utente utente;
         VaadinSession vaadSession = UI.getCurrent().getSession();
+        login = StaticContextAccessor.getBean(ALogin.class);
 
         context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
         if (context == null) {
@@ -278,8 +282,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
             User springUser = (User) securityContext.getAuthentication().getPrincipal();
             uniqueUserName = springUser.getUsername();
-            utente = utenteService.findByUserName(uniqueUserName);
-
+            AMongoService mongo = StaticContextAccessor.getBean(AMongoService.class);
+            utente = (Utente) mongo.findByProperty(Utente.class, "userName", uniqueUserName);
             login.setUtente(utente);
             context = new AContext(login);
             vaadSession.setAttribute(KEY_CONTEXT, context);

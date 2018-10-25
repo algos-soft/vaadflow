@@ -26,13 +26,13 @@ public abstract class AVersBoot {
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
      */
-    @Autowired
+//    @Autowired
     protected VersioneService vers;
 
     /**
      * La injection viene fatta da SpringBoot in automatico <br>
      */
-    @Autowired
+//    @Autowired
     protected PreferenzaService pref;
 
     /**

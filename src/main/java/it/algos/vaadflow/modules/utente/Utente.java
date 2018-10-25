@@ -5,6 +5,7 @@ import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import lombok.*;
@@ -14,9 +15,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
@@ -141,5 +146,44 @@ public class Utente extends AEntity {
 //    public boolean isDev() {
 //        return service.isDev(this);
 //    }// end of method
+
+    public boolean isAdmin() {
+        for (Role role : this.ruoli) {
+            if (role.code.equals(EARole.admin.toString())) {
+                return true;
+            }// end of if cycle
+        }// end of for cycle
+
+        return false;
+    }// end of method
+
+    public boolean isDev( ) {
+        for (Role role : this.ruoli) {
+            if (role.code.equals(EARole.developer.toString())) {
+                return true;
+            }// end of if cycle
+        }// end of for cycle
+
+        return false;
+    }// end of method
+
+
+    /**
+     * GrantedAuthority
+     */
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> listAuthority = new ArrayList<>();
+        List<Role> ruoli = this.ruoli;
+        GrantedAuthority authority;
+
+        if (ruoli!=null&&ruoli.size()>0) {
+            for (Role ruolo : ruoli) {
+                authority = new SimpleGrantedAuthority(ruolo.code);
+                listAuthority.add(authority);
+            }// end of for cycle
+        }// end of if cycle
+
+        return listAuthority;
+    }// end of method
 
 }// end of entity class
