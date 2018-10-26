@@ -43,6 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 
+
 /**
  * La newEntity() usa il metodo newEntity() della superclasse per usare 'builderUtente' <br>
  */
@@ -55,6 +56,7 @@ public class PersonService extends AService {
 
     public final static List<String> PROPERTIES_SECURED =
             Arrays.asList("userName", "passwordInChiaro", "locked", "nome", "cognome", "telefono", "mail", "indirizzo");
+
     public final static List<String> PROPERTIES_NOT_SECURED =
             Arrays.asList("nome", "cognome", "telefono", "mail", "indirizzo");
 
@@ -100,53 +102,82 @@ public class PersonService extends AService {
         this.repository = (PersonRepository) repository;
     }// end of Spring constructor
 
+
     /**
-     * Crea una entity <br>
+     * Crea una entity solo se non esisteva <br>
      *
      * @param nome:      (obbligatorio, non unico)
      * @param cognome:   (obbligatorio, non unico)
      * @param telefono:  (facoltativo)
      * @param indirizzo: via, nome e numero (facoltativo)
+     * @param mail       posta elettronica (facoltativo)
      *
-     * @return la entity trovata o appena creata
+     * @return true se la entity è stata creata
      */
-    public Person crea(String nome, String cognome, String telefono, Address indirizzo) {
-        return crea(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
-    }// end of method
-
-    /**
-     * Crea una entity <br>
-     * Se esiste già, la cancella prima di ricrearla <br>
-     *
-     * @param nome:            (obbligatorio, non unico)
-     * @param cognome:         (obbligatorio, non unico)
-     * @param telefono:        (facoltativo)
-     * @param indirizzo:       via, nome e numero (facoltativo)
-     * @param userName         userName o nickName (obbligatorio, unico)
-     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     *                         con inserimento automatico (prima del 'save') se è nulla
-     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
-     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
-     *                         lista modificabile solo da developer ed admin
-     * @param mail             posta elettronica (facoltativo)
-     * @param locked           flag locked (facoltativo, di default false)
-     * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Person crea(
+    public boolean creaIfNotExist(
             String nome,
             String cognome,
             String telefono,
             Address indirizzo,
-            String userName,
-            String passwordInChiaro,
-            List<Role> ruoli,
-            String mail,
-            boolean locked,
-            boolean usaSuperClasse) {
-        return (Person) save(newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, locked, usaSuperClasse));
+            String mail) {
+        boolean creata = false;
+
+        if (true) {//@todo da inventare
+            AEntity entity = save(newEntity(nome, cognome, telefono, indirizzo, mail));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
+
+
+//    /**
+//     * Crea una entity <br>
+//     *
+//     * @param nome:      (obbligatorio, non unico)
+//     * @param cognome:   (obbligatorio, non unico)
+//     * @param telefono:  (facoltativo)
+//     * @param indirizzo: via, nome e numero (facoltativo)
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Person crea(String nome, String cognome, String telefono, Address indirizzo) {
+//        return crea(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
+//    }// end of method
+//
+//    /**
+//     * Crea una entity <br>
+//     * Se esiste già, la cancella prima di ricrearla <br>
+//     *
+//     * @param nome:            (obbligatorio, non unico)
+//     * @param cognome:         (obbligatorio, non unico)
+//     * @param telefono:        (facoltativo)
+//     * @param indirizzo:       via, nome e numero (facoltativo)
+//     * @param userName         userName o nickName (obbligatorio, unico)
+//     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+//     *                         con inserimento automatico (prima del 'save') se è nulla
+//     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+//     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+//     *                         lista modificabile solo da developer ed admin
+//     * @param mail             posta elettronica (facoltativo)
+//     * @param locked           flag locked (facoltativo, di default false)
+//     * @param usaSuperClasse   (transient) per utilizzare le properties di Security della superclasse Utente (facoltativo)
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Person crea(
+//            String nome,
+//            String cognome,
+//            String telefono,
+//            Address indirizzo,
+//            String userName,
+//            String passwordInChiaro,
+//            List<Role> ruoli,
+//            String mail,
+//            boolean locked,
+//            boolean usaSuperClasse) {
+//        return (Person) save(newEntity(nome, cognome, telefono, indirizzo, userName, passwordInChiaro, ruoli, mail, locked, usaSuperClasse));
+//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -156,34 +187,34 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity() {
-        return newEntity("", "");
-    }// end of method
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Non usa le properties di security della superclasse Utente
-     * Usato come record 'embedded' in altre classi (Company,...)
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Person newEntityNoSuperclasse() {
         return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
     }// end of method
 
+//    /**
+//     * Creazione in memoria di una nuova entity che NON viene salvata
+//     * Non usa le properties di security della superclasse Utente
+//     * Usato come record 'embedded' in altre classi (Company,...)
+//     *
+//     * @return la nuova entity appena creata (non salvata)
+//     */
+//    public Person newEntityNoSuperclasse() {
+//        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
+//    }// end of method
 
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata
-     * Eventuali regolazioni iniziali delle property
-     * Properties obbligatorie
-     *
-     * @param nome:    obbligatorio
-     * @param cognome: obbligatorio
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Person newEntity(String nome, String cognome) {
-        return newEntity(nome, cognome, "", (Address) null);
-    }// end of method
+
+//    /**
+//     * Creazione in memoria di una nuova entity che NON viene salvata
+//     * Eventuali regolazioni iniziali delle property
+//     * Properties obbligatorie
+//     *
+//     * @param nome:    obbligatorio
+//     * @param cognome: obbligatorio
+//     *
+//     * @return la nuova entity appena creata (non salvata)
+//     */
+//    public Person newEntity(String nome, String cognome) {
+//        return newEntity(nome, cognome, "", (Address) null);
+//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata
@@ -193,11 +224,12 @@ public class PersonService extends AService {
      * @param cognome:   (obbligatorio, non unico)
      * @param telefono:  (facoltativo)
      * @param indirizzo: via, nome e numero (facoltativo)
+     * @param mail       posta elettronica (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Person newEntity(String nome, String cognome, String telefono, Address indirizzo) {
-        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, true);
+    public Person newEntity(String nome, String cognome, String telefono, Address indirizzo, String mail) {
+        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
     }// end of method
 
     /**
@@ -270,6 +302,7 @@ public class PersonService extends AService {
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
      * @param operation  del dialogo (NEW, EDIT)
@@ -294,6 +327,10 @@ public class PersonService extends AService {
 
         if (text.isValid(entity.cognome)) {
             entity.cognome = text.primaMaiuscola(entity.cognome);
+        }// end of if cycle
+
+        if (text.isEmpty(entity.nome) && text.isEmpty(entity.cognome)) {
+            entity = null;
         }// end of if cycle
 
         return entity;
@@ -323,64 +360,77 @@ public class PersonService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-
-        for (EAPerson eaPersona : EAPerson.values()) {
-            this.crea(eaPersona);
-            num++;
-        }// end of for cycle
-        return num;
-    }// end of method
-
-
-    /**
-     * Crea una entity <br>
-     *
-     * @param eaPerson: enumeration di dati iniziali di prova
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Person crea(EAPerson eaPerson) {
-        return (Person) save(newEntity(eaPerson));
-    }// end of method
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata, per essere usata anche embedded <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     *
-     * @param eaPerson: enumeration di dati iniziali di prova
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Person newEntity(EAPerson eaPerson) {
+        int numRec = super.reset();
         String nome;
         String cognome;
         String telefono;
         EAAddress address;
         Address indirizzo;
         String mail;
-        String userName;
 
-        if (eaPerson != null) {
+        for (EAPerson eaPerson : EAPerson.values()) {
             nome = eaPerson.getNome();
             cognome = eaPerson.getCognome();
             telefono = eaPerson.getTelefono();
             address = eaPerson.getAddress();
             indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
             mail = eaPerson.getMail();
-            userName = eaPerson.getUserName();
 
-            if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
-                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail, false, false);
-            } else {
-                return newEntity(nome, cognome, telefono, indirizzo);
-            }// end of if/else cycle
+            numRec = creaIfNotExist(nome, cognome, telefono, indirizzo, mail) ? numRec + 1 : numRec;
+        }// end of for cycle
 
-        } else {
-            return null;
-        }// end of if/else cycle
+        return numRec;
     }// end of method
+
+
+//    /**
+//     * Crea una entity <br>
+//     *
+//     * @param eaPerson: enumeration di dati iniziali di prova
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Person crea(EAPerson eaPerson) {
+//        return (Person) save(newEntity(eaPerson));
+//    }// end of method
+
+
+//    /**
+//     * Creazione in memoria di una nuova entity che NON viene salvata, per essere usata anche embedded <br>
+//     * Eventuali regolazioni iniziali delle property <br>
+//     *
+//     * @param eaPerson: enumeration di dati iniziali di prova
+//     *
+//     * @return la nuova entity appena creata (non salvata)
+//     */
+//    public Person newEntity(EAPerson eaPerson) {
+//        String nome;
+//        String cognome;
+//        String telefono;
+//        EAAddress address;
+//        Address indirizzo;
+//        String mail;
+//        String userName;
+//
+//        if (eaPerson != null) {
+//            nome = eaPerson.getNome();
+//            cognome = eaPerson.getCognome();
+//            telefono = eaPerson.getTelefono();
+//            address = eaPerson.getAddress();
+//            indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
+//            mail = eaPerson.getMail();
+//            userName = eaPerson.getUserName();
+//
+//            if (pref.isBool(EAPreferenza.usaCompany.getCode())) {
+//                return newEntity(nome, cognome, telefono, indirizzo, userName, "", (List<Role>) null, mail, false, false);
+//            } else {
+//                return newEntity(nome, cognome, telefono, indirizzo);
+//            }// end of if/else cycle
+//
+//        } else {
+//            return null;
+//        }// end of if/else cycle
+//    }// end of method
 
     /**
      * Costruisce una lista di nomi delle properties della Grid nell'ordine:

@@ -3,9 +3,11 @@ package it.algos.vaadflow.backend.data;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.anno.AnnoService;
+import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.modules.giorno.GiornoService;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
 import it.algos.vaadflow.modules.mese.MeseService;
+import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -44,12 +46,6 @@ public class FlowData extends AData {
 //     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
 //     */
 //    private MeseService mese;
-//
-//    /**
-//     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
-//     */
-//    private PersonService person;
-//
 //    /**
 //     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
 //     */
@@ -80,6 +76,18 @@ public class FlowData extends AData {
      */
     @Autowired
     private AddressService addressService;
+
+    /**
+     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
+     */
+    @Autowired
+    private PersonService personService;
+
+    /**
+     * Istanza @VaadinSessionScope inietta da BeanFactory <br>
+     */
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -115,10 +123,14 @@ public class FlowData extends AData {
         roleService.loadData();
         utenteService.loadData();
         logtypeService.loadData();
+
         addressService.loadData();
+        personService.loadData();
+        companyService.loadData();
+
         secoloService.loadData();
-        annoService.loadData();
         meseService.loadData();
+        annoService.loadData();
         giornoService.loadData();
     }// end of method
 

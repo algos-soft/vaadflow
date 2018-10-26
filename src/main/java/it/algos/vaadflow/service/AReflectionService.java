@@ -492,6 +492,19 @@ public class AReflectionService extends AbstractService {
     }// end of method
 
 
+    /**
+     * Se esiste il field della Entity
+     *
+     * @param entityClazz     classe su cui operare la riflessione
+     * @param publicFieldName property
+     *
+     * @return lista di fields della Entity e di tutte le supeclassi
+     */
+    public boolean isNotEsiste(Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        return getField(entityClazz, publicFieldName) == null;
+    }// end of method
+
+
 //    /**
 //     * Fields dichiarati nella Entity, da usare come campi del Form
 //     * Se listaNomi è nulla, usa tutti i campi:

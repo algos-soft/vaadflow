@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.mese;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,17 +70,36 @@ public class MeseService extends AService {
 
 
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
-     * @param titoloLungo nome completo (obbligatorio, unico)
-     * @param titoloBreve nome abbreviato di tre cifre (obbligatorio, unico)
-     * @param giorni      numero di giorni presenti (obbligatorio)
+     * @param eaMese: enumeration di dati iniziali di prova
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Mese crea(String titoloLungo, String titoloBreve, int giorni) {
-        return (Mese) save(newEntity(titoloLungo, titoloBreve, giorni));
+    public boolean creaIfNotExist(EAMese eaMese) {
+        boolean creata = false;
+
+        if (mongo.isManca(entityClass, "titoloLungo", eaMese.getLungo())) {
+            AEntity entity = save(newEntity(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni()));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
+
+
+//    /**
+//     * Crea una entity e la registra <br>
+//     *
+//     * @param titoloLungo nome completo (obbligatorio, unico)
+//     * @param titoloBreve nome abbreviato di tre cifre (obbligatorio, unico)
+//     * @param giorni      numero di giorni presenti (obbligatorio)
+//     *
+//     * @return la entity appena creata
+//     */
+//    public Mese crea(String titoloLungo, String titoloBreve, int giorni) {
+//        return (Mese) save(newEntity(titoloLungo, titoloBreve, giorni));
+//    }// end of method
 
 
     /**
@@ -107,16 +127,12 @@ public class MeseService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Mese newEntity(String titoloLungo, String titoloBreve, int giorni) {
-        Mese entity = findByKeyUnica(titoloLungo);
-
-        if (entity == null) {
-            entity = Mese.builderMese()
-                    .titoloLungo(titoloLungo)
-                    .titoloBreve(titoloBreve)
-                    .giorni(giorni)
-                    .build();
-            entity.id = titoloLungo;
-        }// end of if cycle
+        Mese entity = Mese.builderMese()
+                .titoloLungo(text.isValid(titoloLungo) ? titoloLungo : null)
+                .titoloBreve(text.isValid(titoloBreve) ? titoloBreve : null)
+                .giorni(giorni)
+                .build();
+        entity.id = titoloLungo;
 
         return entity;
     }// end of method
@@ -128,6 +144,27 @@ public class MeseService extends AService {
 //    public String getPropertyUnica(AEntity entityBean) {
 //        return text.isValid(((Mese) entityBean).getTitoloLungo()) ? ((Mese) entityBean).getTitoloLungo() : "";
 //    }// end of method
+
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Mese entity = (Mese) super.beforeSave(entityBean, operation);
+
+        if (text.isEmpty(entity.titoloLungo) || text.isEmpty(entity.titoloBreve) || entity.giorni == 0) {
+            entity = null;
+        }// end of if cycle
+
+        return entity;
+    }// end of method
 
 
     /**
@@ -153,14 +190,13 @@ public class MeseService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
+        int numRec = super.reset();
 
         for (EAMese eaMese : EAMese.values()) {
-            this.crea(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni());
-            num++;
+            numRec = creaIfNotExist(eaMese) ? numRec + 1 : numRec;
         }// end of for cycle
 
-        return num;
+        return numRec;
     }// end of method
 
 }// end of class

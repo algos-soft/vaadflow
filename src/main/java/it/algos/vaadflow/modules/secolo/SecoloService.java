@@ -70,18 +70,36 @@ public class SecoloService extends AService {
 
 
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
-     * @param titolo     (obbligatorio, unico)
-     * @param inizio     (obbligatorio, unico)
-     * @param fine       (obbligatorio, unico)
-     * @param anteCristo flag per i secoli prima di cristo (obbligatorio)
+     * @param eaSec: enumeration di dati iniziali di prova
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Secolo crea(String titolo, int inizio, int fine, boolean anteCristo) {
-        return (Secolo) save(newEntity(titolo, inizio, fine, anteCristo));
+    public boolean creaIfNotExist(EASecolo eaSec) {
+        boolean creata = false;
+
+        if (mongo.isManca(entityClass, "titolo", eaSec.getTitolo())) {
+            AEntity entity = save(newEntity(eaSec.getTitolo(), eaSec.getInizio(), eaSec.getFine(), eaSec.isAnteCristo()));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
+
+//    /**
+//     * Crea una entity e la registra <br>
+//     *
+//     * @param titolo     (obbligatorio, unico)
+//     * @param inizio     (obbligatorio, unico)
+//     * @param fine       (obbligatorio, unico)
+//     * @param anteCristo flag per i secoli prima di cristo (obbligatorio)
+//     *
+//     * @return la entity appena creata
+//     */
+//    public Secolo crea(String titolo, int inizio, int fine, boolean anteCristo) {
+//        return (Secolo) save(newEntity(titolo, inizio, fine, anteCristo));
+//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -109,17 +127,13 @@ public class SecoloService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Secolo newEntity(String titolo, int inizio, int fine, boolean anteCristo) {
-        Secolo entity = findByKeyUnica(titolo);
-
-        if (entity == null) {
-            entity = Secolo.builderSecolo()
-                    .titolo(titolo)
-                    .inizio(inizio)
-                    .fine(fine)
-                    .anteCristo(anteCristo)
-                    .build();
-            entity.id = titolo;
-        }// end of if cycle
+        Secolo entity = Secolo.builderSecolo()
+                .titolo(text.isValid(titolo) ? titolo : null)
+                .inizio(inizio)
+                .fine(fine)
+                .anteCristo(anteCristo)
+                .build();
+        entity.id = titolo;
 
         return entity;
     }// end of method
@@ -148,7 +162,6 @@ public class SecoloService extends AService {
 
         if (text.isEmpty(entity.titolo) || entity.inizio == 0 || entity.fine == 0) {
             entity = null;
-            log.error("entity incompleta in SecoloService.beforeSave()");
         }// end of if cycle
 
         return entity;
@@ -178,14 +191,13 @@ public class SecoloService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
+        int numRec = super.reset();
 
         for (EASecolo eaSecolo : EASecolo.values()) {
-            this.crea(eaSecolo.getTitolo(), eaSecolo.getInizio(), eaSecolo.getFine(), eaSecolo.isAnteCristo());
-            num++;
+            numRec = creaIfNotExist(eaSecolo) ? numRec + 1 : numRec;
         }// end of for cycle
 
-        return num;
+        return numRec;
     }// end of method
 
 }// end of class

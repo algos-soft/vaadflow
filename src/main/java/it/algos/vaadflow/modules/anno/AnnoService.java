@@ -25,9 +25,9 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  * Created by Algos <br>
  * User: Gac <br>
  * Fix date: 26-ott-2018 9.59.58 <br>
- * <br>
+ * <p>
  * Business class. Layer di collegamento per la Repository. <br>
- * <br>
+ * <p>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
  * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
@@ -44,18 +44,24 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 public class AnnoService extends AService {
 
 
-    //--usato nell'ordinamento delle categorie
+    /**
+     * Costanti usate nell'ordinamento delle categorie
+     */
     public static final int ANNO_INIZIALE = 2000;
+
     public static final int ANTE_CRISTO = 1000;
+
     public static final int DOPO_CRISTO = 2030;
+
     /**
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
+
     /**
-     * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
-     * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
-     * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
+     * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br> Spring costruisce
+     * una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br> Qui si una una
+     * interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public AnnoRepository repository;
 
@@ -66,11 +72,11 @@ public class AnnoService extends AService {
     @Autowired
     private SecoloService secoloService;
 
+
     /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     * Regola il modello-dati specifico e lo passa al costruttore della superclasse <br>
+     * Costruttore @Autowired <br> Si usa un @Qualifier(), per avere la sottoclasse specifica <br> Si usa una costante
+     * statica, per essere sicuri di scrivere sempre uguali i riferimenti <br> Regola il modello-dati specifico e lo
+     * passa al costruttore della superclasse <br>
      *
      * @param repository per la persistenza dei dati
      */
@@ -83,16 +89,23 @@ public class AnnoService extends AService {
 
 
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
-     * @param secolo      di riferimento (obbligatorio)
-     * @param ordinamento (obbligatorio, unico)
-     * @param titolo      (obbligatorio, unico)
+     * @param titolo (obbligatorio, unico)
+     * @param secolo di riferimento (obbligatorio)
+     * @param ordine (obbligatorio, unico)
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Anno crea(Secolo secolo, int ordinamento, String titolo) {
-        return (Anno) save(newEntity(secolo, ordinamento, titolo));
+    public boolean creaIfNotExist(String titolo, Secolo secolo, int ordine) {
+        boolean creata = false;
+
+        if (mongo.isManca(entityClass, "titolo", titolo)) {
+            AEntity entity = save(newEntity(titolo, secolo, ordine));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
 
 
@@ -104,7 +117,7 @@ public class AnnoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Anno newEntity() {
-        return newEntity((Secolo) null, 0, "");
+        return newEntity("", (Secolo) null, 0);
     }// end of method
 
 
@@ -112,41 +125,29 @@ public class AnnoService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
+     * @param titolo (obbligatorio, unico)
      * @param secolo di riferimento (obbligatorio)
      * @param ordine (obbligatorio, unico)
-     * @param titolo (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Anno newEntity(Secolo secolo, int ordine, String titolo) {
-        Anno entity = findByKeyUnica(titolo);
-
-        if (entity == null) {
-            entity = Anno.builderAnno()
-                    .secolo(secolo)
-                    .ordine(ordine)
-                    .titolo(titolo)
-                    .build();
-            entity.id = titolo;
-        }// end of if cycle
+    public Anno newEntity(String titolo, Secolo secolo, int ordine) {
+        Anno entity = Anno.builderAnno()
+                .secolo(secolo)
+                .ordine(ordine)
+                .titolo(titolo)
+                .build();
+        entity.id = titolo;
 
         return entity;
     }// end of method
 
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return text.isValid(((Anno) entityBean).getTitolo()) ? ((Anno) entityBean).getTitolo() : "";
-//    }// end of method
-
-
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
      * @param operation  del dialogo (NEW, EDIT)
@@ -157,33 +158,21 @@ public class AnnoService extends AService {
     public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
         Anno entity = (Anno) super.beforeSave(entityBean, operation);
 
-        if (entity.getSecolo() == null || entity.ordine == 0 || text.isEmpty(entity.titolo)) {
+        if (text.isEmpty(entity.titolo) || entity.getSecolo() == null || entity.ordine == 0) {
             entity = null;
-            log.error("entity incompleta in AnnoService.beforeSave()");
         }// end of if cycle
 
         return entity;
     }// end of method
 
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param titolo (obbligatorio, unico)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Anno findByKeyUnica(String titolo) {
-        return repository.findByTitolo(titolo);
-    }// end of method
 
     /**
      * Returns all entities of the type <br>
      * <p>
-     * Se esiste la property 'ordine', ordinate secondo questa property <br>
-     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
-     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
-     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
-     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
+     * Se esiste la property 'ordine', ordinate secondo questa property <br> Altrimenti, se esiste la property 'code',
+     * ordinate secondo questa property <br> Altrimenti, se esiste la property 'descrizione', ordinate secondo questa
+     * property <br> Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br> Altrimenti,
+     * ordinate in ordine di inserimento nel DB mongo <br>
      *
      * @return all ordered entities
      */
@@ -192,12 +181,11 @@ public class AnnoService extends AService {
         return repository.findTop100ByOrderByOrdine();
     }// end of method
 
+
     /**
-     * Creazione di alcuni dati demo iniziali <br>
-     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
-     * La collezione viene svuotata <br>
-     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
-     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     * Creazione di alcuni dati demo iniziali <br> Viene invocato alla creazione del programma e dal bottone Reset della
+     * lista (solo per il developer) <br> La collezione viene svuotata <br> I dati possono essere presi da una
+     * Enumeration o creati direttamemte <br> Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
      * @return numero di elementi creato
      */
@@ -205,49 +193,36 @@ public class AnnoService extends AService {
     public int reset() {
         int numRec = super.reset();
         int ordine;
-        String titoloAnno;
+        String titolo;
         EASecolo secoloEnum;
-        Secolo secoloBean;
+        Secolo secolo;
         String titoloSecolo;
 
         //costruisce gli anni prima di cristo dal 1000
         for (int k = ANTE_CRISTO; k > 0; k--) {
             ordine = ANNO_INIZIALE - k;
-            titoloAnno = k + EASecolo.TAG_AC;
+            titolo = k + EASecolo.TAG_AC;
             secoloEnum = EASecolo.getSecoloAC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            secolo = secoloService.findByKeyUnica(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
-                crea(secoloBean, ordine, titoloAnno);
-                numRec++;
+                numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle
         }// end of for cycle
 
         //costruisce gli anni dopo cristo fino al 2030
         for (int k = 1; k <= DOPO_CRISTO; k++) {
             ordine = k + ANNO_INIZIALE;
-            titoloAnno = k + VUOTA;
+            titolo = k + VUOTA;
             secoloEnum = EASecolo.getSecoloDC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            secolo = secoloService.findByKeyUnica(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
-                crea(secoloBean, ordine, titoloAnno);
-                numRec++;
+                numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle
         }// end of for cycle
 
         return numRec;
-    }// end of method
-
-    /**
-     * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param titolo (obbligatorio, unico)
-     *
-     * @return true se trovata
-     */
-    public boolean isEsiste(String titolo) {
-        return findByKeyUnica(titolo) != null;
     }// end of method
 
 

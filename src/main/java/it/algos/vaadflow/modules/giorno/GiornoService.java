@@ -48,17 +48,20 @@ public class GiornoService extends AService {
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
+
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public GiornoRepository repository;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private ADateService dateService;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -82,17 +85,38 @@ public class GiornoService extends AService {
     }// end of Spring constructor
 
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
+     * @param titolo      (obbligatorio, unico)
      * @param mese        di riferimento (obbligatorio)
      * @param ordinamento (obbligatorio, unico)
-     * @param titolo      (obbligatorio, unico)
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Giorno crea(Mese mese, int ordinamento, String titolo) {
-        return (Giorno) save(newEntity(mese, ordinamento, titolo));
+    public boolean creaIfNotExist(String titolo, Mese mese, int ordinamento) {
+        boolean creata = false;
+
+        if (mongo.isManca(entityClass, "titolo", titolo)) {
+            AEntity entity = save(newEntity(titolo, mese, ordinamento));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
+
+
+//    /**
+//     * Crea una entity e la registra <br>
+//     *
+//     * @param mese        di riferimento (obbligatorio)
+//     * @param ordinamento (obbligatorio, unico)
+//     * @param titolo      (obbligatorio, unico)
+//     *
+//     * @return la entity appena creata
+//     */
+//    public Giorno crea(Mese mese, int ordinamento, String titolo) {
+//        return (Giorno) save(newEntity(mese, ordinamento, titolo));
+//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -102,7 +126,7 @@ public class GiornoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Giorno newEntity() {
-        return newEntity((Mese) null, 0, "");
+        return newEntity("", (Mese) null, 0);
     }// end of method
 
 
@@ -112,23 +136,19 @@ public class GiornoService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
+     * @param titolo (obbligatorio, unico)
      * @param mese   di riferimento (obbligatorio)
      * @param ordine (obbligatorio, unico)
-     * @param titolo (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Giorno newEntity(Mese mese, int ordine, String titolo) {
-        Giorno entity = findByKeyUnica(titolo);
-
-        if (entity == null) {
-            entity = Giorno.builderGiorno()
-                    .mese(mese)
-                    .ordine(ordine > 0 ? ordine : getNewOrdine())
-                    .titolo(titolo)
-                    .build();
-            entity.id = titolo;
-        }// end of if cycle
+    public Giorno newEntity(String titolo, Mese mese, int ordine) {
+        Giorno entity = Giorno.builderGiorno()
+                .titolo(text.isValid(titolo) ? titolo : null)
+                .mese(mese)
+                .ordine(ordine > 0 ? ordine : getNewOrdine())
+                .build();
+        entity.id = titolo;
 
         return entity;
     }// end of method
@@ -157,7 +177,6 @@ public class GiornoService extends AService {
 
         if (entity.getMese() == null || entity.ordine == 0 || text.isEmpty(entity.titolo)) {
             entity = null;
-            log.error("entity incompleta in GiornoService.beforeSave()");
         }// end of if cycle
 
         return entity;
@@ -192,16 +211,16 @@ public class GiornoService extends AService {
 //    }// end of method
 //
 
-    /**
-     * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param titolo (obbligatorio, unico)
-     *
-     * @return true se trovata
-     */
-    public boolean isEsiste(String titolo) {
-        return findByKeyUnica(titolo) != null;
-    }// end of method
+//    /**
+//     * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
+//     *
+//     * @param titolo (obbligatorio, unico)
+//     *
+//     * @return true se trovata
+//     */
+//    public boolean isEsiste(String titolo) {
+//        return findByKeyUnica(titolo) != null;
+//    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -220,23 +239,16 @@ public class GiornoService extends AService {
         List<HashMap> lista;
         String titolo;
         int bisestile;
-        Mese meseEntity;
+        Mese mese;
 
         //costruisce i 366 records
         lista = dateService.getAllGiorni();
         for (HashMap mappaGiorno : lista) {
             titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
             bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            meseEntity = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
-            crea(meseEntity, ordine, titolo);
-//            entity = Giorno.builderGiorno()
-//                    .mese(meseEntity)
-//                    .ordine(ordine)
-//                    .titolo(titolo)
-//                    .build();
-//            entity.id = entity.titolo;
-//            mongoService.insert(entity, Giorno.class);
-            numRec++;
+            mese = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
+            numRec = creaIfNotExist(titolo, mese, ordine) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

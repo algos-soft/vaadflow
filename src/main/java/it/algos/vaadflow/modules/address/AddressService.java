@@ -1,7 +1,9 @@
 package it.algos.vaadflow.modules.address;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -56,31 +58,22 @@ public class AddressService extends AService {
 
 
     /**
-     * Crea una entity <br>
-     * Se esiste già, la cancella prima di ricrearla <br>
+     * Crea una entity solo se non esisteva <br>
      *
      * @param eaAddress: enumeration di dati iniziali di prova
      *
-     * @return la entity trovata o appena creata
+     * @return true se la entity è stata creata
      */
-    public Address crea(EAAddress eaAddress) {
-        return (Address) save(newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap()));
+    public boolean creaIfNotExist(EAAddress eaAddress) {
+        boolean creata = false;
+
+        if (mongo.isManca(entityClass, "indirizzo", eaAddress.getIndirizzo())) {
+            AEntity entity = save(newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap()));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
-
-
-//    /**
-//     * Crea una entity <br>
-//     * Se esiste già, la cancella prima di ricrearla <br>
-//     *
-//     * @param indirizzo: via, nome e numero (obbligatoria, non unica)
-//     * @param localita:  località (obbligatoria, non unica)
-//     * @param cap:       codice di avviamento postale (obbligatoria, non unica)
-//     *
-//     * @return la entity trovata o appena creata
-//     */
-//    public Address crea(String indirizzo, String localita, String cap) {
-//        return (Address) save(newEntity(indirizzo, localita, cap));
-//    }// end of method
 
 
     /**
@@ -95,20 +88,6 @@ public class AddressService extends AService {
     }// end of method
 
 
-//    /**
-//     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-//     * Eventuali regolazioni iniziali delle property <br>
-//     * All properties <br>
-//     *
-//     * @param eaAddress: enumeration di dati iniziali di prova
-//     *
-//     * @return la entity trovata o appena creata
-//     */
-//    public Address newEntity(EAAddress eaAddress) {
-//        return newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
-//    }// end of method
-//
-//
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -131,6 +110,26 @@ public class AddressService extends AService {
         return entity;
     }// end of method
 
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Address entity = (Address) super.beforeSave(entityBean, operation);
+
+        if (text.isEmpty(entity.indirizzo)) {
+            entity = null;
+        }// end of if cycle
+
+        return entity;
+    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -145,11 +144,8 @@ public class AddressService extends AService {
     public int reset() {
         int numRec = super.reset();
 
-        for (EAAddress address : EAAddress.values()) {
-            if (mongo.isManca(entityClass, FIELD_NAME_CODE, address.getIndirizzo())) {
-                this.crea(address);
-                numRec++;
-            }// end of if cycle
+        for (EAAddress eaAddress : EAAddress.values()) {
+            numRec = creaIfNotExist(eaAddress) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

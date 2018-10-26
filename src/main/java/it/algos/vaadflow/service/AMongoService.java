@@ -52,6 +52,7 @@ public class AMongoService extends AbstractService {
      * Private final property
      */
     private static final AMongoService INSTANCE = new AMongoService();
+
     /**
      * Inietta da Spring
      */
@@ -176,6 +177,11 @@ public class AMongoService extends AbstractService {
         AEntity entity = null;
         Object lista;
 
+        if (reflection.isNotEsiste(clazz, property)) {
+            log.error("Algos - Manca la property " + property + " nella classe " + clazz.getSimpleName());
+            return null;
+        }// end of if cycle
+
         Query searchQuery = new Query(Criteria.where(property).is(value));
         lista = mongoOp.find(searchQuery, clazz);
 
@@ -196,7 +202,7 @@ public class AMongoService extends AbstractService {
      * @return true se esiste già
      */
     public boolean isEsiste(Class<? extends AEntity> clazz, String property, Object value) {
-        return findByProperty(clazz, FIELD_NAME_CODE, value) != null;
+        return findByProperty(clazz, property, value) != null;
     }// end of method
 
     /**
@@ -209,7 +215,7 @@ public class AMongoService extends AbstractService {
      * @return true se manca
      */
     public boolean isManca(Class<? extends AEntity> clazz, String property, Object value) {
-        return findByProperty(clazz, FIELD_NAME_CODE, value) == null;
+        return findByProperty(clazz, property, value) == null;
     }// end of method
 
     /**

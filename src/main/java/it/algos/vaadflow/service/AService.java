@@ -2,6 +2,7 @@ package it.algos.vaadflow.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
@@ -25,6 +26,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
+import static it.algos.vaadflow.ui.dialog.AViewDialog.DURATA;
 
 /**
  * Project springvaadin
@@ -221,7 +223,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (text.isValid(sortName)) {
             sort = new Sort(Sort.Direction.ASC, sortName);
-            lista = findAll( sort);
+            lista = findAll(sort);
         } else {
             lista = findAll((Sort) null);
         }// end of if/else cycle
@@ -235,11 +237,11 @@ public abstract class AService extends AbstractService implements IAService {
      * <p>
      * Ordinate secondo l'ordinamento previsto
      *
-     * @param sort    ordinamento previsto
+     * @param sort ordinamento previsto
      *
      * @return all ordered entities
      */
-    protected List<? extends AEntity> findAll( Sort sort) {
+    protected List<? extends AEntity> findAll(Sort sort) {
         List<? extends AEntity> lista = null;
 
         try { // prova ad eseguire il codice
@@ -263,13 +265,13 @@ public abstract class AService extends AbstractService implements IAService {
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
-     * @param filter  the filter text
+     * @param filter the filter text
      *
      * @return the list of matching entities
      */
     @Override
     @Deprecated
-    public List<? extends AEntity> findFilter( String filter) {
+    public List<? extends AEntity> findFilter(String filter) {
         List<? extends AEntity> lista = null;
         String normalizedFilter = filter.toLowerCase();
 //        boolean appUsaCompany = pref.isBool(EAPreferenza.usaCompany.getCode());
@@ -541,7 +543,12 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (entityValida != null) {
             entityValida = save(null, entityValida);
-        }// end of if cycle
+        } else {
+            if (UI.getCurrent() != null) {
+                Notification.show("La scheda non è completa", DURATA, Notification.Position.BOTTOM_START);
+            }// end of if cycle
+            log.error("Algos - La scheda " + entityBean.toString() + " di " + entityBean.getClass().getSimpleName() + " non è completa");
+        }// end of if/else cycle
 
         return entityValida;
     }// end of method
@@ -550,6 +557,7 @@ public abstract class AService extends AbstractService implements IAService {
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
      * @param operation  del dialogo (NEW, EDIT)
@@ -875,7 +883,7 @@ public abstract class AService extends AbstractService implements IAService {
      *
      * @return lista ordinata delle entities della company corrente
      */
-    private List<? extends AEntity> findAllByCompany( Sort sort) {
+    private List<? extends AEntity> findAllByCompany(Sort sort) {
         List<AEntity> listByCompany = null;
         List<? extends AEntity> listAllEntities = null;
         Company company = null;
@@ -888,7 +896,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (company != null) {
 //            companyCode = company.getCode();
-            listAllEntities = findAll( sort);
+            listAllEntities = findAll(sort);
             if (array.isValid(listAllEntities)) {
                 listByCompany = new ArrayList<>();
                 for (AEntity entity : listAllEntities) {
@@ -1117,7 +1125,7 @@ public abstract class AService extends AbstractService implements IAService {
             log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
         }// end of if/else cycle
 
-     }// end of method
+    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
