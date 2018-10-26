@@ -61,7 +61,7 @@ public class TestBoot extends ABoot {
      */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-//        super.inizia();
+        super.inizia();
     }// end of method
 
 
@@ -76,7 +76,7 @@ public class TestBoot extends ABoot {
      * Inizializzazione delle versioni del programma specifico
      */
     protected void iniziaVersioni() {
-        versBootStrap.inizia();
+//        versBootStrap.inizia();
     }// end of method
 
 
@@ -96,7 +96,7 @@ public class TestBoot extends ABoot {
      * Se esistono, sostituisce i valori esistenti con quelli indicati qui
      */
     protected void regolaPreferenze() {
-        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
+//        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
     }// end of method
 
 

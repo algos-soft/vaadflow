@@ -1,9 +1,6 @@
 package it.algos.vaadflow.modules.role;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,24 +23,29 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ROL)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class RoleService extends AService {
+
+    /**
+     * versione della classe per la serializzazione
+     */
+    private final static long serialVersionUID = 1L;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -51,7 +53,6 @@ public class RoleService extends AService {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public RoleRepository repository;
-    Collection<? extends GrantedAuthority> authorities;
 
 
     /**
@@ -68,34 +69,18 @@ public class RoleService extends AService {
         this.repository = (RoleRepository) repository;
     }// end of Spring constructor
 
-    /**
-     * Ricerca una entity <br>
-     * Se non esiste, la crea <br>
-     *
-     * @param code di riferimento (obbligatorio ed unico)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Role findOrCrea(String code) {
-        Role entity = findByKeyUnica(code);
-
-        if (entity == null) {
-            entity = newEntity(0, code);
-            save(entity);
-        }// end of if cycle
-
-        return entity;
-    }// end of method
 
     /**
-     * Crea una entity <br>
+     * Crea una entity sul MongoDB <br>
      *
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity trovata o appena creata
      */
     public Role crea(String code) {
-        return (Role) save(newEntity(0, code));
+        Role entity = newEntity(0, code);
+        mongo.insert(entity, entityClass);
+        return entity;
     }// end of method
 
     /**
@@ -103,10 +88,9 @@ public class RoleService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Role newEntity(){
+    public Role newEntity() {
         return newEntity(0, "");
     }// end of method
 
@@ -125,12 +109,13 @@ public class RoleService extends AService {
 
         if (entity == null) {
             entity = Role.builderRole()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                    .ordine(ordine != 0 ? ordine : getNewOrdine())
                     .code(text.isValid(code) ? code : null)
                     .build();
+            entity.id = code;
         }// end of if cycle
 
-        return (Role) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
     /**
@@ -156,13 +141,6 @@ public class RoleService extends AService {
         return repository.findAllByOrderByOrdineAsc();
     }// end of method
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Role) entityBean).getCode()) ? ((Role) entityBean).getCode() : "";
-    }// end of method
-
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -175,14 +153,18 @@ public class RoleService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
+        int numRec = super.reset();
+        String code;
 
         for (EARole ruolo : EARole.values()) {
-            this.crea(ruolo.toString());
-            num++;
+            code = ruolo.toString();
+            if (mongo.isManca(entityClass, FIELD_NAME_CODE, code)) {
+                this.crea(code);
+                numRec++;
+            }// end of if cycle
         }// end of for cycle
 
-        return num;
+        return numRec;
     }// end of method
 
     /**

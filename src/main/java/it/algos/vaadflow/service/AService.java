@@ -826,41 +826,43 @@ public abstract class AService extends AbstractService implements IAService {
      * Incrementa di uno il risultato <br>
      */
     public int getNewOrdine() {
-        int ordine = 0;
-        AEntity entityBean = null;
-        Sort sort;
-        List lista = null;
-        Field field;
-        Object value;
-
-        if (!reflection.isEsiste(entityClass, FIELD_NAME_ORDINE)) {
-            return 0;
-        }// end of if/else cycle
-
-        sort = new Sort(Sort.Direction.DESC, FIELD_NAME_ORDINE);
-        if (usaCompany()) {
-            lista = findAllByCompany( sort);
-        } else {
-            lista = findAll( sort);
-        }// end of if/else cycle
-
-        if (array.isValid(lista)) {
-            entityBean = (AEntity) lista.get(0);
-        }// end of if cycle
-
-        if (entityBean != null) {
-            field = reflection.getField(entityClass, FIELD_NAME_ORDINE);
-            try { // prova ad eseguire il codice
-                value = field.get(entityBean);
-                if (value instanceof Integer) {
-                    ordine = (Integer) value;
-                }// end of if cycle
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-        }// end of if cycle
-
-        return ordine + 1;
+//        int ordine = 0;
+//        AEntity entityBean = null;
+//        Sort sort;
+//        List lista = null;
+//        Field field;
+//        Object value;
+//
+//        if (!reflection.isEsiste(entityClass, FIELD_NAME_ORDINE)) {
+//            return 0;
+//        }// end of if/else cycle
+//
+//        sort = new Sort(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+//        if (usaCompany()) {
+//            lista = findAllByCompany( sort);
+//        } else {
+//            lista = findAll( sort);
+//        }// end of if/else cycle
+//
+//        if (array.isValid(lista)) {
+//            entityBean = (AEntity) lista.get(0);
+//        }// end of if cycle
+//
+//        if (entityBean != null) {
+//            field = reflection.getField(entityClass, FIELD_NAME_ORDINE);
+//            try { // prova ad eseguire il codice
+//                value = field.get(entityBean);
+//                if (value instanceof Integer) {
+//                    ordine = (Integer) value;
+//                }// end of if cycle
+//            } catch (Exception unErrore) { // intercetta l'errore
+//                log.error(unErrore.toString());
+//            }// fine del blocco try-catch
+//        }// end of if cycle
+//
+//        return ordine + 1;
+//
+        return mongo.getNewOrdine(entityClass);
     }// end of method
 
 
@@ -1110,12 +1112,12 @@ public abstract class AService extends AbstractService implements IAService {
 
         if (numRec == 0) {
             numRec = reset();
-            log.warn("Algos " + collectionName + "- Creazione dati iniziali: " + numRec + " schede");
+            log.warn("Algos - Data. La collezione " + collectionName + " è stata creata: " + numRec + " schede");
         } else {
             log.info("Algos - Data. La collezione " + collectionName + " è già presente: " + numRec + " schede");
         }// end of if/else cycle
 
-    }// end of method
+     }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>

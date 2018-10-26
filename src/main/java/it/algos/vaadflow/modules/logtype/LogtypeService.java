@@ -1,10 +1,6 @@
 package it.algos.vaadflow.modules.logtype;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +16,20 @@ import static it.algos.vaadflow.application.FlowCost.*;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_TYP)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -73,13 +69,12 @@ public class LogtypeService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
-     * @param context della sessione
      * @param code di riferimento (obbligatorio ed unico)
      *
      * @return la entity appena creata
      */
-    public Logtype crea(AContext context,String code) {
-        return (Logtype) save(newEntity(context,0, code));
+    public Logtype crea(String code) {
+        return (Logtype) save(newEntity(0, code));
     }// end of method
 
     /**
@@ -87,12 +82,10 @@ public class LogtypeService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Logtype newEntity(AContext context){
-        return newEntity(context,0, "");
+    public Logtype newEntity() {
+        return newEntity(0, "");
     }// end of method
 
 
@@ -102,13 +95,12 @@ public class LogtypeService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param context della sessione
      * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code   codice di riferimento (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Logtype newEntity(AContext context,int ordine, String code) {
+    public Logtype newEntity(int ordine, String code) {
         Logtype entity = findByKeyUnica(code);
 
         if (entity == null) {
@@ -116,9 +108,10 @@ public class LogtypeService extends AService {
                     .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                     .code(text.isValid(code) ? code : null)
                     .build();
+            entity.id = code;
         }// end of if cycle
 
-        return (Logtype) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
@@ -145,7 +138,18 @@ public class LogtypeService extends AService {
      */
     @Override
     public int reset() {
-        return flow.loadLogtype();
+        int numRec = super.reset();
+        String code;
+
+        for (EALogType type : EALogType.values()) {
+            code = type.getTag();
+            if (mongo.isManca(entityClass, FIELD_NAME_CODE, code)) {
+                this.crea(code);
+                numRec++;
+            }// end of if cycle
+        }// end of for cycle
+
+        return numRec;
     }// end of method
 
 

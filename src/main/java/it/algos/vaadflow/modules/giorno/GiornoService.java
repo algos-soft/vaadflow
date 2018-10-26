@@ -1,8 +1,6 @@
 package it.algos.vaadflow.modules.giorno;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
@@ -12,32 +10,34 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_GIO)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -99,11 +99,9 @@ public class GiornoService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Giorno newEntity(AContext context) {
+    public Giorno newEntity() {
         return newEntity((Mese) null, 0, "");
     }// end of method
 
@@ -121,29 +119,27 @@ public class GiornoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Giorno newEntity(Mese mese, int ordine, String titolo) {
-        Giorno entity = null;
+        Giorno entity = findByKeyUnica(titolo);
 
-        entity = findByKeyUnica(titolo);
-        if (entity != null) {
-            return findByKeyUnica(titolo);
+        if (entity == null) {
+            entity = Giorno.builderGiorno()
+                    .mese(mese)
+                    .ordine(ordine > 0 ? ordine : getNewOrdine())
+                    .titolo(titolo)
+                    .build();
+            entity.id = titolo;
         }// end of if cycle
 
-        entity = Giorno.builderGiorno()
-                .mese(mese)
-                .ordine(ordine)
-                .titolo(titolo)
-                .build();
-
-        return (Giorno) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Giorno) entityBean).getTitolo()) ? ((Giorno) entityBean).getTitolo() : "";
-    }// end of method
+//    /**
+//     * Property unica (se esiste).
+//     */
+//    public String getPropertyUnica(AEntity entityBean) {
+//        return text.isValid(((Giorno) entityBean).getTitolo()) ? ((Giorno) entityBean).getTitolo() : "";
+//    }// end of method
 
 
     /**
@@ -180,36 +176,21 @@ public class GiornoService extends AService {
     }// end of method
 
 
-    /**
-     * Returns all entities of the type <br>
-     * <p>
-     * Se esiste la property 'ordine', ordinate secondo questa property <br>
-     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
-     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
-     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
-     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
-     *
-     *
-     * @return all ordered entities
-     */
-    @Override
-    public List<? extends AEntity> findAll() {
-        return super.findAll();
-    }// end of method
-
-    /**
-     * Returns all entities of the type <br>
-     * <p>
-     * Ordinate secondo l'ordinamento previsto
-     *
-     * @param sort    ordinamento previsto
-     *
-     * @return all ordered entities
-     */
-    @Override
-    protected List<? extends AEntity> findAll( Sort sort) {
-        return super.findAll( sort);
-    }// end of method
+//
+//    /**
+//     * Returns all entities of the type <br>
+//     * <p>
+//     * Ordinate secondo l'ordinamento previsto
+//     *
+//     * @param sort ordinamento previsto
+//     *
+//     * @return all ordered entities
+//     */
+//    @Override
+//    protected List<? extends AEntity> findAll(Sort sort) {
+//        return super.findAll(sort);
+//    }// end of method
+//
 
     /**
      * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
@@ -233,7 +214,32 @@ public class GiornoService extends AService {
      */
     @Override
     public int reset() {
-        return flow.loadGiorno();
+        int numRec = super.reset();
+        int ordine = 0;
+        Giorno entity;
+        List<HashMap> lista;
+        String titolo;
+        int bisestile;
+        Mese meseEntity;
+
+        //costruisce i 366 records
+        lista = dateService.getAllGiorni();
+        for (HashMap mappaGiorno : lista) {
+            titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
+            bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
+            meseEntity = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            crea(meseEntity, ordine, titolo);
+//            entity = Giorno.builderGiorno()
+//                    .mese(meseEntity)
+//                    .ordine(ordine)
+//                    .titolo(titolo)
+//                    .build();
+//            entity.id = entity.titolo;
+//            mongoService.insert(entity, Giorno.class);
+            numRec++;
+        }// end of for cycle
+
+        return numRec;
     }// end of method
 
 }// end of class

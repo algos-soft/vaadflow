@@ -554,7 +554,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
         //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
         List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
-
         if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             try { // prova ad eseguire il codice
                 grid = new Grid(entityClazz);

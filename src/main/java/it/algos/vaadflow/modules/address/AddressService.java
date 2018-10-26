@@ -1,11 +1,11 @@
 package it.algos.vaadflow.modules.address;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +15,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ADD)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -64,52 +64,51 @@ public class AddressService extends AService {
      * @return la entity trovata o appena creata
      */
     public Address crea(EAAddress eaAddress) {
-        return (Address) save(newEntity(eaAddress));
+        return (Address) save(newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap()));
     }// end of method
 
 
-    /**
-     * Crea una entity <br>
-     * Se esiste già, la cancella prima di ricrearla <br>
-     *
-     * @param indirizzo: via, nome e numero (obbligatoria, non unica)
-     * @param localita:  località (obbligatoria, non unica)
-     * @param cap:       codice di avviamento postale (obbligatoria, non unica)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Address crea(String indirizzo, String localita, String cap) {
-        return (Address) save(newEntity(indirizzo, localita, cap));
-    }// end of method
+//    /**
+//     * Crea una entity <br>
+//     * Se esiste già, la cancella prima di ricrearla <br>
+//     *
+//     * @param indirizzo: via, nome e numero (obbligatoria, non unica)
+//     * @param localita:  località (obbligatoria, non unica)
+//     * @param cap:       codice di avviamento postale (obbligatoria, non unica)
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Address crea(String indirizzo, String localita, String cap) {
+//        return (Address) save(newEntity(indirizzo, localita, cap));
+//    }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Address newEntity(AContext context) {
+    public Address newEntity() {
         return newEntity("", "", "");
     }// end of method
 
 
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
-     *
-     * @param eaAddress: enumeration di dati iniziali di prova
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Address newEntity(EAAddress eaAddress) {
-        return newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
-    }// end of method
-
-
+//    /**
+//     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+//     * Eventuali regolazioni iniziali delle property <br>
+//     * All properties <br>
+//     *
+//     * @param eaAddress: enumeration di dati iniziali di prova
+//     *
+//     * @return la entity trovata o appena creata
+//     */
+//    public Address newEntity(EAAddress eaAddress) {
+//        return newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
+//    }// end of method
+//
+//
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -127,8 +126,9 @@ public class AddressService extends AService {
                 .localita(text.isValid(localita) ? localita : null)
                 .cap(text.isValid(cap) ? cap : null)
                 .build();
+        entity.id = indirizzo;
 
-        return (Address) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
@@ -143,7 +143,16 @@ public class AddressService extends AService {
      */
     @Override
     public int reset() {
-        return flow.loadAddress();
+        int numRec = super.reset();
+
+        for (EAAddress address : EAAddress.values()) {
+            if (mongo.isManca(entityClass, FIELD_NAME_CODE, address.getIndirizzo())) {
+                this.crea(address);
+                numRec++;
+            }// end of if cycle
+        }// end of for cycle
+
+        return numRec;
     }// end of method
 
 }// end of class

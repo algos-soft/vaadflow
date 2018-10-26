@@ -1,9 +1,8 @@
 package it.algos.vaadflow.modules.anno;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.AService;
@@ -11,31 +10,34 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ANN)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -99,11 +101,9 @@ public class AnnoService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Anno newEntity(AContext context) {
+    public Anno newEntity() {
         return newEntity((Secolo) null, 0, "");
     }// end of method
 
@@ -121,29 +121,27 @@ public class AnnoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Anno newEntity(Secolo secolo, int ordine, String titolo) {
-        Anno entity = null;
+        Anno entity = findByKeyUnica(titolo);
 
-        entity = findByKeyUnica(titolo);
-        if (entity != null) {
-            return findByKeyUnica(titolo);
+        if (entity == null) {
+            entity = Anno.builderAnno()
+                    .secolo(secolo)
+                    .ordine(ordine)
+                    .titolo(titolo)
+                    .build();
+            entity.id = titolo;
         }// end of if cycle
 
-        entity = Anno.builderAnno()
-                .secolo(secolo)
-                .ordine(ordine)
-                .titolo(titolo)
-                .build();
-
-        return (Anno) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Anno) entityBean).getTitolo()) ? ((Anno) entityBean).getTitolo() : "";
-    }// end of method
+//    /**
+//     * Property unica (se esiste).
+//     */
+//    public String getPropertyUnica(AEntity entityBean) {
+//        return text.isValid(((Anno) entityBean).getTitolo()) ? ((Anno) entityBean).getTitolo() : "";
+//    }// end of method
 
 
     /**
@@ -187,7 +185,6 @@ public class AnnoService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     *
      * @return all ordered entities
      */
     @Override
@@ -202,12 +199,44 @@ public class AnnoService extends AService {
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
-     *
      * @return numero di elementi creato
      */
     @Override
     public int reset() {
-        return flow.loadAnno();
+        int numRec = super.reset();
+        int ordine;
+        String titoloAnno;
+        EASecolo secoloEnum;
+        Secolo secoloBean;
+        String titoloSecolo;
+
+        //costruisce gli anni prima di cristo dal 1000
+        for (int k = ANTE_CRISTO; k > 0; k--) {
+            ordine = ANNO_INIZIALE - k;
+            titoloAnno = k + EASecolo.TAG_AC;
+            secoloEnum = EASecolo.getSecoloAC(k);
+            titoloSecolo = secoloEnum.getTitolo();
+            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            if (ordine != ANNO_INIZIALE) {
+                crea(secoloBean, ordine, titoloAnno);
+                numRec++;
+            }// end of if cycle
+        }// end of for cycle
+
+        //costruisce gli anni dopo cristo fino al 2030
+        for (int k = 1; k <= DOPO_CRISTO; k++) {
+            ordine = k + ANNO_INIZIALE;
+            titoloAnno = k + VUOTA;
+            secoloEnum = EASecolo.getSecoloDC(k);
+            titoloSecolo = secoloEnum.getTitolo();
+            secoloBean = secoloService.findByKeyUnica(titoloSecolo);
+            if (ordine != ANNO_INIZIALE) {
+                crea(secoloBean, ordine, titoloAnno);
+                numRec++;
+            }// end of if cycle
+        }// end of for cycle
+
+        return numRec;
     }// end of method
 
     /**

@@ -1,9 +1,6 @@
 package it.algos.vaadflow.modules.secolo;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -22,20 +19,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_SEC)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -91,11 +88,9 @@ public class SecoloService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Secolo newEntity(AContext context){
+    public Secolo newEntity() {
         return newEntity("", 0, 0, false);
     }// end of method
 
@@ -114,30 +109,28 @@ public class SecoloService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Secolo newEntity(String titolo, int inizio, int fine, boolean anteCristo) {
-        Secolo entity = null;
+        Secolo entity = findByKeyUnica(titolo);
 
-        entity = findByKeyUnica(titolo);
-        if (entity != null) {
-            return findByKeyUnica(titolo);
+        if (entity == null) {
+            entity = Secolo.builderSecolo()
+                    .titolo(titolo)
+                    .inizio(inizio)
+                    .fine(fine)
+                    .anteCristo(anteCristo)
+                    .build();
+            entity.id = titolo;
         }// end of if cycle
 
-        entity = Secolo.builderSecolo()
-                .titolo(titolo)
-                .inizio(inizio)
-                .fine(fine)
-                .anteCristo(anteCristo)
-                .build();
-
-        return (Secolo) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Secolo) entityBean).getTitolo()) ? ((Secolo) entityBean).getTitolo() : "";
-    }// end of method
+//    /**
+//     * Property unica (se esiste).
+//     */
+//    public String getPropertyUnica(AEntity entityBean) {
+//        return text.isValid(((Secolo) entityBean).getTitolo()) ? ((Secolo) entityBean).getTitolo() : "";
+//    }// end of method
 
 
     /**

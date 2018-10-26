@@ -1,9 +1,6 @@
 package it.algos.vaadflow.modules.log;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
@@ -25,20 +22,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_LOG)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -64,7 +61,6 @@ public class LogService extends AService {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     private LogRepository repository;
-
 
 
     /**
@@ -115,11 +111,9 @@ public class LogService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Log newEntity(AContext context){
+    public Log newEntity() {
         return newEntity((Livello) null, (Logtype) null, "");
     }// end of method
 
@@ -213,9 +207,8 @@ public class LogService extends AService {
 
     //--registra un avviso
     public void importo(String descrizione) {
-        crea(Livello.debug, logtype.getImport(),descrizione);
+        crea(Livello.debug, logtype.getImport(), descrizione);
     }// fine del metodo
-
 
 
 }// end of class

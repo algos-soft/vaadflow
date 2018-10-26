@@ -1,19 +1,9 @@
 package it.algos.vaadflow.boot;
 
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.data.FlowData;
-import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.anno.AnnoService;
-import it.algos.vaadflow.modules.company.CompanyService;
-import it.algos.vaadflow.modules.giorno.GiornoService;
-import it.algos.vaadflow.modules.logtype.LogtypeService;
-import it.algos.vaadflow.modules.mese.MeseService;
-import it.algos.vaadflow.modules.person.PersonService;
-import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.modules.secolo.SecoloService;
+import it.algos.vaadflow.modules.role.UtenteData;
 import it.algos.vaadflow.modules.utente.UtenteService;
-import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
@@ -40,20 +30,20 @@ public abstract class ABoot implements ServletContextListener {
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
 //    @Autowired
-    protected ABootService boot;
+//    protected ABootService boot;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
 //    @Autowired
-    protected PreferenzaService pref;
+//    protected PreferenzaService pref;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+
 
     //    /**
-//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-//     */
-//    @Autowired
-//    private RoleService role;
-//    /**
 //     * Istanza (@Scope = 'singleton') inietta da Spring <br>
 //     */
 //    @Autowired
@@ -96,8 +86,8 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-//    @Autowired
-    private FlowData flow;
+    @Autowired
+    private FlowData flowData;
 
     /**
      * Executed on container startup
@@ -131,11 +121,12 @@ public abstract class ABoot implements ServletContextListener {
         this.addRouteSpecifiche();
     }// end of method
 
+
     /**
      * Inizializzazione dei dati di alcune collections standard sul DB mongo <br>
      */
     private void iniziaDataStandard() {
-        flow.loadAllData();
+        flowData.loadAllData();
     }// end of method
 
 
@@ -180,7 +171,7 @@ public abstract class ABoot implements ServletContextListener {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
-        boot.creaRouteStandard();
+//        boot.creaRouteStandard();
     }// end of method
 
 

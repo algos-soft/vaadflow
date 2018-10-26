@@ -1,9 +1,7 @@
 package it.algos.vaadflow.modules.company;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
@@ -17,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -30,20 +27,21 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
 @VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_COM)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -127,11 +125,9 @@ public class CompanyService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Company newEntity(AContext context){
+    public Company newEntity() {
         return newEntity("", "");
     }// end of method
 
@@ -267,7 +263,7 @@ public class CompanyService extends AService {
         Person contatto;
         String telefono;
         String email;
-        EAAddress eaAddress;
+        EAAddress address;
         Address indirizzo;
 
         for (EACompany company : EACompany.values()) {
@@ -277,8 +273,8 @@ public class CompanyService extends AService {
             contatto = personService.newEntity(eaPerson);
             telefono = company.getTelefono();
             email = company.getEmail();
-            eaAddress = company.getAddress();
-            indirizzo = addressService.newEntity(eaAddress);
+            address = company.getAddress();
+            indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
 
             this.crea(code, descrizione, contatto, telefono, email, indirizzo);
             num++;

@@ -7,13 +7,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.algos.vaadflow.service.AService.FIELD_NAME_CODE;
+import static it.algos.vaadflow.service.AService.FIELD_NAME_ORDINE;
 
 /**
  * Project vaadflow
@@ -181,6 +186,31 @@ public class AMongoService extends AbstractService {
         return entity;
     }// end of method
 
+    /**
+     * Controlla l'esistenza della singola entity
+     *
+     * @param clazz    della collezione
+     * @param property da controllare
+     * @param value    da considerare
+     *
+     * @return true se esiste già
+     */
+    public boolean isEsiste(Class<? extends AEntity> clazz, String property, Object value) {
+        return findByProperty(clazz, FIELD_NAME_CODE, value) != null;
+    }// end of method
+
+    /**
+     * Controlla l'esistenza della singola entity
+     *
+     * @param clazz    della collezione
+     * @param property da controllare
+     * @param value    da considerare
+     *
+     * @return true se manca
+     */
+    public boolean isManca(Class<? extends AEntity> clazz, String property, Object value) {
+        return findByProperty(clazz, FIELD_NAME_CODE, value) == null;
+    }// end of method
 
     /**
      * Find all
@@ -419,5 +449,57 @@ public class AMongoService extends AbstractService {
         return mongoOp.getCollection(collectionName);
     }// end of method
 
+
+    /**
+     * Recupera dal DB il valore massimo pre-esistente della property <br>
+     * Incrementa di uno il risultato <br>
+     *
+     * @param clazz della collezione
+     */
+    public int getNewOrdine(Class<? extends AEntity> clazz) {
+        return getNewOrdine(clazz, FIELD_NAME_ORDINE);
+    }// end of method
+
+
+    /**
+     * Recupera dal DB il valore massimo pre-esistente della property <br>
+     * Incrementa di uno il risultato <br>
+     *
+     * @param clazz        della collezione
+     * @param propertyName dell'ordinamento
+     */
+    public int getNewOrdine(Class<? extends AEntity> clazz, String propertyName) {
+        int ordine = 0;
+        AEntity entityBean = null;
+        Sort sort = new Sort(Sort.Direction.DESC, propertyName);
+        List lista;
+        Field field;
+        Object value;
+
+        if (!reflection.isEsiste(clazz, propertyName)) {
+            return 0;
+        }// end of if/else cycle
+
+        Query query = new Query().with(sort).limit(1);
+        lista = mongoOp.find(query, clazz);
+
+        if (array.isValid(lista) && lista.size() == 1) {
+            entityBean = (AEntity) lista.get(0);
+        }// end of if cycle
+
+        if (entityBean != null) {
+            field = reflection.getField(clazz, propertyName);
+            try { // prova ad eseguire il codice
+                value = field.get(entityBean);
+                if (value instanceof Integer) {
+                    ordine = (Integer) value;
+                }// end of if cycle
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        return ordine + 1;
+    }// end of method
 
 }// end of class

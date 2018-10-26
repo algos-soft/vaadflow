@@ -1,11 +1,7 @@
 package it.algos.vaadflow.modules.mese;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +18,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_MES)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -91,12 +87,10 @@ public class MeseService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Mese newEntity(AContext context){
-        return newEntity("", "",0);
+    public Mese newEntity() {
+        return newEntity("", "", 0);
     }// end of method
 
 
@@ -113,29 +107,27 @@ public class MeseService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Mese newEntity(String titoloLungo, String titoloBreve, int giorni) {
-        Mese entity = null;
+        Mese entity = findByKeyUnica(titoloLungo);
 
-        entity = findByKeyUnica(titoloLungo);
-        if (entity != null) {
-            return findByKeyUnica(titoloLungo);
+        if (entity == null) {
+            entity = Mese.builderMese()
+                    .titoloLungo(titoloLungo)
+                    .titoloBreve(titoloBreve)
+                    .giorni(giorni)
+                    .build();
+            entity.id = titoloLungo;
         }// end of if cycle
 
-        entity = Mese.builderMese()
-                .titoloLungo(titoloLungo)
-                .titoloBreve(titoloBreve)
-                .giorni(giorni)
-                .build();
-
-        return (Mese) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Mese) entityBean).getTitoloLungo()) ? ((Mese) entityBean).getTitoloLungo() : "";
-    }// end of method
+//    /**
+//     * Property unica (se esiste).
+//     */
+//    public String getPropertyUnica(AEntity entityBean) {
+//        return text.isValid(((Mese) entityBean).getTitoloLungo()) ? ((Mese) entityBean).getTitoloLungo() : "";
+//    }// end of method
 
 
     /**

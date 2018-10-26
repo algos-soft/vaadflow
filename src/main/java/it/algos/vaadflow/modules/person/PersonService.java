@@ -1,7 +1,5 @@
 package it.algos.vaadflow.modules.person;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
@@ -19,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -33,14 +30,14 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
@@ -50,7 +47,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * La newEntity() usa il metodo newEntity() della superclasse per usare 'builderUtente' <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PER)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -156,11 +153,9 @@ public class PersonService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Person newEntity(AContext context){
+    public Person newEntity() {
         return newEntity("", "");
     }// end of method
 
@@ -362,7 +357,7 @@ public class PersonService extends AService {
         String nome;
         String cognome;
         String telefono;
-        EAAddress eaAddress;
+        EAAddress address;
         Address indirizzo;
         String mail;
         String userName;
@@ -371,8 +366,8 @@ public class PersonService extends AService {
             nome = eaPerson.getNome();
             cognome = eaPerson.getCognome();
             telefono = eaPerson.getTelefono();
-            eaAddress = eaPerson.getAddress();
-            indirizzo = addressService.newEntity(eaAddress);
+            address = eaPerson.getAddress();
+            indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
             mail = eaPerson.getMail();
             userName = eaPerson.getUserName();
 
@@ -410,7 +405,7 @@ public class PersonService extends AService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList(AEntity curremtItem,AContext context) {
+    public List<String> getFormPropertyNamesList(AEntity curremtItem, AContext context) {
         return ((Person) curremtItem).usaSuperClasse ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
 

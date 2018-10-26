@@ -107,11 +107,10 @@ public class ProvaService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Prova newEntity(AContext context) {
+    public Prova newEntity() {
         return newEntity(0, "");
     }// end of method
 

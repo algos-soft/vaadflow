@@ -13,6 +13,8 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,20 +26,20 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-ott-2018 18.52.54 <br>
+ * Fix date: 26-ott-2018 9.59.58 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * Annotated with @VaadinSessionScope (obbligatorio) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (sbagliato) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * NOT annotated with @VaadinSessionScope (sbagliato, perché SpringBoot va in loop iniziale) <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_UTE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
@@ -113,11 +115,10 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     * @param context della sessione
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(AContext context) {
+    public Utente newEntity( ) {
         return newEntity("", "", (List<Role>) null);
     }// end of method
 
@@ -236,8 +237,7 @@ public class UtenteService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
-
+        int numRec = super.reset();
         String userName;
         String passwordInChiaro;
         EARole ruolo;
@@ -252,10 +252,10 @@ public class UtenteService extends AService {
             mail = utente.getMail();
 
             this.crea(userName, passwordInChiaro, ruoli, mail, false);
-            num++;
+            numRec++;
         }// end of for cycle
 
-        return num;
+        return numRec;
     }// end of method
 
     public boolean isUser(Utente utente) {
