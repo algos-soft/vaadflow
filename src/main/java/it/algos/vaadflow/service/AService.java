@@ -478,7 +478,7 @@ public abstract class AService extends AbstractService implements IAService {
         EACompanyRequired tableCompanyRequired;
         Company company = null;
 
-        //--se la EntityClass non estende ACCompany, nopn deve fare nulla
+        //--se la EntityClass non estende ACCompany, non deve fare nulla
         if ((entityBean instanceof ACEntity)) {
             company = ((ACEntity) entityBean).company;
         } else {

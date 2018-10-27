@@ -122,7 +122,7 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity() {
-        return newEntity((Company) null, "", "", (List<Role>) null, "", false);
+        return newEntity("", "", (List<Role>) null, "", false);
     }// end of method
 
 
@@ -136,25 +136,27 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity(EAUtente eaUtente) {
+        Utente entity;
         String userName;
         String passwordInChiaro;
         EARole ruolo;
         List<Role> ruoli;
         String mail;
         EACompany eaCompany;
-        Company company = null;
 
-        eaCompany = eaUtente.getCompany();
-        if (eaCompany != null) {
-            company = (Company) companyService.findById(eaCompany.getCode());
-        }// end of if cycle
         userName = eaUtente.getUserName();
         passwordInChiaro = eaUtente.getPasswordInChiaro();
         ruolo = eaUtente.getRuolo();
         ruoli = roleService.getRoles(ruolo);
         mail = eaUtente.getMail();
+        entity = newEntity(userName, passwordInChiaro, ruoli, mail);
 
-        return newEntity(company, userName, passwordInChiaro, ruoli, mail);
+        eaCompany = eaUtente.getCompany();
+        if (eaCompany != null) {
+            entity.company = (Company) companyService.findById(eaCompany.getCode());
+        }// end of if cycle
+
+        return entity;
     }// end of method
 
 
@@ -162,8 +164,7 @@ public class UtenteService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Properties obbligatorie <br>
-     *
-     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
+     * <p>
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -174,8 +175,8 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
-        return newEntity(company, userName, passwordInChiaro, ruoli, mail, false);
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        return newEntity(userName, passwordInChiaro, ruoli, mail, false);
     }// end of method
 
 
@@ -183,8 +184,7 @@ public class UtenteService extends AService {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
-     *
-     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
+     * <p>
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -196,7 +196,7 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
         Utente entity = Utente.builderUtente()
                 .userName(text.isValid(userName) ? userName : null)
                 .passwordInChiaro(text.isValid(passwordInChiaro) ? passwordInChiaro : null)
@@ -205,7 +205,6 @@ public class UtenteService extends AService {
                 .locked(locked)
                 .build();
         entity.id = userName;
-        entity.company = company;
 
         return (Utente) super.addCompany(entity);
     }// end of method

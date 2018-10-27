@@ -238,7 +238,7 @@ public class PersonService extends AService {
         //--se non usa la security, utilizza il metodo builderPerson
         if (usaSuperClasse && pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
-            entityDellaSuperClasseUtente = utenteService.newEntity(null, userName, passwordInChiaro, ruoli, mail, locked);
+            entityDellaSuperClasseUtente = utenteService.newEntity( userName, passwordInChiaro, ruoli, mail, locked);
 
             //--poi vengono ricopiati i valori in Persona
             //--casting dalla superclasse alla classe attuale

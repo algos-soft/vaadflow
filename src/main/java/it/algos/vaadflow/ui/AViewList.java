@@ -751,6 +751,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
+    /**
+     * Primo ingresso dopo il click sul bottone <br>
+     */
     protected void save(AEntity entityBean, AViewDialog.Operation operation) {
         entityBean = service.beforeSave(entityBean, operation);
         switch (operation) {

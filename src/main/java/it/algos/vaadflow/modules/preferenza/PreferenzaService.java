@@ -8,6 +8,7 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.person.EAPerson;
 import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -159,12 +160,27 @@ public class PreferenzaService extends AService {
                 .type(type != null ? type : EAPrefType.string)
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();
-        entity.id = code;//@todo da migliorare con la company
+//        entity.id = code;//@todo da migliorare con la company
         entity.company = company;
 
         return (Preferenza)super.addCompany(entity);
     }// end of method
 
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        return super.beforeSave(entityBean, operation);
+    }// end of method
 
 //    /**
 //     * Fetches the entities whose 'main text property' matches the given filter text.
@@ -273,13 +289,13 @@ public class PreferenzaService extends AService {
 //    }// end of method
 
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    @Override
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return ((Preferenza) entityBean).getCode();
-//    }// end of method
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Preferenza) entityBean).getCode();
+    }// end of method
 
 //    /**
 //     * Opportunità di controllare (per le nuove schede) che la key unica non esista già. <br>
