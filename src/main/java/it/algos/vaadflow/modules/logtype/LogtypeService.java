@@ -1,7 +1,9 @@
 package it.algos.vaadflow.modules.logtype;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,14 +69,21 @@ public class LogtypeService extends AService {
 
 
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param code codice di riferimento (obbligatorio)
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Logtype crea(String code) {
-        return (Logtype) save(newEntity(0, code));
+    public boolean creaIfNotExist(String code) {
+        boolean creata = false;
+
+        if (isMancaByKeyUnica(code)) {
+            AEntity entity = save(newEntity(0, code));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
 
     /**
@@ -101,31 +110,35 @@ public class LogtypeService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Logtype newEntity(int ordine, String code) {
-        Logtype entity = findByKeyUnica(code);
-
-        if (entity == null) {
-            entity = Logtype.builderLogtype()
-                    .ordine(ordine != 0 ? ordine : this.getNewOrdine())
-                    .code(text.isValid(code) ? code : null)
-                    .build();
-            entity.id = code;
-        }// end of if cycle
+        Logtype entity = Logtype.builderLogtype()
+                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                .code(text.isValid(code) ? code : null)
+                .build();
+        entity.id = code;
 
         return entity;
     }// end of method
 
 
     /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
      *
-     * @param code di riferimento (obbligatorio)
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
      *
-     * @return istanza della Entity, null se non trovata
+     * @return the modified entity
      */
-    public Logtype findByKeyUnica(String code) {
-        return repository.findByCode(code);
-    }// end of method
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Logtype entity = (Logtype) super.beforeSave(entityBean, operation);
 
+        if (text.isEmpty(entity.code)) {
+            entity = null;
+        }// end of if cycle
+
+        return entity;
+    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -139,14 +152,9 @@ public class LogtypeService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-        String code;
 
         for (EALogType type : EALogType.values()) {
-            code = type.getTag();
-            if (mongo.isManca(entityClass, FIELD_NAME_CODE, code)) {
-                this.crea(code);
-                numRec++;
-            }// end of if cycle
+            numRec = creaIfNotExist(type.getTag()) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;
@@ -159,7 +167,7 @@ public class LogtypeService extends AService {
      * @return la entity appena trovata
      */
     public Logtype getSetup() {
-        return findByKeyUnica(SETUP);
+        return repository.findByCode(SETUP);
     }// end of method
 
 
@@ -169,7 +177,7 @@ public class LogtypeService extends AService {
      * @return la entity appena trovata
      */
     public Logtype getNew() {
-        return findByKeyUnica(NEW);
+        return repository.findByCode(NEW);
     }// end of method
 
 
@@ -179,7 +187,7 @@ public class LogtypeService extends AService {
      * @return la entity appena trovata
      */
     public Logtype getEdit() {
-        return findByKeyUnica(EDIT);
+        return repository.findByCode(EDIT);
     }// end of method
 
 
@@ -189,7 +197,7 @@ public class LogtypeService extends AService {
      * @return la entity appena trovata
      */
     public Logtype getDelete() {
-        return findByKeyUnica(DELETE);
+        return repository.findByCode(DELETE);
     }// end of method
 
     /**
@@ -198,7 +206,7 @@ public class LogtypeService extends AService {
      * @return la entity appena trovata
      */
     public Logtype getImport() {
-        return findByKeyUnica(IMPORT);
+        return repository.findByCode(IMPORT);
     }// end of method
 
 }// end of class

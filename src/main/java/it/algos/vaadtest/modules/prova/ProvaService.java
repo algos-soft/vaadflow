@@ -75,23 +75,6 @@ public class ProvaService extends AService {
     }// end of Spring constructor
 
     /**
-     * Ricerca di una entity (la crea se non la trova) <br>
-     *
-     * @param code di riferimento (obbligatorio ed unico)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public Prova findOrCrea(String code) {
-        Prova entity = findByKeyUnica(code);
-
-        if (entity == null) {
-            entity = crea(code);
-        }// end of if cycle
-
-        return entity;
-    }// end of method
-
-    /**
      * Crea una entity e la registra <br>
      *
      * @param code di riferimento (obbligatorio ed unico)

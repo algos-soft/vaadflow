@@ -100,7 +100,7 @@ public class AnnoService extends AService {
     public boolean creaIfNotExist(String titolo, Secolo secolo, int ordine) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "titolo", titolo)) {
+        if (isMancaByKeyUnica(titolo)) {
             AEntity entity = save(newEntity(titolo, secolo, ordine));
             creata = entity != null;
         }// end of if cycle
@@ -204,7 +204,7 @@ public class AnnoService extends AService {
             titolo = k + EASecolo.TAG_AC;
             secoloEnum = EASecolo.getSecoloAC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = secoloService.findByKeyUnica(titoloSecolo);
+            secolo = (Secolo)secoloService.findById(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle
@@ -216,7 +216,7 @@ public class AnnoService extends AService {
             titolo = k + VUOTA;
             secoloEnum = EASecolo.getSecoloDC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = secoloService.findByKeyUnica(titoloSecolo);
+            secolo = (Secolo)secoloService.findById(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle

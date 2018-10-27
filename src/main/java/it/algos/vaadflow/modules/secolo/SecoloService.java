@@ -79,7 +79,7 @@ public class SecoloService extends AService {
     public boolean creaIfNotExist(EASecolo eaSec) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "titolo", eaSec.getTitolo())) {
+        if (isMancaByKeyUnica(eaSec.getTitolo())) {
             AEntity entity = save(newEntity(eaSec.getTitolo(), eaSec.getInizio(), eaSec.getFine(), eaSec.isAnteCristo()));
             creata = entity != null;
         }// end of if cycle
@@ -87,19 +87,6 @@ public class SecoloService extends AService {
         return creata;
     }// end of method
 
-//    /**
-//     * Crea una entity e la registra <br>
-//     *
-//     * @param titolo     (obbligatorio, unico)
-//     * @param inizio     (obbligatorio, unico)
-//     * @param fine       (obbligatorio, unico)
-//     * @param anteCristo flag per i secoli prima di cristo (obbligatorio)
-//     *
-//     * @return la entity appena creata
-//     */
-//    public Secolo crea(String titolo, int inizio, int fine, boolean anteCristo) {
-//        return (Secolo) save(newEntity(titolo, inizio, fine, anteCristo));
-//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -139,14 +126,6 @@ public class SecoloService extends AService {
     }// end of method
 
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return text.isValid(((Secolo) entityBean).getTitolo()) ? ((Secolo) entityBean).getTitolo() : "";
-//    }// end of method
-
-
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
@@ -165,18 +144,6 @@ public class SecoloService extends AService {
         }// end of if cycle
 
         return entity;
-    }// end of method
-
-
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param titolo (obbligatorio, unico)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Secolo findByKeyUnica(String titolo) {
-        return repository.findByTitolo(titolo);
     }// end of method
 
 

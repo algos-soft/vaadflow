@@ -1,8 +1,6 @@
 package it.algos.vaadflow.modules.utente;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARole;
@@ -46,6 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 public class UtenteService extends AService {
 
     private final static String SUFFIX = "123";
+
     /**
      * versione della classe per la serializzazione
      */
@@ -86,8 +85,9 @@ public class UtenteService extends AService {
         this.repository = (UtenteRepository) repository;
     }// end of Spring constructor
 
+
     /**
-     * Crea una entity e la registra <br>
+     * Crea una entity solo se non esisteva <br>
      *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
@@ -96,17 +96,18 @@ public class UtenteService extends AService {
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
      * @param mail             posta elettronica (facoltativo)
-     * @param locked           flag locked (facoltativo, di default false)
      *
-     * @return la entity appena creata
+     * @return true se la entity è stata creata
      */
-    public Utente crea(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
-        Utente entity;
+    public boolean creaIfNotExist(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        boolean creata = false;
 
-        entity = newEntity(userName, passwordInChiaro, ruoli, mail, locked);
-        save(entity);
+        if (isMancaByKeyUnica(userName)) {
+            AEntity entity = save(newEntity(userName, passwordInChiaro, ruoli, mail));
+            creata = entity != null;
+        }// end of if cycle
 
-        return entity;
+        return creata;
     }// end of method
 
 
@@ -115,11 +116,10 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
      *
-     *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity( ) {
-        return newEntity("", "", (List<Role>) null);
+    public Utente newEntity() {
+        return newEntity("", "", (List<Role>) null, "", false);
     }// end of method
 
 
@@ -134,11 +134,12 @@ public class UtenteService extends AService {
      * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
      *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
      *                         lista modificabile solo da developer ed admin
+     * @param mail             posta elettronica (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli) {
-        return newEntity(userName, passwordInChiaro, ruoli, "", false);
+    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        return newEntity(userName, passwordInChiaro, ruoli, mail, false);
     }// end of method
 
 
@@ -159,22 +160,16 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
-        Utente entity;
-
-        entity = findByUserName(userName);
-        if (entity != null) {
-            return findByUserName(userName);
-        }// end of if cycle
-
-        entity = Utente.builderUtente()
+        Utente entity = Utente.builderUtente()
                 .userName(text.isValid(userName) ? userName : null)
                 .passwordInChiaro(text.isValid(passwordInChiaro) ? passwordInChiaro : null)
                 .ruoli(ruoli != null ? ruoli : roleService.getUserRole())
                 .mail(text.isValid(mail) ? mail : null)
                 .locked(locked)
                 .build();
+        entity.id = userName;
 
-        return (Utente) creaIdKeySpecifica(entity);
+        return entity;
     }// end of method
 
 
@@ -207,24 +202,6 @@ public class UtenteService extends AService {
         return entity;
     }// end of method
 
-    /**
-     * Property unica (se esiste).
-     */
-    public String getPropertyUnica(AEntity entityBean) {
-        return text.isValid(((Utente) entityBean).getUserName()) ? ((Utente) entityBean).getUserName() : "";
-    }// end of method
-
-
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param userName userName o nickName (obbligatorio, unico)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Utente findByUserName(String userName) {
-        return repository.findByUserName(userName);
-    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -251,12 +228,12 @@ public class UtenteService extends AService {
             ruoli = roleService.getRoles(ruolo);
             mail = utente.getMail();
 
-            this.crea(userName, passwordInChiaro, ruoli, mail, false);
-            numRec++;
+            numRec = creaIfNotExist(userName, passwordInChiaro, ruoli, mail) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;
     }// end of method
+
 
     public boolean isUser(Utente utente) {
         for (Role role : utente.ruoli) {
@@ -268,15 +245,17 @@ public class UtenteService extends AService {
         return false;
     }// end of method
 
+
     public boolean isAdmin(Utente utente) {
         for (Role role : utente.ruoli) {
-            if (role.code.equals("admin")) {
+            if (role.code.equals(roleService.getAdmin().code)) {
                 return true;
             }// end of if cycle
         }// end of for cycle
 
         return false;
     }// end of method
+
 
     public boolean isDev(Utente utente) {
         for (Role role : utente.ruoli) {

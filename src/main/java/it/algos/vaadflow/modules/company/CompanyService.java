@@ -19,8 +19,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 
 /**
@@ -112,7 +110,7 @@ public class CompanyService extends AService {
     public boolean creaIfNotExist(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "code", code)) {
+        if (isMancaByKeyUnica(code)) {
             AEntity entity = save(newEntity(code, descrizione, contatto, telefono, mail, indirizzo));
             creata = entity != null;
         }// end of if cycle
@@ -188,32 +186,6 @@ public class CompanyService extends AService {
     }// end of method
 
 
-//    /**
-//     * Returns all instances of the type <br>
-//     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
-//     * Lista ordinata <br>
-//     *
-//     * @return lista ordinata di tutte le entities
-//     */
-//    @Override
-//    public List<Company> findAll() {
-//        List<Company> lista = null;
-//
-//        try { // prova ad eseguire il codice
-//            lista = repository.findAllByOrderByCodeAsc();
-//        } catch (Exception unErrore2) { // intercetta l'errore
-//            log.error(unErrore2.toString());
-//            try { // prova ad eseguire il codice
-//                lista = repository.findAll();
-//            } catch (Exception unErrore3) { // intercetta l'errore
-//                log.error(unErrore3.toString());
-//            }// fine del blocco try-catch
-//        }// fine del blocco try-catch
-//
-//        return lista;
-//    }// end of method
-
-
     /**
      * Creazione di alcuni dati demo iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
@@ -229,7 +201,7 @@ public class CompanyService extends AService {
         String code;
         String descrizione;
         EAPerson eaPers;
-        Person contatto=null;
+        Person contatto = null;
         String telefono;
         String email;
         EAAddress address;
@@ -239,7 +211,7 @@ public class CompanyService extends AService {
             code = company.getCode();
             descrizione = company.getDescrizione();
             eaPers = company.getPerson();
-            contatto = personService.newEntity( eaPers.getNome(),  eaPers.getCognome(),  eaPers.getTelefono(), null,  eaPers.getMail());
+            contatto = personService.newEntity(eaPers.getNome(), eaPers.getCognome(), eaPers.getTelefono(), null, eaPers.getMail());
             telefono = company.getTelefono();
             email = company.getEmail();
             address = company.getAddress();

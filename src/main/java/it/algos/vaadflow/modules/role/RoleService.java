@@ -1,8 +1,10 @@
 package it.algos.vaadflow.modules.role;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -71,16 +73,21 @@ public class RoleService extends AService {
 
 
     /**
-     * Crea una entity sul MongoDB <br>
+     * Crea una entity solo se non esisteva <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param code codice di riferimento (obbligatorio)
      *
-     * @return la entity trovata o appena creata
+     * @return true se la entity è stata creata
      */
-    public Role crea(String code) {
-        Role entity = newEntity(0, code);
-        mongo.insert(entity, entityClass);
-        return entity;
+    public boolean creaIfNotExist(String code) {
+        boolean creata = false;
+
+        if (isMancaByKeyUnica(code)) {
+            AEntity entity = save(newEntity(0, code));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
     }// end of method
 
     /**
@@ -105,41 +112,48 @@ public class RoleService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Role newEntity(int ordine, String code) {
-        Role entity = findByKeyUnica(code);
+        Role entity = Role.builderRole()
+                .ordine(ordine != 0 ? ordine : getNewOrdine())
+                .code(text.isValid(code) ? code : null)
+                .build();
+        entity.id = code;
 
-        if (entity == null) {
-            entity = Role.builderRole()
-                    .ordine(ordine != 0 ? ordine : getNewOrdine())
-                    .code(text.isValid(code) ? code : null)
-                    .build();
-            entity.id = code;
+        return entity;
+    }// end of method
+
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Role entity = (Role) super.beforeSave(entityBean, operation);
+
+        if (text.isEmpty(entity.code)) {
+            entity = null;
         }// end of if cycle
 
         return entity;
     }// end of method
 
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param code di riferimento (obbligatorio)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Role findByKeyUnica(String code) {
-        return repository.findByCode(code);
-    }// end of method
 
-    /**
-     * Returns all instances of the type <br>
-     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
-     * Lista ordinata <br>
-     *
-     * @return lista ordinata di tutte le entities
-     */
-    @Override
-    public List<Role> findAll() {
-        return repository.findAllByOrderByOrdineAsc();
-    }// end of method
+//    /**
+//     * Returns all instances of the type <br>
+//     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
+//     * Lista ordinata <br>
+//     *
+//     * @return lista ordinata di tutte le entities
+//     */
+//    @Override
+//    public List<Role> findAll() {
+//        return repository.findAllByOrderByOrdineAsc();
+//    }// end of method
 
 
     /**
@@ -154,14 +168,9 @@ public class RoleService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-        String code;
 
         for (EARole ruolo : EARole.values()) {
-            code = ruolo.toString();
-            if (mongo.isManca(entityClass, FIELD_NAME_CODE, code)) {
-                this.crea(code);
-                numRec++;
-            }// end of if cycle
+            numRec = creaIfNotExist(ruolo.toString()) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;
@@ -171,28 +180,28 @@ public class RoleService extends AService {
      * Guest role
      */
     public Role getGuest() {
-        return findByKeyUnica(EARole.guest.name());
+        return repository.findByCode(EARole.guest.name());
     }// end of method
 
     /**
      * User role
      */
     public Role getUser() {
-        return findByKeyUnica(EARole.user.name());
+        return repository.findByCode(EARole.user.name());
     }// end of method
 
     /**
      * Admin role
      */
     public Role getAdmin() {
-        return findByKeyUnica(EARole.admin.name());
+        return repository.findByCode(EARole.admin.name());
     }// end of method
 
     /**
      * Developer role
      */
     public Role getDeveloper() {
-        return findByKeyUnica(EARole.developer.name());
+        return repository.findByCode(EARole.developer.name());
     }// end of method
 
     /**

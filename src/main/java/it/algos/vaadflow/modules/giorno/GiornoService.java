@@ -96,7 +96,7 @@ public class GiornoService extends AService {
     public boolean creaIfNotExist(String titolo, Mese mese, int ordinamento) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "titolo", titolo)) {
+        if (isMancaByKeyUnica(titolo)) {
             AEntity entity = save(newEntity(titolo, mese, ordinamento));
             creata = entity != null;
         }// end of if cycle
@@ -104,19 +104,6 @@ public class GiornoService extends AService {
         return creata;
     }// end of method
 
-
-//    /**
-//     * Crea una entity e la registra <br>
-//     *
-//     * @param mese        di riferimento (obbligatorio)
-//     * @param ordinamento (obbligatorio, unico)
-//     * @param titolo      (obbligatorio, unico)
-//     *
-//     * @return la entity appena creata
-//     */
-//    public Giorno crea(Mese mese, int ordinamento, String titolo) {
-//        return (Giorno) save(newEntity(mese, ordinamento, titolo));
-//    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -154,14 +141,6 @@ public class GiornoService extends AService {
     }// end of method
 
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return text.isValid(((Giorno) entityBean).getTitolo()) ? ((Giorno) entityBean).getTitolo() : "";
-//    }// end of method
-
-
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
@@ -195,33 +174,6 @@ public class GiornoService extends AService {
     }// end of method
 
 
-//
-//    /**
-//     * Returns all entities of the type <br>
-//     * <p>
-//     * Ordinate secondo l'ordinamento previsto
-//     *
-//     * @param sort ordinamento previsto
-//     *
-//     * @return all ordered entities
-//     */
-//    @Override
-//    protected List<? extends AEntity> findAll(Sort sort) {
-//        return super.findAll(sort);
-//    }// end of method
-//
-
-//    /**
-//     * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
-//     *
-//     * @param titolo (obbligatorio, unico)
-//     *
-//     * @return true se trovata
-//     */
-//    public boolean isEsiste(String titolo) {
-//        return findByKeyUnica(titolo) != null;
-//    }// end of method
-
     /**
      * Creazione di alcuni dati demo iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
@@ -246,7 +198,7 @@ public class GiornoService extends AService {
         for (HashMap mappaGiorno : lista) {
             titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
             bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            mese = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            mese = (Mese)meseService.findById((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
             ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
             numRec = creaIfNotExist(titolo, mese, ordine) ? numRec + 1 : numRec;
         }// end of for cycle

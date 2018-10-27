@@ -42,9 +42,13 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     public final static String FIELD_NAME_ID = "id";
+
     public final static String FIELD_NAME_ORDINE = "ordine";
+
     public final static String FIELD_NAME_CODE = "code";
+
     public final static String FIELD_NAME_DESCRIZIONE = "descrizione";
+
     public final static String FIELD_NAME_COMPANY = "company";
 
 //    /**
@@ -55,21 +59,25 @@ public abstract class AService extends AbstractService implements IAService {
 
     //--il modello-dati specifico viene regolato dalla sottoclasse nel costruttore
     public Class<? extends AEntity> entityClass;
+
     /**
      * Inietta da Spring
      */
     @Autowired
     public AMongoService mongo;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected FlowData flow;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected PreferenzaService pref;
+
     //--la repository dei dati viene iniettata dal costruttore della sottoclasse concreta
     protected MongoRepository repository;
 
@@ -151,14 +159,13 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     /**
-     * Ricerca una entity <br>
-     * Se non esiste, la crea <br>
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param idKey di riferimento (obbligatorio ed unico)
+     * @param keyUnica (obbligatoria, unica)
      *
-     * @return la entity trovata o appena creata
+     * @return istanza della Entity, null se non trovata
      */
-    public AEntity findOrCrea(String idKey) {
+    protected AEntity findByKeyUnica(String keyUnica) {
         return null;
     }// end of method
 
@@ -684,18 +691,49 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     /**
-     * Opportunità di controllare (per le nuove schede) che la key unica non esista già
-     * Invocato appena prima del save(), solo per una nuova entity
+     * Opportunità di controllare (per le nuove schede) che la key unica non esista già <br>
+     * Invocato appena prima del save(), solo per una nuova entity <br>
      *
      * @param newEntityBean nuova da creare
      */
     public boolean isEsisteEntityKeyUnica(AEntity newEntityBean) {
-        String keyID = getKeyUnica(newEntityBean);
-        if (text.isValid(keyID)) {
-            return findById(keyID) != null;
+//        String keyID = getKeyUnica(newEntityBean);
+//        if (text.isValid(keyID)) {
+//            return findById(keyID) != null;
+//        } else {
+//            return false;
+//        }// end of if/else cycle
+        return isEsisteByKeyUnica(getKeyUnica(newEntityBean));
+    }// end of method
+
+
+    /**
+     * Opportunità di controllare (per le nuove schede) che una entity con la keyUnica indicata non esista già <br>
+     * Invocato appena prima del save(), solo per una nuova entity <br>
+     *
+     * @param keyUnica di riferimento (obbligatoria ed unica)
+     *
+     * @return true se la entity con la keyUnica indicata esiste
+     */
+    public boolean isEsisteByKeyUnica(String keyUnica) {
+        if (text.isValid(keyUnica)) {
+            return findById(keyUnica) != null;
         } else {
             return false;
         }// end of if/else cycle
+    }// end of method
+
+
+    /**
+     * Opportunità di controllare (per le nuove schede) che una entity con la keyUnica indicata non esista già <br>
+     * Invocato appena prima del save(), solo per una nuova entity <br>
+     *
+     * @param keyUnica di riferimento (obbligatoria ed unica)
+     *
+     * @return true se la entity con la keyUnica indicata non esiste
+     */
+    public boolean isMancaByKeyUnica(String keyUnica) {
+        return !isEsisteByKeyUnica(keyUnica);
     }// end of method
 
 

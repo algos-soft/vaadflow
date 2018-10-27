@@ -79,27 +79,13 @@ public class MeseService extends AService {
     public boolean creaIfNotExist(EAMese eaMese) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "titoloLungo", eaMese.getLungo())) {
+        if (isMancaByKeyUnica(eaMese.getLungo())) {
             AEntity entity = save(newEntity(eaMese.getLungo(), eaMese.getBreve(), eaMese.getGiorni()));
             creata = entity != null;
         }// end of if cycle
 
         return creata;
     }// end of method
-
-
-//    /**
-//     * Crea una entity e la registra <br>
-//     *
-//     * @param titoloLungo nome completo (obbligatorio, unico)
-//     * @param titoloBreve nome abbreviato di tre cifre (obbligatorio, unico)
-//     * @param giorni      numero di giorni presenti (obbligatorio)
-//     *
-//     * @return la entity appena creata
-//     */
-//    public Mese crea(String titoloLungo, String titoloBreve, int giorni) {
-//        return (Mese) save(newEntity(titoloLungo, titoloBreve, giorni));
-//    }// end of method
 
 
     /**
@@ -138,14 +124,6 @@ public class MeseService extends AService {
     }// end of method
 
 
-//    /**
-//     * Property unica (se esiste).
-//     */
-//    public String getPropertyUnica(AEntity entityBean) {
-//        return text.isValid(((Mese) entityBean).getTitoloLungo()) ? ((Mese) entityBean).getTitoloLungo() : "";
-//    }// end of method
-
-
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
@@ -164,18 +142,6 @@ public class MeseService extends AService {
         }// end of if cycle
 
         return entity;
-    }// end of method
-
-
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param titoloLungo nome completo (obbligatorio, unico)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Mese findByKeyUnica(String titoloLungo) {
-        return repository.findByTitoloLungo(titoloLungo);
     }// end of method
 
 

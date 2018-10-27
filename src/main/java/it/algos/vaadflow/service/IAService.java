@@ -54,16 +54,6 @@ public interface IAService {
 
 
     /**
-     * Ricerca una entity <br>
-     * Se non esiste, la crea <br>
-     *
-     * @param idKey di riferimento (obbligatorio ed unico)
-     *
-     * @return la entity trovata o appena creata
-     */
-    public AEntity findOrCrea(String idKey);
-
-    /**
      * Retrieves an entity by its id.
      *
      * @param id must not be {@literal null}.

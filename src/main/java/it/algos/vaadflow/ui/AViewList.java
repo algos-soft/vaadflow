@@ -794,7 +794,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
             User springUser = (User) securityContext.getAuthentication().getPrincipal();
             uniqueUserName = springUser.getUsername();
-            utente = utenteService.findByUserName(uniqueUserName);
+            utente = (Utente)utenteService.findById(uniqueUserName);
 
             login.setUtente(utente);
             context = new AContext(login);

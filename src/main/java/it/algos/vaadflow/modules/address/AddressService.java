@@ -67,7 +67,7 @@ public class AddressService extends AService {
     public boolean creaIfNotExist(EAAddress eaAddress) {
         boolean creata = false;
 
-        if (mongo.isManca(entityClass, "indirizzo", eaAddress.getIndirizzo())) {
+        if (isMancaByKeyUnica(eaAddress.getIndirizzo())) {
             AEntity entity = save(newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap()));
             creata = entity != null;
         }// end of if cycle
