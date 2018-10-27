@@ -42,7 +42,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @Service
-@VaadinSessionScope
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_COM)
 @Slf4j

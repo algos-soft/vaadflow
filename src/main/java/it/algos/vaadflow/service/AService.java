@@ -475,29 +475,18 @@ public abstract class AService extends AbstractService implements IAService {
      * @param entityBean da creare
      */
     protected AEntity addCompany(AEntity entityBean) {
-        return addCompany(entityBean, (Company) null);
-    }// end of method
-
-
-    /**
-     * Se la nuova entity usa la company, la recupera dal login
-     * Se la campany manca, lancia l'eccezione
-     *
-     * @param entityBean da creare
-     * @param company    da utilizzare se valida (può essere nulla)
-     */
-    protected AEntity addCompany(AEntity entityBean, Company company) {
         EACompanyRequired tableCompanyRequired;
+        Company company = null;
 
         //--se la EntityClass non estende ACCompany, nopn deve fare nulla
-        if (!(entityBean instanceof ACEntity)) {
+        if ((entityBean instanceof ACEntity)) {
+            company = ((ACEntity) entityBean).company;
+        } else {
             return entityBean;
-        }// end of if cycle
+        }// end of if/else cycle
 
         if (company == null) {
-//            if (login != null) {
-//                company = login.getCompany();
-//            }// end of if cycle
+            company = this.getCompany();
         }// end of if cycle
 
         //--controlla l'obbligatorietà della Company
@@ -508,16 +497,16 @@ public abstract class AService extends AbstractService implements IAService {
                 break;
             case facoltativa:
                 if (company != null) {
-//                    ((ACEntity) entityBean).company = company;
+                    ((ACEntity) entityBean).company = company;
                 } else {
-                    log.info("Nuova scheda senza company (facoltativa)");
+                    log.warn("Algos- Nuova scheda senza company (facoltativa) di " + entityBean.toString() + " della classe " + entityBean.getClass().getSimpleName());
                 }// end of if/else cycle
                 break;
             case obbligatoria:
                 if (company != null) {
-//                    ((ACEntity) entityBean).company = company;
+                    ((ACEntity) entityBean).company = company;
                 } else {
-                    entityBean = null;
+                    log.error("Algos- Manca la company (obbligatoria) di " + entityBean.toString() + " della classe " + entityBean.getClass().getSimpleName());
                 }// end of if/else cycle
                 break;
             default:
@@ -690,12 +679,16 @@ public abstract class AService extends AbstractService implements IAService {
      * @param entityBean da salvare
      */
     public AEntity creaIdKeySpecifica(AEntity entityBean) {
-        String idKey = getKeyUnica(entityBean);
-        if (text.isValid(idKey)) {
-            entityBean.id = idKey;
-        } else {
-            entityBean.id = null;
-        }// end of if/else cycle
+        String idKey = "";
+
+        if (text.isEmpty(entityBean.id)) {
+            idKey = getKeyUnica(entityBean);
+            if (text.isValid(idKey)) {
+                entityBean.id = idKey;
+            } else {
+                entityBean.id = null;
+            }// end of if/else cycle
+        }// end of if cycle
 
         return entityBean;
     }// end of method
@@ -842,16 +835,6 @@ public abstract class AService extends AbstractService implements IAService {
         return company;
     }// end of method
 
-
-    public Company getCompany() {
-        Company company = null;
-
-//        if (login != null) {
-//            company = login.getCompany();
-//        }// end of if cycle
-
-        return company;
-    }// end of method
 
 //    /**
 //     * Property unica (se esiste) <br>
@@ -1247,7 +1230,7 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     /**
-     * Recupera il login della session <br>
+     * Recupera il login della session corrente <br>
      * Controlla che la session sia attiva <br>
      *
      * @return context della sessione
@@ -1261,6 +1244,24 @@ public abstract class AService extends AbstractService implements IAService {
         }// end of if cycle
 
         return login;
+    }// end of method
+
+
+    /**
+     * Recupera la company della session corrente <br>
+     * Controlla che la session sia attiva <br>
+     *
+     * @return context della sessione
+     */
+    public Company getCompany() {
+        Company company = null;
+        AContext context = getContext();
+
+        if (context != null) {
+            company = context.getCompany();
+        }// end of if cycle
+
+        return company;
     }// end of method
 
 

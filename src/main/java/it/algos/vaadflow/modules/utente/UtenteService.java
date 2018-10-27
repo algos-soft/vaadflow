@@ -98,22 +98,15 @@ public class UtenteService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
-     * @param userName         userName o nickName (obbligatorio, unico)
-     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     *                         con inserimento automatico (prima del 'save') se è nulla
-     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
-     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
-     *                         lista modificabile solo da developer ed admin
-     * @param mail             posta elettronica (facoltativo)
+     * @param eaUtente: enumeration di dati iniziali di prova
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+    public boolean creaIfNotExist(EAUtente eaUtente) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(userName)) {//@todo migliorare
-            AEntity entity = save(newEntity(company, userName, passwordInChiaro, ruoli, mail));
+        if (isMancaByKeyUnica(eaUtente.userName)) {//@todo migliorare
+            AEntity entity = save(newEntity(eaUtente));
             creata = entity != null;
         }// end of if cycle
 
@@ -130,6 +123,38 @@ public class UtenteService extends AService {
      */
     public Utente newEntity() {
         return newEntity((Company) null, "", "", (List<Role>) null, "", false);
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Usa una enumeration di dati iniziali di prova <br>
+     *
+     * @param eaUtente: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Utente newEntity(EAUtente eaUtente) {
+        String userName;
+        String passwordInChiaro;
+        EARole ruolo;
+        List<Role> ruoli;
+        String mail;
+        EACompany eaCompany;
+        Company company = null;
+
+        eaCompany = eaUtente.getCompany();
+        if (eaCompany != null) {
+            company = (Company) companyService.findById(eaCompany.getCode());
+        }// end of if cycle
+        userName = eaUtente.getUserName();
+        passwordInChiaro = eaUtente.getPasswordInChiaro();
+        ruolo = eaUtente.getRuolo();
+        ruoli = roleService.getRoles(ruolo);
+        mail = eaUtente.getMail();
+
+        return newEntity(company, userName, passwordInChiaro, ruoli, mail);
     }// end of method
 
 
@@ -182,7 +207,7 @@ public class UtenteService extends AService {
         entity.id = userName;
         entity.company = company;
 
-        return entity;
+        return (Utente) super.addCompany(entity);
     }// end of method
 
 
@@ -228,25 +253,9 @@ public class UtenteService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-        String userName;
-        String passwordInChiaro;
-        EARole ruolo;
-        List<Role> ruoli;
-        String mail;
-        EACompany eaCompany;
-        Company company = null;
 
-        for (EAUtente utente : EAUtente.values()) {
-            userName = utente.getUserName();
-            passwordInChiaro = utente.getPasswordInChiaro();
-            ruolo = utente.getRuolo();
-            ruoli = roleService.getRoles(ruolo);
-            mail = utente.getMail();
-            eaCompany = utente.getCompany();
-            if (eaCompany != null) {
-                company = (Company) companyService.findById(eaCompany.getCode());
-            }// end of if cycle
-            numRec = creaIfNotExist(company, userName, passwordInChiaro, ruoli, mail) ? numRec + 1 : numRec;
+        for (EAUtente eaUtente : EAUtente.values()) {
+            numRec = creaIfNotExist(eaUtente) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

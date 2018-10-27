@@ -2,7 +2,11 @@ package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.EAAddress;
 import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.person.EAPerson;
+import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,18 +77,15 @@ public class PreferenzaService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param code        codice di riferimento (obbligatorio)
-     * @param descrizione (facoltativa)
-     * @param type        (obbligatorio) per convertire in byte[] i valori
-     * @param value       (obbligatorio) memorizza tutto in byte[]
+     * @param eaPref: enumeration di dati iniziali di prova
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(String code, String descrizione, EAPrefType type, Object value) {
+    public boolean creaIfNotExist(EAPreferenza eaPref) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(code)) {
-            AEntity entity = save(newEntity(code, descrizione, type, value));
+        if (isMancaByKeyUnica(eaPref.getCode())) {
+            AEntity entity = save(newEntity(eaPref));
             creata = entity != null;
         }// end of if cycle
 
@@ -102,6 +103,21 @@ public class PreferenzaService extends AService {
     public AEntity newEntity() {
         return newEntity(null, 0, "", "", null, null);
     }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Usa una enumeration di dati iniziali di prova <br>
+     *
+     * @param eaPref: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Preferenza newEntity(EAPreferenza eaPref) {
+        return newEntity(eaPref.getCode(), eaPref.getDesc(), eaPref.getType(), eaPref.getValue());
+    }// end of method
+
 
 
     /**
@@ -146,7 +162,7 @@ public class PreferenzaService extends AService {
         entity.id = code;//@todo da migliorare con la company
         entity.company = company;
 
-        return entity;
+        return (Preferenza)super.addCompany(entity);
     }// end of method
 
 
@@ -222,13 +238,8 @@ public class PreferenzaService extends AService {
         int numRec = 0;
         int numPref = count();
 
-        for (EAPreferenza prefTemp : EAPreferenza.values()) {
-            String code = prefTemp.getCode();
-            String descNew = prefTemp.getDesc();
-            EAPrefType type = prefTemp.getType();
-            Object valueNew = prefTemp.getValue();
-
-            numRec = creaIfNotExist(code, descNew, type, valueNew) ? numRec + 1 : numRec;
+        for (EAPreferenza eaPref : EAPreferenza.values()) {
+            numRec = creaIfNotExist(eaPref) ? numRec + 1 : numRec;
         }// end of for cycle
 
         if (numRec == 0) {

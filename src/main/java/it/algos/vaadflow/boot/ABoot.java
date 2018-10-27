@@ -1,8 +1,8 @@
 package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.backend.data.FlowData;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.modules.role.UtenteData;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-//    @Autowired
-//    protected PreferenzaService pref;
+    @Autowired
+    protected PreferenzaService pref;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>

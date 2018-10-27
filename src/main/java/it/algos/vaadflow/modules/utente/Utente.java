@@ -68,7 +68,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderUtente")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = EACompanyRequired.facoltativa)
+@AIEntity(company = EACompanyRequired.obbligatoria)
 @AIList(fields = {"company", "userName", "passwordInChiaro", "locked", "mail"})
 @AIForm(fields = {"company", "userName", "ruoli", "passwordInChiaro", "locked", "mail"})
 @AIScript(sovrascrivibile = false)

@@ -137,6 +137,18 @@ public class PersonService extends AService {
 
 
     /**
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Non usa le properties di security della superclasse Utente
+     * Usato come record 'embedded' in altre classi (Company,...)
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntityConSuperclasse() {
+        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, true);
+    }// end of method
+
+
+    /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Usa una enumeration di dati iniziali di prova <br>
