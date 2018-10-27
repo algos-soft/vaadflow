@@ -68,7 +68,7 @@ public class AddressService extends AService {
         boolean creata = false;
 
         if (isMancaByKeyUnica(eaAddress.getIndirizzo())) {
-            AEntity entity = save(newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap()));
+            AEntity entity = save(newEntity(eaAddress));
             creata = entity != null;
         }// end of if cycle
 
@@ -85,6 +85,20 @@ public class AddressService extends AService {
      */
     public Address newEntity() {
         return newEntity("", "", "");
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Usa una enumeration di dati iniziali di prova <br>
+     *
+     * @param eaAddress: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Address newEntity(EAAddress eaAddress) {
+        return newEntity(eaAddress.getIndirizzo(), eaAddress.getLocalita(), eaAddress.getCap());
     }// end of method
 
 
@@ -110,6 +124,7 @@ public class AddressService extends AService {
         return entity;
     }// end of method
 
+
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
@@ -130,6 +145,7 @@ public class AddressService extends AService {
 
         return entity;
     }// end of method
+
 
     /**
      * Creazione di alcuni dati demo iniziali <br>

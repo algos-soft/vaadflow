@@ -103,31 +103,90 @@ public class PersonService extends AService {
     }// end of Spring constructor
 
 
+//    /**
+//     * Crea una entity solo se non esisteva <br>
+//     *
+//     * @param nome:      (obbligatorio, non unico)
+//     * @param cognome:   (obbligatorio, non unico)
+//     * @param telefono:  (facoltativo)
+//     * @param indirizzo: via, nome e numero (facoltativo)
+//     * @param mail       posta elettronica (facoltativo)
+//     *
+//     * @return true se la entity è stata creata
+//     */
+//    public boolean creaIfNotExist(
+//            String nome,
+//            String cognome,
+//            String telefono,
+//            Address indirizzo,
+//            String mail) {
+//        boolean creata = false;
+//
+//        if (true) {//@todo da inventare
+//            AEntity entity = save(newEntity(nome, cognome, telefono, indirizzo, mail));
+//            creata = entity != null;
+//        }// end of if cycle
+//
+//        return creata;
+//    }// end of method
+
+
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param nome:      (obbligatorio, non unico)
-     * @param cognome:   (obbligatorio, non unico)
-     * @param telefono:  (facoltativo)
-     * @param indirizzo: via, nome e numero (facoltativo)
-     * @param mail       posta elettronica (facoltativo)
+     * @param eaPerson: enumeration di dati iniziali di prova
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(
-            String nome,
-            String cognome,
-            String telefono,
-            Address indirizzo,
-            String mail) {
+    public boolean creaIfNotExist(EAPerson eaPerson) {
         boolean creata = false;
 
         if (true) {//@todo da inventare
-            AEntity entity = save(newEntity(nome, cognome, telefono, indirizzo, mail));
+            AEntity entity = save(newEntity(eaPerson));
             creata = entity != null;
         }// end of if cycle
 
         return creata;
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Senza properties per compatibilità con la superclasse <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntity() {
+        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Usa una enumeration di dati iniziali di prova <br>
+     *
+     * @param eaPerson: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Person newEntity(EAPerson eaPerson) {
+        String nome;
+        String cognome;
+        String telefono;
+        EAAddress address;
+        Address indirizzo;
+        String mail;
+
+        nome = eaPerson.getNome();
+        cognome = eaPerson.getCognome();
+        telefono = eaPerson.getTelefono();
+        address = eaPerson.getAddress();
+        indirizzo = addressService.newEntity(address);
+        mail = eaPerson.getMail();
+
+        return newEntity(nome, cognome, telefono, indirizzo, mail);
     }// end of method
 
 
@@ -146,6 +205,7 @@ public class PersonService extends AService {
     public Person newEntity(String nome, String cognome, String telefono, Address indirizzo, String mail) {
         return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -192,7 +252,7 @@ public class PersonService extends AService {
         //--se non usa la security, utilizza il metodo builderPerson
         if (usaSuperClasse && pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
-            entityDellaSuperClasseUtente = utenteService.newEntity(null,userName, passwordInChiaro, ruoli, mail, locked);
+            entityDellaSuperClasseUtente = utenteService.newEntity(null, userName, passwordInChiaro, ruoli, mail, locked);
 
             //--poi vengono ricopiati i valori in Persona
             //--casting dalla superclasse alla classe attuale
@@ -276,22 +336,24 @@ public class PersonService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-        String nome;
-        String cognome;
-        String telefono;
-        EAAddress address;
-        Address indirizzo;
-        String mail;
+//        String nome;
+//        String cognome;
+//        String telefono;
+//        EAAddress address;
+//        Address indirizzo;
+//        String mail;
 
         for (EAPerson eaPerson : EAPerson.values()) {
-            nome = eaPerson.getNome();
-            cognome = eaPerson.getCognome();
-            telefono = eaPerson.getTelefono();
-            address = eaPerson.getAddress();
-            indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
-            mail = eaPerson.getMail();
+//            nome = eaPerson.getNome();
+//            cognome = eaPerson.getCognome();
+//            telefono = eaPerson.getTelefono();
+//            address = eaPerson.getAddress();
+//            indirizzo = addressService.newEntity(address);
+//            mail = eaPerson.getMail();
+//
+//            numRec = creaIfNotExist(nome, cognome, telefono, indirizzo, mail) ? numRec + 1 : numRec;
 
-            numRec = creaIfNotExist(nome, cognome, telefono, indirizzo, mail) ? numRec + 1 : numRec;
+            numRec = creaIfNotExist(eaPerson) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

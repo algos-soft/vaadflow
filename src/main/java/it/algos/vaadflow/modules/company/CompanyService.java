@@ -99,29 +99,48 @@ public class CompanyService extends AService {
     }// end of Spring constructor
 
 
+//    /**
+//     * Crea una entity solo se non esisteva <br>
+//     *
+//     * @param code        di riferimento interno (obbligatorio ed unico)
+//     * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
+//     * @param contatto    persona di riferimento (facoltativo)
+//     * @param telefono    della company (facoltativo)
+//     * @param mail        della company (facoltativo)
+//     * @param indirizzo   della company (facoltativo)
+//     *
+//     * @return true se la entity è stata creata
+//     */
+//    public boolean creaIfNotExist(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
+//        boolean creata = false;
+//
+//        if (isMancaByKeyUnica(code)) {
+//            AEntity entity = save(newEntity(code, descrizione, contatto, telefono, mail, indirizzo));
+//            creata = entity != null;
+//        }// end of if cycle
+//
+//        return creata;
+//    }// end of method
+//
+
+
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param code        di riferimento interno (obbligatorio ed unico)
-     * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
-     * @param contatto    persona di riferimento (facoltativo)
-     * @param telefono    della company (facoltativo)
-     * @param mail        della company (facoltativo)
-     * @param indirizzo   della company (facoltativo)
+     * @param eaCompany: enumeration di dati iniziali di prova
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
+    public boolean creaIfNotExist(EACompany eaCompany) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(code)) {
-            AEntity entity = save(newEntity(code, descrizione, contatto, telefono, mail, indirizzo));
+        if (isMancaByKeyUnica(eaCompany.getCode())) {
+            AEntity entity = save(newEntity(eaCompany));
             creata = entity != null;
         }// end of if cycle
 
         return creata;
     }// end of method
-
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -132,6 +151,38 @@ public class CompanyService extends AService {
      */
     public Company newEntity() {
         return newEntity("", "", (Person) null, "", "", (Address) null);
+    }// end of method
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * Usa una enumeration di dati iniziali di prova <br>
+     *
+     * @param eaCompany: enumeration di dati iniziali di prova
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Company newEntity(EACompany eaCompany) {
+        String code;
+        String descrizione;
+        EAPerson eaPerson;
+        Person contatto;
+        String telefono;
+        String mail;
+        EAAddress eaAddress;
+        Address indirizzo;
+
+        code = eaCompany.getCode();
+        descrizione = eaCompany.getDescrizione();
+        eaPerson = eaCompany.getPerson();
+        contatto = personService.newEntity(eaPerson);
+        telefono = eaCompany.getTelefono();
+        mail = eaCompany.getEmail();
+        eaAddress = eaCompany.getAddress();
+        indirizzo = addressService.newEntity(eaAddress);
+
+        return newEntity(code,descrizione,contatto,telefono,mail,indirizzo);
     }// end of method
 
 
@@ -233,26 +284,28 @@ public class CompanyService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-        String code;
-        String descrizione;
-        EAPerson eaPers;
-        Person contatto = null;
-        String telefono;
-        String email;
-        EAAddress address;
-        Address indirizzo;
+//        String code;
+//        String descrizione;
+//        EAPerson eaPerson;
+//        Person contatto = null;
+//        String telefono;
+//        String email;
+//        EAAddress eaAddress;
+//        Address indirizzo;
 
-        for (EACompany company : EACompany.values()) {
-            code = company.getCode();
-            descrizione = company.getDescrizione();
-            eaPers = company.getPerson();
-            contatto = personService.newEntity(eaPers.getNome(), eaPers.getCognome(), eaPers.getTelefono(), null, eaPers.getMail());
-            telefono = company.getTelefono();
-            email = company.getEmail();
-            address = company.getAddress();
-            indirizzo = addressService.newEntity(address.getIndirizzo(), address.getLocalita(), address.getCap());
+        for (EACompany eaCompany : EACompany.values()) {
+//            code = company.getCode();
+//            descrizione = company.getDescrizione();
+//            eaPerson = company.getPerson();
+//            contatto = personService.newEntity(eaPerson);
+//            telefono = company.getTelefono();
+//            email = company.getEmail();
+//            eaAddress = company.getAddress();
+//            indirizzo = addressService.newEntity(eaAddress);
+//
+//            numRec = creaIfNotExist(code, descrizione, contatto, telefono, email, indirizzo) ? numRec + 1 : numRec;
 
-            numRec = creaIfNotExist(code, descrizione, contatto, telefono, email, indirizzo) ? numRec + 1 : numRec;
+            numRec = creaIfNotExist(eaCompany) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

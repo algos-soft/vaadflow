@@ -232,9 +232,9 @@ public class PreferenzaService extends AService {
         }// end of for cycle
 
         if (numRec == 0) {
-            log.warn("Algos - Data. Le preferenze sono già presenti (" + numPref + ") e non ne sono state aggiunte di nuove");
+            log.info("Algos - Data. Le preferenze sono già presenti (" + numPref + ") e non ne sono state aggiunte di nuove");
         } else {
-            log.info("Algos - Data. Sono state aggiunte: " + numRec + " nuove preferenze");
+            log.warn("Algos - Data. Sono state aggiunte: " + numRec + " nuove preferenze");
         }// end of if/else cycle
 
         return numRec;
