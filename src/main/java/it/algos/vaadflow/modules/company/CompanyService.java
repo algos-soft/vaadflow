@@ -99,31 +99,6 @@ public class CompanyService extends AService {
     }// end of Spring constructor
 
 
-//    /**
-//     * Crea una entity solo se non esisteva <br>
-//     *
-//     * @param code        di riferimento interno (obbligatorio ed unico)
-//     * @param descrizione ragione sociale o descrizione della company (visibile - obbligatoria)
-//     * @param contatto    persona di riferimento (facoltativo)
-//     * @param telefono    della company (facoltativo)
-//     * @param mail        della company (facoltativo)
-//     * @param indirizzo   della company (facoltativo)
-//     *
-//     * @return true se la entity è stata creata
-//     */
-//    public boolean creaIfNotExist(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
-//        boolean creata = false;
-//
-//        if (isMancaByKeyUnica(code)) {
-//            AEntity entity = save(newEntity(code, descrizione, contatto, telefono, mail, indirizzo));
-//            creata = entity != null;
-//        }// end of if cycle
-//
-//        return creata;
-//    }// end of method
-//
-
-
     /**
      * Crea una entity solo se non esisteva <br>
      *
@@ -141,6 +116,7 @@ public class CompanyService extends AService {
 
         return creata;
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -182,7 +158,7 @@ public class CompanyService extends AService {
         eaAddress = eaCompany.getAddress();
         indirizzo = addressService.newEntity(eaAddress);
 
-        return newEntity(code,descrizione,contatto,telefono,mail,indirizzo);
+        return newEntity(code, descrizione, contatto, telefono, mail, indirizzo);
     }// end of method
 
 
@@ -284,27 +260,8 @@ public class CompanyService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-//        String code;
-//        String descrizione;
-//        EAPerson eaPerson;
-//        Person contatto = null;
-//        String telefono;
-//        String email;
-//        EAAddress eaAddress;
-//        Address indirizzo;
 
         for (EACompany eaCompany : EACompany.values()) {
-//            code = company.getCode();
-//            descrizione = company.getDescrizione();
-//            eaPerson = company.getPerson();
-//            contatto = personService.newEntity(eaPerson);
-//            telefono = company.getTelefono();
-//            email = company.getEmail();
-//            eaAddress = company.getAddress();
-//            indirizzo = addressService.newEntity(eaAddress);
-//
-//            numRec = creaIfNotExist(code, descrizione, contatto, telefono, email, indirizzo) ? numRec + 1 : numRec;
-
             numRec = creaIfNotExist(eaCompany) ? numRec + 1 : numRec;
         }// end of for cycle
 

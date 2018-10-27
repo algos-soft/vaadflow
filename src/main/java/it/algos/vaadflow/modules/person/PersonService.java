@@ -103,32 +103,6 @@ public class PersonService extends AService {
     }// end of Spring constructor
 
 
-//    /**
-//     * Crea una entity solo se non esisteva <br>
-//     *
-//     * @param nome:      (obbligatorio, non unico)
-//     * @param cognome:   (obbligatorio, non unico)
-//     * @param telefono:  (facoltativo)
-//     * @param indirizzo: via, nome e numero (facoltativo)
-//     * @param mail       posta elettronica (facoltativo)
-//     *
-//     * @return true se la entity è stata creata
-//     */
-//    public boolean creaIfNotExist(
-//            String nome,
-//            String cognome,
-//            String telefono,
-//            Address indirizzo,
-//            String mail) {
-//        boolean creata = false;
-//
-//        if (true) {//@todo da inventare
-//            AEntity entity = save(newEntity(nome, cognome, telefono, indirizzo, mail));
-//            creata = entity != null;
-//        }// end of if cycle
-//
-//        return creata;
-//    }// end of method
 
 
     /**
@@ -336,23 +310,8 @@ public class PersonService extends AService {
     @Override
     public int reset() {
         int numRec = super.reset();
-//        String nome;
-//        String cognome;
-//        String telefono;
-//        EAAddress address;
-//        Address indirizzo;
-//        String mail;
 
         for (EAPerson eaPerson : EAPerson.values()) {
-//            nome = eaPerson.getNome();
-//            cognome = eaPerson.getCognome();
-//            telefono = eaPerson.getTelefono();
-//            address = eaPerson.getAddress();
-//            indirizzo = addressService.newEntity(address);
-//            mail = eaPerson.getMail();
-//
-//            numRec = creaIfNotExist(nome, cognome, telefono, indirizzo, mail) ? numRec + 1 : numRec;
-
             numRec = creaIfNotExist(eaPerson) ? numRec + 1 : numRec;
         }// end of for cycle
 
