@@ -1,17 +1,13 @@
 package it.algos.vaadflow.modules.utente;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
-import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -23,8 +19,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 
 /**
  * Project vaadflow <br>
@@ -60,6 +54,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
+
+
 /**
  * Vengono usate SOLO le property indispensabili per la gestione della security <br>
  * Altre property, anche generiche, vanno nella sottoclasse anagrafica Person <br>
@@ -73,10 +69,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @Builder(builderMethodName = "builderUtente")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"userName", "passwordInChiaro", "locked", "mail"})
-@AIForm(fields = {"userName", "ruoli", "passwordInChiaro", "locked", "mail"})
+@AIList(fields = {"company", "userName", "passwordInChiaro", "locked", "mail"})
+@AIForm(fields = {"company", "userName", "ruoli", "passwordInChiaro", "locked", "mail"})
 @AIScript(sovrascrivibile = false)
-public class Utente extends AEntity {
+public class Utente extends ACEntity {
 
 
     /**
@@ -147,6 +143,7 @@ public class Utente extends AEntity {
 //        return service.isDev(this);
 //    }// end of method
 
+
     public boolean isAdmin() {
         for (Role role : this.ruoli) {
             if (role.code.equals(EARole.admin.toString())) {
@@ -157,7 +154,8 @@ public class Utente extends AEntity {
         return false;
     }// end of method
 
-    public boolean isDev( ) {
+
+    public boolean isDev() {
         for (Role role : this.ruoli) {
             if (role.code.equals(EARole.developer.toString())) {
                 return true;
@@ -176,7 +174,7 @@ public class Utente extends AEntity {
         List<Role> ruoli = this.ruoli;
         GrantedAuthority authority;
 
-        if (ruoli!=null&&ruoli.size()>0) {
+        if (ruoli != null && ruoli.size() > 0) {
             for (Role ruolo : ruoli) {
                 authority = new SimpleGrantedAuthority(ruolo.code);
                 listAuthority.add(authority);

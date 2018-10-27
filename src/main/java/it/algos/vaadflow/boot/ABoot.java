@@ -4,6 +4,7 @@ import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.role.UtenteData;
 import it.algos.vaadflow.modules.utente.UtenteService;
+import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
@@ -29,8 +30,8 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
-//    @Autowired
-//    protected ABootService boot;
+    @Autowired
+    protected ABootService boot;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -171,7 +172,7 @@ public abstract class ABoot implements ServletContextListener {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     private void addRouteStandard() {
-//        boot.creaRouteStandard();
+        boot.creaRouteStandard();
     }// end of method
 
 

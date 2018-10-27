@@ -4,13 +4,16 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 
 /**
@@ -38,8 +41,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM, layout = MainLayout.class)
 @Qualifier(TAG_COM)
+@AIView(roleTypeVisibility = EARoleType.admin)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class CompanyViewList extends AViewList {
 
 
@@ -50,8 +54,10 @@ public class CompanyViewList extends AViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
+    public static final String IRON_ICON = "account-balance";
 
-   /**
+
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -64,6 +70,30 @@ public class CompanyViewList extends AViewList {
         super(presenter, dialog);
         ((CompanyViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
+
+
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.usaSearchTextField = false;
+        super.isEntityUsaDatiDemo = true;
+
+        if (context.getLogin().isDeveloper()) {
+            super.usaBottoneDeleteAll = true;
+            super.usaBottoneReset = true;
+            super.isEntityDeveloper = true;
+            super.usaSearchBottoneNew = true;
+        } else {
+            super.usaBottoneDeleteAll = false;
+            super.usaBottoneReset = false;
+            super.isEntityAdmin = true;
+            super.usaSearchBottoneNew = false;
+        }// end of if/else cycle
+    }// end of method
 
 
 }// end of class

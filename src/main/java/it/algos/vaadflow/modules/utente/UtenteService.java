@@ -3,6 +3,9 @@ package it.algos.vaadflow.modules.utente;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.company.CompanyService;
+import it.algos.vaadflow.modules.company.EACompany;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
@@ -57,6 +60,12 @@ public class UtenteService extends AService {
     public RoleService roleService;
 
     /**
+     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
+     */
+    @Autowired
+    public CompanyService companyService;
+
+    /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
 //    @Autowired
@@ -89,6 +98,7 @@ public class UtenteService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
+     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -99,11 +109,11 @@ public class UtenteService extends AService {
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+    public boolean creaIfNotExist(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(userName)) {
-            AEntity entity = save(newEntity(userName, passwordInChiaro, ruoli, mail));
+        if (isMancaByKeyUnica(userName)) {//@todo migliorare
+            AEntity entity = save(newEntity(company, userName, passwordInChiaro, ruoli, mail));
             creata = entity != null;
         }// end of if cycle
 
@@ -119,7 +129,7 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity() {
-        return newEntity("", "", (List<Role>) null, "", false);
+        return newEntity((Company) null, "", "", (List<Role>) null, "", false);
     }// end of method
 
 
@@ -128,6 +138,7 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Properties obbligatorie <br>
      *
+     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -138,8 +149,8 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
-        return newEntity(userName, passwordInChiaro, ruoli, mail, false);
+    public Utente newEntity(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        return newEntity(company, userName, passwordInChiaro, ruoli, mail, false);
     }// end of method
 
 
@@ -148,6 +159,7 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
+     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -159,7 +171,7 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
+    public Utente newEntity(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
         Utente entity = Utente.builderUtente()
                 .userName(text.isValid(userName) ? userName : null)
                 .passwordInChiaro(text.isValid(passwordInChiaro) ? passwordInChiaro : null)
@@ -168,6 +180,7 @@ public class UtenteService extends AService {
                 .locked(locked)
                 .build();
         entity.id = userName;
+        entity.company = company;
 
         return entity;
     }// end of method
@@ -220,6 +233,8 @@ public class UtenteService extends AService {
         EARole ruolo;
         List<Role> ruoli;
         String mail;
+        EACompany eaCompany;
+        Company company = null;
 
         for (EAUtente utente : EAUtente.values()) {
             userName = utente.getUserName();
@@ -227,8 +242,11 @@ public class UtenteService extends AService {
             ruolo = utente.getRuolo();
             ruoli = roleService.getRoles(ruolo);
             mail = utente.getMail();
-
-            numRec = creaIfNotExist(userName, passwordInChiaro, ruoli, mail) ? numRec + 1 : numRec;
+            eaCompany = utente.getCompany();
+            if (eaCompany != null) {
+                company = (Company) companyService.findById(eaCompany.getCode());
+            }// end of if cycle
+            numRec = creaIfNotExist(company, userName, passwordInChiaro, ruoli, mail) ? numRec + 1 : numRec;
         }// end of for cycle
 
         return numRec;

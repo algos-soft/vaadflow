@@ -9,6 +9,7 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -85,6 +86,7 @@ public abstract class AService extends AbstractService implements IAService {
 //    @Autowired
 //    private LogService logger;
 
+
     /**
      * Default constructor
      */
@@ -101,15 +103,18 @@ public abstract class AService extends AbstractService implements IAService {
         this.repository = repository;
     }// end of Spring constructor
 
+
     @Override
     public AAnnotationService getAnnotationService() {
         return annotation;
     }// end of method
 
+
     //    @Override
     public AFieldService getFieldService() {
         return field;
     }// end of method
+
 
     /**
      * Returns the number of entities available.
@@ -168,6 +173,7 @@ public abstract class AService extends AbstractService implements IAService {
     protected AEntity findByKeyUnica(String keyUnica) {
         return null;
     }// end of method
+
 
     /**
      * Retrieves an entity by its id.
@@ -263,6 +269,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         return lista;
     }// end of method
+
 
     /**
      * Fetches the entities whose 'main text property' matches the given filter text.
@@ -381,9 +388,11 @@ public abstract class AService extends AbstractService implements IAService {
         return lista;
     }// end of method
 
+
     private Predicate<? extends AEntity> getPredicate(String normalizedFilter) {
         return entity -> getKeyUnica(entity).toLowerCase().contains(normalizedFilter);
     }
+
 
     public boolean mancaCompanyNecessaria() {
         boolean status = false;
@@ -422,6 +431,7 @@ public abstract class AService extends AbstractService implements IAService {
 
         return lista;
     }// end of method
+
 
     /**
      * Costruisce una lista di nomi delle properties del Form nell'ordine:
@@ -467,6 +477,7 @@ public abstract class AService extends AbstractService implements IAService {
     protected AEntity addCompany(AEntity entityBean) {
         return addCompany(entityBean, (Company) null);
     }// end of method
+
 
     /**
      * Se la nuova entity usa la company, la recupera dal login
@@ -1052,6 +1063,7 @@ public abstract class AService extends AbstractService implements IAService {
 //        return true;
 //    }// end of method
 
+
     /**
      * Deletes a given entity.
      *
@@ -1114,6 +1126,7 @@ public abstract class AService extends AbstractService implements IAService {
         return cancellati;
     }// end of method
 
+
     /**
      * Deletes all entities of the collection.
      */
@@ -1165,6 +1178,7 @@ public abstract class AService extends AbstractService implements IAService {
 
     }// end of method
 
+
     /**
      * Creazione di alcuni dati demo iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
@@ -1180,6 +1194,7 @@ public abstract class AService extends AbstractService implements IAService {
         return 0;
     }// end of method
 
+
     /**
      * Importazione di dati <br>
      * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
@@ -1190,6 +1205,7 @@ public abstract class AService extends AbstractService implements IAService {
         this.deleteAll();
         return false;
     }// end of method
+
 
     /**
      * Importazione di dati <br>
@@ -1204,6 +1220,7 @@ public abstract class AService extends AbstractService implements IAService {
         this.deleteAll();
         return false;
     }// end of method
+
 
     /**
      * Recupera il context della session <br>
@@ -1227,6 +1244,25 @@ public abstract class AService extends AbstractService implements IAService {
 
         return context;
     }// end of method
+
+
+    /**
+     * Recupera il login della session <br>
+     * Controlla che la session sia attiva <br>
+     *
+     * @return context della sessione
+     */
+    public ALogin getLogin() {
+        ALogin login = null;
+        AContext context = getContext();
+
+        if (context != null) {
+            login = context.getLogin();
+        }// end of if cycle
+
+        return login;
+    }// end of method
+
 
     /**
      * Casting da una superclasse ad una sottoclasse <br>

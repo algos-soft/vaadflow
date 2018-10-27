@@ -19,10 +19,10 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.footer.AFooter;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -44,7 +44,6 @@ import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
  * Project it.algos.vaadflow
@@ -96,14 +95,14 @@ import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
 
     protected final static String EDIT_NAME = "Edit";
+
     protected final static String SHOW_NAME = "Show";
+
     /**
      * Viene recuperato dal context della sessione <br>
      */
     @Autowired
     public ALogin login;
-    @Autowired
-    protected UtenteService utenteService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
@@ -146,6 +145,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
+
+    @Autowired
+    protected UtenteService utenteService;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -210,11 +212,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
      */
     protected Grid<AEntity> grid;
+
     /**
      * Placeholder (eventuale) SOTTO la Grid <br>
      * Eventuali bottoni aggiuntivi
      */
     protected HorizontalLayout bottomLayout;
+
     /**
      * Placeholder (obbligatorio) SOTTO la Grid con informazioni generali <br>
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -223,67 +227,83 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     protected AFooter footer;
+
     /**
      * Flag di preferenza per usare il campo-testo di ricerca e selezione. Normalmente true.
      */
     protected boolean usaSearchTextField;
+
     /**
      * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true.
      */
     protected boolean usaSearchBottoneNew;
+
     /**
      * Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
      */
     protected boolean usaTopAlert;
+
     /**
      * Flag di preferenza per la Label nell'header della Grid grid. Normalmente true.
      */
     protected boolean usaHaederGrid;
+
     /**
      * Flag di preferenza per mostrare una caption sopra la grid. Normalmente true.
      */
     @Deprecated
     protected boolean usaCaption;
+
     /**
      * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente false.
      */
     protected boolean usaBottoneEdit;
+
     /**
      * Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
      */
     protected String testoBottoneEdit;
+
     /**
      * Flag di preferenza per usare il placeholder di bottoni ggiuntivi sotto la Grid. Normalmente false.
      */
     protected boolean usaBottomLayout;
+
     /**
      * Flag di preferenza per cancellare tutti gli elementi. Normalmente false.
      */
     protected boolean usaBottoneDeleteAll;
+
     /**
      * Flag di preferenza per resettare le condizioni standard di partenza. Normalmente false.
      */
     protected boolean usaBottoneReset;
+
     /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityDeveloper;
+
     /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityAdmin;
+
     /**
      * Flag di preferenza per modificare la entity. Normalmente true.
      */
     protected boolean isEntityModificabile;
+
     /**
      * Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
      */
     protected boolean isEntityEmbadded;
+
     /**
      * Flag di preferenza se si caricano dati demo alla creazione. Resettabili. Normalmente false.
      */
     protected boolean isEntityUsaDatiDemo;
+
     /**
      * Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
      */
@@ -293,6 +313,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Recuperato dalla sessione, quando la @route fa partire la AViewList. Passato poi anche alla AViewDialog.
      */
     protected AContext context;
+
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -402,6 +423,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     }// end of method
 
+
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
      * Può essere sovrascritto, per aggiungere informazioni
@@ -409,6 +431,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected void fixPreferenzeSpecifiche() {
     }// end of method
+
 
     /**
      * Placeholder (eventuale, presente di default) SOPRA la Grid
@@ -474,6 +497,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.add(topLayout);
     }// end of method
 
+
     /**
      * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
      * Normalmente ad uso esclusivo del developer
@@ -517,6 +541,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         return layout;
     }// end of method
 
+
     /**
      * Eventuale caption sopra la grid
      * Può essere sovrascritto, per aggiungere informazioni
@@ -538,6 +563,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         return layout;
     }// end of method
+
 
     /**
      * Crea il corpo centrale della view
@@ -593,6 +619,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         fixHeader();
     }// end of method
 
+
     /**
      * Eventuale header text
      */
@@ -604,12 +631,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         informationCell.setComponent(headerHolder);
     }// end of method
 
+
     /**
      * Eventuale header text
      */
     protected String getHeaderText() {
         return getHeaderText(service != null ? service.count() : 0);
     }// end of method
+
 
     /**
      * Eventuale aggiunta alla caption sopra la grid
@@ -650,11 +679,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 //        return layout;
 //    }// end of method
 
+
     /**
      * Aggiunge eventuali colonne calcolate
      */
     protected void addSpecificColumns() {
     }// end of method
+
 
     /**
      * Apre il dialog di detail
@@ -672,6 +703,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         }// end of if/else cycle
     }// end of method
 
+
     protected Button createEditButton(AEntity entityBean) {
         Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT, context));
         edit.setIcon(new Icon("lumo", "edit"));
@@ -680,6 +712,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         return edit;
     }// end of method
 
+
     private void apreDialogo(SingleSelectionEvent evento, AViewDialog.Operation operation) {
         if (evento != null && evento.getOldValue() != evento.getValue()) {
             if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
@@ -687,6 +720,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             }// end of if cycle
         }// end of if cycle
     }// end of method
+
 
     /**
      * Costruisce un (eventuale) layout con bottoni aggiuntivi
@@ -772,6 +806,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     }// end of method
 
+
     /**
      * Crea il login ed il context <br>
      * Controlla che non esista già il context nella vaadSession
@@ -785,6 +820,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     private void fixLoginAndContext() {
         String uniqueUserName = "";
         Utente utente;
+        Company company;
         VaadinSession vaadSession = UI.getCurrent().getSession();
 
         context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
@@ -794,10 +830,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
             User springUser = (User) securityContext.getAuthentication().getPrincipal();
             uniqueUserName = springUser.getUsername();
-            utente = (Utente)utenteService.findById(uniqueUserName);
+            utente = (Utente) utenteService.findById(uniqueUserName);
 
             login.setUtente(utente);
-            context = new AContext(login);
+            company = utente.company;
+            context = new AContext(login, company);
             vaadSession.setAttribute(KEY_CONTEXT, context);
         }// end of if cycle
     }// end of method

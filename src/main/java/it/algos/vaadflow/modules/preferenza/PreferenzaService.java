@@ -71,40 +71,26 @@ public class PreferenzaService extends AService {
 
 
     /**
-     * Ricerca di una entity (la crea se non la trova) <br>
+     * Crea una entity solo se non esisteva <br>
      *
      * @param code        codice di riferimento (obbligatorio)
      * @param descrizione (facoltativa)
      * @param type        (obbligatorio) per convertire in byte[] i valori
      * @param value       (obbligatorio) memorizza tutto in byte[]
      *
-     * @return la entity trovata o appena creata
+     * @return true se la entity è stata creata
      */
-    public Preferenza findOrCrea(String code, String descrizione, EAPrefType type, Object value) {
-        Preferenza entity = findByKeyUnica(code);
+    public boolean creaIfNotExist(String code, String descrizione, EAPrefType type, Object value) {
+        boolean creata = false;
 
-        if (entity == null) {
-            entity = crea(code, descrizione, type, value);
+        if (isMancaByKeyUnica(code)) {
+            AEntity entity = save(newEntity(code, descrizione, type, value));
+            creata = entity != null;
         }// end of if cycle
 
-        return entity;
+        return creata;
     }// end of method
 
-    /**
-     * Crea una entity e la registra <br>
-     *
-     * @param code        codice di riferimento (obbligatorio)
-     * @param descrizione (facoltativa)
-     * @param type        (obbligatorio) per convertire in byte[] i valori
-     * @param value       (obbligatorio) memorizza tutto in byte[]
-     *
-     * @return la entity appena creata
-     */
-    public Preferenza crea(String code, String descrizione, EAPrefType type, Object value) {
-        Preferenza entity = newEntity((Company) null, 0, code, descrizione, type, value);
-        save(entity);
-        return entity;
-    }// end of method
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -134,6 +120,7 @@ public class PreferenzaService extends AService {
         return newEntity((Company) null, 0, code, descrizione, type, value);
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -149,68 +136,77 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Preferenza newEntity(Company company, int ordine, String code, String descrizione, EAPrefType type, Object value) {
-        Preferenza entity = null;
-
-        entity = findByKeyUnica(code);
-        if (entity != null) {
-            return findByKeyUnica(code);
-        }// end of if cycle
-
-        entity = Preferenza.builderPreferenza()
+        Preferenza entity = Preferenza.builderPreferenza()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .code(text.isValid(code) ? code : null)
                 .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .type(type != null ? type : EAPrefType.string)
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();
+        entity.id = code;//@todo da migliorare con la company
+        entity.company = company;
 
-        return (Preferenza) addCompany(entity, company);
+        return entity;
     }// end of method
 
+
+//    /**
+//     * Fetches the entities whose 'main text property' matches the given filter text.
+//     * <p>
+//     * Se esiste la company, filtrate secondo la company <br>
+//     * The matching is case insensitive. When passed an empty filter text,
+//     * the method returns all categories. The returned list is ordered by name.
+//     * The 'main text property' is different in each entity class and chosen in the specific subclass
+//     *
+//     * @param filter the filter text
+//     *
+//     * @return the list of matching entities
+//     */
+//    @Override
+//    public List<? extends AEntity> findFilter(String filter) {
+//        return findAll(); //@todo PROVVISORIO
+//    }
+//
+//
+//    /**
+//     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+//     *
+//     * @param code di riferimento (obbligatorio)
+//     *
+//     * @return istanza della Entity, null se non trovata
+//     */
+//    public Preferenza findByKeyUnica(String code) {
+//        return repository.findByCode(code);
+//    }// end of method
+//
+//
+//    /**
+//     * Returns all instances of the type <br>
+//     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
+//     * Lista ordinata <br>
+//     *
+//     * @return lista ordinata di tutte le entities
+//     */
+//    @Override
+//    public List<Preferenza> findAll() {
+//        List<Preferenza> lista = null;
+//
+//        lista = repository.findAllByOrderByOrdineAsc();
+//
+//        return lista;
+//    }// end of method
+
+
     /**
-     * Fetches the entities whose 'main text property' matches the given filter text.
-     * <p>
-     * Se esiste la company, filtrate secondo la company <br>
-     * The matching is case insensitive. When passed an empty filter text,
-     * the method returns all categories. The returned list is ordered by name.
-     * The 'main text property' is different in each entity class and chosen in the specific subclass
-     *
-     * @param filter the filter text
-     *
-     * @return the list of matching entities
+     * Metodo invocato da ABoot (o da una sua sottoclasse) <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * Creazione di una collezione - Solo se non ci sono records
      */
     @Override
-    public List<? extends AEntity> findFilter(String filter) {
-        return findAll(); //@todo PROVVISORIO
-    }
-
-    /**
-     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
-     *
-     * @param code di riferimento (obbligatorio)
-     *
-     * @return istanza della Entity, null se non trovata
-     */
-    public Preferenza findByKeyUnica(String code) {
-        return repository.findByCode(code);
+    public void loadData() {
+        this.reset();
     }// end of method
 
-
-    /**
-     * Returns all instances of the type <br>
-     * La Entity è EACompanyRequired.nonUsata. Non usa Company. <br>
-     * Lista ordinata <br>
-     *
-     * @return lista ordinata di tutte le entities
-     */
-    @Override
-    public List<Preferenza> findAll() {
-        List<Preferenza> lista = null;
-
-        lista = repository.findAllByOrderByOrdineAsc();
-
-        return lista;
-    }// end of method
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -223,7 +219,8 @@ public class PreferenzaService extends AService {
      */
     @Override
     public int reset() {
-        int num = super.reset();
+        int numRec = 0;
+        int numPref = count();
 
         for (EAPreferenza prefTemp : EAPreferenza.values()) {
             String code = prefTemp.getCode();
@@ -231,11 +228,16 @@ public class PreferenzaService extends AService {
             EAPrefType type = prefTemp.getType();
             Object valueNew = prefTemp.getValue();
 
-            this.findOrCrea(code, descNew, type, valueNew);
-            num++;
+            numRec = creaIfNotExist(code, descNew, type, valueNew) ? numRec + 1 : numRec;
         }// end of for cycle
 
-        return num;
+        if (numRec == 0) {
+            log.warn("Algos - Data. Le preferenze sono già presenti (" + numPref + ") e non ne sono state aggiunte di nuove");
+        } else {
+            log.info("Algos - Data. Sono state aggiunte: " + numRec + " nuove preferenze");
+        }// end of if/else cycle
+
+        return numRec;
     }// end of method
 
 //    /**
@@ -289,6 +291,7 @@ public class PreferenzaService extends AService {
 //        entityBean.id = ((Preferenza) entityBean).getCode();
 //    }// end of method
 
+
     /**
      * Ordine di presentazione (obbligatorio, unico per tutte le eventuali company), <br>
      * Viene calcolato in automatico alla creazione della entity <br>
@@ -309,7 +312,7 @@ public class PreferenzaService extends AService {
 
     public Object getValue(String keyCode) {
         Object value = null;
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = (Preferenza) findById(keyCode);
 
         if (pref != null) {
             value = pref.getType().bytesToObject(pref.value);
@@ -330,6 +333,7 @@ public class PreferenzaService extends AService {
         return value;
     } // end of method
 
+
     public Boolean isBool(String keyCode) {
         boolean status = false;
         Object value = getValue(keyCode);
@@ -338,12 +342,22 @@ public class PreferenzaService extends AService {
             status = (boolean) value;
         }// end of if cycle
 
+        if (value != null) {
+            if (value instanceof Boolean) {
+                status = (boolean) value;
+            } else {
+                log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
+            }// end of if/else cycle
+        } else {
+            log.warn("Algos - Preferenze. Non esiste la preferenza: " + keyCode);
+        }// end of if/else cycle
+
         return status;
     } // end of method
 
 
     public Preferenza setValue(String keyCode, Object value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = (Preferenza) findById(keyCode);
 
         if (pref != null) {
             pref.setValue(pref.getType().objectToBytes(value));
@@ -354,7 +368,7 @@ public class PreferenzaService extends AService {
 
 
     public Preferenza setBool(String keyCode, boolean value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = (Preferenza) findById(keyCode);
 
         if (pref != null && pref.type == EAPrefType.bool) {
             pref = this.setValue(keyCode, value);
@@ -365,7 +379,7 @@ public class PreferenzaService extends AService {
 
 
     public Preferenza setInt(String keyCode, int value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = (Preferenza) findById(keyCode);
 
         if (pref != null && pref.type == EAPrefType.integer) {
             pref = this.setValue(keyCode, value);
@@ -376,7 +390,7 @@ public class PreferenzaService extends AService {
 
 
     public Preferenza setDate(String keyCode, LocalDateTime value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = (Preferenza) findById(keyCode);
 
         if (pref != null && pref.type == EAPrefType.date) {
             pref = this.setValue(keyCode, value);

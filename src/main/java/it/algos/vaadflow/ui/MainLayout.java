@@ -21,6 +21,7 @@ import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.utente.Utente;
@@ -36,14 +37,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -63,12 +59,18 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public static final String SITE_TITLE = "World Cup 2018 Stats";
 
+    public final static String KEY_MAPPA_CRONO = "crono";
+
     private ALogin login;
+
     private AAnnotationService annotation = AAnnotationService.getInstance();
+
     private AReflectionService reflection = AReflectionService.getInstance();
+
     private ATextService text = ATextService.getInstance();
 
     private UtenteService utenteService;
+
 
     //    public MainLayout(UtenteService utenteService, ALogin login) {
     public MainLayout() {
@@ -88,29 +90,23 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
         ArrayList<MenuItem> listaMenu = null;
         MenuItem menu = null;
-        Map<EARole, List<Class>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
+        Map<String, List<Class>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
 
         if (mappaClassi != null && mappaClassi.size() > 0) {
             listaMenu = new ArrayList<>();
 
             //--crea i menu del developer, inserendoli come sub-menu
             if (login != null && login.isDeveloper()) {
-                if (mappaClassi.get(EARole.developer) != null) {
-                    this.addDev(listaMenu, mappaClassi.get(EARole.developer));
-                }// end of if cycle
+                this.addDev(listaMenu, mappaClassi);
             }// end of if cycle
 
             //--crea i menu di admin, inserendoli come sub-menu
             if (login != null && login.isAdmin()) {
-                if (mappaClassi.get(EARole.admin) != null) {
-                    this.addAdmin(listaMenu, mappaClassi.get(EARole.admin));
-                }// end of if cycle
+                this.addAdmin(listaMenu, mappaClassi);
             }// end of if cycle
 
             //--crea gli altri menu, esclusi quelli del developer e di admin che sono già inseriti
-            if (mappaClassi.get(EARole.user) != null) {
-                this.addUser(listaMenu, mappaClassi.get(EARole.user));
-            }// end of if cycle
+            this.addUser(listaMenu, mappaClassi);
 
             //--crea il logout
             listaMenu.add(creaMenuLogout());
@@ -125,19 +121,28 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         }// end of if cycle
     }// end of method
 
-    private Map<EARole, List<Class>> creaMappa(List<Class> listaClassiMenu) {
-        Map<EARole, List<Class>> mappa = new HashMap<>();
+
+    private Map<String, List<Class>> creaMappa(List<Class> listaClassiMenu) {
+        Map<String, List<Class>> mappa = new HashMap<>();
         ArrayList<Class> devClazzList = new ArrayList<>();
+        ArrayList<Class> cronoDevClazzList = new ArrayList<>();
         ArrayList<Class> adminClazzList = new ArrayList<>();
         ArrayList<Class> utenteClazzList = new ArrayList<>();
         EARoleType type = null;
+        List<String> cronoList = Arrays.asList(new String[]{"secolo", "anno", "mese", "giorno"});
+        String menuName;
 
         for (Class viewClazz : listaClassiMenu) {
             type = annotation.getViewRoleType(viewClazz);
 
             switch (type) {
                 case developer:
-                    devClazzList.add(viewClazz);
+                    menuName = annotation.getViewName(viewClazz);
+                    if (cronoList.contains(menuName)) {
+                        cronoDevClazzList.add(viewClazz);
+                    } else {
+                        devClazzList.add(viewClazz);
+                    }// end of if/else cycle
                     break;
                 case admin:
                     adminClazzList.add(viewClazz);
@@ -152,24 +157,39 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             } // end of switch statement
         }// end of for cycle
 
-        mappa.put(EARole.developer, devClazzList);
-        mappa.put(EARole.admin, adminClazzList);
-        mappa.put(EARole.user, utenteClazzList);
+        mappa.put(EARole.developer.toString(), devClazzList);
+        mappa.put(EARole.admin.toString(), adminClazzList);
+        mappa.put(KEY_MAPPA_CRONO, cronoDevClazzList);
+        mappa.put(EARole.user.toString(), utenteClazzList);
 
         return mappa;
     }// end of method
 
 
-    private void addDev(ArrayList<MenuItem> listaMenu, List<Class> devClazzList) {
+    /**
+     * Crea i menu visibili solo per il developer <br>
+     * Li incapsula come sub-menu <br>
+     */
+    private void addDev(ArrayList<MenuItem> listaMenu, Map<String, List<Class>> mappaClassi) {
         MenuItem developerItem;
         MenuItem[] matrice;
         ArrayList<MenuItem> listaSubMenuDev = new ArrayList<>();
         MenuItem menu;
+        List<Class> devClazzList = null;
 
-        for (Class viewClazz : devClazzList) {
-            menu = creaMenu(viewClazz);
-            listaSubMenuDev.add(menu);
-        }// end of for cycle
+        if (mappaClassi.get(EARole.developer.toString()) != null) {
+            devClazzList = mappaClassi.get(EARole.developer.toString());
+        }// end of if cycle
+
+        if (devClazzList != null && devClazzList.size() > 0) {
+            for (Class viewClazz : devClazzList) {
+                menu = creaMenu(viewClazz);
+                listaSubMenuDev.add(menu);
+            }// end of for cycle
+        }// end of if cycle
+
+        //--crea i menu del developer, inserendoli come sub-menu
+        this.addCronoDev(listaSubMenuDev, mappaClassi);
 
         matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
         developerItem = new MenuItem("Developer", "build", matrice);
@@ -177,16 +197,55 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
-    private void addAdmin(ArrayList<MenuItem> listaMenu, List<Class> adminClazzList) {
+    /**
+     * Crea i menu crono, visibili solo per il developer <br>
+     * Li incapsula come sub-menu <br>
+     */
+    private void addCronoDev(ArrayList<MenuItem> listaMenuDev, Map<String, List<Class>> mappaClassi) {
+        MenuItem developerItem;
+        MenuItem[] matrice;
+        ArrayList<MenuItem> listaSubMenuCronoDev = new ArrayList<>();
+        MenuItem menu;
+        List<Class> devCronoClazzList = null;
+
+        if (mappaClassi.get(KEY_MAPPA_CRONO) != null) {
+            devCronoClazzList = mappaClassi.get(KEY_MAPPA_CRONO);
+        }// end of if cycle
+
+        if (devCronoClazzList != null && devCronoClazzList.size() > 0) {
+            for (Class viewClazz : devCronoClazzList) {
+                menu = creaMenu(viewClazz);
+                listaSubMenuCronoDev.add(menu);
+            }// end of for cycle
+        }// end of if cycle
+
+        matrice = listaSubMenuCronoDev.toArray(new MenuItem[listaSubMenuCronoDev.size()]);
+        developerItem = new MenuItem("Crono", "build", matrice);
+        listaMenuDev.add(developerItem);
+    }// end of method
+
+
+    /**
+     * Crea i menu visibili solo per l'admin ed per il developer <br>
+     * Li incapsula come sub-menu <br>
+     */
+    private void addAdmin(ArrayList<MenuItem> listaMenu, Map<String, List<Class>> mappaClassi) {
         MenuItem adminItem;
         MenuItem[] matrice;
         ArrayList<MenuItem> listaSubMenuDev = new ArrayList<>();
         MenuItem menu;
+        List<Class> adminClazzList = null;
 
-        for (Class viewClazz : adminClazzList) {
-            menu = creaMenu(viewClazz);
-            listaSubMenuDev.add(menu);
-        }// end of for cycle
+        if (mappaClassi.get(EARole.admin.toString()) != null) {
+            adminClazzList = mappaClassi.get(EARole.admin.toString());
+        }// end of if cycle
+
+        if (adminClazzList != null && adminClazzList.size() > 0) {
+            for (Class viewClazz : adminClazzList) {
+                menu = creaMenu(viewClazz);
+                listaSubMenuDev.add(menu);
+            }// end of for cycle
+        }// end of if cycle
 
         matrice = listaSubMenuDev.toArray(new MenuItem[listaSubMenuDev.size()]);
         adminItem = new MenuItem("Admin", "apps", matrice);
@@ -194,17 +253,29 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
-    private void addUser(ArrayList<MenuItem> listaMenu, List<Class> userClazzList) {
+    /**
+     * Crea i menu visibili a tutti <br>
+     */
+    private void addUser(ArrayList<MenuItem> listaMenu, Map<String, List<Class>> mappaClassi) {
         MenuItem menu;
+        List<Class> userClazzList = null;
 
-        for (Class viewClazz : userClazzList) {
-            menu = creaMenu(viewClazz);
-            listaMenu.add(menu);
-        }// end of for cycle
+        if (mappaClassi.get(EARole.user.toString()) != null) {
+            userClazzList = mappaClassi.get(EARole.user.toString());
+        }// end of if cycle
 
+        if (userClazzList != null && userClazzList.size() > 0) {
+            for (Class viewClazz : userClazzList) {
+                menu = creaMenu(viewClazz);
+                listaMenu.add(menu);
+            }// end of for cycle
+        }// end of if cycle
     }// end of method
 
 
+    /**
+     * Crea l'immagine (se esiste) dell'utente collegato <br>
+     */
     private Component createAvatarComponent() {
         Div container = new Div();
         H5 userName;
@@ -222,6 +293,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
+    /**
+     * Crea il singolo item di menu <br>
+     */
     protected MenuItem creaMenu(Class<? extends AViewList> viewClazz) {
         String linkRoute;
         String menuName;
@@ -236,6 +310,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
+    /**
+     * Crea (in fondo) il menu item per il logout <br>
+     */
     protected MenuItem creaMenuLogout() {
         MenuItem menuItem = null;
         String menuName = "Logout";
@@ -250,6 +327,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         super.onAttach(attachEvent);
     }// end of method
 
+
     @Override
     public void configurePage(final InitialPageSettings settings) {
         settings.addMetaTag("viewport", "width=device-width, initial-scale=1.0");
@@ -257,6 +335,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         settings.addLink("manifest", "/manifest.json");
         settings.addFavIcon("icon", "/frontend/images/favicons/favicon-96x96.png", "96x96");
     }// end of method
+
 
     /**
      * Crea il login ed il context <br>
@@ -272,6 +351,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         AContext context;
         String uniqueUserName = "";
         Utente utente;
+        Company company;
         VaadinSession vaadSession = UI.getCurrent().getSession();
         login = StaticContextAccessor.getBean(ALogin.class);
 
@@ -284,8 +364,10 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             uniqueUserName = springUser.getUsername();
             AMongoService mongo = StaticContextAccessor.getBean(AMongoService.class);
             utente = (Utente) mongo.findByProperty(Utente.class, "userName", uniqueUserName);
+
             login.setUtente(utente);
-            context = new AContext(login);
+            company = utente.company;
+            context = new AContext(login, company);
             vaadSession.setAttribute(KEY_CONTEXT, context);
         }// end of if cycle
 

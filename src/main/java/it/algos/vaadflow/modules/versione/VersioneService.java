@@ -237,7 +237,7 @@ public class VersioneService extends AService {
      * @param value    di default della preferenza
      */
     public void creaPref(String sigla, String codePref, String descPref, EAPrefType type, Object value) {
-        pref.findOrCrea(codePref, descPref, type, value);
+        pref.creaIfNotExist(codePref, descPref, type, value);
         this.crea(sigla, "Preferenze", codePref + ", di default " + value);
     }// end of method
 

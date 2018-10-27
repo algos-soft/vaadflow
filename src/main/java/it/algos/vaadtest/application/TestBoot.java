@@ -112,7 +112,6 @@ public class TestBoot extends ABoot {
      */
     protected void addRouteSpecifiche() {
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 
 
