@@ -133,14 +133,20 @@ public class AnnoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Anno newEntity(String titolo, Secolo secolo, int ordine) {
-        Anno entity = Anno.builderAnno()
+        return Anno.builderAnno()
+                .titolo(text.isValid(titolo) ? titolo : null)
                 .secolo(secolo)
                 .ordine(ordine)
-                .titolo(titolo)
                 .build();
-        entity.id = titolo;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Anno) entityBean).getTitolo();
     }// end of method
 
 
@@ -163,6 +169,18 @@ public class AnnoService extends AService {
         }// end of if cycle
 
         return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param titolo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Anno findByKeyUnica(String titolo) {
+        return repository.findByTitolo(titolo);
     }// end of method
 
 
@@ -204,7 +222,7 @@ public class AnnoService extends AService {
             titolo = k + EASecolo.TAG_AC;
             secoloEnum = EASecolo.getSecoloAC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = (Secolo)secoloService.findById(titoloSecolo);
+            secolo = (Secolo) secoloService.findById(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle
@@ -216,7 +234,7 @@ public class AnnoService extends AService {
             titolo = k + VUOTA;
             secoloEnum = EASecolo.getSecoloDC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = (Secolo)secoloService.findById(titoloSecolo);
+            secolo = (Secolo) secoloService.findById(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle

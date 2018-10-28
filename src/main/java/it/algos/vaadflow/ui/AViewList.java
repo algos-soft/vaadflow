@@ -92,7 +92,7 @@ import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
 @Slf4j
-public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
+public abstract class  AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
 
     protected final static String EDIT_NAME = "Edit";
 

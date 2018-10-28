@@ -2,11 +2,7 @@ package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.EAAddress;
 import it.algos.vaadflow.modules.company.Company;
-import it.algos.vaadflow.modules.person.EAPerson;
-import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -120,7 +116,6 @@ public class PreferenzaService extends AService {
     }// end of method
 
 
-
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -160,12 +155,19 @@ public class PreferenzaService extends AService {
                 .type(type != null ? type : EAPrefType.string)
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();
-//        entity.id = code;//@todo da migliorare con la company
         entity.company = company;
 
-        return (Preferenza)super.addCompany(entity);
+        return (Preferenza) super.addCompany(entity);
     }// end of method
 
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Preferenza) entityBean).getCode();
+    }// end of method
 
     /**
      * Operazioni eseguite PRIMA del save <br>
@@ -181,6 +183,19 @@ public class PreferenzaService extends AService {
     public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
         return super.beforeSave(entityBean, operation);
     }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param code (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Preferenza findByKeyUnica(String code) {
+        return repository.findByCode(code);
+    }// end of method
+
 
 //    /**
 //     * Fetches the entities whose 'main text property' matches the given filter text.
@@ -289,13 +304,6 @@ public class PreferenzaService extends AService {
 //    }// end of method
 
 
-    /**
-     * Property unica (se esiste).
-     */
-    @Override
-    public String getPropertyUnica(AEntity entityBean) {
-        return ((Preferenza) entityBean).getCode();
-    }// end of method
 
 //    /**
 //     * Opportunità di controllare (per le nuove schede) che la key unica non esista già. <br>

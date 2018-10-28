@@ -28,4 +28,5 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @Qualifier(TAG_ADD)
 @AIScript(sovrascrivibile = false)
 public interface AddressRepository extends MongoRepository<Address, String> {
+    public Address findByIndirizzo(String indirizzo);
 }// end of class

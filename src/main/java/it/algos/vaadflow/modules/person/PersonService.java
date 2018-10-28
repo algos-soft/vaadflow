@@ -261,6 +261,17 @@ public class PersonService extends AService {
 
 
     /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        Person persona = (Person) entityBean;
+        String nome = persona.nome != null ? persona.nome : "";
+        String cognome = persona.cognome != null ? persona.cognome : "";
+
+        return pref.isBool(FlowCost.USA_SECURITY) ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
+    }// end of method
+    /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
      * Controllo della validità delle properties obbligatorie <br>
@@ -299,14 +310,14 @@ public class PersonService extends AService {
 
 
     /**
-     * Property unica (se esiste).
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param titolo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
      */
-    public String getPropertyUnica(AEntity entityBean) {
-        Person persona = (Person) entityBean;
-        String nome = persona.nome != null ? persona.nome : "";
-        String cognome = persona.cognome != null ? persona.cognome : "";
-
-        return pref.isBool(FlowCost.USA_SECURITY) ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
+    public Person findByKeyUnica(String titolo) {
+        return null;
     }// end of method
 
 

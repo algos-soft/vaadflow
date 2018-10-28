@@ -114,15 +114,21 @@ public class SecoloService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Secolo newEntity(String titolo, int inizio, int fine, boolean anteCristo) {
-        Secolo entity = Secolo.builderSecolo()
+        return Secolo.builderSecolo()
                 .titolo(text.isValid(titolo) ? titolo : null)
                 .inizio(inizio)
                 .fine(fine)
                 .anteCristo(anteCristo)
                 .build();
-        entity.id = titolo;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Secolo) entityBean).getTitolo();
     }// end of method
 
 
@@ -144,6 +150,18 @@ public class SecoloService extends AService {
         }// end of if cycle
 
         return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param titolo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Secolo findByKeyUnica(String titolo) {
+        return repository.findByTitolo(titolo);
     }// end of method
 
 

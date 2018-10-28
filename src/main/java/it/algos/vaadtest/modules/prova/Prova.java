@@ -2,6 +2,7 @@ package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
+import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
@@ -62,11 +63,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = EACompanyRequired.nonUsata)
+@AIEntity(company = EACompanyRequired.obbligatoria)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code"})
 @AIScript(sovrascrivibile = false)
-public class Prova extends AEntity {
+public class Prova extends ACEntity {
 
 
     /**

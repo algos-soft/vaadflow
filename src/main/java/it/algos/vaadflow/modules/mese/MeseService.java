@@ -113,14 +113,20 @@ public class MeseService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Mese newEntity(String titoloLungo, String titoloBreve, int giorni) {
-        Mese entity = Mese.builderMese()
+        return Mese.builderMese()
                 .titoloLungo(text.isValid(titoloLungo) ? titoloLungo : null)
                 .titoloBreve(text.isValid(titoloBreve) ? titoloBreve : null)
                 .giorni(giorni)
                 .build();
-        entity.id = titoloLungo;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Mese) entityBean).getTitoloLungo();
     }// end of method
 
 
@@ -142,6 +148,18 @@ public class MeseService extends AService {
         }// end of if cycle
 
         return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param titolo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Mese findByKeyUnica(String titolo) {
+        return repository.findByTitoloLungo(titolo);
     }// end of method
 
 

@@ -1,12 +1,12 @@
 package it.algos.vaadflow.modules.company;
 
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.giorno.Giorno;
 import it.algos.vaadflow.modules.person.EAPerson;
 import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.modules.person.PersonService;
@@ -176,7 +176,7 @@ public class CompanyService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Company newEntity(String code, String descrizione, Person contatto, String telefono, String mail, Address indirizzo) {
-        Company entity = Company.builderCompany()
+        return Company.builderCompany()
                 .code(text.isValid(code) ? code : null)
                 .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .contatto(contatto)
@@ -184,9 +184,15 @@ public class CompanyService extends AService {
                 .mail(text.isValid(mail) ? mail : null)
                 .indirizzo(indirizzo)
                 .build();
-        entity.id = code;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Company) entityBean).getCode();
     }// end of method
 
 
@@ -215,6 +221,17 @@ public class CompanyService extends AService {
         return entity;
     }// end of method
 
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param code (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Company findByKeyUnica(String code) {
+        return repository.findByCode(code);
+    }// end of method
 
     /**
      * Returns all entities of the type <br>

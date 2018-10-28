@@ -513,7 +513,7 @@ public abstract class AService extends AbstractService implements IAService {
                 break;
         } // end of switch statement
 
-        return creaIdKeySpecifica(entityBean);
+        return entityBean;
     }// end of method
 
 
@@ -521,7 +521,7 @@ public abstract class AService extends AbstractService implements IAService {
         boolean status = false;
         EACompanyRequired tableCompanyRequired = null;
 
-        //--se la EntityClass non estende ACCompany, nopn deve fare nulla
+        //--se la EntityClass non estende ACCompany, non deve fare nulla
         tableCompanyRequired = annotation.getCompanyRequired(entityClass);
         status = tableCompanyRequired == EACompanyRequired.obbligatoria || tableCompanyRequired == EACompanyRequired.facoltativa;
 
@@ -565,6 +565,7 @@ public abstract class AService extends AbstractService implements IAService {
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
      * Controllo della validità delle properties obbligatorie <br>
+     * Può essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
      * @param entityBean da regolare prima del save
      * @param operation  del dialogo (NEW, EDIT)
@@ -572,7 +573,7 @@ public abstract class AService extends AbstractService implements IAService {
      * @return the modified entity
      */
     public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
-        return entityBean;
+        return creaIdKeySpecifica(entityBean);
     }// end of method
 
 
@@ -751,14 +752,6 @@ public abstract class AService extends AbstractService implements IAService {
      * Altrimenti, se esiste la property 'ordine', usa questa property come idKey <br>
      * Altrimenti, se esiste un metodo sovrascritto nella sottoclasse concreta, utilizza quello <br>
      * Altrimenti, restituisce un valore vuoto <br>
-     * <p>
-     * Se è prevista la company obbligatoria, antepone company.code a quanto sopra (se non è vuoto)
-     * Se manca la company obbligatoria, non registra
-     * <p>
-     * Se è prevista la company facoltativa, antepone company.code a quanto sopra (se non è vuoto)
-     * Se manca la company facoltativa, registra con idKey regolata come sopra
-     * <p>
-     * Per codifiche diverse, sovrascrivere il metodo
      *
      * @param entityBean da regolare
      *
@@ -767,7 +760,6 @@ public abstract class AService extends AbstractService implements IAService {
     public String getKeyUnica(AEntity entityBean) {
         String keyUnica = "";
         String keyCode = getPropertyUnica(entityBean);
-        String companyCode = "";
 
         if (text.isEmpty(keyCode)) {
             if (reflection.isEsiste(entityClass, FIELD_NAME_CODE)) {
@@ -783,11 +775,43 @@ public abstract class AService extends AbstractService implements IAService {
             return keyCode;
         }// end of if cycle
 
+        keyUnica = addKeyCompany(entityBean, keyCode);
+        return keyUnica;
+    }// end of method
+
+
+    /**
+     * Se è prevista la company obbligatoria, antepone company.code a quanto sopra (se non è vuoto)
+     * Se manca la company obbligatoria, non registra
+     * <p>
+     * Se è prevista la company facoltativa, antepone company.code a quanto sopra (se non è vuoto)
+     * Se manca la company facoltativa, registra con idKey regolata come sopra
+     * <p>
+     * Per codifiche diverse, sovrascrivere il metodo
+     *
+     * @param entityBean da regolare
+     *
+     * @return chiave univoca da usare come idKey nel DB mongo
+     */
+    public String addKeyCompany(AEntity entityBean, String keyCode) {
+        String keyUnica = "";
+        Company company = null;
+        String companyCode = "";
+
         if (usaCompany()) {
-            companyCode = getCompanyCode(entityBean);
+            if (entityBean instanceof ACEntity) {
+                company = ((ACEntity) entityBean).company;
+                if (company != null) {
+                    companyCode = company.getCode();
+                }// end of if cycle
+            }// end of if cycle
+
+            if (text.isEmpty(companyCode)) {
+                companyCode = getCompanyCode();
+            }// end of if cycle
 
             if (text.isValid(companyCode)) {
-                keyUnica = companyCode + keyCode;
+                keyUnica = companyCode + text.primaMaiuscola(keyCode);
             } else {
                 if (annotation.getCompanyRequired(entityClass) == EACompanyRequired.obbligatoria) {
                     keyUnica = null;
@@ -1262,6 +1286,24 @@ public abstract class AService extends AbstractService implements IAService {
         }// end of if cycle
 
         return company;
+    }// end of method
+
+
+    /**
+     * Recupera la sigla della company della session corrente (se esiste) <br>
+     * Controlla che la session sia attiva <br>
+     *
+     * @return context della sessione
+     */
+    public String getCompanyCode() {
+        String code = "";
+        Company company = getCompany();
+
+        if (company != null) {
+            code = company.getCode();
+        }// end of if cycle
+
+        return code;
     }// end of method
 
 

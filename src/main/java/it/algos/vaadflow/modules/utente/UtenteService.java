@@ -9,6 +9,7 @@ import it.algos.vaadflow.modules.company.EACompany;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
+import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -204,11 +205,18 @@ public class UtenteService extends AService {
                 .mail(text.isValid(mail) ? mail : null)
                 .locked(locked)
                 .build();
-        entity.id = userName;
 
         return (Utente) super.addCompany(entity);
     }// end of method
 
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Utente) entityBean).getUserName();
+    }// end of method
 
     /**
      * Operazioni eseguite PRIMA del save <br>
@@ -237,6 +245,38 @@ public class UtenteService extends AService {
         }// end of if cycle
 
         return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param userName (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Utente findByKeyUnica(String userName) {
+        return repository.findByUserName(userName);
+    }// end of method
+
+
+    /**
+     * Se è prevista la company obbligatoria, antepone company.code a quanto sopra (se non è vuoto)
+     * Se manca la company obbligatoria, non registra
+     * <p>
+     * Se è prevista la company facoltativa, antepone company.code a quanto sopra (se non è vuoto)
+     * Se manca la company facoltativa, registra con idKey regolata come sopra
+     * <p>
+     * Per codifiche diverse, sovrascrivere il metodo
+     *
+     * @param entityBean da regolare
+     * @param keyCode
+     *
+     * @return chiave univoca da usare come idKey nel DB mongo
+     */
+    @Override
+    public String addKeyCompany(AEntity entityBean, String keyCode) {
+        return keyCode;
     }// end of method
 
 

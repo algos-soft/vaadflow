@@ -5,6 +5,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -78,6 +79,7 @@ public class LogService extends AService {
         this.repository = (LogRepository) repository;
     }// end of Spring constructor
 
+
     /**
      * Crea una entity e la registra <br>
      *
@@ -90,6 +92,7 @@ public class LogService extends AService {
         save(entity);
         return entity;
     }// end of method
+
 
     /**
      * Crea una entity e la registra <br>
@@ -106,6 +109,7 @@ public class LogService extends AService {
         return entity;
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -116,6 +120,7 @@ public class LogService extends AService {
     public Log newEntity() {
         return newEntity((Livello) null, (Logtype) null, "");
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -130,6 +135,7 @@ public class LogService extends AService {
         return newEntity((Livello) null, (Logtype) null, descrizione);
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -142,17 +148,63 @@ public class LogService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Log newEntity(Livello livello, Logtype type, String descrizione) {
-        Log entity;
-
-        entity = Log.builderLog()
+        return Log.builderLog()
                 .livello(livello != null ? livello : Livello.info)
                 .type(type != null ? type : logtype.getEdit())
                 .descrizione(text.isValid(descrizione) ? descrizione : null)
                 .evento(LocalDateTime.now())
                 .build();
-
-        return (Log) creaIdKeySpecifica(entity);
     }// end of method
+
+
+    /**
+     * Property unica (se esiste) <br>
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        String code = "";
+        Log log = ((Log) entityBean);
+
+        code += log.getType().code;
+        code += log.getEvento().toString();
+
+        return code;
+    }// end of method
+
+
+    /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, EDIT)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+        Log entity = (Log) super.beforeSave(entityBean, operation);
+
+        if (entity.livello == null || entity.getType() == null || text.isEmpty(entity.descrizione)) {
+            entity = null;
+        }// end of if cycle
+
+        return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param indirizzo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+//    public Log findByKeyUnica(String indirizzo) {
+//        return repository.findByIndirizzo(indirizzo);
+//    }// end of method
+
 
     /**
      * Returns all entities of the type <br>
@@ -170,40 +222,30 @@ public class LogService extends AService {
         return repository.findAll();
     }// end of method
 
-    /**
-     * Property unica (se esiste) <br>
-     */
-    @Override
-    public String getPropertyUnica(AEntity entityBean) {
-        String code = "";
-        Log log = ((Log) entityBean);
-
-        code += log.getType().code;
-        code += log.getEvento().toString();
-
-        return code;
-    }// end of method
-
 
     //--registra un avviso
     public void debug(Logtype type, String descrizione) {
         crea(Livello.debug, type, descrizione);
     }// fine del metodo
 
+
     //--registra un avviso
     public void info(Logtype type, String descrizione) {
         crea(Livello.info, type, descrizione);
     }// fine del metodo
+
 
     //--registra un avviso
     public void warning(Logtype type, String descrizione) {
         crea(Livello.warn, type, descrizione);
     }// fine del metodo
 
+
     //--registra un avviso
     public void error(Logtype type, String descrizione) {
         crea(Livello.error, type, descrizione);
     }// fine del metodo
+
 
     //--registra un avviso
     public void importo(String descrizione) {

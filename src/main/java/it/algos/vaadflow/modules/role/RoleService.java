@@ -90,6 +90,7 @@ public class RoleService extends AService {
         return creata;
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -100,6 +101,7 @@ public class RoleService extends AService {
     public Role newEntity() {
         return newEntity(0, "");
     }// end of method
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -112,13 +114,19 @@ public class RoleService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Role newEntity(int ordine, String code) {
-        Role entity = Role.builderRole()
+        return Role.builderRole()
                 .ordine(ordine != 0 ? ordine : getNewOrdine())
                 .code(text.isValid(code) ? code : null)
                 .build();
-        entity.id = code;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Role) entityBean).getCode();
     }// end of method
 
 
@@ -142,6 +150,17 @@ public class RoleService extends AService {
         return entity;
     }// end of method
 
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param code (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Role findByKeyUnica(String code) {
+        return repository.findByCode(code);
+    }// end of method
 
 //    /**
 //     * Returns all instances of the type <br>
@@ -176,12 +195,14 @@ public class RoleService extends AService {
         return numRec;
     }// end of method
 
+
     /**
      * Guest role
      */
     public Role getGuest() {
         return repository.findByCode(EARole.guest.name());
     }// end of method
+
 
     /**
      * User role
@@ -190,6 +211,7 @@ public class RoleService extends AService {
         return repository.findByCode(EARole.user.name());
     }// end of method
 
+
     /**
      * Admin role
      */
@@ -197,12 +219,14 @@ public class RoleService extends AService {
         return repository.findByCode(EARole.admin.name());
     }// end of method
 
+
     /**
      * Developer role
      */
     public Role getDeveloper() {
         return repository.findByCode(EARole.developer.name());
     }// end of method
+
 
     /**
      * Guest roles
@@ -213,6 +237,7 @@ public class RoleService extends AService {
         return lista;
     }// end of method
 
+
     /**
      * User roles
      */
@@ -221,6 +246,7 @@ public class RoleService extends AService {
         lista.add(getUser());
         return lista;
     }// end of method
+
 
     /**
      * User roles
@@ -231,6 +257,7 @@ public class RoleService extends AService {
         return lista;
     }// end of method
 
+
     /**
      * Admin roles
      */
@@ -240,6 +267,7 @@ public class RoleService extends AService {
         return lista;
     }// end of method
 
+
     /**
      * Developer roles
      */
@@ -248,6 +276,7 @@ public class RoleService extends AService {
         lista.add(getDeveloper());
         return lista;
     }// end of method
+
 
     /**
      * Roles
@@ -277,12 +306,14 @@ public class RoleService extends AService {
         return lista;
     }// end of method
 
+
     /**
      * Roles
      */
     public String[] getAllRoles() {
         return new String[]{"admin", "user"};
     }// end of method
+
 
     /**
      * GrantedAuthority

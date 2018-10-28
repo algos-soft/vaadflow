@@ -84,6 +84,7 @@ public class GiornoService extends AService {
         this.repository = (GiornoRepository) repository;
     }// end of Spring constructor
 
+
     /**
      * Crea una entity solo se non esisteva <br>
      *
@@ -130,14 +131,20 @@ public class GiornoService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Giorno newEntity(String titolo, Mese mese, int ordine) {
-        Giorno entity = Giorno.builderGiorno()
+        return Giorno.builderGiorno()
                 .titolo(text.isValid(titolo) ? titolo : null)
                 .mese(mese)
                 .ordine(ordine > 0 ? ordine : getNewOrdine())
                 .build();
-        entity.id = titolo;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Giorno) entityBean).getTitolo();
     }// end of method
 
 
@@ -198,7 +205,7 @@ public class GiornoService extends AService {
         for (HashMap mappaGiorno : lista) {
             titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
             bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            mese = (Mese)meseService.findById((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            mese = (Mese) meseService.findById((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
             ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
             numRec = creaIfNotExist(titolo, mese, ordine) ? numRec + 1 : numRec;
         }// end of for cycle

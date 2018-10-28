@@ -44,6 +44,14 @@ public class AddressService extends AService {
 
 
     /**
+     * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br> Spring costruisce
+     * una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br> Qui si una una
+     * interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
+     */
+    public AddressRepository repository;
+
+
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -54,6 +62,7 @@ public class AddressService extends AService {
     public AddressService(@Qualifier(TAG_ADD) MongoRepository repository) {
         super(repository);
         super.entityClass = Address.class;
+        this.repository = (AddressRepository) repository;
     }// end of Spring constructor
 
 
@@ -114,14 +123,20 @@ public class AddressService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Address newEntity(String indirizzo, String localita, String cap) {
-        Address entity = Address.builderAddress()
+        return Address.builderAddress()
                 .indirizzo(text.isValid(indirizzo) ? indirizzo : null)
                 .localita(text.isValid(localita) ? localita : null)
                 .cap(text.isValid(cap) ? cap : null)
                 .build();
-        entity.id = indirizzo;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Address) entityBean).getIndirizzo();
     }// end of method
 
 
@@ -144,6 +159,18 @@ public class AddressService extends AService {
         }// end of if cycle
 
         return entity;
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param indirizzo (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Address findByKeyUnica(String indirizzo) {
+        return repository.findByIndirizzo(indirizzo);
     }// end of method
 
 

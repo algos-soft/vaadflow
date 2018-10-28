@@ -86,6 +86,7 @@ public class LogtypeService extends AService {
         return creata;
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
@@ -110,13 +111,19 @@ public class LogtypeService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Logtype newEntity(int ordine, String code) {
-        Logtype entity = Logtype.builderLogtype()
+        return Logtype.builderLogtype()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .code(text.isValid(code) ? code : null)
                 .build();
-        entity.id = code;
+    }// end of method
 
-        return entity;
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Logtype) entityBean).getCode();
     }// end of method
 
 
@@ -139,6 +146,19 @@ public class LogtypeService extends AService {
 
         return entity;
     }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param code (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Logtype findByKeyUnica(String code) {
+        return repository.findByCode(code);
+    }// end of method
+
 
     /**
      * Creazione di alcuni dati demo iniziali <br>
@@ -199,6 +219,7 @@ public class LogtypeService extends AService {
     public Logtype getDelete() {
         return repository.findByCode(DELETE);
     }// end of method
+
 
     /**
      * Raggruppamento logico dei log per type di eventi (import di dati)
