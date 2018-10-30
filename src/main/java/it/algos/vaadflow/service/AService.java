@@ -474,7 +474,7 @@ public abstract class AService extends AbstractService implements IAService {
      *
      * @param entityBean da creare
      */
-    protected AEntity addCompany(AEntity entityBean) {
+    protected AEntity addCompanySeManca(AEntity entityBean) {
         EACompanyRequired tableCompanyRequired;
         Company company = null;
 

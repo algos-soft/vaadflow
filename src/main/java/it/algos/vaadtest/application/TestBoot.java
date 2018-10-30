@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContextEvent;
 import java.time.LocalDate;
@@ -27,15 +28,23 @@ import static it.algos.vaadflow.application.FlowCost.*;
  * Date: ven, 24-ago-2018
  * Time: 16:48
  * <p>
+ * Estende la classe ABoot per le regolazioni iniziali di questa applicazione <br>
+ * <p>
  * Running logic after the Spring context has been initialized <br>
  * Parte perché SpringBoot chiama il metodo contextInitialized() <br>
  * Invoca alcuni metodi della superclasse <br>
  * Di norma dovrebbe esserci una sola classe di questo tipo nel programma <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
+ * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@SpringComponent
+@Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 public class TestBoot extends ABoot {
 
 
@@ -71,6 +80,16 @@ public class TestBoot extends ABoot {
 
 
     /**
+     * Inizializzazione delle versioni standard di vaadinflow <br>
+     * Inizializzazione delle versioni del programma specifico <br>
+     */
+    @Override
+    protected void iniziaVersioni() {
+        testVers.inizia();
+    }// end of method
+
+
+    /**
      * Regola alcune preferenze iniziali
      * Se non esistono, le crea
      * Se esistono, sostituisce i valori esistenti con quelli indicati qui
@@ -85,29 +104,19 @@ public class TestBoot extends ABoot {
 
 
     /**
-     * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
-     */
-    protected void iniziaDataProgettoSpecifico() {
-    }// end of method
-
-
-    /**
-     * Inizializzazione delle versioni standard di vaadinflow <br>
-     * Inizializzazione delle versioni del programma specifico <br>
-     */
-    @Override
-    protected void iniziaVersioni() {
-        testVers.inizia();
-    }// end of method
-
-
-    /**
      * Regola alcune informazioni dell'applicazione
      */
     protected void regolaInfo() {
         PROJECT_NAME = "test";
         PROJECT_VERSION = "0.1";
         PROJECT_DATE = LocalDate.of(2018, 10, 14);
+    }// end of method
+
+
+    /**
+     * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
+     */
+    protected void iniziaDataProgettoSpecifico() {
     }// end of method
 
 

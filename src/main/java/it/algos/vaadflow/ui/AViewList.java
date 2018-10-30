@@ -532,11 +532,9 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
             if (isEntityEmbadded || isEntityUsaDatiDemo) {
                 alertLayout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
             }// end of if cycle
-
-//            alertLayout.add(layout);
-            this.add(alertLayout);
         }// end of if cycle
 
+        this.add(alertLayout);
         return alertLayout;
     }// end of method
 

@@ -32,6 +32,7 @@
     private RoleService service;
 
 
+
     /**
      * Recupera da StaticContextAccessor una istanza della classe <br>
      * La classe deve avere l'annotation @Scope = 'singleton', and is created at the time of class loading <br>

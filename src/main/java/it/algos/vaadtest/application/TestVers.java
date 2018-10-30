@@ -15,8 +15,13 @@ import org.springframework.stereotype.Service;
  * Setup non-UI logic here
  * Classe eseguita solo quando l'applicazione viene caricata/parte nel server (Tomcat od altri) <br>
  * Eseguita quindi ad ogni avvio/riavvio del server e NON ad ogni sessione <br>
+ * <p>
+ * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * Annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (obbligatorio) <br>
+ * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
+ * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@SpringComponent
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
@@ -37,8 +42,7 @@ public class TestVers extends AVers {
      * L'ordine di inserimento è FONDAMENTALE
      */
     public int inizia() {
-        int k = 0;
-        super.inizia();
+        int k = super.inizia();
         codeProject = CODE_PROJECT;
 
 //        //--programma di test

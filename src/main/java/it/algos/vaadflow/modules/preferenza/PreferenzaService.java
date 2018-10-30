@@ -159,7 +159,7 @@ public class PreferenzaService extends AService {
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();
 
-        return (Preferenza) super.addCompany(entity);
+        return (Preferenza) super.addCompanySeManca(entity);
     }// end of method
 
 

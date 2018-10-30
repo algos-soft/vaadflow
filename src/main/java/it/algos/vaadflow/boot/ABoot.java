@@ -132,7 +132,6 @@ public abstract class ABoot implements ServletContextListener {
     /**
      * Inizializzazione delle versioni standard di vaadinflow <br>
      * Inizializzazione delle versioni del programma specifico <br>
-     *
      */
     protected void iniziaVersioni() {
     }// end of method
@@ -153,8 +152,6 @@ public abstract class ABoot implements ServletContextListener {
      */
     protected void regolaInfo() {
     }// end of method
-
-
 
 
     /**

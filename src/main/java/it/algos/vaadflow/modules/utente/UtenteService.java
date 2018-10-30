@@ -118,7 +118,7 @@ public class UtenteService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param company          (obbligatoria)
+     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -134,7 +134,7 @@ public class UtenteService extends AService {
         AEntity entity = null;
 
         if (isMancaByKeyUnica(userName)) {
-            entity = newEntity(userName, passwordInChiaro, ruoli, mail);
+            entity = newEntity(company, userName, passwordInChiaro, ruoli, mail, false);
             ((ACEntity) entity).company = company;
             entity = save(entity);
             creata = entity != null;
@@ -152,7 +152,7 @@ public class UtenteService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Utente newEntity() {
-        return newEntity("", "", (List<Role>) null, "", false);
+        return newEntity((Company) null, "", "", (List<Role>) null, "", false);
     }// end of method
 
 
@@ -173,41 +173,19 @@ public class UtenteService extends AService {
         List<Role> ruoli;
         String mail;
         EACompany eaCompany;
+        Company company = null;
 
         userName = eaUtente.getUserName();
         passwordInChiaro = eaUtente.getPasswordInChiaro();
         ruolo = eaUtente.getRuolo();
         ruoli = roleService.getRoles(ruolo);
         mail = eaUtente.getMail();
-        entity = newEntity(userName, passwordInChiaro, ruoli, mail);
-
         eaCompany = eaUtente.getCompany();
         if (eaCompany != null) {
-            entity.company = companyService.findByKeyUnica(eaCompany.getCode());
+            company = companyService.findByKeyUnica(eaCompany.getCode());
         }// end of if cycle
 
-        return entity;
-    }// end of method
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * Properties obbligatorie <br>
-     * <p>
-     *
-     * @param userName         userName o nickName (obbligatorio, unico)
-     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
-     *                         con inserimento automatico (prima del 'save') se è nulla
-     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
-     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
-     *                         lista modificabile solo da developer ed admin
-     * @param mail             posta elettronica (facoltativo)
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
-        return newEntity(userName, passwordInChiaro, ruoli, mail, false);
+        return newEntity(company, userName, passwordInChiaro, ruoli, mail, false);
     }// end of method
 
 
@@ -217,6 +195,7 @@ public class UtenteService extends AService {
      * All properties <br>
      * <p>
      *
+     * @param company          di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -228,7 +207,7 @@ public class UtenteService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Utente newEntity(String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
+    public Utente newEntity(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail, boolean locked) {
         Utente entity = Utente.builderUtente()
                 .userName(text.isValid(userName) ? userName : null)
                 .passwordInChiaro(text.isValid(passwordInChiaro) ? passwordInChiaro : null)
@@ -236,8 +215,9 @@ public class UtenteService extends AService {
                 .mail(text.isValid(mail) ? mail : null)
                 .locked(locked)
                 .build();
+        entity.company = company;
 
-        return (Utente) super.addCompany(entity);
+        return (Utente) super.addCompanySeManca(entity);
     }// end of method
 
 

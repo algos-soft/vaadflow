@@ -7,6 +7,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.utente.Utente;
@@ -103,8 +104,6 @@ public class PersonService extends AService {
     }// end of Spring constructor
 
 
-
-
     /**
      * Crea una entity solo se non esisteva <br>
      *
@@ -132,7 +131,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity() {
-        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
+        return newEntity((Company) null, "", "", "", (Address) null, "", "", (List<Role>) null, "", false, false);
     }// end of method
 
 
@@ -144,7 +143,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntityConSuperclasse() {
-        return newEntity("", "", "", (Address) null, "", "", (List<Role>) null, "", false, true);
+        return newEntity((Company) null, "", "", "", (Address) null, "", "", (List<Role>) null, "", false, true);
     }// end of method
 
 
@@ -189,7 +188,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity(String nome, String cognome, String telefono, Address indirizzo, String mail) {
-        return newEntity(nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
+        return newEntity((Company) null, nome, cognome, telefono, indirizzo, "", "", (List<Role>) null, "", false, false);
     }// end of method
 
 
@@ -199,6 +198,7 @@ public class PersonService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
+     * @param company          di appartenenza (facoltativa)
      * @param nome:            (obbligatorio, non unico)
      * @param cognome:         (obbligatorio, non unico)
      * @param telefono:        (facoltativo)
@@ -216,6 +216,7 @@ public class PersonService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Person newEntity(
+            Company company,
             String nome,
             String cognome,
             String telefono,
@@ -238,7 +239,7 @@ public class PersonService extends AService {
         //--se non usa la security, utilizza il metodo builderPerson
         if (usaSuperClasse && pref.isBool(EAPreferenza.usaSecurity.getCode())) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
-            entityDellaSuperClasseUtente = utenteService.newEntity( userName, passwordInChiaro, ruoli, mail, locked);
+            entityDellaSuperClasseUtente = utenteService.newEntity(company, userName, passwordInChiaro, ruoli, mail, locked);
 
             //--poi vengono ricopiati i valori in Persona
             //--casting dalla superclasse alla classe attuale
@@ -271,6 +272,8 @@ public class PersonService extends AService {
 
         return pref.isBool(FlowCost.USA_SECURITY) ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
     }// end of method
+
+
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
