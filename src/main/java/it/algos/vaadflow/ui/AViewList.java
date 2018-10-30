@@ -490,7 +490,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
             newButton = new Button("New entity", new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.ADD, context));
+            newButton.addClickListener(e -> dialog.open(service.newEntity(), AViewDialog.Operation.AddNew, context));
             topLayout.add(newButton);
         }// end of if cycle
 
@@ -507,10 +507,9 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
     protected VerticalLayout creaTopAlert() {
         alertLayout = new VerticalLayout();
         alertLayout.addClassName("view-toolbar");
-        VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(false);
-        layout.setSpacing(false);
-        layout.setPadding(false);
+        alertLayout.setMargin(false);
+        alertLayout.setSpacing(false);
+        alertLayout.setPadding(false);
 
         if (isEntityDeveloper || isEntityAdmin || isEntityEmbadded || isEntityUsaDatiDemo) {
             usaTopAlert = true;
@@ -518,27 +517,27 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
 
         if (usaTopAlert) {
             if (isEntityDeveloper) {
-                layout.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
+                alertLayout.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
             }// end of if cycle
 
             if (isEntityAdmin) {
-                layout.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
+                alertLayout.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
             }// end of if cycle
 
             if (isEntityEmbadded) {
-                layout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
-                layout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+                alertLayout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
+                alertLayout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
             }// end of if cycle
 
             if (isEntityEmbadded || isEntityUsaDatiDemo) {
-                layout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
+                alertLayout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
             }// end of if cycle
 
-            alertLayout.add(layout);
+//            alertLayout.add(layout);
             this.add(alertLayout);
         }// end of if cycle
 
-        return layout;
+        return alertLayout;
     }// end of method
 
 
@@ -698,14 +697,14 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
             this.setFlexGrow(0);
         } else {
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            AViewDialog.Operation operation = isEntityModificabile ? AViewDialog.Operation.EDIT : AViewDialog.Operation.SHOW;
+            AViewDialog.Operation operation = isEntityModificabile ? AViewDialog.Operation.Edit : AViewDialog.Operation.ShowOnly;
             grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
         }// end of if/else cycle
     }// end of method
 
 
     protected Button createEditButton(AEntity entityBean) {
-        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.EDIT, context));
+        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, AViewDialog.Operation.Edit, context));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -757,7 +756,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
     protected void save(AEntity entityBean, AViewDialog.Operation operation) {
         entityBean = service.beforeSave(entityBean, operation);
         switch (operation) {
-            case ADD:
+            case AddNew:
                 if (service.isEsisteEntityKeyUnica(entityBean)) {
                     Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
                 } else {
@@ -766,7 +765,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
                     Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
                 }// end of if/else cycle
                 break;
-            case EDIT:
+            case Edit:
                 service.save(entityBean);
                 updateView();
                 Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
@@ -833,7 +832,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
             User springUser = (User) securityContext.getAuthentication().getPrincipal();
             uniqueUserName = springUser.getUsername();
-            utente = (Utente) utenteService.findById(uniqueUserName);
+            utente = utenteService.findByKeyUnica(uniqueUserName);
 
             login.setUtente(utente);
             company = utente.company;

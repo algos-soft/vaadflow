@@ -2,8 +2,6 @@ package it.algos.vaadflow.boot;
 
 import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.ABootService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -84,11 +82,19 @@ public abstract class ABoot implements ServletContextListener {
 //     */
 //    @Autowired
 //    private AnnoService anno;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     private FlowData flowData;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private PreferenzaService preferenzaService;
+
 
     /**
      * Executed on container startup
@@ -113,14 +119,42 @@ public abstract class ABoot implements ServletContextListener {
      * Deve essere sovrascritto dalla sottoclasse concreta che invocherà questo metodo()
      */
     protected void inizia() {
+        this.iniziaVersioni();
+        this.regolaPreferenze();
         this.iniziaDataStandard();
         this.iniziaDataProgettoSpecifico();
-        this.iniziaVersioni();
         this.regolaInfo();
-        this.regolaPreferenze();
         this.addRouteStandard();
         this.addRouteSpecifiche();
     }// end of method
+
+
+    /**
+     * Inizializzazione delle versioni standard di vaadinflow <br>
+     * Inizializzazione delle versioni del programma specifico <br>
+     *
+     */
+    protected void iniziaVersioni() {
+    }// end of method
+
+
+    /**
+     * Regola alcune preferenze iniziali
+     * Se non esistono, le crea
+     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
+     */
+    protected void regolaPreferenze() {
+//        preferenzaService.loadData();
+    }// end of method
+
+
+    /**
+     * Regola alcune informazioni dell'applicazione
+     */
+    protected void regolaInfo() {
+    }// end of method
+
+
 
 
     /**
@@ -135,29 +169,6 @@ public abstract class ABoot implements ServletContextListener {
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
-    }// end of method
-
-
-    /**
-     * Inizializzazione delle versioni del programma specifico
-     */
-    protected void iniziaVersioni() {
-    }// end of method
-
-
-    /**
-     * Regola alcune informazioni dell'applicazione
-     */
-    protected void regolaInfo() {
-    }// end of method
-
-
-    /**
-     * Regola alcune preferenze iniziali
-     * Se non esistono, le crea
-     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
-     */
-    protected void regolaPreferenze() {
     }// end of method
 
 

@@ -140,7 +140,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
 
         AComboBox comboType = (AComboBox) getField(TIPO_FIELD_NAME);
         comboType.setValue(type);
-        if (operation == Operation.ADD) {
+        if (operation == Operation.AddNew) {
             comboType.setEnabled(true);
             comboType.addValueChangeListener(e -> sincro((EAPrefType) e.getValue()));
         } else {
@@ -152,7 +152,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
 
     /**
      * Cambia il valueField sincronizzandolo col comboBox
-     * Senza valori, perché è attivo SOLO in modalita ADD (new record)
+     * Senza valori, perché è attivo SOLO in modalita AddNew (new record)
      */
     protected AbstractField sincro(EAPrefType type) {
         String caption = "Valore ";

@@ -48,30 +48,43 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     public final static int DURATA = 4000;
+
     protected final Button saveButton = new Button(REGISTRA);
+
     protected final Button cancelButton = new Button(ANNULLA);
+
     protected final Button deleteButton = new Button(DELETE);
+
     protected final FormLayout formLayout = new FormLayout();
+
     private final H2 titleField = new H2();
+
     private final String confirmText = "Conferma";
+
     private final AConfirmDialog<T> confirmDialog = new AConfirmDialog<>();
+
     public Consumer<T> itemAnnulla;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     public AAnnotationService annotation;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     public ADateService date;
+
     protected HorizontalLayout buttonBar;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
     protected AReflectionService reflection;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -110,19 +123,32 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 //    @Autowired
 //    public CompanyService companyService;
     protected IAService service;
+
     protected IAPresenter presenter;
+
     //--collegamento tra i fields e la entityBean
     protected Binder<T> binder;
+
     protected Class binderClass;
+
     protected LinkedHashMap<String, AbstractField> fieldMap;
+
     protected AFieldService fieldService;
+
     protected T currentItem;
+
     protected Operation operation;
+
     protected BiConsumer<T, Operation> itemSaver;
+
     protected AComboBox companyField;
+
     private Consumer<T> itemDeleter;
+
     private String itemType;
+
     private Registration registrationForSave;
+
 
     /**
      * Constructs a new instance.
@@ -132,6 +158,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     public AViewDialog(IAPresenter presenter) {
         this(presenter, null, null);
     }// end of constructor
+
 
     /**
      * Constructs a new instance.
@@ -170,6 +197,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         }// end of if cycle
     }// end of constructor
 
+
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
@@ -202,9 +230,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         });
     }// end of method
 
+
     public void fixFunzioni(BiConsumer<T, AViewDialog.Operation> itemSaver, Consumer<T> itemDeleter) {
         fixFunzioni(itemSaver, itemDeleter, null);
     }// end of method
+
 
     public void fixFunzioni(BiConsumer<T, AViewDialog.Operation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
         this.itemSaver = itemSaver;
@@ -232,6 +262,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         usaDeleteButton = true;
     }// end of method
 
+
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
      * Può essere sovrascritto, per aggiungere informazioni
@@ -240,9 +271,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected void fixPreferenzeSpecifiche() {
     }// end of method
 
+
     private void initTitle() {
         add(titleField);
     }
+
 
     private void initFormLayout() {
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
@@ -252,6 +285,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         div.addClassName("has-padding");
         add(div);
     }// end of method
+
 
     protected void initButtonBar() {
         buttonBar = new HorizontalLayout();
@@ -277,6 +311,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         add(buttonBar);
     }// end of method
+
 
     /**
      * Crea i fields (non esiste ancora la entityBean, che arriva nel metodo open())
@@ -319,7 +354,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Aggiunge il field al binder, nel metodo create() del fieldService
         //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
         for (String propertyName : formPropertyNamesList) {
-            propertyField = fieldService.create( binder, binderClass, propertyName);
+            propertyField = fieldService.create(binder, binderClass, propertyName);
             if (propertyField != null) {
                 fieldMap.put(propertyName, propertyField);
             }// end of if cycle
@@ -392,6 +427,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         }// end of for cycle
     }// end of method
 
+
     /**
      * Eventuali aggiustamenti finali al layout
      * Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
@@ -416,6 +452,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 //            companyField.setEnabled(false);
 //        }// end of if cycle
     }// end of method
+
 
     /**
      * Regola il focus iniziale
@@ -468,6 +505,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         open(item, operation, (AContext) null);
     }// end of method
 
+
     /**
      * Opens the given item for editing in the dialog.
      *
@@ -479,6 +517,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     public void open(AEntity item, Operation operation, AContext context) {
         open(item, operation, context, "");
     }// end of method
+
 
     /**
      * Opens the given item for editing in the dialog.
@@ -522,12 +561,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         readSpecificFields();
         readCompanyField();
 
-        deleteButton.setEnabled(operation.isDeleteEnabled());
-
-        if (this.operation == Operation.SHOW) {
-            saveButton.setVisible(false);
-            deleteButton.setVisible(false);
-        }// end of if cycle
+        //--visibilità dei bottoni
+        saveButton.setVisible(operation.isSaveEnabled());
+        deleteButton.setVisible(operation.isDeleteEnabled());
 
         open();
     }// end of method
@@ -637,6 +673,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         openConfirmDialog();
     }// end of method\
 
+
     /**
      * Azione proveniente dal click sul bottone Annulla
      */
@@ -647,6 +684,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             vista.updateView();
         }// end of if cycle
     }// end of method
+
 
     /**
      * Opens the confirmation dialog before deleting the current item.
@@ -707,6 +745,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         return formLayout;
     }
 
+
     /**
      * Gets the binder.
      *
@@ -716,6 +755,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         return binder;
     }
 
+
     /**
      * Gets the item currently being edited.
      *
@@ -724,6 +764,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected final T getCurrentItem() {
         return currentItem;
     }
+
 
     /**
      * Recupera il field dal nome
@@ -738,40 +779,58 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     }// end of method
 
+
     public IAPresenter getPresenter() {
         return presenter;
     }// end of method
 
+
     public void setPresenter(IAPresenter presenter) {
         this.presenter = presenter;
     }// end of method
+
 
     /**
      * The operations supported by this dialog.
      * Delete is enabled when editing an already existing item.
      */
     public enum Operation {
-        ADD("Add New", "add", false),
-        EDIT("Edit", "edit", true),
-        SHOW("Mostra", "mostra", false);
+        AddNew("Add New", "add", true, false),
+        Edit("Edit", "edit", true, true),
+        EditNoDelete("Edit", "edit", true, false),
+        ShowOnly("Mostra", "mostra", false, false);
 
         private final String nameInTitle;
+
         private final String nameInText;
+
+        private final boolean saveEnabled;
+
         private final boolean deleteEnabled;
 
-        Operation(String nameInTitle, String nameInText, boolean deleteEnabled) {
+
+        Operation(String nameInTitle, String nameInText, boolean saveEnabled, boolean deleteEnabled) {
             this.nameInTitle = nameInTitle;
             this.nameInText = nameInText;
+            this.saveEnabled = saveEnabled;
             this.deleteEnabled = deleteEnabled;
         }
+
 
         public String getNameInTitle() {
             return nameInTitle;
         }// end of method
 
+
         public String getNameInText() {
             return nameInText;
         }// end of method
+
+
+        public boolean isSaveEnabled() {
+            return saveEnabled;
+        }// end of method
+
 
         public boolean isDeleteEnabled() {
             return deleteEnabled;

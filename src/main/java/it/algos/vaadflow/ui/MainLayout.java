@@ -86,8 +86,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
 
     protected void creaAllMenu() {
-        String title = FlowCost.LAYOUT_TITLE;
-        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), title);
+        final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), FlowCost.LAYOUT_TITLE);
         ArrayList<MenuItem> listaMenu = null;
         MenuItem menu = null;
         Map<String, List<Class>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
@@ -219,9 +218,11 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             }// end of for cycle
         }// end of if cycle
 
-        matrice = listaSubMenuCronoDev.toArray(new MenuItem[listaSubMenuCronoDev.size()]);
-        developerItem = new MenuItem("Crono", "build", matrice);
-        listaMenuDev.add(developerItem);
+        if (devCronoClazzList != null && devCronoClazzList.size() > 0) {
+            matrice = listaSubMenuCronoDev.toArray(new MenuItem[listaSubMenuCronoDev.size()]);
+            developerItem = new MenuItem("Crono", "build", matrice);
+            listaMenuDev.add(developerItem);
+        }// end of if cycle
     }// end of method
 
 
@@ -351,7 +352,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         AContext context;
         String uniqueUserName = "";
         Utente utente;
-        Company company;
+        Company company = null;
         VaadinSession vaadSession = UI.getCurrent().getSession();
         login = StaticContextAccessor.getBean(ALogin.class);
 
@@ -370,8 +371,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
             context = new AContext(login, company);
             vaadSession.setAttribute(KEY_CONTEXT, context);
         }// end of if cycle
-
-        FlowCost.LAYOUT_TITLE = login.getCompany() != null ? login.getCompany().descrizione : PROJECT_NAME;
     }// end of method
 
 }// end of class

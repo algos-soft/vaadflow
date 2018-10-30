@@ -1,25 +1,22 @@
 package it.algos.vaadtest.security;
 
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.modules.role.RoleService;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.utente.Utente;
-import it.algos.vaadflow.modules.utente.UtenteRepository;
-import it.algos.vaadflow.modules.utente.UtenteService;
-import it.algos.vaadflow.service.ABootService;
 import it.algos.vaadflow.service.AMongoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+
+import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -35,7 +32,7 @@ public class AUserDetailsService implements UserDetailsService {
     public PasswordEncoder passwordEncoder;
 
 
-    public AUserDetailsService(  ) {
+    public AUserDetailsService() {
     }// end of Spring constructor
 
 
@@ -49,16 +46,19 @@ public class AUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String uniqueUserName) throws UsernameNotFoundException {
         String passwordHash = "";
+        Company company;
         Collection<? extends GrantedAuthority> authorities;
         AMongoService mongo = StaticContextAccessor.getBean(AMongoService.class);
         Utente utente = (Utente) mongo.findByProperty(Utente.class, "userName", uniqueUserName);
 
-        if (null == utente) {
-            throw new UsernameNotFoundException("Non c'è nessun utente di nome: " + uniqueUserName);
-        } else {
+        if (utente != null) {
             passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
             authorities = utente.getAuthorities();
+            company = utente.company;
+            FlowCost.LAYOUT_TITLE = company != null ? company.descrizione : PROJECT_NAME;
             return new User(utente.getUserName(), passwordHash, authorities);
+        } else {
+            throw new UsernameNotFoundException("Non c'è nessun utente di nome: " + uniqueUserName);
         }// end of if/else cycle
 
     }// end of method

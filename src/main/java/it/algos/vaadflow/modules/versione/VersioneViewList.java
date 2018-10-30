@@ -1,6 +1,8 @@
 package it.algos.vaadflow.modules.versione;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -51,6 +53,7 @@ public class VersioneViewList extends AViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
     public static final String IRON_ICON = "drafts";
 
 
@@ -68,6 +71,7 @@ public class VersioneViewList extends AViewList {
         ((VersioneViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
     /**
      * Le preferenze sovrascritte nella sottoclasse
      */
@@ -76,6 +80,21 @@ public class VersioneViewList extends AViewList {
         super.usaSearchTextField = false;
         super.usaSearchBottoneNew = false;
         super.isEntityDeveloper = true;
+    }// end of method
+
+
+    /**
+     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
+     * Normalmente ad uso esclusivo del developer
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected VerticalLayout creaTopAlert() {
+        super.creaTopAlert();
+        alertLayout.add(new Label("Sigla 'A' per le versioni base di vaadinflow"));
+        alertLayout.add(new Label("Sigla 'Z' per le modifiche alla descrizione di una preferenza"));
+        return alertLayout;
     }// end of method
 
 }// end of class

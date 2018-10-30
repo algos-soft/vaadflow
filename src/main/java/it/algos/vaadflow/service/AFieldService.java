@@ -245,8 +245,8 @@ public class AFieldService extends AbstractService {
             case localdatetime:
                 //@todo andrà inserito quando ci sarà un DatePicker che accetti i LocalDateTime
 //                field = new ADatePicker(caption);
-                field = new ATextField(caption);
-                binder.forField(field).bind(fieldName);
+//                field = new ATextField(caption);
+//                binder.forField(field).bind(fieldName);
                 break;
             case link:
                 field = new ATextField(caption);

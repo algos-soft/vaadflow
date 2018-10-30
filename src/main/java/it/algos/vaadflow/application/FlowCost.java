@@ -148,6 +148,7 @@ public class FlowCost {
     public final static String SHOW_ANNO = "showAnno";
     public final static String SHOW_MESE = "showMese";
     public final static String SHOW_GIORNO = "showGiorno";
+    public final static String LOAD_UTENTI = "loadUtenti";
     public  static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
     public  static String LAYOUT_TITLE = "";
     public  static String PROJECT_NAME = "vaadinflow";

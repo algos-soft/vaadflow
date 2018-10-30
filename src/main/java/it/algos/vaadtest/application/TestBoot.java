@@ -4,7 +4,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.modules.anno.AnnoViewList;
+import it.algos.vaadflow.modules.giorno.GiornoViewList;
+import it.algos.vaadflow.modules.mese.MeseViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
+import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +42,20 @@ public class TestBoot extends ABoot {
     /**
      * Iniettata dal costruttore <br>
      */
-    private VersBootStrap versBootStrap;
+    private TestVers testVers;
 
 
     /**
      * Costruttore @Autowired <br>
      *
-     * @param versBootStrap Log delle versioni, modifiche e patch installat
+     * @param testVers Log delle versioni, modifiche e patch installat
      */
     @Autowired
-    public TestBoot(VersBootStrap versBootStrap) {
+    public TestBoot(TestVers testVers) {
         super();
-        this.versBootStrap = versBootStrap;
+        this.testVers = testVers;
     }// end of Spring constructor
+
 
     /**
      * Executed on container startup <br>
@@ -66,6 +71,20 @@ public class TestBoot extends ABoot {
 
 
     /**
+     * Regola alcune preferenze iniziali
+     * Se non esistono, le crea
+     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
+     */
+    protected void regolaPreferenze() {
+        super.regolaPreferenze();
+        pref.saveValue(EAPreferenza.loadUtenti.getCode(), true);
+//        pref.saveValue(EAPreferenza.showAnno.getCode(), false);
+//        pref.saveValue(EAPreferenza.showMese.getCode(), false);
+//        pref.saveValue(EAPreferenza.showGiorno.getCode(), false);
+    }// end of method
+
+
+    /**
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
@@ -73,10 +92,12 @@ public class TestBoot extends ABoot {
 
 
     /**
-     * Inizializzazione delle versioni del programma specifico
+     * Inizializzazione delle versioni standard di vaadinflow <br>
+     * Inizializzazione delle versioni del programma specifico <br>
      */
+    @Override
     protected void iniziaVersioni() {
-//        versBootStrap.inizia();
+        testVers.inizia();
     }// end of method
 
 
@@ -91,16 +112,6 @@ public class TestBoot extends ABoot {
 
 
     /**
-     * Regola alcune preferenze iniziali
-     * Se non esistono, le crea
-     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
-     */
-    protected void regolaPreferenze() {
-//        pref.saveValue(EAPreferenza.usaCompany.getCode(), true);
-    }// end of method
-
-
-    /**
      * Questa classe viene invocata PRIMA della chiamata del browser
      * Se NON usa la security, le @Route vengono create solo qui
      * Se USA la security, le @Route vengono sovrascritte all'apertura del brose nella classe AUserDetailsService
@@ -111,6 +122,10 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
+        FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(AnnoViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(MeseViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 

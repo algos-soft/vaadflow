@@ -153,7 +153,7 @@ public class GiornoService extends AService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */
@@ -205,7 +205,7 @@ public class GiornoService extends AService {
         for (HashMap mappaGiorno : lista) {
             titolo = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
             bisestile = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-            mese = (Mese) meseService.findById((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
+            mese = meseService.findByKeyUnica((String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO));
             ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
             numRec = creaIfNotExist(titolo, mese, ordine) ? numRec + 1 : numRec;
         }// end of for cycle

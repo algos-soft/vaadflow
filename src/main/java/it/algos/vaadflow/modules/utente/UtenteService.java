@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.utente;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.company.CompanyService;
@@ -9,7 +10,6 @@ import it.algos.vaadflow.modules.company.EACompany;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleService;
-import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -106,8 +106,37 @@ public class UtenteService extends AService {
     public boolean creaIfNotExist(EAUtente eaUtente) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(eaUtente.userName)) {//@todo migliorare
+        if (isMancaByKeyUnica(eaUtente.userName)) {
             AEntity entity = save(newEntity(eaUtente));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
+    }// end of method
+
+
+    /**
+     * Crea una entity solo se non esisteva <br>
+     *
+     * @param company          (obbligatoria)
+     * @param userName         userName o nickName (obbligatorio, unico)
+     * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
+     *                         con inserimento automatico (prima del 'save') se è nulla
+     * @param ruoli            Ruoli attribuiti a questo utente (lista di valori obbligatoria)
+     *                         con inserimento del solo ruolo 'user' (prima del 'save') se la lista è nulla
+     *                         lista modificabile solo da developer ed admin
+     * @param mail             posta elettronica (facoltativo)
+     *
+     * @return true se la entity è stata creata
+     */
+    public boolean creaIfNotExist(Company company, String userName, String passwordInChiaro, List<Role> ruoli, String mail) {
+        boolean creata = false;
+        AEntity entity = null;
+
+        if (isMancaByKeyUnica(userName)) {
+            entity = newEntity(userName, passwordInChiaro, ruoli, mail);
+            ((ACEntity) entity).company = company;
+            entity = save(entity);
             creata = entity != null;
         }// end of if cycle
 
@@ -154,7 +183,7 @@ public class UtenteService extends AService {
 
         eaCompany = eaUtente.getCompany();
         if (eaCompany != null) {
-            entity.company = (Company) companyService.findById(eaCompany.getCode());
+            entity.company = companyService.findByKeyUnica(eaCompany.getCode());
         }// end of if cycle
 
         return entity;
@@ -166,6 +195,7 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * Properties obbligatorie <br>
      * <p>
+     *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -186,6 +216,7 @@ public class UtenteService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      * <p>
+     *
      * @param userName         userName o nickName (obbligatorio, unico)
      * @param passwordInChiaro password in chiaro (obbligatoria, non unica)
      *                         con inserimento automatico (prima del 'save') se è nulla
@@ -218,12 +249,13 @@ public class UtenteService extends AService {
         return ((Utente) entityBean).getUserName();
     }// end of method
 
+
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */

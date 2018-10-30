@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +73,28 @@ public class PreferenzaService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
+     * @param code        codice di riferimento (obbligatorio)
+     * @param descrizione (facoltativa)
+     * @param type        (obbligatorio) per convertire in byte[] i valori
+     * @param value       (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return true se la entity è stata creata
+     */
+    public boolean creaIfNotExist(String code, String descrizione, EAPrefType type, Object value) {
+        boolean creata = false;
+
+        if (isMancaByKeyUnica(code)) {
+            AEntity entity = save(newEntity(0, code, descrizione, type, value));
+            creata = entity != null;
+        }// end of if cycle
+
+        return creata;
+    }// end of method
+
+
+    /**
+     * Crea una entity solo se non esisteva <br>
+     *
      * @param eaPref: enumeration di dati iniziali di prova
      *
      * @return true se la entity è stata creata
@@ -98,7 +119,7 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public AEntity newEntity() {
-        return newEntity(null, 0, "", "", null, null);
+        return newEntity(0, "", "", null, null);
     }// end of method
 
 
@@ -112,24 +133,7 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Preferenza newEntity(EAPreferenza eaPref) {
-        return newEntity(eaPref.getCode(), eaPref.getDesc(), eaPref.getType(), eaPref.getValue());
-    }// end of method
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * Properties obbligatorie
-     *
-     * @param code        codice di riferimento (obbligatorio)
-     * @param descrizione (facoltativa)
-     * @param type        (obbligatorio) per convertire in byte[] i valori
-     * @param value       (obbligatorio) memorizza tutto in byte[]
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Preferenza newEntity(String code, String descrizione, EAPrefType type, Object value) {
-        return newEntity((Company) null, 0, code, descrizione, type, value);
+        return newEntity(0, eaPref.getCode(), eaPref.getDesc(), eaPref.getType(), eaPref.getValue());
     }// end of method
 
 
@@ -138,7 +142,6 @@ public class PreferenzaService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param company     di appartenenza (obbligatoria, se manca viene recuperata dal login)
      * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)
      * @param code        codice di riferimento (obbligatorio)
      * @param descrizione (facoltativa)
@@ -147,7 +150,7 @@ public class PreferenzaService extends AService {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Preferenza newEntity(Company company, int ordine, String code, String descrizione, EAPrefType type, Object value) {
+    public Preferenza newEntity(int ordine, String code, String descrizione, EAPrefType type, Object value) {
         Preferenza entity = Preferenza.builderPreferenza()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
                 .code(text.isValid(code) ? code : null)
@@ -155,7 +158,6 @@ public class PreferenzaService extends AService {
                 .type(type != null ? type : EAPrefType.string)
                 .value(type != null ? type.objectToBytes(value) : (byte[]) null)
                 .build();
-        entity.company = company;
 
         return (Preferenza) super.addCompany(entity);
     }// end of method
@@ -169,13 +171,14 @@ public class PreferenzaService extends AService {
         return ((Preferenza) entityBean).getCode();
     }// end of method
 
+
     /**
      * Operazioni eseguite PRIMA del save <br>
      * Regolazioni automatiche di property <br>
      * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */
@@ -304,7 +307,6 @@ public class PreferenzaService extends AService {
 //    }// end of method
 
 
-
 //    /**
 //     * Opportunità di controllare (per le nuove schede) che la key unica non esista già. <br>
 //     * Invocato appena prima del save(), solo per una nuova entity <br>
@@ -347,7 +349,7 @@ public class PreferenzaService extends AService {
 
     public Object getValue(String keyCode) {
         Object value = null;
-        Preferenza pref = (Preferenza) findById(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null) {
             value = pref.getType().bytesToObject(pref.value);
@@ -391,8 +393,16 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
     public Preferenza setValue(String keyCode, Object value) {
-        Preferenza pref = (Preferenza) findById(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null) {
             pref.setValue(pref.getType().objectToBytes(value));
@@ -402,8 +412,16 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
     public Preferenza setBool(String keyCode, boolean value) {
-        Preferenza pref = (Preferenza) findById(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null && pref.type == EAPrefType.bool) {
             pref = this.setValue(keyCode, value);
@@ -413,8 +431,16 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
     public Preferenza setInt(String keyCode, int value) {
-        Preferenza pref = (Preferenza) findById(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null && pref.type == EAPrefType.integer) {
             pref = this.setValue(keyCode, value);
@@ -424,8 +450,16 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
     public Preferenza setDate(String keyCode, LocalDateTime value) {
-        Preferenza pref = (Preferenza) findById(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode);
 
         if (pref != null && pref.type == EAPrefType.date) {
             pref = this.setValue(keyCode, value);
@@ -435,13 +469,24 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
-    public void saveValue(String keyCode, Object value) {
-        Preferenza pref = setValue(keyCode, value);
+    /**
+     * Regola il valore della entity e la salva <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return true se la entity è stata salvata
+     */
+    public boolean saveValue(String keyCode, Object value) {
+        boolean salvata = false;
+        Preferenza entity = setValue(keyCode, value);
 
-        if (pref != null) {
-            this.save(pref);
+        if (entity != null) {
+            entity = (Preferenza) this.save(entity);
+            salvata = entity != null;
         }// end of if cycle
 
+        return salvata;
     } // end of method
 
 //    public  Boolean getBool(String code, Object defaultValue) {

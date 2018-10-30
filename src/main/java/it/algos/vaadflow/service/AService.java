@@ -546,7 +546,7 @@ public abstract class AService extends AbstractService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        AEntity entityValida = beforeSave(entityBean, AViewDialog.Operation.EDIT);
+        AEntity entityValida = beforeSave(entityBean, AViewDialog.Operation.Edit);
 
         if (entityValida != null) {
             entityValida = save(null, entityValida);
@@ -568,7 +568,7 @@ public abstract class AService extends AbstractService implements IAService {
      * Può essere sovrascritto - Invocare PRIMA il metodo della superclasse
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */

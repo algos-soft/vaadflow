@@ -156,7 +156,7 @@ public class AnnoService extends AService {
      * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */
@@ -222,7 +222,7 @@ public class AnnoService extends AService {
             titolo = k + EASecolo.TAG_AC;
             secoloEnum = EASecolo.getSecoloAC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = (Secolo) secoloService.findById(titoloSecolo);
+            secolo = secoloService.findByKeyUnica(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle
@@ -234,7 +234,7 @@ public class AnnoService extends AService {
             titolo = k + VUOTA;
             secoloEnum = EASecolo.getSecoloDC(k);
             titoloSecolo = secoloEnum.getTitolo();
-            secolo = (Secolo) secoloService.findById(titoloSecolo);
+            secolo = secoloService.findByKeyUnica(titoloSecolo);
             if (ordine != ANNO_INIZIALE) {
                 numRec = creaIfNotExist(titolo, secolo, ordine) ? numRec + 1 : numRec;
             }// end of if cycle

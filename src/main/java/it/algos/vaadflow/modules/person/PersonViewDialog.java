@@ -2,9 +2,7 @@ package it.algos.vaadflow.modules.person;
 
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
@@ -19,9 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static it.algos.vaadflow.application.FlowCost.FLASH;
@@ -91,7 +86,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
 
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), Operation.EDIT));
+            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), Operation.Edit));
         }// end of if cycle
     }// end of method
 

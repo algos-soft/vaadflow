@@ -91,7 +91,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         contattoDialog.fixConfermaAndNotRegistrazione();
         contattoField = (ATextField) getField(CONTATTO);
         if (contattoField != null) {
-            contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), Operation.EDIT, null, CONTATTO));//todo sistemare il null
+            contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), Operation.Edit, null, CONTATTO));//todo sistemare il null
         }// end of if cycle
 
         indirizzoPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
@@ -103,7 +103,7 @@ public class CompanyViewDialog extends AViewDialog<Company> {
         indirizzoDialog.fixConfermaAndNotRegistrazione();
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), Operation.EDIT, null, INDIRIZZO));//todo sistemare il null
+            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), Operation.Edit, null, INDIRIZZO));//todo sistemare il null
         }// end of if cycle
     }// end of method
 

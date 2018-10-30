@@ -40,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @UIScope
 @Route(value = TAG_PRE, layout = MainLayout.class)
 @Qualifier(TAG_PRE)
-@AIView(roleTypeVisibility = EARoleType.admin)
+@AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class PreferenzaViewList extends AViewList {
@@ -77,7 +77,7 @@ public class PreferenzaViewList extends AViewList {
         super.usaBottoneEdit = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
-        super.isEntityAdmin = true;
+        super.isEntityDeveloper = true;
     }// end of method
 
 }// end of class

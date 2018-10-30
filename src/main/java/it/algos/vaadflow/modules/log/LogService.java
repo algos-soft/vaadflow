@@ -178,7 +178,7 @@ public class LogService extends AService {
      * Controllo della validità delle properties obbligatorie <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */

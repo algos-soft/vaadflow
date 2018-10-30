@@ -137,7 +137,7 @@ public class SecoloService extends AService {
      * Regolazioni automatiche di property <br>
      *
      * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, EDIT)
+     * @param operation  del dialogo (NEW, Edit)
      *
      * @return the modified entity
      */
