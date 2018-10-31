@@ -74,3 +74,10 @@
     @Autowired
     @Qualifier(TASK_FUN)
     private ATask task;
+
+
+    /**
+     * Costruttore @Autowired <br>
+     */
+    public APresenter() {
+    }// end of Spring constructor

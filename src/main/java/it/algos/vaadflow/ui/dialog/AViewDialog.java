@@ -14,6 +14,7 @@ import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.shared.Registration;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -106,10 +107,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected boolean usaDeleteButton;
 
-    /**
-     * Recuperato dalla sessione, quando la @route fa partire la AViewList. Passato poi anche alla AViewDialog.
-     */
-    protected AContext context;
 
 //    /**
 //     * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -149,6 +146,24 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     private Registration registrationForSave;
 
+    /**
+     * Istanza (@VaadinSessionScope) inietta da Spring ed unica nella sessione <br>
+     */
+    @Autowired
+    protected ALogin login;
+
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la UI. <br>
+     * Viene regolato nel service specifico (AVaadinService) <br>
+     */
+    protected AContext context;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Unica per tutta l'applicazione. Usata come libreria. <br>
+     */
+    @Autowired
+    private AVaadinService vaadinService;
 
     /**
      * Constructs a new instance.
@@ -206,6 +221,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @PostConstruct
     protected void initView() {
+
+        //--Login and context della sessione
+        context = vaadinService.fixLoginAndContext(login);
+
         //--Le preferenze standard
         fixPreferenze();
 

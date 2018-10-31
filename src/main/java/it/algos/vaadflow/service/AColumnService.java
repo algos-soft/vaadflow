@@ -91,8 +91,12 @@ public class AColumnService extends AbstractService {
         Class clazz = annotation.getComboClass(entityClazz, propertyName);
 
         if (type == null) {
-            colonna = grid.addColumn(propertyName);
-            colonna.setSortProperty(propertyName);
+            try { // prova ad eseguire il codice
+                colonna = grid.addColumn(propertyName);
+                colonna.setSortProperty(propertyName);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
             return;
         }// end of if cycle
 

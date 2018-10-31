@@ -15,31 +15,20 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.utente.Utente;
-import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.service.AAnnotationService;
-import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.service.AVaadinService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
-
-import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -61,7 +50,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public final static String KEY_MAPPA_CRONO = "crono";
 
-    private ALogin login;
 
     private AAnnotationService annotation = AAnnotationService.getInstance();
 
@@ -69,7 +57,19 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     private ATextService text = ATextService.getInstance();
 
-    private UtenteService utenteService;
+    private ALogin login;
+
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la UI. <br>
+     * Viene regolato nel service specifico (AVaadinService) <br>
+     */
+    private AContext context;
+
+    /**
+     * Service (@Scope = 'singleton') iniettato da StaticContextAccessor e usato come libreria <br>
+     * Unico per tutta l'applicazione. Usato come libreria.
+     */
+    private AVaadinService vaadinService = StaticContextAccessor.getBean(AVaadinService.class);
 
 
     //    public MainLayout(UtenteService utenteService, ALogin login) {
@@ -80,7 +80,10 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         setSpacing(false);
         setPadding(false);
 
-        fixLoginAndContext();
+        //--Login and context della sessione
+        context = vaadinService.fixLoginAndContext(null);
+        login = context.getLogin();
+
         creaAllMenu();
     }// end of method
 
@@ -337,40 +340,5 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         settings.addFavIcon("icon", "/frontend/images/favicons/favicon-96x96.png", "96x96");
     }// end of method
 
-
-    /**
-     * Crea il login ed il context <br>
-     * Controlla che non esista già il context nella vaadSession
-     * (non è chiaro se passa prima da MainLayout o da AViewList) <br>
-     * <p>
-     * Recupera l'user dall'attributo della sessione HttpSession al termine della security <br>
-     * Crea il login <br>
-     * Crea il context <br>
-     * Inserisce il context come attributo nella vaadSession <br>
-     */
-    private void fixLoginAndContext() {
-        AContext context;
-        String uniqueUserName = "";
-        Utente utente;
-        Company company = null;
-        VaadinSession vaadSession = UI.getCurrent().getSession();
-        login = StaticContextAccessor.getBean(ALogin.class);
-
-        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
-        if (context == null) {
-            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession httpSession = attr.getRequest().getSession(true);
-            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
-            User springUser = (User) securityContext.getAuthentication().getPrincipal();
-            uniqueUserName = springUser.getUsername();
-            AMongoService mongo = StaticContextAccessor.getBean(AMongoService.class);
-            utente = (Utente) mongo.findByProperty(Utente.class, "userName", uniqueUserName);
-
-            login.setUtente(utente);
-            company = utente.company;
-            context = new AContext(login, company);
-            vaadSession.setAttribute(KEY_CONTEXT, context);
-        }// end of if cycle
-    }// end of method
 
 }// end of class

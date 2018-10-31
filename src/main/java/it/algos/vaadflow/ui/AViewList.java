@@ -1,6 +1,5 @@
 package it.algos.vaadflow.ui;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
@@ -17,14 +16,11 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.footer.AFooter;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -32,18 +28,10 @@ import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
-
-import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
-import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
 
 /**
  * Project it.algos.vaadflow
@@ -92,17 +80,12 @@ import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
 @Slf4j
-public abstract class  AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
+public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
 
     protected final static String EDIT_NAME = "Edit";
 
     protected final static String SHOW_NAME = "Show";
 
-    /**
-     * Viene recuperato dal context della sessione <br>
-     */
-    @Autowired
-    public ALogin login;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
@@ -148,6 +131,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
 
     @Autowired
     protected UtenteService utenteService;
+
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -310,9 +294,23 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
     protected boolean usaRefresh;
 
     /**
-     * Recuperato dalla sessione, quando la @route fa partire la AViewList. Passato poi anche alla AViewDialog.
+     * Istanza (@VaadinSessionScope) inietta da Spring ed unica nella sessione <br>
+     */
+    @Autowired
+    protected ALogin login;
+
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la UI. <br>
+     * Viene regolato nel service specifico (AVaadinService) <br>
      */
     protected AContext context;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Unica per tutta l'applicazione. Usata come libreria. <br>
+     */
+    @Autowired
+    private AVaadinService vaadinService;
 
 
     /**
@@ -346,7 +344,7 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
         this.removeAll();
 
         //--Login and context della sessione
-        fixLoginAndContext();
+        context = vaadinService.fixLoginAndContext(login);
 
         //--Le preferenze standard
         fixPreferenze();
@@ -804,39 +802,6 @@ public abstract class  AViewList extends VerticalLayout implements IAView, Befor
             }// fine del blocco try-catch
         }// end of if cycle
 
-    }// end of method
-
-
-    /**
-     * Crea il login ed il context <br>
-     * Controlla che non esista già il context nella vaadSession
-     * (non è chiaro se passa prima da MainLayout o da AViewList) <br>
-     * <p>
-     * Recupera l'user dall'attributo della sessione HttpSession al termine della security <br>
-     * Crea il login <br>
-     * Crea il context <br>
-     * Inserisce il context come attributo nella vaadSession <br>
-     */
-    private void fixLoginAndContext() {
-        String uniqueUserName = "";
-        Utente utente;
-        Company company;
-        VaadinSession vaadSession = UI.getCurrent().getSession();
-
-        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
-        if (context == null) {
-            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession httpSession = attr.getRequest().getSession(true);
-            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
-            User springUser = (User) securityContext.getAuthentication().getPrincipal();
-            uniqueUserName = springUser.getUsername();
-            utente = utenteService.findByKeyUnica(uniqueUserName);
-
-            login.setUtente(utente);
-            company = utente.company;
-            context = new AContext(login, company);
-            vaadSession.setAttribute(KEY_CONTEXT, context);
-        }// end of if cycle
     }// end of method
 
 
