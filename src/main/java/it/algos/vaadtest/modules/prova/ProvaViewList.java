@@ -66,4 +66,14 @@ public class ProvaViewList extends AViewList {
     }// end of Spring constructor
 
 
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+    }
+
 }// end of class

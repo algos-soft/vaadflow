@@ -4,6 +4,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
@@ -285,7 +286,7 @@ public class PersonService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         if (((Person) entityBean).usaSuperClasse) {
             entityBean = utenteService.beforeSave(entityBean, operation);
         }// end of if cycle

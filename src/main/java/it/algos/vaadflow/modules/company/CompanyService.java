@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.company;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.EAAddress;
@@ -207,7 +208,7 @@ public class CompanyService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Company entity = (Company) super.beforeSave(entityBean, operation);
 
         if (text.isValid(entity.descrizione)) {

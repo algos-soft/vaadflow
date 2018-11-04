@@ -6,6 +6,9 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -15,6 +18,7 @@ import com.vaadin.flow.shared.Registration;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
@@ -108,17 +112,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected boolean usaDeleteButton;
 
 
-//    /**
-//     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-//     */
-//    @Autowired
-//    protected ALogin login;
-
-    /**
-     * Service iniettato da Spring (@Scope = 'singleton'). Unica per tutta l'applicazione. Usata come libreria.
-     */
-//    @Autowired
-//    public CompanyService companyService;
     protected IAService service;
 
     protected IAPresenter presenter;
@@ -134,17 +127,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected T currentItem;
 
-    protected Operation operation;
 
-    protected BiConsumer<T, Operation> itemSaver;
+    protected BiConsumer<T, EAOperation> itemSaver;
 
     protected AComboBox companyField;
-
-    private Consumer<T> itemDeleter;
-
-    private String itemType;
-
-    private Registration registrationForSave;
 
     /**
      * Istanza (@VaadinSessionScope) inietta da Spring ed unica nella sessione <br>
@@ -158,12 +144,21 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected AContext context;
 
+    protected EAOperation operation;
+
+    private Consumer<T> itemDeleter;
+
+    private String itemType;
+
+    private Registration registrationForSave;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      * Unica per tutta l'applicazione. Usata come libreria. <br>
      */
     @Autowired
     private AVaadinService vaadinService;
+
 
     /**
      * Constructs a new instance.
@@ -183,7 +178,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param itemDeleter funzione associata al bottone 'annulla'
      */
     @Deprecated
-    public AViewDialog(IAPresenter presenter, BiConsumer<T, Operation> itemSaver, Consumer<T> itemDeleter) {
+    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         this(presenter, itemSaver, itemDeleter, null, false);
     }// end of constructor
 
@@ -198,7 +193,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param confermaSenzaRegistrare cambia il testo del bottone 'Registra' in 'Conferma'
      */
     @Deprecated
-    public AViewDialog(IAPresenter presenter, BiConsumer<T, Operation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
+    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
         this.presenter = presenter;
         this.service = presenter.getService();
         this.itemSaver = itemSaver;
@@ -231,7 +226,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
         fixPreferenzeSpecifiche();
 
-
         initTitle();
         initFormLayout();
         initButtonBar();
@@ -245,17 +239,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         addOpenedChangeListener(event -> {
             if (!isOpened()) {
                 getElement().removeFromParent();
-            }
-        });
+            }// end of if cycle
+        });//end of lambda expressions and anonymous inner class
     }// end of method
 
 
-    public void fixFunzioni(BiConsumer<T, AViewDialog.Operation> itemSaver, Consumer<T> itemDeleter) {
+    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         fixFunzioni(itemSaver, itemDeleter, null);
     }// end of method
 
 
-    public void fixFunzioni(BiConsumer<T, AViewDialog.Operation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
+    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
         this.itemAnnulla = itemAnnulla;
@@ -293,7 +287,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     private void initTitle() {
         add(titleField);
-    }
+    }// end of method
 
 
     private void initFormLayout() {
@@ -309,25 +303,31 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected void initButtonBar() {
         buttonBar = new HorizontalLayout();
         buttonBar.setClassName("buttons");
+        buttonBar.setPadding(false);
         buttonBar.setSpacing(true);
-        buttonBar.setMargin(true);
+        buttonBar.setMargin(false);
 
         if (usaSaveButton) {
             saveButton.getElement().setAttribute("theme", "primary");
+            saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
             buttonBar.add(saveButton);
         }// end of if cycle
 
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
+            cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
             buttonBar.add(cancelButton);
         }// end of if cycle
 
         if (usaDeleteButton) {
             deleteButton.addClickListener(e -> deleteClicked());
-            deleteButton.getElement().setAttribute("theme", "tertiary danger");
+            deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
+//            deleteButton.getElement().setAttribute("theme", "tertiary danger");
+            deleteButton.getElement().setAttribute("theme", "error");
             buttonBar.add(deleteButton);
         }// end of if cycle
 
+        add(new H3()); //--spazio per distanziare i bottoni dai campi
         add(buttonBar);
     }// end of method
 
@@ -520,7 +520,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param operation The operation being performed on the item
      */
     @Override
-    public void open(AEntity item, AViewDialog.Operation operation) {
+    public void open(AEntity item, EAOperation operation) {
         open(item, operation, (AContext) null);
     }// end of method
 
@@ -533,7 +533,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param context   legato alla sessione
      */
     @Override
-    public void open(AEntity item, Operation operation, AContext context) {
+    public void open(AEntity item, EAOperation operation, AContext context) {
         open(item, operation, context, "");
     }// end of method
 
@@ -549,7 +549,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param title     of the window dialog
      */
     @Override
-    public void open(AEntity item, Operation operation, AContext context, String title) {
+    public void open(AEntity item, EAOperation operation, AContext context, String title) {
         if (((AService) service).mancaCompanyNecessaria()) {
             Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
@@ -663,7 +663,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Azione proveniente dal click sul bottone Registra
      * Inizio delle operazioni di registrazione
      */
-    protected void saveClicked(AViewDialog.Operation operation) {
+    protected void saveClicked(EAOperation operation) {
         boolean isValid = false;
         if (currentItem != null) {
             isValid = binder.writeBeanIfValid(currentItem);
@@ -762,7 +762,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected final FormLayout getFormLayout() {
         return formLayout;
-    }
+    }// end of method
 
 
     /**
@@ -808,52 +808,5 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         this.presenter = presenter;
     }// end of method
 
-
-    /**
-     * The operations supported by this dialog.
-     * Delete is enabled when editing an already existing item.
-     */
-    public enum Operation {
-        AddNew("Add New", "add", true, false),
-        Edit("Edit", "edit", true, true),
-        EditNoDelete("Edit", "edit", true, false),
-        ShowOnly("Mostra", "mostra", false, false);
-
-        private final String nameInTitle;
-
-        private final String nameInText;
-
-        private final boolean saveEnabled;
-
-        private final boolean deleteEnabled;
-
-
-        Operation(String nameInTitle, String nameInText, boolean saveEnabled, boolean deleteEnabled) {
-            this.nameInTitle = nameInTitle;
-            this.nameInText = nameInText;
-            this.saveEnabled = saveEnabled;
-            this.deleteEnabled = deleteEnabled;
-        }
-
-
-        public String getNameInTitle() {
-            return nameInTitle;
-        }// end of method
-
-
-        public String getNameInText() {
-            return nameInText;
-        }// end of method
-
-
-        public boolean isSaveEnabled() {
-            return saveEnabled;
-        }// end of method
-
-
-        public boolean isDeleteEnabled() {
-            return deleteEnabled;
-        }// end of method
-    }// end of enum
 
 }// end of class

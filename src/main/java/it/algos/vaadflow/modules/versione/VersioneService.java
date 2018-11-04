@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.versione;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.AService;
@@ -212,7 +213,7 @@ public class VersioneService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Versione entity = (Versione) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.titolo) || text.isEmpty(entity.descrizione) || entity.timestamp == null) {

@@ -3,6 +3,7 @@ package it.algos.vaadflow.ui.dialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import lombok.extern.slf4j.Slf4j;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
@@ -27,7 +28,7 @@ public class ADialog extends Dialog implements IADialog {
      * @param operation The operation being performed on the item
      */
     @Override
-    public void open(AEntity item, AViewDialog.Operation operation) {
+    public void open(AEntity item, EAOperation operation) {
     }// end of method
 
     /**
@@ -38,7 +39,7 @@ public class ADialog extends Dialog implements IADialog {
      * @param context   legato alla sessione
      */
     @Override
-    public void open(AEntity item, AViewDialog.Operation operation, AContext context) {
+    public void open(AEntity item, EAOperation operation, AContext context) {
     }// end of method
 
     /**
@@ -50,7 +51,7 @@ public class ADialog extends Dialog implements IADialog {
      * @param title     of the window dialog
      */
     @Override
-    public void open(AEntity item, AViewDialog.Operation operation, AContext context, String title) {
+    public void open(AEntity item, EAOperation operation, AContext context, String title) {
     }// end of method
 
 }// end of class

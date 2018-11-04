@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.secolo;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -142,7 +143,7 @@ public class SecoloService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Secolo entity = (Secolo) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.titolo) || entity.inizio == 0 || entity.fine == 0) {

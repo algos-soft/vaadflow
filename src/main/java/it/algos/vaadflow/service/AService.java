@@ -11,11 +11,13 @@ import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -242,6 +244,48 @@ public abstract class AService extends AbstractService implements IAService {
         }// end of if/else cycle
 
         return lista;
+    }// end of method
+
+
+    /**
+     * Returns only entities of the requested page.
+     * <p>
+     * Senza filtri
+     * Ordinati per sort
+     * <p>
+     * Methods of this library return Iterable<T>, while the rest of my code expects Collection<T>
+     * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
+     * Eseguo qui la conversione, che rimane trasparente al resto del programma
+     *
+     * @param offset numero di pagine da saltare, parte da zero
+     * @param size   numero di elementi per ogni pagina
+     *
+     * @return all entities
+     */
+    public List<? extends AEntity> findAll(int offset, int size) {
+        return findAll(offset, size, (Sort) null);
+    }// end of method
+
+
+    /**
+     * Returns only entities of the requested page.
+     * <p>
+     * Senza filtri
+     * Ordinati per sort
+     * <p>
+     * Methods of this library return Iterable<T>, while the rest of my code expects Collection<T>
+     * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
+     * Eseguo qui la conversione, che rimane trasparente al resto del programma
+     *
+     * @param offset numero di pagine da saltare, parte da zero
+     * @param size   numero di elementi per ogni pagina
+     * @param sort   ordinamento degli elementi
+     *
+     * @return all entities
+     */
+    public List<? extends AEntity> findAll(int offset, int size, Sort sort) {
+        Pageable page = PageRequest.of(offset, size);
+        return repository.findAll(page).getContent();
     }// end of method
 
 
@@ -478,7 +522,7 @@ public abstract class AService extends AbstractService implements IAService {
         EACompanyRequired tableCompanyRequired;
         Company company = null;
 
-        //--se la EntityClass non estende ACCompany, non deve fare nulla
+        //--se la EntityClass non estende ACEntity, non deve fare nulla
         if ((entityBean instanceof ACEntity)) {
             company = ((ACEntity) entityBean).company;
         } else {
@@ -546,7 +590,7 @@ public abstract class AService extends AbstractService implements IAService {
      */
     @Override
     public AEntity save(AEntity entityBean) {
-        AEntity entityValida = beforeSave(entityBean, AViewDialog.Operation.Edit);
+        AEntity entityValida = beforeSave(entityBean, EAOperation.edit);
 
         if (entityValida != null) {
             entityValida = save(null, entityValida);
@@ -572,7 +616,7 @@ public abstract class AService extends AbstractService implements IAService {
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         return creaIdKeySpecifica(entityBean);
     }// end of method
 

@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.role;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -140,7 +141,7 @@ public class RoleService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Role entity = (Role) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.code)) {

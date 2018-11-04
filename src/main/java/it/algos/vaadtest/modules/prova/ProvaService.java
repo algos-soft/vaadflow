@@ -1,22 +1,20 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.AService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -74,6 +72,7 @@ public class ProvaService extends AService {
         this.repository = (ProvaRepository) repository;
     }// end of Spring constructor
 
+
     /**
      * Crea una entity e la registra <br>
      *
@@ -85,11 +84,11 @@ public class ProvaService extends AService {
         return (Prova) save(newEntity(0, code));
     }// end of method
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Eventuali regolazioni iniziali delle property <br>
      * Senza properties per compatibilità con la superclasse <br>
-     *
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -154,6 +153,7 @@ public class ProvaService extends AService {
         return ordine + 1;
     }// end of method
 
+
     /**
      * Returns all entities of the type <br>
      * <p>
@@ -163,15 +163,18 @@ public class ProvaService extends AService {
      * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
      * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
      *
-     *
      * @return all ordered entities
      */
-    @Override
-    public List<? extends AEntity> findAll() {
-        VaadinSession vaadSession = UI.getCurrent().getSession();
-        AContext context2 = getContext();
+    public List<? extends AEntity> findAll2() {
 
-        return super.findAll();
+        //    db.collection.find().skip(20).limit(10).sort({"xxx":1})
+
+
+        Pageable page = PageRequest.of(0, 2);
+        Object lista = repository.findAll(page);
+        Object listaAll = super.findAll();
+
+        return repository.findAll(page).getContent();
     }
 
 
@@ -184,7 +187,8 @@ public class ProvaService extends AService {
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         return super.beforeSave(entityBean, operation);
     }// end of method
+
 }// end of class

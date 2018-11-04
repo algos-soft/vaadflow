@@ -4,6 +4,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
@@ -86,7 +87,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
 
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), Operation.Edit));
+            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit));
         }// end of if cycle
     }// end of method
 
@@ -113,7 +114,7 @@ public class PersonViewDialog extends AViewDialog<Person> {
     }// end of method
 
 
-    private void saveUpdate(Address entityBean, AViewDialog.Operation operation) {
+    private void saveUpdate(Address entityBean, EAOperation operation) {
         indirizzoTemporaneo = entityBean;
         indirizzoField.setValue(entityBean.toString());
         focusOnPost(INDIRIZZO);

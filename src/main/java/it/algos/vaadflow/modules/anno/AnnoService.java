@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.anno;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
@@ -161,7 +162,7 @@ public class AnnoService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Anno entity = (Anno) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.titolo) || entity.getSecolo() == null || entity.ordine == 0) {

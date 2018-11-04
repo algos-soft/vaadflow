@@ -2,8 +2,9 @@ package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.Company;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -81,17 +82,54 @@ public interface IAService {
 
 
     /**
+     * Returns only entities of the requested page.
+     * <p>
+     * Senza filtri
+     * Ordinati per sort
+     * <p>
+     * Methods of this library return Iterable<T>, while the rest of my code expects Collection<T>
+     * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
+     * Eseguo qui la conversione, che rimane trasparente al resto del programma
+     *
+     * @param offset numero di pagine da saltare, parte da zero
+     * @param size   numero di elementi per ogni pagina
+     *
+     * @return all entities
+     */
+    public List<? extends AEntity> findAll(int offset, int size);
+
+
+    /**
+     * Returns only entities of the requested page.
+     * <p>
+     * Senza filtri
+     * Ordinati per sort
+     * <p>
+     * Methods of this library return Iterable<T>, while the rest of my code expects Collection<T>
+     * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
+     * Eseguo qui la conversione, che rimane trasparente al resto del programma
+     *
+     * @param offset numero di pagine da saltare, parte da zero
+     * @param size   numero di elementi per ogni pagina
+     * @param sort   ordinamento degli elementi
+     *
+     * @return all entities
+     */
+    public List<? extends AEntity> findAll(int offset, int size, Sort sort);
+
+
+    /**
      * Fetches the entities whose 'main text property' matches the given filter text.
      * <p>
      * The matching is case insensitive. When passed an empty filter text,
      * the method returns all categories. The returned list is ordered by name.
      * The 'main text property' is different in each entity class and chosen in the specific subclass
      *
-     * @param filter  the filter text
+     * @param filter the filter text
      *
      * @return the list of matching entities
      */
-    public List<? extends AEntity> findFilter( String filter);
+    public List<? extends AEntity> findFilter(String filter);
 
 
     /**
@@ -104,7 +142,7 @@ public interface IAService {
      *
      * @return the modified entity
      */
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation);
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation);
 
 
     /**
@@ -271,6 +309,6 @@ public interface IAService {
      *
      * @return context della sessione
      */
-    public AContext getContext() ;
+    public AContext getContext();
 
-    }// end of interface
+}// end of interface

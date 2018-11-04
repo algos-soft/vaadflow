@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.log;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
 import it.algos.vaadflow.service.AService;
@@ -183,7 +184,7 @@ public class LogService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Log entity = (Log) super.beforeSave(entityBean, operation);
 
         if (entity.livello == null || entity.getType() == null || text.isEmpty(entity.descrizione)) {

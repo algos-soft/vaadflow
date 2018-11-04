@@ -1,13 +1,10 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -50,11 +47,13 @@ public class AReflectionService extends AbstractService {
      */
     private static final AReflectionService INSTANCE = new AReflectionService();
 
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
     private AReflectionService() {
     }// end of constructor
+
 
     /**
      * Gets the unique instance of this Singleton.
@@ -91,7 +90,8 @@ public class AReflectionService extends AbstractService {
     /**
      * Valore della property di una classe
      *
-     * @param entityBean oggetto su cui operare la riflessione
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
      */
     public Object getPropertyValue(final AEntity entityBean, final String publicFieldName) {
         Object value = null;
@@ -110,6 +110,30 @@ public class AReflectionService extends AbstractService {
         }// fine del blocco try-catch
 
         return value;
+    }// end of method
+
+
+    /**
+     * Valore della property di una classe
+     *
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
+     * @param value           da inserire nella property
+     */
+    public boolean setPropertyValue(final AEntity entityBean, final String publicFieldName, Object value) {
+        boolean status = false;
+        Field field = getField(entityBean.getClass(), publicFieldName);
+
+        if (field != null) {
+            try { // prova ad eseguire il codice
+                field.set(entityBean, value);
+                status = true;
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        return status;
     }// end of method
 
 

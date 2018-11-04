@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.giorno;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.service.ADateService;
@@ -158,7 +159,7 @@ public class GiornoService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Giorno entity = (Giorno) super.beforeSave(entityBean, operation);
 
         if (entity.getMese() == null || entity.ordine == 0 || text.isEmpty(entity.titolo)) {

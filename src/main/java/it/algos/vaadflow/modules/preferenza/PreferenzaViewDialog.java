@@ -4,6 +4,7 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -140,7 +141,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
 
         AComboBox comboType = (AComboBox) getField(TIPO_FIELD_NAME);
         comboType.setValue(type);
-        if (operation == Operation.AddNew) {
+        if (operation == EAOperation.addNew) {
             comboType.setEnabled(true);
             comboType.addValueChangeListener(e -> sincro((EAPrefType) e.getValue()));
         } else {

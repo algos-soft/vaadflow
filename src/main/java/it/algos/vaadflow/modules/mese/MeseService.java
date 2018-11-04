@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.mese;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -140,7 +141,7 @@ public class MeseService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         Mese entity = (Mese) super.beforeSave(entityBean, operation);
 
         if (text.isEmpty(entity.titoloLungo) || text.isEmpty(entity.titoloBreve) || entity.giorni == 0) {

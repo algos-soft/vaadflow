@@ -2,8 +2,8 @@ package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.AService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -183,7 +183,7 @@ public class PreferenzaService extends AService {
      * @return the modified entity
      */
     @Override
-    public AEntity beforeSave(AEntity entityBean, AViewDialog.Operation operation) {
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         return super.beforeSave(entityBean, operation);
     }// end of method
 
@@ -375,10 +375,6 @@ public class PreferenzaService extends AService {
         boolean status = false;
         Object value = getValue(keyCode);
 
-        if (value != null && value instanceof Boolean) {
-            status = (boolean) value;
-        }// end of if cycle
-
         if (value != null) {
             if (value instanceof Boolean) {
                 status = (boolean) value;
@@ -390,6 +386,24 @@ public class PreferenzaService extends AService {
         }// end of if/else cycle
 
         return status;
+    } // end of method
+
+
+    public int getInt(String keyCode) {
+        int valoreIntero = 0;
+        Object value = getValue(keyCode);
+
+        if (value != null) {
+            if (value instanceof Integer) {
+                valoreIntero = (Integer) value;
+            } else {
+                log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
+            }// end of if/else cycle
+        } else {
+            log.warn("Algos - Preferenze. Non esiste la preferenza: " + keyCode);
+        }// end of if/else cycle
+
+        return valoreIntero;
     } // end of method
 
 
