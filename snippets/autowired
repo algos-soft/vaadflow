@@ -61,7 +61,7 @@
     protected RoleData roleData;
 
     /**
-     * Istanza (@Scope = 'prototype') inietta da Spring ogni volta che necessita<br>
+     * Istanza (@Scope = 'prototype') inietta da Spring ogni volta che necessita <br>
      */
     @Autowired
     private TurnoCell turno;

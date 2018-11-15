@@ -130,7 +130,8 @@ public class FlowCost {
     public final static String USA_CHECK_BOX = "usaCheckbox";
     public final static String USA_COMPANY = "usaCompany";
     public final static String USA_LOG_MAIL = "usaLogMail";
-    public final static String LOG_MAIL_ADDRESS = "logMailAddress";
+    public final static String MAIL_FROM = "mailFrom";
+    public final static String MAIL_TO = "mailTo";
     public final static String MAX_RIGHE_GRID = "maxRigheGrid";
 
     // moduli visibili

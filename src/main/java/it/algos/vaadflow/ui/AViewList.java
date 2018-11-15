@@ -645,7 +645,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 break;
             default:
                 if (isPagination) {
-                    testo += "Collezione di " + limit + " elementi su " + numFormattato + " totali";
+                    testo += "Collezione di " + limit + " elementi su " + numFormattato + " totali. ";
                 } else {
                     testo += "Collezione di " + numFormattato + " elementi";
                 }// end of if/else cycle
@@ -731,8 +731,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             return;
         }// end of if cycle
 
+
         int numRecCollezione = service.count();
-        final String mess = "Gli elementi vengono mostrati divisi in pagine. Con i bottoni ci si muove avanti ed indietro, una pagina alla volta. Oppure si inserisce il numero della pagina desiderata.";
+        final String mess = "Gli elementi vengono mostrati divisi in pagine da " + limit + " elementi ciascuna. Con i bottoni (-) e (+) ci si muove avanti ed indietro, una pagina alla volta. Oppure si inserisce il numero della pagina desiderata.";
 
         if (numRecCollezione < limit) {
             isPagination = false;

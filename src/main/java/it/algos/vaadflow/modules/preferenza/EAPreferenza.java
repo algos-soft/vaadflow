@@ -34,7 +34,8 @@ public enum EAPreferenza {
     showGiorno(FlowCost.SHOW_GIORNO, show(FlowCost.TAG_GIO), EAPrefType.bool, false),
     loadUtenti(FlowCost.LOAD_UTENTI, "Flag per caricare gli utenti di prova allo startup del programma. Di default false.", EAPrefType.bool, false),
     usaLogMail(FlowCost.USA_LOG_MAIL, "Uso della mail spedita da un log. Di default false", EAPrefType.bool, false),
-    logMailAddress(FlowCost.LOG_MAIL_ADDRESS, "Email a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),
+    mailFrom(FlowCost.MAIL_FROM, "Email di default da cui partono i log", EAPrefType.string, "info@algos.it"),
+    mailTo(FlowCost.MAIL_TO, "Email di default a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),
     maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Elementi da visualizzare in ogni pagina della Grid", EAPrefType.integer, 20),
     ;
 

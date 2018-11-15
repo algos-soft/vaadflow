@@ -7,7 +7,6 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import it.algos.vaadflow.annotation.AIField;
-import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.ui.fields.*;
@@ -60,11 +59,13 @@ public class AFieldService extends AbstractService {
 //    @Autowired
 //    private AConverterPrefByte prefConverter;
 
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
     private AFieldService() {
     }// end of constructor
+
 
     /**
      * Gets the unique instance of this Singleton.
@@ -84,11 +85,11 @@ public class AFieldService extends AbstractService {
      * @param binderClass  della Entity di riferimento
      * @param propertyName della property
      */
-    public AbstractField create( Binder binder, Class binderClass, String propertyName) {
+    public AbstractField create(Binder binder, Class binderClass, String propertyName) {
         Field reflectionJavaField = reflection.getField(binderClass, propertyName);
 
         if (reflectionJavaField != null) {
-            return create( binder, reflectionJavaField);
+            return create(binder, reflectionJavaField);
         } else {
             return null;
         }// end of if/else cycle
@@ -102,7 +103,7 @@ public class AFieldService extends AbstractService {
      * @param binder              collegamento tra i fields e la entityBean
      * @param reflectionJavaField di riferimento per estrarre le Annotation
      */
-    public AbstractField create( Binder binder, Field reflectionJavaField) {
+    public AbstractField create(Binder binder, Field reflectionJavaField) {
         AbstractField field = null;
         String fieldName = reflectionJavaField.getName();
 //        int minDefault = 3;
@@ -141,7 +142,9 @@ public class AFieldService extends AbstractService {
         if (type == null) {
             field = new ATextField(caption.equals("") ? "noname" : caption);
             field.setReadOnly(false);
-            binder.forField(field).bind(fieldName);
+            if (binder != null) {
+                binder.forField(field).bind(fieldName);
+            }// end of if cycle
             return field;
         }// end of if cycle
 
@@ -151,37 +154,48 @@ public class AFieldService extends AbstractService {
                 if (notNull) {
                     if (min > 0) {
                         stringValidator = new StringLengthValidator(messageSize, min, null);
-                        binder
-                                .forField(field)
-                                .withValidator(nullValidator)
-                                .withValidator(stringValidator)
-                                .bind(fieldName);
+                        if (binder != null) {
+                            binder
+                                    .forField(field)
+                                    .withValidator(nullValidator)
+                                    .withValidator(stringValidator)
+                                    .bind(fieldName);
+                        }// end of if cycle
                     } else {
-                        binder
-                                .forField(field)
-                                .withValidator(nullValidator)
-                                .bind(fieldName);
+                        if (binder != null) {
+                            binder
+                                    .forField(field)
+                                    .withValidator(nullValidator)
+                                    .bind(fieldName);
+                        }// end of if cycle
                     }// end of if/else cycle
                 } else {
                     if (min > 0) {
                         stringValidator = new StringLengthValidator(messageSize, min, null);
-                        binder.forField(field).withValidator(stringValidator).bind(fieldName);
+                        if (binder != null) {
+                            binder.forField(field).withValidator(stringValidator).bind(fieldName);
+                        }// end of if cycle
                     } else {
-                        binder.forField(field).bind(fieldName);
+                        if (binder != null) {
+                            binder.forField(field).bind(fieldName);
+                        }// end of if cycle
                     }// end of if/else cycle
                 }// end of if/else cycle
-
                 if (focus) {
                     ((ATextField) field).focus();
                 }// end of if cycle
                 break;
             case email:
                 field = new ATextField(caption);
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case textarea:
                 field = new ATextArea(caption);
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 field.setReadOnly(false);
                 break;
             case integer:
@@ -189,11 +203,12 @@ public class AFieldService extends AbstractService {
                 message = text.isValid(message) ? message : mess;
                 integerConverter = new StringToIntegerConverter(0, message);
                 field = new AIntegerField(caption);
-                binder.forField(field)
-                        .withConverter(integerConverter)
-                        .withValidator(integerZeroValidator)
-                        .bind(fieldName);
-
+                if (binder != null) {
+                    binder.forField(field)
+                            .withConverter(integerConverter)
+                            .withValidator(integerZeroValidator)
+                            .bind(fieldName);
+                }// end of if cycle
                 if (focus) {
                     ((AIntegerField) field).focus();
                 }// end of if cycle
@@ -203,11 +218,12 @@ public class AFieldService extends AbstractService {
                 message = text.isValid(message) ? message : mess;
                 longConverter = new StringToLongConverter(0L, message);
                 field = new AIntegerField(caption);
-                binder.forField(field)
-                        .withConverter(longConverter)
-                        .withValidator(longZeroValidator)
-                        .bind(fieldName);
-
+                if (binder != null) {
+                    binder.forField(field)
+                            .withConverter(longConverter)
+                            .withValidator(longZeroValidator)
+                            .bind(fieldName);
+                }// end of if cycle
                 if (focus) {
                     ((AIntegerField) field).focus();
                 }// end of if cycle
@@ -222,7 +238,9 @@ public class AFieldService extends AbstractService {
                     }// end of if cycle
                 }// end of if cycle
                 field.setReadOnly(false);
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case enumeration:
                 field = new AComboBox(caption);
@@ -232,15 +250,21 @@ public class AFieldService extends AbstractService {
                         ((AComboBox) field).setItems(items);
                     }// end of if cycle
                 }// end of if cycle
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case checkbox:
                 field = new Checkbox(caption);
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case localdate:
                 field = new ADatePicker(caption);
-                binder.forField(field).bind(fieldName);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case localdatetime:
                 //@todo andrà inserito quando ci sarà un DatePicker che accetti i LocalDateTime

@@ -407,6 +407,24 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
+    public String getStr(String keyCode) {
+        String valoreTesto = "";
+        Object value = getValue(keyCode);
+
+        if (value != null) {
+            if (value instanceof String) {
+                valoreTesto = (String) value;
+            } else {
+                log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
+            }// end of if/else cycle
+        } else {
+            log.warn("Algos - Preferenze. Non esiste la preferenza: " + keyCode);
+        }// end of if/else cycle
+
+        return valoreTesto;
+    } // end of method
+
+
     /**
      * Regola il valore della entity che NON viene salvata <br>
      *

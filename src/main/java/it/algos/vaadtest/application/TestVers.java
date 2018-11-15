@@ -42,7 +42,8 @@ public class TestVers extends AVers {
      * L'ordine di inserimento è FONDAMENTALE
      */
     public int inizia() {
-        int k = super.inizia();
+        int k = 0;
+        super.inizia();
         codeProject = CODE_PROJECT;
 
 //        //--programma di test

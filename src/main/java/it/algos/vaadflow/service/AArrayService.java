@@ -25,7 +25,6 @@ import java.util.*;
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, basta il 'pattern') <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
- * <p>
  */
 @Service
 @Slf4j
