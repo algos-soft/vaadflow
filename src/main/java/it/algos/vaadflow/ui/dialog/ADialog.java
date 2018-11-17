@@ -21,15 +21,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 @Slf4j
 public class ADialog extends Dialog implements IADialog {
 
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation) {
-    }// end of method
 
     /**
      * Opens the given item for editing in the dialog.

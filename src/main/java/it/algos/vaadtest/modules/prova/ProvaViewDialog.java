@@ -1,5 +1,7 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -10,6 +12,7 @@ import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AColumnService;
 import it.algos.vaadflow.service.AMailService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -42,9 +46,6 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @AIScript(sovrascrivibile = true)
 public class ProvaViewDialog extends AViewDialog<Prova> {
 
-    @Autowired
-    protected AMailService posta;
-
    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
@@ -58,21 +59,52 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     }// end of Spring constructor
 
 
+//    @Override
+//    protected void initButtonBar() {
+//        super.initButtonBar();
+//    }
+
+
+
 
     /**
-     * Opens the given item for editing in the dialog.
-     * Legge la entityBean, ed inserisce i valori nel binder
-     * Legge la entityBean ed inserisce nella UI i valori di eventuali fields NON associati al binder
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     * @param title     of the window dialog
+     * Costruisce eventuali fields specifici (costruiti non come standard type)
+     * Aggiunge i fields specifici al binder
+     * Aggiunge i fields specifici alla fieldMap
+     * Sovrascritto nella sottoclasse
      */
     @Override
-    public void open(AEntity item, EAOperation operation, AContext context, String title) {
-        posta.send("Seconda","Spedita alle: "+ LocalDateTime.now().toString());
-        super.open(item, operation, context, title);
-    }// end of method
+    protected void addSpecificAlgosFields() {
+        super.addSpecificAlgosFields();
+        AbstractField propertyField = null;
+        propertyField = new ATextField("Alfa");
+        if (propertyField != null) {
+            fieldMap.put("alfa", propertyField);
+        }// end of if cycle
+    }
+
+
+
+    /**
+     * Eventuali aggiustamenti finali al layout
+     * Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
+     * Sovrascritto nella sottoclasse
+     */
+    @Override
+    protected void fixLayout() {
+        getFormLayout().add(new Label("Prova"));
+
+    }
+
+
+    /**
+     * Recupera il field dal nome
+     *
+     * @param publicFieldName
+     */
+    @Override
+    protected AbstractField getField(String publicFieldName) {
+        return super.getField(publicFieldName);
+    }
 
 }// end of class

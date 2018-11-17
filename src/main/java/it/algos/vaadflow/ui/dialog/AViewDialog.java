@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -60,9 +61,23 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected final Button deleteButton = new Button(DELETE);
 
+
+    /**
+     * Titolo del dialogo <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected final H2 titleLayout = new H2();
+
+    /**
+     * Barra dei bottoni di comando <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected final HorizontalLayout bottomLayout = new HorizontalLayout();
+
+
     protected final FormLayout formLayout = new FormLayout();
 
-    private final H2 titleField = new H2();
+//    protected final HorizontalLayout buttonBar = new HorizontalLayout();
 
     private final String confirmText = "Conferma";
 
@@ -82,7 +97,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     @Autowired
     public ADateService date;
 
-    protected HorizontalLayout buttonBar;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -203,7 +217,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         this.fieldService = presenter.getService().getFieldService();
 
         if (confermaSenzaRegistrare) {
-            this.saveButton.setText(confirmText);
+            this.fixConfermaAndNotRegistrazione();
         }// end of if cycle
     }// end of constructor
 
@@ -226,12 +240,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
         fixPreferenzeSpecifiche();
 
-        initTitle();
-        initFormLayout();
-        initButtonBar();
+        //--Titolo placeholder del dialogo, regolato dopo open()
+        this.add(creaTitleLayout());
 
-        //--Eventuali aggiustamenti finali al layout
-        fixLayout();
+        //--Body placeholder per i campi, creati dopo open()
+        this.add(creaFormLayout());
+
+        //--spazio per distanziare i bottoni dai campi
+        this.add(new H3());
+
+        //--Barra placeholder dei bottoni, creati adesso ma regolabili dopo open()
+        this.add(creaBottomLayout());
+
 
         setCloseOnEsc(true);
         setCloseOnOutsideClick(false);
@@ -255,6 +275,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
+    /**
+     * Esclude la possibilità di registrare  <br>
+     * Dialogo in modalità 'show' <br>
+     */
     public void fixConfermaAndNotRegistrazione() {
         this.saveButton.setText(confirmText);
     }// end of method
@@ -284,60 +308,219 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    private void initTitle() {
-        add(titleField);
+    /**
+     * Titolo del dialogo <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    private Component creaTitleLayout() {
+        return titleLayout;
     }// end of method
 
 
-    private void initFormLayout() {
+    /**
+     * Body placeholder per i campi, creati dopo open()
+     */
+    private Div creaFormLayout() {
+        Div div;
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("50em", 2));
         formLayout.addClassName("no-padding");
-        Div div = new Div(formLayout);
+        div = new Div(formLayout);
         div.addClassName("has-padding");
-        add(div);
+
+        return div;
     }// end of method
 
 
-    protected void initButtonBar() {
-        buttonBar = new HorizontalLayout();
-        buttonBar.setClassName("buttons");
-        buttonBar.setPadding(false);
-        buttonBar.setSpacing(true);
-        buttonBar.setMargin(false);
+    /**
+     * Barra dei bottoni
+     */
+    protected Component creaBottomLayout() {
+        bottomLayout.setClassName("buttons");
+        bottomLayout.setPadding(false);
+        bottomLayout.setSpacing(true);
+        bottomLayout.setMargin(false);
 
         if (usaSaveButton) {
             saveButton.getElement().setAttribute("theme", "primary");
             saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
-            buttonBar.add(saveButton);
+            bottomLayout.add(saveButton);
         }// end of if cycle
 
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-            buttonBar.add(cancelButton);
+            bottomLayout.add(cancelButton);
         }// end of if cycle
 
         if (usaDeleteButton) {
             deleteButton.addClickListener(e -> deleteClicked());
             deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
-//            deleteButton.getElement().setAttribute("theme", "tertiary danger");
             deleteButton.getElement().setAttribute("theme", "error");
-            buttonBar.add(deleteButton);
+            bottomLayout.add(deleteButton);
         }// end of if cycle
 
-        add(new H3()); //--spazio per distanziare i bottoni dai campi
-        add(buttonBar);
+        return bottomLayout;
     }// end of method
 
 
     /**
-     * Costruisce una lista di nomi delle properties nella sottoclasse specifica <br>
-     * Se serve, modifica l'ordine della lista <br>
-     * Sovrasritto nella sottoclasse <br>
+     * Opens the given item for editing in the dialog.
+     *
+     * @param item      The item to edit; it may be an existing or a newly created instance
+     * @param operation The operation being performed on the item
+     * @param context   legato alla sessione
      */
-    protected List<String> getSpecificFormPropertiesName(List<String> properties) {
-        return properties;
+    @Override
+    public void open(AEntity item, EAOperation operation, AContext context) {
+        open(item, operation, context, "");
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     * Riceve la entityBean <br>
+     * Crea i fields <br>
+     *
+     * @param entityBean The item to edit; it may be an existing or a newly created instance
+     * @param operation  The operation being performed on the item
+     * @param context    legato alla sessione
+     * @param title      of the window dialog
+     */
+    @Override
+    public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
+        //--controllo iniziale di sicurezza
+        if (service == null) {
+            return;
+        }// end of if cycle
+
+        if (((AService) service).mancaCompanyNecessaria()) {
+            Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
+            return;
+        }// end of if cycle
+        if (entityBean == null) {
+            Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
+            return;
+        }// end of if cycle
+
+        this.currentItem = (T) entityBean;
+        this.operation = operation;
+        this.context = context;
+        Object view = presenter.getView();
+        if (view != null) {
+            this.itemType = presenter.getView().getName();
+        }// end of if cycle
+        this.fixTitleLayout(title);
+
+        if (registrationForSave != null) {
+            registrationForSave.remove();
+        }
+        registrationForSave = saveButton.addClickListener(e -> saveClicked(operation));
+
+        //--Controlla la visibilità dei bottoni
+        saveButton.setVisible(operation.isSaveEnabled());
+        deleteButton.setVisible(operation.isDeleteEnabled());
+
+        //--Crea i fields
+        creaFields();
+
+        super.open();
+    }// end of method
+
+
+    /**
+     * Regola il titolo del dialogo <br>
+     */
+    private void fixTitleLayout(String title) {
+        title = title.equals("") ? itemType : title;
+        titleLayout.setText(operation.getNameInTitle() + " " + title);
+    }// end of method
+
+
+    /**
+     * Crea i fields
+     * <p>
+     * Crea un nuovo binder (vuoto) per questo Dialog e questa Entity
+     * Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
+     * Costruisce una lista di nomi delle properties. Ordinata. Sovrascrivibile.
+     * <p>
+     * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service
+     * Inizializza le properties grafiche (caption, visible, editable, width, ecc)
+     * Aggiunge i fields al binder
+     * Aggiunge i fields alla mappa fieldMap
+     * <p>
+     * Aggiunge eventuali fields specifici (costruiti non come standard type) al binder ed alla fieldMap
+     * Aggiunge i fields della fieldMap al layout grafico
+     * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
+     * Legge la entityBean ed inserisce nella UI i valori di eventuali fields NON associati al binder
+     */
+    private void creaFields() {
+        List<String> propertyNamesList;
+        AbstractField propertyField = null;
+
+        //--Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
+        fieldMap = new LinkedHashMap<>();
+
+        //--Costruisce una lista di nomi delle properties del Form nell'ordine:
+        //--1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+        propertyNamesList = getPropertiesName();
+
+        //--Crea un nuovo binder (vuoto) per questo Dialog e questa entityBean (currentItem)
+        binder = new Binder(binderClass);
+
+        //--Costruisce ogni singolo field
+        //--Aggiunge il field al binder, nel metodo create() del fieldService
+        //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
+        for (String propertyName : propertyNamesList) {
+            propertyField = fieldService.create(binder, binderClass, propertyName);
+            if (propertyField != null) {
+                fieldMap.put(propertyName, propertyField);
+            }// end of if cycle
+        }// end of for cycle
+
+        //--Costruisce eventuali fields specifici (costruiti non come standard type)
+        //--Aggiunge i fields specifici al binder (facoltativo, alcuni fields non funzionano col binder)
+        //--Se i fields non sono associati al binder, DEVONO comparire in readSpecificFields()
+        //--Aggiunge i fields specifici alla fieldMap (obbligatorio)
+        addSpecificAlgosFields();
+
+        //--Aggiunge ogni singolo field della fieldMap al layout grafico
+        addFieldsToLayout();
+
+        //--Eventuali aggiustamenti finali al layout
+        //--Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
+        fixLayout();
+
+        //--Controlla l'esistenza del field company e ne regola i valori
+        fixCompanyField();
+
+        //--Regola il focus iniziale
+        fixFocus();
+
+        //--Associa i valori del currentItem al binder. Dal DB alla UI
+        binder.readBean(currentItem);
+
+        //--Regola in lettura eventuali valori NON associati al binder. Dal DB alla UI
+        readSpecificFields();
+
+        //--Regola in lettura l'eeventuale field company (un combo). Dal DB alla UI
+        readCompanyField();
+    }// end of method
+
+
+    /**
+     * Costruisce nell'ordine una lista di nomi di properties <br>
+     * La lista viene usata per la costruzione automatica dei campi e l'inserimento nel binder <br>
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     * Sovrasrivibile nella sottoclasse <br>
+     * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
+     */
+    protected List<String> getPropertiesName() {
+        return service != null ? service.getFormPropertyNamesList((AEntity) currentItem, context) : null;
     }// end of method
 
 
@@ -425,156 +608,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             }// end of if cycle
         }// end of if cycle
 
-    }// end of method
-
-
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation) {
-        open(item, operation, (AContext) null);
-    }// end of method
-
-
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation, AContext context) {
-        open(item, operation, context, "");
-    }// end of method
-
-
-    /**
-     * Opens the given item for editing in the dialog.
-     * Riceve la entityBean <br>
-     * Crea i fields <br>
-     *
-     * @param entityBean      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     * @param title     of the window dialog
-     */
-    @Override
-    public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
-        //--controllo iniziale di sicurezza
-        if (service == null) {
-            return;
-        }// end of if cycle
-
-        if (((AService) service).mancaCompanyNecessaria()) {
-            Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
-            return;
-        }// end of if cycle
-        if (entityBean == null) {
-            Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
-            return;
-        }// end of if cycle
-
-        this.currentItem = (T) entityBean;
-        this.operation = operation;
-        this.context = context;
-        Object view = presenter.getView();
-        if (view != null) {
-            this.itemType = presenter.getView().getName();
-        }// end of if cycle
-        title = title.equals("") ? itemType : title;
-        titleField.setText(operation.getNameInTitle() + " " + title);
-
-        if (registrationForSave != null) {
-            registrationForSave.remove();
-        }
-        registrationForSave = saveButton.addClickListener(e -> saveClicked(operation));
-
-        //--Crea i fields
-        creaFields();
-
-        //--visibilità dei bottoni
-        saveButton.setVisible(operation.isSaveEnabled());
-        deleteButton.setVisible(operation.isDeleteEnabled());
-
-        open();
-    }// end of method
-
-
-    /**
-     * Crea i fields (non esiste ancora la entityBean, che arriva nel metodo open())
-     * <p>
-     * Crea un nuovo binder (vuoto) per questo Dialog e questa Entity
-     * Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
-     * Costruisce una lista di nomi delle properties. Ordinata. Sovrascrivibile.
-     * <p>
-     * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service
-     * Inizializza le properties grafiche (caption, visible, editable, width, ecc)
-     * Aggiunge i fields al binder
-     * Aggiunge i fields alla mappa fieldMap
-     * <p>
-     * Aggiunge eventuali fields specifici (costruiti non come standard type) al binder ed alla fieldMap
-     * Aggiunge i fields della fieldMap al layout grafico
-     * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
-     * Legge la entityBean ed inserisce nella UI i valori di eventuali fields NON associati al binder
-     */
-    private void creaFields() {
-        List<String> formPropertyNamesList;
-        AbstractField propertyField = null;
-
-        //--Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
-        fieldMap = new LinkedHashMap<>();
-
-        //--Costruisce una lista di nomi delle properties del Form nell'ordine:
-        //--1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
-        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
-        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        formPropertyNamesList = service != null ? service.getFormPropertyNamesList((AEntity) currentItem, context) : null;
-
-        //--Crea un nuovo binder (vuoto) per questo Dialog e questa entityBean (currentItem)
-        binder = new Binder(binderClass);
-
-        //--Costruisce ogni singolo field
-        //--Aggiunge il field al binder, nel metodo create() del fieldService
-        //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
-        for (String propertyName : formPropertyNamesList) {
-            propertyField = fieldService.create(binder, binderClass, propertyName);
-            if (propertyField != null) {
-                fieldMap.put(propertyName, propertyField);
-            }// end of if cycle
-        }// end of for cycle
-
-        //--Costruisce eventuali fields specifici (costruiti non come standard type)
-        //--Aggiunge i fields specifici al binder (facoltativo, alcuni fields non funzionano col binder)
-        //--Se i fields non sono associati al binder, DEVONO comparire in readSpecificFields()
-        //--Aggiunge i fields specifici alla fieldMap (obbligatorio)
-        addSpecificAlgosFields();
-
-        //--Aggiunge ogni singolo field della fieldMap al layout grafico
-        addFieldsToLayout();
-
-        //--Eventuali aggiustamenti finali al layout
-        //--Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
-        fixLayout();
-
-        //--Controlla l'esistenza del field company e ne regola i valori
-        fixCompanyField();
-
-        //--Regola il focus iniziale
-        fixFocus();
-
-        //--Associa i valori del currentItem al binder. Dal DB alla UI
-        binder.readBean(currentItem);
-
-        //--Regola in lettura eventuali valori NON associati al binder. Dal DB alla UI
-        readSpecificFields();
-
-        //--Regola in lettura l'eeventuale field company (un combo). Dal DB alla UI
-        readCompanyField();
     }// end of method
 
 

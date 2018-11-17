@@ -336,7 +336,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Unica per tutta l'applicazione. Usata come libreria. <br>
      */
     @Autowired
-    private AVaadinService vaadinService;
+    protected AVaadinService vaadinService;
 
 
     /**
