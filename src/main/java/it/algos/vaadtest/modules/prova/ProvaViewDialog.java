@@ -1,26 +1,23 @@
 package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.AColumnService;
-import it.algos.vaadflow.service.AMailService;
+import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -46,7 +43,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @AIScript(sovrascrivibile = true)
 public class ProvaViewDialog extends AViewDialog<Prova> {
 
-   /**
+    @Autowired
+    ApplicationContext appContext;
+
+
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -65,8 +66,6 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 //    }
 
 
-
-
     /**
      * Costruisce eventuali fields specifici (costruiti non come standard type)
      * Aggiunge i fields specifici al binder
@@ -81,8 +80,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         if (propertyField != null) {
             fieldMap.put("alfa", propertyField);
         }// end of if cycle
-    }
-
+    }// end of method
 
 
     /**
@@ -92,9 +90,11 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
      */
     @Override
     protected void fixLayout() {
+//        Object beta = StaticContextAccessor.getBean(ADialog.class);
         getFormLayout().add(new Label("Prova"));
-
-    }
+        getFormLayout().add(new Button("Click",event -> paperino()));
+        getFormLayout().add(new Button("ClickSecondo",event -> topolino()));
+    }// end of method
 
 
     /**
@@ -105,6 +105,30 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     @Override
     protected AbstractField getField(String publicFieldName) {
         return super.getField(publicFieldName);
-    }
+    }// end of method
+
+
+    public void pippo() {
+        int a = 87;
+    }// end of method
+
+
+    public void pluto() {
+        int a = 87;
+    }// end of method
+
+
+    public void paperino() {
+        ADialog dialog = appContext.getBean(ADialog.class,"Alfetta");
+//        dialog.parte("","","",this::pluto);
+        dialog.open("Pippoz",this::pippo,this::pluto);
+//        dialog.open("Pippoz","Dopotutto sarebbe megl io poter scrivere delle frasi molto lunghe anche senza doverne subire le conseguenze",this::pluto,null);
+    }// end of method
+
+    public void topolino() {
+        ADialog dialog = appContext.getBean(ADialog.class,"Burletta");
+        VerticalLayout vert=new VerticalLayout(new Label("PrimaRiga"),new Button("Ok"),new Label("Terza riga"));
+        dialog.open(vert,this::pippo,this::pluto);
+    }// end of method
 
 }// end of class

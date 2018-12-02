@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
@@ -138,6 +139,7 @@ public class AFieldService extends AbstractService {
         AStringNullValidator nullValidator = new AStringNullValidator(messageNotNull);
         AIntegerZeroValidator integerZeroValidator = new AIntegerZeroValidator();
         ALongZeroValidator longZeroValidator = new ALongZeroValidator();
+        String color = annotation.getFieldColor(reflectionJavaField);
 
         if (type == null) {
             field = new ATextField(caption.equals("") ? "noname" : caption);
@@ -271,6 +273,8 @@ public class AFieldService extends AbstractService {
 //                field = new ADatePicker(caption);
 //                field = new ATextField(caption);
 //                binder.forField(field).bind(fieldName);
+                break;
+            case vaadinIcon:
                 break;
             case link:
                 field = new ATextField(caption);

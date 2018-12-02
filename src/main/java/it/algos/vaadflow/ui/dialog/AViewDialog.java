@@ -12,6 +12,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -66,7 +67,19 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected final H2 titleLayout = new H2();
+    protected final Div titleLayout = new Div();
+
+    /**
+     * Corpo centrale del Form <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected final FormLayout formLayout = new FormLayout();
+
+    /**
+     * Corpo centrale del Dialog, alternativo al Form <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected final VerticalLayout bodyLayout = new VerticalLayout();
 
     /**
      * Barra dei bottoni di comando <br>
@@ -74,10 +87,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected final HorizontalLayout bottomLayout = new HorizontalLayout();
 
-
-    protected final FormLayout formLayout = new FormLayout();
-
-//    protected final HorizontalLayout buttonBar = new HorizontalLayout();
 
     private final String confirmText = "Conferma";
 
@@ -90,6 +99,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Autowired
     public AAnnotationService annotation;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    public AArrayService array;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -243,8 +258,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Titolo placeholder del dialogo, regolato dopo open()
         this.add(creaTitleLayout());
 
-        //--Body placeholder per i campi, creati dopo open()
+        //--Body placeholder standard per i campi, creati dopo open()
         this.add(creaFormLayout());
+
+        //--Body placeholder alternativo
+        this.add(creaBodyLayout());
 
         //--spazio per distanziare i bottoni dai campi
         this.add(new H3());
@@ -269,9 +287,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
+        this.itemAnnulla = itemAnnulla;
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
-        this.itemAnnulla = itemAnnulla;
     }// end of method
 
 
@@ -288,11 +306,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     private void fixPreferenze() {
-        //--Flag di preferenza per usare il bottone Save. Normalmente true.
-        usaSaveButton = true;
-
         //--Flag di preferenza per usare il bottone Cancel. Normalmente true.
         usaCancelButton = true;
+
+        //--Flag di preferenza per usare il bottone Save. Normalmente true.
+        usaSaveButton = true;
 
         //--Flag di preferenza per usare il bottone Delete. Normalmente true.
         usaDeleteButton = true;
@@ -329,6 +347,15 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         div.addClassName("has-padding");
 
         return div;
+    }// end of method
+
+
+    /**
+     * Corpo centrale del Dialog, alternativo al Form <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    private Component creaBodyLayout() {
+        return bodyLayout;
     }// end of method
 
 
@@ -431,9 +458,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     /**
      * Regola il titolo del dialogo <br>
      */
-    private void fixTitleLayout(String title) {
+    protected void fixTitleLayout(String title) {
         title = title.equals("") ? itemType : title;
-        titleLayout.setText(operation.getNameInTitle() + " " + title);
+        titleLayout.add(new H2(operation.getNameInTitle() + " " + title));
     }// end of method
 
 
