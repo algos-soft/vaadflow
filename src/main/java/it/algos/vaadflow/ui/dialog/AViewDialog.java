@@ -368,16 +368,16 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         bottomLayout.setSpacing(true);
         bottomLayout.setMargin(false);
 
-        if (usaSaveButton) {
-            saveButton.getElement().setAttribute("theme", "primary");
-            saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
-            bottomLayout.add(saveButton);
-        }// end of if cycle
-
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
             bottomLayout.add(cancelButton);
+        }// end of if cycle
+
+        if (usaSaveButton) {
+            saveButton.getElement().setAttribute("theme", "primary");
+            saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
+            bottomLayout.add(saveButton);
         }// end of if cycle
 
         if (usaDeleteButton) {

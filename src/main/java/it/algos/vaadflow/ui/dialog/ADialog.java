@@ -49,26 +49,14 @@ public class ADialog extends Dialog implements IADialog {
     protected final Div extraMessageLabel = new Div();
 
     /**
-     * Corpo centrale del Dialog <br>
-     * Placeholder (eventuale, presente di default) <br>
-     */
-    protected final VerticalLayout bodyLayout = new VerticalLayout();
-
-    /**
-     * Barra dei bottoni di comando <br>
-     * Placeholder (eventuale, presente di default) <br>
-     */
-    protected final HorizontalLayout bottomLayout = new HorizontalLayout();
-
-    /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
 
-//    public Runnable cancelHandler;
-//
-//    public Runnable confirmHandler;
+    public Runnable cancelHandler;
+
+    public Runnable confirmHandler;
 
     /**
      * Flag di preferenza per usare il bottone Cancel. Normalmente true.
@@ -79,6 +67,18 @@ public class ADialog extends Dialog implements IADialog {
      * Flag di preferenza per usare il bottone Confirm. Normalmente true.
      */
     public boolean usaConfirmButton;
+
+    /**
+     * Corpo centrale del Dialog <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected VerticalLayout bodyPlaceHolder = new VerticalLayout();
+
+    /**
+     * Barra dei bottoni di comando <br>
+     * Placeholder (eventuale, presente di default) <br>
+     */
+    protected HorizontalLayout bottomLayout = new HorizontalLayout();
 
 //    protected String message;
 //
@@ -151,7 +151,18 @@ public class ADialog extends Dialog implements IADialog {
         this.usaConfirmButton = true;
 
         //--Titolo placeholder del dialogo
-        this.add(creaTitleLayout());
+        this.add(titleField);
+
+        //--Corpo centrale del Dialog
+        this.add(bodyPlaceHolder);
+
+        //--spazio per distanziare i bottoni sottostanti
+        this.add(new H3());
+
+        //--Barra placeholder dei bottoni, creati e regolati
+        this.add(bottomLayout);
+
+        this.creaTitleLayout();
     }// end of method
 
 
@@ -159,12 +170,10 @@ public class ADialog extends Dialog implements IADialog {
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected Component creaTitleLayout() {
+    protected void creaTitleLayout() {
         if (text.isValid(title)) {
             titleField.setText(title);
         }// end of if cycle
-
-        return titleField;
     }// end of method
 
 
@@ -243,14 +252,14 @@ public class ADialog extends Dialog implements IADialog {
      * @param cancelHandler     The cancellation handler function
      */
     public void open(String message, String additionalMessage, Runnable confirmHandler, Runnable cancelHandler) {
-        //--Body placeholder
-        this.creaBodyLayout(message, additionalMessage);
+        this.confirmHandler = confirmHandler;
+        this.cancelHandler = cancelHandler;
 
-        //--spazio per distanziare i bottoni sottostanti
-        this.add(new H3());
+        //--Body placeholder
+        this.fixBodyLayout(message, additionalMessage);
 
         //--Barra placeholder dei bottoni, creati e regolati
-        this.creaBottomLayout(confirmHandler, cancelHandler);
+        this.fixBottomLayout();
 
         super.open();
     }// end of method
@@ -265,14 +274,14 @@ public class ADialog extends Dialog implements IADialog {
      * @param cancelHandler  The cancellation handler function
      */
     public void open(VerticalLayout bodyLayout, Runnable confirmHandler, Runnable cancelHandler) {
-        //--Body placeholder
-        this.creaBodyLayout(bodyLayout);
+        this.confirmHandler = confirmHandler;
+        this.cancelHandler = cancelHandler;
 
-        //--spazio per distanziare i bottoni sottostanti
-        this.add(new H3());
+        //--Body placeholder
+        this.fixBodyLayout(bodyLayout);
 
         //--Barra placeholder dei bottoni, creati e regolati
-        this.creaBottomLayout(confirmHandler, cancelHandler);
+        this.fixBottomLayout();
 
         super.open();
     }// end of method
@@ -284,7 +293,10 @@ public class ADialog extends Dialog implements IADialog {
      * @param message           Detail message
      * @param additionalMessage Additional message (optional, may be empty)
      */
-    protected void creaBodyLayout(String message, String additionalMessage) {
+    protected void fixBodyLayout(String message, String additionalMessage) {
+        VerticalLayout bodyLayout = new VerticalLayout();
+        bodyPlaceHolder.removeAll();
+
         if (text.isValid(message)) {
             messageLabel.setText(message);
             bodyLayout.add(messageLabel);
@@ -294,7 +306,7 @@ public class ADialog extends Dialog implements IADialog {
             bodyLayout.add(extraMessageLabel);
         }// end of if cycle
 
-        this.add(bodyLayout);
+        bodyPlaceHolder.add(bodyLayout);
     }// end of method
 
 
@@ -303,18 +315,16 @@ public class ADialog extends Dialog implements IADialog {
      *
      * @param bodyLayout contenuto del dialogo
      */
-    protected void creaBodyLayout(VerticalLayout bodyLayout) {
-        this.add(bodyLayout);
+    protected void fixBodyLayout(VerticalLayout bodyLayout) {
+        bodyPlaceHolder.removeAll();
+        bodyPlaceHolder.add(bodyLayout);
     }// end of method
 
 
     /**
      * Barra dei bottoni
-     *
-     * @param confirmHandler The confirmation handler function
-     * @param cancelHandler  The cancellation handler function
      */
-    protected void creaBottomLayout(Runnable confirmHandler, Runnable cancelHandler) {
+    protected void fixBottomLayout() {
         bottomLayout.setClassName("buttons");
         bottomLayout.setPadding(false);
         bottomLayout.setSpacing(true);
@@ -323,14 +333,7 @@ public class ADialog extends Dialog implements IADialog {
 
         if (usaCancelButton) {
             cancelButton.getElement().setAttribute("theme", "primary");
-            if (cancelHandler != null) {
-                cancelButton.addClickListener(e -> {
-                    cancelHandler.run();
-                    close();
-                });
-            } else {
-                cancelButton.addClickListener(e -> close());
-            }// end of if/else cycle
+            cancelButton.addClickListener(e -> cancellaHandler());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
             bottomLayout.add(cancelButton);
         }// end of if cycle
@@ -341,19 +344,26 @@ public class ADialog extends Dialog implements IADialog {
             } else {
                 confirmButton.getElement().setAttribute("theme", "primary");
             }// end of if/else cycle
-            if (confirmHandler != null) {
-                confirmButton.addClickListener(e -> {
-                    confirmHandler.run();
-                    close();
-                });
-            } else {
-                confirmButton.addClickListener(e -> close());
-            }// end of if/else cycle
+            confirmButton.addClickListener(e -> confermaHandler());
             confirmButton.setIcon(new Icon(VaadinIcon.CHECK));
             bottomLayout.add(confirmButton);
         }// end of if cycle
+    }// end of method
 
-        this.add(bottomLayout);
+
+    public void cancellaHandler() {
+        if (cancelHandler != null) {
+            cancelHandler.run();
+        }// end of if cycle
+        close();
+    }// end of method
+
+
+    public void confermaHandler() {
+        if (confirmHandler != null) {
+            confirmHandler.run();
+        }// end of if cycle
+        close();
     }// end of method
 
 
