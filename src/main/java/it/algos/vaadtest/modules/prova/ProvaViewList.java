@@ -6,11 +6,15 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -51,7 +55,7 @@ public class ProvaViewList extends AViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -74,6 +78,25 @@ public class ProvaViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
+        super.isBottoneEditAfter=false;
     }// end of method
+
+
+    /**
+     * Eventuale modifica dell'ordine di presentazione delle colonne
+     * Sovrascritto
+     *
+     * @param gridPropertyNamesList
+     */
+    @Override
+    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
+        ArrayList listaNew = new ArrayList(gridPropertyNamesList);
+        Object obj = listaNew.get(1);
+        listaNew.remove(obj);
+        listaNew.add(0, obj);
+
+        return listaNew;
+    }// end of method
+
 
 }// end of class
