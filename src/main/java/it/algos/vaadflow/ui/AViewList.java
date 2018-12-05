@@ -178,14 +178,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * - con o senza bottone New, regolato da preferenza o da parametro
      * - con eventuali altri bottoni specifici
      */
-    protected HorizontalLayout topLayout;
+    protected HorizontalLayout topPlaceholder = new HorizontalLayout();
 
 
     /**
      * Placeholder (eventuale) SOPRA la Grid <br>
      * Label o altro per informazioni specifiche; di norma per il developer
      */
-    protected VerticalLayout alertLayout;
+    protected VerticalLayout alertPlacehorder = new VerticalLayout();
 
 
     /**
@@ -454,8 +454,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto <br>
      */
     protected void creaLayout() {
-        creaTopLayout();
-        creaTopAlert();
+        this.add(topPlaceholder);
+        this.add(alertPlacehorder);
+
+        fixTopLayout();
+        fixAlertLayout();
+
         creaGrid();
         creaGridBottomLayout();
         creaPaginationLayout();
@@ -471,9 +475,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected void creaTopLayout() {
-        topLayout = new HorizontalLayout();
-        topLayout.addClassName("view-toolbar");
+    protected void fixTopLayout() {
+        topPlaceholder.removeAll();
+        topPlaceholder.addClassName("view-toolbar");
         Button deleteAllButton;
         Button resetButton;
         Button clearFilterTextBtn;
@@ -489,7 +493,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 service.deleteAll();
                 updateView();
             });
-            topLayout.add(deleteAllButton);
+            topPlaceholder.add(deleteAllButton);
         }// end of if cycle
 
         if (usaBottoneReset && isDeveloper) {
@@ -500,7 +504,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 service.reset();
                 updateView();
             });
-            topLayout.add(resetButton);
+            topPlaceholder.add(resetButton);
         }// end of if cycle
 
         if (usaSearchTextField) {
@@ -513,7 +517,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
             clearFilterTextBtn.addClickListener(e -> searchField.clear());
 
-            topLayout.add(searchField, clearFilterTextBtn);
+            topPlaceholder.add(searchField, clearFilterTextBtn);
         }// end of if cycle
 
         if (usaSearchBottoneNew) {
@@ -521,10 +525,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
             newButton.addClickListener(e -> dialog.open(service.newEntity(), EAOperation.addNew, context));
-            topLayout.add(newButton);
+            topPlaceholder.add(newButton);
         }// end of if cycle
-
-        this.add(topLayout);
     }// end of method
 
 
@@ -534,12 +536,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected VerticalLayout creaTopAlert() {
-        alertLayout = new VerticalLayout();
-        alertLayout.addClassName("view-toolbar");
-        alertLayout.setMargin(false);
-        alertLayout.setSpacing(false);
-        alertLayout.setPadding(false);
+    protected void fixAlertLayout() {
+        alertPlacehorder.removeAll();
+        alertPlacehorder.addClassName("view-toolbar");
+        alertPlacehorder.setMargin(false);
+        alertPlacehorder.setSpacing(false);
+        alertPlacehorder.setPadding(false);
 
         if (isEntityDeveloper || isEntityAdmin || isEntityEmbadded || isEntityUsaDatiDemo) {
             usaTopAlert = true;
@@ -547,25 +549,22 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         if (usaTopAlert) {
             if (isEntityDeveloper) {
-                alertLayout.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
+                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
             }// end of if cycle
 
             if (isEntityAdmin) {
-                alertLayout.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
+                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
             }// end of if cycle
 
             if (isEntityEmbadded) {
-                alertLayout.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
-                alertLayout.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+                alertPlacehorder.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
+                alertPlacehorder.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
             }// end of if cycle
 
             if (isEntityEmbadded || isEntityUsaDatiDemo) {
-                alertLayout.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
+                alertPlacehorder.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
             }// end of if cycle
         }// end of if cycle
-
-        this.add(alertLayout);
-        return alertLayout;
     }// end of method
 
 
@@ -675,13 +674,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Apre il dialog di detail
      */
     protected void addDetailDialog() {
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             grid.addColumn(renderer);
             this.setFlexGrow(0);
         } else {
-            grid.setSelectionMode(Grid.SelectionMode.SINGLE);
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
             grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
         }// end of if/else cycle
@@ -697,7 +696,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-    private void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
+    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
         if (evento != null && evento.getOldValue() != evento.getValue()) {
             if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
                 dialog.open((AEntity) evento.getValue(), operation, context);
@@ -863,6 +862,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             }// fine del blocco try-catch
         }// end of if cycle
 
+        fixAlertLayout();
     }// end of method
 
 

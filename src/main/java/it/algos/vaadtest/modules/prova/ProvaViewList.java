@@ -74,6 +74,6 @@ public class ProvaViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
-    }
+    }// end of method
 
 }// end of class
