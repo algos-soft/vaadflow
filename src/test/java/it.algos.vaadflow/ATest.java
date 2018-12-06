@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,10 +71,10 @@ public class ATest {
     protected int sorgenteIntero = 0;
     protected int previstoIntero = 0;
     protected int ottenutoIntero = 0;
-    protected List<String> previstoList;
-    protected List<String> ottenutoList;
-    protected List<Field> previstoFieldList;
-    protected List<Field> ottenutoFieldList;
+    protected ArrayList<String> previstoList;
+    protected ArrayList<String> ottenutoList;
+    protected ArrayList<Field> previstoFieldList;
+    protected ArrayList<Field> ottenutoFieldList;
     protected EAFieldType previstoType;
     protected EAFieldType ottenutoType;
 //    protected EAFieldAccessibility previstaAccessibilità;

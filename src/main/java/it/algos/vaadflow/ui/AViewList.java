@@ -799,7 +799,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         paginationField = new ATextField("");
         paginationField.addValueChangeListener(e -> modificaPagination(e));
         paginationField.setValue("1");
-        paginationField.setWidth("3em");
+        paginationField.setWidth("4em");
 
         footerLayout = new HorizontalLayout();
         footerLayout.add(titleButton);

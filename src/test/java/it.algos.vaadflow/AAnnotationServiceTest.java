@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static it.algos.vaadflow.service.AAnnotationService.INT_NULL;
@@ -241,7 +242,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getGridPropertiesName() {
         String[] stringArray = {"ordine", "code"};
-        previstoList = Arrays.asList(stringArray);
+        previstoList = new ArrayList(Arrays.asList(stringArray));
 
         ottenutoList = annotation.getGridPropertiesName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
@@ -260,7 +261,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getFormPropertiesName() {
         String[] stringArray = {"ordine", "code"};
-        previstoList = Arrays.asList(stringArray);
+        previstoList = new ArrayList(Arrays.asList(stringArray));
 
         ottenutoList = annotation.getFormPropertiesName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
@@ -278,7 +279,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getFormFieldsName() {
         String[] stringArray = {"ordine", "code"};
-        previstoList = Arrays.asList(stringArray);
+        previstoList = new ArrayList(Arrays.asList(stringArray));
 
         ottenutoList = annotation.getFormFieldsName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);

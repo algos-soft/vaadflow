@@ -32,11 +32,11 @@ public class AArrayServiceTest extends ATest {
 
 
     private final static String[] stringArray = {"primo", "secondo", "quarto", "quinto", "1Ad", "terzo", "a10"};
-    private final static List<String> stringList = Arrays.asList(stringArray);
+    private final static ArrayList<String> stringList = new ArrayList(Arrays.asList(stringArray));
     private final static Object[] objArray = {new Label("Alfa"), new Button()};
-    private final static List<Object> objList = Arrays.asList(objArray);
+    private final static ArrayList<Object> objList = new ArrayList(Arrays.asList(objArray));
     private final static Long[] longArray = {234L, 85L, 151099L, 123500L, 3L, 456772L};
-    private final static List<Long> longList = Arrays.asList(longArray);
+    private final static ArrayList<Long> longList = new ArrayList(Arrays.asList(longArray));
     private List<String> prevista;
     private List<String> ottenuta;
 
@@ -75,7 +75,7 @@ public class AArrayServiceTest extends ATest {
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         previstoBooleano = false;
-        ottenutoBooleano = service.isValid((List) null);
+        ottenutoBooleano = service.isValid((ArrayList) null);
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         previstoBooleano = false;
@@ -83,7 +83,7 @@ public class AArrayServiceTest extends ATest {
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         String[] stringArray = {"", "secondo", "quarto", "quinto", "1Ad", "terzo", "a10"};
-        List<String> lista = Arrays.asList(stringArray);
+        ArrayList<String> lista = new ArrayList(Arrays.asList(stringArray));
         previstoBooleano = false;
         ottenutoBooleano = service.isValid(lista);
         assertEquals(previstoBooleano, ottenutoBooleano);
@@ -93,7 +93,7 @@ public class AArrayServiceTest extends ATest {
         assertEquals(previstoBooleano, ottenutoBooleano);
 
         Object[] objArray = {null, new Button()};
-        List<Object> objList = Arrays.asList(objArray);
+        ArrayList<Object> objList = new ArrayList(Arrays.asList(objArray));
         previstoBooleano = false;
         ottenutoBooleano = service.isValid(objList);
         assertEquals(previstoBooleano, ottenutoBooleano);

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -333,7 +334,7 @@ public class AReflectionServiceTest extends ATest {
     @Test
     public void getListFields() {
         String[] stringArray = {"ordine", "code"};
-        ottenutoList = Arrays.asList(stringArray);
+        ottenutoList = new ArrayList(Arrays.asList(stringArray));
 
         previstoIntero = 2;
         ottenutoFieldList = service.getListFields(ROLE_ENTITY_CLASS, ottenutoList);
@@ -409,7 +410,7 @@ public class AReflectionServiceTest extends ATest {
     @Test
     public void getFormFields() {
         String[] stringArray = {"ordine", "code"};
-        ottenutoList = Arrays.asList(stringArray);
+        ottenutoList = new ArrayList(Arrays.asList(stringArray));
 
 //        previstoIntero = 2;
 //        ottenutoFieldList = service.getFormFields(ROLE_ENTITY_CLASS, ottenutoList);

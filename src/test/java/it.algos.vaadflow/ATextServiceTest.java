@@ -457,7 +457,7 @@ public class ATextServiceTest extends ATest {
      */
     @Test
     public void isContiene() {
-        List tags = new ArrayList<>();
+        ArrayList tags = new ArrayList<>();
         tags.add("@AIScript(sovrascrivibile = false)");
         tags.add("@AIScript(sovrascrivibile=false)");
         tags.add("@AIScript(sovrascrivibile= false)");
