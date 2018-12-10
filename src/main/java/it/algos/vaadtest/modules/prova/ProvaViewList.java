@@ -1,6 +1,9 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -78,8 +81,33 @@ public class ProvaViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
-        super.isBottoneEditAfter=false;
+        logger.debug("Alfetta");
     }// end of method
+
+
+    /**
+     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
+     * Sovrascritto
+     */
+    @Override
+    protected void addSpecificColumnsBefore() {
+        super.addSpecificColumnsAfter();
+        Grid.Column beta = grid.addColumn(new ComponentRenderer<>(entity -> new Label("30")));//end of lambda expressions and anonymous inner class
+        beta.setHeader("Beta");
+        beta.setKey("beta");
+        beta.setWidth("3em");
+        beta.setFlexGrow(0);
+        Grid.Column alfa = grid.addColumn(new ComponentRenderer<>(entity -> new Label("40")));//end of lambda expressions and anonymous inner class
+        alfa.setHeader("Alfa");
+        alfa.setKey("alfa");
+        alfa.setWidth("4em");
+        alfa.setFlexGrow(0);
+        Grid.Column gamma = grid.addColumn(new ComponentRenderer<>(entity -> new Label("50")));//end of lambda expressions and anonymous inner class
+        gamma.setHeader("gamma");
+        gamma.setKey("gamma");
+        gamma.setWidth("5em");
+        gamma.setFlexGrow(0);
+    }
 
 
     /**

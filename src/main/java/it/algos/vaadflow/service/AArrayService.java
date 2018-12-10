@@ -389,7 +389,7 @@ public class AArrayService extends AbstractService {
      *
      * @return sublista corrente del ciclo
      */
-    public List estraeSublista(ArrayList listaTotale, int dimBlocco, int cicloCorrente) {
+    public ArrayList estraeSublista(ArrayList listaTotale, int dimBlocco, int cicloCorrente) {
         int posIni = 0;
         int posEnd = 0;
 
@@ -408,7 +408,7 @@ public class AArrayService extends AbstractService {
         posEnd = posIni + dimBlocco;
         posEnd = Math.min(posEnd, listaTotale.size());
 
-        return listaTotale.subList(posIni, posEnd);
+        return new ArrayList(listaTotale.subList(posIni, posEnd));
     }// end of method
 
 
@@ -421,7 +421,7 @@ public class AArrayService extends AbstractService {
      *
      * @return sublista corrente del ciclo
      */
-    public List<Long> estraeSublistaLong(ArrayList<Long> listaTotale, int dimBlocco, int cicloCorrente) {
+    public ArrayList<Long> estraeSublistaLong(ArrayList<Long> listaTotale, int dimBlocco, int cicloCorrente) {
         return estraeSublista(listaTotale, dimBlocco, cicloCorrente);
     }// end of method
 
