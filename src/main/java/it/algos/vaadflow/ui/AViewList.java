@@ -346,7 +346,10 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     @Autowired
     protected ApplicationContext appContext;
 
-    boolean isPagination;
+
+    protected boolean isPagination;
+
+    protected Collection items;
 
 
     /**
@@ -381,6 +384,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
         //--Login and context della sessione
         context = vaadinService.fixLoginAndContext(login);
+        login = context.getLogin();
 
         //--Le preferenze standard
         fixPreferenze();
@@ -598,7 +602,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             try { // prova ad eseguire il codice
                 //--Costruisce la Grid SENZA creare automaticamente le colonne
                 //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-                grid = new Grid(entityClazz, false);
+                grid = new Grid(entityClazz);
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error(unErrore.toString());
                 return;
@@ -606,6 +610,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         } else {
             grid = new Grid();
         }// end of if/else cycle
+
+        //--@todo solo per la versione 10.0.5
+        //--@todo dalla versione 12.0.0, si può levare ed aggiungere 'false' come secondo parametro a new Grid(...,false)
+        for (Grid.Column column : grid.getColumns()) {
+            grid.removeColumn(column);
+        }// end of for cycle
 
         //--Apre il dialog di detail
         if (isBottoneEditBefore) {
@@ -664,7 +674,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected String getGridHeaderText() {
         int numRecCollezione = service != null ? service.count() : 0;
-        String numFormattato = text.format(numRecCollezione);
+        String filtro = text.format(items.size());
+        String totale = text.format(numRecCollezione);
         String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
 
         switch (numRecCollezione) {
@@ -676,9 +687,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 break;
             default:
                 if (isPagination) {
-                    testo += "Collezione di " + limit + " elementi su " + numFormattato + " totali. ";
+                    testo += "Collezione di " + limit + " elementi su " + totale + " totali. ";
                 } else {
-                    testo += "Collezione di " + numFormattato + " elementi";
+                    testo += "Collezione di " + totale + " elementi";
                 }// end of if/else cycle
                 break;
         } // end of switch statement
@@ -883,7 +894,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     public void updateView() {
-        Collection items = updateItems();
+        updateItems();
 
         if (items != null) {
             try { // prova ad eseguire il codice
@@ -899,16 +910,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-    public Collection updateItems() {
-        Collection items = null;
-
+    public void updateItems() {
         if (isPagination) {
             items = service != null ? service.findAll(offset, limit) : null;
         } else {
             items = service != null ? service.findAll() : null;
         }// end of if/else cycle
-
-        return items;
     }// end of method
 
 

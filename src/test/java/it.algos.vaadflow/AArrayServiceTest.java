@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,12 +33,19 @@ public class AArrayServiceTest extends ATest {
 
 
     private final static String[] stringArray = {"primo", "secondo", "quarto", "quinto", "1Ad", "terzo", "a10"};
+
     private final static ArrayList<String> stringList = new ArrayList(Arrays.asList(stringArray));
+
     private final static Object[] objArray = {new Label("Alfa"), new Button()};
+
     private final static ArrayList<Object> objList = new ArrayList(Arrays.asList(objArray));
+
     private final static Long[] longArray = {234L, 85L, 151099L, 123500L, 3L, 456772L};
+
     private final static ArrayList<Long> longList = new ArrayList(Arrays.asList(longArray));
+
     private List<String> prevista;
+
     private List<String> ottenuta;
 
 
@@ -132,6 +140,7 @@ public class AArrayServiceTest extends ATest {
         assertEquals(previstoBooleano, ottenutoBooleano);
     }// end of single test
 
+
     @Test
     public void contains() {
         previstoBooleano = true;
@@ -165,6 +174,7 @@ public class AArrayServiceTest extends ATest {
         assertEquals(previstoInt, ottenutoInt);
     }// end of single test
 
+
     /**
      * Costruisce una stringa con i singoli valori divisi da un pipe
      * <p>
@@ -179,7 +189,7 @@ public class AArrayServiceTest extends ATest {
         ottenuto = service.toStringaPipe(stringList);
         assertNotNull(ottenuto);
         assertEquals(previsto, ottenuto);
-    }// end of method
+    }// end of single test
 
 
     /**
@@ -202,7 +212,8 @@ public class AArrayServiceTest extends ATest {
         ottenuto = service.toStringa(stringList, ",");
         assertNotNull(ottenuto);
         assertEquals(previsto, ottenuto);
-    }// end of method
+    }// end of single test
+
 
     /**
      * Numero di cicli
@@ -223,7 +234,8 @@ public class AArrayServiceTest extends ATest {
         ottenutoIntero = service.numCicli(51, 10);
         assertNotNull(ottenuto);
         assertEquals(previstoIntero, ottenutoIntero);
-    }// end of method
+    }// end of single test
+
 
     /**
      * Estra un subset dalla lista
@@ -260,7 +272,8 @@ public class AArrayServiceTest extends ATest {
         listaOttenuta = service.estraeSublista(stringList, 9, 1);
         assertNotNull(listaOttenuta);
         assertEquals(stringList, listaOttenuta);
-    }// end of method
+    }// end of single test
+
 
     /**
      * Estra un subset dalla lista
@@ -289,6 +302,135 @@ public class AArrayServiceTest extends ATest {
         assertNotNull(listaOttenuta);
         assertEquals(listaPrevista, listaOttenuta);
 
-    }// end of method
+    }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void differenza() {
+        ArrayList listaUno = new ArrayList();
+        ArrayList listaDue = new ArrayList();
+        ArrayList listaUnoCopia;
+        ArrayList delta;
+        int dim = 10000;
+        long inizio;
+        long fine;
+
+        for (int k = 0; k < dim; k++) {
+            listaUno.add(k * 3);
+            listaDue.add(k * 2);
+        }// end of for cycle
+
+        //--prima prova
+        inizio = System.currentTimeMillis();
+        delta = service.differenza(listaUno, listaDue);
+        fine = System.currentTimeMillis();
+        System.out.println("prima prova");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+
+        //--seconda prova
+        inizio = System.currentTimeMillis();
+        delta = (ArrayList) listaUno.clone();
+        delta.removeAll(listaDue);
+        fine = System.currentTimeMillis();
+        System.out.println("");
+        System.out.println("seconda prova");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+
+        //--terza prova
+        inizio = System.currentTimeMillis();
+        delta = (ArrayList) listaUno.clone();
+        delta = (ArrayList) listaUno.stream()
+                .filter(e -> !listaDue.contains(e))
+                .collect(Collectors.toList());
+        fine = System.currentTimeMillis();
+        System.out.println("");
+        System.out.println("terza prova");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+        //--quarta prova
+        inizio = System.currentTimeMillis();
+        listaUno.removeAll(listaDue);
+        fine = System.currentTimeMillis();
+        System.out.println("");
+        System.out.println("quarta prova");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+    }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void differenza2() {
+        ArrayList listaUno = new ArrayList();
+        ArrayList listaDue = new ArrayList();
+        ArrayList listaUnoCopia;
+        ArrayList delta;
+        int dim = 10000;
+        long inizio;
+        long fine;
+
+        for (int k = 0; k < dim; k++) {
+            listaUno.add(k);
+        }// end of for cycle
+        listaDue.add(345);
+        listaDue.add(4781);
+
+        //--prima prova
+        inizio = System.currentTimeMillis();
+        delta = service.differenza(listaUno, listaDue);
+        fine = System.currentTimeMillis();
+        System.out.println("");
+        System.out.println("tanti meno pochi - differenza grande");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+        //--seconda prova
+        listaDue = new ArrayList();
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(k);
+        }// end of for cycle
+        listaDue.remove(345);
+        listaDue.remove(4781);
+        inizio = System.currentTimeMillis();
+        delta = service.differenza(listaUno, listaDue);
+        fine = System.currentTimeMillis();
+        System.out.println("");
+        System.out.println("tanti meno tanti - differenza piccola");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size delta: " + delta.size());
+        System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+    }// end of single test
 
 }// end of class

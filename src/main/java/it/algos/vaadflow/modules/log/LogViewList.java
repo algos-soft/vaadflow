@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Collection;
-
 import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
@@ -114,12 +112,9 @@ public class LogViewList extends AViewList {
     }// end of method
 
 
-    public Collection updateItems() {
-        Collection items;
+    public void updateItems() {
         Livello livello = (Livello) comboLivello.getValue();
-        items = ((LogService)service).findAllByLivello(livello);
-
-        return items;
+        items = ((LogService) service).findAllByLivello(livello);
     }// end of method
 
 }// end of class

@@ -7,7 +7,9 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.modules.log.Log;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -49,13 +51,15 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @AIScript(sovrascrivibile = true)
 public class ProvaViewList extends AViewList {
 
-
     /**
      * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
+    @Autowired
+    public AMongoService mongo;
 
 
     /**
@@ -81,6 +85,8 @@ public class ProvaViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
+        ArrayList lista = service.findAllProperty("code", Prova.class);
+        ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
     }// end of method
 
