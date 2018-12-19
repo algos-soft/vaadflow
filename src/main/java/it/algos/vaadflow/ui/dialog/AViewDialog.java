@@ -8,6 +8,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -63,10 +64,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected final Button deleteButton = new Button(DELETE);
 
-
-    @Autowired
-    protected ApplicationContext appContext;
-
     /**
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
@@ -90,7 +87,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Placeholder (eventuale, presente di default) <br>
      */
     protected final HorizontalLayout bottomLayout = new HorizontalLayout();
-
 
     private final String confirmText = "Conferma";
 
@@ -116,6 +112,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     @Autowired
     public ADateService date;
 
+    @Autowired
+    protected ApplicationContext appContext;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
@@ -372,6 +370,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         bottomLayout.setSpacing(true);
         bottomLayout.setMargin(false);
 
+        Label spazioVuotoEspandibile = new Label("");
+        bottomLayout.add(spazioVuotoEspandibile);
+
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
@@ -391,6 +392,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             bottomLayout.add(deleteButton);
         }// end of if cycle
 
+        bottomLayout.setFlexGrow(1, spazioVuotoEspandibile);
         return bottomLayout;
     }// end of method
 
@@ -759,10 +761,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         dialog.open(message, additionalMessage, this::deleteConfirmed);
     }// end of method
 
+
     private void deleteConfirmed() {
         itemDeleter.accept(currentItem);
         close();
     }// end of method
+
 
     /**
      * Gets the form layout, where additional components can be added for

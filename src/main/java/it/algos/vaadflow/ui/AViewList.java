@@ -17,6 +17,8 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -85,7 +87,7 @@ import java.util.List;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
 @Slf4j
-public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver {
+public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver, BeforeLeaveObserver {
 
     protected final static String EDIT_NAME = "Edit";
 
@@ -350,6 +352,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected boolean isPagination;
 
     protected Collection items;
+
+    protected ADeleteDialog deleteDialog;
 
 
     /**
@@ -893,6 +897,17 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
+    @Override
+    public void beforeLeave(BeforeLeaveEvent beforeLeaveEvent) {
+        if (dialog != null) {
+            dialog.close();
+        }// end of if cycle
+        if (deleteDialog != null) {
+            deleteDialog.close();
+        }// end of if cycle
+    }// end of method
+
+
     public void updateView() {
         updateItems();
 
@@ -927,8 +942,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected final void openConfirmDialogDelete() {
         String message = "Vuoi veramente cancellare TUTTE le entities di questa collezione ?";
         String additionalMessage = "L'operazione non è reversibile";
-        ADeleteDialog dialog = appContext.getBean(ADeleteDialog.class);
-        dialog.open(message, additionalMessage, this::deleteCollection, null);
+        deleteDialog = appContext.getBean(ADeleteDialog.class);
+        deleteDialog.open(message, additionalMessage, this::deleteCollection, null);
     }// end of method
 
 
