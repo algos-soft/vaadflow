@@ -5,12 +5,17 @@ import com.flowingcode.addons.applayout.menu.MenuItem;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+//import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.AppLayoutMenu;
+import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
@@ -86,8 +91,21 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         login = context.getLogin();
 
         creaAllMenu();
+//        creaAllVaadinMenu();
     }// end of method
 
+//    protected void creaAllVaadinMenu(){
+//        AppLayout appLayout = new AppLayout();
+//        AppLayoutMenu menu = appLayout.createMenu();
+//
+//        menu.addMenuItems(
+//                new AppLayoutMenuItem(VaadinIcon.USER.create(), "My Profile", "profile"),
+//                new AppLayoutMenuItem(VaadinIcon.TRENDING_UP.create(), "Trending Topics", "trends"),
+//                new AppLayoutMenuItem(VaadinIcon.SIGN_OUT.create(), "Sign Out", e -> logout()));
+//    }// end of method
+//
+//    protected void logout(){
+//    }// end of method
 
     protected void creaAllMenu() {
         final AppLayout appLayout = new AppLayout(null, createAvatarComponent(), FlowCost.LAYOUT_TITLE);
