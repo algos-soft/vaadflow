@@ -7,11 +7,10 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.modules.log.Log;
+import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_PRO, layout = MainLayout.class)
+@Route(value = TAG_PRO)
+//@Tag("prova-list")
+//@HtmlImport("frontend://src/views/prova/prova-list.html")
 @Qualifier(TAG_PRO)
 @Slf4j
 @AIScript(sovrascrivibile = true)
@@ -61,6 +62,13 @@ public class ProvaViewList extends AViewList {
     @Autowired
     public AMongoService mongo;
 
+//    @Id("search")
+//    private TextField search;
+//    @Id("newReview")
+//    private Button addReview;
+//    @Id("header")
+//    private H1 header=new H1();
+
 
     /**
      * Costruttore @Autowired <br>
@@ -74,7 +82,38 @@ public class ProvaViewList extends AViewList {
     public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
         super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
+//        header.setText("Pippoz");
     }// end of Spring constructor
+
+
+    /**
+     * Creazione e posizionamento dei componenti UI <br>
+     * Può essere sovrascritto <br>
+     */
+    protected void creaLayout2() {
+        if (creaTopLayout()) {
+            this.add(topPlaceholder);
+        }// end of if cycle
+
+        if (creaAlertLayout()) {
+            this.add(alertPlacehorder);
+        }// end of if cycle
+
+        creaGrid();
+        creaGridBottomLayout();
+        creaPaginationLayout();
+        creaFooterLayout();
+    }// end of method
+
+
+    /**
+     * Aggiunge al menu eventuali @routes specifiche
+     * Solo sovrascritto
+     */
+    @Override
+    protected void addSpecificRoutes() {
+        addRoute(SecoloViewList.class);
+    }// end of method
 
 
     /**
@@ -88,6 +127,7 @@ public class ProvaViewList extends AViewList {
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
+
     }// end of method
 
 

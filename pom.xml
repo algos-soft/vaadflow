@@ -100,7 +100,8 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-app-layout-flow</artifactId>
-            <version>1.0.3</version>
+            <!-- You do not need to specify the version number as long as you have vaadin-bom imported. -->
+            <!--<version>1.0.3</version>-->
         </dependency>
 
         <!-- Spring -->

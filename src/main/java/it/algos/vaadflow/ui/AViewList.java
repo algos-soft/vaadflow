@@ -1,7 +1,10 @@
 package it.algos.vaadflow.ui;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.applayout.AppLayoutMenu;
+import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
@@ -19,10 +22,13 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveObserver;
+import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.modules.log.LogService;
@@ -33,13 +39,17 @@ import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.ATextField;
+import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.USA_MENU;
 
 /**
  * Project it.algos.vaadflow
@@ -63,16 +73,17 @@ import java.util.List;
  * Annotated with @Route (obbligatorio) per la selezione della vista.
  * <p>
  * Graficamente abbiamo:
- * 1) un topPlaceholder (eventuale, presente di default) di tipo HorizontalLayout
+ * 1) una barra di menu (obbligatorio) di tipo IAMenu
+ * 2) un topPlaceholder (eventuale, presente di default) di tipo HorizontalLayout
  * - con o senza campo edit search, regolato da preferenza o da parametro
  * - con o senza bottone New, regolato da preferenza o da parametro
  * - con eventuali bottoni specifici, aggiuntivi o sostitutivi
- * 2) un alertPlacehorder di avviso (eventuale) con label o altro per informazioni; di norma per il developer
- * 3) un headerGridHolder della Grid (obbligatoria) con informazioni sugli elementi della lista
- * 4) una Grid (obbligatoria); alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
- * 5) un bottomLayout della Grid (eventuale) con informazioni sugli elementi della lista; di norma delle somme
- * 6) un bottomLayout (eventuale) con bottoni aggiuntivi
- * 7) un footer (obbligatorio) con informazioni generali
+ * 3) un alertPlaceholder di avviso (eventuale) con label o altro per informazioni; di norma per il developer
+ * 4) un headerGridHolder della Grid (obbligatoria) con informazioni sugli elementi della lista
+ * 5) una Grid (obbligatoria); alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
+ * 6) un bottomLayout della Grid (eventuale) con informazioni sugli elementi della lista; di norma delle somme
+ * 7) un bottomLayout (eventuale) con bottoni aggiuntivi
+ * 8) un footer (obbligatorio) con informazioni generali
  * <p>
  * Le injections vengono fatta da SpringBoot nel metodo @PostConstruct DOPO init() automatico
  * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
@@ -86,6 +97,7 @@ import java.util.List;
  * <p>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  */
+@HtmlImport(value = "styles/algos-styles.html", loadMode = LoadMode.INLINE)
 @Slf4j
 public abstract class AViewList extends VerticalLayout implements IAView, BeforeEnterObserver, BeforeLeaveObserver {
 
@@ -355,6 +367,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     protected ADeleteDialog deleteDialog;
 
+    protected ArrayList<AppLayoutMenuItem> specificMenuItems = new ArrayList<AppLayoutMenuItem>();
+
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -380,8 +394,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @PostConstruct
     protected void initView() {
-        addClassName("categories-list");
-        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
+//        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
         this.setMargin(false);
         this.setSpacing(false);
         this.removeAll();
@@ -475,16 +488,58 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto <br>
      */
     protected void creaLayout() {
-        this.add(topPlaceholder);
-        this.add(alertPlacehorder);
+        creaMenuLayout();
 
-        fixTopLayout();
-        fixAlertLayout();
+        if (creaTopLayout()) {
+            this.add(topPlaceholder);
+        }// end of if cycle
+
+        if (creaAlertLayout()) {
+            this.add(alertPlacehorder);
+        }// end of if cycle
 
         creaGrid();
         creaGridBottomLayout();
         creaPaginationLayout();
         creaFooterLayout();
+    }// end of method
+
+
+    /**
+     * Costruisce la barra di menu <br>
+     */
+    protected boolean creaMenuLayout() {
+        IAMenu menu;
+        EAMenu typeMenu = EAMenu.getMenu(pref.getStr(USA_MENU));
+
+        if (typeMenu != null) {
+            switch (typeMenu) {
+                case buttons:
+                    menu = StaticContextAccessor.getBean(AButtonMenu.class);
+                    this.add(menu.getComp());
+                    break;
+                case popup:
+                    menu = StaticContextAccessor.getBean(APopupMenu.class);
+                    this.add(menu.getComp());
+                    break;
+                case flowing:
+                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
+                    this.add(menu.getComp());
+                    break;
+                case vaadin:
+                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
+                    this.add(new Label("."));
+                    this.add(menu.getAppLayout());
+                    break;
+                default:
+                    log.warn("Switch - caso non definito");
+                    break;
+            } // end of switch statement
+        } else {
+            return false;
+        }// end of if/else cycle
+
+        return true;
     }// end of method
 
 
@@ -496,7 +551,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected void fixTopLayout() {
+    protected boolean creaTopLayout() {
         topPlaceholder.removeAll();
         topPlaceholder.addClassName("view-toolbar");
         Button deleteAllButton;
@@ -545,6 +600,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             newButton.addClickListener(e -> dialog.open(service.newEntity(), EAOperation.addNew, context));
             topPlaceholder.add(newButton);
         }// end of if cycle
+
+        return topPlaceholder.getComponentCount() > 0;
     }// end of method
 
 
@@ -554,9 +611,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
      */
-    protected void fixAlertLayout() {
+    protected boolean creaAlertLayout() {
         alertPlacehorder.removeAll();
-        alertPlacehorder.addClassName("view-toolbar");
+//        alertPlacehorder.addClassName("view-toolbar");
         alertPlacehorder.setMargin(false);
         alertPlacehorder.setSpacing(false);
         alertPlacehorder.setPadding(false);
@@ -583,6 +640,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 alertPlacehorder.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
             }// end of if cycle
         }// end of if cycle
+
+        return alertPlacehorder.getComponentCount() > 0;
     }// end of method
 
 
@@ -893,17 +952,44 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        this.addSpecificRoutes();
         this.updateView();
+    }// end of method
+
+
+    /**
+     * Aggiunge al menu eventuali @routes specifiche
+     * Solo sovrascritto
+     */
+    protected void addSpecificRoutes() {
+    }// end of method
+
+
+    /**
+     * Aggiunge al menu la @route
+     */
+    protected void addRoute(Class<? extends AViewList> viewClazz) {
+        MainLayout mainLayout = context.getMainLayout();
+        if (specificMenuItems != null && specificMenuItems.size() > 0) {
+            specificMenuItems.add(mainLayout.addMenu(viewClazz));
+        }// end of if cycle
     }// end of method
 
 
     @Override
     public void beforeLeave(BeforeLeaveEvent beforeLeaveEvent) {
+        AppLayoutMenu appMenu = context.getAppMenu();
+
         if (dialog != null) {
             dialog.close();
         }// end of if cycle
         if (deleteDialog != null) {
             deleteDialog.close();
+        }// end of if cycle
+        if (specificMenuItems != null && specificMenuItems.size() > 0) {
+            for (AppLayoutMenuItem menuItem : specificMenuItems) {
+                appMenu.removeMenuItem(menuItem);
+            }// end of for cycle
         }// end of if cycle
     }// end of method
 
@@ -921,7 +1007,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             }// fine del blocco try-catch
         }// end of if cycle
 
-        fixAlertLayout();
+        creaAlertLayout();
     }// end of method
 
 
@@ -997,8 +1083,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     @Override
-    public String getName() {
-        return annotation.getViewName(this.getClass());
+    public String getMenuName() {
+        return annotation.getMenuName(this.getClass());
     }// end of method
 
 }// end of class

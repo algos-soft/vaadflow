@@ -207,7 +207,7 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getViewName() {
         previsto = "role";
-        ottenuto = annotation.getViewName(ROLE_VIEW_CLASS);
+        ottenuto = annotation.getMenuName(ROLE_VIEW_CLASS);
         assertEquals(previsto, ottenuto);
     }// end of single test
 

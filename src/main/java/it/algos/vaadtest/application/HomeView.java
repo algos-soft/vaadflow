@@ -1,12 +1,17 @@
 package it.algos.vaadtest.application;
 
+import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
-import it.algos.vaadflow.ui.MainLayout;
-import lombok.extern.slf4j.Slf4j;
+import com.vaadin.flow.shared.ui.LoadMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
+import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.ui.menu.AButtonMenu;
+import it.algos.vaadflow.ui.menu.APopupMenu;
+import it.algos.vaadflow.ui.menu.IAMenu;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Project vaadflow
@@ -17,7 +22,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
  */
 @SpringComponent
 @UIScope
-@Route(value = "", layout = MainLayout.class)
+@Route(value = "")
+@HtmlImport(value = "styles/algos-styles.html", loadMode = LoadMode.INLINE)
 @Slf4j
 public class HomeView extends VerticalLayout {
 
@@ -30,7 +36,10 @@ public class HomeView extends VerticalLayout {
 //        add(new Paragraph("Framework di prova con Vaadin 10"));
 //    }// end of method
 
+
     public HomeView() {
+        this.add(StaticContextAccessor.getBean(APopupMenu.class).getComp());
         add(immagine);
     }
+
 }// end of class

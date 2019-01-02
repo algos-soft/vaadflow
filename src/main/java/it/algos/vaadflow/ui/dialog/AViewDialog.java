@@ -441,7 +441,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         this.context = context;
         Object view = presenter.getView();
         if (view != null) {
-            this.itemType = presenter.getView().getName();
+            this.itemType = presenter.getView().getMenuName();
         }// end of if cycle
         this.fixTitleLayout(title);
 
