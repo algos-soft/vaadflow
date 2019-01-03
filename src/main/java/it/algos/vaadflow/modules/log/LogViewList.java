@@ -99,7 +99,7 @@ public class LogViewList extends AViewList {
     protected boolean creaTopLayout() {
         super.creaTopLayout();
         topPlaceholder.add(creaPopup());
-        return true;
+        return topPlaceholder.getComponentCount() > 0;
     }// end of method
 
 

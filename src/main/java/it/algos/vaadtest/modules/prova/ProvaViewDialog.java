@@ -120,9 +120,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
     public void paperino() {
         ADialog dialog = appContext.getBean(ADialog.class,"Alfetta");
-//        dialog.parte("","","",this::pluto);
         dialog.open("Pippoz",this::pippo,this::pluto);
-//        dialog.open("Pippoz","Dopotutto sarebbe megl io poter scrivere delle frasi molto lunghe anche senza doverne subire le conseguenze",this::pluto,null);
     }// end of method
 
     public void topolino() {

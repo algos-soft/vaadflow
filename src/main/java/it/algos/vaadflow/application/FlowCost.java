@@ -320,4 +320,6 @@ public class FlowCost {
 
     public static LocalDate PROJECT_DATE = LocalDate.of(2018, 1, 1);
 
+    public final static String TAG_SEARCH = "search";
+
 }// end of static class

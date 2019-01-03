@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
@@ -37,16 +38,20 @@ import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
+import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.USA_MENU;
@@ -105,7 +110,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     protected final static String SHOW_NAME = "Show";
 
-
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
@@ -148,6 +152,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     public ATextService text = ATextService.getInstance();
 
+    @Autowired
+    public AMongoService mongo;
+
+    @Autowired
+    protected ApplicationContext appContext;
+
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -178,6 +188,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * L'istanza viene  dichiarata nel costruttore @Autowired della sottoclasse concreta <br>
      */
     protected IADialog dialog;
+
+    protected ASearchDialog searchDialog;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -356,9 +368,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     @Autowired
     protected AVaadinService vaadinService;
-
-    @Autowired
-    protected ApplicationContext appContext;
 
 
     protected boolean isPagination;
@@ -1017,6 +1026,53 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         } else {
             items = service != null ? service.findAll() : null;
         }// end of if/else cycle
+    }// end of method
+
+
+    protected Component creaSearch() {
+        Button button = new Button("Search", new Icon("lumo", "search"));
+        button.getElement().setAttribute("theme", "secondary");
+        button.addClassName("view-toolbar__button");
+        button.addClickListener(e -> openSearch());
+
+        return button;
+    }// end of method
+
+
+    protected void openSearch() {
+        searchDialog = appContext.getBean(ASearchDialog.class, service);
+        searchDialog.open("", "", this::updateViewDopoSearch, null);
+    }// end of method
+
+
+    public void updateViewDopoSearch() {
+        LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
+        List<AEntity> lista;
+        ATextField field;
+        String fieldValue;
+        ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
+
+        for (String fieldName : searchDialog.fieldMap.keySet()) {
+            field = (ATextField) searchDialog.fieldMap.get(fieldName);
+            fieldValue = field.getValue();
+            listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+        }// end of for cycle
+
+        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinition.stream().toArray(CriteriaDefinition[]::new));
+
+        if (array.isValid(lista)) {
+            try { // prova ad eseguire il codice
+                grid.deselectAll();
+                grid.setItems(lista);
+                headerGridHolder.setText(getGridHeaderText());
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        } else {
+            this.updateView();
+        }// end of if/else cycle
+
+        creaAlertLayout();
     }// end of method
 
 

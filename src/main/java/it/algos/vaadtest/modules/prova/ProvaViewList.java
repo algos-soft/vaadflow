@@ -1,17 +1,23 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.AViewList;
+import it.algos.vaadflow.ui.dialog.ADeleteDialog;
+import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,8 +65,6 @@ public class ProvaViewList extends AViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
-    @Autowired
-    public AMongoService mongo;
 
 //    @Id("search")
 //    private TextField search;
@@ -127,8 +131,23 @@ public class ProvaViewList extends AViewList {
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
-
     }// end of method
+
+
+    /**
+     * Placeholder (eventuale, presente di default) SOPRA la Grid
+     * - con o senza campo edit search, regolato da preferenza o da parametro
+     * - con o senza bottone New, regolato da preferenza o da parametro
+     * - con eventuali altri bottoni specifici
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected boolean creaTopLayout() {
+        super.creaTopLayout();
+        topPlaceholder.add(creaSearch());
+        return true;
+    }// end of method
+
 
 
     /**

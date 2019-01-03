@@ -553,7 +553,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
      */
     protected List<String> getPropertiesName() {
-        return service != null ? service.getFormPropertyNamesList((AEntity) currentItem, context) : null;
+        return service != null ? service.getFormPropertyNamesList(context) : null;
     }// end of method
 
 

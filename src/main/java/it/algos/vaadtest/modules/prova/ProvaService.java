@@ -2,6 +2,7 @@ package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.AService;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
@@ -189,6 +191,20 @@ public class ProvaService extends AService {
      */
     public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
         return super.beforeSave(entityBean, operation);
+    }// end of method
+
+
+    /**
+     * Costruisce una lista di nomi delle properties del Search nell'ordine:
+     * 1) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     *
+     * @param context legato alla sessione
+     *
+     * @return lista di nomi di properties
+     */
+    @Override
+    public List<String> getSearchPropertyNamesList(AContext context) {
+        return Arrays.asList("code");
     }// end of method
 
 }// end of class
