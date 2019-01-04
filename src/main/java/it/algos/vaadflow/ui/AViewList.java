@@ -1055,7 +1055,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         for (String fieldName : searchDialog.fieldMap.keySet()) {
             field = (ATextField) searchDialog.fieldMap.get(fieldName);
             fieldValue = field.getValue();
-            listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+            if (text.isValid(fieldValue)) {
+                listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+            }// end of if cycle
         }// end of for cycle
 
         lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinition.stream().toArray(CriteriaDefinition[]::new));
