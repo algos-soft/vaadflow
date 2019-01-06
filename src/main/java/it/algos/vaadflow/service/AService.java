@@ -16,8 +16,6 @@ import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -560,7 +558,7 @@ public abstract class AService extends AbstractService implements IAService {
      * @return lista di nomi di properties
      */
     @Override
-    public List<String> getFormPropertyNamesList( AContext context) {
+    public List<String> getFormPropertyNamesList(AContext context) {
         ArrayList<String> lista = annotation.getFormPropertiesName(entityClass);
 
         if (lista.contains(FIELD_NAME_COMPANY) && !context.getLogin().isDeveloper()) {
@@ -1212,11 +1210,13 @@ public abstract class AService extends AbstractService implements IAService {
     @Override
     public boolean delete(AEntity entityBean) {
         boolean status = false;
-        DeleteResult result;
+        DeleteResult result = null;
 
-        result = mongo.delete(entityBean);
+        if (entityBean != null) {
+            result = mongo.delete(entityBean);
+        }// end of if cycle
 
-        if (result.getDeletedCount() == 1) {
+        if (result != null && result.getDeletedCount() == 1) {
             status = true;
         }// end of if cycle
 

@@ -25,6 +25,8 @@ public class AContext {
 
     private AppLayoutMenu appMenu;
 
+    private boolean secured;
+
 
     public AContext() {
     } // end of constructor
@@ -92,12 +94,22 @@ public class AContext {
 
 
     public boolean isDev() {
-        return login.isDeveloper();
+        return login.isDeveloper() || !isSecured();
     }// end of method
 
 
     public boolean isAdmin() {
-        return login.isAdmin();
+        return login.isAdmin() || !isSecured();
+    }// end of method
+
+
+    public boolean isSecured() {
+        return secured;
+    }// end of method
+
+
+    public void setSecured(boolean secured) {
+        this.secured = secured;
     }// end of method
 
 }// end of class

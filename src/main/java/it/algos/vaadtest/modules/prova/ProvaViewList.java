@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.mongodb.client.MongoDatabase;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -86,7 +87,6 @@ public class ProvaViewList extends AViewList {
     public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
         super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
-//        header.setText("Pippoz");
     }// end of Spring constructor
 
 

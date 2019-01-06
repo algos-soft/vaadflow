@@ -1,13 +1,16 @@
 package it.algos.vaadflow;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AMongoService;
+import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadtest.TestApplication;
 import it.algos.vaadtest.modules.prova.Prova;
 import it.algos.vaadtest.modules.prova.ProvaService;
-import org.bson.types.ObjectId;
+import org.bson.Document;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -21,7 +24,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //import de.flapdoodle.embed.mongo.config.Net;
 //import de.flapdoodle.embed.mongo.distribution.Version;
 //import de.flapdoodle.embed.process.runtime.Network;
+
 
 /**
  * Project vaadflow
@@ -50,18 +56,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AMongoServiceTest extends ATest {
 
     private final static int CICLI = 1000;
+
     private static Class PROVA_ENTITY_CLASS = Prova.class;
+
     @Autowired
     public MongoOperations mongoOperations;
+
     @InjectMocks
     private AMongoService mongoService;
+
     @InjectMocks
     private ProvaService provaService;
+
     @InjectMocks
     private AAnnotationService annotation;
+
+    @InjectMocks
+    private ATextService text;
+
     private List listaProve = new ArrayList();
+
     private String collectionName = "prova";
+
     private Prova prova;
+
 
     @BeforeAll
     public void setUp() {
@@ -70,6 +88,7 @@ public class AMongoServiceTest extends ATest {
         MockitoAnnotations.initMocks(mongoOperations);
         MockitoAnnotations.initMocks(mongoService);
         MockitoAnnotations.initMocks(annotation);
+        MockitoAnnotations.initMocks(text);
         provaService.array = array;
         provaService.text = text;
         provaService.annotation = annotation;
@@ -77,6 +96,9 @@ public class AMongoServiceTest extends ATest {
         provaService.mongo = mongoService;
         mongoService.mongoOp = mongoOperations;
         mongoService.annotation = annotation;
+        annotation.text = text;
+        mongoService.text = text;
+        mongoService.reflection = reflection;
     }// end of method
 
 
@@ -669,6 +691,7 @@ public class AMongoServiceTest extends ATest {
 //        int a = 87;
 //    }// end of single test
 
+
     private void reset() {
         mongoService.drop(PROVA_ENTITY_CLASS);
         vuoto();
@@ -703,5 +726,94 @@ public class AMongoServiceTest extends ATest {
         return listaEntities;
     }// end of method
 
+
+    /**
+     * Recupera il valore del parametro internalQueryExecMaxBlockingSortBytes
+     *
+     * @return lista
+     */
+    @Test
+    public void getMaxBlockingSortBytes() {
+        mongoService.getMaxBlockingSortBytes();
+    }// end of method
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Regola il valore del parametro internalQueryExecMaxBlockingSortBytes
+     *
+     * @param maxBytes da regolare
+     *
+     * @return true se il valore è stato acquisito dal database
+     */
+    @Test
+    public void setMaxBlockingSortBytes() {
+        int temporary = 22444777;
+
+        //--modifica
+        assertTrue(mongoService.setMaxBlockingSortBytes(temporary));
+
+        //--ripristina
+        assertTrue(mongoService.setMaxBlockingSortBytes(AMongoService.EXPECTED_ALGOS_MAX_BYTES));
+    }// end of method
+
+
+    //    @Test
+    public void checkRamSize() {
+        int hight = 50151432;
+        int low = 22444777;
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("admin");
+        Document param;
+
+        //--questo funziona sul terminale
+        // db.runCommand( { getParameter: '*'})
+        // db.runCommand( { getParameter : 1, "internalQueryExecMaxBlockingSortBytes" : 1 } )
+        //--end
+
+        //--questo funziona per tutti i parametri
+        param = database.runCommand(new Document("getParameter", "*"));
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Parametri di mongoDB");
+        System.out.println(param.toJson());
+
+        //--questo funziona per un singolo parametro
+        Map<String, Object> mappaLegge = new LinkedHashMap<>();
+        mappaLegge.put("getParameter", 1);
+        mappaLegge.put("internalQueryExecMaxBlockingSortBytes", 1);
+        param = database.runCommand(new Document(mappaLegge));
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Legge parametro internalQueryExecMaxBlockingSortBytes");
+        System.out.println(param.toJson());
+        System.out.println("");
+
+        Map<String, Object> mappaScrive = new LinkedHashMap<>();
+        mappaScrive.put("setParameter", 1);
+        mappaScrive.put("internalQueryExecMaxBlockingSortBytes", low);
+        param = database.runCommand(new Document(mappaScrive));
+        System.out.println("");
+        System.out.println("Scrive parametro internalQueryExecMaxBlockingSortBytes");
+        System.out.println(param.toJson());
+        param = database.runCommand(new Document(mappaLegge));
+        System.out.println("");
+        System.out.println("Controlla parametro internalQueryExecMaxBlockingSortBytes");
+        System.out.println(param.toJson());
+
+        //--rimette a posto
+        Map<String, Object> mappaScriveOld = new LinkedHashMap<>();
+        mappaScriveOld.put("setParameter", 1);
+        mappaScriveOld.put("internalQueryExecMaxBlockingSortBytes", 50151432);
+        param = database.runCommand(new Document(mappaScriveOld));
+        System.out.println("");
+        System.out.println("Riscrive parametro internalQueryExecMaxBlockingSortBytes");
+        System.out.println(param.toJson());
+        param = database.runCommand(new Document(mappaLegge));
+        System.out.println("");
+        System.out.println("Ricontrolla parametro internalQueryExecMaxBlockingSortBytes");
+        System.out.println(param.toJson());
+
+    }// end of single test
 
 }// end of class
