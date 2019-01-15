@@ -108,8 +108,8 @@ public class TestBoot extends ABoot {
      */
     protected void regolaInfo() {
         PROJECT_NAME = "test";
-        PROJECT_VERSION = "0.1";
-        PROJECT_DATE = LocalDate.of(2018, 10, 14);
+        PROJECT_VERSION = "1.0";
+        PROJECT_DATE = LocalDate.of(2019, 1, 9);
     }// end of method
 
 

@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -115,7 +116,7 @@ public class AMongoServiceTest extends ATest {
         ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
         if (ottenutoIntero == 0) {
             previstoIntero = 1;
-            prova = new Prova(91, "alfa1");
+            prova = new Prova(91, "alfa1", LocalDateTime.now());
             mongoService.insert(prova, collectionName);
             ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
             assertEquals(previstoIntero, ottenutoIntero);
@@ -142,7 +143,7 @@ public class AMongoServiceTest extends ATest {
         ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
         if (ottenutoIntero == 0) {
             previstoIntero = 1;
-            prova = new Prova(91, "alfa1");
+            prova = new Prova(91, "alfa1", LocalDateTime.now());
             mongoService.insert(prova, collectionName);
             ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
             assertEquals(previstoIntero, ottenutoIntero);
@@ -193,16 +194,16 @@ public class AMongoServiceTest extends ATest {
         reset();
 
         prova = null;
-        prova = new Prova(intUno, codeUno);
+        prova = new Prova(intUno, codeUno, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
-        prova = new Prova(intDue, codeDue);
+        prova = new Prova(intDue, codeDue, LocalDateTime.now());
         prova.id = keyId;
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
-        prova = new Prova(intTre, codeTre);
+        prova = new Prova(intTre, codeTre, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
@@ -236,17 +237,17 @@ public class AMongoServiceTest extends ATest {
         reset();
 
         prova = null;
-        prova = new Prova(intUno, codeUno);
+        prova = new Prova(intUno, codeUno, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
-        prova = new Prova(intDue, codeDue);
+        prova = new Prova(intDue, codeDue, LocalDateTime.now());
         prova.id = keyId;
         provaFind = prova;
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
-        prova = new Prova(intTre, codeTre);
+        prova = new Prova(intTre, codeTre, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
@@ -277,11 +278,11 @@ public class AMongoServiceTest extends ATest {
         String codeDue = "altravolta";
         String codeTre = "nessuno";
         reset();
-        prova = new Prova(intUno, codeUno);
+        prova = new Prova(intUno, codeUno, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
-        prova = new Prova(intDue, codeDue);
+        prova = new Prova(intDue, codeDue, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
-        prova = new Prova(intTre, codeTre);
+        prova = new Prova(intTre, codeTre, LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
@@ -323,7 +324,7 @@ public class AMongoServiceTest extends ATest {
     @Test
     public void insert() {
         sorgenteIntero = mongoService.count(PROVA_ENTITY_CLASS);
-        prova = new Prova(935, "alfa211");
+        prova = new Prova(935, "alfa211", LocalDateTime.now());
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
         ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
         assertEquals(sorgenteIntero + 1, ottenutoIntero);
@@ -344,7 +345,7 @@ public class AMongoServiceTest extends ATest {
     @Test
     public void insert2() {
         sorgenteIntero = mongoService.count(PROVA_ENTITY_CLASS);
-        prova = new Prova(874, "alfa874");
+        prova = new Prova(874, "alfa874", LocalDateTime.now());
         mongoService.insert(prova, collectionName);
         ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
         assertEquals(sorgenteIntero + 1, ottenutoIntero);
@@ -368,13 +369,13 @@ public class AMongoServiceTest extends ATest {
         String keyId = "xx";
         String prima = "provainsert";
         String dopo = "risultato";
-        prova = new Prova(999, prima);
+        prova = new Prova(999, prima, LocalDateTime.now());
         prova.id = keyId;
         reset();
         status = mongoService.insert(prova, PROVA_ENTITY_CLASS);
         assertTrue(status);
 
-        prova = new Prova(777, dopo);
+        prova = new Prova(777, dopo, LocalDateTime.now());
         prova.id = keyId;
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
@@ -433,12 +434,12 @@ public class AMongoServiceTest extends ATest {
         reset();
 
         prova = null;
-        prova = new Prova(intUno, codeUno);
+        prova = new Prova(intUno, codeUno, LocalDateTime.now());
         prova.id = keyId;
         mongoService.insert(prova, PROVA_ENTITY_CLASS);
 
         prova = null;
-        prova = new Prova(intDue, codeDue);
+        prova = new Prova(intDue, codeDue, LocalDateTime.now());
         prova.id = keyId;
         mongoService.update(prova, PROVA_ENTITY_CLASS);
 
@@ -501,14 +502,14 @@ public class AMongoServiceTest extends ATest {
         boolean status;
         reset();
 
-        prova = new Prova(427, "alfa932");
+        prova = new Prova(427, "alfa932", LocalDateTime.now());
         mongoService.insert(prova, collectionName);
         ottenutoIntero = mongoService.count(PROVA_ENTITY_CLASS);
         assertEquals(1, ottenutoIntero);
         mongoService.delete(prova);
         vuoto();
 
-        prova = new Prova(219, "beta151");
+        prova = new Prova(219, "beta151", LocalDateTime.now());
         mongoService.insert(prova, collectionName);
         status = provaService.delete(prova);
         assertTrue(status);
@@ -718,7 +719,7 @@ public class AMongoServiceTest extends ATest {
         List<Prova> listaEntities = new ArrayList<>();
 
         for (int k = 0; k < cicli; k++) {
-            prova = new Prova(k, nameCode + k);
+            prova = new Prova(k, nameCode + k, LocalDateTime.now());
             prova.id = "alfa" + k;
             listaEntities.add(prova);
         }// end of for cycle

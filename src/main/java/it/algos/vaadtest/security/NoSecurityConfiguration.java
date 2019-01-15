@@ -13,12 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * Date: ven, 04-gen-2019
  * Time: 15:16
  */
-@EnableWebSecurity
-@Configuration
-@AIScript(sovrascrivibile = true)
-public class NoSecurityConfiguration extends WebSecurityConfigurerAdapter {
+//@EnableWebSecurity
+//@Configuration
+@AIScript(sovrascrivibile = false)
+public class NoSecurityConfiguration   {
+//    public class NoSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers("/**").permitAll();
     }// end of method

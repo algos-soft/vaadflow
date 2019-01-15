@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
@@ -39,7 +40,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Tutte le @route/view devono essere comprese nei paths indicati come String[] in @EnableVaadin
  * Una sola view può avere @Route("")
  */
-@SpringBootApplication(scanBasePackages = {"it.algos.vaadflow", "it.algos.vaadtest"})
+@SpringBootApplication(scanBasePackages = {"it.algos.vaadflow", "it.algos.vaadtest"}, exclude = {SecurityAutoConfiguration.class})
 @EnableVaadin({"it.algos.vaadflow.modules","it.algos.vaadflow.backend", "it.algos.vaadflow.wizard", "it.algos.vaadflow.service", "it.algos.vaadflow.developer","it.algos.vaadflow.ui", "it.algos.vaadtest.application", "it.algos.vaadtest.modules"})
 @EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
 @EnableMongoRepositories({"it.algos"})

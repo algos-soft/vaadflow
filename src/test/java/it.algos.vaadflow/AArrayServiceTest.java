@@ -430,7 +430,44 @@ public class AArrayServiceTest extends ATest {
         System.out.println("Size listaDue: " + listaDue.size());
         System.out.println("Size delta: " + delta.size());
         System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+    }// end of single test
 
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void differenza3() {
+        ArrayList listaUnoOriginale = new ArrayList();
+        ArrayList listaDue = new ArrayList();
+        ArrayList listaUnoCopia = null;
+        int dim = 300000;
+       long inizio = System.currentTimeMillis();
+
+        for (int k = 0; k < dim; k++) {
+            listaUnoOriginale.add(k * 2);
+        }// end of for cycle
+
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(k * 3);
+        }// end of for cycle
+
+        inizio = System.currentTimeMillis();
+        listaUnoCopia = (ArrayList)listaUnoOriginale.clone();
+        System.out.println("");
+        System.out.println("Tempo per il clone: " + textService.format(System.currentTimeMillis() - inizio));
+        inizio = System.currentTimeMillis();
+        ottenutoBooleano = listaUnoCopia.retainAll(listaDue);
+        System.out.println("Differenza3 in msec: " + textService.format(System.currentTimeMillis() - inizio));
+
+        inizio = System.currentTimeMillis();
+        service.differenza(listaUnoOriginale, listaDue);
+        System.out.println("Differenza4 in msec: " + textService.format(System.currentTimeMillis() - inizio));
     }// end of single test
 
 }// end of class

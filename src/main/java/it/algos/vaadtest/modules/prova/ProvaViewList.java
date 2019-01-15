@@ -134,19 +134,19 @@ public class ProvaViewList extends AViewList {
     }// end of method
 
 
-    /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected boolean creaTopLayout() {
-        super.creaTopLayout();
-        topPlaceholder.add(creaSearch());
-        return true;
-    }// end of method
+//    /**
+//     * Placeholder (eventuale, presente di default) SOPRA la Grid
+//     * - con o senza campo edit search, regolato da preferenza o da parametro
+//     * - con o senza bottone New, regolato da preferenza o da parametro
+//     * - con eventuali altri bottoni specifici
+//     * Può essere sovrascritto, per aggiungere informazioni
+//     * Invocare PRIMA il metodo della superclasse
+//     */
+//    protected boolean creaTopLayout() {
+//        super.creaTopLayout();
+//        topPlaceholder.add(creaSearch());
+//        return true;
+//    }// end of method
 
 
 

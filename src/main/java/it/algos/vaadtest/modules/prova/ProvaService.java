@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class ProvaService extends AService {
         entity = Prova.builderProva()
                 .code(code.equals("") ? null : code)
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                .lastModifica(LocalDateTime.now())
                 .build();
 
         return (Prova) creaIdKeySpecifica(entity);
