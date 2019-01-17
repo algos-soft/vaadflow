@@ -82,7 +82,7 @@ public class Role extends AEntity {
      * il più importante per primo <br>
      */
     @NotNull
-    @Indexed(sparse = true, direction = IndexDirection.DESCENDING)
+    @Indexed(direction = IndexDirection.DESCENDING)
     @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", widthEM = 4)

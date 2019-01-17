@@ -260,6 +260,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected boolean usaSearchBottoneNew;
 
+    protected Button newButton;
     /**
      * Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
      */
@@ -583,7 +584,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         Button resetButton;
         Button clearFilterTextBtn;
         Button searchButton;
-        Button newButton;
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 

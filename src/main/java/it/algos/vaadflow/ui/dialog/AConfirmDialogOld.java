@@ -34,7 +34,7 @@ import static it.algos.vaadflow.application.FlowCost.BOT_BACK;
  *
  * @param <T> The type of the action's subject
  */
-public class AConfirmDialog<T extends Serializable> extends Dialog {
+public class AConfirmDialogOld<T extends Serializable> extends Dialog {
 
     private final H2 titleField = new H2();
 
@@ -55,7 +55,7 @@ public class AConfirmDialog<T extends Serializable> extends Dialog {
     /**
      * Constructor.
      */
-    public AConfirmDialog() {
+    public AConfirmDialogOld() {
         setCloseOnEsc(false);
         setCloseOnOutsideClick(false);
 

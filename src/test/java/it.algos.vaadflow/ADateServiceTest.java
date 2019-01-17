@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,16 +31,25 @@ public class ADateServiceTest extends ATest {
 
 
     private static int GIORNO = 12;
+
     private static int MESE = 7;
+
     private static int ANNO = 2004;
+
     @InjectMocks
     public ADateService service;
+
     // alcuni parametri utilizzati
     private Date dataPrevista = null;
+
     private Date dataOttenuta = null;
+
     private LocalDate localDataPrevista = null;
+
     private LocalDate localDataOttenuta = null;
+
     private LocalDateTime localDateTimePrevista = null;
+
     private LocalDateTime localDateTimeOttenuta = null;
 
 
@@ -48,6 +58,7 @@ public class ADateServiceTest extends ATest {
         MockitoAnnotations.initMocks(this);
         MockitoAnnotations.initMocks(service);
     }// end of method
+
 
     @BeforeAll
     public void tearDown() {
@@ -213,7 +224,6 @@ public class ADateServiceTest extends ATest {
         System.out.println("Restituisce il giorno della settimana in forma estesa: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
         System.out.println("");
     }// end of single test
-
 
 
     @SuppressWarnings("javadoc")
@@ -542,7 +552,7 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void getPrimoGennaio() {
-        localDataPrevista = LocalDate.of(2018, 1, 1);
+        localDataPrevista = LocalDate.of(2019, 1, 1);
         localDataOttenuta = service.getPrimoGennaio();
         assertEquals(localDataOttenuta, localDataPrevista);
     }// end of single test
@@ -586,6 +596,7 @@ public class ADateServiceTest extends ATest {
         System.out.println("LocalDate di riferimento " + LOCAL_DATE_DUE);
     }// end of single test
 
+
     @Test
     public void formattazione2() {
         System.out.println("LocalDateTime di riferimento " + LOCAL_DATE_TIME_DUE);
@@ -612,10 +623,22 @@ public class ADateServiceTest extends ATest {
 
         for (EATime eaTime : EATime.values()) {
             ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
-            System.out.println("Tipo: " + eaTime.getTag()+" -> " + ottenuto);
+            System.out.println("Tipo: " + eaTime.getTag() + " -> " + ottenuto);
         }// end of for cycle
         System.out.println("*************");
         System.out.println("");
+    }// end of single test
+
+
+    @Test
+    public void deltaDiUnaOraTraServerWikiEBrowserGac() {
+        long longUno = LocalDateTime.of(2019, 1, 15, 17, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long longDue = LocalDateTime.of(2019, 1, 15, 18, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long delta;
+        delta = longDue - longUno;
+        System.out.println("*************");
+        System.out.println("Differenza di un'ora in long: " + text.format(delta));
+        System.out.println("*************");
     }// end of single test
 
 

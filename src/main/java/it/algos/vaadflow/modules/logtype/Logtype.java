@@ -91,7 +91,7 @@ public class Logtype extends AEntity {
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @Indexed(direction = IndexDirection.DESCENDING)
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)

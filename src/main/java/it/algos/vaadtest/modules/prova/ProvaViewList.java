@@ -18,6 +18,7 @@ import it.algos.vaadflow.ui.AViewList;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class ProvaViewList extends AViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+    private AComboBox<String> comboUpload;
 
 
 //    @Id("search")
@@ -91,26 +93,6 @@ public class ProvaViewList extends AViewList {
 
 
     /**
-     * Creazione e posizionamento dei componenti UI <br>
-     * Può essere sovrascritto <br>
-     */
-    protected void creaLayout2() {
-        if (creaTopLayout()) {
-            this.add(topPlaceholder);
-        }// end of if cycle
-
-        if (creaAlertLayout()) {
-            this.add(alertPlacehorder);
-        }// end of if cycle
-
-        creaGrid();
-        creaGridBottomLayout();
-        creaPaginationLayout();
-        creaFooterLayout();
-    }// end of method
-
-
-    /**
      * Aggiunge al menu eventuali @routes specifiche
      * Solo sovrascritto
      */
@@ -134,20 +116,44 @@ public class ProvaViewList extends AViewList {
     }// end of method
 
 
-//    /**
-//     * Placeholder (eventuale, presente di default) SOPRA la Grid
-//     * - con o senza campo edit search, regolato da preferenza o da parametro
-//     * - con o senza bottone New, regolato da preferenza o da parametro
-//     * - con eventuali altri bottoni specifici
-//     * Può essere sovrascritto, per aggiungere informazioni
-//     * Invocare PRIMA il metodo della superclasse
-//     */
-//    protected boolean creaTopLayout() {
-//        super.creaTopLayout();
-//        topPlaceholder.add(creaSearch());
-//        return true;
-//    }// end of method
+    /**
+     * Placeholder (eventuale, presente di default) SOPRA la Grid
+     * - con o senza campo edit search, regolato da preferenza o da parametro
+     * - con o senza bottone New, regolato da preferenza o da parametro
+     * - con eventuali altri bottoni specifici
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected boolean creaTopLayout() {
+        super.creaTopLayout();
+        topPlaceholder.add(creaPopup());
+        return topPlaceholder.getComponentCount() > 0;
+    }// end of method
 
+
+    protected Component creaPopup() {
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Popup");
+        items.add("Primo");
+        items.add("Sercondo");
+        comboUpload = new AComboBox();
+        comboUpload.setWidth("8em");
+        comboUpload.setItems(items);
+        comboUpload.setValue("Popup");
+        comboUpload.addValueChangeListener(e -> openProvaDialog());
+
+        return comboUpload;
+    }// end of method
+
+
+
+    protected void openProvaDialog() {
+        String message = "Vuoi continuare ?";
+        String additionalMessage = "L'operazione non si può interrompere";
+//        AConfirmDialog dialog = appContext.getBean(AConfirmDialog.class);
+//        dialog.open();
+    }// end of method
 
 
     /**
