@@ -32,17 +32,23 @@ public class ATextServiceTest extends ATest {
 
     @InjectMocks
     public AArrayService array;
+
     //    private String sorgente = "";
 //    private String previsto = "";
 //    private String ottenuto = "";
 //    private boolean previstoBooleano;
 //    private boolean ottenutoBooleano;
     private String tag = "";
+
     private String oldTag = "";
+
     private String newTag = "";
+
     private int pos;
+
     @InjectMocks
     private ATextService service;
+
 
     @BeforeAll
     public void setUp() {
@@ -446,6 +452,7 @@ public class ATextServiceTest extends ATest {
         print("Inserisce tag", sorgente + SEP3 + newTag + SEP3 + tag, ottenuto);
     }// end of single test
 
+
     @SuppressWarnings("javadoc")
     /**
      * Controlla se il testo contiene uno elemento di una lista di tag
@@ -552,6 +559,123 @@ public class ATextServiceTest extends ATest {
         previsto = "135";
         ottenuto = service.format3(sorgenteIntero);
         assertEquals(previsto, ottenuto);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Confronta due numeri.
+     *
+     * @param primo   numero
+     * @param secondo numero
+     *
+     * @return :
+     * 1 if secondo should be before primo
+     * -1 if primo should be before secondo
+     * 0 otherwise
+     */
+    @Test
+    public void compareInt() {
+        int primo;
+        int secondo;
+
+        primo = 17;
+        secondo = 14;
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareInt(primo, secondo);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        primo = 345;
+        secondo = 1860;
+        previstoIntero = -1; //restano come sono
+        ottenutoIntero = text.compareInt(primo, secondo);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+
+        primo = 13;
+        secondo = 13;
+        previstoIntero = 0; //sono uguali
+        ottenutoIntero = text.compareInt(primo, secondo);
+        assertEquals(previstoIntero, ottenutoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Confronta due stringhe.
+     *
+     * @param prima   stringa
+     * @param seconda stringa
+     *
+     * @return :
+     * 1 if seconda should be before prima
+     * -1 if prima should be before seconda
+     * 0 otherwise
+     */
+    @Test
+    public void compareStr() {
+        String prima;
+        String seconda;
+
+        prima = "gamma";
+        seconda = "alfa";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "Gamma";
+        seconda = "alfa";
+        previstoIntero = -1; //restano come sono
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "gamma";
+        seconda = "Alfa";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "Gamma";
+        seconda = "Alfa";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "Pomeriggio";
+        seconda = "Martedi";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "domani";
+        seconda = "pomeriggio";
+        previstoIntero = -1; //restano come sono
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "dopo";
+        seconda = "dopo";
+        previstoIntero = 0; //sono uguali
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "KakizakiMuku Kakizaki";
+        seconda = "HoustonBrant Houston";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "d'AsburgoElena d'Asburgo";
+        seconda = "VenezianoAntonio Veneziano (poeta)";
+        previstoIntero = 1; //vanno invertiti
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        prima = "MitscherlichEilhard Mitscherlich";
+        seconda = "SchottHeinrich Wilhelm Schott";
+        previstoIntero = -1; //restano come sono
+        ottenutoIntero = text.compareStr(prima, seconda);
+        assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
 }// end of class

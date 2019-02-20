@@ -47,10 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Date: ven, 31-ago-2018
  * Time: 08:47
  */
-//@ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("mongo")
-//@DisplayName("Test sul service di accesso ai files")
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestApplication.class)

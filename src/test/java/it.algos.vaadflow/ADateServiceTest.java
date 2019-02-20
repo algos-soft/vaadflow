@@ -313,6 +313,24 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    /**
+     * Restituisce ora e minuti
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return l'orario sotto forma di stringa
+     */
+    @Test
+    public void getOrario() {
+        previsto = "7:04";
+        ottenuto = service.getOrario(LOCAL_DATE_TIME_DUE);
+        assertEquals(ottenuto, previsto);
+        System.out.println("");
+        System.out.println("Restituisce l'orario: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
+        System.out.println("");
+    }// end of single test
+
+
     @SuppressWarnings("javadoc")
     /**
      * Ritorna il numero della settimana dell'anno di una data fornita.

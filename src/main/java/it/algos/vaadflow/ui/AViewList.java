@@ -16,6 +16,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -43,6 +45,7 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -53,6 +56,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
 import static it.algos.vaadflow.application.FlowCost.USA_MENU;
 
 /**
@@ -351,6 +355,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Istanza (@VaadinSessionScope) inietta da Spring ed unica nella sessione <br>
      */
     @Autowired
+    @Qualifier(TAG_LOGIN)
     protected ALogin login;
 
     /**
@@ -753,7 +758,20 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         layout.setFlexGrow(1, grid);
         this.setFlexGrow(1, layout);
 
+        grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
+
+            @Override
+            public void selectionChange(SelectionEvent<Grid<AEntity>, AEntity> selectionEvent) {
+                boolean enabled = selectionEvent != null && selectionEvent.getAllSelectedItems().size() > 0;
+                sincroBottoniMenu(enabled);
+            }// end of inner method
+        });//end of lambda expressions and anonymous inner class
+
         fixGridHeader();
+    }// end of method
+
+
+    protected void sincroBottoniMenu(boolean enabled) {
     }// end of method
 
 

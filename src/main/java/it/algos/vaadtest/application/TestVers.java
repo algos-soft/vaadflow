@@ -42,15 +42,13 @@ public class TestVers extends AVers {
      * L'ordine di inserimento è FONDAMENTALE
      */
     public int inizia() {
-        int k = 0;
-        super.inizia();
+        int k = super.inizia();
         codeProject = CODE_PROJECT;
 
-//        //--programma di test
-//        //--non fa nulla, solo informativo
-//        if (installa(++k)) {
-//            crea("Test", "Versione corrente");
-//        }// fine del blocco if
+        //--creata una nuova preferenza
+        if (installa(++k)) {
+            creaPrefDate("pippoz", "Ultimo download del modulo nazionalità");
+        }// fine del blocco if
 
         return k;
     }// end of method

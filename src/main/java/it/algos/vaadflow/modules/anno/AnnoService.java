@@ -7,15 +7,16 @@ import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.AService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
@@ -184,6 +185,38 @@ public class AnnoService extends AService {
         return repository.findByTitolo(titolo);
     }// end of method
 
+
+    /**
+     * Returns all entities of the type <br>
+     *
+     * @return all ordered entities
+     */
+    public ArrayList<Anno> findAll() {
+        return (ArrayList) repository.findAllByOrderByOrdineDesc();
+    }// end of method
+
+
+    /**
+     * Returns only entities of the requested page.
+     * <p>
+     * Senza filtri
+     * Ordinati per sort
+     * <p>
+     * Methods of this library return Iterable<T>, while the rest of my code expects Collection<T>
+     * L'annotation standard di JPA prevede un ritorno di tipo Iterable, mentre noi usiamo List
+     * Eseguo qui la conversione, che rimane trasparente al resto del programma
+     *
+     * @param offset numero di pagine da saltare, parte da zero
+     * @param size   numero di elementi per ogni pagina
+     *
+     * @return all entities
+     */
+    public List<? extends AEntity> findAll(int offset, int size) {
+        Sort sort = new Sort(Sort.Direction.DESC, "ordine");
+        return findAll(offset, size, sort);
+    }// end of method
+
+
     /**
      * Controlla l'esistenza di una Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
@@ -193,21 +226,6 @@ public class AnnoService extends AService {
      */
     public boolean isEsiste(String titolo) {
         return findByKeyUnica(titolo) != null;
-    }// end of method
-
-    /**
-     * Returns all entities of the type <br>
-     * <p>
-     * Se esiste la property 'ordine', ordinate secondo questa property <br> Altrimenti, se esiste la property 'code',
-     * ordinate secondo questa property <br> Altrimenti, se esiste la property 'descrizione', ordinate secondo questa
-     * property <br> Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br> Altrimenti,
-     * ordinate in ordine di inserimento nel DB mongo <br>
-     *
-     * @return all ordered entities
-     */
-    @Override
-    public List<Anno> findAll() {
-        return repository.findTop100ByOrderByOrdine();
     }// end of method
 
 
