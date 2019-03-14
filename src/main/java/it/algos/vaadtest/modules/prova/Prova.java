@@ -59,8 +59,8 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.obbligatoria)
-@AIList(fields = {"ordine", "code", "lastModifica"})
-@AIForm(fields = {"ordine", "code", "lastModifica"})
+@AIList(fields = {"ordine", "code", "descrizione", "lastModifica"})
+@AIForm(fields = {"ordine", "code", "descrizione", "lastModifica"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -79,7 +79,7 @@ public class Prova extends ACEntity {
     @Indexed()
     @Field("ind")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", width = 55)
+    @AIColumn(name = "#", widthEM = 3)
     public int ordine;
 
     /**
@@ -89,12 +89,23 @@ public class Prova extends ACEntity {
     @Indexed()
     @Size(min = 3)
     @Field("cod")
-    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(width = 210)
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
+    @AIColumn(widthEM = 6)
     public String code;
+
+    /**
+     * descrizione (obbligatorio, unico) <br>
+     */
+    @NotNull
+    @Field("desc")
+    @AIField(type = EAFieldType.text, widthEM = 16)
+    @AIColumn(flexGrow = true)
+    public String descrizione;
+
 
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
+    @AIColumn(widthEM = 6)
     public LocalDateTime lastModifica;
 
 

@@ -70,9 +70,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     private ALogin login;
 
-    private AppLayout appLayout;
+    protected AppLayout appLayout;
 
-    private AppLayoutMenu appMenu;
+    protected AppLayoutMenu appMenu;
     private Div container;
 
     /**
@@ -132,7 +132,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     /**
      * Creazione iniziale del menu
      */
-    private void creaVaadindMenu() {
+    protected void creaVaadindMenu() {
         appLayout = new AppLayout();
         appMenu = appLayout.createMenu();
         mappaClassi = creaMappa(MENU_CLAZZ_LIST);
@@ -192,7 +192,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     /**
      * Menu logout sempre presente
      */
-    private void creaMenuLogout() {
+    protected void creaMenuLogout() {
         appMenu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.SIGN_OUT.create(), "Logout", e -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
     }// end of method
 

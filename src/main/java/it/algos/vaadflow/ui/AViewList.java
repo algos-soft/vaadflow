@@ -265,6 +265,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected boolean usaSearchBottoneNew;
 
     protected Button newButton;
+
     /**
      * Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
      */
@@ -287,7 +288,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected boolean usaBottoneEdit;
 
     /**
-     * Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true.
+     * Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente false.
      */
     protected boolean isBottoneEditBefore;
 
@@ -463,11 +464,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per modificare la entity. Normalmente true.
         isEntityModificabile = true;
 
-        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-        usaBottoneEdit = true;
+        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente false.
+        usaBottoneEdit = false;
 
-        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true
-        isBottoneEditBefore = true;
+        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente false
+        isBottoneEditBefore = false;
 
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
@@ -779,11 +780,15 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Eventuale header text
      */
     protected void fixGridHeader() {
-        HeaderRow topRow = grid.prependHeaderRow();
-        Grid.Column[] matrix = array.getColumnArray(grid);
-        HeaderRow.HeaderCell informationCell = topRow.join(matrix);
-        headerGridHolder = new Label("x");
-        informationCell.setComponent(headerGridHolder);
+        try { // prova ad eseguire il codice
+            HeaderRow topRow = grid.prependHeaderRow();
+            Grid.Column[] matrix = array.getColumnArray(grid);
+            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+            headerGridHolder = new Label("x");
+            informationCell.setComponent(headerGridHolder);
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
     }// end of method
 
 
@@ -908,7 +913,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         if (!usaPagination) {
             return;
         }// end of if cycle
-
+        if (service == null) {
+            return;
+        }// end of if cycle
 
         int numRecCollezione = service.count();
         final String mess = "Gli elementi vengono mostrati divisi in pagine da " + limit + " elementi ciascuna. Con i bottoni (-) e (+) ci si muove avanti ed indietro, una pagina alla volta. Oppure si inserisce il numero della pagina desiderata.";

@@ -107,6 +107,7 @@ public class ProvaViewList extends AViewList {
     @Override
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
+
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
@@ -167,46 +168,46 @@ public class ProvaViewList extends AViewList {
     }// end of method
 
 
-    /**
-     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
-     * Sovrascritto
-     */
-    @Override
-    protected void addSpecificColumnsBefore() {
-        super.addSpecificColumnsAfter();
-        Grid.Column beta = grid.addColumn(new ComponentRenderer<>(entity -> new Label("30")));//end of lambda expressions and anonymous inner class
-        beta.setHeader("Beta");
-        beta.setKey("beta");
-        beta.setWidth("3em");
-        beta.setFlexGrow(0);
-        Grid.Column alfa = grid.addColumn(new ComponentRenderer<>(entity -> new Label("40")));//end of lambda expressions and anonymous inner class
-        alfa.setHeader("Alfa");
-        alfa.setKey("alfa");
-        alfa.setWidth("4em");
-        alfa.setFlexGrow(0);
-        Grid.Column gamma = grid.addColumn(new ComponentRenderer<>(entity -> new Label("50")));//end of lambda expressions and anonymous inner class
-        gamma.setHeader("gamma");
-        gamma.setKey("gamma");
-        gamma.setWidth("5em");
-        gamma.setFlexGrow(0);
-    }
+//    /**
+//     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
+//     * Sovrascritto
+//     */
+//    @Override
+//    protected void addSpecificColumnsBefore() {
+//        super.addSpecificColumnsAfter();
+//        Grid.Column beta = grid.addColumn(new ComponentRenderer<>(entity -> new Label("30")));//end of lambda expressions and anonymous inner class
+//        beta.setHeader("Beta");
+//        beta.setKey("beta");
+//        beta.setWidth("3em");
+//        beta.setFlexGrow(0);
+//        Grid.Column alfa = grid.addColumn(new ComponentRenderer<>(entity -> new Label("40")));//end of lambda expressions and anonymous inner class
+//        alfa.setHeader("Alfa");
+//        alfa.setKey("alfa");
+//        alfa.setWidth("12em");
+//        alfa.setFlexGrow(0);
+//        Grid.Column gamma = grid.addColumn(new ComponentRenderer<>(entity -> new Label("50")));//end of lambda expressions and anonymous inner class
+//        gamma.setHeader("gamma");
+//        gamma.setKey("gamma");
+//        gamma.setWidth("16em");
+//        gamma.setFlexGrow(0);
+//    }
 
 
-    /**
-     * Eventuale modifica dell'ordine di presentazione delle colonne
-     * Sovrascritto
-     *
-     * @param gridPropertyNamesList
-     */
-    @Override
-    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
-        ArrayList listaNew = new ArrayList(gridPropertyNamesList);
-        Object obj = listaNew.get(1);
-        listaNew.remove(obj);
-        listaNew.add(0, obj);
-
-        return listaNew;
-    }// end of method
+//    /**
+//     * Eventuale modifica dell'ordine di presentazione delle colonne
+//     * Sovrascritto
+//     *
+//     * @param gridPropertyNamesList
+//     */
+//    @Override
+//    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
+//        ArrayList listaNew = new ArrayList(gridPropertyNamesList);
+//        Object obj = listaNew.get(1);
+//        listaNew.remove(obj);
+//        listaNew.add(0, obj);
+//
+//        return listaNew;
+//    }// end of method
 
 
     private class Pippo implements Runnable {

@@ -341,7 +341,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     /**
      * Body placeholder per i campi, creati dopo open()
      */
-    private Div creaFormLayout() {
+    protected Div creaFormLayout() {
         Div div;
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("50em", 2));
@@ -467,6 +467,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected void fixTitleLayout(String title) {
         title = title.equals("") ? itemType : title;
+        titleLayout.removeAll();
         titleLayout.add(new H2(operation.getNameInTitle() + " " + title));
     }// end of method
 
