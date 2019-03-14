@@ -6,8 +6,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.StaticContextAccessor;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -67,6 +65,18 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
 
     /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
+        super.usaFormDueColonne = false;
+    }// end of method
+
+
+    /**
      * Costruisce eventuali fields specifici (costruiti non come standard type)
      * Aggiunge i fields specifici al binder
      * Aggiunge i fields specifici alla fieldMap
@@ -92,8 +102,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     protected void fixLayout() {
 //        Object beta = StaticContextAccessor.getBean(ADialog.class);
         getFormLayout().add(new Label("Prova"));
-        getFormLayout().add(new Button("Click",event -> paperino()));
-        getFormLayout().add(new Button("ClickSecondo",event -> topolino()));
+        getFormLayout().add(new Button("Click", event -> paperino()));
+        getFormLayout().add(new Button("ClickSecondo", event -> topolino()));
     }// end of method
 
 
@@ -119,14 +129,15 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
 
     public void paperino() {
-        ADialog dialog = appContext.getBean(ADialog.class,"Alfetta");
-        dialog.open("Pippoz",this::pippo,this::pluto);
+        ADialog dialog = appContext.getBean(ADialog.class, "Alfetta");
+        dialog.open("Pippoz", this::pippo, this::pluto);
     }// end of method
 
+
     public void topolino() {
-        ADialog dialog = appContext.getBean(ADialog.class,"Burletta");
-        VerticalLayout vert=new VerticalLayout(new Label("PrimaRiga"),new Button("Ok"),new Label("Terza riga"));
-        dialog.open(vert,this::pippo,this::pluto);
+        ADialog dialog = appContext.getBean(ADialog.class, "Burletta");
+        VerticalLayout vert = new VerticalLayout(new Label("PrimaRiga"), new Button("Ok"), new Label("Terza riga"));
+        dialog.open(vert, this::pippo, this::pluto);
     }// end of method
 
 }// end of class

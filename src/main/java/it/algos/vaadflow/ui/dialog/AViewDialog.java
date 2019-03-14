@@ -13,7 +13,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -77,11 +76,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected final FormLayout formLayout = new FormLayout();
 
-    /**
-     * Corpo centrale del Dialog, alternativo al Form <br>
-     * Placeholder (eventuale, presente di default) <br>
-     */
-    protected final VerticalLayout bodyLayout = new VerticalLayout();
+//    /**
+//     * Corpo centrale del Dialog, alternativo al Form <br>
+//     * Placeholder (eventuale, presente di default) <br>
+//     */
+//    protected final VerticalLayout bodyLayout = new VerticalLayout();
 
     /**
      * Barra dei bottoni di comando <br>
@@ -141,6 +140,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Flag di preferenza per usare il bottone delete. Normalmente true.
      */
     protected boolean usaDeleteButton;
+
+    /**
+     * Flag di preferenza per le due colonne nel form. Normalmente true.
+     */
+    protected boolean usaFormDueColonne;
 
 
     protected IAService service;
@@ -261,11 +265,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Titolo placeholder del dialogo, regolato dopo open()
         this.add(creaTitleLayout());
 
-        //--Body placeholder standard per i campi, creati dopo open()
+        //--Form placeholder standard per i campi, creati dopo open()
         this.add(creaFormLayout());
-
-        //--Body placeholder alternativo
-        this.add(creaBodyLayout());
 
         //--spazio per distanziare i bottoni dai campi
         this.add(new H3());
@@ -317,6 +318,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //--Flag di preferenza per usare il bottone Delete. Normalmente true.
         usaDeleteButton = true;
+
+        //Flag di preferenza per le due colonne nel form. Normalmente true.
+        usaFormDueColonne = true;
     }// end of method
 
 
@@ -343,8 +347,13 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected Div creaFormLayout() {
         Div div;
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
-                new FormLayout.ResponsiveStep("50em", 2));
+        if (usaFormDueColonne) {
+            formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
+                    new FormLayout.ResponsiveStep("50em", 2));
+        } else {
+            formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("50em", 1));
+        }// end of if/else cycle
+
         formLayout.addClassName("no-padding");
         div = new Div(formLayout);
         div.addClassName("has-padding");
@@ -353,13 +362,13 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    /**
-     * Corpo centrale del Dialog, alternativo al Form <br>
-     * Placeholder (eventuale, presente di default) <br>
-     */
-    private Component creaBodyLayout() {
-        return bodyLayout;
-    }// end of method
+//    /**
+//     * Corpo centrale del Dialog, alternativo al Form <br>
+//     * Placeholder (eventuale, presente di default) <br>
+//     */
+//    private Component creaBodyLayout() {
+//        return bodyLayout;
+//    }// end of method
 
 
     /**
