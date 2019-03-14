@@ -98,7 +98,7 @@ public class Prova extends ACEntity {
      */
     @NotNull
     @Field("desc")
-    @AIField(type = EAFieldType.text, widthEM = 16)
+    @AIField(type = EAFieldType.text, widthEM = 2)
     @AIColumn(flexGrow = true)
     public String descrizione;
 

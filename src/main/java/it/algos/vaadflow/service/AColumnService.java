@@ -179,7 +179,7 @@ public class AColumnService extends AbstractService {
                     }// fine del blocco try-catch
                     return new Label(testo);
                 }));//end of lambda expressions and anonymous inner class
-                width = "8em";
+//                width = "8em";
                 break;
             case localdatetime:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {

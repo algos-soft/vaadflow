@@ -87,6 +87,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         super.addSpecificAlgosFields();
         AbstractField propertyField = null;
         propertyField = new ATextField("Alfa");
+        ((ATextField) propertyField).setWidth("2em");
+
         if (propertyField != null) {
             fieldMap.put("alfa", propertyField);
         }// end of if cycle

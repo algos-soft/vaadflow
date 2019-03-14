@@ -90,7 +90,7 @@ public class Utente extends ACEntity {
     @Indexed(unique = true, sparse = true, direction = IndexDirection.DESCENDING)
     @Field("user")
     @AIField(type = EAFieldType.text)
-    @AIColumn(name = "user")
+    @AIColumn(name = "user", widthEM = 10)
     public String userName;
 
 
@@ -100,7 +100,7 @@ public class Utente extends ACEntity {
      */
     @Field("pass")
     @AIField(type = EAFieldType.text)
-    @AIColumn(name = "pass")
+    @AIColumn(name = "pass", widthEM = 10)
     public String passwordInChiaro;
 
 
@@ -110,7 +110,7 @@ public class Utente extends ACEntity {
     @Field("lock")
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(type = EAFieldType.checkbox)
-    @AIColumn(name = "lock")
+    @AIColumn(name = "lock", widthEM = 4)
     public boolean locked;
 
 
@@ -131,7 +131,7 @@ public class Utente extends ACEntity {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(width = 350, name = "eMail")
+    @AIColumn(name = "eMail", flexGrow = true)
     public String mail;
 
 
