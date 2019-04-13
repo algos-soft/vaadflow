@@ -49,14 +49,14 @@ public class AUserDetailsService implements UserDetailsService {
         Company company;
         Collection<? extends GrantedAuthority> authorities;
         AMongoService mongo = StaticContextAccessor.getBean(AMongoService.class);
-        Utente utente = (Utente) mongo.findByProperty(Utente.class, "userName", uniqueUserName);
+        Utente utente = (Utente) mongo.findByProperty(Utente.class, "username", uniqueUserName);
 
         if (utente != null) {
-            passwordHash = passwordEncoder.encode(utente.getPasswordInChiaro());
+            passwordHash = passwordEncoder.encode(utente.getPassword());
             authorities = utente.getAuthorities();
             company = utente.company;
             FlowCost.LAYOUT_TITLE = company != null ? company.descrizione : PROJECT_NAME;
-            return new User(utente.getUserName(), passwordHash, authorities);
+            return new User(utente.getUsername(), passwordHash, authorities);
         } else {
             throw new UsernameNotFoundException("Non c'è nessun utente di nome: " + uniqueUserName);
         }// end of if/else cycle

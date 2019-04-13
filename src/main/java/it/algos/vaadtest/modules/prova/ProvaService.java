@@ -1,5 +1,7 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
@@ -9,6 +11,8 @@ import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -36,11 +40,12 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-//@SpringComponent
+@SpringComponent
 @Service
-//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VaadinSessionScope
 @Qualifier(TAG_PRO)
+@Tag("dodici")
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class ProvaService extends AService {
@@ -60,6 +65,8 @@ public class ProvaService extends AService {
     public ProvaRepository repository;
 
 
+    public ProvaService() {
+    }// end of Spring constructor
     /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>

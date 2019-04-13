@@ -3,16 +3,19 @@ package it.algos.vaadflow.ui;
 //import com.flowingcode.addons.applayout.AppLayout;
 //import com.flowingcode.addons.applayout.menu.MenuItem;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
-import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
@@ -59,6 +62,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public final static String KEY_MAPPA_CRONO = "crono";
 
+    protected AppLayout appLayout;
+
+    protected AppLayoutMenu appMenu;
 
     private AAnnotationService annotation = AAnnotationService.getInstance();
 
@@ -70,9 +76,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     private ALogin login;
 
-    protected AppLayout appLayout;
-
-    protected AppLayoutMenu appMenu;
     private Div container;
 
     /**
@@ -400,7 +403,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         i.getElement().setAttribute("style", "width: 60px; margin-top:10px");
 
         if (login != null && login.getUtente() != null) {
-            container.add(i, new H5(login.getUtente().userName));
+            container.add(i, new H5(login.getUtente().getUsername()));
         } else {
             container.add(i);
         }// end of if/else cycle
@@ -421,7 +424,12 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         menuName = annotation.getMenuName(viewClazz);
         icon = reflection.getIconView(viewClazz);
 
-        return appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
+        if (text.isValid(menuName) && text.isValid(linkRoute)) {
+            return appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
+        } else {
+            return null;
+        }// end of if/else cycle
+
     }// end of method
 
 //    /**
@@ -471,7 +479,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     public AppLayout getAppLayout() {
         return appLayout;
     }// end of method
-
 
 
 }// end of class

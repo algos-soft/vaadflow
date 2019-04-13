@@ -2,6 +2,8 @@ package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -386,6 +388,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
+            cancelButton.addFocusShortcut(Key.KEY_W, KeyModifier.ALT);
             bottomLayout.add(cancelButton);
         }// end of if cycle
 
