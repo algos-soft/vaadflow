@@ -569,7 +569,8 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
-     * Costruisce la barra di menu <br>
+     * Costruisce la barra di menu e l'aggiunge alla UI <br>
+     * Lo standard è 'Flowingcode'
      */
     protected boolean creaMenuLayout() {
         IAMenu menu;
@@ -592,7 +593,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
                 case vaadin:
                     menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
                     this.add(new Label("."));
-                    this.add(menu.getAppLayout());
+                    this.add(((AFlowingcodeAppLayoutMenu) menu).getAppLayoutFlowing());
                     break;
                 default:
                     log.warn("Switch - caso non definito");
@@ -792,6 +793,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.setFlexGrow(1, layout);
 
         grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
+
             @Override
             public void selectionChange(SelectionEvent<Grid<AEntity>, AEntity> selectionEvent) {
                 boolean enabled = selectionEvent != null && selectionEvent.getAllSelectedItems().size() > 0;

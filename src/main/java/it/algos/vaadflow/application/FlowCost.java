@@ -268,6 +268,8 @@ public class FlowCost {
 
     public final static String SHOW_GIORNO = "showGiorno";
 
+    public final static String SHOW_ACCOUNT_ON_MENU = "showAccount";
+
     public final static String LOAD_UTENTI = "loadUtenti";
 
     public final static String STOP_SAVE = "nonRegistrare";

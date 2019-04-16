@@ -7,6 +7,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.AViewList;
@@ -49,6 +51,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 //@HtmlImport("frontend://src/views/prova/prova-list.html")
 @Qualifier(TAG_PRO)
 @Slf4j
+@AIView(roleTypeVisibility = EARoleType.user)
 @AIScript(sovrascrivibile = true)
 public class ProvaViewList extends AViewList {
 
