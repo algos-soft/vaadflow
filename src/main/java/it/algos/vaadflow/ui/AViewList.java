@@ -782,11 +782,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             this.addDetailDialog();
         }// end of if cycle
 
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth("50em");
-        grid.setHeightByRows(true);
-        grid.addClassName("pippoz");
-        grid.getElement().setAttribute("theme", "row-dividers");
+        //--Regolazioni finali sulla grid e sulle colonne
+        this.fixLayout();
+
         layout.add(grid);
         this.add(layout);
         layout.setFlexGrow(1, grid);
@@ -829,7 +827,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Header text
      */
     protected String getGridHeaderText() {
-        int numRecCollezione = service != null ? service.count() : 0;
+        int numRecCollezione = items.size();
         String filtro = text.format(items.size());
         String totale = text.format(numRecCollezione);
         String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
@@ -880,6 +878,20 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
+     * Eventuali aggiustamenti finali al layout
+     * Regolazioni finali sulla grid e sulle colonne
+     * Sovrascritto
+     */
+    protected void fixLayout() {
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setWidth("60em");
+        grid.setHeightByRows(true);
+        grid.addClassName("pippoz");
+        grid.getElement().setAttribute("theme", "row-dividers");
+    }// end of method
+
+
+    /**
      * Apre il dialog di detail
      */
     protected void addDetailDialog() {
@@ -887,7 +899,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             Grid.Column colonna = grid.addColumn(renderer);
-            colonna.setWidth("5em");
+            colonna.setWidth("6em");
             colonna.setFlexGrow(0);
         } else {
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
@@ -924,6 +936,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected void routeVerso() {
     }// end of method
+
     /**
      * Navigazione verso un altra pagina
      */
@@ -1224,32 +1237,9 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Primo ingresso dopo il click sul bottone <br>
      */
     protected void save(AEntity entityBean, EAOperation operation) {
-        entityBean = service.beforeSave(entityBean, operation);
-        switch (operation) {
-            case addNew:
-                if (service.isEsisteEntityKeyUnica(entityBean)) {
-                    Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
-                } else {
-                    service.save(entityBean);
-                    updateView();
-                    Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
-                }// end of if/else cycle
-                break;
-            case edit:
-            case editDaLink:
-                service.save(entityBean);
-                updateView();
-                Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
-                break;
-            default:
-                log.warn("Switch - caso non definito");
-                break;
-        } // end of switch statement
-
-//        if (usaRefresh) {
-//            updateView();
-//        }// end of if cycle
-
+        if (service.save(entityBean, operation)) {
+            updateView();
+        }// end of if cycle
     }// end of method
 
 

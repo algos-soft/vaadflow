@@ -179,6 +179,11 @@ public interface IAService {
      */
     public AEntity save(AEntity oldBean, AEntity modifiedBean) throws Exception;
 
+    /**
+     * Proviene da Lista (quasi sempre)
+     * Primo ingresso dopo il click sul bottone <br>
+     */
+    public boolean save(AEntity entityBean, EAOperation operation) ;
 
     /**
      * Costruisce una lista di nomi delle properties della Grid nell'ordine:

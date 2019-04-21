@@ -1,6 +1,7 @@
 package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -106,6 +108,20 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         getFormLayout().add(new Label("Prova"));
         getFormLayout().add(new Button("Click", event -> paperino()));
         getFormLayout().add(new Button("ClickSecondo", event -> topolino()));
+
+        Component comp=creaCombo();
+//        getFormLayout().add(comp);
+    }// end of method
+
+
+    public Component creaCombo() {
+
+        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+        multiselectComboBox.setLabel("Select items");
+        multiselectComboBox.setPlaceholder("Choose...");
+        multiselectComboBox.setItems("Item 1", "Item 2", "Item 3", "Item 4");
+
+        return multiselectComboBox;
     }// end of method
 
 

@@ -77,7 +77,7 @@ public class Prova extends ACEntity {
      */
     @NotNull
     @Indexed()
-    @Field("ind")
+    @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", widthEM = 3)
     public int ordine;
@@ -86,7 +86,7 @@ public class Prova extends ACEntity {
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull
-    @Indexed()
+    @Indexed(unique = true)
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)

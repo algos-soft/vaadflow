@@ -67,6 +67,8 @@ public class ProvaService extends AService {
 
     public ProvaService() {
     }// end of Spring constructor
+
+
     /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
@@ -86,12 +88,13 @@ public class ProvaService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
-     * @param code di riferimento (obbligatorio ed unico)
+     * @param code        di riferimento (obbligatorio ed unico)
+     * @param descrizione (obbligatorio)
      *
      * @return la entity appena creata
      */
-    public Prova crea(String code) {
-        return (Prova) save(newEntity(0, code));
+    public Prova crea(String code, String descrizione) {
+        return (Prova) save(newEntity(0, code, descrizione));
     }// end of method
 
 
@@ -103,7 +106,7 @@ public class ProvaService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     public Prova newEntity() {
-        return newEntity(0, "");
+        return newEntity(0, "", "");
     }// end of method
 
 
@@ -112,12 +115,13 @@ public class ProvaService extends AService {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
-     * @param code   codice di riferimento (obbligatorio)
+     * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)
+     * @param code        codice di riferimento (obbligatorio)
+     * @param descrizione (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Prova newEntity(int ordine, String code) {
+    public Prova newEntity(int ordine, String code, String descrizione) {
         Prova entity = null;
 
         entity = findByKeyUnica(code);
@@ -126,8 +130,9 @@ public class ProvaService extends AService {
         }// end of if cycle
 
         entity = Prova.builderProva()
-                .code(code.equals("") ? null : code)
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                .code(code.equals("") ? null : code)
+                .descrizione(descrizione.equals("") ? null : descrizione)
                 .lastModifica(LocalDateTime.now())
                 .build();
 

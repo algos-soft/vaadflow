@@ -67,6 +67,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected final Button deleteButton = new Button(DELETE);
 
     /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ATextService text = ATextService.getInstance();
+
+    /**
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
@@ -480,7 +486,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected void fixTitleLayout(String title) {
         title = title.equals("") ? itemType : title;
         titleLayout.removeAll();
-        titleLayout.add(new H2(operation.getNameInTitle() + " " + title));
+        titleLayout.add(new H2(operation.getNameInTitle() + " " + title.toLowerCase()));
     }// end of method
 
 
@@ -521,7 +527,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Aggiunge il field al binder, nel metodo create() del fieldService
         //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
         for (String propertyName : propertyNamesList) {
-            propertyField = fieldService.create(binder, binderClass, propertyName);
+            propertyField = fieldService.create(appContext,binder, binderClass, propertyName);
             if (propertyField != null) {
                 fieldMap.put(propertyName, propertyField);
             }// end of if cycle

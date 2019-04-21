@@ -1,6 +1,5 @@
 package it.algos.vaadtest.application;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
@@ -9,6 +8,7 @@ import it.algos.vaadflow.modules.giorno.GiornoViewList;
 import it.algos.vaadflow.modules.mese.MeseViewList;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadtest.modules.prova.ProvaService;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +47,9 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @AIScript(sovrascrivibile = false)
 public class TestBoot extends ABoot {
 
+
+    @Autowired
+    public ProvaService provaService;
 
     /**
      * Iniettata dal costruttore <br>
@@ -117,6 +120,17 @@ public class TestBoot extends ABoot {
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
+        int numRecord = 15;
+        String code = "";
+        String desc = "";
+        provaService.deleteAll();
+
+        for (int k = 1; k <= numRecord; k++) {
+            code = k + "cod";
+            desc = "questa è la descrizione n. "+k;
+            provaService.crea(code, desc);
+        }// end of for cycle
+
     }// end of method
 
 

@@ -136,7 +136,7 @@ public class FlowCost {
 
     public final static String BOT_BACK = "Back";
 
-    public final static String BOT_CREATE = "Nuovo";
+    public final static String BOT_CREATE = "New";
 
     public final static String BOT_DELETE = "Elimina";
 

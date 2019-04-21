@@ -792,7 +792,12 @@ public abstract class AService extends AbstractService implements IAService {
 
         //--controlla l'integrità dei dati, elaborati dalle sottoclassi nei metodi beforeSave()
         if (modifiedBean.id == null || !modifiedBean.id.equals(FlowCost.STOP_SAVE)) {
-            obj = repository.save(modifiedBean);
+            try { // prova ad eseguire il codice
+                obj = repository.save(modifiedBean);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+                Notification.show("La scheda non è stata registrata", DURATA, Notification.Position.BOTTOM_START);
+            }// fine del blocco try-catch
         }// end of if cycle
 
         if (obj != null && obj instanceof AEntity) {
@@ -800,6 +805,38 @@ public abstract class AService extends AbstractService implements IAService {
         }// end of if cycle
 
         return savedBean;
+    }// end of method
+
+
+    /**
+     * Proviene da Lista (quasi sempre)
+     * Primo ingresso dopo il click sul bottone <br>
+     */
+    public boolean save(AEntity entityBean, EAOperation operation) {
+        boolean status = false;
+        entityBean = this.beforeSave(entityBean, operation);
+        switch (operation) {
+            case addNew:
+                if (this.isEsisteEntityKeyUnica(entityBean)) {
+                    Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
+                } else {
+                    this.save(entityBean);
+                    status = true;
+                    Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                }// end of if/else cycle
+                break;
+            case edit:
+            case editDaLink:
+                this.save(entityBean);
+                status = true;
+                Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                break;
+            default:
+                log.warn("Switch - caso non definito");
+                break;
+        } // end of switch statement
+
+        return status;
     }// end of method
 
 

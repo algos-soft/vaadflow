@@ -8,6 +8,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
@@ -18,8 +19,11 @@ import it.algos.vaadflow.ui.fields.AComboBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -141,6 +145,37 @@ public class ProvaViewList extends AViewList {
         comboUpload.addValueChangeListener(event -> openProvaDialog(event));
 
         return comboUpload;
+    }// end of method
+
+
+    /**
+     * Controlla la 'dimensione' della collezione <br>
+     * Se è inferiore alla 'soglia', non fa nulla <br>
+     * Se è superiore, costruisce un layout con freccia indietro, numero pagina, freccia avanti <br>
+     */
+    protected void creaPaginationLayout() {
+        PaginatedGrid<Prova> grid = new PaginatedGrid<Prova>();
+
+        grid.addColumn(Prova::getId).setHeader("ID");
+        grid.addColumn(Prova::getOrdine).setHeader("Ordine").setSortable(true);
+        grid.addColumn(Prova::getCode).setHeader("Code").setSortable(true);
+        grid.addColumn(Prova::getDescrizione).setHeader("Descrizione").setSortable(true);
+        List<? extends AEntity> itemsEntity = service.findAll();
+        ArrayList<Prova> items= new ArrayList<>();
+        for (AEntity elemento : itemsEntity) {
+            items.add((Prova)elemento);
+        }// end of for cycle
+
+//        Collection<Prova> collection = new ArrayList<Prova>(items);
+        grid.setItems(items);
+
+        // Sets the max number of items to be rendered on the grid for each page
+        grid.setPageSize(2);
+
+        // Sets how many pages should be visible on the pagination before and/or after the current selected page
+        grid.setPaginatorSize(1);
+
+        this.add(grid);
     }// end of method
 
 
