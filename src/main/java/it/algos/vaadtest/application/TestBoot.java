@@ -3,6 +3,7 @@ package it.algos.vaadtest.application;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
 import it.algos.vaadflow.modules.mese.MeseViewList;

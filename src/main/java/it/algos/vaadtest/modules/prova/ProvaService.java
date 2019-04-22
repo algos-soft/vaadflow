@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class ProvaService extends AService {
      * @return la entity appena creata
      */
     public Prova crea(String code, String descrizione) {
-        return (Prova) save(newEntity(0, code, descrizione));
+        return (Prova) save(newEntity(0, code, descrizione), EAOperation.addNew);
     }// end of method
 
 
@@ -137,6 +138,15 @@ public class ProvaService extends AService {
                 .build();
 
         return (Prova) creaIdKeySpecifica(entity);
+    }// end of method
+
+
+    /**
+     * Property unica (se esiste).
+     */
+    @Override
+    public String getPropertyUnica(AEntity entityBean) {
+        return ((Prova) entityBean).getCode();
     }// end of method
 
 

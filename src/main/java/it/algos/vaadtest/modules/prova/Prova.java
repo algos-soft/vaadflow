@@ -58,7 +58,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = EACompanyRequired.obbligatoria)
+@AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"ordine", "code", "descrizione", "lastModifica"})
 @AIForm(fields = {"ordine", "code", "descrizione", "lastModifica"})
 @AIScript(sovrascrivibile = false)
@@ -104,7 +104,7 @@ public class Prova extends ACEntity {
 
 
     @Indexed(direction = IndexDirection.DESCENDING)
-    @AIField(type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
+    @AIField(name = "last", type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
     @AIColumn(widthEM = 6)
     public LocalDateTime lastModifica;
 

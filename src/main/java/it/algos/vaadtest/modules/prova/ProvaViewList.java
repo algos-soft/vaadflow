@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
@@ -111,6 +110,7 @@ public class ProvaViewList extends AViewList {
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
 
+        super.usaPagination = true;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
@@ -161,9 +161,9 @@ public class ProvaViewList extends AViewList {
         grid.addColumn(Prova::getCode).setHeader("Code").setSortable(true);
         grid.addColumn(Prova::getDescrizione).setHeader("Descrizione").setSortable(true);
         List<? extends AEntity> itemsEntity = service.findAll();
-        ArrayList<Prova> items= new ArrayList<>();
+        ArrayList<Prova> items = new ArrayList<>();
         for (AEntity elemento : itemsEntity) {
-            items.add((Prova)elemento);
+            items.add((Prova) elemento);
         }// end of for cycle
 
 //        Collection<Prova> collection = new ArrayList<Prova>(items);
@@ -175,7 +175,7 @@ public class ProvaViewList extends AViewList {
         // Sets how many pages should be visible on the pagination before and/or after the current selected page
         grid.setPaginatorSize(1);
 
-        this.add(grid);
+//        this.add(grid);
     }// end of method
 
 

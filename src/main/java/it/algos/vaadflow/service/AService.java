@@ -812,23 +812,29 @@ public abstract class AService extends AbstractService implements IAService {
      * Proviene da Lista (quasi sempre)
      * Primo ingresso dopo il click sul bottone <br>
      */
-    public boolean save(AEntity entityBean, EAOperation operation) {
-        boolean status = false;
+    public AEntity save(AEntity entityBean, EAOperation operation) {
+        AEntity entitySaved = null;
         entityBean = this.beforeSave(entityBean, operation);
         switch (operation) {
             case addNew:
                 if (this.isEsisteEntityKeyUnica(entityBean)) {
-                    Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
+                    try { // prova ad eseguire il codice
+                        Notification.show(entityBean + " non è stata registrata, perché esisteva già con lo stesso code ", 3000, Notification.Position.BOTTOM_START);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
                 } else {
-                    this.save(entityBean);
-                    status = true;
-                    Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                    entitySaved = this.save(entityBean);
+                    try { // prova ad eseguire il codice
+                        Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
                 }// end of if/else cycle
                 break;
             case edit:
             case editDaLink:
-                this.save(entityBean);
-                status = true;
+                entitySaved = this.save(entityBean);
                 Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
                 break;
             default:
@@ -836,7 +842,7 @@ public abstract class AService extends AbstractService implements IAService {
                 break;
         } // end of switch statement
 
-        return status;
+        return entitySaved;
     }// end of method
 
 

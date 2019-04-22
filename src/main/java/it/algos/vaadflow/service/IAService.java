@@ -183,7 +183,7 @@ public interface IAService {
      * Proviene da Lista (quasi sempre)
      * Primo ingresso dopo il click sul bottone <br>
      */
-    public boolean save(AEntity entityBean, EAOperation operation) ;
+    public AEntity save(AEntity entityBean, EAOperation operation) ;
 
     /**
      * Costruisce una lista di nomi delle properties della Grid nell'ordine:
