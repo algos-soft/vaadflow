@@ -109,8 +109,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         getFormLayout().add(new Button("Click", event -> paperino()));
         getFormLayout().add(new Button("ClickSecondo", event -> topolino()));
 
-        Component comp=creaCombo();
-//        getFormLayout().add(comp);
+        Component comp = creaCombo();
+        getFormLayout().add(comp);
     }// end of method
 
 

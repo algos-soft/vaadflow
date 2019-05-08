@@ -16,8 +16,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanPropertySet;
-import com.vaadin.flow.data.binder.PropertySet;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
@@ -43,18 +41,15 @@ import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.menu.*;
-import it.algos.vaadtest.modules.prova.Prova;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
 import static it.algos.vaadflow.application.FlowCost.USA_MENU;
@@ -227,10 +222,15 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected Label headerGridHolder;
 
     /**
-     * Griglia principale (obbligatoria)
+     * Griglia principale senza paginazione
      * Alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
      */
     protected Grid<AEntity> grid;
+
+    /**
+     * PlaceHolder per la griglia con paginazione che deve essere dichiarata nella sottoclasse specifica
+     */
+    protected VerticalLayout gridHolder = new VerticalLayout();
 
     /**
      * Placeholder (eventuale) SOTTO la Grid <br>
@@ -283,12 +283,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected boolean usaCaption;
 
     /**
-     * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente false.
+     * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
      */
     protected boolean usaBottoneEdit;
 
     /**
-     * Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente false.
+     * Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true.
      */
     protected boolean isBottoneEditBefore;
 
@@ -497,11 +497,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per modificare la entity. Normalmente true.
         isEntityModificabile = true;
 
-        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente false.
-        usaBottoneEdit = false;
+        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
+        usaBottoneEdit = true;
 
-        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente false
-        isBottoneEditBefore = false;
+        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true
+        isBottoneEditBefore = true;
 
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
@@ -566,7 +566,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             this.add(alertPlacehorder);
         }// end of if cycle
 
-        creaGrid();
+        if (usaPagination) {
+            creaGridPaginata();
+        } else {
+            creaGrid();
+        }// end of if/else cycle
+
         creaGridBottomLayout();
 //        creaPaginationLayout();
         creaFooterLayout();
@@ -727,6 +732,64 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
 
     /**
+     * Crea il placeholder per la grid paginata (secondo il flag)
+     */
+    protected void creaGridPaginata() {
+        this.add(gridHolder);
+        this.setFlexGrow(1, gridHolder);
+        updateGridPaginata();
+    }// end of method
+
+
+    /**
+     * Prova a creare la grid paginata
+     * Deve essere sovrascritto
+     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
+     * Componente grafico obbligatorio
+     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
+     */
+    protected void updateGridPaginata() {
+    }// end of method
+
+
+    /**
+     * Regolazioni standard della gridPaginated
+     * Chiamato dalla sottoclasse
+     */
+    protected void gridPaginataBefore() {
+        //--Apre il dialog di detail
+        if (isBottoneEditBefore) {
+            this.addDetailDialog();
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Costruisce le colonne della grid paginata
+     * DEVE essere sovrascritto - Componente grafico obbligatorio
+     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
+     */
+    protected void gridPaginataColumns() {
+    }// end of method
+
+
+    /**
+     * Regolazioni standard della gridPaginated
+     * Chiamato dalla sottoclasse
+     */
+    protected void gridPaginataAfter() {
+        //--Apre il dialog di detail
+        if (!isBottoneEditBefore) {
+            this.addDetailDialog();
+        }// end of if cycle
+
+        items = service != null ? service.findAll() : null;
+        fixGridHeader(getGridHeaderText());
+    }// end of method
+
+
+    /**
      * Crea il corpo centrale della view
      * Componente grafico obbligatorio
      * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
@@ -746,27 +809,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             try { // prova ad eseguire il codice
                 //--Costruisce la Grid SENZA creare automaticamente le colonne
                 //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-                grid = new Grid(entityClazz);
-                PaginatedGrid<Prova> grid2 = new PaginatedGrid<>();
-
-
-//                PropertySet<Prova> propertySet;
-//                propertySet = BeanPropertySet.get(Prova.class);
-//                    propertySet.getProperties().filter((property) -> {
-//                        return !property.isSubProperty();
-//                    }).sorted((prop1, prop2) -> {
-//                        return prop1.getName().compareTo(prop2.getName());
-//                    }).forEach((prop)->pippo(prop.getName()));
-
-
-
-                grid2.addColumn(Prova::getOrdine).setHeader("ord");
-                grid2.addColumn(Prova::getCode).setHeader("code");
-                grid2.addColumn(Prova::getDescrizione).setHeader("desc");
-                grid2.addColumn(Prova::getLastModifica).setHeader("last");
-//                grid.addColumn("code").setHeader("pippoz");
-                grid=(Grid)grid2;
-
+                grid = new Grid(entityClazz, false);
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error(unErrore.toString());
                 return;
@@ -775,11 +818,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
             grid = new Grid();
         }// end of if/else cycle
 
-        //--@todo solo per la versione 10.0.5
-        //--@todo dalla versione 12.0.0, si può levare ed aggiungere 'false' come secondo parametro a new Grid(...,false)
-        for (Grid.Column column : grid.getColumns()) {
-            grid.removeColumn(column);
-        }// end of for cycle
+//        //--@todo solo per la versione 10.0.5
+//        //--@todo dalla versione 12.0.0, si può levare ed aggiungere 'false' come secondo parametro a new Grid(...,false)
+//        for (Grid.Column column : grid.getColumns()) {
+//            grid.removeColumn(column);
+//        }// end of for cycle
 
         //--Apre il dialog di detail
         if (isBottoneEditBefore) {
@@ -795,7 +838,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Colonne normali aggiunte in automatico
         if (gridPropertyNamesList != null) {
             for (String propertyName : gridPropertyNamesList) {
-//                column.create(grid, entityClazz, propertyName);
+                column.create(grid, entityClazz, propertyName);
             }// end of for cycle
         }// end of if cycle
 
@@ -1238,6 +1281,11 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         creaAlertLayout();
     }// end of method
 
+    /**
+     * Eventuale header text
+     */
+    protected void fixGridHeader(String messaggio) {
+    }// end of method
 
     /**
      * Opens the confirmation dialog before deleting all items.
@@ -1262,7 +1310,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Primo ingresso dopo il click sul bottone <br>
      */
     protected void save(AEntity entityBean, EAOperation operation) {
-        if (service.save(entityBean, operation)!=null) {
+        if (service.save(entityBean, operation) != null) {
             updateView();
         }// end of if cycle
     }// end of method

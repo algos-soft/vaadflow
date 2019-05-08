@@ -6,7 +6,6 @@ import com.vaadin.flow.data.validator.AbstractValidator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AMongoService;
-import it.algos.vaadtest.modules.prova.Prova;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

@@ -2,13 +2,19 @@ package it.algos.vaadtest.modules.prova;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
@@ -22,7 +28,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -67,6 +72,7 @@ public class ProvaViewList extends AViewList {
 
     private AComboBox<String> comboUpload;
 
+    private PaginatedGrid<Prova> gridPaginated;
 
 //    @Id("search")
 //    private TextField search;
@@ -110,6 +116,8 @@ public class ProvaViewList extends AViewList {
     protected void fixPreferenzeSpecifiche() {
         super.fixPreferenzeSpecifiche();
 
+        super.usaBottoneEdit = true;
+        super.isBottoneEditBefore = true;
         super.usaPagination = true;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
@@ -149,34 +157,61 @@ public class ProvaViewList extends AViewList {
 
 
     /**
-     * Controlla la 'dimensione' della collezione <br>
-     * Se è inferiore alla 'soglia', non fa nulla <br>
-     * Se è superiore, costruisce un layout con freccia indietro, numero pagina, freccia avanti <br>
+     * Prova a creare la grid paginata (secondo il flag)
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
+     * Componente grafico obbligatorio
+     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
      */
-    protected void creaPaginationLayout() {
-        PaginatedGrid<Prova> grid = new PaginatedGrid<Prova>();
+    protected void updateGridPaginata() {
+        FlexLayout layout = new FlexLayout();
+        gridPaginated = new PaginatedGrid<>();
 
-        grid.addColumn(Prova::getId).setHeader("ID");
-        grid.addColumn(Prova::getOrdine).setHeader("Ordine").setSortable(true);
-        grid.addColumn(Prova::getCode).setHeader("Code").setSortable(true);
-        grid.addColumn(Prova::getDescrizione).setHeader("Descrizione").setSortable(true);
-        List<? extends AEntity> itemsEntity = service.findAll();
-        ArrayList<Prova> items = new ArrayList<>();
-        for (AEntity elemento : itemsEntity) {
-            items.add((Prova) elemento);
-        }// end of for cycle
+        super.gridPaginataBefore();
 
-//        Collection<Prova> collection = new ArrayList<Prova>(items);
-        grid.setItems(items);
+        gridPaginated.addColumn(Prova::getOrdine).setHeader("ord");
+        gridPaginated.addColumn(Prova::getCode).setHeader("code");
+        gridPaginated.addColumn(Prova::getDescrizione).setHeader("desc");
+        gridPaginated.addColumn(Prova::getLastModifica).setHeader("last");
+
+        super.gridPaginataAfter();
+
+        gridPaginated.setItems(items);
 
         // Sets the max number of items to be rendered on the grid for each page
-        grid.setPageSize(2);
+        gridPaginated.setPageSize(3);
 
         // Sets how many pages should be visible on the pagination before and/or after the current selected page
-        grid.setPaginatorSize(1);
+        gridPaginated.setPaginatorSize(1);
 
-//        this.add(grid);
+        gridHolder.add(gridPaginated);
+        gridHolder.setFlexGrow(1, gridPaginated);
     }// end of method
+
+//    /**
+//     * Controlla la 'dimensione' della collezione <br>
+//     * Se è inferiore alla 'soglia', non fa nulla <br>
+//     * Se è superiore, costruisce un layout con freccia indietro, numero pagina, freccia avanti <br>
+//     */
+//    protected void creaPaginationLayout() {
+//        List<? extends AEntity> itemsEntity = service.findAll();
+//        ArrayList<Prova> items = new ArrayList<>();
+//        for (AEntity elemento : itemsEntity) {
+//            items.add((Prova) elemento);
+//        }// end of for cycle
+//
+////        Collection<Prova> collection = new ArrayList<Prova>(items);
+//        grid.setItems(items);
+//
+//        // Sets the max number of items to be rendered on the grid for each page
+//        grid.setPageSize(2);
+//
+//        // Sets how many pages should be visible on the pagination before and/or after the current selected page
+//        grid.setPaginatorSize(1);
+//
+////        this.add(grid);
+//    }// end of method
 
 
     protected void openProvaDialog(HasValue.ValueChangeEvent event) {
@@ -243,6 +278,36 @@ public class ProvaViewList extends AViewList {
 //        return listaNew;
 //    }// end of method
 
+    /**
+     * Apre il dialog di detail
+     */
+    protected void addDetailDialog() {
+        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
+        if (usaBottoneEdit) {
+            ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
+            Grid.Column colonna = gridPaginated.addColumn(renderer);
+            colonna.setWidth("6em");
+            colonna.setFlexGrow(0);
+        } else {
+            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
+            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
+        }// end of if/else cycle
+    }// end of method
+
+    /**
+     * Eventuale header text
+     */
+    protected void fixGridHeader(String messaggio) {
+        try { // prova ad eseguire il codice
+            HeaderRow topRow = gridPaginated.prependHeaderRow();
+            Grid.Column[] matrix = array.getColumnArray(gridPaginated);
+            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+            Label testo = new Label(messaggio);
+            informationCell.setComponent(testo);
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
+    }// end of method
 
     private class Pippo implements Runnable {
 

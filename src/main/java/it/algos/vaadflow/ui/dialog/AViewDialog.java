@@ -542,6 +542,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Aggiunge ogni singolo field della fieldMap al layout grafico
         addFieldsToLayout();
 
+        //--Associa i valori del currentItem al binder. Dal DB alla UI
+        binder.readBean(currentItem);
+
         //--Eventuali aggiustamenti finali al layout
         //--Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
         fixLayout();
@@ -551,9 +554,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //--Regola il focus iniziale
         fixFocus();
-
-        //--Associa i valori del currentItem al binder. Dal DB alla UI
-        binder.readBean(currentItem);
 
         //--Regola in lettura eventuali valori NON associati al binder. Dal DB alla UI
         readSpecificFields();
