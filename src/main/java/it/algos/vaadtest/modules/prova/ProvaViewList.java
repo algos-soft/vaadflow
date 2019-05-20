@@ -14,6 +14,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
@@ -55,8 +56,6 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  */
 @UIScope
 @Route(value = TAG_PRO)
-//@Tag("prova-list")
-//@HtmlImport("frontend://src/views/prova/prova-list.html")
 @Qualifier(TAG_PRO)
 @Slf4j
 @AIView(roleTypeVisibility = EARoleType.user)
@@ -168,9 +167,14 @@ public class ProvaViewList extends AViewList {
         FlexLayout layout = new FlexLayout();
         gridPaginated = new PaginatedGrid<>();
 
-        super.gridPaginataBefore();
+//        PaginatedGrid<AEntity> grid2=new  PaginatedGrid();
+//        super.gridPaginataBefore();
+//
+//        Grid<AEntity> grid3= new Grid();
+//        grid3.addColumn("desc");
 
-        gridPaginated.addColumn(Prova::getOrdine).setHeader("ord");
+//        gridPaginated.addColumn(Prova::getOrdine).setHeader("ord");
+        gridPaginated.addColumn(Prova::getOrdine);
         gridPaginated.addColumn(Prova::getCode).setHeader("code");
         gridPaginated.addColumn(Prova::getDescrizione).setHeader("desc");
         gridPaginated.addColumn(Prova::getLastModifica).setHeader("last");

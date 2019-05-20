@@ -660,4 +660,30 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    /**
+     * Restituisce come stringa (intelligente) una durata espressa in long
+     * - Meno di 1 secondo
+     * - Meno di 1 minuto
+     * - Meno di 1 ora
+     * - Meno di 1 giorno
+     * - Meno di 1 anno
+     *
+     * @return durata (arrotondata e semplificata) in forma leggibile
+     */
+    @Test
+    public void toText() {
+        long durata = 0;
+
+        System.out.println("*************");
+        System.out.println("Durata");
+        System.out.println("Meno di 1 secondo: " + service.toText(87));
+        System.out.println("Meno di 1 minuto: " + service.toText(45000));
+        System.out.println("Meno di 1 ora: " + service.toText(3500000));
+        System.out.println("Meno di 1 giorno: " + service.toText(3700000));
+        System.out.println("Meno di 1 giorno: " + service.toText(7500000));
+        System.out.println("Meno di 1 anno: " + service.toText(86500000));
+        System.out.println("*************");
+        service.toText(durata);
+    }// end of single test
+
 }// end of class

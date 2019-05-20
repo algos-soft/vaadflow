@@ -228,6 +228,20 @@ public class ADateService extends AbstractService {
         return get(localDate, EATime.standard.getPattern());
     }// end of method
 
+    /**
+     * Restituisce la data nella forma del pattern completo
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getCompleta(LocalDate localDate) {
+        return get(localDate, EATime.completa.getPattern());
+    }// end of method
 
     /**
      * Restituisce la data nella forma del pattern ricevuto
@@ -740,9 +754,14 @@ public class ADateService extends AbstractService {
 
 
     /**
-     * Restituisce come stringa (intelligente) un durata espressa in long
+     * Restituisce come stringa (intelligente) una durata espressa in long
+     * - Meno di 1 secondo
+     * - Meno di 1 minuto
+     * - Meno di 1 ora
+     * - Meno di 1 giorno
+     * - Meno di 1 anno
      *
-     * @return tempo in forma leggibile
+     * @return durata (arrotondata e semplificata) in forma leggibile
      */
     public String toText(long durata) {
         String tempo = "null";
@@ -788,6 +807,7 @@ public class ADateService extends AbstractService {
                             } else {
                                 tempo = div + ORE;
                             }// fine del blocco if-else
+                            tempo += " e " + toText(durata - div * MAX_MINUTI);
                         } else {
                             tempo = "1" + GIORNO;
                         }// fine del blocco if-else

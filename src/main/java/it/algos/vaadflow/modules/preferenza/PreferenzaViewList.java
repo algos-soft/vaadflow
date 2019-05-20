@@ -73,6 +73,7 @@ public class PreferenzaViewList extends AViewList {
      * Le preferenze sovrascritte nella sottoclasse
      */
     protected void fixPreferenzeSpecifiche() {
+        super.fixPreferenzeSpecifiche();
         super.usaSearchTextField = false;
 //        super.usaBottoneEdit = true;
         super.usaBottoneDeleteAll = true;

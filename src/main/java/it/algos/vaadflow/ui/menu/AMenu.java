@@ -123,7 +123,7 @@ public abstract class AMenu extends Div implements IAMenu {
      * Login and context della sessione <br>
      */
     protected void fixContext() {
-        context = vaadinService.fixLoginAndContext(null);
+        context = vaadinService.fixLoginAndContext();
         login = context.getLogin();
     }// end of method
 

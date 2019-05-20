@@ -34,7 +34,7 @@
         <!-- Dependencies -->
         <!-- Va tenuta aggiornata la versione di VAADIN 10.0.x -->
         <!--<vaadin.version>10.0.5</vaadin.version>-->
-        <vaadin.version>13.0.3</vaadin.version>
+        <vaadin.version>13.0.7</vaadin.version>
 
         <!-- Va tenuta aggiornata la versione di spring-boot -->
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
@@ -91,24 +91,19 @@
     </dependencyManagement>
 
     <dependencies>
+
         <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-confirm-dialog-flow</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-app-layout-flow</artifactId>
-            <!-- You do not need to specify the version number as long as you have vaadin-bom imported. -->
-            <!--<version>1.0.3</version>-->
-        </dependency>
 
         <!-- MultiSelectCombo -->
         <dependency>
             <groupId>org.vaadin.gatanaso</groupId>
             <artifactId>multiselect-combo-box-flow</artifactId>
-            <version>0.0.7</version>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bowergithub.vaadin</groupId>
@@ -120,7 +115,7 @@
         <dependency>
             <groupId>org.vaadin.klaudeta</groupId>
             <artifactId>grid-pagination</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <!-- Spring -->
@@ -181,7 +176,6 @@
             <scope>test</scope>
         </dependency>  <!--<dependency>-->
 
-
         <!-- Old JPA -->
         <dependency>
             <groupId>mysql</groupId>
@@ -195,7 +189,7 @@
             <version>2.5.0</version>
         </dependency>
 
-        <!-- Algos -->
+        <!-- lombok -->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok-maven -->
         <dependency>
             <groupId>org.projectlombok</groupId>

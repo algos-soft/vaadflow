@@ -3,10 +3,15 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -18,6 +23,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.gatanaso.MultiselectComboBox;
+
+import java.util.ArrayList;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -111,6 +118,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
         Component comp = creaCombo();
         getFormLayout().add(comp);
+
+        addComboColor();
     }// end of method
 
 
@@ -122,6 +131,38 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         multiselectComboBox.setItems("Item 1", "Item 2", "Item 3", "Item 4");
 
         return multiselectComboBox;
+    }// end of method
+
+
+    /**
+     * Costruisce un comboBox di colori, costruendo una classe ad hoc con testo e bottone-colore.
+     */
+    private void addComboColor() {
+//        Component comp = new AColor("maroon");
+//        ComboBox<AColor> combo = new ComboBox<>();
+
+        Select<AColor> select = new Select<>();
+        select.setLabel("Seleziona un colore");
+
+        ArrayList<AColor> items = new ArrayList<>();
+        for (EAColor color : EAColor.values()) {
+            items.add(new AColor(color.getTag()));
+        }// end of for cycle
+
+        select.setItems(items);
+        select.setRenderer(new ComponentRenderer<>(color -> {
+            Div div = new Div();
+            div.getStyle().set("text-align", "left");
+            div.setText((color.getName()));
+
+            FlexLayout wrapper = new FlexLayout();
+            wrapper.setFlexGrow(1, div);
+            wrapper.add(color.getColore(), new Label("&nbsp;&nbsp;&nbsp;"), div);
+            return wrapper;
+        }));
+
+        select.setWidth("8em");
+        getFormLayout().add(select);
     }// end of method
 
 
@@ -157,5 +198,39 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         VerticalLayout vert = new VerticalLayout(new Label("PrimaRiga"), new Button("Ok"), new Label("Terza riga"));
         dialog.open(vert, this::pippo, this::pluto);
     }// end of method
+
+
+    public class AColor extends Div {
+
+        private Button colore;
+
+        private String name;
+
+
+        /**
+         * Costruttore completo con parametri.
+         *
+         * @param name descrizione del parametro
+         */
+        public AColor(String name) {
+            this.name = name;
+            this.colore = new Button();
+            colore.getElement().getStyle().set("background-color", name);
+
+            this.add(colore);
+            this.add(name);
+        }// fine del metodo costruttore completo
+
+
+        public Button getColore() {
+            return colore;
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+    }// end of class
 
 }// end of class

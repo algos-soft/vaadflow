@@ -3,6 +3,7 @@ package it.algos.vaadflow;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import it.algos.vaadflow.service.AArrayService;
+import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
@@ -12,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,12 +58,16 @@ public class AArrayServiceTest extends ATest {
     @InjectMocks
     private ATextService textService;
 
+    @InjectMocks
+    private ADateService dateService;
+
 
     @BeforeAll
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         MockitoAnnotations.initMocks(service);
         service.text = textService;
+        service.date = dateService;
     }// end of method
 
 
@@ -345,7 +351,7 @@ public class AArrayServiceTest extends ATest {
         delta.removeAll(listaDue);
         fine = System.currentTimeMillis();
         System.out.println("");
-        System.out.println("seconda prova");
+        System.out.println("seconda prova - removeAll");
         System.out.println("Size listaUno: " + listaUno.size());
         System.out.println("Size listaDue: " + listaDue.size());
         System.out.println("Size delta: " + delta.size());
@@ -360,7 +366,7 @@ public class AArrayServiceTest extends ATest {
                 .collect(Collectors.toList());
         fine = System.currentTimeMillis();
         System.out.println("");
-        System.out.println("terza prova");
+        System.out.println("terza prova - stream");
         System.out.println("Size listaUno: " + listaUno.size());
         System.out.println("Size listaDue: " + listaDue.size());
         System.out.println("Size delta: " + delta.size());
@@ -441,13 +447,13 @@ public class AArrayServiceTest extends ATest {
      *
      * @return differenza
      */
-    @Test
+//    @Test
     public void differenza3() {
         ArrayList listaUnoOriginale = new ArrayList();
         ArrayList listaDue = new ArrayList();
         ArrayList listaUnoCopia = null;
         int dim = 300000;
-       long inizio = System.currentTimeMillis();
+        long inizio = System.currentTimeMillis();
 
         for (int k = 0; k < dim; k++) {
             listaUnoOriginale.add(k * 2);
@@ -458,7 +464,7 @@ public class AArrayServiceTest extends ATest {
         }// end of for cycle
 
         inizio = System.currentTimeMillis();
-        listaUnoCopia = (ArrayList)listaUnoOriginale.clone();
+        listaUnoCopia = (ArrayList) listaUnoOriginale.clone();
         System.out.println("");
         System.out.println("Tempo per il clone: " + textService.format(System.currentTimeMillis() - inizio));
         inizio = System.currentTimeMillis();
@@ -468,6 +474,42 @@ public class AArrayServiceTest extends ATest {
         inizio = System.currentTimeMillis();
         service.differenza(listaUnoOriginale, listaDue);
         System.out.println("Differenza4 in msec: " + textService.format(System.currentTimeMillis() - inizio));
+    }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void differenza5() {
+        ArrayList<Long> listaUno = new ArrayList();
+        ArrayList<Long> listaDue = new ArrayList();
+        HashSet<String> hashA = new HashSet<String>();
+        HashSet<String> hashB = new HashSet<String>();
+        int dim = 300000;
+        long inizio = System.currentTimeMillis();
+
+        for (int k = 0; k < dim; k++) {
+            listaUno.add(new Long((k * 2)));
+        }// end of for cycle
+
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(new Long((k * 3)));
+        }// end of for cycle
+
+        inizio = System.currentTimeMillis();
+        service.delta(listaUno, listaDue);
+        System.out.println("");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Differenza5 -HashSet- in msec: " + textService.format(System.currentTimeMillis() - inizio));
+        System.out.println("");
+
     }// end of single test
 
 }// end of class

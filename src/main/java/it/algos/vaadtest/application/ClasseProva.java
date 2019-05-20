@@ -14,10 +14,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Date: mar, 19-feb-2019
  * Time: 08:42
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier("xxxyyyzzz")
-@Slf4j
-public class ClasseProva extends ALogin {
+//@SpringComponent
+//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//@Qualifier("xxxyyyzzz")
+//@Slf4j
+public class ClasseProva  {
 
 }// end of class

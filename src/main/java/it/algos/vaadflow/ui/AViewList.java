@@ -40,6 +40,7 @@ import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.ATextField;
+import it.algos.vaadflow.ui.fields.IAField;
 import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +61,14 @@ import static it.algos.vaadflow.application.FlowCost.USA_MENU;
  * User: gac
  * Date: sab, 05-mag-2018
  * Time: 18:49
+ * <p>
  * Classe astratta per visualizzare la Grid <br>
  * <p>
- * <p>
  * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
- * Le property di questa classe/sottoclasse vengono iniettate automaticamente da SpringBoot se: <br>
+ * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta <br>
- * 2) usano una loro classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
- * 3) vengono usate in un un metodo @PostConstruct di questa classe/sottoclasse, perché SpringBoot le inietta solo DOPO init() <br>
+ * 2) sono istanze di una classe SINGLETON, richiamate con AxxService.getInstance() <br>
+ * 3) sono annotate @Autowired; sono disponibile SOLO DOPO @PostConstruct <br>
  * <p>
  * Le sottoclassi concrete NON hanno le annotation @SpringComponent, @SpringView e @Scope
  * NON annotated with @SpringComponent - Sbagliato perché va in conflitto con la @Route
@@ -75,7 +76,7 @@ import static it.algos.vaadflow.application.FlowCost.USA_MENU;
  * NON annotated with @Scope - Usa @UIScope
  * Annotated with @Route (obbligatorio) per la selezione della vista.
  * <p>
- * Graficamente abbiamo:
+ * Graficamente abbiamo in tutte (di solito) le XxxViewList:
  * 1) una barra di menu (obbligatorio) di tipo IAMenu
  * 2) un topPlaceholder (eventuale, presente di default) di tipo HorizontalLayout
  * - con o senza campo edit search, regolato da preferenza o da parametro
@@ -150,28 +151,35 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     public ATextService text = ATextService.getInstance();
 
-    @Autowired
-    public AMongoService mongo;
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public AMongoService mongo = AMongoService.getInstance();
 
+    /**
+     * Istanza unica di una classe di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct <br>
+     */
     @Autowired
     protected ApplicationContext appContext;
 
     /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct <br>
      */
     @Autowired
     protected LogService logger;
 
-    @Autowired
-    protected UtenteService utenteService;
-
     /**
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct <br>
      */
     @Autowired
-    protected PreferenzaService pref;
+    protected UtenteService utenteService;
 
     protected TextField searchField;
 
@@ -238,14 +246,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected HorizontalLayout bottomLayout;
 
-    /**
-     * Placeholder (obbligatorio) SOTTO la Grid con informazioni generali <br>
-     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
-     * La injection viene fatta da SpringBoot solo DOPO init() automatico <br>
-     * Usare quindi un metodo @PostConstruct per averla disponibile <br>
-     */
-    @Autowired
-    protected AFooter footer;
 
     /**
      * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
@@ -258,6 +258,17 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Facoltativo ed alternativo a usaSearchTextField. Normalmente true.
      */
     protected boolean usaSearchTextDialog;
+
+    /**
+     * Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
+     */
+    protected boolean usaPagination;
+
+    /**
+     * Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
+     * Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50
+     */
+    protected int sogliaPagination;
 
     /**
      * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true.
@@ -343,11 +354,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected boolean usaRefresh;
 
     /**
-     * Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
-     */
-    protected boolean usaPagination;
-
-    /**
      * Flag di preferenza per selezionare il numero di righe visibili della Grid. Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
      */
     protected int limit;
@@ -365,8 +371,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      */
     protected AContext context;
 
-    protected HorizontalLayout footerLayout;
-
     protected int offset;
 
     protected Button minusButton;
@@ -376,12 +380,12 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     protected ATextField paginationField;
 
     /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     * Unica per tutta l'applicazione. Usata come libreria. <br>
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct <br>
      */
     @Autowired
     protected AVaadinService vaadinService;
-
 
     protected boolean isPagination;
 
@@ -406,6 +410,14 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
      * Nome della route per la location della pagina di visualizzazione (opzionale-senza modifica) del Form <br>
      */
     protected String routeNameFormShow;
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct <br>
+     */
+    @Autowired
+    private PreferenzaService pref;
 
 
     /**
@@ -455,7 +467,7 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         this.removeAll();
 
         //--Login and context della sessione
-        context = vaadinService.fixLoginAndContext(login);
+        context = vaadinService.fixLoginAndContext();
         login = context.getLogin();
 
         //--Le preferenze standard
@@ -530,15 +542,20 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
         usaRefresh = true;
 
-        //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente false.
-        usaPagination = false;
-
         //--Flag di preferenza per selezionare il numero di righe visibili della Grid. Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
         limit = pref.getInt(FlowCost.MAX_RIGHE_GRID);
 
         //--Flag di preferenza per usare una route view come detail della singola istanza. Normalmente true.
         //--In alternativa si può usare un Dialog.
         usaRouteFormView = false;
+
+        //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
+        usaPagination = true;
+
+        //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
+        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50
+        sogliaPagination = pref.getInt(FlowCost.SOGLIA_PAGINATION, 50);
+
     }// end of method
 
 
@@ -553,34 +570,42 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 
     /**
      * Creazione e posizionamento dei componenti UI <br>
-     * Può essere sovrascritto <br>
+     * Può essere sovrascritto in toto oppure possono essere sovrascritti tutti i singoli layout <br>
      */
     protected void creaLayout() {
         creaMenuLayout();
 
+        //--barra/menu dei bottoni
         if (creaTopLayout()) {
             this.add(topPlaceholder);
         }// end of if cycle
 
+        //--una o più righe di avvisi
         if (creaAlertLayout()) {
             this.add(alertPlacehorder);
         }// end of if cycle
 
+        //--body con la Grid
         if (usaPagination) {
             creaGridPaginata();
         } else {
             creaGrid();
         }// end of if/else cycle
 
+        //--eventuale barra di bottoni sotto la grid
         creaGridBottomLayout();
 //        creaPaginationLayout();
-        creaFooterLayout();
+
+        //--aggiunge il footer
+        this.add(appContext.getBean(AFooter.class));
     }// end of method
 
 
     /**
      * Costruisce la barra di menu e l'aggiunge alla UI <br>
      * Lo standard è 'Flowingcode'
+     * Può essere sovrascritto
+     * Invocare PRIMA il metodo della superclasse
      */
     protected boolean creaMenuLayout() {
         IAMenu menu;
@@ -1053,11 +1078,6 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     }// end of method
 
 
-    protected void creaFooterLayout() {
-        if (footer != null) {
-            this.add(footer.setAppMessage("", context));
-        }// end of if cycle
-    }// end of method
 
 
 //    /**
@@ -1108,64 +1128,64 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
 //    }// end of method
 
 
-    public void diminuiscePagination() {
-        if (offset > 0) {
-            offset--;
-            paginationField.setValue("" + (offset + 1));
-            updateView();
-        }// end of if cycle
-
+//    public void diminuiscePagination() {
+//        if (offset > 0) {
+//            offset--;
+//            paginationField.setValue("" + (offset + 1));
+//            updateView();
+//        }// end of if cycle
+//
+////        sincroPagination();
+//    }// end of method
+//
+//
+//    public void modificaPagination(AbstractField.ComponentValueChangeEvent event) {
+//        String value = (String) event.getValue();
+//        int numPage = Integer.decode(value);
+//        int maxPage = service.count() / limit + 1;
+//
+//        if (numPage > 0 && numPage <= maxPage) {
+//            offset = numPage - 1;
+//            updateView();
+//        } else {
+//            if (numPage < 1) {
+//                offset = 0;
+//                paginationField.setValue("1");
+//                Notification.show("La numerazione delle pagine inizia da 1", 3000, Notification.Position.BOTTOM_START);
+//            }// end of if cycle
+//            if (numPage > maxPage) {
+//                offset = 0;
+//                paginationField.setValue(maxPage + "");
+//                Notification.show("La pagina più alta è " + maxPage, 3000, Notification.Position.BOTTOM_START);
+//            }// end of if cycle
+//        }// end of if/else cycle
+//
 //        sincroPagination();
-    }// end of method
-
-
-    public void modificaPagination(AbstractField.ComponentValueChangeEvent event) {
-        String value = (String) event.getValue();
-        int numPage = Integer.decode(value);
-        int maxPage = service.count() / limit + 1;
-
-        if (numPage > 0 && numPage <= maxPage) {
-            offset = numPage - 1;
-            updateView();
-        } else {
-            if (numPage < 1) {
-                offset = 0;
-                paginationField.setValue("1");
-                Notification.show("La numerazione delle pagine inizia da 1", 3000, Notification.Position.BOTTOM_START);
-            }// end of if cycle
-            if (numPage > maxPage) {
-                offset = 0;
-                paginationField.setValue(maxPage + "");
-                Notification.show("La pagina più alta è " + maxPage, 3000, Notification.Position.BOTTOM_START);
-            }// end of if cycle
-        }// end of if/else cycle
-
-        sincroPagination();
-        updateView();
-    }// end of method
-
-
-    public void aumentaPagination() {
-        if (offset < service.count()) {
-            offset++;
-            paginationField.setValue("" + (offset + 1));
-        }// end of if cycle
-    }// end of method
-
-
-    public void sincroPagination() {
-        if (offset == 0) {
-            minusButton.setEnabled(false);
-        } else {
-            minusButton.setEnabled(true);
-        }// end of if/else cycle
-
-        if ((offset + 1) * limit > service.count()) {
-            plusButton.setEnabled(false);
-        } else {
-            plusButton.setEnabled(true);
-        }// end of if/else cycle
-    }// end of method
+//        updateView();
+//    }// end of method
+//
+//
+//    public void aumentaPagination() {
+//        if (offset < service.count()) {
+//            offset++;
+//            paginationField.setValue("" + (offset + 1));
+//        }// end of if cycle
+//    }// end of method
+//
+//
+//    public void sincroPagination() {
+//        if (offset == 0) {
+//            minusButton.setEnabled(false);
+//        } else {
+//            minusButton.setEnabled(true);
+//        }// end of if/else cycle
+//
+//        if ((offset + 1) * limit > service.count()) {
+//            plusButton.setEnabled(false);
+//        } else {
+//            plusButton.setEnabled(true);
+//        }// end of if/else cycle
+//    }// end of method
 
 
     @Override
@@ -1252,13 +1272,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
     public void updateViewDopoSearch() {
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
         List<AEntity> lista;
-        ATextField field;
-        String fieldValue;
+        IAField field;
+        Object fieldValue;
         ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
 
         for (String fieldName : searchDialog.fieldMap.keySet()) {
-            field = (ATextField) searchDialog.fieldMap.get(fieldName);
-            fieldValue = field.getValue();
+            field = (IAField) searchDialog.fieldMap.get(fieldName);
+            fieldValue = field.getValore();
             if (text.isValid(fieldValue)) {
                 listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
             }// end of if cycle
@@ -1281,11 +1301,13 @@ public abstract class AViewList extends VerticalLayout implements IAView, Before
         creaAlertLayout();
     }// end of method
 
+
     /**
      * Eventuale header text
      */
     protected void fixGridHeader(String messaggio) {
     }// end of method
+
 
     /**
      * Opens the confirmation dialog before deleting all items.
