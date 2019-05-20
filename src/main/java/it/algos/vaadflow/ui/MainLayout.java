@@ -34,6 +34,7 @@ import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.service.AVaadinService;
+import it.algos.vaadflow.ui.list.AViewList;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;

@@ -6,7 +6,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.ui.AViewList;
+import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.IAView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

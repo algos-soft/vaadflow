@@ -2,14 +2,12 @@ package it.algos.vaadflow.modules.versione;
 
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.AViewList;
-import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,6 +3,7 @@ package it.algos.vaadflow.ui;
 import com.vaadin.flow.component.html.Label;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AViewList;
 
 /**
  * Project vaadflow
