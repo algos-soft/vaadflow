@@ -3,6 +3,7 @@ package it.algos.vaadflow.ui;
 import com.vaadin.flow.component.html.Label;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.ALayoutViewList;
 import it.algos.vaadflow.ui.list.AViewList;
 
 /**
@@ -15,7 +16,7 @@ import it.algos.vaadflow.ui.list.AViewList;
 //@SpringComponent
 //@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 //@Slf4j
-public abstract class ACronoViewList extends AViewList {
+public abstract class ACronoViewList extends ALayoutViewList {
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -28,10 +29,14 @@ public abstract class ACronoViewList extends AViewList {
 
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected void fixPreferenzeSpecifiche() {
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.usaSearchTextField = false;
         super.usaSearchBottoneNew = false;
         super.usaBottoneDeleteAll = true;
@@ -41,18 +46,15 @@ public abstract class ACronoViewList extends AViewList {
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
-     * Normalmente ad uso esclusivo del developer
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
-    protected boolean creaAlertLayout() {
+    protected void creaAlertLayout() {
         super.creaAlertLayout();
-
         alertPlacehorder.add(new Label("Serve per costruire liste cronologiche"));
-
-        return true;
     }// end of method
 
 }// end of class

@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class VersioneViewList extends AViewList {
+public class VersioneViewList extends AGridViewList {
 
 
     /**
@@ -71,10 +72,14 @@ public class VersioneViewList extends AViewList {
 
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected void fixPreferenzeSpecifiche() {
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.usaSearchTextField = false;
         super.usaSearchBottoneNew = false;
         super.isEntityDeveloper = true;
@@ -82,19 +87,17 @@ public class VersioneViewList extends AViewList {
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
-     * Normalmente ad uso esclusivo del developer
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
-    protected boolean creaAlertLayout() {
+    protected void creaAlertLayout() {
         super.creaAlertLayout();
 
         alertPlacehorder.add(new Label("Sigla 'A' per le versioni base di vaadinflow"));
         alertPlacehorder.add(new Label("Sigla 'Z' per le modifiche alla descrizione di una preferenza"));
-
-        return true;
     }// end of method
 
 }// end of class

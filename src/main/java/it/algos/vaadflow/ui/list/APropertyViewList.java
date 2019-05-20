@@ -7,7 +7,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
@@ -20,12 +19,10 @@ import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.ATextField;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
  * User: gac
  * Date: Mon, 20-May-2019
  * Time: 07:06
- *
+ * <p>
  * Superclasse di servizio per separare le property di AViewList in una classe 'dedicata' <br>
  * Alleggerisce la 'lettura' della sottoclasse principale <br>
  * Le property sono regolarmente disponibili in AViewList ed in tutte le sue sottoclassi <br>

@@ -10,52 +10,28 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.selection.SelectionEvent;
-import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
-import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.backend.login.ALogin;
-import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
-import it.algos.vaadflow.modules.log.LogService;
-import it.algos.vaadflow.modules.preferenza.PreferenzaService;
-import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
-import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
-import static it.algos.vaadflow.application.FlowCost.USA_MENU;
 
 /**
  * Project it.algos.vaadflow
@@ -65,6 +41,10 @@ import static it.algos.vaadflow.application.FlowCost.USA_MENU;
  * Time: 18:49
  * <p>
  * Classe astratta per visualizzare la Grid <br>
+ * La classe viene divisa verticalmente in alcune classi, per 'leggerla' meglio (era troppo grossa) <br>
+ * - 1 superclasse (APropertyViewList) <br>
+ * - 3 sottoclassi (AGridViewList, ALayoutViewList e APrefViewList) <br>
+ * L'utilizzo pratico per il programmatore è come se fosse una classe sola <br>
  * <p>
  * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
@@ -108,7 +88,6 @@ import static it.algos.vaadflow.application.FlowCost.USA_MENU;
 public abstract class AViewList extends APropertyViewList implements IAView, BeforeEnterObserver, BeforeLeaveObserver {
 
 
-
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
@@ -147,10 +126,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
      * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Creazione e posizionamento dei componenti UI <br>
+     * Possono essere sovrascritti nellesottoclassi <br>
      */
     @PostConstruct
     protected void initView() {
-//        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
         this.setMargin(false);
         this.setSpacing(false);
         this.removeAll();
@@ -159,134 +139,40 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         context = vaadinService.fixLoginAndContext();
         login = context.getLogin();
 
-        //--Le preferenze standard
-        fixPreferenze();
+        //--Le preferenze standard e specifiche
+        this.fixPreferenze();
 
-        //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-        fixPreferenzeSpecifiche();
+        //--menu generale dell'applicazione
+        this.creaMenuLayout();
 
-        creaLayout();
-    }// end of method
-
-
-    /**
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
-     */
-    private void fixPreferenze() {
-
-        /**
-         * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
-         * Facoltativo ed alternativo a usaSearchTextDialog. Normalmente false.
-         */
-        usaSearchTextField = false;
-
-        /**
-         * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
-         * Facoltativo ed alternativo a usaSearchTextField. Normalmente true.
-         */
-        usaSearchTextDialog = true;
-
-        //--Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
-        usaSearchBottoneNew = true;
-
-        //--Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
-        usaTopAlert = false;
-
-        //--Flag di preferenza per la Label nell'header della Grid grid. Normalmente true.
-        usaHaederGrid = true;
-
-        //--Flag di preferenza per modificare la entity. Normalmente true.
-        isEntityModificabile = true;
-
-        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-        usaBottoneEdit = true;
-
-        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true
-        isBottoneEditBefore = true;
-
-        //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
-        testoBottoneEdit = EDIT_NAME;
-
-        //--Flag di preferenza per usare il placeholder di botoni ggiuntivi sotto la Grid. Normalmente false.
-        usaBottomLayout = false;
-
-        //--Flag di preferenza per cancellare tutti gli elementi. Normalmente false.
-        usaBottoneDeleteAll = false;
-
-        //--Flag di preferenza per resettare le condizioni standard di partenza. Normalmente false.
-        usaBottoneReset = false;
-
-        //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
-        isEntityDeveloper = false;
-
-        //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
-        isEntityAdmin = false;
-
-        //--Flag di preferenza per aggiungere una caption di info sopra la grid. Normalmente false.
-        isEntityEmbedded = false;
-
-        //--Flag di preferenza se si caricano dati demo alla creazione. Resettabili. Normalmente false.
-        isEntityUsaDatiDemo = false;
-
-        //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
-        usaRefresh = true;
-
-        //--Flag di preferenza per selezionare il numero di righe visibili della Grid. Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
-        limit = pref.getInt(FlowCost.MAX_RIGHE_GRID);
-
-        //--Flag di preferenza per usare una route view come detail della singola istanza. Normalmente true.
-        //--In alternativa si può usare un Dialog.
-        usaRouteFormView = false;
-
-        //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
-        usaPagination = true;
-
-        //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
-        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50
-        sogliaPagination = pref.getInt(FlowCost.SOGLIA_PAGINATION, 50);
-
-    }// end of method
-
-
-    /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected void fixPreferenzeSpecifiche() {
-    }// end of method
-
-
-    /**
-     * Creazione e posizionamento dei componenti UI <br>
-     * Può essere sovrascritto in toto oppure possono essere sovrascritti tutti i singoli layout <br>
-     */
-    protected void creaLayout() {
-        creaMenuLayout();
-
-        //--barra/menu dei bottoni
-        if (creaTopLayout()) {
+        //--barra/menu dei bottoni specifici del modulo
+        this.creaTopLayout();
+        if (topPlaceholder.getComponentCount() > 0) {
             this.add(topPlaceholder);
         }// end of if cycle
 
         //--una o più righe di avvisi
-        if (creaAlertLayout()) {
+        this.creaAlertLayout();
+        if (alertPlacehorder.getComponentCount() > 0) {
             this.add(alertPlacehorder);
         }// end of if cycle
 
         //--body con la Grid
-        if (usaPagination) {
-            creaGridPaginata();
-        } else {
-            creaGrid();
-        }// end of if/else cycle
+        //--seleziona quale grid usare e la aggiunge al layout
+        this.creaGridPaginataOppureNormale();
 
-        //--eventuale barra di bottoni sotto la grid
-        creaGridBottomLayout();
-//        creaPaginationLayout();
-
-        //--aggiunge il footer
+        //--aggiunge il footer standard
         this.add(appContext.getBean(AFooter.class));
+    }// end of method
+
+
+    /**
+     * Le preferenze standard
+     * Le preferenze specifiche della sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected void fixPreferenze() {
     }// end of method
 
 
@@ -296,164 +182,78 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Può essere sovrascritto
      * Invocare PRIMA il metodo della superclasse
      */
-    protected boolean creaMenuLayout() {
-        IAMenu menu;
-        EAMenu typeMenu = EAMenu.getMenu(pref.getStr(USA_MENU));
-
-        if (typeMenu != null) {
-            switch (typeMenu) {
-                case buttons:
-                    menu = StaticContextAccessor.getBean(AButtonMenu.class);
-                    this.add(menu.getComp());
-                    break;
-                case popup:
-                    menu = StaticContextAccessor.getBean(APopupMenu.class);
-                    this.add(menu.getComp());
-                    break;
-                case flowing:
-                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
-                    this.add(menu.getComp());
-                    break;
-                case vaadin:
-                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
-                    this.add(new Label("."));
-                    this.add(((AFlowingcodeAppLayoutMenu) menu).getAppLayoutFlowing());
-                    break;
-                default:
-                    log.warn("Switch - caso non definito");
-                    break;
-            } // end of switch statement
-        } else {
-            return false;
-        }// end of if/else cycle
-
-        return true;
+    protected void creaMenuLayout() {
     }// end of method
 
 
     /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Placeholder (eventuale, presente di default) SOPRA la Grid <br>
+     * - con o senza campo edit search, regolato da preferenza o da parametro <br>
+     * - con o senza bottone New, regolato da preferenza o da parametro <br>
+     * - con eventuali altri bottoni specifici <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
-    protected boolean creaTopLayout() {
-        topPlaceholder.removeAll();
-        topPlaceholder.addClassName("view-toolbar");
-        String buttonTitle;
-        Button deleteAllButton;
-        Button resetButton;
-        Button clearFilterTextBtn;
-        Button searchButton;
-        boolean isDeveloper = login.isDeveloper();
-        boolean isAdmin = login.isAdmin();
-
-        if (usaBottoneDeleteAll && isDeveloper) {
-            deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
-            deleteAllButton.getElement().setAttribute("theme", "error");
-            deleteAllButton.addClassName("view-toolbar__button");
-            deleteAllButton.addClickListener(e -> openConfirmDialogDelete());
-            topPlaceholder.add(deleteAllButton);
-        }// end of if cycle
-
-        if (usaBottoneReset && isDeveloper) {
-            resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
-            resetButton.getElement().setAttribute("theme", "error");
-            resetButton.addClassName("view-toolbar__button");
-            resetButton.addClickListener(e -> {
-                service.reset();
-                updateView();
-            });
-            topPlaceholder.add(resetButton);
-        }// end of if cycle
-
-        if (usaSearchTextField) {
-            searchField = new TextField("", "Search");
-            searchField.setPrefixComponent(new Icon("lumo", "search"));
-            searchField.addClassName("view-toolbar__search-field");
-            searchField.setValueChangeMode(ValueChangeMode.EAGER);
-            searchField.addValueChangeListener(e -> updateView());
-
-            clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-            clearFilterTextBtn.addClickListener(e -> searchField.clear());
-
-            topPlaceholder.add(searchField, clearFilterTextBtn);
-        }// end of if cycle
-
-        if (usaSearchTextDialog) {
-            buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
-            searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
-            searchButton.getElement().setAttribute("theme", "secondary");
-            searchButton.addClassName("view-toolbar__button");
-            searchButton.addClickListener(e -> openSearch());
-            topPlaceholder.add(searchButton);
-        }// end of if cycle
-
-
-        if (usaSearchBottoneNew) {
-            buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
-            newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
-            newButton.getElement().setAttribute("theme", "primary");
-            newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(e -> openNew());
-            topPlaceholder.add(newButton);
-        }// end of if cycle
-
-        return topPlaceholder.getComponentCount() > 0;
+    protected void creaTopLayout() {
     }// end of method
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
-     * Normalmente ad uso esclusivo del developer
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
-    protected boolean creaAlertLayout() {
-        alertPlacehorder.removeAll();
-//        alertPlacehorder.addClassName("view-toolbar");
-        alertPlacehorder.setMargin(false);
-        alertPlacehorder.setSpacing(false);
-        alertPlacehorder.setPadding(false);
+    protected void creaAlertLayout() {
+    }// end of method
 
-        if (isEntityDeveloper || isEntityAdmin || isEntityEmbedded || isEntityUsaDatiDemo) {
-            usaTopAlert = true;
-        }// end of if cycle
 
-        if (usaTopAlert) {
-            if (isEntityDeveloper) {
-                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
-            }// end of if cycle
 
-            if (isEntityAdmin) {
-                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
-            }// end of if cycle
 
-            if (isEntityEmbedded) {
-                alertPlacehorder.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
-                alertPlacehorder.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
-            }// end of if cycle
+    /**
+     * Crea il corpo centrale della view <br>
+     * Componente grafico obbligatorio <br>
+     * Seleziona quale grid usare e la aggiunge al layout <br>
+     * Eventuale barra di bottoni sotto la grid <br>
+     */
+    protected void creaGridPaginataOppureNormale() {
+        int numRec = service.count();
 
-            if (isEntityEmbedded || isEntityUsaDatiDemo) {
-                alertPlacehorder.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
-            }// end of if cycle
-        }// end of if cycle
+//        if (usaPagination && numRec > sogliaPagination) {
+//            creaGridPaginata();
+//        } else {
+//            creaGrid();
+//        }// end of if/else cycle
+        creaGridPaginata();
 
-        return alertPlacehorder.getComponentCount() > 0;
+        //--eventuale barra di bottoni sotto la grid
+        creaGridBottomLayout();
     }// end of method
 
 
     /**
-     * Crea il placeholder per la grid paginata (secondo il flag)
+     * Crea il corpo centrale della view con una Grid normale <br>
+     * Componente grafico obbligatorio <br>
+     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
+     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView() <br>
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
+     */
+    protected void creaGrid() {
+    }// end of method
+
+
+    /**
+     * Crea il corpo centrale della view con una Grid paginata <br>
+     * Componente grafico obbligatorio <br>
+     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
+     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView() <br>
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
      */
     protected void creaGridPaginata() {
         this.add(gridHolder);
         this.setFlexGrow(1, gridHolder);
-        updateGridPaginata();
+//        updateGridPaginata();
     }// end of method
-
 
     /**
      * Prova a creare la grid paginata
@@ -501,89 +301,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         items = service != null ? service.findAll() : null;
         fixGridHeader(getGridHeaderText());
     }// end of method
-
-
-    /**
-     * Crea il corpo centrale della view
-     * Componente grafico obbligatorio
-     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
-     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
-     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
-     */
-    protected void creaGrid() {
-        FlexLayout layout = new FlexLayout();
-//        layout.setHeight("30em");
-
-        //--Costruisce una lista di nomi delle properties della Grid nell'ordine:
-        //--1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
-        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
-        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
-        if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
-            try { // prova ad eseguire il codice
-                //--Costruisce la Grid SENZA creare automaticamente le colonne
-                //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-                grid = new Grid(entityClazz, false);
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-                return;
-            }// fine del blocco try-catch
-        } else {
-            grid = new Grid();
-        }// end of if/else cycle
-
-//        //--@todo solo per la versione 10.0.5
-//        //--@todo dalla versione 12.0.0, si può levare ed aggiungere 'false' come secondo parametro a new Grid(...,false)
-//        for (Grid.Column column : grid.getColumns()) {
-//            grid.removeColumn(column);
-//        }// end of for cycle
-
-        //--Apre il dialog di detail
-        if (isBottoneEditBefore) {
-            this.addDetailDialog();
-        }// end of if cycle
-
-        //--Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
-        this.addSpecificColumnsBefore();
-
-        //--Eventuale modifica dell'ordine di presentazione delle colonne automatiche
-        gridPropertyNamesList = this.reorderingColumns(gridPropertyNamesList);
-
-        //--Colonne normali aggiunte in automatico
-        if (gridPropertyNamesList != null) {
-            for (String propertyName : gridPropertyNamesList) {
-                column.create(grid, entityClazz, propertyName);
-            }// end of for cycle
-        }// end of if cycle
-
-        //--Eventuali colonne calcolate aggiunte DOPO quelle automatiche
-        this.addSpecificColumnsAfter();
-
-        //--Apre il dialog di detail
-        if (!isBottoneEditBefore) {
-            this.addDetailDialog();
-        }// end of if cycle
-
-        //--Regolazioni finali sulla grid e sulle colonne
-        this.fixLayout();
-
-        layout.add(grid);
-        this.add(layout);
-        layout.setFlexGrow(1, grid);
-        this.setFlexGrow(1, layout);
-
-        grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
-
-            @Override
-            public void selectionChange(SelectionEvent<Grid<AEntity>, AEntity> selectionEvent) {
-                boolean enabled = selectionEvent != null && selectionEvent.getAllSelectedItems().size() > 0;
-                sincroBottoniMenu(enabled);
-            }// end of inner method
-        });//end of lambda expressions and anonymous inner class
-
-        fixGridHeader();
-    }// end of method
-
 
     protected void sincroBottoniMenu(boolean enabled) {
     }// end of method
@@ -765,116 +482,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
             this.add(bottomLayout);
         }// end of if cycle
     }// end of method
-
-
-
-
-//    /**
-//     * Controlla la 'dimensione' della collezione <br>
-//     * Se è inferiore alla 'soglia', non fa nulla <br>
-//     * Se è superiore, costruisce un layout con freccia indietro, numero pagina, freccia avanti <br>
-//     */
-//    protected void creaPaginationLayout() {
-//        if (!usaPagination) {
-//            return;
-//        }// end of if cycle
-//        if (service == null) {
-//            return;
-//        }// end of if cycle
-//
-//        int numRecCollezione = service.count();
-//        final String mess = "Gli elementi vengono mostrati divisi in pagine da " + limit + " elementi ciascuna. Con i bottoni (-) e (+) ci si muove avanti ed indietro, una pagina alla volta. Oppure si inserisce il numero della pagina desiderata.";
-//
-//        if (numRecCollezione < limit) {
-//            isPagination = false;
-//            return;
-//        } else {
-//            isPagination = true;
-//        }// end of if/else cycle
-//        offset = 0;
-//
-//        Button titleButton = new Button("Pagination");
-//        titleButton.addClickListener(e -> Notification.show(mess, 6000, Notification.Position.BOTTOM_START));
-//
-//        minusButton = new Button("", new Icon("lumo", "minus"));
-//        minusButton.addClickListener(e -> diminuiscePagination());
-//        minusButton.setEnabled(false);
-//
-//        plusButton = new Button("", new Icon("lumo", "plus"));
-//        plusButton.addClickListener(e -> aumentaPagination());
-//
-//        paginationField = new ATextField("");
-//        paginationField.addValueChangeListener(e -> modificaPagination(e));
-//        paginationField.setValue("1");
-//        paginationField.setWidth("4em");
-//
-//        footerLayout = new HorizontalLayout();
-//        footerLayout.add(titleButton);
-//        footerLayout.add(minusButton);
-//        footerLayout.add(paginationField);
-//        footerLayout.add(plusButton);
-//        this.add(footerLayout);
-//    }// end of method
-
-
-//    public void diminuiscePagination() {
-//        if (offset > 0) {
-//            offset--;
-//            paginationField.setValue("" + (offset + 1));
-//            updateView();
-//        }// end of if cycle
-//
-////        sincroPagination();
-//    }// end of method
-//
-//
-//    public void modificaPagination(AbstractField.ComponentValueChangeEvent event) {
-//        String value = (String) event.getValue();
-//        int numPage = Integer.decode(value);
-//        int maxPage = service.count() / limit + 1;
-//
-//        if (numPage > 0 && numPage <= maxPage) {
-//            offset = numPage - 1;
-//            updateView();
-//        } else {
-//            if (numPage < 1) {
-//                offset = 0;
-//                paginationField.setValue("1");
-//                Notification.show("La numerazione delle pagine inizia da 1", 3000, Notification.Position.BOTTOM_START);
-//            }// end of if cycle
-//            if (numPage > maxPage) {
-//                offset = 0;
-//                paginationField.setValue(maxPage + "");
-//                Notification.show("La pagina più alta è " + maxPage, 3000, Notification.Position.BOTTOM_START);
-//            }// end of if cycle
-//        }// end of if/else cycle
-//
-//        sincroPagination();
-//        updateView();
-//    }// end of method
-//
-//
-//    public void aumentaPagination() {
-//        if (offset < service.count()) {
-//            offset++;
-//            paginationField.setValue("" + (offset + 1));
-//        }// end of if cycle
-//    }// end of method
-//
-//
-//    public void sincroPagination() {
-//        if (offset == 0) {
-//            minusButton.setEnabled(false);
-//        } else {
-//            minusButton.setEnabled(true);
-//        }// end of if/else cycle
-//
-//        if ((offset + 1) * limit > service.count()) {
-//            plusButton.setEnabled(false);
-//        } else {
-//            plusButton.setEnabled(true);
-//        }// end of if/else cycle
-//    }// end of method
 
 
     @Override

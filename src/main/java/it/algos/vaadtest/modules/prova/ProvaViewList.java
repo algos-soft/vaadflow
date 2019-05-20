@@ -18,10 +18,12 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.AConfirmDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.list.ALayoutViewList;
+import it.algos.vaadflow.ui.list.APrefViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,7 +61,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Slf4j
 @AIView(roleTypeVisibility = EARoleType.user)
 @AIScript(sovrascrivibile = true)
-public class ProvaViewList extends AViewList {
+public class ProvaViewList extends AGridViewList {
 
     /**
      * Icona visibile nel menu (facoltativa)
@@ -90,7 +92,7 @@ public class ProvaViewList extends AViewList {
      */
     @Autowired
     public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
-        super(presenter, dialog, "provaViewRoute");
+        super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
@@ -111,8 +113,8 @@ public class ProvaViewList extends AViewList {
      * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
+    protected void fixPreferenze() {
+        super.fixPreferenze();
 
         super.usaBottoneEdit = true;
         super.isBottoneEditBefore = true;
@@ -132,10 +134,9 @@ public class ProvaViewList extends AViewList {
      * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected boolean creaTopLayout() {
+    protected void creaTopLayout() {
         super.creaTopLayout();
         topPlaceholder.add(creaPopup());
-        return topPlaceholder.getComponentCount() > 0;
     }// end of method
 
 
@@ -166,6 +167,8 @@ public class ProvaViewList extends AViewList {
         FlexLayout layout = new FlexLayout();
         gridPaginated = new PaginatedGrid<>();
 
+//        super.gridPaginataBefore();
+
 //        PaginatedGrid<AEntity> grid2=new  PaginatedGrid();
 //        super.gridPaginataBefore();
 //
@@ -178,9 +181,11 @@ public class ProvaViewList extends AViewList {
         gridPaginated.addColumn(Prova::getDescrizione).setHeader("desc");
         gridPaginated.addColumn(Prova::getLastModifica).setHeader("last");
 
-        super.gridPaginataAfter();
+//        super.gridPaginataAfter();
 
-        gridPaginated.setItems(items);
+        if (items!=null) {
+            gridPaginated.setItems(items);
+        }// end of if cycle
 
         // Sets the max number of items to be rendered on the grid for each page
         gridPaginated.setPageSize(3);
@@ -281,36 +286,39 @@ public class ProvaViewList extends AViewList {
 //        return listaNew;
 //    }// end of method
 
-    /**
-     * Apre il dialog di detail
-     */
-    protected void addDetailDialog() {
-        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-        if (usaBottoneEdit) {
-            ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
-            Grid.Column colonna = gridPaginated.addColumn(renderer);
-            colonna.setWidth("6em");
-            colonna.setFlexGrow(0);
-        } else {
-            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
-            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
-        }// end of if/else cycle
-    }// end of method
 
-    /**
-     * Eventuale header text
-     */
-    protected void fixGridHeader(String messaggio) {
-        try { // prova ad eseguire il codice
-            HeaderRow topRow = gridPaginated.prependHeaderRow();
-            Grid.Column[] matrix = array.getColumnArray(gridPaginated);
-            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
-            Label testo = new Label(messaggio);
-            informationCell.setComponent(testo);
-        } catch (Exception unErrore) { // intercetta l'errore
-            log.error(unErrore.toString());
-        }// fine del blocco try-catch
-    }// end of method
+//    /**
+//     * Apre il dialog di detail
+//     */
+//    protected void addDetailDialog() {
+//        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
+//        if (usaBottoneEdit) {
+//            ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
+//            Grid.Column colonna = gridPaginated.addColumn(renderer);
+//            colonna.setWidth("6em");
+//            colonna.setFlexGrow(0);
+//        } else {
+//            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
+//            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
+//        }// end of if/else cycle
+//    }// end of method
+
+
+//    /**
+//     * Eventuale header text
+//     */
+//    protected void fixGridHeader(String messaggio) {
+//        try { // prova ad eseguire il codice
+//            HeaderRow topRow = gridPaginated.prependHeaderRow();
+//            Grid.Column[] matrix = array.getColumnArray(gridPaginated);
+//            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+//            Label testo = new Label(messaggio);
+//            informationCell.setComponent(testo);
+//        } catch (Exception unErrore) { // intercetta l'errore
+//            log.error(unErrore.toString());
+//        }// fine del blocco try-catch
+//    }// end of method
+
 
     private class Pippo implements Runnable {
 

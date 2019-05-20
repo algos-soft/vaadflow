@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @AIView(roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class PreferenzaViewList extends AViewList {
+public class PreferenzaViewList extends AGridViewList {
 
 
     /**
@@ -69,10 +70,15 @@ public class PreferenzaViewList extends AViewList {
     }// end of Spring constructor
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.fixPreferenze();
         super.usaSearchTextField = false;
 //        super.usaBottoneEdit = true;
         super.usaBottoneDeleteAll = true;

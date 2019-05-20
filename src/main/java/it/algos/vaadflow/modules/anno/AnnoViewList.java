@@ -10,6 +10,7 @@ import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

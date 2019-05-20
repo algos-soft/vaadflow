@@ -7,6 +7,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.list.ALayoutViewList;
 import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
@@ -43,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 @AIView(roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class LogViewList extends AViewList {
+public class LogViewList extends AGridViewList {
 
     /**
      * Icona visibile nel menu (facoltativa)
@@ -73,10 +75,14 @@ public class LogViewList extends AViewList {
 
 
     /**
-     * Le preferenze sovrascritte nella sottoclasse
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected void fixPreferenzeSpecifiche() {
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.usaSearchTextField = false;
         super.usaSearchBottoneNew = false;
         super.isEntityAdmin = true;
@@ -95,10 +101,9 @@ public class LogViewList extends AViewList {
      * Invocare PRIMA il metodo della superclasse
      */
     @Override
-    protected boolean creaTopLayout() {
+    protected void creaTopLayout() {
         super.creaTopLayout();
         topPlaceholder.add(creaPopup());
-        return topPlaceholder.getComponentCount() > 0;
     }// end of method
 
 
