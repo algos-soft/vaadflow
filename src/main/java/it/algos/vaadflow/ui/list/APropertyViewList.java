@@ -22,7 +22,6 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -93,7 +92,7 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AMongoService mongo = AMongoService.getInstance();
+    public AMongoService mongo;
 
     /**
      * Istanza unica di una classe di servizio: <br>
@@ -212,6 +211,7 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Flag per costruire una Grid normale o una PaginatedGrid. Viene regolato da codice. <br>
      */
     protected boolean usaGridPaginata;
+
     /**
      * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true.
      */
@@ -355,5 +355,18 @@ public abstract class APropertyViewList extends VerticalLayout {
      */
     @Autowired
     protected PreferenzaService pref;
+
+
+    /**
+     * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Creazione e posizionamento dei componenti UI <br>
+     * Possono essere sovrascritti nelle sottoclassi <br>
+     */
+    protected void initView() {
+        this.mongo = appContext.getBean(AMongoService.class);
+    }// end of method
 
 }// end of class

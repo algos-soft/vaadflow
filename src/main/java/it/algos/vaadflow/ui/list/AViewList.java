@@ -4,22 +4,16 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
@@ -127,10 +121,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      * Creazione e posizionamento dei componenti UI <br>
-     * Possono essere sovrascritti nellesottoclassi <br>
+     * Possono essere sovrascritti nelle sottoclassi <br>
      */
     @PostConstruct
     protected void initView() {
+        super.initView();
         this.setMargin(false);
         this.setSpacing(false);
         this.removeAll();
@@ -167,10 +162,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Le preferenze standard
-     * Le preferenze specifiche della sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Le preferenze standard <br>
+     * Le preferenze specifiche della sottoclasse <br>
+     * Può essere sovrascritto, per modificare le preferenze standard <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
     }// end of method
@@ -240,88 +235,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-//    /**
-//     * Crea il corpo centrale della view con una Grid paginata <br>
-//     * Componente grafico obbligatorio <br>
-//     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
-//     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView() <br>
-//     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
-//     */
-//    protected void creaGridPaginata() {
-//        this.add(gridHolder);
-//        this.setFlexGrow(1, gridHolder);
-////        updateGridPaginata();
-//    }// end of method
-
-
-//    /**
-//     * Prova a creare la grid paginata
-//     * Deve essere sovrascritto
-//     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
-//     * Componente grafico obbligatorio
-//     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
-//     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
-//     */
-//    protected void updateGridPaginata() {
-//    }// end of method
-
-
-//    /**
-//     * Regolazioni standard della gridPaginated
-//     * Chiamato dalla sottoclasse
-//     */
-//    protected void gridPaginataBefore() {
-//        //--Apre il dialog di detail
-//        if (isBottoneEditBefore) {
-//            this.addDetailDialog();
-//        }// end of if cycle
-//    }// end of method
-
-
-//    /**
-//     * Costruisce le colonne della grid paginata
-//     * DEVE essere sovrascritto - Componente grafico obbligatorio
-//     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
-//     */
-//    protected void gridPaginataColumns() {
-//    }// end of method
-
-
-//    /**
-//     * Regolazioni standard della gridPaginated
-//     * Chiamato dalla sottoclasse
-//     */
-//    protected void gridPaginataAfter() {
-//        //--Apre il dialog di detail
-//        if (!isBottoneEditBefore) {
-//            this.addDetailDialog();
-//        }// end of if cycle
-//
-//        items = service != null ? service.findAll() : null;
-//        fixGridHeader(getGridHeaderText());
-//    }// end of method
-
-
-    protected void sincroBottoniMenu(boolean enabled) {
-    }// end of method
-
-
-//    /**
-//     * Eventuale header text
-//     */
-//    protected void fixGridHeader() {
-//        try { // prova ad eseguire il codice
-//            HeaderRow topRow = grid.prependHeaderRow();
-//            Grid.Column[] matrix = array.getColumnArray(grid);
-//            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
-//            headerGridHolder = new Label("x");
-//            informationCell.setComponent(headerGridHolder);
-//        } catch (Exception unErrore) { // intercetta l'errore
-//            log.error(unErrore.toString());
-//        }// fine del blocco try-catch
-//    }// end of method
-
-
     /**
      * Header text
      */
@@ -330,94 +243,12 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-//    /**
-//     * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
-//     * Sovrascritto
-//     */
-//    protected void addSpecificColumnsBefore() {
-//    }// end of method
-
-
-//    /**
-//     * Eventuale modifica dell'ordine di presentazione delle colonne
-//     * Sovrascritto
-//     */
-//    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
-//        return gridPropertyNamesList;
-//    }// end of method
-//
-//
-//    /**
-//     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
-//     * Sovrascritto
-//     */
-//    protected void addSpecificColumnsAfter() {
-//    }// end of method
-
-
-    /**
-     * Eventuali aggiustamenti finali al layout
-     * Regolazioni finali sulla grid e sulle colonne
-     * Sovrascritto
-     */
-    protected void fixLayout() {
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth("60em");
-        grid.setHeightByRows(true);
-        grid.addClassName("pippoz");
-        grid.getElement().setAttribute("theme", "row-dividers");
-    }// end of method
-
-
-//    /**
-//     * Apre il dialog di detail
-//     */
-//    protected void addDetailDialog() {
-//        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-//        if (usaBottoneEdit) {
-//            ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
-//            Grid.Column colonna = grid.addColumn(renderer);
-//            colonna.setWidth("6em");
-//            colonna.setFlexGrow(0);
-//        } else {
-//            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
-//            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
-//        }// end of if/else cycle
-//    }// end of method
-//
-//
-//    protected Button createEditButton(AEntity entityBean) {
-//        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, EAOperation.edit, context));
-//        edit.setIcon(new Icon("lumo", "edit"));
-//        edit.addClassName("review__edit");
-//        edit.getElement().setAttribute("theme", "tertiary");
-//        return edit;
-//    }// end of method
-//
-//
-//    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
-//        if (evento != null && evento.getOldValue() != evento.getValue()) {
-//            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
-//                if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
-//                    AEntity entity = (AEntity) evento.getValue();
-//                    routeVerso(routeNameFormEdit, entity);
-//                } else {
-//                    dialog.open((AEntity) evento.getValue(), operation, context);
-//                }// end of if/else cycle
-//            }// end of if cycle
-//        }// end of if cycle
-//    }// end of method
-
-
     /**
      * Navigazione verso un altra pagina
      */
     protected void routeVerso() {
     }// end of method
 
-    /**
-     * Navigazione verso un altra pagina
-     */
 
     /**
      * Navigazione verso un altra pagina
@@ -508,29 +339,16 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     public void updateView() {
-        updateItems();
-
-        if (items != null) {
-            try { // prova ad eseguire il codice
-                grid.deselectAll();
-                grid.setItems(items);
-                headerGridHolder.setText(getGridHeaderText());
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-        }// end of if cycle
-
-        creaAlertLayout();
     }// end of method
 
 
-    public void updateItems() {
-        if (isPagination) {
-            items = service != null ? service.findAll(offset, limit) : null;
-        } else {
-            items = service != null ? service.findAll() : null;
-        }// end of if/else cycle
-    }// end of method
+//    public void updateItems() {
+//        if (isPagination) {
+//            items = service != null ? service.findAll(offset, limit) : null;
+//        } else {
+//            items = service != null ? service.findAll() : null;
+//        }// end of if/else cycle
+//    }// end of method
 
 
     protected void openSearch() {
@@ -575,13 +393,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         creaAlertLayout();
     }// end of method
-
-
-//    /**
-//     * Eventuale header text
-//     */
-//    protected void fixGridHeader(String messaggio) {
-//    }// end of method
 
 
     /**

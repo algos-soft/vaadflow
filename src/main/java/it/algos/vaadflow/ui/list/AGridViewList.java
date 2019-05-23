@@ -15,6 +15,7 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.List;
 
@@ -53,47 +54,42 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
      */
     protected void creaGrid() {
+        List<String> gridPropertyNamesList = null;
         FlexLayout layout = new FlexLayout();
-//        layout.setHeight("30em");
 
-        //--Costruisce una lista di nomi delle properties della Grid nell'ordine:
-        //--1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID)
-        //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
-        //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
-        if (!usaGridPaginata && entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
-            try { // prova ad eseguire il codice
-                //--Costruisce la Grid SENZA creare automaticamente le colonne
-                //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-                grid = new Grid(entityClazz, false);
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-                return;
-            }// fine del blocco try-catch
+        //--Costruisce una lista di nomi delle properties della Grid
+        gridPropertyNamesList = getGridPropertyNamesList();
+
+        if (usaGridPaginata) {
+            grid = new PaginatedGrid<>();
         } else {
-            grid = new Grid();
+            if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
+                try { // prova ad eseguire il codice
+                    //--Costruisce la Grid SENZA creare automaticamente le colonne
+                    //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
+                    grid = new Grid(entityClazz, false);
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error(unErrore.toString());
+                    return;
+                }// fine del blocco try-catch
+            } else {
+                grid = new Grid();
+            }// end of if/else cycle
         }// end of if/else cycle
 
-//        //--@todo solo per la versione 10.0.5
-//        //--@todo dalla versione 12.0.0, si può levare ed aggiungere 'false' come secondo parametro a new Grid(...,false)
-//        for (Grid.Column column : grid.getColumns()) {
-//            grid.removeColumn(column);
-//        }// end of for cycle
-
         //--Apre il dialog di detail
+        //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna
         this.addDetailDialog();
 
         //--Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
         this.addSpecificColumnsBefore();
 
-        //--Eventuale modifica dell'ordine di presentazione delle colonne automatiche
-        gridPropertyNamesList = this.reorderingColumns(gridPropertyNamesList);
-
-        //--Colonne normali aggiunte in automatico
+        //--Colonne normali aggiunte nel metodo sovrascritto dalla sottoclasse specifica (se PaginatedGrid)
+        //--Colonne normali aggiunte in automatico (se Grid normale)
         if (usaGridPaginata) {
             addColumnsGridPaginata();
         } else {
-            addColumnsGrid();
+            addColumnsGrid(gridPropertyNamesList);
         }// end of if/else cycle
 
         //--Eventuali colonne calcolate aggiunte DOPO quelle automatiche
@@ -108,7 +104,6 @@ public abstract class AGridViewList extends ALayoutViewList {
         this.setFlexGrow(1, layout);
 
         grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
-
             @Override
             public void selectionChange(SelectionEvent<Grid<AEntity>, AEntity> selectionEvent) {
                 boolean enabled = selectionEvent != null && selectionEvent.getAllSelectedItems().size() > 0;
@@ -120,8 +115,21 @@ public abstract class AGridViewList extends ALayoutViewList {
     }// end of method
 
 
+    /**
+     * Costruisce una lista di nomi delle properties <br>
+     * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID) <br>
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse) <br>
+     * 3) Sovrascrive il metodo getGridPropertyNamesList() nella sottoclasse specifica di xxxService <br>
+     * Un eventuale modifica dell'ordine di presentazione delle colonne viene regolata nel metodo sovrascritto <br>
+     */
+    protected List<String> getGridPropertyNamesList() {
+        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
 
-        /**
+        return gridPropertyNamesList;
+    }// end of method
+
+
+    /**
      * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
      * Sovrascritto
      */
@@ -130,20 +138,10 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Eventuale modifica dell'ordine di presentazione delle colonne
-     * Sovrascritto
+     * Aggiunge in automatico le colonne previste in gridPropertyNamesList <br>
+     * Funziona SOLO con la Grid normale <br>
      */
-    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
-        return gridPropertyNamesList;
-    }// end of method
-
-
-    /**
-     *
-     */
-    protected void addColumnsGrid() {
-        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
-
+    protected void addColumnsGrid(List<String> gridPropertyNamesList) {
         if (gridPropertyNamesList != null) {
             for (String propertyName : gridPropertyNamesList) {
                 column.create(grid, entityClazz, propertyName);
@@ -153,12 +151,11 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     *
+     * Aggiunge le colonne alla PaginatedGrid <br>
+     * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
     }// end of method
-
-
 
 
     /**
@@ -170,7 +167,22 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Apre il dialog di detail
+     * Eventuali aggiustamenti finali al layout
+     * Regolazioni finali sulla grid e sulle colonne
+     * Sovrascritto
+     */
+    protected void fixLayout() {
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setWidth("60em");
+        grid.setHeightByRows(true);
+        grid.addClassName("pippoz");
+        grid.getElement().setAttribute("theme", "row-dividers");
+    }// end of method
+
+
+    /**
+     * Apre il dialog di detail <br>
+     * Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna <br>
      */
     protected void addDetailDialog() {
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
@@ -209,6 +221,10 @@ public abstract class AGridViewList extends ALayoutViewList {
     }// end of method
 
 
+    protected void sincroBottoniMenu(boolean enabled) {
+    }// end of method
+
+
     /**
      * Eventuale header text
      */
@@ -223,6 +239,7 @@ public abstract class AGridViewList extends ALayoutViewList {
             log.error(unErrore.toString());
         }// fine del blocco try-catch
     }// end of method
+
 
     /**
      * Header text
@@ -252,6 +269,31 @@ public abstract class AGridViewList extends ALayoutViewList {
         return testo;
     }// end of method
 
+
+    public void updateView() {
+        updateItems();
+
+        if (items != null) {
+            try { // prova ad eseguire il codice
+                grid.deselectAll();
+                grid.setItems(items);
+                headerGridHolder.setText(getGridHeaderText());
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        creaAlertLayout();
+    }// end of method
+
+
+    protected void updateItems() {
+        if (isPagination) {
+            items = service != null ? service.findAll(offset, limit) : null;
+        } else {
+            items = service != null ? service.findAll() : null;
+        }// end of if/else cycle
+    }// end of method
 
 
 }// end of class
