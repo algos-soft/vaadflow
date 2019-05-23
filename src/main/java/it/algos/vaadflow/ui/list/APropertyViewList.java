@@ -168,10 +168,10 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected Label headerGridHolder;
 
     /**
-     * Griglia principale senza paginazione
+     * Griglia principale con o senza senza paginazione
      * Alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
      */
-    protected Grid<AEntity> grid;
+    protected Grid grid;
 
     /**
      * PlaceHolder per la griglia con paginazione che deve essere dichiarata nella sottoclasse specifica
@@ -209,6 +209,10 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected int sogliaPagination;
 
     /**
+     * Flag per costruire una Grid normale o una PaginatedGrid. Viene regolato da codice. <br>
+     */
+    protected boolean usaGridPaginata;
+    /**
      * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true.
      */
     protected boolean usaSearchBottoneNew;
@@ -235,11 +239,6 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
      */
     protected boolean usaBottoneEdit;
-
-    /**
-     * Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true.
-     */
-    protected boolean isBottoneEditBefore;
 
     /**
      * Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.

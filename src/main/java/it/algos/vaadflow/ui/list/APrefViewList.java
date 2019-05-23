@@ -65,9 +65,6 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
         usaBottoneEdit = true;
 
-        //--Flag di preferenza posizionare il bottone Edit come prima colonna. Normalmente true
-        isBottoneEditBefore = true;
-
         //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
         testoBottoneEdit = EDIT_NAME;
 

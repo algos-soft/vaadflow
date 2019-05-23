@@ -436,6 +436,22 @@ public class AArrayServiceTest extends ATest {
         System.out.println("Size listaDue: " + listaDue.size());
         System.out.println("Size delta: " + delta.size());
         System.out.println("Differenza in msec: " + textService.format(fine - inizio));
+
+
+        //--terza prova
+        listaDue = new ArrayList();
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(k);
+        }// end of for cycle
+        listaDue.remove(345);
+        listaDue.remove(4781);
+
+        listaUnoCopia = (ArrayList) listaUno.clone();
+
+        listaUnoCopia.removeAll(listaDue);
+        inizio = System.currentTimeMillis();
+//        delta = service.differenza(listaUno, listaDue);
+        fine = System.currentTimeMillis();
     }// end of single test
 
 
@@ -485,7 +501,7 @@ public class AArrayServiceTest extends ATest {
      *
      * @return differenza
      */
-    @Test
+//    @Test
     public void differenza5() {
         ArrayList<Long> listaUno = new ArrayList();
         ArrayList<Long> listaDue = new ArrayList();
@@ -511,5 +527,130 @@ public class AArrayServiceTest extends ATest {
         System.out.println("");
 
     }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void delta() {
+        Long[] alfa = {23L, 34L, 87L, 89L, 90L};
+        Long[] beta = {23L, 34L};
+        Long[] gamma = {87L, 89L, 90L};
+        List<Long> listaUno = new ArrayList(Arrays.asList(alfa));
+        List<Long> listaDue = new ArrayList(Arrays.asList(beta));
+        List<Long> listaPrevista = new ArrayList(Arrays.asList(gamma));
+        List<Long> listaOttenuta;
+
+        listaOttenuta = service.delta(listaUno, listaDue);
+        assertNotNull(listaOttenuta);
+        assertEquals(listaPrevista, listaOttenuta);
+
+    }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void delta2() {
+        Long[] alfa = {23L, 34L, 87L, 89L, 90L};
+        Long[] beta = {17L, 564L};
+        Long[] gamma = {23L, 34L, 87L, 89L, 90L};
+        List<Long> listaUno = new ArrayList(Arrays.asList(alfa));
+        List<Long> listaDue = new ArrayList(Arrays.asList(beta));
+        List<Long> listaPrevista = new ArrayList(Arrays.asList(gamma));
+        List<Long> listaOttenuta;
+
+        listaOttenuta = service.delta(listaUno, listaDue);
+        assertNotNull(listaOttenuta);
+        assertEquals(listaPrevista.size(), listaOttenuta.size());
+
+    }// end of single test
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void delta3() {
+        ArrayList<Long> listaUno = new ArrayList();
+        ArrayList<Long> listaDue = new ArrayList();
+        HashSet<String> hashA = new HashSet<String>();
+        HashSet<String> hashB = new HashSet<String>();
+        int dim = 30000;
+        long inizio = System.currentTimeMillis();
+
+        for (int k = 0; k < dim; k++) {
+            listaUno.add(new Long((k * 2)));
+        }// end of for cycle
+
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(new Long((k * 3)));
+        }// end of for cycle
+
+        List<Long> listaOttenuta = service.delta(listaUno, listaDue);
+        assertNotNull(listaOttenuta);
+        System.out.println("");
+        System.out.println("Size listaUno: " + listaUno.size());
+        System.out.println("Size listaDue: " + listaDue.size());
+        System.out.println("Size listaOttenuta: " + listaOttenuta.size());
+        System.out.println("Delta in msec: " + textService.format(System.currentTimeMillis() - inizio));
+        System.out.println("");
+
+    }// end of single tes
+
+
+    /**
+     * Differenza tra due array
+     *
+     * @param primo   array
+     * @param secondo array
+     *
+     * @return differenza
+     */
+    @Test
+    public void delta4() {
+        ArrayList<Long> listaUno = new ArrayList();
+        ArrayList<Long> listaDue = new ArrayList();
+        HashSet<String> hashA = new HashSet<String>();
+        HashSet<String> hashB = new HashSet<String>();
+        int dim = 300000;
+        long inizio = System.currentTimeMillis();
+
+        for (int k = 0; k < dim; k++) {
+            listaUno.add(new Long((k * 2)));
+        }// end of for cycle
+
+        for (int k = 0; k < dim; k++) {
+            listaDue.add(new Long((k * 3)));
+        }// end of for cycle
+
+        List<Long> listaOttenuta = service.delta(listaUno, listaDue);
+        assertNotNull(listaOttenuta);
+        System.out.println("");
+        System.out.println("Size listaUno: " + textService.format(listaUno.size()));
+        System.out.println("Size listaDue: " + textService.format(listaDue.size()));
+        System.out.println("Size listaOttenuta: " + textService.format(listaOttenuta.size()));
+        System.out.println("Delta in msec: " + textService.format(System.currentTimeMillis() - inizio));
+        System.out.println("");
+
+    }// end of single tes
+
 
 }// end of class

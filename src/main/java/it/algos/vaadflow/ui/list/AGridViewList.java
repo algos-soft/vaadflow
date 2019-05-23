@@ -1,16 +1,20 @@
 package it.algos.vaadflow.ui.list;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
+import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.List;
 
@@ -57,7 +61,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
         //--3) Sovrascrive la lista nella sottoclasse specifica di xxxService
         List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
-        if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
+        if (!usaGridPaginata && entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             try { // prova ad eseguire il codice
                 //--Costruisce la Grid SENZA creare automaticamente le colonne
                 //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
@@ -77,9 +81,7 @@ public abstract class AGridViewList extends ALayoutViewList {
 //        }// end of for cycle
 
         //--Apre il dialog di detail
-        if (isBottoneEditBefore) {
-            this.addDetailDialog();
-        }// end of if cycle
+        this.addDetailDialog();
 
         //--Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
         this.addSpecificColumnsBefore();
@@ -88,19 +90,14 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridPropertyNamesList = this.reorderingColumns(gridPropertyNamesList);
 
         //--Colonne normali aggiunte in automatico
-        if (gridPropertyNamesList != null) {
-            for (String propertyName : gridPropertyNamesList) {
-                column.create(grid, entityClazz, propertyName);
-            }// end of for cycle
-        }// end of if cycle
+        if (usaGridPaginata) {
+            addColumnsGridPaginata();
+        } else {
+            addColumnsGrid();
+        }// end of if/else cycle
 
         //--Eventuali colonne calcolate aggiunte DOPO quelle automatiche
         this.addSpecificColumnsAfter();
-
-        //--Apre il dialog di detail
-        if (!isBottoneEditBefore) {
-            this.addDetailDialog();
-        }// end of if cycle
 
         //--Regolazioni finali sulla grid e sulle colonne
         this.fixLayout();
@@ -121,5 +118,140 @@ public abstract class AGridViewList extends ALayoutViewList {
 
         fixGridHeader();
     }// end of method
+
+
+
+        /**
+     * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
+     * Sovrascritto
+     */
+    protected void addSpecificColumnsBefore() {
+    }// end of method
+
+
+    /**
+     * Eventuale modifica dell'ordine di presentazione delle colonne
+     * Sovrascritto
+     */
+    protected List<String> reorderingColumns(List<String> gridPropertyNamesList) {
+        return gridPropertyNamesList;
+    }// end of method
+
+
+    /**
+     *
+     */
+    protected void addColumnsGrid() {
+        List<String> gridPropertyNamesList = service != null ? service.getGridPropertyNamesList(context) : null;
+
+        if (gridPropertyNamesList != null) {
+            for (String propertyName : gridPropertyNamesList) {
+                column.create(grid, entityClazz, propertyName);
+            }// end of for cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     *
+     */
+    protected void addColumnsGridPaginata() {
+    }// end of method
+
+
+
+
+    /**
+     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
+     * Sovrascritto
+     */
+    protected void addSpecificColumnsAfter() {
+    }// end of method
+
+
+    /**
+     * Apre il dialog di detail
+     */
+    protected void addDetailDialog() {
+        //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
+        if (usaBottoneEdit) {
+            ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
+            Grid.Column colonna = grid.addColumn(renderer);
+            colonna.setWidth("6em");
+            colonna.setFlexGrow(0);
+        } else {
+            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
+            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
+        }// end of if/else cycle
+    }// end of method
+
+
+    protected Button createEditButton(AEntity entityBean) {
+        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, EAOperation.edit, context));
+        edit.setIcon(new Icon("lumo", "edit"));
+        edit.addClassName("review__edit");
+        edit.getElement().setAttribute("theme", "tertiary");
+        return edit;
+    }// end of method
+
+
+    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
+        if (evento != null && evento.getOldValue() != evento.getValue()) {
+            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
+                if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
+                    AEntity entity = (AEntity) evento.getValue();
+                    routeVerso(routeNameFormEdit, entity);
+                } else {
+                    dialog.open((AEntity) evento.getValue(), operation, context);
+                }// end of if/else cycle
+            }// end of if cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Eventuale header text
+     */
+    protected void fixGridHeader() {
+        try { // prova ad eseguire il codice
+            HeaderRow topRow = grid.prependHeaderRow();
+            Grid.Column[] matrix = array.getColumnArray(grid);
+            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+            headerGridHolder = new Label("x");
+            informationCell.setComponent(headerGridHolder);
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
+    }// end of method
+
+    /**
+     * Header text
+     */
+    protected String getGridHeaderText() {
+        int numRecCollezione = items.size();
+        String filtro = text.format(items.size());
+        String totale = text.format(numRecCollezione);
+        String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
+
+        switch (numRecCollezione) {
+            case 0:
+                testo += "Al momento non ci sono elementi in questa collezione";
+                break;
+            case 1:
+                testo += "Collezione con un solo elemento";
+                break;
+            default:
+                if (isPagination) {
+                    testo += "Collezione di " + limit + " elementi su " + totale + " totali. ";
+                } else {
+                    testo += "Collezione di " + totale + " elementi";
+                }// end of if/else cycle
+                break;
+        } // end of switch statement
+
+        return testo;
+    }// end of method
+
+
 
 }// end of class

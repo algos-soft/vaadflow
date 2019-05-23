@@ -117,8 +117,7 @@ public class ProvaViewList extends AGridViewList {
         super.fixPreferenze();
 
         super.usaBottoneEdit = true;
-        super.isBottoneEditBefore = true;
-        super.usaPagination = true;
+        super.usaPagination = false;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
@@ -220,6 +219,17 @@ public class ProvaViewList extends AGridViewList {
 //
 ////        this.add(grid);
 //    }// end of method
+
+    /**
+     *
+     */
+    protected void addColumnsGridPaginata() {
+//        PaginatedGrid grid=new PaginatedGrid<>();
+//        grid.addColumn(Prova::getOrdine);
+//        gridPaginated.addColumn(Prova::getCode).setHeader("code");
+//        gridPaginated.addColumn(Prova::getDescrizione).setHeader("desc");
+//        gridPaginated.addColumn(Prova::getLastModifica).setHeader("last");
+    }// end of method
 
 
     protected void openProvaDialog(HasValue.ValueChangeEvent event) {
