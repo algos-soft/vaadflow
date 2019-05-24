@@ -61,7 +61,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridPropertyNamesList = getGridPropertyNamesList();
 
         if (usaGridPaginata) {
-            grid = new PaginatedGrid<>();
+            grid = creaGridPaginata();
         } else {
             if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
                 try { // prova ad eseguire il codice
@@ -98,10 +98,15 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Regolazioni finali sulla grid e sulle colonne
         this.fixLayout();
 
-        layout.add(grid);
-        this.add(layout);
-        layout.setFlexGrow(1, grid);
-        this.setFlexGrow(1, layout);
+        //questo funzione per Grid
+//        layout.add(grid);
+//        this.add(layout);
+//        layout.setFlexGrow(1, grid);
+//        this.setFlexGrow(1, layout);
+
+        //questo funzione per gridPaginated
+        gridHolder.add(grid);
+        gridHolder.setFlexGrow(1, grid);
 
         grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
             @Override
@@ -114,6 +119,13 @@ public abstract class AGridViewList extends ALayoutViewList {
         fixGridHeader();
     }// end of method
 
+    /**
+     * Crea la GridPaginata specifica della sottoclasse <br>
+     * Sovrascritto <br>
+     */
+    protected Grid creaGridPaginata() {
+        return null;
+    }// end of method
 
     /**
      * Costruisce una lista di nomi delle properties <br>

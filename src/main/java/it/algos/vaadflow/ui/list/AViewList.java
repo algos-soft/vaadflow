@@ -13,12 +13,14 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.fields.AIntegerField;
+import it.algos.vaadflow.ui.fields.ATextArea;
+import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -155,6 +157,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         //--body con la Grid
         //--seleziona quale grid usare e la aggiunge al layout
         this.creaGridPaginataOppureNormale();
+        this.add(gridHolder);
 
         //--aggiunge il footer standard
         this.add(appContext.getBean(AFooter.class));
@@ -342,15 +345,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-//    public void updateItems() {
-//        if (isPagination) {
-//            items = service != null ? service.findAll(offset, limit) : null;
-//        } else {
-//            items = service != null ? service.findAll() : null;
-//        }// end of if/else cycle
-//    }// end of method
-
-
     protected void openSearch() {
         searchDialog = appContext.getBean(ASearchDialog.class, service);
         searchDialog.open("", "", this::updateViewDopoSearch, null);
@@ -372,8 +366,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         for (String fieldName : searchDialog.fieldMap.keySet()) {
             field = (IAField) searchDialog.fieldMap.get(fieldName);
             fieldValue = field.getValore();
-            if (text.isValid(fieldValue)) {
-                listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+            if (field instanceof ATextField || field instanceof ATextArea) {
+                if (text.isValid(fieldValue)) {
+                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+                }// end of if cycle
+            }// end of if cycle
+            if (field instanceof AIntegerField) {
+                if ((Integer) fieldValue > 0) {
+                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+                }// end of if cycle
             }// end of if cycle
         }// end of for cycle
 

@@ -200,7 +200,7 @@ public class AColumnService extends AbstractService {
                     }// fine del blocco try-catch
                     return new Label(testo);
                 }));//end of lambda expressions and anonymous inner class
-                width = "9em";
+                width = text.isValid(width) ? width : "7em";
                 break;
             case vaadinIcon:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {

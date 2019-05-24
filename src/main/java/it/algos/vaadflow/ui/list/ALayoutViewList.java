@@ -98,6 +98,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         Button resetButton;
         Button clearFilterTextBtn;
         Button searchButton;
+        Button allButton;
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 
@@ -133,6 +134,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(searchField, clearFilterTextBtn);
         }// end of if cycle
 
+
         if (usaSearchTextDialog) {
             buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
             searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
@@ -140,6 +142,12 @@ public abstract class ALayoutViewList extends APrefViewList {
             searchButton.addClassName("view-toolbar__button");
             searchButton.addClickListener(e -> openSearch());
             topPlaceholder.add(searchButton);
+        }// end of if cycle
+
+        if (usaAllButton) {
+            allButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+            allButton.addClickListener(e -> updateView());
+            topPlaceholder.add(allButton);
         }// end of if cycle
 
 

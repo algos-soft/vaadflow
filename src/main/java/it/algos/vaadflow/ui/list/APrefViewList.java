@@ -50,6 +50,9 @@ public abstract class APrefViewList extends AViewList {
          */
         usaSearchTextDialog = true;
 
+        //--Flag di preferenza per usare il bottone all situato nella searchBar. Normalmente true
+        usaAllButton = true;
+
         //--Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
         usaSearchBottoneNew = true;
 

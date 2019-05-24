@@ -191,10 +191,15 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected boolean usaSearchTextField;
 
     /**
-     * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
+     * Flag di preferenza per aprire un dialogo di ricerca e selezione.
      * Facoltativo ed alternativo a usaSearchTextField. Normalmente true.
      */
     protected boolean usaSearchTextDialog;
+
+    /**
+     * Flag di preferenza per usare il bottone all situato nella searchBar. Normalmente true
+     */
+    protected boolean usaAllButton;
 
     /**
      * Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
