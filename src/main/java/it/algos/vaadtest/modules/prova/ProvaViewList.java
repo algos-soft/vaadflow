@@ -3,11 +3,9 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -25,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.vaadin.klaudeta.PaginatedGrid;
 
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
@@ -153,98 +149,42 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
-     * Crea la GridPaginata specifica della sottoclasse <br>
-     * Sovrascritto <br>
+     * Crea la GridPaginata <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
      */
-    protected Grid creaGridPaginata() {
+    protected void creaGridPaginata() {
         PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
-
-        // Sets the max number of items to be rendered on the grid for each page
-        gridPaginated.setPageSize(3);
-
-        // Sets how many pages should be visible on the pagination before and/or after the current selected page
-        gridPaginated.setPaginatorSize(1);
-
-        return gridPaginated;
+        super.grid = gridPaginated;
+        super.creaGridPaginata();
     }// end of method
-
-
-//    /**
-//     * Prova a creare la grid paginata (secondo il flag)
-//     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
-//     * Nella sottoclasse specifica vanno aggiunte le colonne che non si riesce ad aggiungere in automatico
-//     * Componente grafico obbligatorio
-//     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
-//     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
-//     */
-//    protected void updateGridPaginata() {
-//        FlexLayout layout = new FlexLayout();
-//        gridPaginated = new PaginatedGrid<Prova>();
-//
-////        super.gridPaginataBefore();
-//
-////        PaginatedGrid<AEntity> grid2=new  PaginatedGrid();
-////        super.gridPaginataBefore();
-////
-////        Grid<AEntity> grid3= new Grid();
-////        grid3.addColumn("desc");
-//
-////        gridPaginated.addColumn(Prova::getOrdine).setHeader("ord");
-//        gridPaginated.addColumn(Prova::getOrdine);
-//        gridPaginated.addColumn(Prova::getCode).setHeader("code");
-//        gridPaginated.addColumn(Prova::getDescrizione).setHeader("desc");
-//        gridPaginated.addColumn(Prova::getLastModifica).setHeader("last");
-//
-////        super.gridPaginataAfter();
-//
-//        if (items != null) {
-//            gridPaginated.setItems(items);
-//        }// end of if cycle
-//
-//        // Sets the max number of items to be rendered on the grid for each page
-//        gridPaginated.setPageSize(3);
-//
-//        // Sets how many pages should be visible on the pagination before and/or after the current selected page
-//        gridPaginated.setPaginatorSize(1);
-//
-//        gridHolder.add(gridPaginated);
-//        gridHolder.setFlexGrow(1, gridPaginated);
-//    }// end of method
-
-//    /**
-//     * Controlla la 'dimensione' della collezione <br>
-//     * Se è inferiore alla 'soglia', non fa nulla <br>
-//     * Se è superiore, costruisce un layout con freccia indietro, numero pagina, freccia avanti <br>
-//     */
-//    protected void creaPaginationLayout() {
-//        List<? extends AEntity> itemsEntity = service.findAll();
-//        ArrayList<Prova> items = new ArrayList<>();
-//        for (AEntity elemento : itemsEntity) {
-//            items.add((Prova) elemento);
-//        }// end of for cycle
-//
-////        Collection<Prova> collection = new ArrayList<Prova>(items);
-//        grid.setItems(items);
-//
-//        // Sets the max number of items to be rendered on the grid for each page
-//        grid.setPageSize(2);
-//
-//        // Sets how many pages should be visible on the pagination before and/or after the current selected page
-//        grid.setPaginatorSize(1);
-//
-////        this.add(grid);
-//    }// end of method
 
 
     /**
-     *
+     * Aggiunge le colonne alla PaginatedGrid <br>
+     * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
-        ((PaginatedGrid<Prova>) grid).addColumn(Prova::getOrdine).setHeader("#").setFlexGrow(0).setWidth("3em");
-        ((PaginatedGrid<Prova>) grid).addColumn(Prova::getCode).setHeader("code").setFlexGrow(0).setWidth("6em");;
-        ((PaginatedGrid<Prova>) grid).addColumn(Prova::getDescrizione).setHeader("desc").setFlexGrow(1);;
-        ((PaginatedGrid<Prova>) grid).addColumn(Prova::getLastModifica).setHeader("last").setFlexGrow(0).setWidth("7em");;
+
+        fixColumn(Prova::getOrdine,"ordine");
+        fixColumn(Prova::getCode,"code");
+        fixColumn(Prova::getDescrizione,"descrizione");
+        fixColumn(Prova::getLastModifica,"lastModifica");
+
     }// end of method
+
+
+    /**
+     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
+     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
+     */
+    protected void fixColumn(ValueProvider<Prova, ?> valueProvider , String propertyName) {
+        Grid.Column singleColumn;
+        singleColumn = ((PaginatedGrid<Prova>) grid).addColumn(valueProvider);
+        columnService.fixColumn(singleColumn, Prova.class, propertyName);
+    }// end of method
+
 
 
     protected void openProvaDialog(HasValue.ValueChangeEvent event) {

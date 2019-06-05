@@ -144,9 +144,13 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(searchButton);
         }// end of if cycle
 
+        //--bottone piccolo per eliminare i filtri di una ricerca e restituire tutte le entities
         if (usaAllButton) {
             allButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-            allButton.addClickListener(e -> updateView());
+            allButton.addClickListener(e -> {
+                updateItems();
+                updateView();
+            });
             topPlaceholder.add(allButton);
         }// end of if cycle
 

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
@@ -31,6 +32,12 @@ import java.util.List;
  * Le property sono regolarmente disponibili in AViewList ed in tutte le sue sottoclassi <br>
  * Costruisce e regola la Grid <br>
  * Nelle sottoclassi concrete la Grid può essere modificata. <br>
+ * <p>
+ * Se si prevede che la lunghezza del DB possa superare una soglia prestabilita (regolabile in preferenza), <br>
+ * occorre implementare nella sottoclasse XxxViewList 3 metodi specifici per la PaginatedGrid: <br>
+ * 1) creaGridPaginata() per creare la PaginatedGrid<Xxx> della classe corretta <br>
+ * 2) addColumnsGridPaginata() per creare le columns delle property richieste <br>
+ * 3) fixColumn() per regolare le columns nel AColumnService <br>
  */
 @Slf4j
 public abstract class AGridViewList extends ALayoutViewList {
@@ -47,11 +54,33 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Crea il corpo centrale della view
-     * Componente grafico obbligatorio
-     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
-     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView()
-     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto)
+     * Crea il corpo centrale della view <br>
+     * Componente grafico obbligatorio <br>
+     * Seleziona quale grid usare e la aggiunge al layout <br>
+     * Eventuale barra di bottoni sotto la grid <br>
+     */
+    protected void creaGridPaginataOppureNormale() {
+        int numRec = service.count();
+
+        if (usaPagination && numRec > sogliaPagination) {
+            usaGridPaginata = true;
+        } else {
+            usaGridPaginata = false;
+        }// end of if/else cycle
+
+        creaGrid();
+
+        //--eventuale barra di bottoni sotto la grid
+        creaGridBottomLayout();
+    }// end of method
+
+
+    /**
+     * Crea il corpo centrale della view <br>
+     * Componente grafico obbligatorio <br>
+     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
+     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView() <br>
+     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
      */
     protected void creaGrid() {
         List<String> gridPropertyNamesList = null;
@@ -61,8 +90,31 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridPropertyNamesList = getGridPropertyNamesList();
 
         if (usaGridPaginata) {
-            grid = creaGridPaginata();
-        } else {
+            creaGridPaginata();
+//
+//            //--se la sottoclasse NON ha implementato i metodi per creare la PaginatedGrid, crea una Grid normale <br>
+//            if (grid == null) {
+//                usaGridPaginata = false;
+//                creaGrid();
+//            }// end of if cycle
+//
+//        } else {
+//            if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
+//                try { // prova ad eseguire il codice
+//                    //--Costruisce la Grid SENZA creare automaticamente le colonne
+//                    //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
+//                    grid = new Grid(entityClazz, false);
+//                } catch (Exception unErrore) { // intercetta l'errore
+//                    log.error(unErrore.toString());
+//                    return;
+//                }// fine del blocco try-catch
+//            } else {
+//                grid = new Grid();
+//            }// end of if/else cycle
+        }// end of if/else cycle
+
+        if (grid == null) {
+            usaGridPaginata = false;
             if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
                 try { // prova ad eseguire il codice
                     //--Costruisce la Grid SENZA creare automaticamente le colonne
@@ -75,7 +127,8 @@ public abstract class AGridViewList extends ALayoutViewList {
             } else {
                 grid = new Grid();
             }// end of if/else cycle
-        }// end of if/else cycle
+        }// end of if cycle
+
 
         //--Apre il dialog di detail
         //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna
@@ -109,6 +162,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridHolder.setFlexGrow(1, grid);
 
         grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
+
             @Override
             public void selectionChange(SelectionEvent<Grid<AEntity>, AEntity> selectionEvent) {
                 boolean enabled = selectionEvent != null && selectionEvent.getAllSelectedItems().size() > 0;
@@ -119,13 +173,23 @@ public abstract class AGridViewList extends ALayoutViewList {
         fixGridHeader();
     }// end of method
 
+
     /**
-     * Crea la GridPaginata specifica della sottoclasse <br>
-     * Sovrascritto <br>
+     * Crea la GridPaginata <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
      */
-    protected Grid creaGridPaginata() {
-        return null;
+    protected void creaGridPaginata() {
+        if (grid != null) {
+            // Sets the max number of items to be rendered on the grid for each page
+            grid.setPageSize(15);
+
+            // Sets how many pages should be visible on the pagination before and/or after the current selected page
+            ((PaginatedGrid) grid).setPaginatorSize(1);
+        }// end of if cycle
     }// end of method
+
 
     /**
      * Costruisce una lista di nomi delle properties <br>
@@ -156,7 +220,7 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected void addColumnsGrid(List<String> gridPropertyNamesList) {
         if (gridPropertyNamesList != null) {
             for (String propertyName : gridPropertyNamesList) {
-                column.create(grid, entityClazz, propertyName);
+                columnService.create(grid, entityClazz, propertyName);
             }// end of for cycle
         }// end of if cycle
     }// end of method
@@ -168,6 +232,16 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     protected void addColumnsGridPaginata() {
     }// end of method
+
+    /**
+     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
+     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
+     */
+//    protected void fixColumn(ValueProvider<AEntity, ?> valueProvider , String propertyName) {
+//        Grid.Column singleColumn;
+//        singleColumn = ((PaginatedGrid<Prova>) grid).addColumn(valueProvider);
+//        columnService.fixColumn(singleColumn, AEntity.class, propertyName);
+//    }// end of method
 
 
     /**
@@ -189,6 +263,22 @@ public abstract class AGridViewList extends ALayoutViewList {
         grid.setHeightByRows(true);
         grid.addClassName("pippoz");
         grid.getElement().setAttribute("theme", "row-dividers");
+    }// end of method
+
+
+    /**
+     * Costruisce un (eventuale) layout con bottoni aggiuntivi
+     * Facoltativo (assente di default)
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    protected void creaGridBottomLayout() {
+        bottomLayout = new HorizontalLayout();
+        bottomLayout.addClassName("view-toolbar");
+
+        if (usaBottomLayout) {
+            this.add(bottomLayout);
+        }// end of if cycle
     }// end of method
 
 
@@ -282,9 +372,16 @@ public abstract class AGridViewList extends ALayoutViewList {
     }// end of method
 
 
-    public void updateView() {
-        updateItems();
+    protected void updateItems() {
+        if (isPagination) {
+            items = service != null ? service.findAll(offset, limit) : null;
+        } else {
+            items = service != null ? service.findAll() : null;
+        }// end of if/else cycle
+    }// end of method
 
+
+    public void updateView() {
         if (items != null) {
             try { // prova ad eseguire il codice
                 grid.deselectAll();
@@ -296,15 +393,6 @@ public abstract class AGridViewList extends ALayoutViewList {
         }// end of if cycle
 
         creaAlertLayout();
-    }// end of method
-
-
-    protected void updateItems() {
-        if (isPagination) {
-            items = service != null ? service.findAll(offset, limit) : null;
-        } else {
-            items = service != null ? service.findAll() : null;
-        }// end of if/else cycle
     }// end of method
 
 

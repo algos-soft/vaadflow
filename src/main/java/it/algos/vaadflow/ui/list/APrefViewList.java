@@ -103,7 +103,7 @@ public abstract class APrefViewList extends AViewList {
         usaRouteFormView = false;
 
         //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
-        usaPagination = false;
+        usaPagination = true;
 
         //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
         //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50

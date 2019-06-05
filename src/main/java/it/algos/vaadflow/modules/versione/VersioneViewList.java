@@ -1,11 +1,14 @@
 package it.algos.vaadflow.modules.versione;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.AViewList;
@@ -13,6 +16,7 @@ import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
@@ -98,6 +102,41 @@ public class VersioneViewList extends AGridViewList {
 
         alertPlacehorder.add(new Label("Sigla 'A' per le versioni base di vaadinflow"));
         alertPlacehorder.add(new Label("Sigla 'Z' per le modifiche alla descrizione di una preferenza"));
+    }// end of method
+
+
+    /**
+     * Crea la GridPaginata <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
+     */
+    protected void creaGridPaginata() {
+        PaginatedGrid<Versione> gridPaginated = new PaginatedGrid<Versione>();
+        super.grid = gridPaginated;
+        super.creaGridPaginata();
+    }// end of method
+
+
+    /**
+     * Aggiunge le colonne alla PaginatedGrid <br>
+     * Sovrascritto (obbligatorio) <br>
+     */
+    protected void addColumnsGridPaginata() {
+        fixColumn(Versione::getTitolo,"titolo");
+        fixColumn(Versione::getDescrizione,"descrizione");
+        fixColumn(Versione::getTimestamp,"timestamp");
+    }// end of method
+
+
+    /**
+     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
+     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
+     */
+    protected void fixColumn(ValueProvider<Versione, ?> valueProvider , String propertyName) {
+        Grid.Column singleColumn;
+        singleColumn = ((PaginatedGrid<Versione>) grid).addColumn(valueProvider);
+        columnService.fixColumn(singleColumn, Versione.class, propertyName);
     }// end of method
 
 }// end of class

@@ -291,13 +291,13 @@ public class AAnnotationServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the name (column) of the property.
+     * Get the name (columnService) of the property.
      * Se manca, usa il nome del Field
      * Se manca, usa il nome della property
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the name (column) of the field
+     * @return the name (columnService) of the field
      */
     @Test
     public void getColumnName() {
@@ -313,12 +313,12 @@ public class AAnnotationServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the type (column) of the property.
+     * Get the type (columnService) of the property.
      * Se manca, usa il type del Field
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the type for the specific column
+     * @return the type for the specific columnService
      */
     @Test
     public void getColumnType() {
@@ -334,12 +334,12 @@ public class AAnnotationServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the visibility of the column.
+     * Get the visibility of the columnService.
      * Di default true
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the visibility of the column
+     * @return the visibility of the columnService
      */
     @Test
     public void isColumnVisibile() {
@@ -353,7 +353,7 @@ public class AAnnotationServiceTest extends ATest {
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the width of the column expressed in int
+     * @return the width of the columnService expressed in int
      */
     @Test
     public void getColumnWith() {
@@ -373,7 +373,7 @@ public class AAnnotationServiceTest extends ATest {
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the type for the specific column
+     * @return the type for the specific columnService
      */
     @Test
     public void getFormType() {
@@ -525,7 +525,7 @@ public class AAnnotationServiceTest extends ATest {
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the class for the specific column
+     * @return the class for the specific columnService
      */
     public void getComboClass() {
         Class previstoClass = Role.class;

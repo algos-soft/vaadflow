@@ -73,13 +73,13 @@ public class ADateService extends AbstractService {
 
     private static final long MAX_MILLISEC = 1000;
 
-    private static final long MAX_SECONDI = MAX_MILLISEC * 60;
+    private static final long MAX_SECONDI = 60 * MAX_MILLISEC;
 
-    private static final long MAX_MINUTI = MAX_SECONDI * 60;
+    private static final long MAX_MINUTI = 60 * MAX_SECONDI;
 
-    private static final long MAX_ORE = MAX_MINUTI * 24;
+    private static final long MAX_ORE = 24 * MAX_MINUTI;
 
-    private static final long MAX_GIORNI = MAX_ORE * 365;
+    private static final long MAX_GIORNI = 365 * MAX_ORE;
 
 
     /**
@@ -228,6 +228,7 @@ public class ADateService extends AbstractService {
         return get(localDate, EATime.standard.getPattern());
     }// end of method
 
+
     /**
      * Restituisce la data nella forma del pattern completo
      * <p>
@@ -242,6 +243,7 @@ public class ADateService extends AbstractService {
     public String getCompleta(LocalDate localDate) {
         return get(localDate, EATime.completa.getPattern());
     }// end of method
+
 
     /**
      * Restituisce la data nella forma del pattern ricevuto
@@ -774,9 +776,6 @@ public class ADateService extends AbstractService {
             if (durata < MAX_SECONDI) {
                 div = Math.floorDiv(durata, MAX_MILLISEC);
                 mod = Math.floorMod(durata, MAX_MILLISEC);
-                if (mod >= MAX_MILLISEC / 2) {
-                    div++;
-                }// fine del blocco if
                 if (div < 60) {
                     tempo = div + SECONDI;
                 } else {
@@ -786,9 +785,6 @@ public class ADateService extends AbstractService {
                 if (durata < MAX_MINUTI) {
                     div = Math.floorDiv(durata, MAX_SECONDI);
                     mod = Math.floorMod(durata, MAX_SECONDI);
-                    if (mod >= MAX_SECONDI / 2) {
-                        div++;
-                    }// fine del blocco if
                     if (div < 60) {
                         tempo = div + MINUTI;
                     } else {
@@ -798,16 +794,13 @@ public class ADateService extends AbstractService {
                     if (durata < MAX_ORE) {
                         div = Math.floorDiv(durata, MAX_MINUTI);
                         mod = Math.floorMod(durata, MAX_MINUTI);
-                        if (mod >= MAX_MINUTI / 2) {
-                            div++;
-                        }// fine del blocco if
                         if (div < 24) {
                             if (div == 1) {
                                 tempo = div + ORA;
                             } else {
                                 tempo = div + ORE;
-                            }// fine del blocco if-else
-                            tempo += " e " + toText(durata - div * MAX_MINUTI);
+                            }// fine del blocco if-els
+                            tempo += " e " + toText(durata - (div * MAX_MINUTI));
                         } else {
                             tempo = "1" + GIORNO;
                         }// fine del blocco if-else
@@ -815,9 +808,6 @@ public class ADateService extends AbstractService {
                         if (durata < MAX_GIORNI) {
                             div = Math.floorDiv(durata, MAX_ORE);
                             mod = Math.floorMod(durata, MAX_ORE);
-                            if (mod >= MAX_ORE / 2) {
-                                div++;
-                            }// fine del blocco if
                             if (div < 365) {
                                 if (div == 1) {
                                     tempo = div + GIORNO;
@@ -830,9 +820,6 @@ public class ADateService extends AbstractService {
                         } else {
                             div = Math.floorDiv(durata, MAX_GIORNI);
                             mod = Math.floorMod(durata, MAX_GIORNI);
-                            if (mod >= MAX_GIORNI / 2) {
-                                div++;
-                            }// fine del blocco if
                             if (div == 1) {
                                 tempo = div + ANNO;
                             } else {

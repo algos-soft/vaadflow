@@ -250,6 +250,8 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+
+
     @SuppressWarnings("javadoc")
     /**
      * Restituisce la data (senza tempo) in forma normale
@@ -673,13 +675,15 @@ public class ADateServiceTest extends ATest {
     @Test
     public void toText() {
         long durata = 0;
+        int minuto = 60000;
 
         System.out.println("*************");
         System.out.println("Durata");
         System.out.println("Meno di 1 secondo: " + service.toText(87));
-        System.out.println("Meno di 1 minuto: " + service.toText(45000));
-        System.out.println("Meno di 1 ora: " + service.toText(3500000));
-        System.out.println("Meno di 1 giorno: " + service.toText(3700000));
+        System.out.println("Mezzo minuto: " + service.toText(30000));
+        System.out.println("58 minuti: " + service.toText(58 * minuto));
+        System.out.println("118 minuti: " + service.toText(118 * minuto));
+        System.out.println("122 minuti: " + service.toText(122 * minuto));
         System.out.println("Meno di 1 giorno: " + service.toText(7500000));
         System.out.println("Meno di 1 anno: " + service.toText(86500000));
         System.out.println("*************");

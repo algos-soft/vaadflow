@@ -105,7 +105,7 @@ public class Prova extends ACEntity {
 
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(name = "last", type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
-    @AIColumn(widthEM = 7)
+    @AIColumn(widthEM = 16)
     public LocalDateTime lastModifica;
 
 

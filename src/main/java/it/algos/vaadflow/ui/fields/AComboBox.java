@@ -54,7 +54,7 @@ public class AComboBox<T> extends ComboBox implements IAField {
 
     @Override
     public String getValore() {
-        return getValue().toString();
+        return getValue() != null ? getValue().toString() : "";
     }// end of method
 
 }// end of class

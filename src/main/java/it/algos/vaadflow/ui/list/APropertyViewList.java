@@ -62,7 +62,7 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AColumnService column = AColumnService.getInstance();
+    public AColumnService columnService = AColumnService.getInstance();
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>

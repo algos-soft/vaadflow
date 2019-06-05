@@ -3,6 +3,7 @@ package it.algos.vaadflow.ui;
 import com.vaadin.flow.component.html.Label;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.ALayoutViewList;
 import it.algos.vaadflow.ui.list.AViewList;
 
@@ -16,7 +17,7 @@ import it.algos.vaadflow.ui.list.AViewList;
 //@SpringComponent
 //@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 //@Slf4j
-public abstract class ACronoViewList extends ALayoutViewList {
+public abstract class ACronoViewList extends AGridViewList {
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>

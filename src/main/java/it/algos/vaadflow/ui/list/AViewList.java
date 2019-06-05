@@ -6,7 +6,6 @@ import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -213,28 +212,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Eventuale barra di bottoni sotto la grid <br>
      */
     protected void creaGridPaginataOppureNormale() {
-        int numRec = service.count();
-
-        if (usaPagination && numRec > sogliaPagination) {
-            usaGridPaginata = true;
-        } else {
-            usaGridPaginata = false;
-        }// end of if/else cycle
-        creaGrid();
-
-        //--eventuale barra di bottoni sotto la grid
-        creaGridBottomLayout();
-    }// end of method
-
-
-    /**
-     * Crea il corpo centrale della view con una Grid normale <br>
-     * Componente grafico obbligatorio <br>
-     * Alcune regolazioni vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
-     * Costruisce la Grid con le colonne. Gli items vengono caricati in updateView() <br>
-     * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
-     */
-    protected void creaGrid() {
     }// end of method
 
 
@@ -281,25 +258,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    /**
-     * Costruisce un (eventuale) layout con bottoni aggiuntivi
-     * Facoltativo (assente di default)
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected void creaGridBottomLayout() {
-        bottomLayout = new HorizontalLayout();
-        bottomLayout.addClassName("view-toolbar");
-
-        if (usaBottomLayout) {
-            this.add(bottomLayout);
-        }// end of if cycle
-    }// end of method
-
-
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         this.addSpecificRoutes();
+        this.updateItems();
         this.updateView();
     }// end of method
 
@@ -338,6 +300,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
                 appMenu.removeMenuItem(menuItem);
             }// end of for cycle
         }// end of if cycle
+    }// end of method
+
+
+    protected void updateItems() {
     }// end of method
 
 
@@ -381,16 +347,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinition.stream().toArray(CriteriaDefinition[]::new));
 
         if (array.isValid(lista)) {
-            try { // prova ad eseguire il codice
-                grid.deselectAll();
-                grid.setItems(lista);
-                headerGridHolder.setText(getGridHeaderText());
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-        } else {
-            this.updateView();
-        }// end of if/else cycle
+            items = lista;
+        }// end of if cycle
+
+        this.updateView();
 
         creaAlertLayout();
     }// end of method
