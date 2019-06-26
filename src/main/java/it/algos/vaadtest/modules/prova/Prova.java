@@ -4,14 +4,21 @@ import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.mese.Mese;
+import it.algos.vaadflow.modules.mese.MeseService;
+import it.algos.vaadflow.modules.secolo.Secolo;
+import it.algos.vaadflow.modules.secolo.SecoloService;
 import lombok.*;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -50,7 +57,7 @@ import java.time.LocalDateTime;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  */
-@Entity
+//@Entity
 @Document(collection = "prova")
 @TypeAlias("prova")
 @Data
@@ -59,8 +66,8 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "code", "descrizione", "lastModifica"})
-@AIForm(fields = {"ordine", "code", "descrizione", "lastModifica"})
+@AIList(fields = {"ordine", "code", "descrizione", "lastModifica", "meseStatico", "meseDinamico"})
+@AIForm(fields = {"ordine", "code", "descrizione", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -108,6 +115,49 @@ public class Prova extends ACEntity {
     @AIColumn(widthEM = 16)
     public LocalDateTime lastModifica;
 
+
+    /**
+     * indirizzo (facoltativo, non unica)
+     * riferimento statico SENZA @DBRef (embedded)
+     */
+    @Field("ind")
+    @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
+    @AIColumn(name = "ind", flexGrow = true)
+    public Address indirizzoStatico;
+
+
+    /**
+     * indirizzo (facoltativo, non unica)
+     * riferimento dinamico CON @DBRef
+     */
+    @DBRef
+    @Field("ind2")
+    @AIField(type = EAFieldType.combo, clazz = AddressService.class, help = "Indirizzo")
+    @AIColumn(name = "ind2", flexGrow = true)
+    public Address indirizzoDinamico;
+
+    /**
+     * mese di riferimento (obbligatorio)
+     * riferimento dinamico CON @DBRef
+     */
+    @NotNull
+    @DBRef
+    @Field("mese")
+    @AIField(type = EAFieldType.combo, clazz = MeseService.class)
+    @AIColumn(widthEM = 8)
+    public Mese mese;
+
+
+    /**
+     * secolo di riferimento (obbligatorio)
+     * riferimento dinamico CON @DBRef
+     */
+    @NotNull
+    @DBRef
+    @Field("secolo")
+    @AIField(type = EAFieldType.combo, clazz = SecoloService.class)
+    @AIColumn(widthEM = 8)
+    public Secolo secolo;
 
     /**
      * @return a string representation of the object.

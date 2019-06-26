@@ -83,6 +83,10 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
      */
     protected void creaGrid() {
+        gridHolder.setMargin(false);
+        gridHolder.setSpacing(false);
+        gridHolder.setPadding(false);
+
         List<String> gridPropertyNamesList = null;
         FlexLayout layout = new FlexLayout();
 
@@ -91,26 +95,6 @@ public abstract class AGridViewList extends ALayoutViewList {
 
         if (usaGridPaginata) {
             creaGridPaginata();
-//
-//            //--se la sottoclasse NON ha implementato i metodi per creare la PaginatedGrid, crea una Grid normale <br>
-//            if (grid == null) {
-//                usaGridPaginata = false;
-//                creaGrid();
-//            }// end of if cycle
-//
-//        } else {
-//            if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
-//                try { // prova ad eseguire il codice
-//                    //--Costruisce la Grid SENZA creare automaticamente le colonne
-//                    //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-//                    grid = new Grid(entityClazz, false);
-//                } catch (Exception unErrore) { // intercetta l'errore
-//                    log.error(unErrore.toString());
-//                    return;
-//                }// fine del blocco try-catch
-//            } else {
-//                grid = new Grid();
-//            }// end of if/else cycle
         }// end of if/else cycle
 
         if (grid == null) {
@@ -151,15 +135,10 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Regolazioni finali sulla grid e sulle colonne
         this.fixLayout();
 
-        //questo funzione per Grid
-//        layout.add(grid);
-//        this.add(layout);
-//        layout.setFlexGrow(1, grid);
-//        this.setFlexGrow(1, layout);
-
         //questo funzione per gridPaginated
         gridHolder.add(grid);
-        gridHolder.setFlexGrow(1, grid);
+        grid.setWidth(gridWith + "em");
+//        gridHolder.setFlexGrow(1, grid); //@todo Non sembra che funzioni
 
         grid.addSelectionListener(new SelectionListener<Grid<AEntity>, AEntity>() {
 
@@ -232,16 +211,6 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     protected void addColumnsGridPaginata() {
     }// end of method
-
-    /**
-     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
-     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
-     */
-//    protected void fixColumn(ValueProvider<AEntity, ?> valueProvider , String propertyName) {
-//        Grid.Column singleColumn;
-//        singleColumn = ((PaginatedGrid<Prova>) grid).addColumn(valueProvider);
-//        columnService.fixColumn(singleColumn, AEntity.class, propertyName);
-//    }// end of method
 
 
     /**

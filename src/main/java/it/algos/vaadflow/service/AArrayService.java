@@ -398,7 +398,7 @@ public class AArrayService extends AbstractService {
      *
      * @return sublista corrente del ciclo
      */
-    public ArrayList estraeSublista(ArrayList listaTotale, int dimBlocco, int cicloCorrente) {
+    public ArrayList estraeSublista(List listaTotale, int dimBlocco, int cicloCorrente) {
         int posIni = 0;
         int posEnd = 0;
 

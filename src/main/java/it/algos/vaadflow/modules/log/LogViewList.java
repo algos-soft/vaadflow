@@ -7,14 +7,11 @@ import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.giorno.Giorno;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.ALayoutViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -115,7 +112,10 @@ public class LogViewList extends AGridViewList {
         comboLivello = new AComboBox();
         comboLivello.setWidth("8em");
         comboLivello.setItems(Livello.values());
-        comboLivello.addValueChangeListener(e -> super.updateView());
+        comboLivello.addValueChangeListener(e -> {
+            updateItems();
+            updateView();
+        });
 
         return comboLivello;
     }// end of method
@@ -139,10 +139,10 @@ public class LogViewList extends AGridViewList {
      * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
-        fixColumn(Log::getLivello,"livello");
-        fixColumn(Log::getType,"type");
-        fixColumn(Log::getEvento,"evento");
-        fixColumn(Log::getDescrizione,"descrizione");
+        fixColumn(Log::getLivello, "livello");
+        fixColumn(Log::getType, "type");
+        fixColumn(Log::getEvento, "evento");
+        fixColumn(Log::getDescrizione, "descrizione");
     }// end of method
 
 
@@ -150,7 +150,7 @@ public class LogViewList extends AGridViewList {
      * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
      * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
      */
-    protected void fixColumn(ValueProvider<Log, ?> valueProvider , String propertyName) {
+    protected void fixColumn(ValueProvider<Log, ?> valueProvider, String propertyName) {
         Grid.Column singleColumn;
         singleColumn = ((PaginatedGrid<Log>) grid).addColumn(valueProvider);
         columnService.fixColumn(singleColumn, Log.class, propertyName);

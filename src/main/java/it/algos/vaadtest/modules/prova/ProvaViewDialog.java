@@ -5,13 +5,21 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAColor;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressService;
+import it.algos.vaadflow.modules.address.AddressViewDialog;
+import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -26,6 +34,7 @@ import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
 
+import static it.algos.vaadflow.application.FlowCost.FLASH;
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -52,7 +61,17 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
     @Autowired
     ApplicationContext appContext;
+    private final static String INDIRIZZO = "indirizzoStatico";
 
+    private AddressPresenter addressPresenter;
+
+    private AddressService addressService;
+
+    private AddressViewDialog addressDialog;
+
+    private Address indirizzoTemporaneo;
+
+    private ATextField indirizzoField;
 
     /**
      * Costruttore @Autowired <br>
@@ -94,6 +113,20 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     @Override
     protected void addSpecificAlgosFields() {
         super.addSpecificAlgosFields();
+
+        addressPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
+        addressService = (AddressService) addressPresenter.getService();
+
+        addressDialog = StaticContextAccessor.getBean(AddressViewDialog.class);
+        addressDialog.setPresenter(addressPresenter);
+        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
+        addressDialog.fixConfermaAndNotRegistrazione();
+
+        indirizzoField = (ATextField) getField(INDIRIZZO);
+        if (indirizzoField != null) {
+            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));
+        }// end of if cycle
+
         AbstractField propertyField = null;
         propertyField = new ATextField("Alfa");
         ((ATextField) propertyField).setWidth("2em");
@@ -103,6 +136,46 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         }// end of if cycle
     }// end of method
 
+    /**
+     * Regola in lettura eventuali valori NON associati al binder
+     * Dal DB alla UI
+     * Sovrascritto
+     */
+    protected void readSpecificFields() {
+        indirizzoTemporaneo = getIndirizzoCorrente();
+        indirizzoField.setValue(indirizzoTemporaneo != null ? indirizzoTemporaneo.toString() : "");
+    }// end of method
+
+
+    /**
+     * Regola in scrittura eventuali valori NON associati al binder
+     * Dallla  UI al DB
+     * Sovrascritto
+     */
+    protected void writeSpecificFields() {
+        Prova prova = super.getCurrentItem();
+        prova.setIndirizzoStatico(indirizzoTemporaneo);
+    }// end of method
+
+
+    private void saveUpdate(Address entityBean, EAOperation operation) {
+        indirizzoTemporaneo = entityBean;
+        indirizzoField.setValue(entityBean.toString());
+        focusOnPost(INDIRIZZO);
+        Notification.show("La modifica di indirizzo è stata confermata ma devi registrare questa persona per renderla definitiva", FLASH, Notification.Position.BOTTOM_START);
+    }// end of method
+
+
+    private void deleteUpdate(Address entityBean) {
+        indirizzoTemporaneo = null;
+        indirizzoField.setValue("");
+        focusOnPost(INDIRIZZO);
+    }// end of method
+
+
+    protected void annullaUpdate(Address entityBean) {
+        cancelButton.focus();
+    }// end of method
 
     /**
      * Eventuali aggiustamenti finali al layout
@@ -165,6 +238,25 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         getFormLayout().add(select);
     }// end of method
 
+    private Address getIndirizzoCorrente() {
+        Address indirizzo = null;
+        Prova prova = getCurrentItem();
+
+        if (prova != null) {
+            indirizzo = prova.getIndirizzoStatico();
+        }// end of if cycle
+
+        return indirizzo;
+    }// end of method
+    private Address getIndirizzo() {
+        Address indirizzo = getIndirizzoCorrente();
+
+        if (indirizzo == null) {
+            indirizzo = addressService.newEntity();
+        }// end of if cycle
+
+        return indirizzo;
+    }// end of method
 
     /**
      * Recupera il field dal nome

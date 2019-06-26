@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
@@ -30,9 +32,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 public interface ProvaRepository extends MongoRepository<Prova, String> {
 
 
-
 	public Prova findByCode(String code);
 
 	public List<Prova> findAllByOrderByOrdineAsc();
+
+//	@Query(value="{'code' : {$regex : ?0, $options: 'i'}}")
+//	public List<Prova> findByCodeStartingWith(String code);
 
 }// end of class

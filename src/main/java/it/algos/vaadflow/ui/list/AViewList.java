@@ -22,6 +22,8 @@ import it.algos.vaadflow.ui.fields.ATextArea;
 import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
@@ -326,7 +328,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
         List<AEntity> lista;
         IAField field;
-        Object fieldValue;
+        Object fieldValue=null;
         ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
 
         for (String fieldName : searchDialog.fieldMap.keySet()) {

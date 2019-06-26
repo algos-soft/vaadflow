@@ -10,7 +10,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
@@ -115,21 +114,7 @@ public class ProvaViewList extends AGridViewList {
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
-    }// end of method
-
-
-    /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    @Override
-    protected void creaTopLayout() {
-        super.creaTopLayout();
-        topPlaceholder.add(creaPopup());
+//        super.gridWith = 14;
     }// end of method
 
 
@@ -157,7 +142,12 @@ public class ProvaViewList extends AGridViewList {
     protected void creaGridPaginata() {
         PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
         super.grid = gridPaginated;
+//        gridHolder.setWidth("100em");
+
         super.creaGridPaginata();
+        gridHolder.getElement().getStyle().set("background-color", "#5F9EA0");
+        grid.getElement().getStyle().set("background-color", "#1F1EC0");
+
     }// end of method
 
 
@@ -166,12 +156,10 @@ public class ProvaViewList extends AGridViewList {
      * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
-
-        fixColumn(Prova::getOrdine,"ordine");
-        fixColumn(Prova::getCode,"code");
-        fixColumn(Prova::getDescrizione,"descrizione");
-        fixColumn(Prova::getLastModifica,"lastModifica");
-
+        fixColumn(Prova::getOrdine, "ordine");
+        fixColumn(Prova::getCode, "code");
+        fixColumn(Prova::getDescrizione, "descrizione");
+        fixColumn(Prova::getLastModifica, "lastModifica");
     }// end of method
 
 
@@ -179,12 +167,11 @@ public class ProvaViewList extends AGridViewList {
      * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
      * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
      */
-    protected void fixColumn(ValueProvider<Prova, ?> valueProvider , String propertyName) {
+    protected void fixColumn(ValueProvider<Prova, ?> valueProvider, String propertyName) {
         Grid.Column singleColumn;
         singleColumn = ((PaginatedGrid<Prova>) grid).addColumn(valueProvider);
         columnService.fixColumn(singleColumn, Prova.class, propertyName);
     }// end of method
-
 
 
     protected void openProvaDialog(HasValue.ValueChangeEvent event) {
