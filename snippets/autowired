@@ -126,7 +126,7 @@
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
-     * Disponibile solo dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
     protected PreferenzaService pref;
@@ -139,3 +139,14 @@
      */
     @Autowired
     protected PreferenzaService pref;
+
+
+    /**
+     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Chiamato DOPO @PostConstruct <br>
+     *
+     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
+     */
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    }// end of method

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -91,6 +92,18 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
+     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Chiamato DOPO @PostConstruct <br>
+     *
+     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
+     */
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        super.beforeEnter(beforeEnterEvent);
+    }// end of method
+
+
+    /**
      * Aggiunge al menu eventuali @routes specifiche
      * Solo sovrascritto
      */
@@ -101,9 +114,10 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Le preferenze standard <br>
+     * Le preferenze specifiche della sottoclasse <br>
+     * Può essere sovrascritto, per modificare le preferenze standard <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
     protected void fixPreferenze() {
@@ -118,7 +132,7 @@ public class ProvaViewList extends AGridViewList {
     }// end of method
 
 
-    protected Component creaPopup() {
+    private Component creaPopup() {
         ArrayList<String> items = new ArrayList<>();
         items.add("Popup");
         items.add("Primo");
@@ -142,10 +156,10 @@ public class ProvaViewList extends AGridViewList {
     protected void creaGridPaginata() {
         PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
         super.grid = gridPaginated;
-//        gridHolder.setWidth("100em");
+//        gridPlaceholder.setWidth("100em");
 
         super.creaGridPaginata();
-        gridHolder.getElement().getStyle().set("background-color", "#5F9EA0");
+        gridPlaceholder.getElement().getStyle().set("background-color", "#5F9EA0");
         grid.getElement().getStyle().set("background-color", "#1F1EC0");
 
     }// end of method
