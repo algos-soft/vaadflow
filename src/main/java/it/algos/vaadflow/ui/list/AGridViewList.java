@@ -112,7 +112,7 @@ public abstract class AGridViewList extends ALayoutViewList {
                 grid = new Grid();
             }// end of if/else cycle
         }// end of if cycle
-
+        grid.setHeightByRows(true);
 
         //--Apre il dialog di detail
         //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna

@@ -56,18 +56,26 @@ public abstract class ALayoutViewList extends APrefViewList {
      */
     protected void fixLayout() {
         super.fixLayout();
+        this.setMargin(false);
+        this.setSpacing(false);
+        this.setPadding(false);
 
         this.topPlaceholder = new HorizontalLayout();
         this.alertPlacehorder = new VerticalLayout();
         this.gridPlaceholder = new VerticalLayout();
-        this.bottomPlacehorder= new HorizontalLayout();
+        this.bottomPlacehorder = new HorizontalLayout();
 
         if (pref.isBool(USA_DEBUG)) {
             this.getElement().getStyle().set("background-color", EAColor.yellow.getEsadecimale());
-            topPlaceholder.getElement().getStyle().set("background-color",EAColor.lime.getEsadecimale());
-            alertPlacehorder.getElement().getStyle().set("background-color",EAColor.blue.getEsadecimale());
-            bottomPlacehorder.getElement().getStyle().set("background-color",EAColor.lime.getEsadecimale());
+            topPlaceholder.getElement().getStyle().set("background-color", EAColor.lime.getEsadecimale());
+            alertPlacehorder.getElement().getStyle().set("background-color", EAColor.blue.getEsadecimale());
+            gridPlaceholder.getElement().getStyle().set("background-color", EAColor.silver.getEsadecimale());
+            bottomPlacehorder.getElement().getStyle().set("background-color", EAColor.lime.getEsadecimale());
         }// end of if cycle
+
+        gridPlaceholder.setMargin(false);
+        gridPlaceholder.setSpacing(false);
+        gridPlaceholder.setPadding(false);
     }// end of method
 
 

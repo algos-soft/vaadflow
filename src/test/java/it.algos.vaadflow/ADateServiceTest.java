@@ -2,6 +2,7 @@ package it.algos.vaadflow;
 
 import it.algos.vaadflow.enumeration.EATime;
 import it.algos.vaadflow.service.ADateService;
+import it.algos.vaadflow.service.ATextService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,10 +40,15 @@ public class ADateServiceTest extends ATest {
     @InjectMocks
     public ADateService service;
 
+    @InjectMocks
+    public ATextService text;
+
     // alcuni parametri utilizzati
     private Date dataPrevista = null;
 
     private Date dataOttenuta = null;
+
+    private LocalDate localData = null;
 
     private LocalDate localDataPrevista = null;
 
@@ -57,6 +63,8 @@ public class ADateServiceTest extends ATest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         MockitoAnnotations.initMocks(service);
+        MockitoAnnotations.initMocks(text);
+        service.text = text;
     }// end of method
 
 
@@ -248,8 +256,6 @@ public class ADateServiceTest extends ATest {
         System.out.println("Restituisce la data (senza tempo) in forma breve: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
         System.out.println("");
     }// end of single test
-
-
 
 
     @SuppressWarnings("javadoc")
@@ -688,6 +694,140 @@ public class ADateServiceTest extends ATest {
         System.out.println("Meno di 1 anno: " + service.toText(86500000));
         System.out.println("*************");
         service.toText(durata);
+    }// end of single test
+
+
+    /**
+     * Recupera il primo lunedì precedente al giorno indicato <br>
+     */
+    @Test
+    public void getFirstLunedì() {
+        localDataPrevista = LocalDate.of(2019, 6, 24);
+
+        localData = LocalDate.of(2019, 6, 30);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 29);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 28);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 27);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 26);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 25);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localData = LocalDate.of(2019, 6, 24);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localDataPrevista = LocalDate.of(2019, 6, 17);
+        localData = LocalDate.of(2019, 6, 23);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localDataPrevista = LocalDate.of(2019, 7, 1);
+        localData = LocalDate.of(2019, 7, 1);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localDataPrevista = LocalDate.of(2019, 7, 1);
+        localData = LocalDate.of(2019, 7, 2);
+        localDataOttenuta = service.getFirstLunedì(localData);
+        assertEquals(localDataOttenuta, localDataPrevista);
+    }// end of single test
+
+
+    /**
+     * Recupera un giorno tot giorni prima o dopo la data corrente <br>
+     */
+    @Test
+    public void getGiornoDelta() {
+        sorgenteIntero = -3;
+        localDataPrevista = LocalDate.of(2019, 6, 30);
+        localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgenteIntero = 0;
+        localDataPrevista = LocalDate.of(2019, 7, 3);
+        localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgenteIntero = 2;
+        localDataPrevista = LocalDate.of(2019, 7, 5);
+        localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgente = "-3";
+        localDataPrevista = LocalDate.of(2019, 6, 30);
+        localDataOttenuta = service.getGiornoDelta(sorgente);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgente = "0";
+        localDataPrevista = LocalDate.of(2019, 7, 3);
+        localDataOttenuta = service.getGiornoDelta(sorgente);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgente = "+2";
+        localDataPrevista = LocalDate.of(2019, 7, 5);
+        localDataOttenuta = service.getGiornoDelta(sorgente);
+        assertEquals(localDataOttenuta, localDataPrevista);
+    }// end of single test
+
+
+    /**
+     * Durata tra due momenti individuati da ora e minuti <br>
+     */
+    @Test
+    public void getDurata() {
+        int oraFine;
+        int oraIni;
+        int minFine;
+        int minIni;
+
+        previstoIntero = 120;
+        oraIni = 15;
+        oraFine = 17;
+        minIni = 0;
+        minFine = 0;
+        ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 150;
+        oraIni = 15;
+        oraFine = 17;
+        minIni = 0;
+        minFine = 30;
+        ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 140;
+        oraIni = 15;
+        oraFine = 17;
+        minIni = 10;
+        minFine = 30;
+        ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 100Ø;
+        oraIni = 15;
+        oraFine = 17;
+        minIni = 30;
+        minFine = 10;
+        ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
+        assertEquals(ottenutoIntero, previstoIntero);
+
     }// end of single test
 
 }// end of class
