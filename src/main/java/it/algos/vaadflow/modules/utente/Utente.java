@@ -151,7 +151,7 @@ public class Utente extends ACEntity implements UserDetails {
      */
     @Field("role")
     @AIField(type = EAFieldType.noone, required = true, clazz = RoleService.class)
-    @AIColumn(name = "ruolo", width = 200)
+    @AIColumn(name = "ruolo", widthEM = 10)
     public List<Role> ruoli;
 
 

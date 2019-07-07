@@ -6,8 +6,8 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.IAView;
+import it.algos.vaadflow.ui.list.AViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -695,29 +695,6 @@ public class AAnnotationService extends AbstractService {
         return name;
     }// end of method
 
-//    /**
-//     * Get the type (columnService) of the property.
-//     * Se manca, usa il type del Field
-//     *
-//     * @param reflectionJavaField di riferimento per estrarre la Annotation
-//     *
-//     * @return the type for the specific columnService
-//     */
-//    public EAFieldType getColumnType(final Field reflectionJavaField) {
-//        EAFieldType type = null;
-//        AIColumn annotation = this.getAIColumn(reflectionJavaField);
-//
-//        if (annotation != null) {
-//            type = annotation.type();
-//        }// end of if cycle
-//
-//        if (type == EAFieldType.ugualeAlField) {
-//            type = this.getFormType(reflectionJavaField);
-//        }// end of if cycle
-//
-//        return type;
-//    }// end of method
-
 
     /**
      * Get the visibility of the columnService.
@@ -773,26 +750,6 @@ public class AAnnotationService extends AbstractService {
     /**
      * Get the width of the property.
      *
-     * @param reflectionJavaField di riferimento per estrarre la Annotation
-     *
-     * @return the width of the columnService expressed in int
-     */
-    @SuppressWarnings("all")
-    public int getColumnWith(final Field reflectionJavaField) {
-        int width = 0;
-        AIColumn annotation = this.getAIColumn(reflectionJavaField);
-
-        if (annotation != null) {
-            width = annotation.width();
-        }// end of if cycle
-
-        return width;
-    }// end of method
-
-
-    /**
-     * Get the width of the property.
-     *
      * @param entityClazz the entity class
      * @param fieldName   the property name
      *
@@ -809,31 +766,6 @@ public class AAnnotationService extends AbstractService {
 
         if (widthInt > 0) {
             widthTxt = widthInt + TAG_EM;
-        }// end of if cycle
-
-        return widthTxt;
-    }// end of method
-
-
-    /**
-     * Get the width of the property.
-     *
-     * @param entityClazz the entity class
-     * @param fieldName   the property name
-     *
-     * @return the name (columnService) of the field
-     */
-    public String getColumnWithPX(Class<? extends AEntity> entityClazz, String fieldName) {
-        String widthTxt = "";
-        int widthInt = 0;
-        AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
-
-        if (annotation != null) {
-            widthInt = annotation.widthPX();
-        }// end of if cycle
-
-        if (widthInt > 0) {
-            widthTxt = widthInt + TAG_PX;
         }// end of if cycle
 
         return widthTxt;
@@ -873,6 +805,45 @@ public class AAnnotationService extends AbstractService {
 
         if (annotation != null) {
             status = annotation.flexGrow();
+        }// end of if cycle
+
+        return status;
+    }// end of method
+
+
+    /**
+     * Get the status sortable of the property.
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return status of field
+     */
+    public boolean isSortable(Class<? extends AEntity> entityClazz, String fieldName) {
+        boolean status = true;
+        Field field = reflection.getField(entityClazz, fieldName);
+
+        if (field != null) {
+            status = isSortable(field);
+        }// end of if cycle
+
+        return status;
+    }// end of method
+
+
+    /**
+     * Get the status flexibility of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return status of field
+     */
+    public boolean isSortable(Field reflectionJavaField) {
+        boolean status = true;
+        AIColumn annotation = this.getAIColumn(reflectionJavaField);
+
+        if (annotation != null) {
+            status = annotation.sortable();
         }// end of if cycle
 
         return status;

@@ -1,9 +1,6 @@
 package it.algos.vaadflow.ui.dialog;
 
-import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -756,10 +753,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     public void close() {
         super.close();
-        IAView vista = presenter.getView();
-        if (vista != null) {
-            vista.updateView();
-        }// end of if cycle
+//        IAView vista = presenter.getView();
+//        if (vista != null) {
+//            vista.updateView();
+//        }// end of if cycle
+        UI.getCurrent().getPage().reload();
     }// end of method
 
 

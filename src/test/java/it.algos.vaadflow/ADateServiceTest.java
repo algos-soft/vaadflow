@@ -820,7 +820,7 @@ public class ADateServiceTest extends ATest {
         ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
         assertEquals(ottenutoIntero, previstoIntero);
 
-        previstoIntero = 100Ø;
+        previstoIntero = 100;
         oraIni = 15;
         oraFine = 17;
         minIni = 30;

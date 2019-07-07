@@ -154,16 +154,16 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         //--menu generale dell'applicazione
         this.creaMenuLayout();
 
-        //--barra/menu dei bottoni specifici del modulo
-        this.creaTopLayout();
-        if (topPlaceholder.getComponentCount() > 0) {
-            this.add(topPlaceholder);
-        }// end of if cycle
-
         //--una o più righe di avvisi
         this.creaAlertLayout();
         if (alertPlacehorder.getComponentCount() > 0) {
             this.add(alertPlacehorder);
+        }// end of if cycle
+
+        //--barra/menu dei bottoni specifici del modulo
+        this.creaTopLayout();
+        if (topPlaceholder.getComponentCount() > 0) {
+            this.add(topPlaceholder);
         }// end of if cycle
 
         //--body con la Grid
@@ -392,7 +392,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     protected void deleteCollection() {
         service.deleteAll();
-        updateView();
+        UI.getCurrent().getPage().reload();
     }// end of method
 
 

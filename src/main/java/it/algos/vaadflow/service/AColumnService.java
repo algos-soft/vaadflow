@@ -95,6 +95,7 @@ public class AColumnService extends AbstractService {
         boolean isFlexGrow = annotation.isFlexGrow(entityClazz, propertyName);
         Class clazz = annotation.getComboClass(entityClazz, propertyName);
         String color = annotation.getColumnColor(entityClazz, propertyName);
+        boolean sortable = annotation.isSortable(entityClazz, propertyName);
 
         if (type == null) {
             try { // prova ad eseguire il codice
@@ -261,6 +262,7 @@ public class AColumnService extends AbstractService {
         if (colonna != null) {
             colonna.setHeader(text.isValid(header) ? header : propertyName);
             colonna.setSortProperty(propertyName);
+            colonna.setSortable(sortable);
 //            if (property.equals("id")) {
 //                colonna.setWidth("1px");
 //            }// end of if cycle

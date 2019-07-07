@@ -3,6 +3,7 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.function.ValueProvider;
@@ -64,6 +65,14 @@ public class ProvaViewList extends AGridViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
+    /**
+     * Label del menu (facoltativa)
+     * Vaadin usa il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
+     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
+     * Se manca il MENU_NAME, di default usa il 'name' della view
+     */
+    public static final String MENU_NAME = "prove";
+
     private AComboBox<String> comboUpload;
 
     private PaginatedGrid<Prova> gridPaginated;
@@ -104,6 +113,18 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Serve per inserire eventuali commenti"));
+    }// end of method
+
+    /**
      * Aggiunge al menu eventuali @routes specifiche
      * Solo sovrascritto
      */
@@ -128,7 +149,7 @@ public class ProvaViewList extends AGridViewList {
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
-//        super.gridWith = 14;
+//        super.gridWith = 100;
     }// end of method
 
 

@@ -106,7 +106,7 @@ public class Prova extends ACEntity {
     @NotNull
     @Field("desc")
     @AIField(type = EAFieldType.text, widthEM = 2)
-    @AIColumn(flexGrow = true)
+    @AIColumn(name = "Desc", flexGrow = true, sortable = false)
     public String descrizione;
 
 
@@ -158,6 +158,7 @@ public class Prova extends ACEntity {
     @AIField(type = EAFieldType.combo, clazz = SecoloService.class)
     @AIColumn(widthEM = 8)
     public Secolo secolo;
+
 
     /**
      * @return a string representation of the object.

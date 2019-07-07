@@ -17,8 +17,7 @@ import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 
-import static it.algos.vaadflow.application.FlowCost.USA_DEBUG;
-import static it.algos.vaadflow.application.FlowCost.USA_MENU;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow
@@ -56,7 +55,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      */
     protected void fixLayout() {
         super.fixLayout();
-        this.setMargin(false);
+        this.setMargin(true);
         this.setSpacing(false);
         this.setPadding(false);
 
@@ -138,7 +137,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         boolean isAdmin = login.isAdmin();
 
         if (usaBottoneDeleteAll && isDeveloper) {
-            deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
+            deleteAllButton = new Button("Delete all", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
             deleteAllButton.addClickListener(e -> openConfirmDialogDelete());

@@ -30,39 +30,19 @@ public @interface AIColumn {
 
 
     /**
-     * (Optional) The name of the field.
+     * (Optional) The name of the column header.
      * Defaults to the property or field name.
      */
     String name() default "";
 
 
     /**
-     * (Optional) The width of the field.
-     * Defaults to 0
-     * Viene regolato in AColumnService.add()
-     */
-    int width() default 0;
-
-    /**
-     * (Optional) The width of the field.
+     * (Optional) The width of the column.
      * Expressed in int, to be converted in String ending with "em"
      * Defaults to 0.
      */
     int widthEM() default 0;
 
-
-    /**
-     * (Optional) The width of the field.
-     * Expressed in int, to be converted in String ending with "px"
-     * Defaults to 0.
-     */
-    int widthPX() default 0;
-
-//    /**
-//     * (Optional) Visibilità a secondo del ruolo dell'User collegato
-//     * Defaults to guest.
-//     */
-//    EARoleType roleTypeVisibility() default EARoleType.guest;
 
     /**
      * (Optional) color of the component
@@ -72,10 +52,16 @@ public @interface AIColumn {
 
 
     /**
-     * (Optional) field that expand the maximum
+     * (Optional) column that expand the maximum
      * Only one for list
      * Defaults to false.
      */
     boolean flexGrow() default false;
+
+    /**
+     * (Optional) column sortable
+     * Defaults to true.
+     */
+    boolean sortable() default true;
 
 }// end of interface annotation

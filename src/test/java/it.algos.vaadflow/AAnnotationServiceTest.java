@@ -4,15 +4,9 @@ import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.Role;
-import it.algos.vaadflow.service.AAnnotationService;
-import it.algos.vaadflow.service.AArrayService;
-import it.algos.vaadflow.service.AReflectionService;
-import it.algos.vaadflow.service.ATextService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -196,6 +190,7 @@ public class AAnnotationServiceTest extends ATest {
         assertNotNull(ottenuto);
     }// end of method
 
+
     @SuppressWarnings("javadoc")
     /**
      * Get the name of the spring-view.
@@ -247,6 +242,7 @@ public class AAnnotationServiceTest extends ATest {
         ottenutoList = annotation.getGridPropertiesName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
     }// end of single test
+
 
     @SuppressWarnings("javadoc")
     /**
@@ -344,26 +340,6 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void isColumnVisibile() {
         //@todo RIMETTERE
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Get the width of the property.
-     *
-     * @param reflectionJavaField di riferimento per estrarre la Annotation
-     *
-     * @return the width of the columnService expressed in int
-     */
-    @Test
-    public void getColumnWith() {
-        previstoIntero = 55;
-        ottenutoIntero = annotation.getColumnWith(FIELD_ORDINE);
-        assertEquals(previstoIntero, ottenutoIntero);
-
-        previstoIntero = 210;
-        ottenutoIntero = annotation.getColumnWith(FIELD_CODE);
-        assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
 
