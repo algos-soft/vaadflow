@@ -18,6 +18,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE) //can use in class and interface.
 public @interface AIView {
 
+
+    /**
+     * (Optional) Label del menu
+     * Vaadin usa SEMPRE il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
+     * Nella menuBar appare invece visibile il menuName, indicato qui (con il primo carattere maiuscolo)
+     * Di default usa il 'name' della view (@Route)
+     */
+    String menuName() default "";
+
     /**
      * (Optional) Visibilità a secondo del ruolo dell'User collegato
      * Defaults to user.

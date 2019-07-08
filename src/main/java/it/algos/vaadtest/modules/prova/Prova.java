@@ -66,7 +66,7 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "code", "descrizione", "lastModifica", "meseStatico", "meseDinamico"})
+@AIList( fields = {"ordine", "code", "descrizione", "lastModifica", "meseStatico", "meseDinamico"})
 @AIForm(fields = {"ordine", "code", "descrizione", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {

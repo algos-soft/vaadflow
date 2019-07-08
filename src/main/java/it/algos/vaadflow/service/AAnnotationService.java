@@ -395,27 +395,49 @@ public class AAnnotationService extends AbstractService {
 
 
     /**
-     * Get the name of the route-view.
-     * Cerca nella classe la property statica MENU_NAME
-     * Se non la trova, di default usa l'annotation @Route
+     * Restituisce il nome del menu
+     * 1) Cerca in @interface AIView della classe la property menuName
+     * 2) Se non la trova, cerca nella classe la property statica MENU_NAME
+     * 3) Se non la trova, di default usa la property 'value' di @interface Route
      *
      * @param viewClazz the view class
      *
      * @return the name of the spring-view
      */
     public String getMenuName(final Class<? extends IAView> viewClazz) {
-        String menuName = reflection.getMenuName(viewClazz);
-        Route annotation = null;
+        String menuName = "";
+        AIView annotationView=null;
+        Route annotationRoute = null;
 
-        if (text.isEmpty(menuName)) {
-            annotation = this.getRoute(viewClazz);
+        /**
+         * 1) Cerca in @interface AIView della classe la property menuName
+         */
+        annotationView = this.getAIView(viewClazz);
+        if (annotationView != null) {
+            menuName = annotationView.menuName();
         }// end of if cycle
 
-        if (annotation != null) {
-            menuName = annotation.value();
+
+        /**
+         * 2) Se non la trova, cerca nella classe la property statica MENU_NAME
+         */
+        if (text.isEmpty(menuName)) {
+            menuName = reflection.getMenuName(viewClazz);
+        }// end of if cycle
+
+        /**
+         * 3) Se non la trova, di default usa la property 'value' di @interface Route
+         */
+        if (text.isEmpty(menuName)) {
+            annotationRoute = this.getRoute(viewClazz);
+        }// end of if cycle
+
+        if (annotationRoute != null) {
+            menuName = annotationRoute.value();
         }// end of if cycle
 
         menuName = text.isValid(menuName) ? text.primaMaiuscola(menuName) : "Home";
+
         return menuName;
     }// end of method
 

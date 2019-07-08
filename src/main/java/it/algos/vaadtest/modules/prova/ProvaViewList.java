@@ -1,10 +1,5 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.QueryBuilder;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
@@ -29,16 +24,13 @@ import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.springframework.data.mongodb.core.query.Query;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -68,7 +60,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Route(value = TAG_PRO)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIView(roleTypeVisibility = EARoleType.user)
+@AIView(menuName = "prove", roleTypeVisibility = EARoleType.user)
 @AIScript(sovrascrivibile = true)
 public class ProvaViewList extends AGridViewList {
 
@@ -79,13 +71,13 @@ public class ProvaViewList extends AGridViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
-    /**
-     * Label del menu (facoltativa)
-     * Vaadin usa il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final String MENU_NAME = "prove";
+//    /**
+//     * Label del menu (facoltativa)
+//     * Vaadin usa il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
+//     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
+//     * Se manca il MENU_NAME, di default usa il 'name' della view
+//     */
+//    public static final String MENU_NAME = "pluto";
 
     private AComboBox<String> comboUpload;
 
@@ -338,12 +330,12 @@ public class ProvaViewList extends AGridViewList {
             if (field instanceof ATextField || field instanceof ATextArea) {
                 if (text.isValid(fieldValue)) {
 //                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String)fieldValue));
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
                 }// end of if cycle
             }// end of if cycle
             if (field instanceof AIntegerField) {
                 if ((Integer) fieldValue > 0) {
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String)fieldValue));
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
                 }// end of if cycle
             }// end of if cycle
         }// end of for cycle
