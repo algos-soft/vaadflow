@@ -86,7 +86,7 @@ public class Prova extends ACEntity {
     @Indexed()
     @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 3)
+    @AIColumn(name = "#")
     public int ordine;
 
     /**
@@ -122,7 +122,7 @@ public class Prova extends ACEntity {
      */
     @Field("ind")
     @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
-    @AIColumn(name = "ind", flexGrow = true)
+    @AIColumn(name = "ind")
     public Address indirizzoStatico;
 
 
@@ -133,7 +133,7 @@ public class Prova extends ACEntity {
     @DBRef
     @Field("ind2")
     @AIField(type = EAFieldType.combo, clazz = AddressService.class, help = "Indirizzo")
-    @AIColumn(name = "ind2", flexGrow = true)
+    @AIColumn(name = "ind2")
     public Address indirizzoDinamico;
 
     /**

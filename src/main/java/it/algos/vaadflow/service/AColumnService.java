@@ -293,9 +293,11 @@ public class AColumnService extends AbstractService {
         String header = annotation.getColumnName(entityClazz, propertyName);
         String width = annotation.getColumnWithEM(entityClazz, propertyName);
         boolean isFlexGrow = annotation.isFlexGrow(entityClazz, propertyName);
+        boolean sortable = annotation.isSortable(entityClazz, propertyName);
 
         colonna.setHeader(text.isValid(header) ? header : propertyName);
         colonna.setSortProperty(propertyName);
+        colonna.setSortable(sortable);
 
         if (isFlexGrow) {
             colonna.setFlexGrow(1);

@@ -1,5 +1,11 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.QueryBuilder;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.grid.Grid;
@@ -12,19 +18,27 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AConfirmDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.fields.AComboBox;
+import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -124,6 +138,7 @@ public class ProvaViewList extends AGridViewList {
         alertPlacehorder.add(new Label("Serve per inserire eventuali commenti"));
     }// end of method
 
+
     /**
      * Aggiunge al menu eventuali @routes specifiche
      * Solo sovrascritto
@@ -180,8 +195,10 @@ public class ProvaViewList extends AGridViewList {
 //        gridPlaceholder.setWidth("100em");
 
         super.creaGridPaginata();
-        gridPlaceholder.getElement().getStyle().set("background-color", "#5F9EA0");
-        grid.getElement().getStyle().set("background-color", "#1F1EC0");
+//        gridPlaceholder.getElement().getStyle().set("background-color", "#5F9EA0");
+        gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
+        gridPlaceholder.setWidth("110em");
+        grid.getElement().getStyle().set("background-color", "#ffaabb");
 
     }// end of method
 
@@ -305,6 +322,42 @@ public class ProvaViewList extends AGridViewList {
 //            log.error(unErrore.toString());
 //        }// fine del blocco try-catch
 //    }// end of method
+
+
+    public void updateViewDopoSearch() {
+        LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
+        List<AEntity> lista;
+        IAField field;
+        Object fieldValue = null;
+        ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
+        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
+
+        for (String fieldName : searchDialog.fieldMap.keySet()) {
+            field = (IAField) searchDialog.fieldMap.get(fieldName);
+            fieldValue = field.getValore();
+            if (field instanceof ATextField || field instanceof ATextArea) {
+                if (text.isValid(fieldValue)) {
+//                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String)fieldValue));
+                }// end of if cycle
+            }// end of if cycle
+            if (field instanceof AIntegerField) {
+                if ((Integer) fieldValue > 0) {
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String)fieldValue));
+                }// end of if cycle
+            }// end of if cycle
+        }// end of for cycle
+
+        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
+
+        if (array.isValid(lista)) {
+            items = lista;
+        }// end of if cycle
+
+        this.updateView();
+
+        creaAlertLayout();
+    }// end of method
 
 
     private class Pippo implements Runnable {

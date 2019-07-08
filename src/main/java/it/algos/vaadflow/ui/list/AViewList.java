@@ -22,6 +22,8 @@ import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
 import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
+import it.algos.vaadtest.modules.prova.Prova;
+import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -364,7 +366,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
                 }// end of if cycle
             }// end of if cycle
         }// end of for cycle
-
         lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinition.stream().toArray(CriteriaDefinition[]::new));
 
         if (array.isValid(lista)) {

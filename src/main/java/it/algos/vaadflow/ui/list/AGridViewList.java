@@ -138,6 +138,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         //questo funzione per gridPaginated
         gridPlaceholder.add(grid);
         grid.setWidth(gridWith + "em");
+        gridPlaceholder.setWidth(gridWith + "em");
 
 //        gridPlaceholder.setFlexGrow(1, grid); //@todo Non sembra che funzioni
 
