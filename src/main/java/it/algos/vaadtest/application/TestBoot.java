@@ -3,7 +3,6 @@ package it.algos.vaadtest.application;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
 import it.algos.vaadflow.modules.mese.MeseViewList;
@@ -127,8 +126,19 @@ public class TestBoot extends ABoot {
         provaService.deleteAll();
 
         for (int k = 1; k <= numRecord; k++) {
-            code = k + "cod";
-            desc = "questa è la descrizione n. "+k;
+
+            if (k == 6 || k == 7) {
+                code = "cod" + k;
+            } else {
+                code = k + "cod";
+            }// end of if/else cycle
+
+            if (k == 8) {
+                desc = "descrizione leggermente diversa (per test)";
+            } else {
+                desc = "questa è la descrizione n. " + k;
+            }// end of if/else cycle
+
             provaService.crea(code, desc);
         }// end of for cycle
 

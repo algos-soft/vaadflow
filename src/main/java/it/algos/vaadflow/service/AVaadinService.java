@@ -7,6 +7,7 @@ import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,11 @@ public class AVaadinService {
      */
     private static final AVaadinService INSTANCE = new AVaadinService();
 
+    /**
+     * La injection viene fatta da SpringBoot in automatico <br>
+     */
+    @Autowired
+    public PreferenzaService pref;
 
     @Autowired
     ApplicationContext appContext;
@@ -57,17 +63,22 @@ public class AVaadinService {
     @Autowired
     private UtenteService utenteService;
 
-    /**
-     * La injection viene fatta da SpringBoot in automatico <br>
-     */
-    @Autowired
-    public PreferenzaService pref;
 
     /**
      * Private constructor to avoid client applications to use constructor
      */
     private AVaadinService() {
     }// end of constructor
+
+
+    /**
+     * Gets the unique instance of this Singleton.
+     *
+     * @return the unique instance of this Singleton
+     */
+    public static AVaadinService getInstance() {
+        return INSTANCE;
+    }// end of static method
 
 
     /**
@@ -99,7 +110,7 @@ public class AVaadinService {
             HttpSession httpSession = attr.getRequest().getSession(true);
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
 
-            if (pref.isBool(USA_SECURITY)) {
+            if (pref.isBool(USA_SECURITY) && securityContext != null) {
                 try { // prova ad eseguire il codice
                     springUser = (User) securityContext.getAuthentication().getPrincipal();
                     uniqueUserName = springUser.getUsername();
@@ -114,24 +125,19 @@ public class AVaadinService {
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.error(unErrore.toString());
                 }// fine del blocco try-catch
-            }// end of if cycle
 
-            context = new AContext(login, company);
-            context.setSecured(secured);
+                context = new AContext(login, company);
+                context.setSecured(secured);
+            } else {
+                login.setRoleType(EARoleType.developer);
+                context = new AContext(login, company);
+                context.setSecured(false);
+            }// end of if/else cycle
+
             vaadSession.setAttribute(KEY_CONTEXT, context);
         }// end of if cycle
 
         return context;
     }// end of method
-
-
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AVaadinService getInstance() {
-        return INSTANCE;
-    }// end of static method
 
 }// end of class

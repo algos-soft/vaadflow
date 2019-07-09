@@ -22,8 +22,6 @@ import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
 import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
-import it.algos.vaadtest.modules.prova.Prova;
-import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -147,11 +145,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         context = vaadinService.fixLoginAndContext();
         login = context.getLogin();
 
-        //--Placeholder
-        this.fixLayout();
-
         //--Le preferenze standard e specifiche
         this.fixPreferenze();
+
+        //--Placeholder
+        this.fixLayout();
 
         //--menu generale dell'applicazione
         this.creaMenuLayout();
@@ -193,22 +191,24 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Costruisce gli oggetti base (placeholder) di questa view <br>
-     * Li aggiunge alla view stessa <br>
-     * Può essere sovrascritto, per modificare il layout standard <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    protected void fixLayout() {
-    }// end of method
-
-
-    /**
      * Le preferenze standard <br>
      * Le preferenze specifiche della sottoclasse <br>
+     * Gestito nella classe specializzata APrefViewList <br>
      * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+    }// end of method
+
+
+    /**
+     * Costruisce gli oggetti base (placeholder) di questa view <br>
+     * Li aggiunge alla view stessa <br>
+     * Gestito nella classe specializzata ALayoutViewList <br>
+     * Può essere sovrascritto, per modificare il layout standard <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void fixLayout() {
     }// end of method
 
 
@@ -223,24 +223,31 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid <br>
-     * - con o senza campo edit search, regolato da preferenza o da parametro <br>
-     * - con o senza bottone New, regolato da preferenza o da parametro <br>
-     * - con eventuali altri bottoni specifici <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    protected void creaTopLayout() {
-    }// end of method
-
-
-    /**
      * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
      * Normalmente ad uso esclusivo del developer <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     protected void creaAlertLayout() {
+    }// end of method
+
+
+    /**
+     * Placeholder SOPRA la Grid <br>
+     * Contenuto eventuale, presente di default <br>
+     * - con o senza un bottone per cancellare tutta la collezione
+     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza gruppo di ricerca:
+     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
+     * -    bottone per aprire un DialogSearch con diverse property selezionabili
+     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
+     * - con eventuale Popup di selezione, filtro e ordinamento
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuali altri bottoni specifici <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void creaTopLayout() {
     }// end of method
 
 
@@ -260,6 +267,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     protected String getGridHeaderText() {
         return "";
     }// end of method
+
 
     /**
      * Navigazione verso un altra pagina
@@ -350,23 +358,23 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         List<AEntity> lista;
         IAField field;
         Object fieldValue = null;
-        ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
+        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
 
         for (String fieldName : searchDialog.fieldMap.keySet()) {
             field = (IAField) searchDialog.fieldMap.get(fieldName);
             fieldValue = field.getValore();
             if (field instanceof ATextField || field instanceof ATextArea) {
                 if (text.isValid(fieldValue)) {
-                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex("^" + fieldValue));
                 }// end of if cycle
             }// end of if cycle
             if (field instanceof AIntegerField) {
                 if ((Integer) fieldValue > 0) {
-                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex("^" + fieldValue));
                 }// end of if cycle
             }// end of if cycle
         }// end of for cycle
-        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinition.stream().toArray(CriteriaDefinition[]::new));
+        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
 
         if (array.isValid(lista)) {
             items = lista;

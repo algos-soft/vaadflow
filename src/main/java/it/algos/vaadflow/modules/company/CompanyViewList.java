@@ -81,19 +81,18 @@ public class CompanyViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearchTextField = false;
         super.isEntityUsaDatiDemo = true;
 
         if (context.getLogin().isDeveloper()) {
             super.usaBottoneDeleteAll = true;
             super.usaBottoneReset = true;
             super.isEntityDeveloper = true;
-            super.usaSearchBottoneNew = true;
+            super.usaBottoneNew = true;
         } else {
             super.usaBottoneDeleteAll = false;
             super.usaBottoneReset = false;
             super.isEntityAdmin = true;
-            super.usaSearchBottoneNew = false;
+            super.usaBottoneNew = false;
         }// end of if/else cycle
     }// end of method
 

@@ -2,7 +2,9 @@ package it.algos.vaadflow.ui.list;
 
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadtest.modules.prova.ProvaViewList;
 
 /**
  * Project vaadflow
@@ -38,23 +40,33 @@ public abstract class APrefViewList extends AViewList {
      */
     protected void fixPreferenze() {
 
-        /**
-         * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
-         * Facoltativo ed alternativo a usaSearchTextDialog. Normalmente false.
-         */
-        usaSearchTextField = false;
 
         /**
-         * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu.
-         * Facoltativo ed alternativo a usaSearchTextField. Normalmente true.
+         * Flag di preferenza per usare la ricerca e selezione nella barra dei menu. <br>
+         * Se è true, un altro flag seleziona il textField o il textDialog <br>
+         * Se è true, il bottone usaAllButton è sempre presente <br>
+         * Normalmente true. <br>
          */
-        usaSearchTextDialog = true;
+        usaSearch = false;
 
-        //--Flag di preferenza per usare il bottone all situato nella searchBar. Normalmente true
-        usaAllButton = true;
 
-        //--Flag di preferenza per usare il bottone new situato nella searchBar. Normalmente true.
-        usaSearchBottoneNew = true;
+        /**
+         * Flag di preferenza per selezionare la ricerca:
+         * true per aprire un dialogo di ricerca e selezione su diverse properties <br>
+         * false per presentare un textEdit predisposto per la ricerca su un unica property <br>
+         * Normalmente true.
+         */
+        usaSearchDialog = true;
+
+        /**
+         * Flag di preferenza per usare il popup di selezione, filtro e ordinamento situato nella searchBar.
+         * Normalmente false <br>
+         */
+        usaPopupFiltro = false;
+
+
+        //--Flag di preferenza per usare il bottone new situato nella barra topLayout. Normalmente true.
+        usaBottoneNew = true;
 
         //--Flag di preferenza per usare il placeholder di informazioni specifiche sopra la Grid. Normalmente false.
         usaTopAlert = false;
@@ -106,11 +118,19 @@ public abstract class APrefViewList extends AViewList {
         usaPagination = true;
 
         //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
-        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50
-        sogliaPagination = pref.getInt(FlowCost.SOGLIA_PAGINATION, 50);
+        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 20
+        sogliaPagination = pref.getInt(FlowCost.SOGLIA_PAGINATION, 20);
+
+        //--controllo della paginazione
+        isPaginata = usaPagination && service.count() > sogliaPagination;
 
         //--Flag per la larghezza della Grid. Default a 100. Espressa come numero per comodità; poi viene convertita in "em".
         gridWith = 100;
+
+        //--property per la ricerca con searchField.
+        //--Viene letta da una @Annotation.
+        //--Può essere sovrascritta in fixPreferenze() della sottoclasse specifica
+        searchProperty = annotation.getSearchPropertyName(this.getClass());
     }// end of method
 
 }// end of class

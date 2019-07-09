@@ -60,7 +60,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Route(value = TAG_PRO)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIView(menuName = "prove", roleTypeVisibility = EARoleType.user)
+@AIView(searchProperty = "code", menuName = "prove", roleTypeVisibility = EARoleType.user)
 @AIScript(sovrascrivibile = true)
 public class ProvaViewList extends AGridViewList {
 
@@ -128,6 +128,7 @@ public class ProvaViewList extends AGridViewList {
     protected void creaAlertLayout() {
         super.creaAlertLayout();
         alertPlacehorder.add(new Label("Serve per inserire eventuali commenti"));
+        alertPlacehorder.add(new Label("La collezione di 15 elementi viene cancellata e ricostruita ad ogni avvio del programma di test"));
     }// end of method
 
 
@@ -151,12 +152,17 @@ public class ProvaViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
+        super.usaPopupFiltro = false;
         super.usaBottoneEdit = true;
         super.usaPagination = true;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
 //        super.gridWith = 100;
+
+//        super.searchProperty="descrizione";
     }// end of method
 
 

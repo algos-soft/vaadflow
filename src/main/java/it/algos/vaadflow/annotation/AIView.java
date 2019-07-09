@@ -28,6 +28,11 @@ public @interface AIView {
     String menuName() default "";
 
     /**
+     * (Optional) Property per la ricerca tramite il searchField
+     */
+    String searchProperty() default "";
+
+    /**
      * (Optional) Visibilità a secondo del ruolo dell'User collegato
      * Defaults to user.
      */

@@ -16,8 +16,11 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,13 +63,13 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Eventuale barra di bottoni sotto la grid <br>
      */
     protected void creaGridPaginataOppureNormale() {
-        int numRec = service.count();
+//        int numRec = service.count();
 
-        if (usaPagination && numRec > sogliaPagination) {
-            usaGridPaginata = true;
-        } else {
-            usaGridPaginata = false;
-        }// end of if/else cycle
+//        if (usaPagination && service.count() > sogliaPagination) {
+//            isPaginata = true;
+//        } else {
+//            isPaginata = false;
+//        }// end of if/else cycle
 
         creaGrid();
 
@@ -93,12 +96,12 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Costruisce una lista di nomi delle properties della Grid
         gridPropertyNamesList = getGridPropertyNamesList();
 
-        if (usaGridPaginata) {
+        if (isPaginata) {
             creaGridPaginata();
         }// end of if/else cycle
 
         if (grid == null) {
-            usaGridPaginata = false;
+            isPaginata = false;
             if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
                 try { // prova ad eseguire il codice
                     //--Costruisce la Grid SENZA creare automaticamente le colonne
@@ -112,6 +115,8 @@ public abstract class AGridViewList extends ALayoutViewList {
                 grid = new Grid();
             }// end of if/else cycle
         }// end of if cycle
+        // Sets the max number of items to be rendered on the grid for each page
+        grid.setPageSize(sogliaPagination);
         grid.setHeightByRows(true);
 
         //--Apre il dialog di detail
@@ -123,7 +128,7 @@ public abstract class AGridViewList extends ALayoutViewList {
 
         //--Colonne normali aggiunte nel metodo sovrascritto dalla sottoclasse specifica (se PaginatedGrid)
         //--Colonne normali aggiunte in automatico (se Grid normale)
-        if (usaGridPaginata) {
+        if (isPaginata) {
             addColumnsGridPaginata();
         } else {
             addColumnsGrid(gridPropertyNamesList);
@@ -163,9 +168,6 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     protected void creaGridPaginata() {
         if (grid != null) {
-            // Sets the max number of items to be rendered on the grid for each page
-            grid.setPageSize(15);
-
             // Sets how many pages should be visible on the pagination before and/or after the current selected page
             ((PaginatedGrid) grid).setPaginatorSize(1);
         }// end of if cycle
@@ -318,7 +320,8 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Header text
      */
     protected String getGridHeaderText() {
-        int numRecCollezione = items.size();
+//        int numRecCollezione = items.size();
+        int numRecCollezione = service.count();
         String filtro = text.format(items.size());
         String totale = text.format(numRecCollezione);
         String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";
@@ -328,13 +331,13 @@ public abstract class AGridViewList extends ALayoutViewList {
                 testo += "Al momento non ci sono elementi in questa collezione";
                 break;
             case 1:
-                testo += "Collezione con un solo elemento";
+                testo += "Lista con un solo elemento";
                 break;
             default:
-                if (isPagination) {
-                    testo += "Collezione di " + limit + " elementi su " + totale + " totali. ";
+                if (isPaginata && sogliaPagination < numRecCollezione) {
+                    testo += "Lista di " + sogliaPagination + " elementi su " + totale + " totali. ";
                 } else {
-                    testo += "Collezione di " + totale + " elementi";
+                    testo += "Lista di " + totale + " elementi";
                 }// end of if/else cycle
                 break;
         } // end of switch statement
@@ -344,10 +347,24 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     protected void updateItems() {
-        if (isPagination) {
+        List<AEntity> lista = null;
+        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
+
+        if (isPaginata) {
             items = service != null ? service.findAll(offset, limit) : null;
         } else {
-            items = service != null ? service.findAll() : null;
+            if (usaSearch && !usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
+                items = service != null ? service.findAll() : null;
+            } else {
+                if (searchField != null) {
+                    listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
+                    lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
+                }// end of if cycle
+                if (array.isValid(lista)) {
+                    items = lista;
+                }// end of if cycle
+
+            }// end of if/else cycle
         }// end of if/else cycle
     }// end of method
 

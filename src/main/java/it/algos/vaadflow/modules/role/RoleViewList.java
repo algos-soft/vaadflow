@@ -79,7 +79,6 @@ public class RoleViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearchTextField = false;
         super.isEntityDeveloper = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;

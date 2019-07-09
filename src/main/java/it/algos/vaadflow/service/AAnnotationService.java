@@ -406,7 +406,7 @@ public class AAnnotationService extends AbstractService {
      */
     public String getMenuName(final Class<? extends IAView> viewClazz) {
         String menuName = "";
-        AIView annotationView=null;
+        AIView annotationView = null;
         Route annotationRoute = null;
 
         /**
@@ -439,6 +439,26 @@ public class AAnnotationService extends AbstractService {
         menuName = text.isValid(menuName) ? text.primaMaiuscola(menuName) : "Home";
 
         return menuName;
+    }// end of method
+
+
+    /**
+     * Restituisce il nome della property per le ricerche con searchFiueld
+     *
+     * @param viewClazz the view class
+     *
+     * @return the name of the property
+     */
+    public String getSearchPropertyName(final Class<? extends IAView> viewClazz) {
+        String searchProperty = "";
+        AIView annotationView = null;
+
+        annotationView = this.getAIView(viewClazz);
+        if (annotationView != null) {
+            searchProperty = annotationView.searchProperty();
+        }// end of if cycle
+
+        return searchProperty;
     }// end of method
 
 

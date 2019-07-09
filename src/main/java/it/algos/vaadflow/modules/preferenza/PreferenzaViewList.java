@@ -83,8 +83,6 @@ public class PreferenzaViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.fixPreferenze();
-        super.usaSearchTextField = false;
 //        super.usaBottoneEdit = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;

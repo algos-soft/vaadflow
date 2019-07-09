@@ -84,8 +84,7 @@ public class VersioneViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearchTextField = false;
-        super.usaSearchBottoneNew = false;
+        super.usaBottoneNew = false;
         super.isEntityDeveloper = true;
     }// end of method
 

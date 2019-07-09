@@ -57,8 +57,6 @@ public class LogViewList extends AGridViewList {
 
     public static final String IRON_ICON = "history";
 
-    private AComboBox<Livello> comboLivello;
-
 
     /**
      * Costruttore @Autowired <br>
@@ -84,8 +82,8 @@ public class LogViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearchTextField = false;
-        super.usaSearchBottoneNew = false;
+        super.usaSearch = false;
+        super.usaPopupFiltro=true;
         super.isEntityAdmin = true;
         if (login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
@@ -93,32 +91,22 @@ public class LogViewList extends AGridViewList {
     }// end of method
 
 
+
     /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
+     * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void creaTopLayout() {
-        super.creaTopLayout();
-        topPlaceholder.add(creaPopup());
-    }// end of method
+    protected void creaPopupFiltro() {
+        super.creaPopupFiltro();
 
-
-    protected Component creaPopup() {
-        comboLivello = new AComboBox();
-        comboLivello.setWidth("8em");
-        comboLivello.setItems(Livello.values());
-        comboLivello.addValueChangeListener(e -> {
+        filtroComboBox.setItems(Livello.values());
+        filtroComboBox.addValueChangeListener(e -> {
             updateItems();
             updateView();
         });
-
-        return comboLivello;
     }// end of method
+
 
 
     /**
@@ -158,7 +146,7 @@ public class LogViewList extends AGridViewList {
 
 
     public void updateItems() {
-        Livello livello = (Livello) comboLivello.getValue();
+        Livello livello = (Livello) filtroComboBox.getValue();
         items = ((LogService) service).findAllByLivello(livello);
     }// end of method
 

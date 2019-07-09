@@ -294,7 +294,7 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 break;
             case checkbox:
-                field = new Checkbox(caption);
+                field = new ACheckBox(caption);
                 if (binder != null) {
                     binder.forField(field).bind(fieldName);
                 }// end of if cycle

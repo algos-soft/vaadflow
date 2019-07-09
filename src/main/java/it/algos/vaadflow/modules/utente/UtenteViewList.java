@@ -90,7 +90,6 @@ public class UtenteViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearchTextField = false;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
         super.isEntityDeveloper = true;

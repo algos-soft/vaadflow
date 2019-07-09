@@ -18,7 +18,7 @@ import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.fields.ATextField;
+import it.algos.vaadflow.ui.fields.AComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -141,8 +141,6 @@ public abstract class APropertyViewList extends VerticalLayout {
     @Autowired
     protected PreferenzaService pref;
 
-    //--property
-    protected TextField searchField;
 
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
@@ -159,6 +157,16 @@ public abstract class APropertyViewList extends VerticalLayout {
     //--property
     protected ASearchDialog searchDialog;
 
+    //--property
+    protected TextField searchField;
+
+    //--property
+    protected String searchProperty;
+
+    protected  Button deleteAllButton;
+    protected  Button resetButton;
+    protected  Button clearFilterButton;
+    protected  Button searchButton;
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * Il service viene recuperato dal presenter, <br>
@@ -174,8 +182,14 @@ public abstract class APropertyViewList extends VerticalLayout {
     /**
      * Placeholder SOPRA la Grid <br>
      * Contenuto eventuale, presente di default <br>
-     * - con o senza campo edit search, regolato da preferenza o da parametro <br>
-     * - con o senza bottone New, regolato da preferenza o da parametro <br>
+     * - con o senza un bottone per cancellare tutta la collezione
+     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza gruppo di ricerca:
+     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
+     * -    bottone per aprire un DialogSearch con diverse property selezionabili
+     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
+     * -    eventuale Popup di selezione, filtro e ordinamento
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
      * - con eventuali altri bottoni specifici <br>
      */
     protected HorizontalLayout topPlaceholder;
@@ -211,23 +225,28 @@ public abstract class APropertyViewList extends VerticalLayout {
      */
     protected HorizontalLayout bottomPlacehorder;
 
+    /**
+     * Flag di preferenza per usare la ricerca e selezione nella barra dei menu. <br>
+     * Se è true, un altro flag seleziona il textField o il textDialog <br>
+     * Se è true, il bottone usaAllButton è sempre presente <br>
+     * Se è true, un altro flag seleziona la presenza o meno del Popup di filtro <br>
+     * Normalmente true. <br>
+     */
+    protected boolean usaSearch;
 
     /**
-     * Flag di preferenza per usare il campo-testo di ricerca e selezione nella barra dei menu. <br>
-     * Facoltativo ed alternativo a usaSearchTextDialog. Normalmente false. <br>
+     * Flag di preferenza per selezionare la ricerca:
+     * true per aprire un dialogo di ricerca e selezione su diverse properties <br>
+     * false per presentare un textEdit predisposto per la ricerca su un unica property <br>
+     * Normalmente true.
      */
-    protected boolean usaSearchTextField;
+    protected boolean usaSearchDialog;
 
     /**
-     * Flag di preferenza per aprire un dialogo di ricerca e selezione. <br>
-     * Facoltativo ed alternativo a usaSearchTextField. Normalmente true.
+     * Flag di preferenza per usare il popup di selezione, filtro e ordinamento situato nella searchBar.
+     * Normalmente false <br>
      */
-    protected boolean usaSearchTextDialog;
-
-    /**
-     * Flag di preferenza per usare il bottone all situato nella searchBar. Normalmente true <br>
-     */
-    protected boolean usaAllButton;
+    protected boolean usaPopupFiltro;
 
     /**
      * Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true. <br>
@@ -241,14 +260,17 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected int sogliaPagination;
 
     /**
-     * Flag per costruire una Grid normale o una PaginatedGrid. Viene regolato da codice. <br>
+     * Flag per costruire una Grid normale o una PaginatedGrid. <br>
+     * Viene regolato da codice. <br>
      */
-    protected boolean usaGridPaginata;
+    protected boolean isPaginata;
 
     /**
      * Flag di preferenza per usare il bottone new situato nella topLayout. Normalmente true. <br>
      */
-    protected boolean usaSearchBottoneNew;
+    protected boolean usaBottoneNew;
+
+    protected AComboBox filtroComboBox;
 
     protected Button newButton;
 
@@ -279,7 +301,7 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected String testoBottoneEdit;
 
     /**
-     * Flag di preferenza per usare il placeholder di bottoni ggiuntivi sotto la Grid. Normalmente false. <br>
+     * Flag di preferenza per usare il placeholder di bottoni aggiuntivi sotto la Grid. Normalmente false. <br>
      */
     protected boolean usaBottomLayout;
 
@@ -349,7 +371,7 @@ public abstract class APropertyViewList extends VerticalLayout {
 
     protected int offset;
 
-    protected boolean isPagination;
+//    protected boolean isPagination;
 
     protected Collection items;
 

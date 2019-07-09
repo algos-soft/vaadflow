@@ -14,6 +14,7 @@ import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -117,22 +118,66 @@ public abstract class ALayoutViewList extends APrefViewList {
 
 
     /**
-     * Placeholder (eventuale, presente di default) SOPRA la Grid
-     * - con o senza campo edit search, regolato da preferenza o da parametro
-     * - con o senza bottone New, regolato da preferenza o da parametro
-     * - con eventuali altri bottoni specifici
+     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
+     * Normalmente ad uso esclusivo del developer
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
+     */
+    protected void creaAlertLayout() {
+        alertPlacehorder.removeAll();
+//        alertPlacehorder.addClassName("view-toolbar");
+        alertPlacehorder.setMargin(false);
+        alertPlacehorder.setSpacing(false);
+        alertPlacehorder.setPadding(false);
+
+        if (isEntityDeveloper || isEntityAdmin || isEntityEmbedded || isEntityUsaDatiDemo) {
+            usaTopAlert = true;
+        }// end of if cycle
+
+        if (usaTopAlert) {
+
+            if (pref.isBool(USA_SECURITY)) {
+                if (isEntityDeveloper) {
+                    alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
+                }// end of if cycle
+
+                if (isEntityAdmin) {
+                    alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
+                }// end of if cycle
+            }// end of if cycle
+
+            if (isEntityEmbedded) {
+                alertPlacehorder.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
+                alertPlacehorder.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
+            }// end of if cycle
+
+            if (isEntityEmbedded || isEntityUsaDatiDemo) {
+                alertPlacehorder.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
+            }// end of if cycle
+        }// end of if cycle
+
+    }// end of method
+
+
+    /**
+     * Placeholder SOPRA la Grid <br>
+     * Contenuto eventuale, presente di default <br>
+     * - con o senza un bottone per cancellare tutta la collezione
+     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza gruppo di ricerca:
+     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
+     * -    bottone per aprire un DialogSearch con diverse property selezionabili
+     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
+     * - con eventuale Popup di selezione, filtro e ordinamento
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuali altri bottoni specifici <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     protected void creaTopLayout() {
         topPlaceholder.removeAll();
         topPlaceholder.addClassName("view-toolbar");
         String buttonTitle;
-        Button deleteAllButton;
-        Button resetButton;
-        Button clearFilterTextBtn;
-        Button searchButton;
-        Button allButton;
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 
@@ -155,41 +200,52 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(resetButton);
         }// end of if cycle
 
-        if (usaSearchTextField) {
-            searchField = new TextField("", "Search");
-            searchField.setPrefixComponent(new Icon("lumo", "search"));
-            searchField.addClassName("view-toolbar__search-field");
-            searchField.setValueChangeMode(ValueChangeMode.EAGER);
-            searchField.addValueChangeListener(e -> updateView());
+        //--con o senza gruppo di ricerca
+        if (usaSearch) {
+            //--bottone per aprire un DialogSearch con diverse property selezionabili
+            if (usaSearchDialog) {
+                buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
+                searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
+                searchButton.getElement().setAttribute("theme", "secondary");
+                searchButton.addClassName("view-toolbar__button");
+                searchButton.addClickListener(e -> openSearch());
 
-            clearFilterTextBtn = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-            clearFilterTextBtn.addClickListener(e -> searchField.clear());
+                //--bottone piccolo per eliminare i filtri di una ricerca e restituire tutte le entities
+                clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+                clearFilterButton.addClickListener(e -> {
+                    updateItems();
+                    updateView();
+                });
 
-            topPlaceholder.add(searchField, clearFilterTextBtn);
+                topPlaceholder.add(searchButton, clearFilterButton);
+            } else {
+                //--campo EditSearch predisposto su un unica property
+                if (!isPaginata) {
+                    searchField = new TextField("", "Search");
+                    searchField.setPrefixComponent(new Icon("lumo", "search"));
+                    searchField.addClassName("view-toolbar__search-field");
+                    searchField.setValueChangeMode(ValueChangeMode.EAGER);
+                    searchField.addValueChangeListener(e -> {
+                        updateItems();
+                        updateView();
+                    });
+
+                    //--bottone piccolo per pulire il campo testo di ricerca
+                    clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+                    clearFilterButton.addClickListener(e -> searchField.clear());
+
+                    topPlaceholder.add(searchField, clearFilterButton);
+                }// end of if cycle
+            }// end of if/else cycle
+        }// end of if cycle
+
+        if (usaPopupFiltro) {
+            creaPopupFiltro();
+            topPlaceholder.add(filtroComboBox);
         }// end of if cycle
 
 
-        if (usaSearchTextDialog) {
-            buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
-            searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
-            searchButton.getElement().setAttribute("theme", "secondary");
-            searchButton.addClassName("view-toolbar__button");
-            searchButton.addClickListener(e -> openSearch());
-            topPlaceholder.add(searchButton);
-        }// end of if cycle
-
-        //--bottone piccolo per eliminare i filtri di una ricerca e restituire tutte le entities
-        if (usaAllButton) {
-            allButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-            allButton.addClickListener(e -> {
-                updateItems();
-                updateView();
-            });
-            topPlaceholder.add(allButton);
-        }// end of if cycle
-
-
-        if (usaSearchBottoneNew) {
+        if (usaBottoneNew) {
             buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
             newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
@@ -197,46 +253,17 @@ public abstract class ALayoutViewList extends APrefViewList {
             newButton.addClickListener(e -> openNew());
             topPlaceholder.add(newButton);
         }// end of if cycle
-
     }// end of method
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
-     * Normalmente ad uso esclusivo del developer
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
+     * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
-    protected void creaAlertLayout() {
-        alertPlacehorder.removeAll();
-//        alertPlacehorder.addClassName("view-toolbar");
-        alertPlacehorder.setMargin(false);
-        alertPlacehorder.setSpacing(false);
-        alertPlacehorder.setPadding(false);
-
-        if (isEntityDeveloper || isEntityAdmin || isEntityEmbedded || isEntityUsaDatiDemo) {
-            usaTopAlert = true;
-        }// end of if cycle
-
-        if (usaTopAlert) {
-            if (isEntityDeveloper) {
-                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
-            }// end of if cycle
-
-            if (isEntityAdmin) {
-                alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come admin. Gli utenti normali non la vedono."));
-            }// end of if cycle
-
-            if (isEntityEmbedded) {
-                alertPlacehorder.add(new Label("Questa lista non dovrebbe mai essere usata direttamente (serve come test o per le sottoclassi specifiche)"));
-                alertPlacehorder.add(new Label("L'entity è 'embedded' nelle collezioni che la usano (no @Annotation property DbRef)"));
-            }// end of if cycle
-
-            if (isEntityEmbedded || isEntityUsaDatiDemo) {
-                alertPlacehorder.add(new Label("Allo startup del programma, sono stati creati alcuni elementi di prova"));
-            }// end of if cycle
-        }// end of if cycle
-
+    protected void creaPopupFiltro() {
+        filtroComboBox = new AComboBox();
+        filtroComboBox.setWidth("8em");
     }// end of method
 
 }// end of class
