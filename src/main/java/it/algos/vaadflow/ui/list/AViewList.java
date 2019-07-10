@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -173,6 +174,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--aggiunge il footer standard
         this.add(appContext.getBean(AFooter.class));
+
+        this.addSpecificRoutes();
+        this.updateItems();
+        this.updateView();
     }// end of method
 
 
@@ -184,9 +189,9 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        this.addSpecificRoutes();
-        this.updateItems();
-        this.updateView();
+//        this.addSpecificRoutes();
+//        this.updateItems();
+//        this.updateView();
     }// end of method
 
 
@@ -342,16 +347,30 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    protected void openSearch() {
-        searchDialog = appContext.getBean(ASearchDialog.class, service);
-        searchDialog.open("", "", this::updateViewDopoSearch, null);
+    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
+        if (evento != null && evento.getOldValue() != evento.getValue()) {
+            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
+                if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
+                    AEntity entity = (AEntity) evento.getValue();
+                    routeVerso(routeNameFormEdit, entity);
+                } else {
+                    dialog.open((AEntity) evento.getValue(), operation, context);
+                }// end of if/else cycle
+            }// end of if cycle
+        }// end of if cycle
     }// end of method
+
 
 
     protected void openNew() {
         dialog.open(service.newEntity(), EAOperation.addNew, context);
     }// end of method
 
+
+    protected void openSearch() {
+        searchDialog = appContext.getBean(ASearchDialog.class, service);
+        searchDialog.open("", "", this::updateViewDopoSearch, null);
+    }// end of method
 
     public void updateViewDopoSearch() {
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
@@ -401,7 +420,8 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     protected void deleteCollection() {
         service.deleteAll();
-        UI.getCurrent().getPage().reload();
+        updateItems();
+        updateView();
     }// end of method
 
 
@@ -410,6 +430,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     protected void save(AEntity entityBean, EAOperation operation) {
         if (service.save(entityBean, operation) != null) {
+            updateItems();
             updateView();
         }// end of if cycle
     }// end of method
@@ -420,6 +441,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         Notification.show(entityBean + " successfully deleted.", 3000, Notification.Position.BOTTOM_START);
 
         if (usaRefresh) {
+            updateItems();
             updateView();
         }// end of if cycle
     }// end of method

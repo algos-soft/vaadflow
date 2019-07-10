@@ -748,17 +748,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method\
 
 
-    /**
-     * Azione proveniente dal click sul bottone Annulla
-     */
-    public void close() {
-        super.close();
-//        IAView vista = presenter.getView();
-//        if (vista != null) {
-//            vista.updateView();
-//        }// end of if cycle
-        UI.getCurrent().getPage().reload();
-    }// end of method
+//    /**
+//     * Azione proveniente dal click sul bottone Annulla
+//     */
+//    public void close() {
+//        super.close();
+////        IAView vista = presenter.getView();
+////        if (vista != null) {
+////            vista.updateView();
+////        }// end of if cycle
+////        UI.getCurrent().getPage().reload();
+//    }// end of method
 
 
     /**

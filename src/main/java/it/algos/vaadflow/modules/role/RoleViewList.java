@@ -6,9 +6,8 @@ import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -94,7 +93,7 @@ public class RoleViewList extends AGridViewList {
     @Override
     protected void creaAlertLayout() {
         super.creaAlertLayout();
-        alertPlacehorder.add(new Label("Serve per aggiungere altri eventuali 'authority' specifiche dell'applicazione"));
+        alertPlacehorder.add(new Label("Serve per aggiungere altre eventuali 'authority' specifiche dell'applicazione"));
     }// end of method
 
 

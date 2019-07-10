@@ -4,7 +4,6 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
 
 /**
  * Project vaadflow

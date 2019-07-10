@@ -1,5 +1,6 @@
 package it.algos.vaadflow.ui.list;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -195,6 +196,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             resetButton.addClassName("view-toolbar__button");
             resetButton.addClickListener(e -> {
                 service.reset();
+                updateItems();
                 updateView();
             });
             topPlaceholder.add(resetButton);

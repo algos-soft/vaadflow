@@ -282,18 +282,18 @@ public abstract class AGridViewList extends ALayoutViewList {
     }// end of method
 
 
-    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
-        if (evento != null && evento.getOldValue() != evento.getValue()) {
-            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
-                if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
-                    AEntity entity = (AEntity) evento.getValue();
-                    routeVerso(routeNameFormEdit, entity);
-                } else {
-                    dialog.open((AEntity) evento.getValue(), operation, context);
-                }// end of if/else cycle
-            }// end of if cycle
-        }// end of if cycle
-    }// end of method
+//    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
+//        if (evento != null && evento.getOldValue() != evento.getValue()) {
+//            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
+//                if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
+//                    AEntity entity = (AEntity) evento.getValue();
+//                    routeVerso(routeNameFormEdit, entity);
+//                } else {
+//                    dialog.open((AEntity) evento.getValue(), operation, context);
+//                }// end of if/else cycle
+//            }// end of if cycle
+//        }// end of if cycle
+//    }// end of method
 
 
     protected void sincroBottoniMenu(boolean enabled) {
@@ -353,17 +353,20 @@ public abstract class AGridViewList extends ALayoutViewList {
         if (isPaginata) {
             items = service != null ? service.findAll(offset, limit) : null;
         } else {
-            if (usaSearch && !usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
-                items = service != null ? service.findAll() : null;
+            if (usaSearch) {
+                if (!usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
+                    items = service != null ? service.findAll() : null;
+                } else {
+                    if (searchField != null) {
+                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
+                        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
+                    }// end of if cycle
+                    if (array.isValid(lista)) {
+                        items = lista;
+                    }// end of if cycle
+                }// end of if/else cycle
             } else {
-                if (searchField != null) {
-                    listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
-                    lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
-                }// end of if cycle
-                if (array.isValid(lista)) {
-                    items = lista;
-                }// end of if cycle
-
+                items = service != null ? service.findAll() : null;
             }// end of if/else cycle
         }// end of if/else cycle
     }// end of method
