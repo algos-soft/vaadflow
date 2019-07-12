@@ -110,7 +110,7 @@ public class AVaadinService {
             HttpSession httpSession = attr.getRequest().getSession(true);
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
 
-            if (pref.isBool(USA_SECURITY) && securityContext != null) {
+            if (USA_SECURITY && securityContext != null) {
                 try { // prova ad eseguire il codice
                     springUser = (User) securityContext.getAuthentication().getPrincipal();
                     uniqueUserName = springUser.getUsername();

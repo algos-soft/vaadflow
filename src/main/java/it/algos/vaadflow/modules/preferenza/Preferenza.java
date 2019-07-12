@@ -89,7 +89,7 @@ public class Preferenza extends ACEntity {
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 9)
+    @AIColumn(widthEM = 12)
     public String code;
 
     /**
@@ -99,7 +99,7 @@ public class Preferenza extends ACEntity {
     @Size(min = 2, max = 50)
     @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(flexGrow = true)
+    @AIColumn(flexGrow = true, sortable = false)
     public String descrizione;
 
 

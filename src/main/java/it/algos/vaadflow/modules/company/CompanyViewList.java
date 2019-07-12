@@ -41,7 +41,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM)
 @Qualifier(TAG_COM)
-@AIView(roleTypeVisibility = EARoleType.admin)
+@AIView(menuName = "companies", searchProperty = "code", roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class CompanyViewList extends AGridViewList {
@@ -81,13 +81,14 @@ public class CompanyViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.isEntityUsaDatiDemo = true;
-
         if (context.getLogin().isDeveloper()) {
             super.usaBottoneDeleteAll = true;
             super.usaBottoneReset = true;
+            super.usaSearch = true;
+            super.usaSearchDialog = false;
             super.isEntityDeveloper = true;
             super.usaBottoneNew = true;
+            super.isEntityUsaDatiDemo = true;
         } else {
             super.usaBottoneDeleteAll = false;
             super.usaBottoneReset = false;

@@ -13,10 +13,9 @@ import it.algos.vaadflow.enumeration.EAMenu;
  */
 public enum EAPreferenza {
 
-    usaDebug(FlowCost.USA_DEBUG, "Flag generale di debug (ce ne possono essere di specifici, validi solo se questo è vero)", EAPrefType.bool, true),
+    usaDebug(FlowCost.USA_DEBUG, "Flag generale di debug (ce ne possono essere di specifici, validi solo se questo è vero)", EAPrefType.bool, false),
     usaLogDebug(FlowCost.USA_LOG_DEBUG, "Uso del log di registrazione per il livello debug. Di default false.", EAPrefType.bool, false),
     usaCompany(FlowCost.USA_COMPANY, "L'applicazione è multiCompany", EAPrefType.bool, false),
-    usaSecurity(FlowCost.USA_SECURITY, "L'applicazione usa la security", EAPrefType.bool, true),
     usaCheckBox(FlowCost.USA_CHECK_BOX, "Uso del checkbox in lista, per i valori booleani", EAPrefType.bool, true),
     showCompany(FlowCost.SHOW_COMPANY, show(FlowCost.TAG_COM), EAPrefType.bool, true),
     showPreferenza(FlowCost.SHOW_PREFERENZA, show(FlowCost.TAG_PRE), EAPrefType.bool, true),
@@ -37,13 +36,13 @@ public enum EAPreferenza {
     usaLogMail(FlowCost.USA_LOG_MAIL, "Uso della mail spedita da un log. Di default false", EAPrefType.bool, false),
     mailFrom(FlowCost.MAIL_FROM, "Email di default da cui partono i log", EAPrefType.string, "info@algos.it"),
     mailTo(FlowCost.MAIL_TO, "Email di default a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),
-    maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Elementi da visualizzare in ogni pagina della Grid", EAPrefType.integer, 20),
+    maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Numero di elementi oltre il quale scatta la pagination automatica della Grid (se attiva)", EAPrefType.integer, 15),
     mongoPageLimit(FlowCost.MONGO_PAGE_LIMIT, "Limite di elementi nelle query mongoDB", EAPrefType.integer, 50000),
     usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.string, EAMenu.flowing.toString()),
     textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.string, FlowCost.BOT_SEARCH),
     textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.string, FlowCost.BOT_CREATE),
     showAccount(FlowCost.SHOW_ACCOUNT_ON_MENU, "Mostra l'account nella barra di menu", EAPrefType.bool, true),
-    sogliaPagination(FlowCost.SOGLIA_PAGINATION, "Numero di elementi oltre il quale scatta la pagination automatica (se attiva)", EAPrefType.integer, 15),
+    usaSearchCaseSensitive(FlowCost.USA_SEARCH_CASE_SENSITIVE, "Search delle query sensibile alle maiuscole", EAPrefType.bool, false),
     ;
 
 

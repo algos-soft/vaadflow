@@ -106,7 +106,9 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per un refresh dopo aggiunta/modifica/cancellazione di una entity. Normalmente true.
         usaRefresh = true;
 
-        //--Flag di preferenza per selezionare il numero di righe visibili della Grid. Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
+        //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination della Grid.
+        //--Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
+        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 15
         limit = pref.getInt(FlowCost.MAX_RIGHE_GRID);
 
         //--Flag di preferenza per usare una route view come detail della singola istanza. Normalmente true.
@@ -116,12 +118,8 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
         usaPagination = true;
 
-        //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination.
-        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 20
-        sogliaPagination = pref.getInt(FlowCost.SOGLIA_PAGINATION, 20);
-
         //--controllo della paginazione
-        isPaginata = usaPagination && service.count() > sogliaPagination;
+        isPaginata = usaPagination && service.count() > limit;
 
         //--Flag per la larghezza della Grid. Default a 100. Espressa come numero per comodità; poi viene convertita in "em".
         gridWith = 100;

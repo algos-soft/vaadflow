@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+import static it.algos.vaadflow.application.FlowCost.USA_SECURITY;
 import static it.algos.vaadflow.ui.MainLayout.KEY_MAPPA_CRONO;
 
 /**
@@ -88,6 +89,8 @@ public abstract class AMenu extends Div implements IAMenu {
 
     protected ArrayList<Class<? extends IAView>> userClazzList = null;
 
+    protected ArrayList<Class<? extends IAView>> noSecurityClazzList = null;
+
 
     /**
      * Costruttore @Autowired <br>
@@ -138,21 +141,26 @@ public abstract class AMenu extends Div implements IAMenu {
         //--crea brand (sempre)
         creaBrand();
 
-        //--crea menu dello sviluppatore (se loggato)
-        if (context.isDev()) {
-            creaMenuDeveloper();
-        }// end of if cycle
+        if (USA_SECURITY) {
+            //--crea menu dello sviluppatore (se loggato)
+            if (context.isDev()) {
+                creaMenuDeveloper();
+            }// end of if cycle
 
-        //--crea menu dell'admin (se loggato)
-        if (context.isAdmin()) {
-            creaMenuAdmin();
-        }// end of if cycle
+            //--crea menu dell'admin (se loggato)
+            if (context.isAdmin()) {
+                creaMenuAdmin();
+            }// end of if cycle
 
-        //--crea menu utente normale (sempre)
-        creaMenuUser();
+            //--crea menu utente normale (sempre)
+            creaMenuUser();
 
-        //--crea menu logout (sempre)
-        creaMenuLogout();
+            //--crea menu logout (sempre)
+            creaMenuLogout();
+        } else {
+            //--crea menu indifferenziato
+            creaMenuNoSecurity();
+        }// end of if/else cycle
 
         //--regolazioni finali (eventuali)
         fixFinali();
@@ -177,6 +185,10 @@ public abstract class AMenu extends Div implements IAMenu {
 
         if (mappaClassi.get(EARole.user.toString()) != null) {
             userClazzList = mappaClassi.get(EARole.user.toString());
+        }// end of if cycle
+
+        if (mappaClassi.get(EARole.noSecurity.toString()) != null) {
+            noSecurityClazzList = mappaClassi.get(EARole.noSecurity.toString());
         }// end of if cycle
     }// end of method
 
@@ -230,6 +242,16 @@ public abstract class AMenu extends Div implements IAMenu {
     protected void creaMenuLogout() {
     }// end of method
 
+    /**
+     * Item di menu sempre presenti
+     */
+    protected void creaMenuNoSecurity() {
+        if (array.isValid(noSecurityClazzList)) {
+            for (Class viewClazz : noSecurityClazzList) {
+                addItem(viewClazz);
+            }// end of for cycle
+        }// end of if cycle
+    }// end of method
 
     /**
      * Regolazioni finali
@@ -262,39 +284,44 @@ public abstract class AMenu extends Div implements IAMenu {
         ArrayList<Class<? extends IAView>> cronoDevClazzList = new ArrayList<>();
         ArrayList<Class<? extends IAView>> adminClazzList = new ArrayList<>();
         ArrayList<Class<? extends IAView>> utenteClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> noSecurityClazzList = new ArrayList<>();
         EARoleType type = null;
         List<String> cronoList = Arrays.asList(new String[]{"Secolo", "Anno", "Mese", "Giorno"});
         String menuName;
 
         for (Class viewClazz : listaClassiMenu) {
-            type = annotation.getViewRoleType(viewClazz);
-
-            switch (type) {
-                case developer:
-                    menuName = annotation.getMenuName(viewClazz);
-                    if (cronoList.contains(menuName)) {
-                        cronoDevClazzList.add(viewClazz);
-                    } else {
-                        devClazzList.add(viewClazz);
-                    }// end of if/else cycle
-                    break;
-                case admin:
-                    adminClazzList.add(viewClazz);
-                    break;
-                case user:
-                    utenteClazzList.add(viewClazz);
-                    break;
-                default:
-                    utenteClazzList.add(viewClazz);
-                    log.warn("Switch - caso non definito");
-                    break;
-            } // end of switch statement
+            if (USA_SECURITY) {
+                type = annotation.getViewRoleType(viewClazz);
+                switch (type) {
+                    case developer:
+                        menuName = annotation.getMenuName(viewClazz);
+                        if (cronoList.contains(menuName)) {
+                            cronoDevClazzList.add(viewClazz);
+                        } else {
+                            devClazzList.add(viewClazz);
+                        }// end of if/else cycle
+                        break;
+                    case admin:
+                        adminClazzList.add(viewClazz);
+                        break;
+                    case user:
+                        utenteClazzList.add(viewClazz);
+                        break;
+                    default:
+                        utenteClazzList.add(viewClazz);
+                        log.warn("Switch - caso non definito");
+                        break;
+                } // end of switch statement
+            } else {
+                noSecurityClazzList.add(viewClazz);
+            }// end of if/else cycle
         }// end of for cycle
 
         mappa.put(EARole.developer.toString(), devClazzList);
         mappa.put(EARole.admin.toString(), adminClazzList);
         mappa.put(KEY_MAPPA_CRONO, cronoDevClazzList);
         mappa.put(EARole.user.toString(), utenteClazzList);
+        mappa.put(EARole.noSecurity.toString(), noSecurityClazzList);
 
         return mappa;
     }// end of method

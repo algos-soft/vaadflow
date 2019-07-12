@@ -82,7 +82,7 @@ public class Company extends AEntity {
     @Size(min = 3)
     @Field("code")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 5)
+    @AIColumn(widthEM = 7)
     public String code;
 
     /**
@@ -92,7 +92,7 @@ public class Company extends AEntity {
     @Size(min = 2, max = 50)
     @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(flexGrow = true)
+    @AIColumn(widthEM = 20, flexGrow = true)
     public String descrizione;
 
     /**
@@ -101,7 +101,7 @@ public class Company extends AEntity {
      */
     @Field("contatto")
     @AIField(type = EAFieldType.link, clazz = PersonPresenter.class, help = "Riferimento")
-    @AIColumn(name = "Riferimento", widthEM = 8)
+    @AIColumn(name = "riferimento", widthEM = 10, sortable = false)
     public Person contatto;
 
 
@@ -110,7 +110,7 @@ public class Company extends AEntity {
      */
     @Field("tel")
     @AIField(type = EAFieldType.text)
-    @AIColumn(widthEM = 7)
+    @AIColumn(widthEM = 9, sortable = false)
     public String telefono;
 
 
@@ -119,7 +119,7 @@ public class Company extends AEntity {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(name = "Mail", widthEM = 14)
+    @AIColumn(widthEM = 20, sortable = false)
     public String mail;
 
 

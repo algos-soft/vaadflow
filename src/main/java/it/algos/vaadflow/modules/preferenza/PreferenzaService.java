@@ -269,18 +269,19 @@ public class PreferenzaService extends AService {
      */
     @Override
     public int reset() {
-        int numRec = 0;
+        int numRec = super.reset();
+//        int numRec = 0;
         int numPref = count();
 
         for (EAPreferenza eaPref : EAPreferenza.values()) {
             numRec = creaIfNotExist(eaPref) ? numRec + 1 : numRec;
         }// end of for cycle
 
-        if (numRec == 0) {
-            log.info("Algos - Data. Le preferenze sono già presenti (" + numPref + ") e non ne sono state aggiunte di nuove");
-        } else {
-            log.warn("Algos - Data. Sono state aggiunte: " + numRec + " nuove preferenze");
-        }// end of if/else cycle
+//        if (numRec == 0) {
+//            log.info("Algos - Data. Le preferenze sono già presenti (" + numPref + ") e non ne sono state aggiunte di nuove");
+//        } else {
+//            log.warn("Algos - Data. Sono state aggiunte: " + numRec + " nuove preferenze");
+//        }// end of if/else cycle
 
         return numRec;
     }// end of method

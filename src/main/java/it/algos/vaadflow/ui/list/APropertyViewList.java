@@ -253,11 +253,11 @@ public abstract class APropertyViewList extends VerticalLayout {
      */
     protected boolean usaPagination;
 
-    /**
-     * Flag di preferenza per la soglia di elementi che fanno scattare la pagination. <br>
-     * Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50 <br>
-     */
-    protected int sogliaPagination;
+//    /**
+//     * Flag di preferenza per la soglia di elementi che fanno scattare la pagination. <br>
+//     * Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 50 <br>
+//     */
+//    protected int sogliaPagination;
 
     /**
      * Flag per costruire una Grid normale o una PaginatedGrid. <br>

@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @UIScope
 @Route(value = TAG_ADD)
 @Qualifier(TAG_ADD)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "indirizzi", searchProperty = "localita", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class AddressViewList extends AGridViewList {
@@ -82,8 +82,11 @@ public class AddressViewList extends AGridViewList {
 
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
-        super.isEntityEmbedded = true;
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
         super.isEntityDeveloper = true;
+        super.isEntityEmbedded = true;
+        super.isEntityUsaDatiDemo = true;
     }// end of method
 
 }// end of class

@@ -89,7 +89,7 @@ public class Versione extends AEntity {
     @Size(min = 2, max = 50)
     @Field("desc")
     @AIField(type = EAFieldType.textarea, firstCapital = true, widthEM = 24)
-    @AIColumn(flexGrow = true)
+    @AIColumn(widthEM = 40, sortable = false)
     public String descrizione;
 
     /**
@@ -99,8 +99,8 @@ public class Versione extends AEntity {
     @NotNull(message = "Il tempo è obbligatorio")
     @Indexed(direction = IndexDirection.DESCENDING)
     @Field("time")
-    @AIField(type = EAFieldType.localdate, widthEM = 24)
-    @AIColumn(widthEM = 7)
+    @AIField(type = EAFieldType.localdate, widthEM = 20)
+    @AIColumn(widthEM = 10)
     public LocalDate timestamp;
 
 

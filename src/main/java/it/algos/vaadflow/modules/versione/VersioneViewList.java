@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  */
 @Route(value = TAG_VER)
 @Qualifier(TAG_VER)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "versioni", searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class VersioneViewList extends AGridViewList {
@@ -84,8 +84,11 @@ public class VersioneViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaBottoneNew = false;
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
         super.isEntityDeveloper = true;
+        super.usaBottoneDeleteAll = true;
+        super.usaBottoneNew = false;
     }// end of method
 
 
@@ -122,6 +125,7 @@ public class VersioneViewList extends AGridViewList {
      * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
+        fixColumn(Versione::getId,"id");
         fixColumn(Versione::getTitolo,"titolo");
         fixColumn(Versione::getDescrizione,"descrizione");
         fixColumn(Versione::getTimestamp,"timestamp");

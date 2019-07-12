@@ -1,15 +1,10 @@
 package it.algos.vaadflow.modules.logtype;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
@@ -75,8 +69,8 @@ public class Logtype extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-    
-	/**
+
+    /**
      * ordine di presentazione (obbligatorio, unico) <br>
      * il più importante per primo <br>
      */
@@ -86,8 +80,8 @@ public class Logtype extends AEntity {
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", widthEM = 3)
     public int ordine;
-    
-	/**
+
+    /**
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull
@@ -95,9 +89,9 @@ public class Logtype extends AEntity {
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(flexGrow = true)
+    @AIColumn(name = "code", flexGrow = true)
     public String code;
-    
+
 
     /**
      * @return a string representation of the object.

@@ -74,7 +74,7 @@ public class Address extends AEntity {
     @Size(min = 2, max = 50)
     @Field("ind")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(flexGrow = true)
+    @AIColumn(widthEM = 20, sortable = false)
     public String indirizzo;
 
     /**

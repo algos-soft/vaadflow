@@ -8,9 +8,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @UIScope
 @Route(value = TAG_UTE)
 @Qualifier(TAG_UTE)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "utenti", searchProperty = "username", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class UtenteViewList extends AGridViewList {
@@ -90,9 +89,11 @@ public class UtenteViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
+        super.isEntityDeveloper = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
-        super.isEntityDeveloper = true;
         super.isEntityUsaDatiDemo = true;
     }// end of method
 

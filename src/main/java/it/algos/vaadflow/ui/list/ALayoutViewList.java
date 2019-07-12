@@ -137,7 +137,7 @@ public abstract class ALayoutViewList extends APrefViewList {
 
         if (usaTopAlert) {
 
-            if (pref.isBool(USA_SECURITY)) {
+            if (USA_SECURITY) {
                 if (isEntityDeveloper) {
                     alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
                 }// end of if cycle
@@ -222,7 +222,6 @@ public abstract class ALayoutViewList extends APrefViewList {
                 topPlaceholder.add(searchButton, clearFilterButton);
             } else {
                 //--campo EditSearch predisposto su un unica property
-                if (!isPaginata) {
                     searchField = new TextField("", "Search");
                     searchField.setPrefixComponent(new Icon("lumo", "search"));
                     searchField.addClassName("view-toolbar__search-field");
@@ -237,7 +236,6 @@ public abstract class ALayoutViewList extends APrefViewList {
                     clearFilterButton.addClickListener(e -> searchField.clear());
 
                     topPlaceholder.add(searchField, clearFilterButton);
-                }// end of if cycle
             }// end of if/else cycle
         }// end of if cycle
 

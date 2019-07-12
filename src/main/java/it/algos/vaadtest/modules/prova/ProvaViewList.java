@@ -60,7 +60,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Route(value = TAG_PRO)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIView(searchProperty = "code", menuName = "prove", roleTypeVisibility = EARoleType.user)
+@AIView(menuName = "prove", searchProperty = "code", roleTypeVisibility = EARoleType.user)
 @AIScript(sovrascrivibile = true)
 public class ProvaViewList extends AGridViewList {
 

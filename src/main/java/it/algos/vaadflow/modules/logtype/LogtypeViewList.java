@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @UIScope
 @Route(value = TAG_TYP)
 @Qualifier(TAG_TYP)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "logTypes", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogtypeViewList extends AGridViewList {
@@ -85,6 +85,9 @@ public class LogtypeViewList extends AGridViewList {
         super.isEntityDeveloper = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
+        super.isEntityUsaDatiDemo = true;
     }// end of method
 
 

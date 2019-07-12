@@ -8,11 +8,9 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @UIScope
 @Route(value = TAG_PRE)
 @Qualifier(TAG_PRE)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "preferenze", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class PreferenzaViewList extends AGridViewList {
@@ -57,10 +55,11 @@ public class PreferenzaViewList extends AGridViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
     public static final String IRON_ICON = "menu";
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -74,6 +73,7 @@ public class PreferenzaViewList extends AGridViewList {
         ((PreferenzaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
      * Può essere sovrascritto, per aggiungere informazioni
@@ -83,11 +83,17 @@ public class PreferenzaViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-//        super.usaBottoneEdit = true;
-        super.usaBottoneDeleteAll = true;
-        super.usaBottoneReset = true;
+        if (login.isDeveloper()) {
+            super.usaBottoneDeleteAll = true;
+            super.usaBottoneReset = true;
+        }// end of if cycle
+
+        super.usaSearch = true;
+        super.usaSearchDialog = false;
         super.isEntityDeveloper = true;
+        super.usaPagination = true;
     }// end of method
+
 
     /**
      * Crea la GridPaginata <br>
@@ -107,10 +113,10 @@ public class PreferenzaViewList extends AGridViewList {
      * Sovrascritto (obbligatorio) <br>
      */
     protected void addColumnsGridPaginata() {
-        fixColumn(Preferenza::getOrdine,"ordine");
-        fixColumn(Preferenza::getCode,"code");
-        fixColumn(Preferenza::getDescrizione,"descrizione");
-        fixColumn(Preferenza::getType,"type");
+        fixColumn(Preferenza::getOrdine, "ordine");
+        fixColumn(Preferenza::getCode, "code");
+        fixColumn(Preferenza::getDescrizione, "descrizione");
+        fixColumn(Preferenza::getType, "type");
     }// end of method
 
 
@@ -118,7 +124,7 @@ public class PreferenzaViewList extends AGridViewList {
      * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
      * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
      */
-    protected void fixColumn(ValueProvider<Preferenza, ?> valueProvider , String propertyName) {
+    protected void fixColumn(ValueProvider<Preferenza, ?> valueProvider, String propertyName) {
         Grid.Column singleColumn;
         singleColumn = ((PaginatedGrid<Preferenza>) grid).addColumn(valueProvider);
         columnService.fixColumn(singleColumn, Preferenza.class, propertyName);

@@ -139,7 +139,7 @@ public class Utente extends ACEntity implements UserDetails {
     @Field("ena")
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(type = EAFieldType.checkbox)
-    @AIColumn(name = "ena", widthEM = 4)
+    @AIColumn(name = "OK", widthEM = 3,sortable = false)
     public boolean enabled;
 
 
@@ -160,7 +160,7 @@ public class Utente extends ACEntity implements UserDetails {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(name = "eMail", flexGrow = true)
+    @AIColumn(name = "eMail", flexGrow = true, sortable = false)
     public String mail;
 
 

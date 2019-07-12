@@ -709,7 +709,7 @@ public class AAnnotationService extends AbstractService {
         }// end of if cycle
 
         if (text.isEmpty(name)) {
-            name = this.getFormFieldNameCapital(reflectionJavaField);
+            name = this.getFormFieldName(reflectionJavaField);
         }// end of if cycle
 
         return name;
@@ -798,7 +798,7 @@ public class AAnnotationService extends AbstractService {
      * @return the name (columnService) of the field
      */
     public String getColumnWithEM(Class<? extends AEntity> entityClazz, String fieldName) {
-        String widthTxt = "";
+        String widthTxt = "5em";
         int widthInt = 0;
         AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
 
@@ -823,7 +823,7 @@ public class AAnnotationService extends AbstractService {
      * @return status of field
      */
     public boolean isFlexGrow(Class<? extends AEntity> entityClazz, String fieldName) {
-        boolean status = true;
+        boolean status = false;
         Field field = reflection.getField(entityClazz, fieldName);
 
         if (field != null) {

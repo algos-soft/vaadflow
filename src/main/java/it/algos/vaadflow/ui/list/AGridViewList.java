@@ -23,6 +23,8 @@ import org.vaadin.klaudeta.PaginatedGrid;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.USA_SEARCH_CASE_SENSITIVE;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -116,7 +118,7 @@ public abstract class AGridViewList extends ALayoutViewList {
             }// end of if/else cycle
         }// end of if cycle
         // Sets the max number of items to be rendered on the grid for each page
-        grid.setPageSize(sogliaPagination);
+        grid.setPageSize(limit);
         grid.setHeightByRows(true);
 
         //--Apre il dialog di detail
@@ -334,8 +336,8 @@ public abstract class AGridViewList extends ALayoutViewList {
                 testo += "Lista con un solo elemento";
                 break;
             default:
-                if (isPaginata && sogliaPagination < numRecCollezione) {
-                    testo += "Lista di " + sogliaPagination + " elementi su " + totale + " totali. ";
+                if (isPaginata && limit < numRecCollezione) {
+                    testo += "Lista di " + limit + " elementi su " + totale + " totali. ";
                 } else {
                     testo += "Lista di " + totale + " elementi";
                 }// end of if/else cycle
@@ -350,17 +352,21 @@ public abstract class AGridViewList extends ALayoutViewList {
         List<AEntity> lista = null;
         ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
 
-        if (isPaginata) {
-            items = service != null ? service.findAll(offset, limit) : null;
-        } else {
             if (usaSearch) {
                 if (!usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
                     items = service != null ? service.findAll() : null;
                 } else {
                     if (searchField != null) {
-                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
+                        if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
+                            listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
+                        } else {
+                            listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i"));
+                        }// end of if/else cycle
                         lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
-                    }// end of if cycle
+                    } else {
+                        items = service != null ? service.findAll() : null;
+                    }// end of if/else cycle
+
                     if (array.isValid(lista)) {
                         items = lista;
                     }// end of if cycle
@@ -368,7 +374,6 @@ public abstract class AGridViewList extends ALayoutViewList {
             } else {
                 items = service != null ? service.findAll() : null;
             }// end of if/else cycle
-        }// end of if/else cycle
     }// end of method
 
 

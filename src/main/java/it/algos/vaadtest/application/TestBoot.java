@@ -110,6 +110,7 @@ public class TestBoot extends ABoot {
      * Regola alcune informazioni dell'applicazione
      */
     protected void regolaInfo() {
+        USA_SECURITY = false;
         PROJECT_NAME = "test";
         PROJECT_VERSION = "1.0";
         PROJECT_DATE = LocalDate.of(2019, 1, 9);

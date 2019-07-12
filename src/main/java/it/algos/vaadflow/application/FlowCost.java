@@ -14,6 +14,7 @@ public class FlowCost {
 
     public final static String DEVELOPER_COMPANY = "Algos® ";
 
+
     public final static String TAG_LOG = "log";
 
     public final static String TAG_LOGIN = "alogin";
@@ -33,8 +34,6 @@ public class FlowCost {
     public final static String TAG_GIO = "giorno";
 
     public static final Locale APP_LOCALE = Locale.US;
-
-    public final static boolean DEBUG = false;
 
     public static final String VUOTA = "";
 
@@ -221,8 +220,6 @@ public class FlowCost {
 
     public final static String USA_LOG_DEBUG = "usaLogDebug";
 
-    public final static String USA_SECURITY = "usaSecurity";
-
     public final static String USA_CHECK_BOX = "usaCheckbox";
 
     public final static String USA_COMPANY = "usaCompany";
@@ -238,6 +235,8 @@ public class FlowCost {
     public final static String MONGO_PAGE_LIMIT = "mongoPageLimit";
 
     public final static String USA_MENU = "usaMenu";
+
+    public final static String USA_SEARCH_CASE_SENSITIVE = "usaSearchCaseSensitive";
 
     // moduli visibili
     public final static String SHOW_COMPANY = "showCompany";
@@ -271,8 +270,6 @@ public class FlowCost {
     public final static String SHOW_GIORNO = "showGiorno";
 
     public final static String SHOW_ACCOUNT_ON_MENU = "showAccount";
-
-    public final static String SOGLIA_PAGINATION = "sogliaPagination";
 
     public final static String LOAD_UTENTI = "loadUtenti";
 
@@ -327,6 +324,8 @@ public class FlowCost {
     private final static String[] companyMatrice = {COMPANY_CODE, COMPANY_UNICO};
 
     public final static List<String> COMPANY_OPTIONAL = Arrays.asList(companyMatrice);
+
+    public static boolean USA_SECURITY = true;
 
     public static List<Class> MENU_CLAZZ_LIST = new ArrayList<>();
 
