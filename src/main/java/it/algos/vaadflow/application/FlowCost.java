@@ -238,6 +238,8 @@ public class FlowCost {
 
     public final static String USA_SEARCH_CASE_SENSITIVE = "usaSearchCaseSensitive";
 
+    public final static String USA_BUTTON_SHORTCUT = "usaButtonShortcut";
+
     // moduli visibili
     public final static String SHOW_COMPANY = "showCompany";
 

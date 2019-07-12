@@ -1,5 +1,7 @@
 package it.algos.vaadflow.ui.dialog;
 
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;

@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui.list;
 
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -222,20 +223,20 @@ public abstract class ALayoutViewList extends APrefViewList {
                 topPlaceholder.add(searchButton, clearFilterButton);
             } else {
                 //--campo EditSearch predisposto su un unica property
-                    searchField = new TextField("", "Search");
-                    searchField.setPrefixComponent(new Icon("lumo", "search"));
-                    searchField.addClassName("view-toolbar__search-field");
-                    searchField.setValueChangeMode(ValueChangeMode.EAGER);
-                    searchField.addValueChangeListener(e -> {
-                        updateItems();
-                        updateView();
-                    });
+                searchField = new TextField("", "Search");
+                searchField.setPrefixComponent(new Icon("lumo", "search"));
+                searchField.addClassName("view-toolbar__search-field");
+                searchField.setValueChangeMode(ValueChangeMode.EAGER);
+                searchField.addValueChangeListener(e -> {
+                    updateItems();
+                    updateView();
+                });
 
-                    //--bottone piccolo per pulire il campo testo di ricerca
-                    clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-                    clearFilterButton.addClickListener(e -> searchField.clear());
+                //--bottone piccolo per pulire il campo testo di ricerca
+                clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+                clearFilterButton.addClickListener(e -> searchField.clear());
 
-                    topPlaceholder.add(searchField, clearFilterButton);
+                topPlaceholder.add(searchField, clearFilterButton);
             }// end of if/else cycle
         }// end of if cycle
 
@@ -251,6 +252,9 @@ public abstract class ALayoutViewList extends APrefViewList {
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
             newButton.addClickListener(e -> openNew());
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                newButton.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
+            }// end of if cycle
             topPlaceholder.add(newButton);
         }// end of if cycle
     }// end of method

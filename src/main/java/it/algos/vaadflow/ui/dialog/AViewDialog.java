@@ -390,13 +390,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-            cancelButton.addFocusShortcut(Key.KEY_W, KeyModifier.ALT);
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                cancelButton.addClickShortcut(Key.ARROW_LEFT);
+            }// end of if cycle
             bottomLayout.add(cancelButton);
         }// end of if cycle
 
         if (usaSaveButton) {
             saveButton.getElement().setAttribute("theme", "primary");
             saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                saveButton.addClickShortcut(Key.ENTER);
+            }// end of if cycle
             bottomLayout.add(saveButton);
         }// end of if cycle
 
@@ -404,6 +409,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             deleteButton.addClickListener(e -> deleteClicked());
             deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteButton.getElement().setAttribute("theme", "error");
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.ALT);
+            }// end of if cycle
             bottomLayout.add(deleteButton);
         }// end of if cycle
 
