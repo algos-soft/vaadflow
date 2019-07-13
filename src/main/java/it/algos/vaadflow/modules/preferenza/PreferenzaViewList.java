@@ -91,6 +91,7 @@ public class PreferenzaViewList extends AGridViewList {
         super.usaSearch = true;
         super.usaSearchDialog = false;
         super.isEntityDeveloper = true;
+        super.usaBottoneNew = false;
         super.usaPagination = true;
     }// end of method
 

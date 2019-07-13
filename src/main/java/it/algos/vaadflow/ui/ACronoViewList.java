@@ -38,10 +38,12 @@ public abstract class ACronoViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaBottoneNew = false;
+        super.usaSearch = false;
+        super.usaPopupFiltro = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
         super.isEntityDeveloper = true;
+        super.usaBottoneNew = false;
     }// end of method
 
 
@@ -54,7 +56,9 @@ public abstract class ACronoViewList extends AGridViewList {
     @Override
     protected void creaAlertLayout() {
         super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Lista visibile solo ai developer."));
         alertPlacehorder.add(new Label("Serve per costruire liste cronologiche"));
+        alertPlacehorder.add(new Label("La lista viene creata in automatico allo startup del programma. Non si possono cancellare ne aggiungere elementi."));
     }// end of method
 
 }// end of class

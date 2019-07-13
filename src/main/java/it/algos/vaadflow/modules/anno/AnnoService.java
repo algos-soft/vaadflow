@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
@@ -206,8 +207,8 @@ public class AnnoService extends AService {
      *
      * @return all ordered entities
      */
-    public ArrayList<Anno> findAll() {
-        return (ArrayList) repository.findAllByOrderByOrdineDesc();
+    public List<Anno> findAll() {
+        return (List) repository.findAllByOrderByOrdineDesc();
     }// end of method
 
 
@@ -229,6 +230,18 @@ public class AnnoService extends AService {
     public List<? extends AEntity> findAll(int offset, int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "ordine");
         return findAll(offset, size, sort);
+    }// end of method
+
+
+    public List<Anno> findAllBySecolo(Secolo secolo) {
+        Query query = new Query();
+        String secoloField = "secolo";
+
+        if (secolo != null) {
+            query.addCriteria(Criteria.where(secoloField).is(secolo));
+        }// end of if cycle
+
+        return mongo.mongoOp.find(query, Anno.class);
     }// end of method
 
 

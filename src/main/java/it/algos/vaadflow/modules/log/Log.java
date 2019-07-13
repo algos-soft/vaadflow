@@ -82,18 +82,8 @@ public class Log extends ACEntity {
     @Enumerated(EnumType.ORDINAL)
     @Field("liv")
     @AIField(type = EAFieldType.enumeration, clazz = Livello.class, required = true, widthEM = 4)
-    @AIColumn(widthEM = 6)
+    @AIColumn(widthEM = 6, sortable = false)
     public Livello livello;
-
-    /**
-     * raggruppamento logico dei log per type di eventi (obbligatorio)
-     */
-    @NotEmpty(message = "La tipologia del log è obbligatoria")
-    @Indexed()
-    @Field("type")
-    @AIField(type = EAFieldType.combo, clazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
-    @AIColumn(widthEM = 7)
-    private Logtype type;
 
     /**
      * descrizione (obbligatoria, non unica) <br>
@@ -115,6 +105,15 @@ public class Log extends ACEntity {
     @AIField(type = EAFieldType.localdatetime)
     public LocalDateTime evento;
 
+    /**
+     * raggruppamento logico dei log per type di eventi (obbligatorio)
+     */
+    @NotEmpty(message = "La tipologia del log è obbligatoria")
+    @Indexed()
+    @Field("type")
+    @AIField(type = EAFieldType.combo, clazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
+    @AIColumn(widthEM = 7, sortable = false)
+    private Logtype type;
 
 
     /**

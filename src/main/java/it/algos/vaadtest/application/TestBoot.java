@@ -157,10 +157,10 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(AnnoViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(MeseViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
+        FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
         FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
     }// end of method
 

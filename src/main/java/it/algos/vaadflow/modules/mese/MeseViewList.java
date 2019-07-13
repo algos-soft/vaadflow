@@ -8,7 +8,6 @@ import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.ACronoViewList;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 @UIScope
 @Route(value = TAG_MES)
 @Qualifier(TAG_MES)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "mesi", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class MeseViewList extends ACronoViewList {
@@ -53,9 +52,10 @@ public class MeseViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+    public static final String IRON_ICON = "today";
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -69,5 +69,16 @@ public class MeseViewList extends ACronoViewList {
         ((MeseViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.usaPopupFiltro = false;
+    }// end of method
 
 }// end of class

@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @UIScope
 @Route(value = TAG_SEC)
 @Qualifier(TAG_SEC)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "secoli", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class SecoloViewList extends ACronoViewList {
@@ -56,6 +56,7 @@ public class SecoloViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+    public static final String IRON_ICON = "today";
 
 
    /**
@@ -71,6 +72,17 @@ public class SecoloViewList extends ACronoViewList {
         super(presenter, dialog);
         ((SecoloViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
+
+    /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.usaPopupFiltro = false;
+    }// end of method
 
     /**
      * Crea la GridPaginata <br>

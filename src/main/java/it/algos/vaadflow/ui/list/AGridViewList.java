@@ -322,8 +322,8 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Header text
      */
     protected String getGridHeaderText() {
-//        int numRecCollezione = items.size();
-        int numRecCollezione = service.count();
+        int numRecCollezione = items.size();
+//        int numRecCollezione = service.count();
         String filtro = text.format(items.size());
         String totale = text.format(numRecCollezione);
         String testo = entityClazz != null ? entityClazz.getSimpleName() + " - " : "";

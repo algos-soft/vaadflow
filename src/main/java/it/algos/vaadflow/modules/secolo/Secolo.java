@@ -77,7 +77,7 @@ public class Secolo extends AEntity {
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.checkbox, required = true, focus = true, widthEM = 12)
-    @AIColumn(name = "AC", widthEM = 4)
+    @AIColumn(name = "AC", widthEM = 5)
     public boolean anteCristo;
 
 
@@ -88,7 +88,7 @@ public class Secolo extends AEntity {
     @Indexed(unique = true, direction = IndexDirection.DESCENDING)
     @Field("inizio")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 5)
+    @AIColumn(name = "#", widthEM = 5,sortable = false)
     public int inizio;
 
 
@@ -99,7 +99,7 @@ public class Secolo extends AEntity {
     @Indexed(unique = true, direction = IndexDirection.DESCENDING)
     @Field("fine")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 5)
+    @AIColumn(name = "#", widthEM = 5,sortable = false)
     public int fine;
 
 

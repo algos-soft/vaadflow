@@ -104,17 +104,17 @@ public class ABootService extends AbstractService {
         FlowCost.MENU_CLAZZ_LIST = new ArrayList<>();
 
         //--developer
-        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
+//        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
+//            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
+//        }// end of if cycle
+        if (pref.isBool(EAPreferenza.showWizard.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showRole.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(RoleViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showUser.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(UtenteViewList.class);
-        }// end of if cycle
-        if (pref.isBool(EAPreferenza.showWizard.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(WizardView.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showLogType.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(LogtypeViewList.class);
@@ -131,8 +131,8 @@ public class ABootService extends AbstractService {
         if (pref.isBool(EAPreferenza.showVersione.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(VersioneViewList.class);
         }// end of if cycle
-        if (pref.isBool(EAPreferenza.showSecolo.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
+        if (pref.isBool(EAPreferenza.showGiorno.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showAnno.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(AnnoViewList.class);
@@ -140,8 +140,8 @@ public class ABootService extends AbstractService {
         if (pref.isBool(EAPreferenza.showMese.getCode())) {
             FlowCost.MENU_CLAZZ_LIST.add(MeseViewList.class);
         }// end of if cycle
-        if (pref.isBool(EAPreferenza.showGiorno.getCode())) {
-            FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
+        if (pref.isBool(EAPreferenza.showSecolo.getCode())) {
+            FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
         }// end of if cycle
 
         //--admin

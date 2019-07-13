@@ -7,7 +7,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.giorno.GiornoService;
+import it.algos.vaadflow.modules.mese.Mese;
+import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.modules.secolo.Secolo;
+import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.MainLayout;
@@ -45,7 +50,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @UIScope
 @Route(value = TAG_ANN)
 @Qualifier(TAG_ANN)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class AnnoViewList extends ACronoViewList {
@@ -57,9 +62,19 @@ public class AnnoViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+    public static final String IRON_ICON = "today";
 
 
-   /**
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    protected SecoloService secoloService;
+
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
@@ -72,6 +87,23 @@ public class AnnoViewList extends ACronoViewList {
         super(presenter, dialog);
         ((AnnoViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
+
+
+    /**
+     * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
+     * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void creaPopupFiltro() {
+        super.creaPopupFiltro();
+
+        filtroComboBox.setItems(secoloService.findAll());
+        filtroComboBox.addValueChangeListener(e -> {
+            updateItems();
+            updateView();
+        });
+    }// end of method
+
 
     /**
      * Crea la GridPaginata <br>
@@ -105,6 +137,11 @@ public class AnnoViewList extends ACronoViewList {
         Grid.Column singleColumn;
         singleColumn = ((PaginatedGrid<Anno>) grid).addColumn(valueProvider);
         columnService.fixColumn(singleColumn, Anno.class, propertyName);
+    }// end of method
+
+    public void updateItems() {
+        Secolo secolo = (Secolo) filtroComboBox.getValue();
+        items = ((AnnoService) service).findAllBySecolo(secolo);
     }// end of method
 
 }// end of class

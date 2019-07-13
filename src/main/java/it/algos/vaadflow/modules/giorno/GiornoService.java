@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -204,6 +206,18 @@ public class GiornoService extends AService {
      */
     public ArrayList<Giorno> findAll() {
         return (ArrayList) repository.findAllByOrderByOrdineAsc();
+    }// end of method
+
+
+    public List<Giorno> findAllByMese(Mese mese) {
+        Query query = new Query();
+        String meseField = "mese";
+
+        if (mese != null) {
+            query.addCriteria(Criteria.where(meseField).is(mese));
+        }// end of if cycle
+
+        return mongo.mongoOp.find(query, Giorno.class);
     }// end of method
 
 

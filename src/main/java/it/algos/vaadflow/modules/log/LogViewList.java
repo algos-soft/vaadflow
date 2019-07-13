@@ -1,6 +1,5 @@
 package it.algos.vaadflow.modules.log;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.function.ValueProvider;
@@ -10,7 +9,6 @@ import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +41,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  */
 @Route(value = TAG_LOG)
 @Qualifier(TAG_LOG)
-@AIView(roleTypeVisibility = EARoleType.admin)
+@AIView(menuName = "logs", searchProperty = "descrizione", roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogViewList extends AGridViewList {
@@ -82,14 +80,14 @@ public class LogViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSearch = false;
-        super.usaPopupFiltro=true;
-        super.isEntityAdmin = true;
         if (login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
         }// end of if cycle
+        super.usaSearch = false;
+        super.usaPopupFiltro = true;
+        super.isEntityAdmin = true;
+        super.usaBottoneNew = false;
     }// end of method
-
 
 
     /**
@@ -106,7 +104,6 @@ public class LogViewList extends AGridViewList {
             updateView();
         });
     }// end of method
-
 
 
     /**

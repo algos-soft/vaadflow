@@ -137,7 +137,6 @@ public abstract class ALayoutViewList extends APrefViewList {
         }// end of if cycle
 
         if (usaTopAlert) {
-
             if (USA_SECURITY) {
                 if (isEntityDeveloper) {
                     alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
