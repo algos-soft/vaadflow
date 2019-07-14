@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
@@ -174,10 +175,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--aggiunge il footer standard
         this.add(appContext.getBean(AFooter.class));
-
-        this.addSpecificRoutes();
-        this.updateItems();
-        this.updateView();
     }// end of method
 
 
@@ -189,10 +186,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-//        this.addSpecificRoutes();
-//        this.updateItems();
-//        this.updateView();
+        this.addSpecificRoutes();
+        this.updateItems();
+        this.updateView();
     }// end of method
+
 
 
     /**

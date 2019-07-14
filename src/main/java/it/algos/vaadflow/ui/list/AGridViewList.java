@@ -165,13 +165,19 @@ public abstract class AGridViewList extends ALayoutViewList {
     /**
      * Crea la GridPaginata <br>
      * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * DEVE poi invocare DOPO il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
      * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
      */
     protected void creaGridPaginata() {
         if (grid != null) {
             // Sets how many pages should be visible on the pagination before and/or after the current selected page
             ((PaginatedGrid) grid).setPaginatorSize(1);
+
+            gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
+            gridPlaceholder.setWidth("110em");
+            grid.getElement().getStyle().set("background-color", "#ffaabb");
+
+//            addColumnsGrid(getGridPropertyNamesList());
         }// end of if cycle
     }// end of method
 

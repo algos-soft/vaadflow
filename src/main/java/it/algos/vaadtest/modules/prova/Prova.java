@@ -66,8 +66,8 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList( fields = {"ordine", "code", "descrizione", "lastModifica", "meseStatico", "meseDinamico"})
-@AIForm(fields = {"ordine", "code", "descrizione", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "code", "descrizione", "sino", "lastModifica", "meseStatico", "meseDinamico"})
+@AIForm(fields = {"ordine", "code", "descrizione", "sino", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -108,6 +108,15 @@ public class Prova extends ACEntity {
     @AIField(type = EAFieldType.text, widthEM = 2)
     @AIColumn(name = "Desc", flexGrow = true, sortable = false)
     public String descrizione;
+
+
+    /**
+     * booleano
+     */
+    @Field("sn")
+    @AIField(type = EAFieldType.checkbox)
+    @AIColumn(name = "sn")
+    public boolean sino;
 
 
     @Indexed(direction = IndexDirection.DESCENDING)

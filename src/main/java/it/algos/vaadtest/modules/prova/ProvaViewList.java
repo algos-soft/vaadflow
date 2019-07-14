@@ -3,10 +3,12 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
@@ -28,6 +30,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -194,9 +197,9 @@ public class ProvaViewList extends AGridViewList {
 
         super.creaGridPaginata();
 //        gridPlaceholder.getElement().getStyle().set("background-color", "#5F9EA0");
-        gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
-        gridPlaceholder.setWidth("110em");
-        grid.getElement().getStyle().set("background-color", "#ffaabb");
+//        gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
+//        gridPlaceholder.setWidth("110em");
+//        grid.getElement().getStyle().set("background-color", "#ffaabb");
 
     }// end of method
 
@@ -208,8 +211,42 @@ public class ProvaViewList extends AGridViewList {
     protected void addColumnsGridPaginata() {
         fixColumn(Prova::getOrdine, "ordine");
         fixColumn(Prova::getCode, "code");
-        fixColumn(Prova::getDescrizione, "descrizione");
+
+//        fixColumn(Prova::getDescrizione, "descrizione");
+        Grid.Column colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Label label = new Label();
+            Object value;
+            Field field = reflection.getField(entityClazz, "descrizione");
+
+            try { // prova ad eseguire il codice
+                value = field.get(entity);
+                if (value instanceof String) {
+                    label.setText((String) value);
+                }// end of if cycle
+
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+            return label;
+        }));//end of lambda expressions and anonymous inner class
+
+//        fixColumn(Prova::isSino, "sino");
         fixColumn(Prova::getLastModifica, "lastModifica");
+
+
+        Grid.Column colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Checkbox checkbox;
+            Boolean status = false;
+            Field field = reflection.getField(entityClazz, "sino");
+            try { // prova ad eseguire il codice
+                status = field.getBoolean(entity);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+            checkbox = new Checkbox(status);
+            return checkbox;
+        }));//end of lambda expressions and anonymous inner class
+
     }// end of method
 
 
@@ -217,7 +254,7 @@ public class ProvaViewList extends AGridViewList {
      * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
      * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
      */
-    protected void fixColumn(ValueProvider<Prova, ?> valueProvider, String propertyName) {
+    private void fixColumn(ValueProvider<Prova, ?> valueProvider, String propertyName) {
         Grid.Column singleColumn;
         singleColumn = ((PaginatedGrid<Prova>) grid).addColumn(valueProvider);
         columnService.fixColumn(singleColumn, Prova.class, propertyName);

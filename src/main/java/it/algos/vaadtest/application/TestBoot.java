@@ -121,7 +121,7 @@ public class TestBoot extends ABoot {
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
-        int numRecord = 15;
+        int numRecord = 16;
         String code = "";
         String desc = "";
         provaService.deleteAll();
