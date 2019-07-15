@@ -798,7 +798,7 @@ public class AAnnotationService extends AbstractService {
      * @return the name (columnService) of the field
      */
     public String getColumnWithEM(Class<? extends AEntity> entityClazz, String fieldName) {
-        String widthTxt = "5em";
+        String widthTxt = "";
         int widthInt = 0;
         AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
 
@@ -842,7 +842,7 @@ public class AAnnotationService extends AbstractService {
      * @return status of field
      */
     public boolean isFlexGrow(Field reflectionJavaField) {
-        boolean status = true;
+        boolean status = false;
         AIColumn annotation = this.getAIColumn(reflectionJavaField);
 
         if (annotation != null) {
@@ -862,7 +862,7 @@ public class AAnnotationService extends AbstractService {
      * @return status of field
      */
     public boolean isSortable(Class<? extends AEntity> entityClazz, String fieldName) {
-        boolean status = true;
+        boolean status = false;
         Field field = reflection.getField(entityClazz, fieldName);
 
         if (field != null) {
@@ -881,7 +881,7 @@ public class AAnnotationService extends AbstractService {
      * @return status of field
      */
     public boolean isSortable(Field reflectionJavaField) {
-        boolean status = true;
+        boolean status = false;
         AIColumn annotation = this.getAIColumn(reflectionJavaField);
 
         if (annotation != null) {

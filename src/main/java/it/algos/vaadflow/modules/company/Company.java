@@ -119,7 +119,7 @@ public class Company extends AEntity {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(widthEM = 20, sortable = false)
+//    @AIColumn(widthEM = 20, sortable = false)
     public String mail;
 
 

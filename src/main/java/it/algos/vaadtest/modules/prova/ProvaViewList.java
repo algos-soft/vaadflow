@@ -155,6 +155,7 @@ public class ProvaViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaBottoneReset = true;
         super.usaSearch = true;
         super.usaSearchDialog = false;
         super.usaPopupFiltro = false;
@@ -208,7 +209,7 @@ public class ProvaViewList extends AGridViewList {
      * Aggiunge le colonne alla PaginatedGrid <br>
      * Sovrascritto (obbligatorio) <br>
      */
-    protected void addColumnsGridPaginata() {
+    protected void addColumnsGridPaginata2() {
         fixColumn(Prova::getOrdine, "ordine");
         fixColumn(Prova::getCode, "code");
 

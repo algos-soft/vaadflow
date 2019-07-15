@@ -66,8 +66,8 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "code", "descrizione", "sino", "lastModifica", "meseStatico", "meseDinamico"})
-@AIForm(fields = {"ordine", "code", "descrizione", "sino", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "pageid", "code", "descrizione", "sino", "box", "yesno", "yesnobold", "lastModifica", "meseStatico", "meseDinamico"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "sino", "box", "yesno", "yesnobold", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -85,9 +85,21 @@ public class Prova extends ACEntity {
     @NotNull
     @Indexed()
     @Field("ord")
-    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIField(type = EAFieldType.integer)
     @AIColumn(name = "#")
     public int ordine;
+
+
+    /**
+     * ordine di presentazione (obbligatorio, unico) <br>
+     * il più importante per primo <br>
+     */
+    @NotNull
+    @Indexed()
+    @Field("pageid")
+    @AIField(type = EAFieldType.lungo)
+    @AIColumn(name = "page")
+    public long pageid;
 
     /**
      * codice di riferimento (obbligatorio, unico) <br>
@@ -96,8 +108,7 @@ public class Prova extends ACEntity {
     @Indexed(unique = true)
     @Size(min = 3)
     @Field("cod")
-    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
-    @AIColumn(widthEM = 6)
+    @AIField(type = EAFieldType.text, required = true, focus = true)
     public String code;
 
     /**
@@ -106,9 +117,17 @@ public class Prova extends ACEntity {
     @NotNull
     @Field("desc")
     @AIField(type = EAFieldType.text, widthEM = 2)
-    @AIColumn(name = "Desc", flexGrow = true, sortable = false)
+    @AIColumn(flexGrow = true, sortable = false)
     public String descrizione;
 
+
+    /**
+     * booleano
+     */
+    @Field("bl")
+    @AIField(type = EAFieldType.booleano)
+    @AIColumn(name = "bl")
+    public boolean sino;
 
     /**
      * booleano
@@ -116,12 +135,28 @@ public class Prova extends ACEntity {
     @Field("sn")
     @AIField(type = EAFieldType.checkbox)
     @AIColumn(name = "sn")
-    public boolean sino;
+    public boolean box;
+
+
+    /**
+     * booleano
+     */
+    @Field("yn")
+    @AIField(type = EAFieldType.yesno)
+    @AIColumn(name = "yn")
+    public boolean yesno;
+
+    /**
+     * booleano
+     */
+    @Field("ynb")
+    @AIField(type = EAFieldType.yesnobold)
+    @AIColumn(name = "ynb")
+    public boolean yesnobold;
 
 
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(name = "last", type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
-    @AIColumn(widthEM = 16)
     public LocalDateTime lastModifica;
 
 

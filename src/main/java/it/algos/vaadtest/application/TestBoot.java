@@ -121,28 +121,7 @@ public class TestBoot extends ABoot {
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
-        int numRecord = 16;
-        String code = "";
-        String desc = "";
-        provaService.deleteAll();
-
-        for (int k = 1; k <= numRecord; k++) {
-
-            if (k == 6 || k == 7) {
-                code = "cod" + k;
-            } else {
-                code = k + "cod";
-            }// end of if/else cycle
-
-            if (k == 8) {
-                desc = "descrizione leggermente diversa (per test)";
-            } else {
-                desc = "questa è la descrizione n. " + k;
-            }// end of if/else cycle
-
-            provaService.crea(code, desc);
-        }// end of for cycle
-
+      provaService.reset();
     }// end of method
 
 

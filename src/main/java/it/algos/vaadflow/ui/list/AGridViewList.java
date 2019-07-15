@@ -177,7 +177,7 @@ public abstract class AGridViewList extends ALayoutViewList {
             gridPlaceholder.setWidth("110em");
             grid.getElement().getStyle().set("background-color", "#ffaabb");
 
-//            addColumnsGrid(getGridPropertyNamesList());
+            addColumnsGrid(getGridPropertyNamesList());
         }// end of if cycle
     }// end of method
 

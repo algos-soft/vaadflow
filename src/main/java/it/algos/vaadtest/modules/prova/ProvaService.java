@@ -7,7 +7,6 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,6 +228,59 @@ public class ProvaService extends AService {
     @Override
     public List<String> getSearchPropertyNamesList(AContext context) {
         return Arrays.asList("code");
+    }// end of method
+
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        int numRec = super.reset();
+        int numRecord = 16;
+        String code = "";
+        String desc = "";
+        Prova prova;
+
+        for (int k = 1; k <= numRecord; k++) {
+
+            if (k == 6 || k == 7) {
+                code = "cod" + k;
+            } else {
+                code = k + "cod";
+            }// end of if/else cycle
+
+            if (k == 8) {
+                desc = "descrizione leggermente diversa (per test)";
+            } else {
+                desc = "questa è la descrizione n. " + k;
+            }// end of if/else cycle
+
+            prova = crea(code, desc);
+            if (k == 3 || k == 9) {
+                prova.box = true;
+            }// end of if cycle
+            if (k == 5 || k == 7) {
+                prova.sino = true;
+            }// end of if cycle
+            if (k == 1 || k == 5 || k == 8 || k == 9|| k == 12|| k == 13) {
+                prova.yesno = true;
+            }// end of if cycle
+            if (k == 2 || k == 3 || k == 4 || k == 7|| k == 14|| k == 15) {
+                prova.yesnobold = true;
+            }// end of if cycle
+            prova.ordine = 178 + k;
+            prova.pageid = 1000000L + (14 * k) + k + 8;
+            save(prova);
+        }// end of for cycle
+
+        return numRec;
     }// end of method
 
 }// end of class

@@ -39,9 +39,9 @@ public @interface AIColumn {
     /**
      * (Optional) The width of the column.
      * Expressed in int, to be converted in String ending with "em"
-     * Defaults to 5.
+     * Defaults to 0.
      */
-    int widthEM() default 5;
+    int widthEM() default 0;
 
 
     /**
@@ -60,8 +60,8 @@ public @interface AIColumn {
 
     /**
      * (Optional) column sortable
-     * Defaults to true.
+     * Defaults to false.
      */
-    boolean sortable() default true;
+    boolean sortable() default false;
 
 }// end of interface annotation
