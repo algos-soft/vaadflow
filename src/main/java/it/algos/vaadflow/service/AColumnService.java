@@ -442,7 +442,6 @@ public class AColumnService extends AbstractService {
                 break;
         } // end of switch statement
 
-
         if (colonna != null) {
             //--l'header viene sempre minuscolo ed uguale al nome della property
             //--può essere modificata con name = "Xyz" nell'annotation @AIColumn della Entity
