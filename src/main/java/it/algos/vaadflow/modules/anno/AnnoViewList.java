@@ -50,7 +50,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @UIScope
 @Route(value = TAG_ANN)
 @Qualifier(TAG_ANN)
-@AIView(menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class AnnoViewList extends ACronoViewList {

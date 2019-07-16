@@ -40,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 @UIScope
 @Route(value = TAG_MES)
 @Qualifier(TAG_MES)
-@AIView(menuName = "mesi", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "mesi", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class MeseViewList extends ACronoViewList {

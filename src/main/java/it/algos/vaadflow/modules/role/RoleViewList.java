@@ -38,7 +38,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  */
 @Route(value = TAG_ROL)
 @Qualifier(TAG_ROL)
-@AIView(roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "ruoli", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class RoleViewList extends AGridViewList {

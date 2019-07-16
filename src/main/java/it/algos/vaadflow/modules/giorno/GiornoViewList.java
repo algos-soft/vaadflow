@@ -43,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 @UIScope
 @Route(value = TAG_GIO)
 @Qualifier(TAG_GIO)
-@AIView(menuName = "giorni", searchProperty = "mese", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "giorni", searchProperty = "mese", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class GiornoViewList extends ACronoViewList {

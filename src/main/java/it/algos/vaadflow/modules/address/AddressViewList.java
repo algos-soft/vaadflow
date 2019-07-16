@@ -7,10 +7,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.ALayoutViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @UIScope
 @Route(value = TAG_ADD)
 @Qualifier(TAG_ADD)
-@AIView(menuName = "indirizzi", searchProperty = "localita", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "indirizzi", searchProperty = "localita", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class AddressViewList extends AGridViewList {
@@ -54,6 +52,7 @@ public class AddressViewList extends AGridViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
     public static final String IRON_ICON = "redeem";
 
 
@@ -70,6 +69,7 @@ public class AddressViewList extends AGridViewList {
         super(presenter, dialog);
         ((AddressViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
+
 
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse

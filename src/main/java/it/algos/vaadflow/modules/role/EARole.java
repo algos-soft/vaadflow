@@ -8,5 +8,5 @@ package it.algos.vaadflow.modules.role;
  * Time: 21:09
  */
 public enum EARole {
-    developer, admin, user, guest, noSecurity;
+    developer, admin, user, guest;
 }// end of enumeration class

@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @UIScope
 @Route(value = TAG_TYP)
 @Qualifier(TAG_TYP)
-@AIView(menuName = "logTypes", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "logTypes", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogtypeViewList extends AGridViewList {

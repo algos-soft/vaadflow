@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
  */
 @Route(value = TAG_VER)
 @Qualifier(TAG_VER)
-@AIView(menuName = "versioni", searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "versioni", searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class VersioneViewList extends AGridViewList {

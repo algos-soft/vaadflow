@@ -41,7 +41,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @UIScope
 @Route(value = TAG_COM)
 @Qualifier(TAG_COM)
-@AIView(menuName = "companies", searchProperty = "code", roleTypeVisibility = EARoleType.admin)
+@AIView(vaadflow = true, menuName = "companies", searchProperty = "code", roleTypeVisibility = EARoleType.admin)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class CompanyViewList extends AGridViewList {

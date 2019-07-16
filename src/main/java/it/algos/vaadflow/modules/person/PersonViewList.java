@@ -40,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @UIScope
 @Route(value = TAG_PER)
 @Qualifier(TAG_PER)
-@AIView(menuName = "persone", searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "persone", searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class PersonViewList extends AGridViewList {

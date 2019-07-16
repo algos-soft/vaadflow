@@ -38,4 +38,9 @@ public @interface AIView {
      */
     EARoleType roleTypeVisibility() default EARoleType.user;
 
+    /**
+     * (Optional) Appartenenza al progetto Base VaadFlow
+     */
+    boolean vaadflow() default false;
+
 }// end of interface annotation

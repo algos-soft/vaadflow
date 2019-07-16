@@ -608,6 +608,18 @@ public class AAnnotationService extends AbstractService {
     }// end of method
 
 
+    public boolean isMenuProgettoBase(final Class<? extends IAView> clazz) {
+        boolean status = false;
+        AIView annotation = this.getAIView(clazz);
+
+        if (annotation != null) {
+            status = annotation.vaadflow();
+        }// end of if cycle
+
+        return status;
+    }// end of method
+
+
     /**
      * Get the accessibility status of the class for the developer login.
      *

@@ -144,6 +144,39 @@ public class AFlowingcodeAppLayoutMenu extends AMenu {
         }// end of if cycle
     }// end of method
 
+    /**
+     * Item di menu sempre presenti
+     */
+    protected void creaMenuNoSecurity() {
+        MenuItem cronoItem;
+        ArrayList<MenuItem> listaSubMenuCrono = new ArrayList<>();
+        MenuItem menu;
+
+        if (array.isValid(progettoBaseClazzList)) {
+            for (Class viewClazz : progettoBaseClazzList) {
+                menuButtons.add(creaItem(viewClazz));
+            }// end of for cycle
+        }// end of if cycle
+
+        if (array.isValid(cronoClazzList)) {
+            MenuItem[] matrice;
+
+            for (Class viewClazz : cronoClazzList) {
+                menu = creaItem(viewClazz);
+                listaSubMenuCrono.add(menu);
+            }// end of for cycle
+
+            matrice = listaSubMenuCrono.toArray(new MenuItem[listaSubMenuCrono.size()]);
+            cronoItem = new MenuItem("Crono", "build", matrice);
+            menuButtons.add(cronoItem);
+        }// end of if cycle
+
+        if (array.isValid(progettoSpecificoClazzList)) {
+            for (Class viewClazz : progettoSpecificoClazzList) {
+                menuButtons.add(creaItem(viewClazz));
+            }// end of for cycle
+        }// end of if cycle
+    }// end of method
 
     /**
      * Item di menu logout sempre presente

@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @UIScope
 @Route(value = TAG_SEC)
 @Qualifier(TAG_SEC)
-@AIView(menuName = "secoli", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "secoli", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class SecoloViewList extends ACronoViewList {

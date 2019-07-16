@@ -63,6 +63,10 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     public final static String KEY_MAPPA_CRONO = "crono";
 
+    public final static String KEY_MAPPA_PROGETTO_BASE = "progettoBase";
+
+    public final static String KEY_MAPPA_PROGETTO_SPECIFICO = "progettoSpecifico";
+
     protected AppLayout appLayout;
 
     protected AppLayoutMenu appMenu;
