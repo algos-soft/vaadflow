@@ -167,6 +167,7 @@ public class ProvaViewList extends AGridViewList {
 //        super.gridWith = 100;
 
 //        super.searchProperty="descrizione";
+        super.grid = new PaginatedGrid<Prova>();
     }// end of method
 
 
@@ -191,64 +192,58 @@ public class ProvaViewList extends AGridViewList {
      * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
      * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
      */
-    protected void creaGridPaginata() {
-        PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
-        super.grid = gridPaginated;
-//        gridPlaceholder.setWidth("100em");
+    protected void creaGridPaginata2() {
+//        PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
+        super.grid = new PaginatedGrid<Prova>();
 
         super.creaGridPaginata();
-//        gridPlaceholder.getElement().getStyle().set("background-color", "#5F9EA0");
-//        gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
-//        gridPlaceholder.setWidth("110em");
-//        grid.getElement().getStyle().set("background-color", "#ffaabb");
-
     }// end of method
 
 
-    /**
-     * Aggiunge le colonne alla PaginatedGrid <br>
-     * Sovrascritto (obbligatorio) <br>
-     */
-    protected void addColumnsGridPaginata2() {
-        fixColumn(Prova::getOrdine, "ordine");
-        fixColumn(Prova::getCode, "code");
-
-//        fixColumn(Prova::getDescrizione, "descrizione");
-        Grid.Column colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-            Label label = new Label();
-            Object value;
-            Field field = reflection.getField(entityClazz, "descrizione");
-
-            try { // prova ad eseguire il codice
-                value = field.get(entity);
-                if (value instanceof String) {
-                    label.setText((String) value);
-                }// end of if cycle
-
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-            return label;
-        }));//end of lambda expressions and anonymous inner class
-
-//        fixColumn(Prova::isSino, "sino");
-        fixColumn(Prova::getLastModifica, "lastModifica");
-
-
-        Grid.Column colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
-            Checkbox checkbox;
-            Boolean status = false;
-            Field field = reflection.getField(entityClazz, "sino");
-            try { // prova ad eseguire il codice
-                status = field.getBoolean(entity);
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-            checkbox = new Checkbox(status);
-            return checkbox;
-        }));//end of lambda expressions and anonymous inner class
-
-    }// end of method
+//    /**
+//     * Aggiunge le colonne alla PaginatedGrid <br>
+//     * Sovrascritto (obbligatorio) <br>
+//     */
+//    protected void addColumnsGridPaginata2() {
+//        fixColumn(Prova::getOrdine, "ordine");
+//        fixColumn(Prova::getCode, "code");
+//
+////        fixColumn(Prova::getDescrizione, "descrizione");
+//        Grid.Column colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+//            Label label = new Label();
+//            Object value;
+//            Field field = reflection.getField(entityClazz, "descrizione");
+//
+//            try { // prova ad eseguire il codice
+//                value = field.get(entity);
+//                if (value instanceof String) {
+//                    label.setText((String) value);
+//                }// end of if cycle
+//
+//            } catch (Exception unErrore) { // intercetta l'errore
+//                log.error(unErrore.toString());
+//            }// fine del blocco try-catch
+//            return label;
+//        }));//end of lambda expressions and anonymous inner class
+//
+////        fixColumn(Prova::isSino, "sino");
+//        fixColumn(Prova::getLastModifica, "lastModifica");
+//
+//
+//        Grid.Column colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
+//            Checkbox checkbox;
+//            Boolean status = false;
+//            Field field = reflection.getField(entityClazz, "sino");
+//            try { // prova ad eseguire il codice
+//                status = field.getBoolean(entity);
+//            } catch (Exception unErrore) { // intercetta l'errore
+//                log.error(unErrore.toString());
+//            }// fine del blocco try-catch
+//            checkbox = new Checkbox(status);
+//            return checkbox;
+//        }));//end of lambda expressions and anonymous inner class
+//
+//    }// end of method
 
 
     /**

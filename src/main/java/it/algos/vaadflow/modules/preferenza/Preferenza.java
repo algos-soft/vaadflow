@@ -58,7 +58,7 @@ import javax.validation.constraints.Size;
 @Builder(builderMethodName = "builderPreferenza")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"company", "ordine", "code", "descrizione", "type", "value"})
+@AIList(fields = { "ordine", "code", "type", "value", "descrizione"})
 @AIForm(fields = {"company", "ordine", "code", "descrizione", "type"})
 @AIScript(sovrascrivibile = false)
 public class Preferenza extends ACEntity {
@@ -99,7 +99,7 @@ public class Preferenza extends ACEntity {
     @Size(min = 2, max = 50)
     @Field("desc")
     @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
-    @AIColumn(flexGrow = true, sortable = false)
+    @AIColumn(flexGrow = true)
     public String descrizione;
 
 
@@ -109,7 +109,7 @@ public class Preferenza extends ACEntity {
     @NotNull
     @Field("type")
     @AIField(type = EAFieldType.enumeration, clazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 5)
+    @AIColumn(widthEM = 6,sortable = true)
     public EAPrefType type;
 
 
@@ -117,7 +117,7 @@ public class Preferenza extends ACEntity {
     @NotNull
     @Field("val")
     @AIField(type = EAFieldType.pref, required = true, name = "Valore", widthEM = 12)
-    @AIColumn(widthEM = 6)
+    @AIColumn(widthEM = 7)
     public byte[] value;
 
 

@@ -1,12 +1,12 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAFieldType;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Project vaadflow
@@ -214,9 +215,9 @@ public class AColumnService extends AbstractService {
                     if (text.isValid(testo)) {
                         label.setText(testo);
                         if (status) {
-                            label.getStyle().set("color","green");
+                            label.getStyle().set("color", "green");
                         } else {
-                            label.getStyle().set("color","red");
+                            label.getStyle().set("color", "red");
                         }// end of if/else cycle
                     }// end of if cycle
 
@@ -239,11 +240,11 @@ public class AColumnService extends AbstractService {
 
                     if (text.isValid(testo)) {
                         label.setText(testo);
-                        label.getStyle().set("font-weight","bold");
+                        label.getStyle().set("font-weight", "bold");
                         if (status) {
-                            label.getStyle().set("color","green");
+                            label.getStyle().set("color", "green");
                         } else {
-                            label.getStyle().set("color","red");
+                            label.getStyle().set("color", "red");
                         }// end of if/else cycle
                     }// end of if cycle
 
@@ -257,19 +258,19 @@ public class AColumnService extends AbstractService {
                 }));//end of lambda expressions and anonymous inner class
                 break;
             case combo:
-                colonna = grid.addColumn(propertyName);
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    ComboBox combo = new ComboBox();
-//                    Object entityBean = reflection.getPropertyValue(entity, property);
-//                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-//                    List items = ((IAService) service).findAll();
-//                    if (array.isValid(items)) {
-//                        combo.setItems(items);
-//                        combo.setValue(entityBean);
-//                    }// end of if cycle
-//                    combo.setEnabled(false);
-//                    return combo;
-//                }));
+//                colonna = grid.addColumn(propertyName);
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    ComboBox combo = new ComboBox();
+                    Object entityBean = reflection.getPropertyValue(entity, propertyName);
+                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+                    List items = ((IAService) service).findAll();
+                    if (array.isValid(items)) {
+                        combo.setItems(items);
+                        combo.setValue(entityBean);
+                    }// end of if cycle
+                    combo.setEnabled(false);
+                    return combo;
+                }));
                 break;
             case weekdate:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -366,11 +367,37 @@ public class AColumnService extends AbstractService {
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch
-                    if (typePref == EAPrefType.bool && pref.isBool(FlowCost.USA_CHECK_BOX)) {
-                        return new Checkbox((boolean) value ? "si" : "no", (boolean) value);
-                    } else {
-                        return new Label(value != null ? value.toString() : "");
-                    }// end of if/else cycle
+
+                    switch (typePref) {
+                        case string:
+                            break;
+                        case bool:
+                            boolean status=(boolean)value;
+                            Label label = new Label(status ? "si" : "no");
+                            label.getStyle().set("font-weight", "bold");
+                            if (status) {
+                                label.getStyle().set("color", "green");
+                            } else {
+                                label.getStyle().set("color", "red");
+                            }// end of if/else cycle
+                            return label;
+                        case integer:
+                            return new Label(text.format(value));
+                        case date:
+                            break;
+                        case email:
+                            break;
+                        default:
+                            log.warn("Switch - caso non definito");
+                            break;
+                    } // end of switch statement
+                    return new Label(value != null ? value.toString() : "");
+
+//                    if (typePref == EAPrefType.bool) {
+//                        return new Checkbox((boolean) value ? "si" : "no", (boolean) value);
+//                    } else {
+//                        return new Label(value != null ? value.toString() : "");
+//                    }// end of if/else cycle
                 }));//end of lambda expressions and anonymous inner class
                 break;
             default:
@@ -400,7 +427,7 @@ public class AColumnService extends AbstractService {
                 break;
             case lungo:
                 //--larghezza di default per un lungo = 7em
-                //--gestisce numeri fino a 999.999
+                //--gestisce numeri fino a 9.999.999
                 width = text.isValid(width) ? width : "7em";
                 break;
             case booleano:

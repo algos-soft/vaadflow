@@ -118,6 +118,8 @@ public abstract class AGridViewList extends ALayoutViewList {
             }// end of if/else cycle
         }// end of if cycle
         // Sets the max number of items to be rendered on the grid for each page
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setWidth("60em");
         grid.setPageSize(limit);
         grid.setHeightByRows(true);
 
@@ -131,7 +133,8 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Colonne normali aggiunte nel metodo sovrascritto dalla sottoclasse specifica (se PaginatedGrid)
         //--Colonne normali aggiunte in automatico (se Grid normale)
         if (isPaginata) {
-            addColumnsGridPaginata();
+//            addColumnsGridPaginata();
+            addColumnsGrid(gridPropertyNamesList);
         } else {
             addColumnsGrid(gridPropertyNamesList);
         }// end of if/else cycle
@@ -139,7 +142,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Eventuali colonne calcolate aggiunte DOPO quelle automatiche
         this.addSpecificColumnsAfter();
 
-        //--Regolazioni finali sulla grid e sulle colonne
+        //--Eventuali regolazioni finali sulla grid e sulle colonne
         this.fixGridLayout();
 
         //questo funzione per gridPaginated
@@ -176,8 +179,6 @@ public abstract class AGridViewList extends ALayoutViewList {
             gridPlaceholder.getElement().getStyle().set("background-color", "#ffaabb");
             gridPlaceholder.setWidth("110em");
             grid.getElement().getStyle().set("background-color", "#ffaabb");
-
-            addColumnsGrid(getGridPropertyNamesList());
         }// end of if cycle
     }// end of method
 
@@ -241,7 +242,7 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected void fixGridLayout() {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth("60em");
-        grid.setHeightByRows(true);
+//        grid.setHeightByRows(true);
         grid.addClassName("pippoz");
         grid.getElement().setAttribute("theme", "row-dividers");
     }// end of method

@@ -220,8 +220,6 @@ public class FlowCost {
 
     public final static String USA_LOG_DEBUG = "usaLogDebug";
 
-    public final static String USA_CHECK_BOX = "usaCheckbox";
-
     public final static String USA_COMPANY = "usaCompany";
 
     public final static String USA_LOG_MAIL = "usaLogMail";
