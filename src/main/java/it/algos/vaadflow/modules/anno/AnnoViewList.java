@@ -90,6 +90,16 @@ public class AnnoViewList extends ACronoViewList {
 
 
     /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.grid = new PaginatedGrid<Anno>();
+    }// end of method
+    /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
      * Invocare PRIMA il metodo della superclasse <br>
@@ -97,6 +107,7 @@ public class AnnoViewList extends ACronoViewList {
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
 
+        filtroComboBox.setWidth("12em");
         filtroComboBox.setItems(secoloService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
             updateItems();
@@ -104,40 +115,6 @@ public class AnnoViewList extends ACronoViewList {
         });
     }// end of method
 
-
-    /**
-     * Crea la GridPaginata <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
-     */
-    protected void creaGridPaginata() {
-        PaginatedGrid<Anno> gridPaginated = new PaginatedGrid<Anno>();
-        super.grid = gridPaginated;
-        super.creaGridPaginata();
-    }// end of method
-
-
-    /**
-     * Aggiunge le colonne alla PaginatedGrid <br>
-     * Sovrascritto (obbligatorio) <br>
-     */
-    protected void addColumnsGridPaginata() {
-        fixColumn(Anno::getOrdine,"ordine");
-        fixColumn(Anno::getSecolo,"secolo");
-        fixColumn(Anno::getTitolo,"titolo");
-    }// end of method
-
-
-    /**
-     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
-     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
-     */
-    protected void fixColumn(ValueProvider<Anno, ?> valueProvider , String propertyName) {
-        Grid.Column singleColumn;
-        singleColumn = ((PaginatedGrid<Anno>) grid).addColumn(valueProvider);
-        columnService.fixColumn(singleColumn, Anno.class, propertyName);
-    }// end of method
 
     public void updateItems() {
         Secolo secolo = (Secolo) filtroComboBox.getValue();

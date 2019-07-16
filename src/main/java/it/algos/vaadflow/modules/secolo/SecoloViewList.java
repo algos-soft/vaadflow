@@ -84,39 +84,4 @@ public class SecoloViewList extends ACronoViewList {
         super.usaPopupFiltro = false;
     }// end of method
 
-    /**
-     * Crea la GridPaginata <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
-     */
-    protected void creaGridPaginata() {
-        PaginatedGrid<Secolo> gridPaginated = new PaginatedGrid<Secolo>();
-        super.grid = gridPaginated;
-        super.creaGridPaginata();
-    }// end of method
-
-
-    /**
-     * Aggiunge le colonne alla PaginatedGrid <br>
-     * Sovrascritto (obbligatorio) <br>
-     */
-    protected void addColumnsGridPaginata() {
-        fixColumn(Secolo::isAnteCristo,"anteCristo");
-        fixColumn(Secolo::getInizio,"inizio");
-        fixColumn(Secolo::getFine,"fine");
-        fixColumn(Secolo::getTitolo,"titolo");
-    }// end of method
-
-
-    /**
-     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
-     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
-     */
-    protected void fixColumn(ValueProvider<Secolo, ?> valueProvider , String propertyName) {
-        Grid.Column singleColumn;
-        singleColumn = ((PaginatedGrid<Secolo>) grid).addColumn(valueProvider);
-        columnService.fixColumn(singleColumn, Secolo.class, propertyName);
-    }// end of method
-
 }// end of class

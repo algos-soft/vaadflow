@@ -58,8 +58,8 @@ import javax.validation.constraints.Size;
 @Builder(builderMethodName = "builderMese")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.nonUsata)
-@AIList(fields = {"titoloBreve", "giorni", "titoloLungo"})
-@AIForm(fields = {"titoloBreve", "giorni", "giorni"})
+@AIList(fields = {"giorni", "titoloBreve", "titoloLungo"})
+@AIForm(fields = {"giorni", "titoloBreve", "giorni"})
 @AIScript(sovrascrivibile = false)
 public class Mese extends AEntity {
 
@@ -68,6 +68,17 @@ public class Mese extends AEntity {
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
+
+
+    /**
+     * numero di giorni presenti (obbligatorio) <br>
+     */
+    @NotNull
+    @Indexed()
+    @Field("giorni")
+    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIColumn( widthEM = 6)
+    public int giorni;
 
 
     /**
@@ -80,17 +91,6 @@ public class Mese extends AEntity {
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
     @AIColumn(widthEM = 8)
     public String titoloBreve;
-
-
-    /**
-     * numero di giorni presenti (obbligatorio) <br>
-     */
-    @NotNull
-    @Indexed()
-    @Field("giorni")
-    @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 6)
-    public int giorni;
 
 
     /**

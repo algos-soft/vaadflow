@@ -1,7 +1,5 @@
 package it.algos.vaadflow.service;
 
-import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Project vaadflow
@@ -258,19 +255,30 @@ public class AColumnService extends AbstractService {
                 }));//end of lambda expressions and anonymous inner class
                 break;
             case combo:
-//                colonna = grid.addColumn(propertyName);
+//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+//                    ComboBox combo = new ComboBox();
+//                    Object entityBean = reflection.getPropertyValue(entity, propertyName);
+//                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+//                    List items = ((IAService) service).findAll();
+//                    if (array.isValid(items)) {
+//                        combo.setItems(items);
+//                        combo.setValue(entityBean);
+//                    }// end of if cycle
+//                    combo.setEnabled(false);
+//                    return combo;
+//                }));
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-                    ComboBox combo = new ComboBox();
-                    Object entityBean = reflection.getPropertyValue(entity, propertyName);
-                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll();
-                    if (array.isValid(items)) {
-                        combo.setItems(items);
-                        combo.setValue(entityBean);
-                    }// end of if cycle
-                    combo.setEnabled(false);
-                    return combo;
-                }));
+                    Field field = reflection.getField(entityClazz, propertyName);
+                    String testo = "";
+
+                    try { // prova ad eseguire il codice
+                        testo = field.get(entity).toString();
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+
+                    return new Label(testo);
+                }));//end of lambda expressions and anonymous inner class
                 break;
             case weekdate:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -372,7 +380,7 @@ public class AColumnService extends AbstractService {
                         case string:
                             break;
                         case bool:
-                            boolean status=(boolean)value;
+                            boolean status = (boolean) value;
                             Label label = new Label(status ? "si" : "no");
                             label.getStyle().set("font-weight", "bold");
                             if (status) {
@@ -449,8 +457,11 @@ public class AColumnService extends AbstractService {
             case combo:
                 break;
             case weekdate:
-                break;
             case localdate:
+                //--larghezza di default per un data = 7em
+                //--vale per la formattazione standard della data
+                //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "7em";
                 break;
             case localdatetime:
                 //--larghezza di default per un data+tempo = 10em

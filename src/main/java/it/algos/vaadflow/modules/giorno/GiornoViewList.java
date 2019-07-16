@@ -1,17 +1,13 @@
 package it.algos.vaadflow.modules.giorno;
 
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.mese.EAMese;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -53,13 +49,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 public class GiornoViewList extends ACronoViewList {
 
 
-
     /**
      * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.CALENDAR;
+
     public static final String IRON_ICON = "today";
 
 
@@ -71,6 +67,7 @@ public class GiornoViewList extends ACronoViewList {
      */
     @Autowired
     protected MeseService meseService;
+
 
     /**
      * Costruttore @Autowired <br>
@@ -88,6 +85,18 @@ public class GiornoViewList extends ACronoViewList {
 
 
     /**
+     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.grid = new PaginatedGrid<Giorno>();
+    }// end of method
+
+
+    /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
      * Invocare PRIMA il metodo della superclasse <br>
@@ -95,46 +104,12 @@ public class GiornoViewList extends ACronoViewList {
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
 
+        filtroComboBox.setWidth("10em");
         filtroComboBox.setItems(meseService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
             updateItems();
             updateView();
         });
-    }// end of method
-
-
-    /**
-     * Crea la GridPaginata <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
-     */
-    protected void creaGridPaginata() {
-        PaginatedGrid<Giorno> gridPaginated = new PaginatedGrid<Giorno>();
-        super.grid = gridPaginated;
-        super.creaGridPaginata();
-    }// end of method
-
-
-    /**
-     * Aggiunge le colonne alla PaginatedGrid <br>
-     * Sovrascritto (obbligatorio) <br>
-     */
-    protected void addColumnsGridPaginata() {
-        fixColumn(Giorno::getOrdine, "ordine");
-        fixColumn(Giorno::getMese, "mese");
-        fixColumn(Giorno::getTitolo, "titolo");
-    }// end of method
-
-
-    /**
-     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
-     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
-     */
-    protected void fixColumn(ValueProvider<Giorno, ?> valueProvider, String propertyName) {
-        Grid.Column singleColumn;
-        singleColumn = ((PaginatedGrid<Giorno>) grid).addColumn(valueProvider);
-        columnService.fixColumn(singleColumn, Giorno.class, propertyName);
     }// end of method
 
 
