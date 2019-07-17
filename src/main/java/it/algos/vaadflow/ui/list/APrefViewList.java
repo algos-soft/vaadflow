@@ -121,8 +121,9 @@ public abstract class APrefViewList extends AViewList {
         //--controllo della paginazione
         isPaginata = usaPagination && service.count() > limit;
 
-        //--Flag per la larghezza della Grid. Default a 100. Espressa come numero per comodità; poi viene convertita in "em".
-        gridWith = 100;
+        //--Flag per la larghezza della Grid. Default a 80.
+        //--Espressa come numero per comodità; poi viene convertita in "em".
+        gridWith = 80;
 
         //--property per la ricerca con searchField.
         //--Viene letta da una @Annotation.

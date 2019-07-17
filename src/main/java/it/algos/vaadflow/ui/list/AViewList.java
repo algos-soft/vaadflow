@@ -1,11 +1,12 @@
 package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.*;
@@ -170,7 +171,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--body con la Grid
         //--seleziona quale grid usare e la aggiunge al layout
-        this.creaGridPaginataOppureNormale();
+        this.creaGrid();
         this.add(gridPlaceholder);
 
         //--aggiunge il footer standard
@@ -190,7 +191,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         this.updateItems();
         this.updateView();
     }// end of method
-
 
 
     /**
@@ -260,15 +260,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Seleziona quale grid usare e la aggiunge al layout <br>
      * Eventuale barra di bottoni sotto la grid <br>
      */
-    protected void creaGridPaginataOppureNormale() {
-    }// end of method
-
-
-    /**
-     * Header text
-     */
-    protected String getGridHeaderText() {
-        return "";
+    protected void creaGrid() {
     }// end of method
 
 
@@ -345,6 +337,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    protected Button createEditButton(AEntity entityBean) {
+        Button edit = new Button(testoBottoneEdit, event -> dialog.open(entityBean, EAOperation.edit, context));
+        edit.setIcon(new Icon("lumo", "edit"));
+        edit.addClassName("review__edit");
+        edit.getElement().setAttribute("theme", "tertiary");
+        return edit;
+    }// end of method
+
+
     protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
         if (evento != null && evento.getOldValue() != evento.getValue()) {
             if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
@@ -359,7 +360,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-
     protected void openNew() {
         dialog.open(service.newEntity(), EAOperation.addNew, context);
     }// end of method
@@ -369,6 +369,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         searchDialog = appContext.getBean(ASearchDialog.class, service);
         searchDialog.open("", "", this::updateViewDopoSearch, null);
     }// end of method
+
 
     public void updateViewDopoSearch() {
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;

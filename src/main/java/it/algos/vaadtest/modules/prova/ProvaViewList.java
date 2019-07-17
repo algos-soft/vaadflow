@@ -194,9 +194,9 @@ public class ProvaViewList extends AGridViewList {
      */
     protected void creaGridPaginata2() {
 //        PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
-        super.grid = new PaginatedGrid<Prova>();
+//        super.grid = new PaginatedGrid<Prova>();
 
-        super.creaGridPaginata();
+//        super.creaGridPaginata();
     }// end of method
 
 

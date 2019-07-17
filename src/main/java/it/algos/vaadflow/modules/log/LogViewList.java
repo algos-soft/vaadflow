@@ -1,8 +1,6 @@
 package it.algos.vaadflow.modules.log;
 
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -87,6 +85,8 @@ public class LogViewList extends AGridViewList {
         super.usaPopupFiltro = true;
         super.isEntityAdmin = true;
         super.usaBottoneNew = false;
+
+        super.grid = new PaginatedGrid<Log>();
     }// end of method
 
 
@@ -103,42 +103,6 @@ public class LogViewList extends AGridViewList {
             updateItems();
             updateView();
         });
-    }// end of method
-
-
-    /**
-     * Crea la GridPaginata <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
-     */
-    protected void creaGridPaginata() {
-        PaginatedGrid<Log> gridPaginated = new PaginatedGrid<Log>();
-        super.grid = gridPaginated;
-        super.creaGridPaginata();
-    }// end of method
-
-
-    /**
-     * Aggiunge le colonne alla PaginatedGrid <br>
-     * Sovrascritto (obbligatorio) <br>
-     */
-    protected void addColumnsGridPaginata() {
-        fixColumn(Log::getLivello, "livello");
-        fixColumn(Log::getType, "type");
-        fixColumn(Log::getEvento, "evento");
-        fixColumn(Log::getDescrizione, "descrizione");
-    }// end of method
-
-
-    /**
-     * Costruisce la colonna in funzione della PaginatedGrid specifica della sottoclasse <br>
-     * DEVE essere sviluppato nella sottoclasse, sostituendo AEntity con la classe effettiva  <br>
-     */
-    protected void fixColumn(ValueProvider<Log, ?> valueProvider, String propertyName) {
-        Grid.Column singleColumn;
-        singleColumn = ((PaginatedGrid<Log>) grid).addColumn(valueProvider);
-        columnService.fixColumn(singleColumn, Log.class, propertyName);
     }// end of method
 
 
