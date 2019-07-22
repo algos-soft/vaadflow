@@ -81,7 +81,7 @@ public class Log extends ACEntity {
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Field("liv")
-    @AIField(type = EAFieldType.enumeration, clazz = Livello.class, required = true, widthEM = 4)
+    @AIField(type = EAFieldType.enumeration, enumClazz = Livello.class, required = true, widthEM = 4)
     @AIColumn(widthEM = 6, sortable = false)
     public Livello livello;
 
@@ -111,7 +111,7 @@ public class Log extends ACEntity {
     @NotEmpty(message = "La tipologia del log è obbligatoria")
     @Indexed()
     @Field("type")
-    @AIField(type = EAFieldType.combo, clazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
+    @AIField(type = EAFieldType.combo, serviceClazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
     @AIColumn(widthEM = 7, sortable = false)
     public Logtype type;
 
@@ -121,7 +121,7 @@ public class Log extends ACEntity {
      */
     @Override
     public String toString() {
-        return getType() + " - " + getDescrizione();
+        return getType().toString() + " - " + getDescrizione();
     }// end of method
 
 }// end of entity class

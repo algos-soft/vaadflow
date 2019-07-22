@@ -572,36 +572,6 @@ public class ADateServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
-     * Costruisce la data per il 1° gennaio dell'anno corrente.
-     *
-     * @return primo gennaio dell'anno
-     */
-    @Test
-    public void getPrimoGennaio() {
-        localDataPrevista = LocalDate.of(2019, 1, 1);
-        localDataOttenuta = service.getPrimoGennaio();
-        assertEquals(localDataOttenuta, localDataPrevista);
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Costruisce la data per il 1° gennaio dell'anno indicato.
-     *
-     * @param anno di riferimento 1985
-     *
-     * @return primo gennaio dell'anno
-     */
-    @Test
-    public void getPrimoGennaioAnno() {
-        localDataPrevista = LocalDate.of(1985, 1, 1);
-        localDataOttenuta = service.getPrimoGennaio(1985);
-        assertEquals(localDataOttenuta, localDataPrevista);
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
      * Costruisce la localData per il giorno dell'anno indicato.
      *
      * @param giorno di riferimento (numero progressivo dell'anno)
@@ -755,32 +725,32 @@ public class ADateServiceTest extends ATest {
     @Test
     public void getGiornoDelta() {
         sorgenteIntero = -3;
-        localDataPrevista = LocalDate.of(2019, 6, 30);
+        localDataPrevista = LocalDate.now().minusDays(3);
         localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
         assertEquals(localDataOttenuta, localDataPrevista);
 
         sorgenteIntero = 0;
-        localDataPrevista = LocalDate.of(2019, 7, 3);
+        localDataPrevista = LocalDate.now();
         localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
         assertEquals(localDataOttenuta, localDataPrevista);
 
         sorgenteIntero = 2;
-        localDataPrevista = LocalDate.of(2019, 7, 5);
+        localDataPrevista = LocalDate.now().plusDays(2);
         localDataOttenuta = service.getGiornoDelta(sorgenteIntero);
         assertEquals(localDataOttenuta, localDataPrevista);
 
         sorgente = "-3";
-        localDataPrevista = LocalDate.of(2019, 6, 30);
+        localDataPrevista = LocalDate.now().minusDays(3);
         localDataOttenuta = service.getGiornoDelta(sorgente);
         assertEquals(localDataOttenuta, localDataPrevista);
 
         sorgente = "0";
-        localDataPrevista = LocalDate.of(2019, 7, 3);
+        localDataPrevista = LocalDate.now();
         localDataOttenuta = service.getGiornoDelta(sorgente);
         assertEquals(localDataOttenuta, localDataPrevista);
 
         sorgente = "+2";
-        localDataPrevista = LocalDate.of(2019, 7, 5);
+        localDataPrevista = LocalDate.now().plusDays(2);
         localDataOttenuta = service.getGiornoDelta(sorgente);
         assertEquals(localDataOttenuta, localDataPrevista);
     }// end of single test
@@ -828,6 +798,76 @@ public class ADateServiceTest extends ATest {
         ottenutoIntero = service.getDurata(oraFine, oraIni, minFine, minIni);
         assertEquals(ottenutoIntero, previstoIntero);
 
+    }// end of single test
+
+
+    /**
+     * Costruisce la data per il 1° gennaio dell'anno indicato.
+     *
+     * @param anno di riferimento
+     *
+     * @return primo gennaio dell'anno indicato
+     */
+    @Test
+    public void primoGennaio() {
+        sorgenteIntero = 2017;
+        localDataPrevista = LocalDate.of(2017, 1, 1);
+        localDataOttenuta = service.primoGennaio(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgenteIntero = 2018;
+        localDataPrevista = LocalDate.of(2018, 1, 1);
+        localDataOttenuta = service.primoGennaio(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        sorgenteIntero = 2019;
+        localDataPrevista = LocalDate.of(2019, 1, 1);
+        localDataOttenuta = service.primoGennaio(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+    }// end of single test
+
+
+    /**
+     * Costruisce la data per il 1° gennaio dell'anno corrente.
+     *
+     * @return primo gennaio dell'anno corrente
+     */
+    @Test
+    public void primoGennaioCorrente() {
+        sorgenteIntero = LocalDate.now().getYear();
+        localDataPrevista = LocalDate.of(sorgenteIntero, 1, 1);
+        localDataOttenuta = service.primoGennaio();
+        assertEquals(localDataOttenuta, localDataPrevista);
+    }// end of single test
+
+
+    /**
+     * Costruisce la data per il 31° dicembre dell'anno indicato.
+     *
+     * @param anno di riferimento
+     *
+     * @return ultimo giorno dell'anno indicato
+     */
+    @Test
+    public void trentunDicembre() {
+        sorgenteIntero = 2017;
+        localDataPrevista = LocalDate.of(2017, 12, 31);
+        localDataOttenuta = service.trentunDicembre(sorgenteIntero);
+        assertEquals(localDataOttenuta, localDataPrevista);
+    }// end of single test
+
+
+    /**
+     * Costruisce la data per il 31° dicembre dell'anno corrente.
+     *
+     * @return ultimo giorno dell'anno corrente
+     */
+    @Test
+    public void trentunDicembreCorrente() {
+        sorgenteIntero = LocalDate.now().getYear();
+        localDataPrevista = LocalDate.of(sorgenteIntero, 12, 31);
+        localDataOttenuta = service.trentunDicembre();
+        assertEquals(localDataOttenuta, localDataPrevista);
     }// end of single test
 
 }// end of class

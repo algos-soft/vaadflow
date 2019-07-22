@@ -117,7 +117,7 @@ public class Person extends Utente {
      * riferimento statico SENZA @DBRef (embedded)
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(name = "ind", flexGrow = true, sortable = false)
     public Address indirizzo;
 

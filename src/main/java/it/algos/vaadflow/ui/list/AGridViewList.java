@@ -117,7 +117,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridPlaceholder.add(grid);
 
         //--Regolazioni di larghezza
-        gridPlaceholder.setWidth("90em");
+        gridPlaceholder.setWidth(gridWith+"em");
         gridPlaceholder.setFlexGrow(0);
 //        gridPlaceholder.setWidth(gridWith + "em");
 

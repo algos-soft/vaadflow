@@ -110,18 +110,6 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
-     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
-     * Chiamato DOPO @PostConstruct <br>
-     *
-     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
-     */
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        super.beforeEnter(beforeEnterEvent);
-    }// end of method
-
-
-    /**
      * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
      * Normalmente ad uso esclusivo del developer <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>

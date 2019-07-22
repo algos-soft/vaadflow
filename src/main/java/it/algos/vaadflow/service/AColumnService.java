@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.SPAZIO;
+import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
 
 /**
  * Project vaadflow
@@ -60,6 +64,7 @@ public class AColumnService extends AbstractService {
     public PreferenzaService pref;
 
 
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
@@ -88,13 +93,16 @@ public class AColumnService extends AbstractService {
     public void create(Grid<AEntity> grid, Class<? extends AEntity> entityClazz, String propertyName) {
         pref = StaticContextAccessor.getBean(PreferenzaService.class);
         Grid.Column<AEntity> colonna = null;
-        EAFieldType type = annotation.getFormType(entityClazz, propertyName);
+        EAFieldType type = annotation.getColumnType(entityClazz, propertyName);
         String header = annotation.getColumnName(entityClazz, propertyName);
         String width = annotation.getColumnWithEM(entityClazz, propertyName);
         boolean isFlexGrow = annotation.isFlexGrow(entityClazz, propertyName);
-        Class clazz = annotation.getComboClass(entityClazz, propertyName);
+        Class linkClazz = annotation.getLinkClass(entityClazz, propertyName);
+        Class enumClazz = annotation.getEnumClass(entityClazz, propertyName);
+        Class serviceClazz = annotation.getServiceClass(entityClazz, propertyName);
         String color = annotation.getColumnColor(entityClazz, propertyName);
         boolean sortable = annotation.isSortable(entityClazz, propertyName);
+        this.enumService = AEnumerationService.getInstance();
 
         if (type == null) {
             try { // prova ad eseguire il codice
@@ -251,7 +259,31 @@ public class AColumnService extends AbstractService {
             case enumeration:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Object obj = reflection.getPropertyValue(entity, propertyName);
-                    return new Label(obj.toString());
+                    return new Label(obj != null ? obj.toString() : "");
+                }));//end of lambda expressions and anonymous inner class
+                break;
+            case multicombo:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Field field = reflection.getField(entityClazz, propertyName);
+                    String testo = "";
+                    List valueList;
+
+                    try { // prova ad eseguire il codice
+                        if (field.get(entity) instanceof List) {
+                            valueList = (List) field.get(entity);
+                            if (array.isValid(valueList)) {
+                                for (Object singleValue : valueList) {
+                                    testo += singleValue.toString();
+                                    testo += VIRGOLA + SPAZIO;
+                                }// end of for cycle
+                                testo = text.levaCoda(testo.trim(), VIRGOLA).trim();
+                            }// end of if cycle
+                        }// end of if cycle
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+
+                    return new Label(testo);
                 }));//end of lambda expressions and anonymous inner class
                 break;
             case combo:
@@ -369,6 +401,7 @@ public class AColumnService extends AbstractService {
                     byte[] bytes = null;
                     Object value = null;
                     Field field = reflection.getField(entityClazz, propertyName);
+                    Label label = null;
                     try { // prova ad eseguire il codice
                         bytes = (byte[]) field.get(entity);
                         value = typePref.bytesToObject(bytes);
@@ -381,7 +414,7 @@ public class AColumnService extends AbstractService {
                             break;
                         case bool:
                             boolean status = (boolean) value;
-                            Label label = new Label(status ? "si" : "no");
+                            label = new Label(status ? "si" : "no");
                             label.getStyle().set("font-weight", "bold");
                             if (status) {
                                 label.getStyle().set("color", "green");
@@ -395,6 +428,12 @@ public class AColumnService extends AbstractService {
                             break;
                         case email:
                             break;
+                        case enumeration:
+                            label = new Label();
+                            label.getStyle().set("color", "green");
+                            label.setText(enumService.convertToPresentation((String) value));
+
+                            return label;
                         default:
                             log.warn("Switch - caso non definito");
                             break;
@@ -453,6 +492,12 @@ public class AColumnService extends AbstractService {
                 width = text.isValid(width) ? width : "2.5em";
                 break;
             case enumeration:
+                break;
+            case multicombo:
+                //--larghezza di default per un multicombo = 20em
+                //--vale per la formattazione standard della data
+                //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "20em";
                 break;
             case combo:
                 break;

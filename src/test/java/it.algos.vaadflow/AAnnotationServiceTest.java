@@ -505,7 +505,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     public void getComboClass() {
         Class previstoClass = Role.class;
-        Class ottenutoClass = annotation.getComboClass(FIELD_CODE);
+        Class ottenutoClass = annotation.getLinkClass(FIELD_CODE);
         assertEquals(previstoClass, ottenutoClass);
     }// end of method
 

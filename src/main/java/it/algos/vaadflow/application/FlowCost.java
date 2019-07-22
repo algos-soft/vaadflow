@@ -39,6 +39,8 @@ public class FlowCost {
 
     public static final String SPAZIO = " ";
 
+    public static final String VIRGOLA = ",";
+
     public final static String A_CAPO = "\n";
 
     public final static String ASTERISCO = "*";

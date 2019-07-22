@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Project springvaadin
@@ -948,7 +949,7 @@ public class AAnnotationService extends AbstractService {
      *
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
-     * @return the type for the specific columnService
+     * @return the type for the specific field
      */
     public EAFieldType getFormType(final Field reflectionJavaField) {
         EAFieldType type = null;
@@ -968,7 +969,7 @@ public class AAnnotationService extends AbstractService {
      * @param entityClazz the entity class
      * @param fieldName   the property name
      *
-     * @return the type for the specific columnService
+     * @return the type for the specific field
      */
     public EAFieldType getFormType(Class<? extends AEntity> entityClazz, String fieldName) {
         EAFieldType type = null;
@@ -977,6 +978,75 @@ public class AAnnotationService extends AbstractService {
         type = getFormType(field);
 
         return type;
+    }// end of method
+
+
+    /**
+     * Get the type (field) of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the type for the specific column
+     */
+    public EAFieldType getColumnType(final Field reflectionJavaField) {
+        EAFieldType type = null;
+        AIColumn annotation = this.getAIColumn(reflectionJavaField);
+
+        if (annotation != null) {
+            type = annotation.type();
+        }// end of if cycle
+
+        if (type == EAFieldType.ugualeAlForm) {
+            type = getFormType(reflectionJavaField);
+        }// end of if cycle
+
+        return type;
+    }// end of method
+
+
+    /**
+     * Get the type (field) of the property.
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the type for the specific column
+     */
+    public EAFieldType getColumnType(Class<? extends AEntity> entityClazz, String fieldName) {
+        EAFieldType type = null;
+
+        Field field = reflection.getField(entityClazz, fieldName);
+        type = getColumnType(field);
+
+        if (type == EAFieldType.ugualeAlForm) {
+            type = getFormType(entityClazz, fieldName);
+        }// end of if cycle
+
+        return type;
+    }// end of method
+
+
+    /**
+     * Get the items (String) of the enum.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the items
+     */
+    public List<String> getEnumItems(final Field reflectionJavaField) {
+        List<String> items = null;
+        String value = "";
+        AIField annotation = this.getAIField(reflectionJavaField);
+
+        if (annotation != null) {
+            value = annotation.items();
+        }// end of if cycle
+
+        if (text.isValid(value)) {
+            items = array.getList(value);
+        }// end of if cycle
+
+        return items;
     }// end of method
 
 
@@ -992,7 +1062,7 @@ public class AAnnotationService extends AbstractService {
         AIField annotation = this.getAIField(reflectionJavaField);
 
         if (annotation != null) {
-            clazz = annotation.clazz();
+            clazz = annotation.serviceClazz();
         }// end of if cycle
 
         return clazz;
@@ -1096,6 +1166,46 @@ public class AAnnotationService extends AbstractService {
     }// end of method
 
 
+//    /**
+//     * Get the class of the property.
+//     *
+//     * @param reflectionJavaField di riferimento per estrarre la Annotation
+//     *
+//     * @return the class for the specific columnService
+//     */
+//    @SuppressWarnings("all")
+//    public Class getComboClass(Field reflectionJavaField) {
+//        Class linkClazz = null;
+//        AIField annotation = this.getAIField(reflectionJavaField);
+//
+//        if (annotation != null) {
+//            linkClazz = annotation.serviceClazz();
+//        }// end of if cycle
+//
+//        return linkClazz;
+//    }// end of method
+//
+//
+//    /**
+//     * Get the class of the property.
+//     *
+//     * @param reflectionJavaField di riferimento per estrarre la Annotation
+//     *
+//     * @return the class for the specific columnService
+//     */
+//    @SuppressWarnings("all")
+//    public Class getComboClass(Class<? extends AEntity> entityClazz, String fieldName) {
+//        Class linkClazz = null;
+//        Field field = reflection.getField(entityClazz, fieldName);
+//
+//        if (field != null) {
+//            linkClazz = getComboClass(field);
+//        }// end of if cycle
+//
+//        return linkClazz;
+//    }// end of method
+
+
     /**
      * Get the class of the property.
      *
@@ -1104,12 +1214,72 @@ public class AAnnotationService extends AbstractService {
      * @return the class for the specific columnService
      */
     @SuppressWarnings("all")
-    public Class getComboClass(Field reflectionJavaField) {
+    public Class getEnumClass(Field reflectionJavaField) {
+        Class enumClazz = null;
+        AIField annotation = this.getAIField(reflectionJavaField);
+
+        if (annotation != null) {
+            enumClazz = annotation.enumClazz();
+        }// end of if cycle
+
+        return enumClazz == Object.class ? null : enumClazz;
+    }// end of method
+
+
+    /**
+     * Get the class of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the class for the specific columnService
+     */
+    @SuppressWarnings("all")
+    public Class getLinkClass(Field reflectionJavaField) {
         Class linkClazz = null;
         AIField annotation = this.getAIField(reflectionJavaField);
 
         if (annotation != null) {
-            linkClazz = annotation.clazz();
+            linkClazz = annotation.linkClazz();
+        }// end of if cycle
+
+        return linkClazz == Object.class ? null : linkClazz;
+    }// end of method
+
+
+    /**
+     * Get the class of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the class for the specific columnService
+     */
+    @SuppressWarnings("all")
+    public Class getServiceClass(Field reflectionJavaField) {
+        Class serviceClazz = null;
+        AIField annotation = this.getAIField(reflectionJavaField);
+
+        if (annotation != null) {
+            serviceClazz = annotation.serviceClazz();
+        }// end of if cycle
+
+        return serviceClazz == Object.class ? null : serviceClazz;
+    }// end of method
+
+
+    /**
+     * Get the class of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the class for the specific columnService
+     */
+    @SuppressWarnings("all")
+    public Class getEnumClass(Class<? extends AEntity> entityClazz, String fieldName) {
+        Class linkClazz = null;
+        Field field = reflection.getField(entityClazz, fieldName);
+
+        if (field != null) {
+            linkClazz = getEnumClass(field);
         }// end of if cycle
 
         return linkClazz;
@@ -1124,12 +1294,32 @@ public class AAnnotationService extends AbstractService {
      * @return the class for the specific columnService
      */
     @SuppressWarnings("all")
-    public Class getComboClass(Class<? extends AEntity> entityClazz, String fieldName) {
+    public Class getLinkClass(Class<? extends AEntity> entityClazz, String fieldName) {
         Class linkClazz = null;
         Field field = reflection.getField(entityClazz, fieldName);
 
         if (field != null) {
-            linkClazz = getComboClass(field);
+            linkClazz = getLinkClass(field);
+        }// end of if cycle
+
+        return linkClazz;
+    }// end of method
+
+
+    /**
+     * Get the class of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the class for the specific columnService
+     */
+    @SuppressWarnings("all")
+    public Class getServiceClass(Class<? extends AEntity> entityClazz, String fieldName) {
+        Class linkClazz = null;
+        Field field = reflection.getField(entityClazz, fieldName);
+
+        if (field != null) {
+            linkClazz = getServiceClass(field);
         }// end of if cycle
 
         return linkClazz;

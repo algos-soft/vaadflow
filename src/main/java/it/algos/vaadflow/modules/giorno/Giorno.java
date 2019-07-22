@@ -91,7 +91,7 @@ public class Giorno extends AEntity {
     @NotNull
     @DBRef
     @Field("mese")
-    @AIField(type = EAFieldType.combo, clazz = MeseService.class)
+    @AIField(type = EAFieldType.combo, serviceClazz = MeseService.class)
     @AIColumn(widthEM = 8)
     public Mese mese;
 

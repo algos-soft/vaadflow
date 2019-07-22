@@ -26,7 +26,7 @@ public @interface AIColumn {
      * Se manca (valore di default), prende quello indicato in AIField
      * Se manca anche in AIField, prende il valore di default di AIField
      */
-    EAFieldType type() default EAFieldType.ugualeAlField;
+    EAFieldType type() default EAFieldType.ugualeAlForm;
 
 
     /**

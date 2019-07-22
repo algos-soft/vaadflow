@@ -7,6 +7,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.AEnumerationService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ACheckBox;
 import it.algos.vaadflow.ui.fields.AComboBox;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,6 +49,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
 
 
     private final static String TIPO_FIELD_NAME = "type";
+
     private final static String VALUE_FIELD_NAME = "value";
 
     /**
@@ -54,6 +57,14 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
      */
     @Autowired
     public CompanyService companyService;
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    @Autowired
+    public AEnumerationService enumService;
+
     private AComboBox companyField;
 
 
@@ -92,12 +103,15 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
         }// end of if cycle
     }// end of method
 
+
     /**
      * Regola in lettura eventuali valori NON associati al binder
      * Sovrascritto
      */
     @Override
     protected void readSpecificFields() {
+        String enumTag = ";";
+        String[] parti = null;
         super.readSpecificFields();
         if (companyField != null) {
 //            companyField.setValue(((Preferenza) getCurrentItem()).getCompany());
@@ -106,7 +120,10 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
         AbstractField valueField = getField(VALUE_FIELD_NAME);
         byte[] byteValue;
         Object genericValue;
+        String stringValue = "";
         byteValue = getCurrentItem().getValue();
+        Field reflectionJavaField = reflection.getField(Preferenza.class, "type");
+        List<String> enumItems = annotation.getEnumItems(reflectionJavaField);
 
         if (valueField != null) {
             formLayout.remove(valueField);
@@ -116,11 +133,14 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
         EAPrefType type = getType();
         type = type != null ? type : EAPrefType.string;
         genericValue = type.bytesToObject(byteValue);
+        if (genericValue instanceof String) {
+            stringValue = (String) genericValue;
+        }// end of if cycle
 
         valueField = sincro(type);
         switch (type) {
             case string:
-                valueField.setValue((String) genericValue);
+                valueField.setValue(stringValue);
                 break;
             case integer:
                 valueField.setValue(genericValue.toString());
@@ -134,6 +154,23 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
                 }// end of if cycle
                 valueField.setValue(genericValue);
                 break;
+            case enumeration:
+
+                if (text.isValid(stringValue)) {
+                    ((AComboBox) valueField).setItems(enumService.getList(stringValue));
+                    valueField.setValue(enumService.convertToPresentation(stringValue));
+                }// end of if cycle
+
+//                if (stringValue.contains(enumTag)) {
+//                    parti = stringValue.split(enumTag);
+//                }// end of if cycle
+//
+//                if (parti != null && parti.length == 2) {
+//                    ((AComboBox) valueField).setItems(parti[0]);
+//                    valueField.setValue(parti[1]);
+//                }// end of if cycle
+                break;
+
             default:
                 log.warn("Switch - caso non definito");
                 break;
@@ -178,6 +215,13 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
                 break;
             case date:
                 valueField = new DatePicker(caption + "(giorno)");
+                break;
+            case enumeration:
+                if (operation == EAOperation.addNew) {
+                    valueField = new ATextField(caption + "(enumeration)");
+                } else {
+                    valueField = new AComboBox(caption + "(enumeration)");
+                }// end of if/else cycle
                 break;
             default:
                 log.warn("Switch - caso non definito");

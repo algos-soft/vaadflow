@@ -349,9 +349,26 @@ public class AArrayService extends AbstractService {
         for (int var4 = 0; var4 < var3; ++var4) {
             Long lungo = var2[var4];
             longList.add(lungo);
-        }
+        } // fine del ciclo for-each
 
         return longList;
+    }// end of method
+
+
+    public List<String> getList(String testo) {
+        List<String> lista = null;
+        String tag = ",";
+        String[] parti = null;
+
+        if (text.isValid(testo) && testo.contains(tag)) {
+            parti = testo.split(tag);
+        }// end of if cycle
+
+        if (parti != null && parti.length > 0) {
+            lista = Arrays.asList(parti);
+        }// end of if cycle
+
+        return lista;
     }// end of method
 
 
@@ -532,7 +549,7 @@ public class AArrayService extends AbstractService {
     /**
      * Differenza tra due array di Long
      *
-     * @param listaUno   array
+     * @param listaUno array
      * @param listaDue array
      *
      * @return differenza
@@ -552,7 +569,6 @@ public class AArrayService extends AbstractService {
         hashA.removeAll(hashB);
         return new ArrayList<Long>(hashA);
     } // fine del metodo
-
 
 
 //    /**
@@ -591,5 +607,39 @@ public class AArrayService extends AbstractService {
 //
 //        return new ArrayList<String>(hashB);
 //    } // fine del metodo
+
+
+    /**
+     * Converte una lista di oggetti in una lista di stringhe
+     */
+    public List<String> toString(List listaOggetti) {
+        List<String> listaStringhe = null;
+
+        if (isValid(listaOggetti)) {
+            listaStringhe = new ArrayList<>();
+            for (Object obj : listaOggetti) {
+                listaStringhe.add(obj.toString());
+            }// end of for cycle
+        }// end of if cycle
+
+        return listaStringhe;
+    }// end of method
+
+
+    /**
+     * Converte una lista di oggetti in una lista di stringhe
+     */
+    public List<String> toString(Object[] listaOggetti) {
+        List<String> listaStringhe = null;
+
+        if (listaOggetti != null && listaOggetti.length > 0) {
+            listaStringhe = new ArrayList<>();
+            for (Object obj : listaOggetti) {
+                listaStringhe.add(obj.toString());
+            }// end of for cycle
+        }// end of if cycle
+
+        return listaStringhe;
+    }// end of method
 
 }// end of singleton class

@@ -29,7 +29,7 @@ public abstract class ACEntity extends AEntity {
      */
     @DBRef
     @Field("comp")
-    @AIField(type = EAFieldType.combo, clazz = CompanyService.class, dev = EAFieldAccessibility.newOnly, admin = EAFieldAccessibility.showOnly)
+    @AIField(type = EAFieldType.combo, serviceClazz = CompanyService.class, dev = EAFieldAccessibility.newOnly, admin = EAFieldAccessibility.showOnly)
     @AIColumn(name = "company", widthEM = 7)
     public Company company;
 

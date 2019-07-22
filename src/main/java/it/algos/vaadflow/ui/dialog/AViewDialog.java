@@ -1,6 +1,9 @@
 package it.algos.vaadflow.ui.dialog;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -23,7 +26,6 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.*;
-import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
@@ -538,6 +540,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             }// end of if cycle
         }// end of for cycle
 
+        //--Eventuali regolazioni aggiuntive ai fields del binder
+        fixStandardAlgosFields();
+
         //--Costruisce eventuali fields specifici (costruiti non come standard type)
         //--Aggiunge i fields specifici al binder (facoltativo, alcuni fields non funzionano col binder)
         //--Se i fields non sono associati al binder, DEVONO comparire in readSpecificFields()
@@ -579,6 +584,14 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected List<String> getPropertiesName() {
         return service != null ? service.getFormPropertyNamesList(context) : null;
+    }// end of method
+
+
+    /**
+     * Eventuali specifiche regolazioni aggiuntive ai fields del binder
+     * Sovrascritto nella sottoclasse
+     */
+    protected void fixStandardAlgosFields() {
     }// end of method
 
 

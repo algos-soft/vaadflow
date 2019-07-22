@@ -72,7 +72,7 @@ public class ATest {
     protected int previstoIntero = 0;
     protected int ottenutoIntero = 0;
     protected ArrayList<String> previstoList;
-    protected ArrayList<String> ottenutoList;
+    protected List<String> ottenutoList;
     protected ArrayList<Field> previstoFieldList;
     protected ArrayList<Field> ottenutoFieldList;
     protected EAFieldType previstoType;

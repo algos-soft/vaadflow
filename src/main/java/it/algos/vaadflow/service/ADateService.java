@@ -620,24 +620,46 @@ public class ADateService extends AbstractService {
 
 
     /**
-     * Costruisce la data per il 1° gennaio dell'anno corrente.
-     *
-     * @return primo gennaio dell'anno
-     */
-    public LocalDate getPrimoGennaio() {
-        return getPrimoGennaio(LocalDate.now().getYear());
-    }// end of method
-
-
-    /**
      * Costruisce la data per il 1° gennaio dell'anno indicato.
      *
      * @param anno di riferimento
      *
-     * @return primo gennaio dell'anno
+     * @return primo gennaio dell'anno indicato
      */
-    public LocalDate getPrimoGennaio(int anno) {
+    public LocalDate primoGennaio(int anno) {
         return LocalDate.of(anno, 1, 1);
+    }// end of method
+
+
+    /**
+     * Costruisce la data per il 1° gennaio dell'anno corrente.
+     *
+     * @return primo gennaio dell'anno corrente
+     */
+    public LocalDate primoGennaio() {
+        return primoGennaio(LocalDate.now().getYear());
+    }// end of method
+
+
+    /**
+     * Costruisce la data per il 31° dicembre dell'anno indicato.
+     *
+     * @param anno di riferimento
+     *
+     * @return ultimo giorno dell'anno indicato
+     */
+    public LocalDate trentunDicembre(int anno) {
+        return LocalDate.of(anno, 12, 31);
+    }// end of method
+
+
+    /**
+     * Costruisce la data per il 31° dicembre dell'anno corrente.
+     *
+     * @return ultimo giorno dell'anno corrente
+     */
+    public LocalDate trentunDicembre() {
+        return trentunDicembre(LocalDate.now().getYear());
     }// end of method
 
 
@@ -651,20 +673,6 @@ public class ADateService extends AbstractService {
     public LocalDate getLocalDateByDay(int giorno) {
         return LocalDate.ofYearDay(LocalDate.now().getYear(), giorno);
     }// end of single test
-
-
-    /**
-     * Costruisce la data per il 31° dicembre dell'anno indicato.
-     * <p>
-     *
-     * @param anno di riferimento
-     *
-     * @return ultimo dell'anno
-     */
-    public Date getTrentunoDicembre(int anno) {
-        Date data = creaData(31, 12, anno);
-        return lastTime(data);
-    }// end of method
 
 
     /**

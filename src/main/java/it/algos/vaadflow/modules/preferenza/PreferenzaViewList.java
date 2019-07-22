@@ -86,12 +86,14 @@ public class PreferenzaViewList extends AGridViewList {
         if (login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
             super.usaBottoneReset = true;
-        }// end of if cycle
+            super.usaBottoneNew = true;
+        } else {
+            super.usaBottoneNew = false;
+        }// end of if/else cycle
 
         super.usaSearch = true;
         super.usaSearchDialog = false;
         super.isEntityDeveloper = true;
-        super.usaBottoneNew = false;
         super.usaPagination = true;
 
         super.grid = new PaginatedGrid<Preferenza>();

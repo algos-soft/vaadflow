@@ -123,7 +123,7 @@ public abstract class APrefViewList extends AViewList {
 
         //--Flag per la larghezza della Grid. Default a 80.
         //--Espressa come numero per comodità; poi viene convertita in "em".
-        gridWith = 80;
+        gridWith = 90;
 
         //--property per la ricerca con searchField.
         //--Viene letta da una @Annotation.

@@ -72,8 +72,8 @@ import java.util.List;
 @Builder(builderMethodName = "builderUtente")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.obbligatoria)
-@AIList(fields = {"company", "username", "password", "enabled", "mail"})
-@AIForm(fields = {"company", "username", "ruoli", "password", "enabled", "mail"})
+@AIList(fields = {"company", "username", "password", "ruoli","enabled", "mail"})
+@AIForm(fields = {"company", "username", "password", "ruoli", "enabled", "mail"})
 @AIScript(sovrascrivibile = false)
 public class Utente extends ACEntity implements UserDetails {
 
@@ -91,7 +91,7 @@ public class Utente extends ACEntity implements UserDetails {
     @Indexed(unique = true, sparse = true, direction = IndexDirection.DESCENDING)
     @Field("user")
     @AIField(type = EAFieldType.text)
-    @AIColumn(name = "user", widthEM = 10)
+    @AIColumn(name = "user", widthEM = 12)
     public String username;
 
 
@@ -150,8 +150,8 @@ public class Utente extends ACEntity implements UserDetails {
      * Siccome sono 'embedded' in utente, non serve @OneToMany() o @ManyToOne()
      */
     @Field("role")
-    @AIField(type = EAFieldType.noone, required = true, clazz = RoleService.class)
-    @AIColumn(name = "ruolo", widthEM = 10)
+    @AIField(type = EAFieldType.multicombo, required = true, serviceClazz = RoleService.class)
+    @AIColumn(name = "ruolo")
     public List<Role> ruoli;
 
 

@@ -1,6 +1,5 @@
 package it.algos.vaadflow.ui.menu;
 
-import com.flowingcode.addons.applayout.menu.MenuItem;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -151,7 +150,7 @@ public abstract class AMenu extends Div implements IAMenu {
             }// end of if cycle
 
             //--crea menu dell'admin (se loggato)
-            if (context.isAdmin()) {
+            if (context.isDev() || context.isAdmin()) {
                 creaMenuAdmin();
             }// end of if cycle
 

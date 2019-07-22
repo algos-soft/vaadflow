@@ -19,7 +19,6 @@ import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressViewDialog;
-import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -33,6 +32,7 @@ import org.springframework.context.annotation.Scope;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.FLASH;
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
@@ -59,9 +59,10 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @AIScript(sovrascrivibile = true)
 public class ProvaViewDialog extends AViewDialog<Prova> {
 
+    private final static String INDIRIZZO = "indirizzoStatico";
+
     @Autowired
     ApplicationContext appContext;
-    private final static String INDIRIZZO = "indirizzoStatico";
 
     private AddressPresenter addressPresenter;
 
@@ -72,6 +73,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     private Address indirizzoTemporaneo;
 
     private ATextField indirizzoField;
+
 
     /**
      * Costruttore @Autowired <br>
@@ -132,9 +134,16 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         ((ATextField) propertyField).setWidth("2em");
 
         if (propertyField != null) {
-            fieldMap.put("alfa", propertyField);
+            AbstractField comboField = fieldMap.get("ruoli");
+            List lista = new ArrayList<>();
+            lista.add("alfetta");
+            lista.add("domani");
+            lista.add("mattina");
+            ((MultiselectComboBox) comboField).setItems(lista);
         }// end of if cycle
+
     }// end of method
+
 
     /**
      * Regola in lettura eventuali valori NON associati al binder
@@ -176,6 +185,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     protected void annullaUpdate(Address entityBean) {
         cancelButton.focus();
     }// end of method
+
 
     /**
      * Eventuali aggiustamenti finali al layout
@@ -238,6 +248,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
         getFormLayout().add(select);
     }// end of method
 
+
     private Address getIndirizzoCorrente() {
         Address indirizzo = null;
         Prova prova = getCurrentItem();
@@ -248,6 +259,8 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
         return indirizzo;
     }// end of method
+
+
     private Address getIndirizzo() {
         Address indirizzo = getIndirizzoCorrente();
 
@@ -257,6 +270,7 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
         return indirizzo;
     }// end of method
+
 
     /**
      * Recupera il field dal nome

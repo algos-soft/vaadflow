@@ -9,6 +9,8 @@ import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
+import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import lombok.*;
@@ -22,6 +24,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Project vaadtest <br>
@@ -66,8 +69,8 @@ import java.time.LocalDateTime;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "descrizione", "sino", "box", "yesno", "yesnobold", "lastModifica", "meseStatico", "meseDinamico"})
-@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "sino", "box", "yesno", "yesnobold", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -154,6 +157,39 @@ public class Prova extends ACEntity {
     @AIColumn(name = "ynb")
     public boolean yesnobold;
 
+    /**
+     * enumeration
+     */
+    @Field("lisA")
+    @AIField(type = EAFieldType.enumeration, items = "alfa,beta,gamma")
+    @AIColumn(name = "lisA")
+    public String listaA;
+
+    /**
+     * enumeration
+     */
+    @Field("lisB")
+    @AIField(type = EAFieldType.enumeration, enumClazz = EACompanyRequired.class)
+    @AIColumn(name = "lisB")
+    public String listaB;
+
+    /**
+     * enumeration
+     */
+    @Field("lisC")
+    @AIField(type = EAFieldType.enumeration, serviceClazz = RoleService.class)
+    @AIColumn(name = "lisC")
+    public String listaC;
+
+
+    /**
+     * combo multiplo <br>
+     */
+    @Field("rol")
+    @AIField(type = EAFieldType.multicombo, serviceClazz = RoleService.class, widthEM = 4)
+    @AIColumn(widthEM = 6)
+    public List<Role> ruoli;
+
 
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(name = "last", type = EAFieldType.localdatetime, required = true, help = "ultima modifica della voce effettuata sul server wiki")
@@ -165,7 +201,7 @@ public class Prova extends ACEntity {
      * riferimento statico SENZA @DBRef (embedded)
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
     @AIColumn(name = "ind")
     public Address indirizzoStatico;
 
@@ -176,7 +212,7 @@ public class Prova extends ACEntity {
      */
     @DBRef
     @Field("ind2")
-    @AIField(type = EAFieldType.combo, clazz = AddressService.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.combo, serviceClazz = AddressService.class, help = "Indirizzo")
     @AIColumn(name = "ind2")
     public Address indirizzoDinamico;
 
@@ -187,7 +223,7 @@ public class Prova extends ACEntity {
     @NotNull
     @DBRef
     @Field("mese")
-    @AIField(type = EAFieldType.combo, clazz = MeseService.class)
+    @AIField(type = EAFieldType.combo, serviceClazz = MeseService.class)
     @AIColumn(widthEM = 8)
     public Mese mese;
 
@@ -199,7 +235,7 @@ public class Prova extends ACEntity {
     @NotNull
     @DBRef
     @Field("secolo")
-    @AIField(type = EAFieldType.combo, clazz = SecoloService.class)
+    @AIField(type = EAFieldType.combo, serviceClazz = SecoloService.class)
     @AIColumn(widthEM = 8)
     public Secolo secolo;
 

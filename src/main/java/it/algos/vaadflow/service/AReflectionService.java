@@ -444,7 +444,7 @@ public class AReflectionService extends AbstractService {
      *
      * @return lista di fields visibili nella Grid
      */
-    public ArrayList<Field> getListFields(Class<? extends AEntity> entityClazz, ArrayList<String> listaNomi) {
+    public ArrayList<Field> getListFields(Class<? extends AEntity> entityClazz, List<String> listaNomi) {
         ArrayList<Field> fieldsList = new ArrayList<>();
         Class<?> clazz = entityClazz;
         ArrayList<Field> fieldsTmp = new ArrayList<>();

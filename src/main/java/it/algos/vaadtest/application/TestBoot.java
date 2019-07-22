@@ -6,6 +6,7 @@ import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
 import it.algos.vaadflow.modules.mese.MeseViewList;
+import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadtest.modules.prova.ProvaService;
@@ -103,6 +104,9 @@ public class TestBoot extends ABoot {
 //        pref.saveValue(EAPreferenza.showAnno.getCode(), false);
 //        pref.saveValue(EAPreferenza.showMese.getCode(), false);
 //        pref.saveValue(EAPreferenza.showGiorno.getCode(), false);
+
+        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, "ordine,code,descrizione;code");
+
     }// end of method
 
 

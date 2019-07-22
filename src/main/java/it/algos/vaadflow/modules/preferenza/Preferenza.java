@@ -108,8 +108,8 @@ public class Preferenza extends ACEntity {
      */
     @NotNull
     @Field("type")
-    @AIField(type = EAFieldType.enumeration, clazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 6,sortable = true)
+    @AIField(type = EAFieldType.enumeration, enumClazz = EAPrefType.class, required = true, focus = true, widthEM = 12)
+    @AIColumn(widthEM = 5,sortable = true)
     public EAPrefType type;
 
 
@@ -117,7 +117,7 @@ public class Preferenza extends ACEntity {
     @NotNull
     @Field("val")
     @AIField(type = EAFieldType.pref, required = true, name = "Valore", widthEM = 12)
-    @AIColumn(widthEM = 7)
+    @AIColumn(widthEM = 10)
     public byte[] value;
 
 

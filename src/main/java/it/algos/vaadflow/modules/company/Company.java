@@ -100,7 +100,7 @@ public class Company extends AEntity {
      * riferimento statico SENZA @DBRef
      */
     @Field("contatto")
-    @AIField(type = EAFieldType.link, clazz = PersonPresenter.class, help = "Riferimento")
+    @AIField(type = EAFieldType.link, linkClazz = PersonPresenter.class, help = "Riferimento")
     @AIColumn(name = "riferimento", widthEM = 10, sortable = false)
     public Person contatto;
 
@@ -128,7 +128,7 @@ public class Company extends AEntity {
      * riferimento statico SENZA @DBRef
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, clazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
     public Address indirizzo;
 
 
