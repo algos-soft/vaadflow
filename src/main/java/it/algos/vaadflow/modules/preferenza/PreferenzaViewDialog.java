@@ -155,22 +155,11 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
                 valueField.setValue(genericValue);
                 break;
             case enumeration:
-
                 if (text.isValid(stringValue)) {
                     ((AComboBox) valueField).setItems(enumService.getList(stringValue));
                     valueField.setValue(enumService.convertToPresentation(stringValue));
                 }// end of if cycle
-
-//                if (stringValue.contains(enumTag)) {
-//                    parti = stringValue.split(enumTag);
-//                }// end of if cycle
-//
-//                if (parti != null && parti.length == 2) {
-//                    ((AComboBox) valueField).setItems(parti[0]);
-//                    valueField.setValue(parti[1]);
-//                }// end of if cycle
                 break;
-
             default:
                 log.warn("Switch - caso non definito");
                 break;
@@ -246,11 +235,31 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
         EAPrefType type = getType();
         AbstractField valueField = getField(VALUE_FIELD_NAME);
         byte[] byteValue;
-        Object genericValue = null;
+        Object genericFieldValue = null;
+        String mongoEnumValue = null;
 
         if (valueField != null) {
-            genericValue = valueField.getValue();
-            byteValue = type.objectToBytes(genericValue);
+            genericFieldValue = valueField.getValue();
+
+            switch (type) {
+                case string:
+                    break;
+                case integer:
+                    break;
+                case bool:
+                    break;
+                case date:
+                    break;
+                case enumeration:
+                    mongoEnumValue = (String) currentItem.getType().bytesToObject(currentItem.value);
+                    genericFieldValue = enumService.convertToModel(mongoEnumValue, (String) genericFieldValue);
+                    break;
+                default:
+                    log.warn("Switch - caso non definito");
+                    break;
+            } // end of switch statement
+
+            byteValue = type.objectToBytes(genericFieldValue);
             getCurrentItem().setValue(byteValue);
         }// end of if cycle
 

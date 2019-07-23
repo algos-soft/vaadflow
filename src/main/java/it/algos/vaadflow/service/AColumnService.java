@@ -64,7 +64,6 @@ public class AColumnService extends AbstractService {
     public PreferenzaService pref;
 
 
-
     /**
      * Private constructor to avoid client applications to use constructor
      */
@@ -439,12 +438,6 @@ public class AColumnService extends AbstractService {
                             break;
                     } // end of switch statement
                     return new Label(value != null ? value.toString() : "");
-
-//                    if (typePref == EAPrefType.bool) {
-//                        return new Checkbox((boolean) value ? "si" : "no", (boolean) value);
-//                    } else {
-//                        return new Label(value != null ? value.toString() : "");
-//                    }// end of if/else cycle
                 }));//end of lambda expressions and anonymous inner class
                 break;
             default:

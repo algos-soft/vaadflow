@@ -391,7 +391,7 @@ public class PreferenzaService extends AService {
 
 
     public int getInt(String keyCode) {
-        return getInt(keyCode,0);
+        return getInt(keyCode, 0);
     } // end of method
 
 
@@ -415,14 +415,30 @@ public class PreferenzaService extends AService {
 
     public String getStr(String keyCode) {
         String valoreTesto = "";
-        Object value = getValue(keyCode);
+        Object value = null;
+        Preferenza pref = findByKeyUnica(keyCode);
 
-        if (value != null) {
-            if (value instanceof String) {
+        if (pref.type == EAPrefType.enumeration) {
+            valoreTesto = getEnumStr(keyCode);
+        } else {
+            value = getValue(keyCode);
+            if (value != null && value instanceof String) {
                 valoreTesto = (String) value;
             } else {
                 log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
             }// end of if/else cycle
+        }// end of if/else cycle
+
+        return valoreTesto;
+    } // end of method
+
+
+    public String getEnumStr(String keyCode) {
+        String valoreTesto = "";
+        String rawValue = (String) getValue(keyCode);
+
+        if (text.isValid(rawValue)) {
+            valoreTesto = enumService.convertToPresentation(rawValue);
         } else {
             log.warn("Algos - Preferenze. Non esiste la preferenza: " + keyCode);
         }// end of if/else cycle

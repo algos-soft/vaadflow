@@ -27,6 +27,8 @@ public class AEnumerationService extends AbstractService {
      */
     private static final AEnumerationService INSTANCE = new AEnumerationService();
 
+    private final static String TAG = ";";
+
 
     /**
      * Private constructor to avoid client applications to use constructor
@@ -73,10 +75,9 @@ public class AEnumerationService extends AbstractService {
      */
     public String[] getParti(String rawValue) {
         String[] parti = null;
-        String tag = ";";
 
-        if (rawValue.contains(tag)) {
-            parti = rawValue.split(tag);
+        if (rawValue.contains(TAG)) {
+            parti = rawValue.split(TAG);
         }// end of if cycle
 
         return parti;
@@ -121,14 +122,26 @@ public class AEnumerationService extends AbstractService {
     }// end of method
 
 
-//    /**
-//     * Regola in lettura eventuali valori NON associati al binder
-//     * Sovrascritto
-//     */
-//    public void convertToModel() {
-//    }// end of method
-//
-//
+    /**
+     * Modifica il valore selezionato nella stringa del mongoDB
+     *
+     * @param rawValue         dei valori ammessi seguita dal valore selezionato
+     * @param newSelectedValue da sostituire
+     *
+     * @return valore selezionato
+     */
+    public String convertToModel(String rawValue, String newSelectedValue) {
+        String newRawValue = "";
+        String stringaValori = getStringaValori(rawValue);
+
+        if (text.isValid(stringaValori)) {
+            newRawValue = stringaValori + TAG + newSelectedValue;
+        }// end of if cycle
+
+        return newRawValue;
+    }// end of method
+
+
 //    /**
 //     * Regola in lettura eventuali valori NON associati al binder
 //     * Sovrascritto

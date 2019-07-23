@@ -121,4 +121,20 @@ public class AEnumerationServiceTest extends ATest {
     }// end of single test
 
 
+    /**
+     * Modifica il valore selezionato nella stringa del mongoDB
+     *
+     * @param rawValue         dei valori ammessi seguita dal valore selezionato
+     * @param newSelectedValue da sostituire
+     *
+     * @return valore selezionato
+     */
+    @Test
+    public void convertToModel() {
+        previsto = "ordine,code,descrizione;ordine";
+        ottenuto = service.convertToModel(sorgente,"ordine");
+        assertEquals(ottenuto, previsto);
+    }// end of single test
+
+
 }// end of class

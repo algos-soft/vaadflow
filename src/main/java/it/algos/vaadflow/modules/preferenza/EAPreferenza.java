@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.preferenza;
 
 
 import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.enumeration.EAMenu;
 
 /**
  * Project it.algos.vaadflow
@@ -37,9 +36,9 @@ public enum EAPreferenza {
     mailTo(FlowCost.MAIL_TO, "Email di default a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),
     maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Numero di elementi oltre il quale scatta la pagination automatica della Grid (se attiva)", EAPrefType.integer, 15),
     mongoPageLimit(FlowCost.MONGO_PAGE_LIMIT, "Limite di elementi nelle query mongoDB", EAPrefType.integer, 50000),
-    usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.string, EAMenu.flowing.toString()),
-    textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.string, FlowCost.BOT_SEARCH),
-    textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.string, FlowCost.BOT_CREATE),
+    usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.enumeration, "buttons,popup,flowing,vaadin;flowing"),
+    textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.enumeration, "cerca,ricerca,find;cerca"),
+    textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.enumeration, "new,nuovo;nuovo"),
     showAccount(FlowCost.SHOW_ACCOUNT_ON_MENU, "Mostra l'account nella barra di menu", EAPrefType.bool, true),
     usaSearchCaseSensitive(FlowCost.USA_SEARCH_CASE_SENSITIVE, "Search delle query sensibile alle maiuscole", EAPrefType.bool, false),
     usaButtonShortcut(FlowCost.USA_BUTTON_SHORTCUT, "Shortcut dei bottoni. Disabilitabile in caso di problemi col browser", EAPrefType.bool, true),

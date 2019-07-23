@@ -89,7 +89,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      */
     protected void creaMenuLayout() {
         IAMenu menu;
-        EAMenu typeMenu = EAMenu.getMenu(pref.getStr(USA_MENU));
+        EAMenu typeMenu = EAMenu.getMenu(pref.getEnumStr(USA_MENU));
 
         if (typeMenu != null) {
             switch (typeMenu) {
