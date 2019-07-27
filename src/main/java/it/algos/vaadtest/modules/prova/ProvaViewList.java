@@ -30,8 +30,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
@@ -186,18 +188,18 @@ public class ProvaViewList extends AGridViewList {
         testVistaDiversi.getElement().setAttribute("theme", "secondary");
         testVistaDiversi.addClassName("view-toolbar__button");
 
-        Map<String, List<String>> mappa = null;
-        mappa = new LinkedHashMap<String, List<String>>();
+        Map<String, String> mappa = null;
+        mappa = new LinkedHashMap<String, String>();
         List<String> lista = new ArrayList<>();
         lista.add("mario");
-        mappa.put("nome", lista);
+        mappa.put("nome", "mario");
 
         lista = new ArrayList<>();
         lista.add("27");
-        mappa.put("servizio", lista);
-        final QueryParameters query = new QueryParameters(mappa);
+        mappa.put("servizio", "27");
+        final QueryParameters query = QueryParameters.simple(mappa);
 
-        testVistaDiversi.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM ,query)));
+        testVistaDiversi.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM, query)));
         topPlaceholder.add(testVistaDiversi);
 
 
@@ -220,7 +222,7 @@ public class ProvaViewList extends AGridViewList {
         mappa2.put("servizi", lista2);
         final QueryParameters query2 = new QueryParameters(mappa2);
 
-        testVistaMultipli.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM ,query2)));
+        testVistaMultipli.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM, query2)));
         topPlaceholder.add(testVistaMultipli);
     }// end of method
 

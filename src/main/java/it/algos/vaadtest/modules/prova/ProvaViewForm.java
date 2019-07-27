@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.SPAZIO;
+import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
 import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
 
 /**
@@ -48,9 +49,10 @@ public class ProvaViewForm extends AView {
                 Object value = parametersMap.get(key);
                 if (value instanceof List) {
                     for (Object stringa : (List) value) {
-                        testo += stringa + SPAZIO;
+                        testo += stringa + VIRGOLA + SPAZIO;
                     }// end of for cycle
                 }// end of if cycle
+                testo = text.levaCoda(testo.trim(), VIRGOLA);
                 alertPlaceholder.add(new Label(testo.trim()));
             }// end of for cycle
         } else {
