@@ -198,6 +198,8 @@ public class FlowCost {
 
     public final static String DELETE = "Delete";
 
+    public final static String CONFERMA = "Conferma";
+
     //log type
     public final static String LOG_SETUP = "logSetup";
 

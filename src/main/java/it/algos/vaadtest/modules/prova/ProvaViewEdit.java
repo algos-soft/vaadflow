@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @Route(value = "provaViewRoute")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class ProvaView extends VerticalLayout implements HasUrlParameter<String>, BeforeEnterObserver, BeforeLeaveObserver {
+public class ProvaViewEdit extends VerticalLayout implements HasUrlParameter<String>, BeforeEnterObserver, BeforeLeaveObserver {
 
     protected final Button backButton = new Button(ANNULLA);
 
@@ -119,7 +119,7 @@ public class ProvaView extends VerticalLayout implements HasUrlParameter<String>
     private String idKey;
 
 
-    public ProvaView() {
+    public ProvaViewEdit() {
     }
 
 
@@ -182,7 +182,10 @@ public class ProvaView extends VerticalLayout implements HasUrlParameter<String>
         QueryParameters queryParameters = location.getQueryParameters();
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
 
-        setParameters(parametersMap);
+        if (parametersMap!=null&&parametersMap.size()>0) {
+            setParameters(parametersMap);
+        }// end of if cycle
+
         open();
     }// end of method
 

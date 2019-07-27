@@ -870,4 +870,40 @@ public class ADateServiceTest extends ATest {
         assertEquals(localDataOttenuta, localDataPrevista);
     }// end of single test
 
+
+    /**
+     * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese di una data fornita.
+     * <p>
+     * sab 23
+     *
+     * @param localDate fornita
+     *
+     * @return il giorno della settimana in forma breve
+     */
+    @Test
+    public void getWeekShort() {
+        previsto = "dom 5";
+
+        ottenuto = service.getWeekShort(LOCAL_DATE_DUE);
+        assertEquals(ottenuto, previsto);
+    }// end of method
+
+
+    /**
+     * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese ed il nome del mese di una data fornita.
+     * <p>
+     * sab 23 apr
+     *
+     * @param localDate fornita
+     *
+     * @return il giorno della settimana in forma breve
+     */
+    @Test
+    public void getWeekShortMese() {
+        previsto = "dom 5 ott";
+
+        ottenuto = service.getWeekShortMese(LOCAL_DATE_DUE);
+        assertEquals(ottenuto, previsto);
+    }// end of method
+
 }// end of class

@@ -21,4 +21,5 @@ public class TestCost {
 	public final static String TAG_ALF = "alfa";
 	public final static String TAG_BOL = "bolla";
 	public final static String TAG_PRO = "prova";
+	public final static String TAG_VIEW_FORM = "provaView";
 }// end of class

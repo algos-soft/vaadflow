@@ -136,6 +136,20 @@ public class AArrayService extends AbstractService {
 
 
     /**
+     * Controlla la validità della mappa
+     * Deve esistere (not null)
+     * Deve avere degli elementi (size > 0)
+     *
+     * @param array (List) in ingresso da controllare
+     *
+     * @return vero se l'array soddisfa le condizioni previste
+     */
+    public boolean isValid(final Map array) {
+        return array != null && array.size() > 0;
+    }// end of method
+
+
+    /**
      * Controlla che l'array sia nullo o vuoto
      * Non deve esistere (null)
      * Se esiste, non deve avere elementi (size = 0)

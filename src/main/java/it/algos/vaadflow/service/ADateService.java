@@ -280,7 +280,21 @@ public class ADateService extends AbstractService {
 
 
     /**
+     * Restituisce l'anno corrente
+     * <p>
+     * 2019
+     *
+     * @return anno corrente
+     */
+    public int getAnnoCorrente() {
+        return LocalDate.now().getYear();
+    }// end of method
+
+
+    /**
      * Restituisce il giorno della settimana in forma estesa
+     * <p>
+     * domenica 5
      * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
@@ -301,6 +315,8 @@ public class ADateService extends AbstractService {
     /**
      * Restituisce il giorno della settimana in forma estesa
      * <p>
+     * domenica 5
+     * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
      * Two numbers for year <b>
@@ -318,6 +334,8 @@ public class ADateService extends AbstractService {
 
     /**
      * Restituisce la data (senza tempo) in forma breve
+     * <p>
+     * 05-04-14
      * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
@@ -337,6 +355,8 @@ public class ADateService extends AbstractService {
     /**
      * Restituisce la data (senza tempo) in forma normale
      * <p>
+     * 5-ott-14
+     * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
      * Two numbers for year <b>
@@ -352,6 +372,8 @@ public class ADateService extends AbstractService {
 
     /**
      * Restituisce la data (senza tempo) in forma normale
+     * <p>
+     * 5-ott-14
      * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
@@ -377,6 +399,8 @@ public class ADateService extends AbstractService {
     /**
      * Restituisce la data attuale completa di tempo
      * <p>
+     * 5-ott-14 7:04
+     * <p>
      * Returns a string representation of the date <br>
      * Not using leading zeroes in day <br>
      * Two numbers for year <b>
@@ -391,7 +415,9 @@ public class ADateService extends AbstractService {
     /**
      * Restituisce la data completa di tempo
      * <p>
-     * Returns a string representation of the date <br>
+     * 5-ott-14 7:04
+     * <p>
+     * Returns a string representation of the date
      * Not using leading zeroes in day <br>
      * Two numbers for year <b>
      *
@@ -406,6 +432,8 @@ public class ADateService extends AbstractService {
 
     /**
      * Restituisce ora e minuti
+     * <p>
+     * 7:04
      *
      * @param localDateTime da rappresentare
      *
@@ -430,6 +458,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero della settimana dell'anno di una data fornita.
+     * <p>
+     * 43
+     * <p>
      * Usa Calendar
      *
      * @param data fornita
@@ -445,6 +476,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero della settimana del mese di una data fornita.
+     * <p>
+     * 3
+     * <p>
      * Usa Calendar
      *
      * @param data fornita
@@ -460,6 +494,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero del giorno dell'anno di una data fornita.
+     * <p>
+     * 294
+     * <p>
      * Usa LocalDate internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -474,6 +511,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero del giorno del mese di una data fornita.
+     * <p>
+     * 21
+     * <p>
      * Usa LocalDate internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -488,6 +528,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero del giorno della settimana di una data fornita.
+     * <p>
+     * 4
+     * <p>
      * Usa Calendar
      *
      * @param data fornita
@@ -503,6 +546,8 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il giorno (testo) della settimana di una data fornita.
+     * <p>
+     * sab
      *
      * @param localDateTime fornita
      *
@@ -514,7 +559,36 @@ public class ADateService extends AbstractService {
 
 
     /**
+     * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese di una data fornita.
+     * <p>
+     * sab 23
+     *
+     * @param localDate fornita
+     *
+     * @return il giorno della settimana in forma breve
+     */
+    public String getWeekShort(LocalDate localDate) {
+        return get(localDate, EATime.weekShort);
+    }// end of method
+
+    /**
+     * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese ed il nome del mese di una data fornita.
+     * <p>
+     * sab 23 apr
+     *
+     * @param localDate fornita
+     *
+     * @return il giorno della settimana in forma breve
+     */
+    public String getWeekShortMese(LocalDate localDate) {
+        return get(localDate, EATime.weekShortMese);
+    }// end of method
+
+
+    /**
      * Ritorna il giorno (testo) della settimana di una data fornita.
+     * <p>
+     * sab
      *
      * @param localDate fornita
      *
@@ -527,6 +601,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il giorno (testo) della settimana di una data fornita.
+     * <p>
+     * sab
+     * <p>
      * Usa LocalDate internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -541,6 +618,8 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il giorno (testo) della settimana di una data fornita.
+     * <p>
+     * martedì
      *
      * @param localDate fornita
      *
@@ -553,6 +632,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il giorno (testo) della settimana di una data fornita.
+     * <p>
+     * martedì
+     * <p>
      * Usa LocalDate internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -567,6 +649,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero delle ore di una data fornita.
+     * <p>
+     * 7
+     * <p>
      * Usa LocalDateTime internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -581,6 +666,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero dei minuti di una data fornita.
+     * <p>
+     * 43
+     * <p>
      * Usa LocalDateTime internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -595,6 +683,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero dei secondi di una data fornita.
+     * <p>
+     * 38
+     * <p>
      * Usa LocalDateTime internamente, perché Date è deprecato
      *
      * @param data fornita
@@ -609,6 +700,9 @@ public class ADateService extends AbstractService {
 
     /**
      * Ritorna il numero dell'anno di una data fornita.
+     * <p>
+     * 2014
+     * <p>
      * Usa LocalDate internamente, perché Date è deprecato
      *
      * @return il numero dell'anno

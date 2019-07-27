@@ -124,7 +124,7 @@
 
     //--Classe che parte da @Route
     /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Istanza (@Scope = 'singleton') inietta da @Route <br>
      * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */

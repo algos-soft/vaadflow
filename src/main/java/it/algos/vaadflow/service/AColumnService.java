@@ -347,7 +347,7 @@ public class AColumnService extends AbstractService {
                     Field field = reflection.getField(entityClazz, propertyName);
                     Object obj;
                     LocalDateTime timeStamp;
-                    String testo = "Y";
+                    String testo = "";
 
                     try { // prova ad eseguire il codice
                         obj = field.get(entity);
@@ -356,6 +356,28 @@ public class AColumnService extends AbstractService {
                             testo = date.getTime(timeStamp); //@todo aggiungere un selettore per modificare il format dalla annotation
                         } else {
                             log.warn("localdatetime non definito");
+                        }// end of if/else cycle
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+
+                    return new Label(testo);
+                }));//end of lambda expressions and anonymous inner class
+                break;
+            case localtime:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Field field = reflection.getField(entityClazz, propertyName);
+                    Object obj;
+                    LocalDateTime timeStamp;
+                    String testo = "Y";
+
+                    try { // prova ad eseguire il codice
+                        obj = field.get(entity);
+                        if (obj instanceof LocalDateTime) {
+                            timeStamp = (LocalDateTime) obj;
+                            testo = date.getOrario(timeStamp); //@todo aggiungere un selettore per modificare il format dalla annotation
+                        } else {
+                            log.warn("localtime non definito");
                         }// end of if/else cycle
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
@@ -506,6 +528,12 @@ public class AColumnService extends AbstractService {
                 //--vale per la formattazione standard della data
                 //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
                 width = text.isValid(width) ? width : "10em";
+                break;
+            case localtime:
+                //--larghezza di default per il solo tempo = 5em
+                //--vale per la formattazione standard della data
+                //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "5em";
                 break;
             case vaadinIcon:
                 break;

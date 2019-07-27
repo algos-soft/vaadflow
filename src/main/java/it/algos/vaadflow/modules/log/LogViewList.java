@@ -39,7 +39,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  */
 @Route(value = TAG_LOG)
 @Qualifier(TAG_LOG)
-@AIView(vaadflow = true, menuName = "logs", searchProperty = "descrizione", roleTypeVisibility = EARoleType.admin)
+@AIView(vaadflow = true, menuName = "logs", searchProperty = "descrizione", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogViewList extends AGridViewList {

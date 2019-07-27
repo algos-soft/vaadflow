@@ -138,7 +138,7 @@ public class Utente extends ACEntity implements UserDetails {
      */
     @Field("ena")
     @Indexed(direction = IndexDirection.DESCENDING)
-    @AIField(type = EAFieldType.checkbox)
+    @AIField(name = "attivo", type = EAFieldType.checkbox)
     @AIColumn(name = "OK", widthEM = 3,sortable = false)
     public boolean enabled;
 

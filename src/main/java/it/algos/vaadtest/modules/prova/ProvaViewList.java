@@ -3,14 +3,14 @@ package it.algos.vaadtest.modules.prova;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -30,12 +30,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
+import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
 
 /**
  * Project vaadtest <br>
@@ -110,30 +109,6 @@ public class ProvaViewList extends AGridViewList {
 
 
     /**
-     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
-     * Normalmente ad uso esclusivo del developer <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void creaAlertLayout() {
-        super.creaAlertLayout();
-        alertPlacehorder.add(new Label("Serve per inserire eventuali commenti"));
-        alertPlacehorder.add(new Label("La collezione di 15 elementi viene cancellata e ricostruita ad ogni avvio del programma di test"));
-    }// end of method
-
-
-    /**
-     * Aggiunge al menu eventuali @routes specifiche
-     * Solo sovrascritto
-     */
-    @Override
-    protected void addSpecificRoutes() {
-        addRoute(SecoloViewList.class);
-    }// end of method
-
-
-    /**
      * Le preferenze standard <br>
      * Le preferenze specifiche della sottoclasse <br>
      * Può essere sovrascritto, per modificare le preferenze standard <br>
@@ -156,6 +131,107 @@ public class ProvaViewList extends AGridViewList {
 
 //        super.searchProperty="descrizione";
         super.grid = new PaginatedGrid<Prova>();
+    }// end of method
+
+
+    /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+
+        alertPlacehorder.add(new Label("Serve per inserire eventuali commenti"));
+        alertPlacehorder.add(new Label("La collezione di 15 elementi viene cancellata e ricostruita ad ogni avvio del programma di test"));
+    }// end of method
+
+
+    /**
+     * Placeholder SOPRA la Grid <br>
+     * Contenuto eventuale, presente di default <br>
+     * - con o senza un bottone per cancellare tutta la collezione
+     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza gruppo di ricerca:
+     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
+     * -    bottone per aprire un DialogSearch con diverse property selezionabili
+     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
+     * - con eventuale Popup di selezione, filtro e ordinamento
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuali altri bottoni specifici <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaTopLayout() {
+        super.creaTopLayout();
+
+        Button testVistaSenza = new Button("Test senza parametri", new Icon(VaadinIcon.ASTERISK));
+        testVistaSenza.getElement().setAttribute("theme", "secondary");
+        testVistaSenza.addClassName("view-toolbar__button");
+        testVistaSenza.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM)));
+        topPlaceholder.add(testVistaSenza);
+
+
+        Button testVistaUno = new Button("Test con 1 parametro", new Icon(VaadinIcon.ASTERISK));
+        testVistaUno.getElement().setAttribute("theme", "secondary");
+        testVistaUno.addClassName("view-toolbar__button");
+        testVistaUno.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM + "/alfa")));
+        topPlaceholder.add(testVistaUno);
+
+
+        Button testVistaDiversi = new Button("Test con diversi parametri", new Icon(VaadinIcon.ASTERISK));
+        testVistaDiversi.getElement().setAttribute("theme", "secondary");
+        testVistaDiversi.addClassName("view-toolbar__button");
+
+        Map<String, List<String>> mappa = null;
+        mappa = new LinkedHashMap<String, List<String>>();
+        List<String> lista = new ArrayList<>();
+        lista.add("mario");
+        mappa.put("nome", lista);
+
+        lista = new ArrayList<>();
+        lista.add("27");
+        mappa.put("servizio", lista);
+        final QueryParameters query = new QueryParameters(mappa);
+
+        testVistaDiversi.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM ,query)));
+        topPlaceholder.add(testVistaDiversi);
+
+
+        Button testVistaMultipli = new Button("Test con diversi parametri multipli", new Icon(VaadinIcon.ASTERISK));
+        testVistaMultipli.getElement().setAttribute("theme", "secondary");
+        testVistaMultipli.addClassName("view-toolbar__button");
+
+        Map<String, List<String>> mappa2 = null;
+        mappa2 = new LinkedHashMap<String, List<String>>();
+        List<String> lista2 = new ArrayList<>();
+        lista2.add("mario");
+        lista2.add("giovanni");
+        lista2.add("francesca");
+        mappa2.put("nomi", lista2);
+
+        lista2 = new ArrayList<>();
+        lista2.add("27");
+        lista2.add("134");
+        lista2.add("8");
+        mappa2.put("servizi", lista2);
+        final QueryParameters query2 = new QueryParameters(mappa2);
+
+        testVistaMultipli.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM ,query2)));
+        topPlaceholder.add(testVistaMultipli);
+    }// end of method
+
+
+    /**
+     * Aggiunge al menu eventuali @routes specifiche
+     * Solo sovrascritto
+     */
+    @Override
+    protected void addSpecificRoutes() {
+        addRoute(SecoloViewList.class);
     }// end of method
 
 
