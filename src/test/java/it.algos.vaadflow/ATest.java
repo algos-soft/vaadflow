@@ -97,8 +97,8 @@ public class ATest {
     protected final static Date DATE_QUATTRO = new Date(1394259124000L); // 8 marzo 2014, 7 e 12 e 4
     protected final static LocalDate LOCAL_DATE_UNO = LocalDate.of(2014, 10, 21);
     protected final static LocalDate LOCAL_DATE_DUE = LocalDate.of(2014, 10, 5);
-    protected final static LocalDate LOCAL_DATE_TRE = LocalDate.of(2014, 10, 5);
-    protected final static LocalDate LOCAL_DATE_QUATTRO = LocalDate.of(2014, 3, 8);
+    protected final static LocalDate LOCAL_DATE_TRE = LocalDate.of(2015, 10, 5);
+    protected final static LocalDate LOCAL_DATE_QUATTRO = LocalDate.of(2015, 3, 8);
     protected final static LocalDateTime LOCAL_DATE_TIME_UNO = LocalDateTime.of(2014, 10, 21, 7, 12);
     protected final static LocalDateTime LOCAL_DATE_TIME_DUE = LocalDateTime.of(2014, 10, 5, 7, 4);
 

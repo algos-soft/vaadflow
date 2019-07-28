@@ -24,7 +24,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -163,8 +162,8 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
         }// end of if cycle
 
         if (array.isValid(multiParametersMap)) {
-            if (isMappaSemplificabile(multiParametersMap)) {
-                this.parametersMap = semplificaMappa(multiParametersMap);
+            if (array.isMappaSemplificabile(multiParametersMap)) {
+                this.parametersMap = array.semplificaMappa(multiParametersMap);
             } else {
                 this.multiParametersMap = multiParametersMap;
             }// end of if/else cycle
@@ -173,62 +172,6 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
     }// end of method
 
 
-    /**
-     * Controlla se la mappa può essere semplicficata
-     * La mappa prevede delle liste di valori per ogni key, quindi Map<String, List<String>>
-     * Se tutte le lisye hanno un singolo valore, si può usare una mappa più semplice Map<String, String>
-     */
-    private boolean isMappaSemplificabile(Map<String, List<String>> mappaConListe) {
-        boolean status = true;
-
-        for (Map.Entry<String, List<String>> entry : mappaConListe.entrySet()) {
-            if (entry.getValue().size() > 1) {
-                status = false;
-            }// end of if cycle
-        }// end of for cycle
-
-        return status;
-    }// end of method
-
-
-    /**
-     * Semplifica la mappa
-     * Questa prevede delle liste di valori per ogni key, quindi Map<String, List<String>>
-     * Spesso basta un valore.
-     * Se tutte le keys hanno un solo valore, si usa una mappa più semplice Map<String, String>
-     */
-    private Map<String, String> semplificaMappa(Map<String, List<String>> mappaConListe) {
-        Map<String, String> mappaSemplice = new HashMap<>();
-
-
-        for (Map.Entry<String, List<String>> entry : mappaConListe.entrySet()) {
-            if (entry.getValue().size() == 1) {
-                mappaSemplice.put(entry.getKey(), entry.getValue().get(0));
-            } else {
-                log.error("Qualcosa non ha funzionato");
-                System.out.println("Qualcosa non ha funzionato");
-            }// end of if/else cycle
-
-
-        }// end of for cycle
-
-
-////        if (parametersMap.get(0).size()==1) {
-////            parametersMap= new HashMap<>();
-////        }// end of if cycle
-//        for (Object key : mappa.keySet()) {
-////            if (((List)mappa.get(key)).size()==1) {
-////                codice
-////            }// end of if cycle
-//            List<String> lista = (List) mappa.get(key);
-//            String value = lista.get(0);
-//            mappa.put(key, value);
-//            int a = 87;
-//        }// end of for cycle
-
-
-        return mappaSemplice;
-    }// end of method
 
 
     @Override

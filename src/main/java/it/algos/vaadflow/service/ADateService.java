@@ -1198,4 +1198,26 @@ public class ADateService extends AbstractService {
         return durata;
     }// end of method
 
+
+    /**
+     * Differenza (in giorni) tra due date <br>
+     */
+    public int delta(LocalDate endDay, LocalDate startDay) {
+        int giorni = 0;
+        long fine = 0;
+        long inizio = 0;
+        Long delta;
+
+        fine = localDateToDate(endDay).getTime();
+        inizio = localDateToDate(startDay).getTime();
+        delta = fine - inizio;
+        delta = delta / 1000;
+        delta = delta / 60;
+        delta = delta / 60;
+        delta = delta / 24;
+        giorni = delta.intValue();
+
+        return giorni;
+    }// end of method
+
 }// end of class

@@ -959,4 +959,23 @@ public class ADateServiceTest extends ATest {
         assertEquals(localDateTimeOttenuta, localDateTimePrevista);
     }// end of method
 
+
+    /**
+     * Differenza (in giorni) tra due date <br>
+     */
+    @Test
+    public void delta() {
+        previstoIntero = 16;
+        ottenutoIntero = service.delta(LOCAL_DATE_UNO, LOCAL_DATE_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = -16;
+        ottenutoIntero = service.delta(LOCAL_DATE_DUE, LOCAL_DATE_UNO);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 154;
+        ottenutoIntero = service.delta(LOCAL_DATE_QUATTRO, LOCAL_DATE_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+    }// end of method
+
 }// end of class
