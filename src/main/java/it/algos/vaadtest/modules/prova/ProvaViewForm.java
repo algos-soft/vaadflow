@@ -35,17 +35,26 @@ public class ProvaViewForm extends AView {
      */
     @Override
     protected void creaAlertLayout() {
-        if (text.isValid(parameter)) {
-            alertPlaceholder.add(new Label("Ho ricevuto il parametro singolo " + parameter));
+        if (text.isValid(singleParameter)) {
+            alertPlaceholder.add(new Label("Ho ricevuto il parametro singolo " + singleParameter));
         } else {
             alertPlaceholder.add(new Label("Non è arrivato nessun parametro singolo"));
         }// end of if/else cycle
 
         if (array.isValid(parametersMap)) {
-            alertPlaceholder.add(new Label("Ho ricevuto la serie di parametri: "));
+            alertPlaceholder.add(new Label("Ho ricevuto una serie di parametri singoli: "));
             for (String key : parametersMap.keySet()) {
+                alertPlaceholder.add(new Label(key + ": " + parametersMap.get(key)));
+            }// end of for cycle
+        } else {
+            alertPlaceholder.add(new Label("Non è arrivato nessun gruppo di parametri"));
+        }// end of if/else cycle
+
+        if (array.isValid(multiParametersMap)) {
+            alertPlaceholder.add(new Label("Ho ricevuto una serie di parametri multipli: "));
+            for (String key : multiParametersMap.keySet()) {
                 String testo = key + ": ";
-                Object value = parametersMap.get(key);
+                Object value = multiParametersMap.get(key);
                 if (value instanceof List) {
                     for (Object stringa : (List) value) {
                         testo += stringa + VIRGOLA + SPAZIO;
