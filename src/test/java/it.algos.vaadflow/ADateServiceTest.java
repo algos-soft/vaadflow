@@ -618,8 +618,10 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
 
         for (EATime eaTime : EATime.values()) {
-            ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
-            System.out.println("Tipo: " + eaTime.getTag() + " -> " + ottenuto);
+            if (eaTime != EATime.iso8601) {
+                ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
+                System.out.println("Tipo: " + eaTime.getTag() + " -> " + ottenuto);
+            }// end of if cycle
         }// end of for cycle
         System.out.println("*************");
         System.out.println("");
@@ -904,6 +906,57 @@ public class ADateServiceTest extends ATest {
 
         ottenuto = service.getWeekShortMese(LOCAL_DATE_DUE);
         assertEquals(ottenuto, previsto);
+    }// end of method
+
+
+    /**
+     * Ritorna la data nel formato standar ISO 8601.
+     * <p>
+     * 2017-02-16T21:00:00.000+01:00
+     *
+     * @param localDate fornita
+     *
+     * @return testo standard ISO
+     */
+    @Test
+    public void getISO() {
+        previsto = "2014-03-08T07:12:04";
+        ottenuto = service.getISO(DATE_QUATTRO);
+        assertEquals(ottenuto, previsto);
+
+        previsto = "2014-10-05T00:00:00";
+        ottenuto = service.getISO(LOCAL_DATE_DUE);
+        assertEquals(ottenuto, previsto);
+
+        previsto = "2014-10-21T07:12:00";
+        ottenuto = service.getISO(LOCAL_DATE_TIME_UNO);
+        assertEquals(ottenuto, previsto);
+    }// end of method
+
+
+    /**
+     * Costruisce una data da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    @Test
+    public void parseFromISO() {
+        dataPrevista = DATE_UNO;
+        sorgente = service.getISO(DATE_UNO);
+        dataOttenuta = service.dateFromISO(sorgente);
+        assertEquals(dataOttenuta, dataPrevista);
+
+        localDataPrevista = LOCAL_DATE_DUE;
+        sorgente = service.getISO(LOCAL_DATE_DUE);
+        localDataOttenuta = service.localDateFromISO(sorgente);
+        assertEquals(localDataOttenuta, localDataPrevista);
+
+        localDateTimePrevista = LOCAL_DATE_TIME_UNO;
+        sorgente = service.getISO(LOCAL_DATE_TIME_UNO);
+        localDateTimeOttenuta = service.localDateTimeFromISO(sorgente);
+        assertEquals(localDateTimeOttenuta, localDateTimePrevista);
     }// end of method
 
 }// end of class

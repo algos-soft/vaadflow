@@ -16,6 +16,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.AArrayService;
+import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -81,6 +82,12 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     protected AArrayService array = AArrayService.getInstance();
+
+    /**
+     * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    protected ADateService date = ADateService.getInstance();
 
     /**
      * Istanza (@Scope = 'singleton') inietta da @Route <br>
@@ -235,7 +242,7 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
 
 
     /**
-     * Azione proveniente dal click sul bottone Cancella
+     * Azione proveniente dal click sul bottone Annulla
      */
     protected void back() {
         History history = UI.getCurrent().getPage().getHistory();
@@ -247,9 +254,6 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
      * Azione proveniente dal click sul bottone Conferma
      */
     protected void confirm() {
-//        if (confirmDialog.getElement().getParent() == null) {
-//            getUI().ifPresent(ui -> ui.add(confirmDialog));
-//        }
     }// end of method
 
 

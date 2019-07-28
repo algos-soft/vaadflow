@@ -27,7 +27,6 @@ import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Route(value = TAG_VIEW_FORM)
-//@Viewport("width=device-width")
 public class ProvaViewForm extends AView {
 
     /**

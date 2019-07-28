@@ -74,6 +74,12 @@ public enum EATime {
      * Esempio: 20 gen 2019 <br>
      */
     standard("standard", "d MMM yyyy", "20 gen 2019"),
+    /**
+     * ISO8601: yyyy-MM-dd'T'HH:mm:ss.SSSXXX <br>
+     * Pattern: yyyy-MM-dd'T'HH:mm:ss <br>
+     * Esempio: 2017-02-16T21:00:00.000+01:00 <br>
+     */
+    iso8601("iso8601", "yyyy-MM-dd'T'HH:mm:ss", "2017-02-16T21:00:00"),
     ;
 
     private String tag;

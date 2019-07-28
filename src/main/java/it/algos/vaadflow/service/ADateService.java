@@ -5,6 +5,7 @@ import it.algos.vaadflow.modules.mese.EAMese;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -196,6 +197,50 @@ public class ADateService extends AbstractService {
      */
     public LocalDate localDateTimeToLocalDate(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate();
+    }// end of method
+
+
+    /**
+     * Costruisce una data da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    public Date dateFromISO(String isoStringa) {
+        Date data = null;
+        DateFormat format = new SimpleDateFormat(EATime.iso8601.getPattern());
+        try { // prova ad eseguire il codice
+            data = format.parse(isoStringa);
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+
+        return data;
+    }// end of method
+
+
+    /**
+     * Costruisce una localData da una stringa in formato ISO 8601
+     * ATTENZIONE: si perdono ore, minuti e secondi (se ci sono)
+     *
+     * @param isoStringa da leggere
+     *
+     * @return localData costruita
+     */
+    public LocalDate localDateFromISO(String isoStringa) {
+        return dateToLocalDate(dateFromISO(isoStringa));
+    }// end of method
+
+
+    /**
+     * Costruisce una localDateTime da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return localDateTime costruita
+     */
+    public LocalDateTime localDateTimeFromISO(String isoStringa) {
+        return dateToLocalDateTime(dateFromISO(isoStringa));
     }// end of method
 
 
@@ -571,6 +616,7 @@ public class ADateService extends AbstractService {
         return get(localDate, EATime.weekShort);
     }// end of method
 
+
     /**
      * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese ed il nome del mese di una data fornita.
      * <p>
@@ -627,6 +673,54 @@ public class ADateService extends AbstractService {
      */
     public String getDayWeekFull(LocalDate localDate) {
         return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
+    }// end of method
+
+
+    /**
+     * Trasforma la data nel formato standard ISO 8601.
+     * <p>
+     * 2017-02-16T21:00:00
+     * Unsupported field: OffsetSeconds
+     * Dovrebbe essere 2017-02-16T21:00:00.000+01:00 per essere completa
+     *
+     * @param localDateTime fornito
+     *
+     * @return testo standard ISO senza OffsetSeconds
+     */
+    public String getISO(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(EATime.iso8601.getPattern(), LOCALE));
+    }// end of method
+
+
+    /**
+     * Trasforma la data nel formato standard ISO 8601.
+     * <p>
+     * 2017-02-16T21:00:00
+     * Unsupported field: OffsetSeconds
+     * Dovrebbe essere 2017-02-16T21:00:00.000+01:00 per essere completa
+     *
+     * @param localDate fornita
+     *
+     * @return testo standard ISO senza OffsetSeconds
+     */
+    public String getISO(LocalDate localDate) {
+        return getISO(localDateToLocalDateTime(localDate));
+    }// end of method
+
+
+    /**
+     * Trasforma la data nel formato standard ISO 8601.
+     * <p>
+     * 2017-02-16T21:00:00
+     * Unsupported field: OffsetSeconds
+     * Dovrebbe essere 2017-02-16T21:00:00.000+01:00 per essere completa
+     *
+     * @param data fornita
+     *
+     * @return testo standard ISO senza OffsetSeconds
+     */
+    public String getISO(Date data) {
+        return getISO(dateToLocalDateTime(data));
     }// end of method
 
 
