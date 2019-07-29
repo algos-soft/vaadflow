@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -69,8 +70,8 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
-@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "inizio","sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio","listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -156,6 +157,14 @@ public class Prova extends ACEntity {
     @AIField(type = EAFieldType.yesnobold)
     @AIColumn(name = "ynb")
     public boolean yesnobold;
+
+    /**
+     * booleano
+     */
+    @Field("ini")
+    @AIField(type = EAFieldType.localtime)
+    @AIColumn(name = "ini")
+    public LocalTime inizio;
 
     /**
      * enumeration

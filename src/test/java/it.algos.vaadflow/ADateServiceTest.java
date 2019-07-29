@@ -334,7 +334,13 @@ public class ADateServiceTest extends ATest {
         ottenuto = service.getOrario(LOCAL_DATE_TIME_DUE);
         assertEquals(ottenuto, previsto);
         System.out.println("");
-        System.out.println("Restituisce l'orario: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
+        System.out.println("Restituisce l'orario di una dateTime: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
+        System.out.println("");
+
+        ottenuto = service.getOrario(LOCAL_TIME_DUE);
+        assertEquals(ottenuto, previsto);
+        System.out.println("");
+        System.out.println("Restituisce l'orario di un time: " + LOCAL_TIME_DUE + " -> " + ottenuto);
         System.out.println("");
     }// end of single test
 

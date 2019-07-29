@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -277,6 +278,7 @@ public class ProvaService extends AService {
             }// end of if cycle
             prova.ordine = 178 + k;
             prova.pageid = 1000000L + (14 * k) + k + 8;
+            prova.inizio= LocalTime.NOON;
             save(prova);
         }// end of for cycle
 

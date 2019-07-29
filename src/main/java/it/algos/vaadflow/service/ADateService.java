@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -492,6 +489,32 @@ public class ADateService extends AbstractService {
         testo += localDateTime.getHour();
         testo += ":";
         minuti = localDateTime.getMinute();
+        if (minuti < 10) {
+            testo += tag;
+        }// end of if cycle
+        testo += minuti;
+
+        return testo;
+    }// end of method
+
+
+    /**
+     * Restituisce ora e minuti
+     * <p>
+     * 7:04
+     *
+     * @param localTime da rappresentare
+     *
+     * @return l'orario sotto forma di stringa
+     */
+    public String getOrario(LocalTime localTime) {
+        String testo = "";
+        int minuti;
+        String tag = "0";
+
+        testo += localTime.getHour();
+        testo += ":";
+        minuti = localTime.getMinute();
         if (minuti < 10) {
             testo += tag;
         }// end of if cycle

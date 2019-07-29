@@ -2,6 +2,9 @@ package it.algos.vaadflow.footer;
 
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
@@ -37,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AFooter extends VerticalLayout {
+public class AFooter extends VerticalLayout implements BeforeEnterObserver {
 
 
     /**
@@ -69,17 +72,8 @@ public class AFooter extends VerticalLayout {
     private PreferenzaService pref;
 
 
-    /**
-     * Metodo invocato subito DOPO il costruttore
-     * <p>
-     * Performing the initialization in a constructor is not suggested
-     * as the state of the UI is not properly set up when the constructor is invoked.
-     * <p>
-     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
-     * ma l'ordine con cui vengono chiamati NON è garantito
-     */
-    @PostConstruct
-    protected void inizia() {
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         this.setMargin(false);
         this.setSpacing(false);
         this.setPadding(false);

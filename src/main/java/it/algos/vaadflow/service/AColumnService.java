@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.SPAZIO;
@@ -315,7 +316,7 @@ public class AColumnService extends AbstractService {
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     LocalDate data;
-                    String testo = "X";
+                    String testo = "";
                     try { // prova ad eseguire il codice
                         data = (LocalDate) field.get(entity);
                         testo = date.getDayWeekShort(data);
@@ -330,7 +331,7 @@ public class AColumnService extends AbstractService {
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     LocalDate data;
-                    String testo = "Y";
+                    String testo = "";
 
                     try { // prova ad eseguire il codice
                         data = (LocalDate) field.get(entity);
@@ -368,13 +369,13 @@ public class AColumnService extends AbstractService {
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     Object obj;
-                    LocalDateTime timeStamp;
-                    String testo = "Y";
+                    LocalTime timeStamp;
+                    String testo = "";
 
                     try { // prova ad eseguire il codice
                         obj = field.get(entity);
-                        if (obj instanceof LocalDateTime) {
-                            timeStamp = (LocalDateTime) obj;
+                        if (obj instanceof LocalTime) {
+                            timeStamp = (LocalTime) obj;
                             testo = date.getOrario(timeStamp); //@todo aggiungere un selettore per modificare il format dalla annotation
                         } else {
                             log.warn("localtime non definito");

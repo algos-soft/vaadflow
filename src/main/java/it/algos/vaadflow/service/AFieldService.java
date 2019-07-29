@@ -1,6 +1,7 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -359,6 +361,11 @@ public class AFieldService extends AbstractService {
 //                field = new ADatePicker(caption);
 //                field = new ATextField(caption);
 //                binder.forField(field).bind(fieldName);
+                break;
+            case localtime:
+                field = new TimePicker(caption);
+                ((TimePicker)field).setStep(Duration.ofHours(1)); //standard
+                binder.forField(field).bind(fieldName);
                 break;
             case vaadinIcon:
                 break;
