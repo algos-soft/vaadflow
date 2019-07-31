@@ -168,7 +168,7 @@ public class AColumnService extends AbstractService {
                     return new Label(testo);
                 }));//end of lambda expressions and anonymous inner class
                 break;
-            case booleano:
+            case checkbox:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     boolean status = false;
@@ -192,7 +192,7 @@ public class AColumnService extends AbstractService {
                     return icon;
                 }));//end of lambda expressions and anonymous inner class
                 break;
-            case checkbox:
+            case booleano:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     boolean status = false;
@@ -496,13 +496,8 @@ public class AColumnService extends AbstractService {
                 //--gestisce numeri fino a 9.999.999
                 width = text.isValid(width) ? width : "7em";
                 break;
-            case booleano:
-                //--larghezza fissa per un booleano reso come icona = 2em
-                //--può essere aumentata con widthEM = ... nell'annotation @AIColumn della Entity
-                //  se si vuole usare un header con un testo più lungo di 2em
-                width = text.isValid(width) ? width : "2em";
-                break;
             case checkbox:
+            case booleano:
             case yesno:
             case yesnobold:
                 //--larghezza fissa per un booleano reso come checkbox oppure come testo si/no = 2.5em
