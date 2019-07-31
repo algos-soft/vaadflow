@@ -298,11 +298,11 @@ public class AAnnotationServiceTest extends ATest {
     @Test
     public void getColumnName() {
         previsto = HEADER_ORDINE;
-        ottenuto = annotation.getColumnName(FIELD_ORDINE);
+        ottenuto = annotation.getColumnNameProperty(FIELD_ORDINE);
         assertEquals(previsto, ottenuto);
 
         previsto = HEADER_CODE;
-        ottenuto = annotation.getColumnName(FIELD_CODE);
+        ottenuto = annotation.getColumnNameProperty(FIELD_CODE);
         assertEquals(previsto, ottenuto);
     }// end of single test
 

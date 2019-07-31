@@ -1,5 +1,6 @@
 package it.algos.vaadflow.application;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.RouterLayout;
 import it.algos.vaadflow.ui.MainLayout;
 import org.springframework.data.domain.Sort;
@@ -242,6 +243,8 @@ public class FlowCost {
 
     public final static String USA_BUTTON_SHORTCUT = "usaButtonShortcut";
 
+    public final static String USA_GRID_HEADER_PRIMA_MAIUSCOLA = "usaGridHeaderPrimaMaiuscola";
+
     // moduli visibili
     public final static String SHOW_COMPANY = "showCompany";
 
@@ -308,6 +311,8 @@ public class FlowCost {
     public final static Locale LOCALE = Locale.ITALIAN;
 
     public final static String TAG_SEARCH = "search";
+
+    public final static VaadinIcon VAADIN_ICON_DA_NON_USARE = VaadinIcon.VAADIN_H;
 
     private final static String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
 

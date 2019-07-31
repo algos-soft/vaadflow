@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
@@ -30,6 +31,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -251,6 +253,51 @@ public class ProvaViewList extends AGridViewList {
         return comboUpload;
     }// end of method
 
+    /**
+     * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
+     * Sovrascritto
+     */
+    protected void addSpecificColumnsBefore() {
+        Grid.Column<AEntity> colonna = null;
+        Grid.Column<AEntity> colonna2 = null;
+
+        Icon nameIcon = new Icon(VaadinIcon.CHECK);
+        nameIcon.setSize("10px");
+        nameIcon.getElement().getStyle().set("float", "center");
+        nameIcon.setColor("green");
+        Label nameLabel = new Label("");
+        nameLabel.add(nameIcon);
+        nameLabel.getElement().getStyle().set("float", "center");
+
+        Icon nameIcon2 = new Icon(VaadinIcon.CLOCK);
+        nameIcon2.setSize("30px");
+        nameIcon2.getStyle().set("float", "center");
+        nameIcon2.setColor("red");
+        Label nameLabel2 = new Label("");
+        nameLabel2.add(nameIcon2);
+
+//        Icon nameIcon = new Icon(VaadinIcon.MONEY);
+//        nameIcon.setSize("20px");
+//        nameIcon.getStyle().set("float", "left");
+//        nameIcon.setColor("blue");
+//        Label nameLabel = new Label("Name");
+//        nameLabel.add(nameIcon);
+//        grid().addColumn(Client::getName).setHeader(nameLabel).setFlexGrow(5).setSortable(true).setKey("name");  }// end of method
+
+
+        colonna=grid.addColumn(new ComponentRenderer<>(entity -> {
+            return new Label("x");
+        }));//end of lambda expressions and anonymous inner class
+        colonna.setHeader(nameLabel);
+        colonna.setWidth("10em");
+        colonna2=grid.addColumn(new ComponentRenderer<>(entity -> {
+            return new Label("y");
+        }));//end of lambda expressions and anonymous inner class
+        colonna2.setHeader(nameLabel2);
+        colonna2.setWidth("2em");
+
+
+    }// end of method
 
     /**
      * Crea la GridPaginata <br>

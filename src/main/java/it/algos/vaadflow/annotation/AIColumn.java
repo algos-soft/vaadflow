@@ -1,11 +1,14 @@
 package it.algos.vaadflow.annotation;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.enumeration.EAFieldType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static it.algos.vaadflow.application.FlowCost.VAADIN_ICON_DA_NON_USARE;
 
 /**
  * Created by gac on 05 ott 2016.
@@ -63,5 +66,23 @@ public @interface AIColumn {
      * Defaults to false.
      */
     boolean sortable() default false;
+
+    /**
+     * (Optional) icon
+     * Defaults to false.
+     */
+    VaadinIcon headerIcon() default VaadinIcon.YOUTUBE;
+
+    /**
+     * (Optional) icon
+     * Defaults to 15.
+     */
+    int headerIconSizePX() default 20;
+
+    /**
+     * (Optional) icon
+     * Defaults to blue.
+     */
+    String headerIconColor() default "blue";
 
 }// end of interface annotation

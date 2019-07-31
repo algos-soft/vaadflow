@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.prova;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
@@ -70,8 +71,8 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "descrizione", "listaA", "listaB", "listaC", "inizio","sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
-@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio","listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "pageid", "code", "descrizione", "inizio","fine", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -163,8 +164,15 @@ public class Prova extends ACEntity {
      */
     @Field("ini")
     @AIField(type = EAFieldType.localtime)
-    @AIColumn(name = "ini")
+    @AIColumn( headerIcon = VaadinIcon.CLOCK, headerIconColor = "green")
     public LocalTime inizio;
+    /**
+     * booleano
+     */
+    @Field("fin")
+    @AIField(type = EAFieldType.localtime)
+    @AIColumn( headerIcon = VaadinIcon.CLOCK, headerIconColor = "red")
+    public LocalTime fine;
 
     /**
      * enumeration

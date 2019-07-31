@@ -1,5 +1,6 @@
 package it.algos.vaadflow.service;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -706,6 +707,26 @@ public class AAnnotationService extends AbstractService {
 
     /**
      * Get the name (columnService) of the property.
+     * Se manca, rimane vuoto
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the name (columnService) of the field
+     */
+    public String getExplicitColumnName(final Field reflectionJavaField) {
+        String name = "";
+        AIColumn annotation = this.getAIColumn(reflectionJavaField);
+
+        if (annotation != null) {
+            name = annotation.name();
+        }// end of if cycle
+
+        return name;
+    }// end of method
+
+
+    /**
+     * Get the name (columnService) of the property.
      * Se manca, usa il nome del Field
      * Se manca, usa il nome della property
      *
@@ -713,7 +734,7 @@ public class AAnnotationService extends AbstractService {
      *
      * @return the name (columnService) of the field
      */
-    public String getColumnName(final Field reflectionJavaField) {
+    public String getColumnNameProperty(final Field reflectionJavaField) {
         String name = "";
         AIColumn annotation = this.getAIColumn(reflectionJavaField);
 
@@ -731,6 +752,27 @@ public class AAnnotationService extends AbstractService {
 
     /**
      * Get the name (columnService) of the property.
+     * Se manca, rimane vuoto
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the name (columnService) of the field
+     */
+    public String getExplicitColumnName(Class<? extends AEntity> entityClazz, String fieldName) {
+        String name = "";
+        Field field = reflection.getField(entityClazz, fieldName);
+
+        if (field != null) {
+            name = getExplicitColumnName(field);
+        }// end of if cycle
+
+        return name;
+    }// end of method
+
+
+    /**
+     * Get the name (columnService) of the property.
      * Se manca, usa il nome del Field
      * Se manca, usa il nome della property
      *
@@ -739,12 +781,12 @@ public class AAnnotationService extends AbstractService {
      *
      * @return the name (columnService) of the field
      */
-    public String getColumnName(Class<? extends AEntity> entityClazz, String fieldName) {
+    public String getColumnNameProperty(Class<? extends AEntity> entityClazz, String fieldName) {
         String name = "";
         Field field = reflection.getField(entityClazz, fieldName);
 
         if (field != null) {
-            name = getColumnName(field);
+            name = getColumnNameProperty(field);
         }// end of if cycle
 
         return name;
@@ -1894,5 +1936,75 @@ public class AAnnotationService extends AbstractService {
 //        return listaNomi;
 //    }// end of method
 
+
+    /**
+     * Get the icon of the property.
+     * Default a VaadinIcon.YOUTUBE che sicuramente non voglio usare
+     * e posso quindi escluderlo
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the icon of the field
+     */
+    public VaadinIcon getHeaderIcon(Class<? extends AEntity> entityClazz, String fieldName) {
+        VaadinIcon icon = null;
+        AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
+
+        if (annotation != null) {
+            icon = annotation.headerIcon();
+        }// end of if cycle
+
+        if (icon == VaadinIcon.YOUTUBE) {
+            icon = null;
+        }// end of if cycle
+
+        return icon;
+    }// end of method
+
+
+    /**
+     * Get the size of the icon of the property.
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the size of the icon
+     */
+    public String getHeaderIconSizePX(Class<? extends AEntity> entityClazz, String fieldName) {
+        int widthInt = 0;
+        int standard = 20;
+        AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
+
+        if (annotation != null) {
+            widthInt = annotation.widthEM();
+        }// end of if cycle
+
+        if (widthInt == 0) {
+            widthInt = standard;
+        }// end of if cycle
+
+        return widthInt + TAG_PX;
+    }// end of method
+
+
+    /**
+     * Get the color of the property.
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the color of the icon
+     */
+    public String getHeaderIconColor(Class<? extends AEntity> entityClazz, String fieldName) {
+        String color = "";
+        AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
+
+        if (annotation != null) {
+            color = annotation.headerIconColor();
+        }// end of if cycle
+
+        return color;
+    }// end of method
 
 }// end of class

@@ -42,6 +42,7 @@ public enum EAPreferenza {
     showAccount(FlowCost.SHOW_ACCOUNT_ON_MENU, "Mostra l'account nella barra di menu", EAPrefType.bool, true),
     usaSearchCaseSensitive(FlowCost.USA_SEARCH_CASE_SENSITIVE, "Search delle query sensibile alle maiuscole", EAPrefType.bool, false),
     usaButtonShortcut(FlowCost.USA_BUTTON_SHORTCUT, "Shortcut dei bottoni. Disabilitabile in caso di problemi col browser", EAPrefType.bool, true),
+    usaGridHeaderPrimaMaiuscola(FlowCost.USA_GRID_HEADER_PRIMA_MAIUSCOLA, "Prima lettera maiuscola nell'header della Grid", EAPrefType.bool, true),
     ;
 
 

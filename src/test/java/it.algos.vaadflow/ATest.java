@@ -63,7 +63,7 @@ public class ATest {
     protected final static String HEADER_CODE = "Code";
 
     // alcune date di riferimento
-    protected final static Date DATE_UNO = new Date(1413868320000L); // 21 ottobre 2014, 7 e 12
+    protected final static Date DATE_UNO = new Date(1413870120000L); // 21 ottobre 2014, 7 e 42
 
     protected final static Date DATE_DUE = new Date(1412485440000L); // 5 ottobre 2014, 7 e 04
 
@@ -79,13 +79,19 @@ public class ATest {
 
     protected final static LocalDate LOCAL_DATE_QUATTRO = LocalDate.of(2015, 3, 8);
 
-    protected final static LocalDateTime LOCAL_DATE_TIME_UNO = LocalDateTime.of(2014, 10, 21, 7, 12);
+    protected final static LocalDateTime LOCAL_DATE_TIME_UNO = LocalDateTime.of(2014, 10, 21, 7, 42);
 
     protected final static LocalDateTime LOCAL_DATE_TIME_DUE = LocalDateTime.of(2014, 10, 5, 7, 4);
 
-    protected final static LocalTime LOCAL_TIME_UNO = LocalTime.of(7, 12);
+    protected final static LocalTime LOCAL_TIME_UNO = LocalTime.of(7, 42);
 
     protected final static LocalTime LOCAL_TIME_DUE = LocalTime.of(7, 4);
+
+    protected final static LocalTime LOCAL_TIME_TRE = LocalTime.of(22, 0);
+
+    protected final static LocalTime LOCAL_TIME_QUATTRO = LocalTime.of(6, 0);
+
+    protected final static LocalTime LOCAL_TIME_VUOTO = LocalTime.of(0, 0);
 
     protected static Field FIELD_ORDINE;
 

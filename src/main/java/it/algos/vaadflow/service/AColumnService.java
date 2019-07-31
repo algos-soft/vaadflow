@@ -20,8 +20,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static it.algos.vaadflow.application.FlowCost.SPAZIO;
-import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow
@@ -94,7 +93,8 @@ public class AColumnService extends AbstractService {
         pref = StaticContextAccessor.getBean(PreferenzaService.class);
         Grid.Column<AEntity> colonna = null;
         EAFieldType type = annotation.getColumnType(entityClazz, propertyName);
-        String header = annotation.getColumnName(entityClazz, propertyName);
+        String headerNotNull = annotation.getColumnNameProperty(entityClazz, propertyName);
+        String explicitHader = annotation.getExplicitColumnName(entityClazz, propertyName);
         String width = annotation.getColumnWithEM(entityClazz, propertyName);
         boolean isFlexGrow = annotation.isFlexGrow(entityClazz, propertyName);
         Class linkClazz = annotation.getLinkClass(entityClazz, propertyName);
@@ -103,6 +103,9 @@ public class AColumnService extends AbstractService {
         String color = annotation.getColumnColor(entityClazz, propertyName);
         boolean sortable = annotation.isSortable(entityClazz, propertyName);
         this.enumService = AEnumerationService.getInstance();
+        VaadinIcon headerIcon = annotation.getHeaderIcon(entityClazz, propertyName);
+        String widthIcon = annotation.getHeaderIconSizePX(entityClazz, propertyName);
+        String colorIcon = annotation.getHeaderIconColor(entityClazz, propertyName);
 
         if (type == null) {
             try { // prova ad eseguire il codice
@@ -472,9 +475,9 @@ public class AColumnService extends AbstractService {
         switch (type) {
             case text://@todo in futuro vanno differenziati
             case textarea:
-                //--larghezza di default per un testo = 5em
+                //--larghezza di default per un testo = 7em
                 //--per larghezze minori o maggiori, inserire widthEM = ... nell'annotation @AIColumn della Entity
-                width = text.isValid(width) ? width : "5em";
+                width = text.isValid(width) ? width : "7em";
                 break;
             case email:
                 //--larghezza di default per un mail = 18em
@@ -537,6 +540,10 @@ public class AColumnService extends AbstractService {
                 width = text.isValid(width) ? width : "5em";
                 break;
             case vaadinIcon:
+                //--larghezza di default per un icona = 3em
+                //--vale per la formattazione standard della data
+                //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "3em";
                 break;
             case link:
                 break;
@@ -548,9 +555,28 @@ public class AColumnService extends AbstractService {
         } // end of switch statement
 
         if (colonna != null) {
-            //--l'header viene sempre minuscolo ed uguale al nome della property
-            //--può essere modificata con name = "Xyz" nell'annotation @AIColumn della Entity
-            colonna.setHeader(text.isValid(header) ? header : propertyName.toLowerCase());
+            String headerText = "";
+            //--l'header di default viene sempre uguale al nome della property
+            //--può essere minuscolo o con la prima maiuscola, a seconda del flag di preferenza
+            //--può essere modificato con name = "Xyz" nell'annotation @AIColumn della Entity
+            if (pref.isBool(USA_GRID_HEADER_PRIMA_MAIUSCOLA)) {
+                headerNotNull = text.primaMaiuscola(headerNotNull);
+            } else {
+                headerNotNull = headerNotNull.toLowerCase();
+            }// end of if/else cycle
+
+            //--eventuale aggiunta di una icona e l'header non è una String ma diventa un Component
+            //--se c'è l'icona e manca il testo della annotation, NON usa il nome della property ma solo l'icona
+            if (headerIcon != null) {
+                Icon icon = new Icon(headerIcon);
+                icon.setSize(widthIcon);
+                icon.setColor(colorIcon);
+                Label label = new Label(explicitHader);
+                label.add(icon);
+                colonna.setHeader(label);
+            } else {
+                colonna.setHeader(headerNotNull);
+            }// end of if/else cycle
 
             //--di default le colonne NON sono sortable
             //--può essere modificata con sortable = true, nell'annotation @AIColumn della Entity
@@ -584,7 +610,7 @@ public class AColumnService extends AbstractService {
      * @param propertyName della property
      */
     public void fixColumn(Grid.Column colonna, Class<? extends AEntity> entityClazz, String propertyName) {
-        String header = annotation.getColumnName(entityClazz, propertyName);
+        String header = annotation.getColumnNameProperty(entityClazz, propertyName);
         String width = annotation.getColumnWithEM(entityClazz, propertyName);
         boolean isFlexGrow = annotation.isFlexGrow(entityClazz, propertyName);
         boolean sortable = annotation.isSortable(entityClazz, propertyName);

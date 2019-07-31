@@ -279,6 +279,7 @@ public class ProvaService extends AService {
             prova.ordine = 178 + k;
             prova.pageid = 1000000L + (14 * k) + k + 8;
             prova.inizio= LocalTime.NOON;
+            prova.fine= LocalTime.MIDNIGHT;
             save(prova);
         }// end of for cycle
 

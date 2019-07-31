@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -57,6 +58,10 @@ public class ADateServiceTest extends ATest {
     private LocalDateTime localDateTimePrevista = null;
 
     private LocalDateTime localDateTimeOttenuta = null;
+
+    private LocalTime localTimePrevisto = null;
+
+    private LocalTime localTimeOttenuto = null;
 
 
     @BeforeAll
@@ -212,6 +217,29 @@ public class ADateServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
+     * Convert java.util.Date to java.time.LocalTime
+     * Estrae la sola parte di Time
+     * Date HA anni, giorni, ore, minuti e secondi
+     * LocalTime NON ha anni e giorni
+     * Si perdono quindi gli anni ed i giorni di Date
+     *
+     * @param data da convertire
+     *
+     * @return time senza ilgiorno
+     */
+    @Test
+    public void dateToLocalTime() {
+        localTimePrevisto = LOCAL_TIME_UNO;
+        localTimeOttenuto = service.dateToLocalTime(DATE_UNO);
+        assertEquals(localTimeOttenuto, localTimePrevisto);
+        System.out.println("");
+        System.out.println("Convert java.util.Date to java.time.LocalTime: " + DATE_UNO + " -> " + localTimeOttenuto);
+        System.out.println("");
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
      * Restituisce una stringa nel formato d-M-yy
      * <p>
      * Returns a string representation of the date <br>
@@ -321,6 +349,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Restituisce ora e minuti
      *
@@ -535,7 +564,7 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void getMinuti() {
-        previstoIntero = 12;
+        previstoIntero = 42;
 
         ottenutoIntero = service.getMinuti(DATE_UNO);
         assertEquals(ottenutoIntero, previstoIntero);
@@ -605,6 +634,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Restituisce la data nella forma del pattern ricevuto
      * <p>
@@ -809,6 +839,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Costruisce la data per il 1° gennaio dell'anno indicato.
      *
@@ -849,6 +880,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Costruisce la data per il 31° dicembre dell'anno indicato.
      *
@@ -879,6 +911,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese di una data fornita.
      * <p>
@@ -894,9 +927,10 @@ public class ADateServiceTest extends ATest {
 
         ottenuto = service.getWeekShort(LOCAL_DATE_DUE);
         assertEquals(ottenuto, previsto);
-    }// end of method
+    }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Ritorna il giorno (testo) della settimana ed il giorno (numero) del mese ed il nome del mese di una data fornita.
      * <p>
@@ -912,9 +946,10 @@ public class ADateServiceTest extends ATest {
 
         ottenuto = service.getWeekShortMese(LOCAL_DATE_DUE);
         assertEquals(ottenuto, previsto);
-    }// end of method
+    }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Ritorna la data nel formato standar ISO 8601.
      * <p>
@@ -934,12 +969,13 @@ public class ADateServiceTest extends ATest {
         ottenuto = service.getISO(LOCAL_DATE_DUE);
         assertEquals(ottenuto, previsto);
 
-        previsto = "2014-10-21T07:12:00";
+        previsto = "2014-10-21T07:42:00";
         ottenuto = service.getISO(LOCAL_DATE_TIME_UNO);
         assertEquals(ottenuto, previsto);
-    }// end of method
+    }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
      * Costruisce una data da una stringa in formato ISO 8601
      *
@@ -963,25 +999,150 @@ public class ADateServiceTest extends ATest {
         sorgente = service.getISO(LOCAL_DATE_TIME_UNO);
         localDateTimeOttenuta = service.localDateTimeFromISO(sorgente);
         assertEquals(localDateTimeOttenuta, localDateTimePrevista);
-    }// end of method
+    }// end of single test
 
 
+    @SuppressWarnings("javadoc")
     /**
-     * Differenza (in giorni) tra due date <br>
+     * Differenza (in giorni) tra due date (LocalDate) <br>
+     *
+     * @param giornoFine data iniziale
+     * @param giornoInizio   data finale
+     *
+     * @return giorni di differenza
      */
     @Test
-    public void delta() {
+    public void differenza() {
         previstoIntero = 16;
-        ottenutoIntero = service.delta(LOCAL_DATE_UNO, LOCAL_DATE_DUE);
+        ottenutoIntero = service.differenza(LOCAL_DATE_UNO, LOCAL_DATE_DUE);
         assertEquals(ottenutoIntero, previstoIntero);
 
         previstoIntero = -16;
-        ottenutoIntero = service.delta(LOCAL_DATE_DUE, LOCAL_DATE_UNO);
+        ottenutoIntero = service.differenza(LOCAL_DATE_DUE, LOCAL_DATE_UNO);
         assertEquals(ottenutoIntero, previstoIntero);
 
         previstoIntero = 154;
-        ottenutoIntero = service.delta(LOCAL_DATE_QUATTRO, LOCAL_DATE_DUE);
+        ottenutoIntero = service.differenza(LOCAL_DATE_QUATTRO, LOCAL_DATE_DUE);
         assertEquals(ottenutoIntero, previstoIntero);
-    }// end of method
+
+        previstoIntero = 0;
+        ottenutoIntero = service.differenza(LOCAL_DATE_UNO, null);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.differenza(null, LOCAL_DATE_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.differenza((LocalDate) null, (LocalDate) null);
+        assertEquals(ottenutoIntero, previstoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Differenza (in minuti) tra due orari (LocalTime) <br>
+     *
+     * @param orarioInizio orario iniziale
+     * @param orarioFine   orario finale
+     *
+     * @return minuti di differenza
+     */
+    @Test
+    public void durata() {
+        previstoIntero = 38;
+        ottenutoIntero = service.durata(LOCAL_TIME_UNO, LOCAL_TIME_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = -38;
+        ottenutoIntero = service.durata(LOCAL_TIME_DUE, LOCAL_TIME_UNO);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 858;
+        ottenutoIntero = service.durata(LOCAL_TIME_TRE, LOCAL_TIME_UNO);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 896;
+        ottenutoIntero = service.durata(LOCAL_TIME_TRE, LOCAL_TIME_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.durata(LOCAL_TIME_TRE, null);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.durata(null, LOCAL_TIME_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.durata(null, null);
+        assertEquals(ottenutoIntero, previstoIntero);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Differenza (in ore) tra due orari (LocalTime) <br>
+     *
+     * @param orarioInizio orario iniziale
+     * @param orarioFine   orario finale
+     *
+     * @return minuti di differenza
+     */
+    @Test
+    public void differenza2() {
+        previstoIntero = 1;
+        ottenutoIntero = service.differenza(LOCAL_TIME_UNO, LOCAL_TIME_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 23;
+        ottenutoIntero = service.differenza(LOCAL_TIME_DUE, LOCAL_TIME_UNO);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 8;
+        ottenutoIntero = service.differenza(LOCAL_TIME_QUATTRO, LOCAL_TIME_TRE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 14;
+        ottenutoIntero = service.differenza(LOCAL_TIME_TRE, LOCAL_TIME_UNO);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 10;
+        ottenutoIntero = service.differenza(LOCAL_TIME_UNO, LOCAL_TIME_TRE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 15;
+        ottenutoIntero = service.differenza(LOCAL_TIME_TRE, LOCAL_TIME_DUE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 9;
+        ottenutoIntero = service.differenza(LOCAL_TIME_DUE, LOCAL_TIME_TRE);
+        assertEquals(ottenutoIntero, previstoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = service.differenza(LOCAL_TIME_VUOTO, LOCAL_TIME_VUOTO);
+        assertEquals(ottenutoIntero, previstoIntero);
+    }// end of single test
+
+
+    /**
+     * Controlla la validità del localTime
+     * Deve esistere (not null)
+     * Deve avere valori delle ore o dei minuti
+     *
+     * @param localTime in ingresso da controllare
+     *
+     * @return vero se il localTime soddisfa le condizioni previste
+     */
+    @Test
+    public void isValid() {
+        previstoBooleano = true;
+        ottenutoBooleano = service.isValid(LOCAL_TIME_DUE);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid(LOCAL_TIME_VUOTO);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+    }// end of single test
 
 }// end of class

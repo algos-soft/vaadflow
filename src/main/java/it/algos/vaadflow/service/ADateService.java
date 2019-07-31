@@ -198,6 +198,22 @@ public class ADateService extends AbstractService {
 
 
     /**
+     * Convert java.util.Date to java.time.LocalTime
+     * Estrae la sola parte di Time
+     * Date HA anni, giorni, ore, minuti e secondi
+     * LocalTime NON ha anni e giorni
+     * Si perdono quindi gli anni ed i giorni di Date
+     *
+     * @param data da convertire
+     *
+     * @return time senza ilgiorno
+     */
+    public LocalTime dateToLocalTime(Date data) {
+        return LocalTime.of(data.getHours(), data.getMinutes());
+    }// end of method
+
+
+    /**
      * Costruisce una data da una stringa in formato ISO 8601
      *
      * @param isoStringa da leggere
@@ -1207,6 +1223,7 @@ public class ADateService extends AbstractService {
     /**
      * Durata tra due momenti individuati da ora e minuti <br>
      */
+    @Deprecated
     public int getDurata(int oraFine, int oraIni, int minFine, int minIni) {
         int durata = 0;
         int ore = 0;
@@ -1223,24 +1240,122 @@ public class ADateService extends AbstractService {
 
 
     /**
-     * Differenza (in giorni) tra due date <br>
+     * Differenza (in giorni) tra due date (LocalDate) <br>
+     *
+     * @param giornoFine   data iniziale
+     * @param giornoInizio data finale
+     *
+     * @return giorni di differenza
      */
-    public int delta(LocalDate endDay, LocalDate startDay) {
-        int giorni = 0;
+    public int differenza(LocalDate giornoFine, LocalDate giornoInizio) {
+        int differenza = 0;
         long fine = 0;
         long inizio = 0;
         Long delta;
 
-        fine = localDateToDate(endDay).getTime();
-        inizio = localDateToDate(startDay).getTime();
-        delta = fine - inizio;
-        delta = delta / 1000;
-        delta = delta / 60;
-        delta = delta / 60;
-        delta = delta / 24;
-        giorni = delta.intValue();
+        if (giornoFine != null && giornoInizio != null) {
+            fine = localDateToDate(giornoFine).getTime();
+            inizio = localDateToDate(giornoInizio).getTime();
+            delta = fine - inizio;
+            delta = delta / 1000;
+            delta = delta / 60;
+            delta = delta / 60;
+            delta = delta / 24;
+            differenza = delta.intValue();
+        }// end of if cycle
 
-        return giorni;
+        return differenza;
+    }// end of method
+
+
+    /**
+     * Differenza (in ore) tra due orari (LocalTime) <br>
+     * Arrotondamento matematico
+     *
+     * @param orarioInizio orario iniziale
+     * @param orarioFine   orario finale
+     *
+     * @return minuti di differenza
+     */
+    public int differenza(LocalTime orarioFine, LocalTime orarioInizio) {
+        int differenza = 0;
+        int minutiFine = 0;
+        int minutiInizio = 0;
+        int minuti = 60;
+        int ore = 24;
+        int resto = 0;
+
+        if (isValid(orarioFine) && isValid(orarioInizio)) {
+            if (orarioFine.isAfter(orarioInizio)) {
+                minutiFine = orarioFine.getHour() * minuti + orarioFine.getMinute();
+                minutiInizio = orarioInizio.getHour() * minuti + orarioInizio.getMinute();
+                differenza = minutiFine - minutiInizio;
+                resto = differenza % minuti;
+                differenza = differenza / minuti;
+                if (resto > minuti / 2) {
+                    differenza++;
+                }// end of if cycle
+            } else {
+                minutiFine = orarioFine.getHour() * minuti + orarioFine.getMinute();
+                minutiInizio = (ore - orarioInizio.getHour()) * minuti;
+                if (orarioInizio.getMinute() > minuti / 2) {
+                    minutiInizio = minutiInizio - orarioInizio.getMinute();
+                }// end of if cycle
+                differenza = minutiFine + minutiInizio;
+                resto = differenza % minuti;
+                differenza = differenza / minuti;
+                if (resto > minuti / 2) {
+                    differenza++;
+                }// end of if cycle
+            }// end of if/else cycle
+        }// end of if cycle
+
+        return differenza;
+    }// end of method
+
+
+    /**
+     * Differenza (in minuti) tra due orari (LocalTime) <br>
+     *
+     * @param orarioInizio orario iniziale
+     * @param orarioFine   orario finale
+     *
+     * @return minuti di differenza
+     */
+    public int durata(LocalTime orarioFine, LocalTime orarioInizio) {
+        int durata = 0;
+        int minutiFine = 0;
+        int minutiInizio = 0;
+
+        if (orarioFine != null && orarioInizio != null) {
+            minutiFine = orarioFine.getHour() * 60 + orarioFine.getMinute();
+            minutiInizio = orarioInizio.getHour() * 60 + orarioInizio.getMinute();
+            durata = minutiFine - minutiInizio;
+        }// end of if cycle
+
+        return durata;
+    }// end of method
+
+
+    /**
+     * Controlla la validità del localTime
+     * Deve esistere (not null)
+     * Deve avere valori delle ore o dei minuti
+     *
+     * @param localTime in ingresso da controllare
+     *
+     * @return vero se il localTime soddisfa le condizioni previste
+     */
+    public boolean isValid(LocalTime localTime) {
+        boolean status = false;
+
+        if (localTime != null) {
+            if (localTime.getHour() > 0 || localTime.getMinute() > 0) {
+                status = true;
+            }// end of if cycle
+        }// end of if cycle
+
+        return status;
     }// end of method
 
 }// end of class

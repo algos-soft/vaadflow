@@ -3,6 +3,8 @@ package it.algos.vaadflow.ui.list;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -174,7 +176,6 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected void addSpecificColumnsBefore() {
     }// end of method
 
-
     /**
      * Aggiunge in automatico le colonne previste in gridPropertyNamesList <br>
      */
@@ -234,7 +235,11 @@ public abstract class AGridViewList extends ALayoutViewList {
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             Grid.Column colonna = grid.addColumn(renderer);
-            colonna.setWidth("6em");
+            if (login.isDeveloper() || login.isAdmin()) {
+                colonna.setWidth("5em");
+            } else {
+                colonna.setWidth("5.5em");
+            }// end of if/else cycle
             colonna.setFlexGrow(0);
         } else {
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
