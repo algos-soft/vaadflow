@@ -7,5 +7,5 @@ package it.algos.vaadflow.enumeration;
  * Enumeration of type used with AIColumn
  */
 public enum EAFieldType {
-    id, text, integer, pref, noBinder, integernotzero, lungo, email, password, combo, multicombo, enumeration, radio, date, weekdate, localdate, localdatetime, localtime, dateNotEnabled, decimal, checkbox, checkboxlabel, link, image, resource, vaadinIcon, json, textarea, time, yesno, yesnobold, ugualeAlForm, noone, booleano
+    id, text, integer, pref, noBinder, calculated,integernotzero, lungo, email, password, combo, multicombo, enumeration, radio, date, weekdate, localdate, localdatetime, localtime, dateNotEnabled, decimal, checkbox, checkboxlabel, link, image, resource, vaadinIcon, json, textarea, time, yesno, yesnobold, ugualeAlForm, noone, booleano
 }// fine della classe Enumeration

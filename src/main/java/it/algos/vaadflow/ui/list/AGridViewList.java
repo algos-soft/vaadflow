@@ -3,8 +3,6 @@ package it.algos.vaadflow.ui.list;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -99,17 +97,17 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna
         this.addDetailDialog();
 
-        //--Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
+        //--Eventuali colonne specifiche aggiunte PRIMA di quelle automatiche
         this.addSpecificColumnsBefore();
 
         //--Colonne normali indicate in @AIList(fields =... , aggiunte in automatico
         this.addColumnsGrid(gridPropertyNamesList);
 
-        //--Eventuali colonne calcolate aggiunte DOPO quelle automatiche
+        //--Eventuali colonne specifiche aggiunte DOPO quelle automatiche
         this.addSpecificColumnsAfter();
 
-        //--Eventuali regolazioni finali sulla grid e sulle colonne
-        this.fixGridLayout();
+        //--Eventuali colonne calcolate
+        this.addCalculatedColumns();
 
         // Sets the max number of items to be rendered on the grid for each page
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -119,7 +117,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         gridPlaceholder.add(grid);
 
         //--Regolazioni di larghezza
-        gridPlaceholder.setWidth(gridWith+"em");
+        gridPlaceholder.setWidth(gridWith + "em");
         gridPlaceholder.setFlexGrow(0);
 //        gridPlaceholder.setWidth(gridWith + "em");
 
@@ -170,11 +168,12 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
+     * Eventuali colonne specifiche aggiunte PRIMA di quelle automatiche
      * Sovrascritto
      */
     protected void addSpecificColumnsBefore() {
     }// end of method
+
 
     /**
      * Aggiunge in automatico le colonne previste in gridPropertyNamesList <br>
@@ -182,14 +181,14 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected void addColumnsGrid(List<String> gridPropertyNamesList) {
         if (gridPropertyNamesList != null) {
             for (String propertyName : gridPropertyNamesList) {
-                columnService.create(grid, entityClazz, propertyName);
+                columnService.create(appContext, grid, entityClazz, propertyName);
             }// end of for cycle
         }// end of if cycle
     }// end of method
 
 
     /**
-     * Eventuali colonne calcolate aggiunte DOPO quelle automatiche
+     * Eventuali colonne specifiche aggiunte DOPO quelle automatiche
      * Sovrascritto
      */
     protected void addSpecificColumnsAfter() {
@@ -197,16 +196,10 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Eventuali aggiustamenti finali al layout
-     * Regolazioni finali sulla grid e sulle colonne
+     * Eventuali colonne calcolate
      * Sovrascritto
      */
-    protected void fixGridLayout() {
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth("60em");
-//        grid.setHeightByRows(true);
-        grid.addClassName("pippoz");
-        grid.getElement().setAttribute("theme", "row-dividers");
+    protected void addCalculatedColumns() {
     }// end of method
 
 

@@ -1358,4 +1358,40 @@ public class ADateService extends AbstractService {
         return status;
     }// end of method
 
+
+    /**
+     * Distanza tra due orari
+     * Deve esistere (not null)
+     * Deve avere valori delle ore o dei minuti
+     *
+     * @param orarioInizio orario iniziale
+     * @param orarioFine   orario finale
+     *
+     * @return LocalTime di differenza
+     */
+    public LocalTime periodo(LocalTime orarioFine, LocalTime orarioInizio) {
+        LocalTime periodo = null;
+        int durata = 0;
+        int minuti = 60;
+        int ore = 0;
+        int resto = 0;
+
+        if (orarioFine != null && orarioInizio != null) {
+            durata = durata(orarioFine, orarioInizio);
+            if (durata == 0) {
+                periodo = LocalTime.of(0, 0);
+            } else {
+                if (durata >= minuti) {
+                    ore = durata / minuti;
+                    resto = durata % minuti;
+                    periodo = LocalTime.of(ore, resto);
+                } else {
+                    periodo = LocalTime.of(0, durata);
+                }// end of if/else cycle
+            }// end of if/else cycle
+        }// end of if cycle
+
+        return periodo;
+    }// end of method
+
 }// end of class

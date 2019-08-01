@@ -11,10 +11,13 @@ import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.fields.ACheckBox;
+import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -89,7 +92,7 @@ public class AColumnService extends AbstractService {
      * @param entityClazz  modello-dati specifico
      * @param propertyName della property
      */
-    public void create(Grid<AEntity> grid, Class<? extends AEntity> entityClazz, String propertyName) {
+    public void create(ApplicationContext appContext, Grid<AEntity> grid, Class<? extends AEntity> entityClazz, String propertyName) {
         pref = StaticContextAccessor.getBean(PreferenzaService.class);
         Grid.Column<AEntity> colonna = null;
         EAFieldType type = annotation.getColumnType(entityClazz, propertyName);
@@ -106,6 +109,7 @@ public class AColumnService extends AbstractService {
         VaadinIcon headerIcon = annotation.getHeaderIcon(entityClazz, propertyName);
         String widthIcon = annotation.getHeaderIconSizePX(entityClazz, propertyName);
         String colorIcon = annotation.getHeaderIconColor(entityClazz, propertyName);
+        String methodName = annotation.getMethodName(entityClazz, propertyName);
 
         if (type == null) {
             try { // prova ad eseguire il codice
@@ -320,6 +324,7 @@ public class AColumnService extends AbstractService {
                     Field field = reflection.getField(entityClazz, propertyName);
                     LocalDate data;
                     String testo = "";
+
                     try { // prova ad eseguire il codice
                         data = (LocalDate) field.get(entity);
                         testo = date.getDayWeekShort(data);
@@ -395,6 +400,7 @@ public class AColumnService extends AbstractService {
                     Icon icon = null;
                     VaadinIcon vaadinIcon;
                     Field field = reflection.getField(entityClazz, propertyName);
+
                     try { // prova ad eseguire il codice
                         vaadinIcon = (VaadinIcon) field.get(entity);
                         icon = vaadinIcon.create();
@@ -412,6 +418,7 @@ public class AColumnService extends AbstractService {
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Object obj = null;
                     Field field = reflection.getField(entityClazz, propertyName);
+
                     try { // prova ad eseguire il codice
                         obj = field.get(entity);
                     } catch (Exception unErrore) { // intercetta l'errore
@@ -427,6 +434,7 @@ public class AColumnService extends AbstractService {
                     Object value = null;
                     Field field = reflection.getField(entityClazz, propertyName);
                     Label label = null;
+
                     try { // prova ad eseguire il codice
                         bytes = (byte[]) field.get(entity);
                         value = typePref.bytesToObject(bytes);
@@ -463,7 +471,38 @@ public class AColumnService extends AbstractService {
                             log.warn("Switch - caso non definito");
                             break;
                     } // end of switch statement
+
                     return new Label(value != null ? value.toString() : "");
+                }));//end of lambda expressions and anonymous inner class
+                break;
+            case calculated:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Label label = new Label();
+                    Method metodo = null;
+                    Object serviceInstance = null;
+                    String value = "";
+
+                    if (appContext == null) {
+                        log.error("Manca il valore di appContext");
+                        return label;
+                    }// end of if cycle
+
+                    if (text.isEmpty(methodName)) {
+                        log.error("Colonna calcolata '" + propertyName + "' - manca il methodName = ... nell'annotation @AIColumn della Entity " + entity.getClass().getSimpleName());
+                        return label;
+                    }// end of if cycle
+
+                    try { // prova ad eseguire il codice
+                        //--il metodo DEVE avere un solo parametro e di tipo AEntity
+                        metodo = serviceClazz.getDeclaredMethod(methodName, AEntity.class);
+                        serviceInstance = appContext.getBean(serviceClazz);
+                        value = (String) metodo.invoke(serviceInstance, entity);
+                        label.setText(value);
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+
+                    return label;
                 }));//end of lambda expressions and anonymous inner class
                 break;
             default:

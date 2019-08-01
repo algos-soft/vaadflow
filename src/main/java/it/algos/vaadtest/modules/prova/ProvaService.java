@@ -270,20 +270,43 @@ public class ProvaService extends AService {
             if (k == 5 || k == 7) {
                 prova.sino = true;
             }// end of if cycle
-            if (k == 1 || k == 5 || k == 8 || k == 9|| k == 12|| k == 13) {
+            if (k == 1 || k == 5 || k == 8 || k == 9 || k == 12 || k == 13) {
                 prova.yesno = true;
             }// end of if cycle
-            if (k == 2 || k == 3 || k == 4 || k == 7|| k == 14|| k == 15) {
+            if (k == 2 || k == 3 || k == 4 || k == 7 || k == 14 || k == 15) {
                 prova.yesnobold = true;
             }// end of if cycle
             prova.ordine = 178 + k;
             prova.pageid = 1000000L + (14 * k) + k + 8;
-            prova.inizio= LocalTime.NOON;
-            prova.fine= LocalTime.MIDNIGHT;
+            prova.inizio = LocalTime.of(k, k + 2);
+            prova.fine = LocalTime.of(k + 1, k * 3);
             save(prova);
         }// end of for cycle
 
         return numRec;
+    }// end of method
+
+
+    /**
+     * Durata di un periodo in ore <br>
+     */
+    public String durataOre(AEntity entityBean) {
+        return "" + date.durata(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
+    }// end of method
+
+    /**
+     * Durata di un periodo in minuti <br>
+     */
+    public String durataMinuti(AEntity entityBean) {
+        return "" + date.differenza(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
+    }// end of method
+
+    /**
+     * Durata di un periodo in LocalTime <br>
+     */
+    public String durataTempo(AEntity entityBean) {
+        LocalTime tempo= date.periodo(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
+        return  date.getOrario(tempo);
     }// end of method
 
 }// end of class

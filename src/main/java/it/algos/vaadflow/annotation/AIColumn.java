@@ -85,4 +85,11 @@ public @interface AIColumn {
      */
     String headerIconColor() default "blue";
 
+
+    /**
+     * (Optional) method name for reflection
+     * Defaults to blue.
+     */
+    String methodName() default "";
+
 }// end of interface annotation

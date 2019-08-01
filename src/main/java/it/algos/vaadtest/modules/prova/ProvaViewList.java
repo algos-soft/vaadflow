@@ -254,7 +254,7 @@ public class ProvaViewList extends AGridViewList {
     }// end of method
 
     /**
-     * Eventuali colonne calcolate aggiunte PRIMA di quelle automatiche
+     * Eventuali colonne specifiche aggiunte PRIMA di quelle automatiche
      * Sovrascritto
      */
     protected void addSpecificColumnsBefore() {
@@ -288,14 +288,26 @@ public class ProvaViewList extends AGridViewList {
         colonna=grid.addColumn(new ComponentRenderer<>(entity -> {
             return new Label("x");
         }));//end of lambda expressions and anonymous inner class
+        colonna.setKey("abbaco");
         colonna.setHeader(nameLabel);
         colonna.setWidth("10em");
         colonna2=grid.addColumn(new ComponentRenderer<>(entity -> {
             return new Label("y");
         }));//end of lambda expressions and anonymous inner class
+        colonna2.setKey("rovina");
         colonna2.setHeader(nameLabel2);
         colonna2.setWidth("2em");
 
+
+    }// end of method
+
+    /**
+     * Eventuali colonne calcolate
+     * Sovrascritto
+     */
+    protected void addCalculatedColumns() {
+        List<Grid.Column> lista=  grid.getColumns();
+        Grid.Column una= grid.getColumnByKey("rovina");
 
     }// end of method
 

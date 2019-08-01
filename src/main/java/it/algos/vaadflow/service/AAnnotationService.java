@@ -2007,4 +2007,23 @@ public class AAnnotationService extends AbstractService {
         return color;
     }// end of method
 
+    /**
+     * Get the method name for reflection.
+     *
+     * @param entityClazz the entity class
+     * @param fieldName   the property name
+     *
+     * @return the method name
+     */
+    public String getMethodName(Class<? extends AEntity> entityClazz, String fieldName) {
+        String methodName = "";
+        AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
+
+        if (annotation != null) {
+            methodName = annotation.methodName();
+        }// end of if cycle
+
+        return methodName;
+    }// end of method
+
 }// end of class

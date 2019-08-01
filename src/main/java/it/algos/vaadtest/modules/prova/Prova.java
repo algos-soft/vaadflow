@@ -15,6 +15,7 @@ import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import lombok.*;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -71,7 +72,7 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "descrizione", "inizio","fine", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
+@AIList(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
 @AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
@@ -164,15 +165,46 @@ public class Prova extends ACEntity {
      */
     @Field("ini")
     @AIField(type = EAFieldType.localtime)
-    @AIColumn( headerIcon = VaadinIcon.CLOCK, headerIconColor = "green")
+    @AIColumn(headerIcon = VaadinIcon.CLOCK, headerIconColor = "green")
     public LocalTime inizio;
+
     /**
      * booleano
      */
     @Field("fin")
     @AIField(type = EAFieldType.localtime)
-    @AIColumn( headerIcon = VaadinIcon.CLOCK, headerIconColor = "red")
+    @AIColumn(headerIcon = VaadinIcon.CLOCK, headerIconColor = "red")
     public LocalTime fine;
+
+    /**
+     * Durata prevista (in ore) del servizio (obbligatoria, calcolata in automatico prima del Save)
+     * Informazione ridondante ma comoda per le successive elaborazioni (turno, tabellone, iscrizioni, statistiche)
+     */
+    @Transient
+    @Field("dur")
+    @AIField(type = EAFieldType.calculated, name = "Ore", serviceClazz = ProvaService.class)
+    @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR, methodName = "durataOre")
+    public int durataOre;
+
+    /**
+     * Durata prevista (in ore) del servizio (obbligatoria, calcolata in automatico prima del Save)
+     * Informazione ridondante ma comoda per le successive elaborazioni (turno, tabellone, iscrizioni, statistiche)
+     */
+    @Transient
+    @Field("dur2")
+    @AIField(type = EAFieldType.calculated, name = "Minuti", serviceClazz = ProvaService.class)
+    @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR,  methodName = "durataMinuti")
+    public int durataMinuti;
+
+    /**
+     * Durata prevista (in ore) del servizio (obbligatoria, calcolata in automatico prima del Save)
+     * Informazione ridondante ma comoda per le successive elaborazioni (turno, tabellone, iscrizioni, statistiche)
+     */
+    @Transient
+    @Field("dur23")
+    @AIField(type = EAFieldType.calculated, name = "Tempo", serviceClazz = ProvaService.class)
+    @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR, methodName = "durataTempo")
+    public int durataTempo;
 
     /**
      * enumeration
