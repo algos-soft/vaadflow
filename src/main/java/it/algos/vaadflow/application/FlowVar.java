@@ -27,6 +27,13 @@ public class FlowVar {
     public static boolean usaSecurity = true;
 
     /**
+     * Controlla se l'applicazione è multi-company oppure no <br>
+     * Di defaul (per sicurezza) uguale a true <br>
+     * Deve essere regolato in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+     */
+    public static boolean usaCompany = true;
+
+    /**
      * Nome identificativo dell'applicazione <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
      */

@@ -121,6 +121,14 @@ public class TestBoot extends ABoot {
         FlowVar.usaSecurity = false;
 
         /**
+         * Controlla se l'applicazione è multi-company oppure no <br>
+         * Di defaul (per sicurezza) uguale a true <br>
+         * Deve essere regolato in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+         */
+        FlowVar.usaCompany = false;
+
+
+        /**
          * Nome identificativo dell'applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */

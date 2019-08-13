@@ -2,7 +2,7 @@
 @Autowired
 ApplicationContext appContext;
 
-Object alfa = appContext.getBean(ADialog.class);
+Object algos = appContext.getBean(AlgosClass.class);
 
 
 ==B==

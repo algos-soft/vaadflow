@@ -127,13 +127,18 @@ public class AVaadinService {
                     log.error(unErrore.toString());
                 }// fine del blocco try-catch
 
-                context = new AContext(login, company);
-                context.setSecured(secured);
+                context = appContext.getBean(AContext.class,login, company);
+
+//                context.setSecured(secured);
+                context.setLoginValido(secured);
             } else {
                 login.setRoleType(EARoleType.developer);
-                context = new AContext(login, company);
-                context.setSecured(false);
+                context = appContext.getBean(AContext.class,login, company);
+
+//                context.setSecured(false);
+                context.setLoginValido(false);
             }// end of if/else cycle
+            context = appContext.getBean(AContext.class);
 
             vaadSession.setAttribute(KEY_CONTEXT, context);
         }// end of if cycle
