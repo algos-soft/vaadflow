@@ -79,9 +79,6 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
         usaBottoneEdit = true;
 
-        //--Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'.
-        testoBottoneEdit = EDIT_NAME;
-
         //--Flag di preferenza per usare il placeholder di botoni ggiuntivi sotto la Grid. Normalmente false.
         usaBottomLayout = false;
 

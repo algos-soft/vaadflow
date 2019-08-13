@@ -106,9 +106,6 @@ public abstract class AGridViewList extends ALayoutViewList {
         //--Eventuali colonne specifiche aggiunte DOPO quelle automatiche
         this.addSpecificColumnsAfter();
 
-        //--Eventuali colonne calcolate
-        this.addCalculatedColumns();
-
         // Sets the max number of items to be rendered on the grid for each page
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setPageSize(limit);
@@ -196,14 +193,6 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Eventuali colonne calcolate
-     * Sovrascritto
-     */
-    protected void addCalculatedColumns() {
-    }// end of method
-
-
-    /**
      * Costruisce un (eventuale) layout con bottoni aggiuntivi
      * Facoltativo (assente di default)
      * Può essere sovrascritto, per aggiungere informazioni
@@ -228,11 +217,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             Grid.Column colonna = grid.addColumn(renderer);
-            if (login.isDeveloper() || login.isAdmin()) {
-                colonna.setWidth("5em");
-            } else {
-                colonna.setWidth("5.5em");
-            }// end of if/else cycle
+            colonna.setWidth("3em");
             colonna.setFlexGrow(0);
         } else {
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;

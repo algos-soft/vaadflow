@@ -21,6 +21,7 @@ import it.algos.vaadflow.ui.menu.*;
 import lombok.extern.slf4j.Slf4j;
 
 import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 
 /**
  * Project vaadflow
@@ -137,7 +138,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         }// end of if cycle
 
         if (usaTopAlert) {
-            if (USA_SECURITY) {
+            if (usaSecurity) {
                 if (isEntityDeveloper) {
                     alertPlacehorder.add(new Label("Lista visibile solo perché sei collegato come developer. Gli admin e gli utenti normali non la vedono."));
                 }// end of if cycle

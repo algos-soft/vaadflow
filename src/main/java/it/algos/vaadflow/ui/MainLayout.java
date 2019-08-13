@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-import static it.algos.vaadflow.application.FlowCost.MENU_CLAZZ_LIST;
+import static it.algos.vaadflow.application.FlowVar.menuClazzList;
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -143,7 +143,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     protected void creaVaadindMenu() {
         appLayout = new AppLayout();
         appMenu = appLayout.createMenu();
-        mappaClassi = creaMappa(MENU_CLAZZ_LIST);
+        mappaClassi = creaMappa(menuClazzList);
 //        this.add(appLayout);
     }// end of method
 

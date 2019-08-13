@@ -1,5 +1,6 @@
 package it.algos.vaadflow.modules.utente;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
@@ -139,7 +141,7 @@ public class Utente extends ACEntity implements UserDetails {
     @Field("ena")
     @Indexed(direction = IndexDirection.DESCENDING)
     @AIField(name = "attivo", type = EAFieldType.checkbox)
-    @AIColumn(name = "OK", widthEM = 3,sortable = false)
+    @AIColumn( headerIcon = VaadinIcon.USER)
     public boolean enabled;
 
 

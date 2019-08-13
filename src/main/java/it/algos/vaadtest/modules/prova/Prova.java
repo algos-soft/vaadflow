@@ -72,7 +72,7 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
+@AIList(fields = {"ordine", "pageid", "code", "colore","descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
 @AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
@@ -117,6 +117,14 @@ public class Prova extends ACEntity {
     @AIField(type = EAFieldType.text, required = true, focus = true)
     public String code;
 
+    /**
+     * descrizione (obbligatorio, unico) <br>
+     */
+    @NotNull
+    @Field("coll")
+    @AIField(type = EAFieldType.color, widthEM = 2)
+    @AIColumn()
+    public String colore;
     /**
      * descrizione (obbligatorio, unico) <br>
      */

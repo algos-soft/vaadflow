@@ -1,0 +1,32 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-button/src/vaadin-button.html">
+
+<dom-module id="form-buttons-bar">
+    <template>
+        <div style="display: flex; flex-direction:column; align-items: center;margin-top: 1em;">
+
+            <buttons-bar>
+                <vaadin-button id="save" slot="left" style="width:200px" theme="raised primary">
+                    Save
+                </vaadin-button>
+                <vaadin-button id="cancel" slot="left" style="width:200px"theme="raised">
+                    Cancel
+                </vaadin-button>
+                <vaadin-button id="delete" slot="right" style="width:200px" theme="raised error">
+                    Delete
+                </vaadin-button>
+            </buttons-bar>
+        </div>
+    </template>
+    <script>
+        {
+            class FormButtonsBarElement extends Polymer.Element {
+                static get is() {
+                    return 'form-buttons-bar';
+                }
+            }
+
+            window.customElements.define(FormButtonsBarElement.is, FormButtonsBarElement);
+        }
+    </script>
+</dom-module>

@@ -5,7 +5,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
 import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.modules.role.EARole;
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-import static it.algos.vaadflow.application.FlowCost.USA_SECURITY;
+import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 import static it.algos.vaadflow.ui.MainLayout.*;
 
 /**
@@ -91,7 +91,7 @@ public abstract class AMenu extends Div implements IAMenu {
 
     protected ArrayList<Class<? extends IAView>> progettoSpecificoClazzList = null;
 
-    protected Map<String, ArrayList<Class<? extends IAView>>> mappaClassi = creaMappa(FlowCost.MENU_CLAZZ_LIST);
+    protected Map<String, ArrayList<Class<? extends IAView>>> mappaClassi = creaMappa(FlowVar.menuClazzList);
 
 
     /**
@@ -143,7 +143,7 @@ public abstract class AMenu extends Div implements IAMenu {
         //--crea brand (sempre)
         creaBrand();
 
-        if (USA_SECURITY) {
+        if (usaSecurity) {
             //--crea menu dello sviluppatore (se loggato)
             if (context.isDev()) {
                 creaMenuDeveloper();
@@ -313,7 +313,7 @@ public abstract class AMenu extends Div implements IAMenu {
 
         for (Class viewClazz : listaClassiMenu) {
             menuName = annotation.getMenuName(viewClazz);
-            if (USA_SECURITY) {
+            if (usaSecurity) {
                 type = annotation.getViewRoleType(viewClazz);
                 switch (type) {
                     case developer:

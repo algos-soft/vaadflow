@@ -1,6 +1,7 @@
 package it.algos.vaadtest.security;
 
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.utente.Utente;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-import static it.algos.vaadflow.application.FlowCost.PROJECT_NAME;
+import static it.algos.vaadflow.application.FlowVar.projectName;
 
 /**
  * Implements the {@link UserDetailsService}.
@@ -55,7 +56,7 @@ public class AUserDetailsService implements UserDetailsService {
             passwordHash = passwordEncoder.encode(utente.getPassword());
             authorities = utente.getAuthorities();
             company = utente.company;
-            FlowCost.LAYOUT_TITLE = company != null ? company.descrizione : PROJECT_NAME;
+            FlowVar.layoutTitle = company != null ? company.descrizione : projectName;
             return new User(utente.getUsername(), passwordHash, authorities);
         } else {
             throw new UsernameNotFoundException("Non c'è nessun utente di nome: " + uniqueUserName);

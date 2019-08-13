@@ -1,7 +1,7 @@
 package it.algos.vaadtest.application;
 
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContextEvent;
 import java.time.LocalDate;
-
-import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow
@@ -114,10 +112,33 @@ public class TestBoot extends ABoot {
      * Regola alcune informazioni dell'applicazione
      */
     protected void regolaInfo() {
-        USA_SECURITY = false;
-        PROJECT_NAME = "test";
-        PROJECT_VERSION = "1.1";
-        PROJECT_DATE = LocalDate.of(2019, 7, 16);
+        /**
+         * Controlla se l'applicazione usa il login oppure no <br>
+         * Se si usa il login, occorre la classe SecurityConfiguration <br>
+         * Se non si usa il login, occorre disabilitare l'Annotation @EnableWebSecurity di SecurityConfiguration <br>
+         * Di defaul (per sicurezza) uguale a true <br>
+         */
+        FlowVar.usaSecurity = false;
+
+        /**
+         * Nome identificativo dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.projectName = "test";
+
+        /**
+         * Versione dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.projectVersion = 1.3;
+
+        /**
+         * Data della versione dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.versionDate = LocalDate.of(2019, 8, 13);
+
+
     }// end of method
 
 
@@ -125,7 +146,7 @@ public class TestBoot extends ABoot {
      * Inizializzazione dei dati di alcune collections specifiche sul DB mongo
      */
     protected void iniziaDataProgettoSpecifico() {
-      provaService.reset();
+        provaService.reset();
     }// end of method
 
 
@@ -140,11 +161,11 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowCost.MENU_CLAZZ_LIST.add(GiornoViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(AnnoViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(MeseViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(SecoloViewList.class);
-        FlowCost.MENU_CLAZZ_LIST.add(ProvaViewList.class);
+        FlowVar.menuClazzList.add(GiornoViewList.class);
+        FlowVar.menuClazzList.add(AnnoViewList.class);
+        FlowVar.menuClazzList.add(MeseViewList.class);
+        FlowVar.menuClazzList.add(SecoloViewList.class);
+        FlowVar.menuClazzList.add(ProvaViewList.class);
     }// end of method
 
 

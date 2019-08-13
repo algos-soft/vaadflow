@@ -1977,7 +1977,7 @@ public class AAnnotationService extends AbstractService {
         AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
 
         if (annotation != null) {
-            widthInt = annotation.widthEM();
+            widthInt = annotation.headerIconSizePX();
         }// end of if cycle
 
         if (widthInt == 0) {

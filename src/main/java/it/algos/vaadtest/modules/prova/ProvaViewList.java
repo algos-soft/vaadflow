@@ -31,14 +31,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.vaadin.klaudeta.PaginatedGrid;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static it.algos.vaadtest.application.TestCost.TAG_PRO;
-import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
+import static it.algos.vaadtest.application.TestCost.*;
 
 /**
  * Project vaadtest <br>
@@ -226,6 +224,40 @@ public class ProvaViewList extends AGridViewList {
 
         testVistaMultipli.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM, query2)));
         topPlaceholder.add(testVistaMultipli);
+
+        Button polymer = new Button("Polymer", new Icon(VaadinIcon.ASTERISK));
+        polymer.getElement().setAttribute("theme", "secondary");
+        polymer.addClassName("view-toolbar__button");
+        polymer.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF)));
+        topPlaceholder.add(polymer);
+
+        Button polymer2 = new Button("Polymer2", new Icon(VaadinIcon.ASTERISK));
+        polymer2.getElement().setAttribute("theme", "error");
+        polymer2.addClassName("view-toolbar__button");
+        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF+"2")));
+        topPlaceholder.add(polymer2);
+
+        Button polymer3 = new Button("polymer3", new Icon(VaadinIcon.ASTERISK));
+        polymer3.getElement().setAttribute("theme", "error");
+        polymer3.addClassName("view-toolbar__button");
+        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF+"3")));
+        topPlaceholder.add(polymer3);
+
+        Button una = new Button("una", new Icon(VaadinIcon.ASTERISK));
+        una.getElement().setAttribute("theme", "error");
+        una.addClassName("view-toolbar__button");
+        una.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate("una")));
+        topPlaceholder.add(una);
+        Button due = new Button("due", new Icon(VaadinIcon.ASTERISK));
+        due.getElement().setAttribute("theme", "error");
+        due.addClassName("view-toolbar__button");
+        due.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate("due")));
+        topPlaceholder.add(due);
+        Button tre = new Button("tre", new Icon(VaadinIcon.ASTERISK));
+        tre.getElement().setAttribute("theme", "error");
+        tre.addClassName("view-toolbar__button");
+        tre.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate("tre")));
+        topPlaceholder.add(tre);
     }// end of method
 
 
@@ -252,6 +284,7 @@ public class ProvaViewList extends AGridViewList {
 
         return comboUpload;
     }// end of method
+
 
     /**
      * Eventuali colonne specifiche aggiunte PRIMA di quelle automatiche
@@ -285,13 +318,13 @@ public class ProvaViewList extends AGridViewList {
 //        grid().addColumn(Client::getName).setHeader(nameLabel).setFlexGrow(5).setSortable(true).setKey("name");  }// end of method
 
 
-        colonna=grid.addColumn(new ComponentRenderer<>(entity -> {
+        colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
             return new Label("x");
         }));//end of lambda expressions and anonymous inner class
         colonna.setKey("abbaco");
         colonna.setHeader(nameLabel);
         colonna.setWidth("10em");
-        colonna2=grid.addColumn(new ComponentRenderer<>(entity -> {
+        colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
             return new Label("y");
         }));//end of lambda expressions and anonymous inner class
         colonna2.setKey("rovina");
@@ -301,15 +334,30 @@ public class ProvaViewList extends AGridViewList {
 
     }// end of method
 
+
     /**
-     * Eventuali colonne calcolate
+     * Eventuali colonne specifiche aggiunte DOPO quelle automatiche
      * Sovrascritto
      */
-    protected void addCalculatedColumns() {
-        List<Grid.Column> lista=  grid.getColumns();
-        Grid.Column una= grid.getColumnByKey("rovina");
+    @Override
+    protected void addSpecificColumnsAfter() {
+        String colorName2 = "#ef6c00";
+        Grid.Column colonna2 = grid.addComponentColumn(servizio -> {
+            Label label = new Label();
+            String htmlCode="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            label.getElement().setProperty("innerHTML", htmlCode);
+            label.getElement().getStyle().set("background-color", colorName2);
+            label.getElement().getStyle().set("color", colorName2);
 
-    }// end of method
+            return label;
+        });//end of lambda expressions
+
+        colonna2.setId("idColor2");
+        colonna2.setHeader("G");
+        colonna2.setWidth("3em");
+        colonna2.setFlexGrow(0);
+    }
+
 
     /**
      * Crea la GridPaginata <br>

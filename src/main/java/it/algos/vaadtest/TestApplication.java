@@ -41,7 +41,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Una sola view può avere @Route("")
  */
 @SpringBootApplication(scanBasePackages = {"it.algos.vaadflow", "it.algos.vaadtest"}, exclude = {SecurityAutoConfiguration.class})
-@EnableVaadin({"it.algos.vaadflow.modules","it.algos.vaadflow.backend", "it.algos.vaadflow.wizard", "it.algos.vaadflow.service", "it.algos.vaadflow.developer","it.algos.vaadflow.ui", "it.algos.vaadtest.application", "it.algos.vaadtest.modules", "it.algos.vaadtest.menu"})
+@EnableVaadin({"it.algos.vaadflow.modules","it.algos.vaadflow.backend", "it.algos.vaadflow.wizard", "it.algos.vaadflow.service", "it.algos.vaadflow.developer","it.algos.vaadflow.ui", "it.algos.vaadtest.application", "it.algos.vaadtest.modules", "it.algos.vaadtest.menu", "it.algos.vaadtest.polymer"})
 @EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
 @EnableMongoRepositories({"it.algos"})
 @Configuration

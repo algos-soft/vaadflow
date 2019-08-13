@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.PostConstruct;
 
 import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowVar.*;
 
 /**
  * Created by gac on 12/06/17
@@ -113,13 +114,13 @@ public class AFooter extends VerticalLayout implements BeforeEnterObserver {
             }// end of if/else cycle
         }// end of if/else cycle
 
-        message = DEVELOPER_COMPANY + sep + PROJECT_NAME;
+        message = DEVELOPER_COMPANY + sep + projectName;
         message += spazio;
-        message += PROJECT_VERSION;
+        message += projectVersion;
         message += " del ";
-        message += date.get(PROJECT_DATE, EATime.normal);
-        if (text.isValid(PROJECT_NOTE)) {
-            message += " " + PROJECT_NOTE;
+        message += date.get(versionDate, EATime.normal);
+        if (text.isValid(projectNote)) {
+            message += " " + projectNote;
         }// end of if cycle
         if (text.isValid(companyName)) {
             message += sep;

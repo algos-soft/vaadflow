@@ -42,10 +42,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
 public abstract class APropertyViewList extends VerticalLayout {
 
 
-    protected final static String EDIT_NAME = "Edit";
-
-    protected final static String SHOW_NAME = "Show";
-
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
@@ -163,10 +159,14 @@ public abstract class APropertyViewList extends VerticalLayout {
     //--property
     protected String searchProperty;
 
-    protected  Button deleteAllButton;
-    protected  Button resetButton;
-    protected  Button clearFilterButton;
-    protected  Button searchButton;
+    protected Button deleteAllButton;
+
+    protected Button resetButton;
+
+    protected Button clearFilterButton;
+
+    protected Button searchButton;
+
     /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * Il service viene recuperato dal presenter, <br>
@@ -294,11 +294,6 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true. <br>
      */
     protected boolean usaBottoneEdit;
-
-    /**
-     * Flag di preferenza per il testo del bottone Edit. Normalmente 'Edit'. <br>
-     */
-    protected String testoBottoneEdit;
 
     /**
      * Flag di preferenza per usare il placeholder di bottoni aggiuntivi sotto la Grid. Normalmente false. <br>

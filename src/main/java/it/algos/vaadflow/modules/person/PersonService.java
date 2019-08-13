@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
-import static it.algos.vaadflow.application.FlowCost.USA_SECURITY;
+import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 
 /**
  * Project vaadflow <br>
@@ -239,7 +239,7 @@ public class PersonService extends AService {
         //--poi vengono ricopiati i valori in Persona
         //--poi vengono aggiunte le property specifiche di Persona
         //--se non usa la security, utilizza il metodo builderPerson
-        if (usaSuperClasse && USA_SECURITY) {
+        if (usaSuperClasse && usaSecurity) {
             //--prima viene creata una entity di Utente, usando le regolazioni automatiche di quella superclasse.
             entityDellaSuperClasseUtente = utenteService.newEntity(company, userName, passwordInChiaro, ruoli, mail, enabled);
 
@@ -272,7 +272,7 @@ public class PersonService extends AService {
         String nome = persona.nome != null ? persona.nome : "";
         String cognome = persona.cognome != null ? persona.cognome : "";
 
-        return USA_SECURITY ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
+        return usaSecurity ? utenteService.getPropertyUnica(entityBean) : nome + cognome;
     }// end of method
 
 
@@ -357,7 +357,7 @@ public class PersonService extends AService {
      */
     @Override
     public List<String> getGridPropertyNamesList(AContext context) {
-        return USA_SECURITY ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
+        return usaSecurity ? PROPERTIES_SECURED : PROPERTIES_NOT_SECURED;
     }// end of method
 
 //

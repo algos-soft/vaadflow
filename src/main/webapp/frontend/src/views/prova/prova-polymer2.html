@@ -1,0 +1,46 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<dom-module id="prova-polymer2">
+    <template>
+        <div class="pippo">
+            prova di pazienza
+        </div>
+        prova di pazienza222
+        <h1 id="header">Topolino secondo</h1>
+
+        <!--area dei bottoni-->
+        <div style="display: flex; flex-direction:row; align-items: center;  justify-content: center; margin-top:2em">
+
+            <!--Client-initiated events:-->
+            <!--Client side template code:-->
+            <!--Un click nel button lancia un evento sincrono (di nome handleClickBack) in questo Client-->
+            <!--Un click nel button lancia un evento asincrono (di nome handleClickBack) nel Server-->
+            <!--Doppia graffa è 'One way binding' mentre doppia quadra è 'Two way binding'-->
+            <vaadin-button style="width: 8.5em" theme="secondary" on-click="handleClickBack">
+                <iron-icon icon="icons:arrow-back" slot="prefix"></iron-icon>
+                <div>Annulla</div>
+            </vaadin-button>
+
+            <!--Client-initiated events:-->
+            <!--Client side template code:-->
+            <!--Un click nel button lancia un evento sincrono (di nome handleClickRegistra) in questo Client-->
+            <!--Un click nel button lancia un evento asincrono (di nome handleClickRegistra) nel Server-->
+            <!--Doppia graffa è 'One way binding' mentre doppia quadra è 'Two way binding'-->
+            <vaadin-button disabled="[[!registraAbilitato]]" on-click="handleClickRegistra"
+                           style="width: 8.5em; margin-left:2em" theme="primary">
+                <iron-icon icon="icons:check" slot="prefix"></iron-icon>
+                <div>Conferma</div>
+            </vaadin-button>
+        </div>
+    </template>
+
+    <script>
+        class HelloWorld2 extends Polymer.Element {
+            static get is() {
+                return 'prova-polymer2'
+            }
+        }
+
+        customElements.define(HelloWorld2.is, HelloWorld2);
+    </script>
+
+</dom-module>

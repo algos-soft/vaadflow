@@ -12,6 +12,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.shared.ui.LoadMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.list.AViewList;
@@ -68,7 +69,7 @@ public class AFlowingcodeAppLayoutMenu extends AMenu {
     protected void inizia() {
         menuButtons = new ArrayList<>();
         toolBarButtons = new ArrayList<MenuItem>();
-        appLayout = new AppLayout(null, createAvatarComponent(), FlowCost.LAYOUT_TITLE);
+        appLayout = new AppLayout(null, createAvatarComponent(), FlowVar.layoutTitle);
     }// end of method
 
 

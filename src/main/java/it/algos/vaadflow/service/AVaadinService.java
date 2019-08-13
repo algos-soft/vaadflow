@@ -23,6 +23,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 
 import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 
 /**
  * Project vaadflow
@@ -110,7 +111,7 @@ public class AVaadinService {
             HttpSession httpSession = attr.getRequest().getSession(true);
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
 
-            if (USA_SECURITY && securityContext != null) {
+            if (usaSecurity && securityContext != null) {
                 try { // prova ad eseguire il codice
                     springUser = (User) securityContext.getAuthentication().getPrincipal();
                     uniqueUserName = springUser.getUsername();

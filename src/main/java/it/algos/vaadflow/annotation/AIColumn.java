@@ -51,7 +51,7 @@ public @interface AIColumn {
      * (Optional) color of the component
      * Defaults to "".
      */
-    String color() default "";
+    String color() default "blue";
 
 
     /**

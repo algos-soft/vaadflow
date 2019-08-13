@@ -11,7 +11,6 @@ import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.fields.ACheckBox;
-import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -103,12 +102,12 @@ public class AColumnService extends AbstractService {
         Class linkClazz = annotation.getLinkClass(entityClazz, propertyName);
         Class enumClazz = annotation.getEnumClass(entityClazz, propertyName);
         Class serviceClazz = annotation.getServiceClass(entityClazz, propertyName);
-        String color = annotation.getColumnColor(entityClazz, propertyName);
+        String colorColumnName = annotation.getColumnColor(entityClazz, propertyName);
         boolean sortable = annotation.isSortable(entityClazz, propertyName);
         this.enumService = AEnumerationService.getInstance();
         VaadinIcon headerIcon = annotation.getHeaderIcon(entityClazz, propertyName);
-        String widthIcon = annotation.getHeaderIconSizePX(entityClazz, propertyName);
-        String colorIcon = annotation.getHeaderIconColor(entityClazz, propertyName);
+        String widthHeaderIcon = annotation.getHeaderIconSizePX(entityClazz, propertyName);
+        String colorHeaderIcon = annotation.getHeaderIconColor(entityClazz, propertyName);
         String methodName = annotation.getMethodName(entityClazz, propertyName);
 
         if (type == null) {
@@ -407,12 +406,24 @@ public class AColumnService extends AbstractService {
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch
-                    if (text.isValid(color) && icon != null) {
-                        icon.getElement().getClassList().add(color);
+                    if (text.isValid(colorColumnName) && icon != null) {
+                        icon.getElement().setAttribute("style", "color: " + colorColumnName);
                     }// end of if cycle
 
                     return icon != null ? icon : new Label("");
                 }));//end of lambda expressions and anonymous inner class
+                break;
+            case color:
+                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                    Label label = new Label();
+                    String htmlCode = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                    label.getElement().setProperty("innerHTML", htmlCode);
+                    label.getElement().getStyle().set("background-color", colorColumnName);
+                    label.getElement().getStyle().set("color", colorColumnName);
+
+                    return label;
+                }));//end of lambda expressions and anonymous inner class
+                headerIcon = headerIcon != null ? headerIcon : VaadinIcon.PALETE;
                 break;
             case link:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -548,7 +559,7 @@ public class AColumnService extends AbstractService {
                 break;
             case multicombo:
                 //--larghezza di default per un multicombo = 20em
-                //--vale per la formattazione standard della data
+                //--vale per la formattazione standard della colonna
                 //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
                 width = text.isValid(width) ? width : "20em";
                 break;
@@ -574,8 +585,12 @@ public class AColumnService extends AbstractService {
                 width = text.isValid(width) ? width : "5em";
                 break;
             case vaadinIcon:
-                //--larghezza di default per un icona = 3em
-                //--vale per la formattazione standard della data
+                //--larghezza di default per una icona = 3em
+                //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "3em";
+                break;
+            case color:
+                //--larghezza di default per un rettangolo colorato = 3em
                 //--per modificare, inserire widthEM = ... nell'annotation @AIColumn della Entity
                 width = text.isValid(width) ? width : "3em";
                 break;
@@ -603,8 +618,8 @@ public class AColumnService extends AbstractService {
             //--se c'è l'icona e manca il testo della annotation, NON usa il nome della property ma solo l'icona
             if (headerIcon != null) {
                 Icon icon = new Icon(headerIcon);
-                icon.setSize(widthIcon);
-                icon.setColor(colorIcon);
+                icon.setSize(widthHeaderIcon);
+                icon.setColor(colorHeaderIcon);
                 Label label = new Label(explicitHader);
                 label.add(icon);
                 colonna.setHeader(label);

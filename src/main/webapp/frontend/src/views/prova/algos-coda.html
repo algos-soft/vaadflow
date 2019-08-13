@@ -1,0 +1,27 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-button/src/vaadin-button.html">
+
+<dom-module id="algos-coda">
+    <template>
+        <div style="display: flex; flex-direction:row; align-items: center;  justify-content: center; margin-top:1em">
+
+            <vaadin-button id="annulla" style="width:120px; margin-left:2em; margin-right:2em" theme="raised secondary">
+                Annulla
+            </vaadin-button>
+            <vaadin-button id="conferma" style="width:120px; margin-left:2em; margin-right:2em" theme="raised primary">
+                Conferma
+            </vaadin-button>
+        </div>
+    </template>
+
+    <script>
+        class AlgosCoda extends Polymer.Element {
+            static get is() {
+                return 'algos-coda'
+            }
+        }
+
+        customElements.define(AlgosCoda.is, AlgosCoda);
+    </script>
+
+</dom-module>

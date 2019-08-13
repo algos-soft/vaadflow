@@ -1,0 +1,25 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
+<link rel="import" href="../../../bower_components/vaadin-time-picker/vaadin-time-picker.html">
+
+<dom-module id="algos-testa">
+    <template>
+        <div style="color: green;">
+            Altra riga con style (nel tag del Div)
+        </div>
+    </template>
+
+    <script>
+        class AlgosTesta extends Polymer.Element {
+            static get is() {
+                return 'algos-testa'
+            }
+        }
+
+        customElements.define(AlgosTesta.is, AlgosTesta);
+    </script>
+
+</dom-module>

@@ -1,0 +1,128 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/src/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-time-picker/vaadin-time-picker.html">
+<dom-module id="prova-polymer">
+    <template>
+        <style>
+            #container {
+                margin-left: 20px;
+                font-size: large;
+                font-weight: bold;
+                color: blue;
+                /*display: flex;*/
+                /*flex-direction: column;*/
+                /*border-style: solid;*/
+                /*border-width: 0.1em;*/
+                /*border-radius: 0.5em;*/
+                /*border-color: rgb(101, 101, 104);*/
+            }
+        </style>
+
+        <h1 id="info">Tutte le prove si possono fare ricaricando la pagina del browser senza riavviare
+            l'applicazione</h1>
+        <div id="container">
+            Div creato nel Client senza usare ProvaModel. Questa riga usa uno style (nel template)) colorato.
+        </div>
+        <div style="color: green;">
+            Altra riga con style (nel tag del Div)
+        </div>
+        <div style="margin: 20px;">
+            <div>
+                Le righe sopra (DIV) sopra sono create nel file Html.
+            </div>
+            <div>
+                Gli oggetti sotto sono creati nel file java e collegati tramite l'annotation @Id("first") nella classe
+                java ProvaPolymer
+            </div>
+            <div>
+                I valori regolati nel file java arrivano al Client tramite il modello dati (ProvaModel) usato per
+                costruire
+                la classe java ProvaPolymer
+            </div>
+            <div style="display: flex; flex-direction:column; align-items: center;margin-top: 1em;">
+                One way binding le doppie quadre e Two way binding le doppie graffe
+            </div>
+            <div>
+                [[terzonome]]
+            </div>
+            <div>
+                {{quartonome}}
+            </div>
+            <div>
+                <vaadin-text-field id="first" label="First Name"></vaadin-text-field>
+                <vaadin-text-field id="second" label="Second Name"></vaadin-text-field>
+                <vaadin-text-field id="terzo" label="Terzo Name">[[terzonome]]</vaadin-text-field>
+                <vaadin-text-field id="quarto" label="Quarto Name"> {{quartonome}}</vaadin-text-field>
+                <!--                <vaadin-text-field id="quinto" label="Quinto Name"></vaadin-text-field>-->
+            </div>
+            <div style="display: flex; flex-direction:column; align-items: center;">
+                <vaadin-button id="conferma1" slot="left" style="width:150px" theme="raised">
+                </vaadin-button>
+                <vaadin-button id="conferma2" slot="left" style="width:150px" theme="raised">
+                    Conferma
+                </vaadin-button>
+                <vaadin-button id="conferma3" style="width:150px" theme="raised">
+                    [[conferma]]
+                </vaadin-button>
+                <vaadin-button id="conferma4" on-click="conferma4" style="width:150px" theme="raised">
+                    [[conferma]]
+                </vaadin-button>
+                <vaadin-button on-click="handleClick">Click me</vaadin-button>
+                <vaadin-button on-click="handleClick2">Click data</vaadin-button>
+                <vaadin-button on-click="handleClick3">Modello</vaadin-button>
+                <vaadin-button on-mouseover="handleClick4">Over</vaadin-button>
+            </div>
+
+            <dom-repeat items="[[messages]]">
+                <template>
+                    <div class='msg' style="margin-left: 100px;" on-mouseover="handleClick87">[[item.text]]</div>
+                </template>
+            </dom-repeat>
+
+            <vaadin-combo-box id="paesi" label="Country"></vaadin-combo-box>
+            <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+            <vaadin-combo-box on-value-changed="valueCategoryChange" id="comboCategory" label="Questo funziona"
+                              items="{{categories}}"
+                              item-value-path="id" value="{{valoreCombo}}" item-label-path="display"
+                              required></vaadin-combo-box>
+            <vaadin-text-field on-value-changed="valueEditChange" id="sesto" label="Anche questo"
+                               value="{{valoreEdit}}"></vaadin-text-field>
+            <vaadin-time-picker on-value-changed="handleClickInizio" disabled="[[item.noteOrariDisabilitati]]"
+                                label="TimePicker" style="width: 6em" value="{{inizio}}"
+                                step="900"></vaadin-time-picker>
+
+        </div>
+        <form-buttons-bar id="buttons"></form-buttons-bar>
+
+    </template>
+
+    <script>
+        // var combobox = document.querySelector('#paesi');
+        // combobox.items = elements; items = ['Hydrogen', 'Helium', 'Lithium'];
+        // combobox.value = 'Helium';
+
+        // customElements.whenDefined('vaadin-combo-box').then(function() {
+        //     const combo = document.querySelector('vaadin-combo-box');
+        //
+        //     combo.dataProvider = function(params, callback) {
+        //         var xhr = new XMLHttpRequest();
+        //         xhr.onload = function() {
+        //             const response = JSON.parse(xhr.responseText);
+        //             setTimeout(function() {
+        //                 callback(response.result, response.size);
+        //             }, 2000);     };
+        //         const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?count=300';
+        //         xhr.open('GET', url, true);
+        //         xhr.send();
+        //     };
+        // });
+        class NonRilevante extends Polymer.Element {
+            static get is() {
+                return 'prova-polymer'
+            }
+        }
+
+        customElements.define(NonRilevante.is, NonRilevante);
+    </script>
+
+</dom-module>

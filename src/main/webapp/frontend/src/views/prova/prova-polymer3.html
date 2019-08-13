@@ -1,0 +1,32 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-layout.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/src/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
+<link rel="import" href="../../../src/views/prova/edit-iscrizione.html">
+
+<dom-module id="prova-polymer3">
+    <template>
+        <edit-iscrizione id="first"></edit-iscrizione>
+<!--        <template is="dom-if" if="[[secondoVisibile]]">-->
+            <edit-iscrizione id="second"></edit-iscrizione>
+<!--        </template>-->
+                <edit-iscrizione id="third"></edit-iscrizione>
+        <!--        <edit-iscrizione id="quarto"></edit-iscrizione>-->
+
+        <vaadin-button on-click="handleClickRegistra" style="width: 8.5em; margin-left:2em" theme="error">
+            <div>Conferma</div>
+        </vaadin-button>
+    </template>
+
+    <script>
+        class HelloWorld2 extends Polymer.Element {
+            static get is() {
+                return 'prova-polymer3'
+            }
+        }
+
+        customElements.define(HelloWorld2.is, HelloWorld2);
+    </script>
+
+</dom-module>
