@@ -148,6 +148,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         context = vaadinService.fixLoginAndContext();
         login = context != null ? context.getLogin() : null;
 
+        //--se il login è obbligatorio e manca, la View non funziona
+        if (vaadinService.mancaLoginSeObbligatorio()) {
+            return;
+        }// end of if cycle
+
         //--Le preferenze standard e specifiche
         this.fixPreferenze();
 
@@ -187,6 +192,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        //--se il login è obbligatorio e manca, la View non funziona
+        if (vaadinService.mancaLoginSeObbligatorio()) {
+            return;
+        }// end of if cycle
         this.addSpecificRoutes();
         this.updateItems();
         this.updateView();

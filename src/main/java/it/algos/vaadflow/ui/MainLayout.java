@@ -103,7 +103,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
         //--Login and context della sessione
         context = vaadinService.fixLoginAndContext();
-        login = context.getLogin();
+        login = context != null ? context.getLogin() : null;
 
         //--creazione iniziale del menu
         creaVaadindMenu();

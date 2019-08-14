@@ -99,12 +99,20 @@ public class AVaadinService {
      */
     public AContext getSessionContext() {
         AContext context = null;
+        VaadinSession vaadSession = null;
+        String uniqueUsername = "";
         ALogin login = null;
         IUtenteService service;
         Utente utente;
-        VaadinSession vaadSession = UI.getCurrent().getSession();
-        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
-        String uniqueUsername = getLoggedUsername();
+
+        try { // prova ad eseguire il codice
+            vaadSession = UI.getCurrent().getSession();
+            context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+            uniqueUsername = getLoggedUsername();
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+            return null;
+        }// fine del blocco try-catch
 
         if (context == null) {
             if (usaSecurity) {
@@ -136,9 +144,11 @@ public class AVaadinService {
         return context;
     }// end of  method
 
+
     public ALogin getLogin() {
-        return getSessionContext().getLogin();
+        return getSessionContext() != null ? getSessionContext().getLogin() : null;
     }// end of  method
+
 
     /**
      * Crea il login ed il context <br>
@@ -223,5 +233,13 @@ public class AVaadinService {
 
         return uniqueUsername;
     }// end of  method
+
+
+    /**
+     * Controlla l'esistenza del login se è obbligatorio <br>
+     */
+    public boolean mancaLoginSeObbligatorio() {
+        return getSessionContext() != null ? getSessionContext().mancaLoginSeObbligatorio() : true;
+    }// end of method
 
 }// end of class

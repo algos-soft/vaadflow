@@ -284,4 +284,27 @@ public class AContext {
     }// end of method
 
 
+    /**
+     * Controlla l'esistenza del login se è obbligatorio <br>
+     */
+    public boolean mancaLoginSeObbligatorio() {
+        boolean loginValido = false;
+
+        if (isUsaLogin()) {
+            if (getLogin() == null) {
+                loginValido = false;
+            } else {
+                if (isLoginValido()) {
+                    loginValido = true;
+                } else {
+                    loginValido = false;
+                }// end of if/else cycle
+            }// end of if/else cycle
+        } else {
+            loginValido = true;
+        }// end of if/else cycle
+
+        return !loginValido;
+    }// end of method
+
 }// end of class
