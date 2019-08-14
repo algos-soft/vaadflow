@@ -104,6 +104,7 @@ public class AVaadinService {
         ALogin login = null;
         IUtenteService service;
         Utente utente;
+        EARoleType roleType = null;
 
         try { // prova ad eseguire il codice
             vaadSession = UI.getCurrent().getSession();
@@ -123,10 +124,15 @@ public class AVaadinService {
                     //--accesso diretto per developer ed altri registrati come utenti e non come sottoclasse di utenti
                     if (utente == null) {
                         utente = utenteService.findByKeyUnica(uniqueUsername);
+                        roleType = EARoleType.developer;
                     }// end of if cycle
 
                     if (utente != null) {
-                        login = (ALogin) appContext.getBean(FlowVar.loginClazz, utente, utente.getCompany(), EARoleType.developer);
+                        if (roleType == null) {
+                            roleType = service.isAdmin(utente) ? EARoleType.admin : EARoleType.user;
+                        }// end of if cycle
+//                        roleType = utenteService.getRole(utente);
+                        login = (ALogin) appContext.getBean(FlowVar.loginClazz, utente, utente.getCompany(), roleType);
                         context = appContext.getBean(AContext.class, login);
                         context.setUsaLogin(true);
                         context.setLoginValido(true);

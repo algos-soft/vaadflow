@@ -22,4 +22,6 @@ public interface IUtenteService {
 
     public Company getCompany();
 
+    public boolean isAdmin(Utente utente);
+
 }// end of interface
