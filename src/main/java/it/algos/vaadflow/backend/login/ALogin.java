@@ -26,9 +26,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOGIN;
 @Qualifier(TAG_LOGIN)
 public class ALogin {
 
-    private Utente utente;
+    protected Utente utente;
 
-    private Company company;
+    protected Company company;
 
     private EARoleType roleType;
 

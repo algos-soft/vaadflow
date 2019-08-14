@@ -119,6 +119,12 @@ public class AVaadinService {
                 try { // prova ad eseguire il codice
                     service = (IUtenteService) appContext.getBean(FlowVar.logServiceClazz);
                     utente = service.findByKeyUnica(uniqueUsername);
+
+                    //--accesso diretto per developer ed altri registrati come utenti e non come sottoclasse di utenti
+                    if (utente == null) {
+                        utente = utenteService.findByKeyUnica(uniqueUsername);
+                    }// end of if cycle
+
                     if (utente != null) {
                         login = (ALogin) appContext.getBean(FlowVar.loginClazz, utente, utente.getCompany(), EARoleType.developer);
                         context = appContext.getBean(AContext.class, login);
