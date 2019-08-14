@@ -82,7 +82,7 @@ public class AFooter extends VerticalLayout implements BeforeEnterObserver {
         //--Context e login della sessione
         //--Recuperato dalla sessione, quando la @route fa partire la UI. <br>
         //--Viene regolato nel service specifico (AVaadinService) <br>
-        AContext context = vaadinService.fixLoginAndContext();
+        AContext context = vaadinService.getSessionContext();
         ALogin login = context.getLogin();
 
         String message = "";

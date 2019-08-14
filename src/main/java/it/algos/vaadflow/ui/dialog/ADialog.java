@@ -154,8 +154,8 @@ public class ADialog extends Dialog implements IADialog {
         this.getElement().getClassList().add("confirm-dialog");
 
         //--Login and context della sessione
-        context = vaadinService.fixLoginAndContext();
-        login = context.getLogin();
+        context = vaadinService.getSessionContext();
+        login = context != null ? context.getLogin() : null;
 
         //--preferenze standard. Possono essere modificate anche selezionando la firma di open(...)
         fixPreferenze();

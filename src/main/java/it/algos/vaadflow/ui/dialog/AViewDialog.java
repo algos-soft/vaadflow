@@ -260,7 +260,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected void initView() {
 
         //--Login and context della sessione
-        context = vaadinService.fixLoginAndContext();
+        context = vaadinService.getSessionContext();
 
         //--Le preferenze standard
         fixPreferenze();

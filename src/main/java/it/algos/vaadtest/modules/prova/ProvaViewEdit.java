@@ -139,7 +139,7 @@ public class ProvaViewEdit extends VerticalLayout implements HasUrlParameter<Str
     protected void initView() {
 
         //--Login and context della sessione
-        context = vaadinService.fixLoginAndContext();
+        context = vaadinService.getSessionContext();
 
         //--ApplicationContext
 //        appContext = StaticContextAccessor.getBean(ApplicationContext.class);

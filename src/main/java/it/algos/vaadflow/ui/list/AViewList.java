@@ -145,7 +145,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--Login and context della sessione
         this.mongo = appContext.getBean(AMongoService.class);
-        context = vaadinService.fixLoginAndContext();
+        context = vaadinService.getSessionContext();
         login = context != null ? context.getLogin() : null;
 
         //--se il login è obbligatorio e manca, la View non funziona
