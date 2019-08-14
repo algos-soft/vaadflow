@@ -39,6 +39,30 @@ public class ALogin {
     private UtenteService utenteService;
 
 
+    /**
+     * Costruttore base senza parametri <br>
+     */
+    public ALogin() {
+    }// end of constructor
+
+
+    public ALogin(EARoleType roleType) {
+        this.roleType = roleType;
+    }// end of constructor
+
+    public ALogin(Utente utente, Company company) {
+        this.utente = utente;
+        this.company = company;
+    }
+
+
+    public ALogin(Utente utente, Company company, EARoleType roleType) {
+        this.utente = utente;
+        this.company = company;
+        this.roleType = roleType;
+    }
+
+
     public Utente getUtente() {
         return utente;
     }// end of method

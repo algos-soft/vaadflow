@@ -2,6 +2,7 @@ package it.algos.vaadtest.application;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
@@ -9,6 +10,7 @@ import it.algos.vaadflow.modules.mese.MeseViewList;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
@@ -146,6 +148,21 @@ public class TestBoot extends ABoot {
          */
         FlowVar.versionDate = LocalDate.of(2019, 8, 13);
 
+        /**
+         * Service da usare per recuperare dal mongoDB l'utenza loggata tramite 'username' che è unico <br>
+         * Di default UtenteService oppure eventuale sottoclasse specializzata per applicazioni con accessi particolari <br>
+         * Eventuale casting a carico del chiamante <br>
+         * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+         */
+        FlowVar.logServiceClazz = UtenteService.class;
+
+        /**
+         * Classe da usare per gestire le informazioni dell'utenza loggata <br>
+         * Di default ALogin oppure eventuale sottoclasse specializzata per applicazioni con accessi particolari <br>
+         * Eventuale casting a carico del chiamante <br>
+         * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+         */
+        FlowVar.loginClazz = ALogin.class;
 
     }// end of method
 

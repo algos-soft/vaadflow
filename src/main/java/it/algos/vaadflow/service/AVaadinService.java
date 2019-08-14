@@ -4,10 +4,11 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.modules.utente.IUtenteService;
 import it.algos.vaadflow.modules.utente.Utente;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.KEY_CONTEXT;
+import static it.algos.vaadflow.application.FlowCost.KEY_SECURITY_CONTEXT;
 import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 
 /**
@@ -83,6 +85,62 @@ public class AVaadinService {
 
 
     /**
+     * Restituisce il context unico della sessione <br>
+     * Se non esiste lo crea <br>
+     * Invocato quando la @route fa partire la AViewList. <br>
+     * (non è chiaro se passa prima da MainLayout o da AViewList o da AViewDialog) <br>
+     * <p>
+     * Recupera l'user dall'attributo della sessione HttpSession al termine della security <br>
+     * Usa il service od una sua sottoclasse specifica dell'applicazione per creare l'utente loggato <br>
+     * Usa ALogin od una sua sottoclasse specifica dell'applicazione per memorizzare l'utente loggato <br>
+     * Crea il context <br>
+     * Crea il login <br>
+     * Inserisce il context come attributo nella vaadSession <br>
+     */
+    public AContext getSessionContext() {
+        AContext context = null;
+        ALogin login = null;
+        IUtenteService service;
+        Utente utente;
+        VaadinSession vaadSession = UI.getCurrent().getSession();
+        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+        String uniqueUsername = getLoggedUsername();
+
+        if (context == null) {
+            if (usaSecurity) {
+                try { // prova ad eseguire il codice
+                    service = (IUtenteService) appContext.getBean(FlowVar.logServiceClazz);
+                    utente = service.findByKeyUnica(uniqueUsername);
+                    if (utente != null) {
+                        login = (ALogin) appContext.getBean(FlowVar.loginClazz, utente, utente.getCompany(), EARoleType.developer);
+                        context = appContext.getBean(AContext.class, login);
+                        context.setUsaLogin(true);
+                        context.setLoginValido(true);
+                    }// end of if cycle
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error(unErrore.toString());
+                }// fine del blocco try-catch
+            } else {
+                login = (ALogin) appContext.getBean(FlowVar.loginClazz, EARoleType.developer);
+                context = appContext.getBean(AContext.class, login);
+                context.setUsaLogin(false);
+                context.setLoginValido(true);
+            }// end of if/else cycle
+
+            if (context != null) {
+                vaadSession.setAttribute(KEY_CONTEXT, context);
+            }// end of if cycle
+        } else {
+        }// end of if/else cycle
+
+        return context;
+    }// end of  method
+
+    public ALogin getLogin() {
+        return getSessionContext().getLogin();
+    }// end of  method
+
+    /**
      * Crea il login ed il context <br>
      * Controlla che non esista già il context nella vaadSession
      * Invocato quando la @route fa partire la AViewList. <br>
@@ -94,56 +152,76 @@ public class AVaadinService {
      * Inserisce il context come attributo nella vaadSession <br>
      */
     public AContext fixLoginAndContext() {
-        AContext context;
-        ALogin login;
-        String uniqueUserName = "";
-        Utente utente;
-        Company company = null;
-        VaadinSession vaadSession = UI.getCurrent().getSession();
+        return getSessionContext();
+//        AContext context;
+//        ALogin login;
+//        String uniqueUserName = "";
+//        UtenteService service;
+//        Utente utente;
+//        Company company = null;
+//        VaadinSession vaadSession = UI.getCurrent().getSession();
+//        User springUser;
+//        boolean secured = false;
+//
+//        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
+//        if (context == null) {
+//            login = (ALogin) appContext.getBean(FlowVar.loginClazz);
+//
+//            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+//            HttpSession httpSession = attr.getRequest().getSession(true);
+//            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
+//
+//            if (usaSecurity && securityContext != null) {
+//                try { // prova ad eseguire il codice
+//                    springUser = (User) securityContext.getAuthentication().getPrincipal();
+//                    uniqueUserName = springUser.getUsername();
+//
+//                    service = (UtenteService) appContext.getBean(FlowVar.logServiceClazz);
+//                    utente = service.findByKeyUnica(uniqueUserName);
+//                    if (utente != null) {
+//                        login.setUtenteAndCompany(utente, utente.company);
+//                        login.setRoleType(service.getRole(utente));
+//                    }// end of if cycle
+//
+//                    secured = true;
+//                } catch (Exception unErrore) { // intercetta l'errore
+//                    log.error(unErrore.toString());
+//                }// fine del blocco try-catch
+//
+//                context = appContext.getBean(AContext.class, login, company);
+//
+////                context.setSecured(secured);
+//                context.setLoginValido(secured);
+//            } else {
+//                login.setRoleType(EARoleType.developer);
+//                context = appContext.getBean(AContext.class, login, company);
+//
+////                context.setSecured(false);
+//                context.setLoginValido(false);
+//            }// end of if/else cycle
+//            context = appContext.getBean(AContext.class);
+//
+//            vaadSession.setAttribute(KEY_CONTEXT, context);
+//        }// end of if cycle
+//
+//        return context;
+    }// end of method
+
+
+    public String getLoggedUsername() {
+        String uniqueUsername = "";
         User springUser;
-        boolean secured = false;
 
-        context = (AContext) vaadSession.getAttribute(KEY_CONTEXT);
-        if (context == null) {
-            login = appContext.getBean(ALogin.class);
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession httpSession = attr.getRequest().getSession(true);
+        SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
 
-            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession httpSession = attr.getRequest().getSession(true);
-            SecurityContext securityContext = (SecurityContext) httpSession.getAttribute(KEY_SECURITY_CONTEXT);
-
-            if (usaSecurity && securityContext != null) {
-                try { // prova ad eseguire il codice
-                    springUser = (User) securityContext.getAuthentication().getPrincipal();
-                    uniqueUserName = springUser.getUsername();
-
-                    utente = utenteService.findByKeyUnica(uniqueUserName);
-                    if (utente != null) {
-                        login.setUtenteAndCompany(utente, utente.company);
-                        login.setRoleType(utenteService.getRole(utente));
-                    }// end of if cycle
-
-                    secured = true;
-                } catch (Exception unErrore) { // intercetta l'errore
-                    log.error(unErrore.toString());
-                }// fine del blocco try-catch
-
-                context = appContext.getBean(AContext.class,login, company);
-
-//                context.setSecured(secured);
-                context.setLoginValido(secured);
-            } else {
-                login.setRoleType(EARoleType.developer);
-                context = appContext.getBean(AContext.class,login, company);
-
-//                context.setSecured(false);
-                context.setLoginValido(false);
-            }// end of if/else cycle
-            context = appContext.getBean(AContext.class);
-
-            vaadSession.setAttribute(KEY_CONTEXT, context);
+        if (securityContext != null) {
+            springUser = (User) securityContext.getAuthentication().getPrincipal();
+            uniqueUsername = springUser.getUsername();
         }// end of if cycle
 
-        return context;
-    }// end of method
+        return uniqueUsername;
+    }// end of  method
 
 }// end of class
