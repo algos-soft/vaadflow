@@ -104,6 +104,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         //--Login and context della sessione
         context = vaadinService.getSessionContext();
         login = context != null ? context.getLogin() : null;
+        if (context == null) {
+            return;
+        }// end of if cycle
 
         //--creazione iniziale del menu
         creaVaadindMenu();
@@ -131,9 +134,11 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      */
     @PostConstruct
     private void fixContext() {
-        context.setMainLayout(this);
-        context.setAppLayout(appLayout);
-        context.setAppMenu(appMenu);
+        if (context != null) {
+            context.setMainLayout(this);
+            context.setAppLayout(appLayout);
+            context.setAppMenu(appMenu);
+        }// end of if cycle
     }// end of method
 
 
@@ -160,7 +165,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      * Eventuali menu se collegato come sviluppatore
      */
     private void creaMenuDeveloper() {
-        if (context.isDev()) {
+        if (context != null && context.isDev()) {
             addMenu(UtenteViewList.class);
             addMenu(VersioneViewList.class);
             addMenu(PreferenzaViewList.class);
@@ -172,7 +177,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      * Eventuali menu se collegato come admin
      */
     private void creaMenuAdmin() {
-        if (context.isAdmin()) {
+        if (context != null && context.isAdmin()) {
             addMenu(LogViewList.class);
         }// end of if cycle
     }// end of method
