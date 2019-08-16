@@ -700,7 +700,7 @@ public abstract class AService extends AbstractService implements IAService {
                     try { // prova ad eseguire il codice
                         Notification.show(entityBean + " successfully " + operation.getNameInText() + "ed.", 3000, Notification.Position.BOTTOM_START);
                     } catch (Exception unErrore) { // intercetta l'errore
-                        log.error(unErrore.toString());
+                        log.warn(unErrore.toString());
                     }// fine del blocco try-catch
                 }// end of if/else cycle
                 break;

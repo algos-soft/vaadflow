@@ -234,7 +234,7 @@ public class AFlowingcodeAppLayoutMenu extends AMenu {
     protected MenuItem creaItem(Class<? extends AViewList> viewClazz) {
         String menuName = annotation.getMenuName(viewClazz);
         String icon = reflection.getIronIcon(viewClazz);
-        String linkRoute = annotation.getQualifierName(viewClazz);
+        String linkRoute = annotation.getRouteName(viewClazz);
 
         return new MenuItem(menuName, icon, () -> goTo(linkRoute));
     }// end of method

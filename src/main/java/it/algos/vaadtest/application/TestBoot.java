@@ -11,6 +11,7 @@ import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.secolo.SecoloViewList;
 import it.algos.vaadflow.modules.utente.UtenteService;
+import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
 import lombok.extern.slf4j.Slf4j;
@@ -191,6 +192,7 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(MeseViewList.class);
         FlowVar.menuClazzList.add(SecoloViewList.class);
         FlowVar.menuClazzList.add(ProvaViewList.class);
+        FlowVar.menuClazzList.add(ProvaDialoghi.class);
     }// end of method
 
 

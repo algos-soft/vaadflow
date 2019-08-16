@@ -148,6 +148,25 @@ public class AAnnotationService extends AbstractService {
 
 
     /**
+     * Get the name of the route.
+     *
+     * @param viewClazz the view class
+     *
+     * @return the name of the vaadin-view
+     */
+    public String getRouteName(final Class<? extends AViewList> viewClazz) {
+        String name = "";
+        Route annotation = getRoute(viewClazz);
+
+        if (annotation != null) {
+            name = annotation.value();
+        }// end of if cycle
+
+        return name;
+    }// end of method
+
+
+    /**
      * Get the name of the qualifier.
      *
      * @param viewClazz the view class

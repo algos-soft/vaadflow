@@ -430,9 +430,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         String menuName;
         VaadinIcon icon;
 
-        linkRoute = annotation.getQualifierName(viewClazz);
         menuName = annotation.getMenuName(viewClazz);
         icon = reflection.getIconView(viewClazz);
+        linkRoute = annotation.getRouteName(viewClazz);
 
         if (text.isValid(menuName) && text.isValid(linkRoute)) {
             return appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));

@@ -68,10 +68,10 @@ public class AAppLayoutMenu extends AMenu {
         String menuName;
         VaadinIcon icon;
 
-        linkRoute = annotation.getQualifierName(viewClazz);
         menuName = annotation.getMenuName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
         icon = reflection.getIconView(viewClazz);
+        linkRoute = annotation.getRouteName(viewClazz);
 
         appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
     }// end of method
@@ -85,10 +85,10 @@ public class AAppLayoutMenu extends AMenu {
         String menuName;
         VaadinIcon icon;
 
-        linkRoute = annotation.getQualifierName(viewClazz);
         menuName = annotation.getMenuName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
         icon = reflection.getIconView(viewClazz);
+        linkRoute = annotation.getRouteName(viewClazz);
 
         appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
     }// end of method

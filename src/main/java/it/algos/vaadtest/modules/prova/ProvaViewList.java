@@ -170,10 +170,13 @@ public class ProvaViewList extends AGridViewList {
     protected void creaTopLayout() {
         super.creaTopLayout();
 
+        topPlaceholder.add(creaPopup());
+
         Button testVistaSenza = new Button("Test senza parametri", new Icon(VaadinIcon.ASTERISK));
         testVistaSenza.getElement().setAttribute("theme", "secondary");
         testVistaSenza.addClassName("view-toolbar__button");
         testVistaSenza.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM)));
+        testVistaSenza.getElement().setAttribute("title", "Posso scrivere quello che voglio. Senza HTML text, però.");
         topPlaceholder.add(testVistaSenza);
 
 
