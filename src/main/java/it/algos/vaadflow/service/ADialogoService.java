@@ -2,11 +2,15 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.UI;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_BODY;
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_HEADER;
 
 /**
  * Project vaadflow
@@ -24,11 +28,19 @@ public class ADialogoService extends AbstractService {
      */
     private final static long serialVersionUID = 1L;
 
-
     /**
      * Private final property
      */
     private static final ADialogoService INSTANCE = new ADialogoService();
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    public ARouteService routeService = ARouteService.getInstance();
 
 
     /**
@@ -49,34 +61,39 @@ public class ADialogoService extends AbstractService {
 
 
     public void dialogoUno(Optional<UI> interfacciaUtente, String bodyText) {
-        String bodyTextUTF8;
-        UI ui = null;
-
-        if (interfacciaUtente != null) {
-            ui = interfacciaUtente.get();
-        }// end of if cycle
-
-        try { // prova ad eseguire il codice
-            if (ui != null) {
-                bodyTextUTF8 = URLEncoder.encode(bodyText, "UTF-8");
-                ui.navigate("dialogouno" + "/" + bodyTextUTF8);
-            }// end of if cycle
-        } catch (Exception unErrore) { // intercetta l'errore
-        }// fine del blocco try-catch
-
+        String routeNameTag = "dialogouno";
+        routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
     }// end of method
 
 
-    public String decodifica(String bodyTextUTF8) {
-        String bodyText = bodyTextUTF8;
+    public void dialogoDue(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
+        String routeNameTag = "dialogodue";
+        HashMap<String, String> mappa=new HashMap<>();
+        mappa.put(KEY_MAPPA_HEADER,headerText);
+        mappa.put(KEY_MAPPA_BODY,bodyText);
 
-
-        try { // prova ad eseguire il codice
-                bodyText = URLDecoder.decode(bodyTextUTF8, "UTF-8");
-        } catch (Exception unErrore) { // intercetta l'errore
-        }// fine del blocco try-catch
-
-        return bodyText;
+        routeService.navigate(interfacciaUtente, routeNameTag, mappa);
     }// end of method
+
+
+//    public void routeVersoDialogo(Optional<UI> interfacciaUtente, String bodyText, String routeNameTag) {
+////        String bodyTextUTF8;
+////        UI ui = null;
+////
+////        if (interfacciaUtente != null) {
+////            ui = interfacciaUtente.get();
+////        }// end of if cycle
+////
+////        try { // prova ad eseguire il codice
+////            if (ui != null) {
+////                bodyTextUTF8 = routeService.codifica(bodyText);
+////                ui.navigate(routeNameTag + "/" + bodyTextUTF8);
+////            }// end of if cycle
+////        } catch (Exception unErrore) { // intercetta l'errore
+////        }// fine del blocco try-catch
+////
+//        routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
+//    }// end of method
+
 
 }// end of class

@@ -5,8 +5,6 @@ import com.vaadin.flow.router.RouterLayout;
 import it.algos.vaadflow.ui.MainLayout;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -310,6 +308,10 @@ public abstract class FlowCost {
 
     public static final String KEY_MAPPA_GIORNI_MESE_MESE = "meseMese";
 
+    public static final String KEY_MAPPA_HEADER = "header";
+
+    public static final String KEY_MAPPA_BODY = "body";
+
     public static final String KEY_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 
     public static final String KEY_LOGGED_USER = "loggedUser";
@@ -344,9 +346,6 @@ public abstract class FlowCost {
     private static final String[] companyMatrice = {COMPANY_CODE, COMPANY_UNICO};
 
     public static final List<String> COMPANY_OPTIONAL = Arrays.asList(companyMatrice);
-
-
-
 
 
 }// end of static class

@@ -41,6 +41,7 @@ public class ProvaDialoghi extends VerticalLayout {
         avvisoUnBottone();
         dialogoConferma();
         nuovoDialogo();
+        nuovoDialogoDueBottoni();
     }// end of constructor
 
 
@@ -155,6 +156,28 @@ public class ProvaDialoghi extends VerticalLayout {
 
     public void usaNuovoDialogo() {
         dialogoService.dialogoUno(getUI(),"Sei sicuro di voler procedere abbastanza a lungo?");
+    }// end of method
+
+
+    /**
+     * Nuovo dialogo, completamente riscritto con due bottoni
+     */
+    public void nuovoDialogoDueBottoni() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Nuovo dialogo con due bottoni: ");
+        Button button = new Button("Dialogo doppio");
+        button.addClickListener(e -> usaNuovoDialogoDueBottoni());
+        layout.add(label);
+        layout.add(button);
+        this.add(layout);
+
+    }// end of method
+
+
+    public void usaNuovoDialogoDueBottoni() {
+        dialogoService.dialogoDue(getUI(),"Unsaved changes","Do you want to save or discard your changes before navigating away?");
     }// end of method
 
 

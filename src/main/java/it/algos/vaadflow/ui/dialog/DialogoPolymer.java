@@ -1,21 +1,22 @@
 package it.algos.vaadflow.ui.dialog;
 
-import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.History;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import it.algos.vaadflow.application.AContext;
@@ -23,14 +24,15 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.service.ADialogoService;
-import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.service.AVaadinService;
+import it.algos.vaadflow.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_BODY;
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_HEADER;
 
 /**
  * Project vaadflow
@@ -106,7 +108,25 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
+    public AArrayService array = AArrayService.getInstance();
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
     public ADialogoService dialogoService = ADialogoService.getInstance();
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    public ARouteService routeService = ARouteService.getInstance();
 
     public Runnable cancelHandler;
 
@@ -135,7 +155,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     /**
      * Flag di preferenza per il testo del bottone Confirm. Normalmente 'Conferma'.
      */
-    protected String textConfirmlButton;
+    protected String textConfirmButton;
 
     /**
      * Corpo centrale del Dialog <br>
@@ -198,7 +218,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 
     protected Button cancelButton = new Button(textCancelButton);
 
-    protected Button confirmButton = new Button(textConfirmlButton);
+    protected Button confirmButton = new Button(textConfirmButton);
 
     /**
      * Service (@Scope = 'singleton') iniettato dal costruttore @Autowired di Spring <br>
@@ -215,11 +235,21 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      */
     protected AContext context;
 
+    protected String headerText;
+
     protected String bodyText;
 
-    private Label question;
+    /**
+     * Component iniettato nel polymer html con lo stesso ID <br>
+     */
+    @Id("body")
+    protected Span body;
 
-    private Button confirm;
+    /**
+     * Component iniettato nel polymer html con lo stesso ID <br>
+     */
+    @Id("conferma")
+    protected Button conferma;
 
 
 //    public DialogoPolymer(String title, String content, ComponentEventListener listener) {
@@ -236,18 +266,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 //        createFooter();
 //    }// end of constructor
 
-
-    /**
-     * Component iniettato nel polymer html con lo stesso ID <br>
-     */
-    @Id("body")
-    protected Span body;
-
-    /**
-     * Component iniettato nel polymer html con lo stesso ID <br>
-     */
-    @Id("conferma")
-    protected Button conferma;
+    private Label question;
 
 
     /**
@@ -276,33 +295,43 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         this.usaBody = true;
         this.usaFooter = true;
 
-        this.backgroundColorHeader = EAColor.lightgreen;
-        this.backgroundColorBody = EAColor.lightskyblue;
-        this.backgroundColorFooter = EAColor.lightgray;
+        this.backgroundColorHeader = EAColor.grigio1;
+        this.backgroundColorBody = EAColor.grigio1;
+        this.backgroundColorFooter = EAColor.grigio2;
 
-        this.width = "18em";
-        this.heightHeader = "6em";
-        this.heightBody = "8em";
+        this.width = "30em";
+        this.heightHeader = "3em";
+        this.heightBody = "6em";
         this.heightFooter = "4em";
 
         this.textCancelButton = "Annulla";
-        this.textConfirmlButton = "Conferma";
+        this.textConfirmButton = "Conferma";
     }// end of method
 
 
     /**
-     * Recupera i parametri ricevuti dalla chiamata appContext.getBean(DialogoPolymer.class, bodyText); <br>
+     * Recupera i parametri ricevuti dal router di Vaadin (via broser) <br>
      *
-     * @param event    con la Location, segments, target, source, ecc
+     * @param event        con la Location, segments, target, source, ecc
      * @param bodyTextUTF8 da decodificare
      */
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String bodyTextUTF8) {
-        this.bodyText = dialogoService.decodifica(bodyTextUTF8);
-        layoutPolymer();
-//        fixHeader();
+        ARouteService.Parametro parametro = routeService.estraeParametri(event, bodyTextUTF8);
+        if (text.isValid(parametro.getSingleParameter())) {
+            this.bodyText = parametro.getSingleParameter();
+        } else {
+            if (array.isValid(parametro.getParametersMap())) {
+                this.headerText = parametro.getParametersMap().get(KEY_MAPPA_HEADER);
+                this.bodyText = parametro.getParametersMap().get(KEY_MAPPA_BODY);
+            }// end of if cycle
+        }// end of if/else cycle
+
+        fixHeader();
         fixBody();
         fixFooter();
+
+        layoutPolymer();
     }// end of method
 
 
@@ -310,9 +339,9 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      * Costruisce la pagina <br>
      */
     protected void layoutPolymer() {
-        getModel().setBackgroundColorHeader(backgroundColorHeader.getTag());
-        getModel().setBackgroundColorBody(backgroundColorBody.getTag());
-        getModel().setBackgroundColorFooter(backgroundColorFooter.getTag());
+        getModel().setBackgroundColorHeader(backgroundColorHeader.getEsadecimale());
+        getModel().setBackgroundColorBody(backgroundColorBody.getEsadecimale());
+        getModel().setBackgroundColorFooter(backgroundColorFooter.getEsadecimale());
         getModel().setWidth(width);
         getModel().setHeightHeader(heightHeader);
         getModel().setHeightBody(heightBody);
@@ -330,16 +359,35 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         header.add(this.title, close);
         header.setFlexGrow(1, this.title);
         header.setAlignItems(FlexComponent.Alignment.CENTER);
-        header.getStyle().set("background-color", EAColor.lightgreen.getTag());
+        header.getStyle().set("background-color", backgroundColorHeader.getEsadecimale());
 //        add(header);//@todo LEVATO
     }// end of method
 
 
-    protected void fixBody() {
+    protected void fixHeader() {
     }// end of method
 
-    protected void fixFooter() {
+
+    protected void fixBody() {
+        body.setText(bodyText);
+//        body.getStyle().set("background-color", this.backgroundColorBody.getTag());
+        body.getStyle().set("background-color", backgroundColorBody.getEsadecimale());
     }// end of method
+
+
+    protected void fixFooter() {
+        conferma.setText(textConfirmButton);
+        conferma.setIcon(new Icon(VaadinIcon.CHECK));
+        conferma.getElement().getStyle().set("margin-right", "auto") ;
+        conferma.addClickListener(buttonClickEvent -> close());
+    }// end of method
+
+
+    protected void close() {
+        History history = UI.getCurrent().getPage().getHistory();
+        history.back();
+    }// end of method
+
 
     private void createContent() {
         question = new Label();
@@ -355,20 +403,20 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     private void createFooter() {
         Button abort = new Button("Abort");
 //        abort.addClickListener(buttonClickEvent -> close());//@todo LEVATO
-        confirm = new Button("Confirm");
+//        confirm = new Button("Confirm");
 //        confirm.addClickListener(buttonClickEvent -> close());//@todo LEVATO
 
-        HorizontalLayout footer = new HorizontalLayout();
-        footer.add(abort, confirm);
-        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        footer.getStyle().set("background-color", EAColor.lightgray.getTag());
+//        HorizontalLayout footer = new HorizontalLayout();
+//        footer.add(abort, confirm);
+//        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+//        footer.getStyle().set("background-color", EAColor.lightgray.getTag());
 //        add(footer);//@todo LEVATO
     }// end of method
 
 
-    public Registration addConfermaListener(ComponentEventListener listener) {
-        return confirm.addClickListener(e -> listener.onComponentEvent(null));
-    }// end of method
+//    public Registration addConfermaListener(ComponentEventListener listener) {
+//        return confirma.addClickListener(e -> listener.onComponentEvent(null));
+//    }// end of method
 
 
     /**
@@ -685,9 +733,9 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     }
 
 
-    public void addConfirmationListener(ComponentEventListener listener) {
-        confirm.addClickListener(listener);
-    }
+//    public void addConfirmationListener(ComponentEventListener listener) {
+//        confirm.addClickListener(listener);
+//    }
 
 
     /**
