@@ -9,7 +9,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.History;
@@ -241,6 +240,10 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 
     protected String bodyText;
 
+    protected String iconaAnnulla;
+
+    protected String iconaConferma;
+
 
     /**
      * Quasto Component viene iniettato nel file html SOLO se esiste un componente (compatibile) con lo stesso ID <br>
@@ -318,6 +321,9 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 
         this.textCancelButton = "Annulla";
         this.textConfirmButton = "Conferma";
+
+        this.iconaAnnulla="icons:close";
+        this.iconaConferma="icons:check";
     }// end of method
 
 
@@ -362,7 +368,8 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         getModel().setBodyText(bodyText);
         getModel().setTextCancelButton(textCancelButton);
         getModel().setTextConfirmButton(textConfirmButton);
-
+        getModel().setIconaAnnulla(iconaAnnulla);
+        getModel().setIconaConferma(iconaConferma);
         dialog.addDialogCloseActionListener(e -> this.close());
         dialog.open();
     }// end of method
@@ -408,6 +415,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         }// end of if cycle
 //        close();//@todo LEVATO
     }// end of method
+
 
     protected void close() {
         History history = UI.getCurrent().getPage().getHistory();
@@ -703,7 +711,6 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     }// end of method
 
 
-
     /**
      * Opens the given item for editing in the dialog.
      *
@@ -765,6 +772,10 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      * Modello dati per collegare questa classe java col polymer
      */
     public interface DialogoModel extends TemplateModel {
+
+        void setIconaAnnulla(String iconaAnnulla);
+
+        void setIconaConferma(String iconaConferma);
 
         void setHeaderText(String headerText);
 

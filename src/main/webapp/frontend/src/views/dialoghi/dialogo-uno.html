@@ -3,6 +3,10 @@
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 
+<!--form centrato orizzontalmente nella pagina, contiene tutto-->
+<!--testo e un bottone (da cui DialogoUno=un bottone)-->
+<!--occorre un template generale e poi, dentro, <vaadin-dialog> che a sua volta contiene un template-->
+<!--dentro il dialogo NON si possono usare Component iniettati con @ID ma occorre usare un TemplateModel-->
 <dom-module id="dialogo-uno">
     <template>
         <vaadin-dialog id="dialogo">

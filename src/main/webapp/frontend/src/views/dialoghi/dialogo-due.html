@@ -7,58 +7,41 @@
 <link rel="import" href="../../../src/views/dialoghi/dialogo-uno.html">
 
 <dom-module id="dialogo-due">
-
-
-    <vaadin-dialog opened>
+    <template>
+        <vaadin-dialog id="dialogo">
             <template>
-                <dialogo-uno></dialogo-uno>
-<!--            Sample dialog-->
-<!--            [[width]]-->
-<!--            <vaadin-button id="conferma" style="width:3em;" theme="raised primary"></vaadin-button>-->
-        </template>
-    </vaadin-dialog>    <script>
-        // customElements.whenDefined('vaadin-dialog').then(function() {
-        //     const dialog = document.querySelector('vaadin-dialog');
-        //     dialog.renderer = function(root, dialog) {
-        //         // Check if there is a DOM generated with the previous renderer call to update its content instead of recreation
-        //         if (root.firstElementChild) {
-        //             return;
-        //         }
-        //         const div = window.document.createElement('div');
-        //         div.textContent = 'Are you sure?';
-        //
-        //         const br = window.document.createElement('br');
-        //
-        //         const okButton = window.document.createElement('vaadin-button');
-        //         okButton.setAttribute('theme', 'primary');
-        //         okButton.textContent = 'OK';
-        //         okButton.setAttribute('style', 'margin-right: 1em');
-        //         okButton.addEventListener('click', function() {
-        //             dialog.opened = false;
-        //         });
-        //
-        //         const cancelButton = window.document.createElement('vaadin-button');
-        //         cancelButton.textContent = 'Cancel';
-        //         cancelButton.addEventListener('click', function() {
-        //             dialog.opened = false;
-        //         });
-        //
-        //         root.appendChild(div);
-        //         root.appendChild(br);
-        //         root.appendChild(okButton);
-        //         root.appendChild(cancelButton);
-        //     };
-        //     document.querySelector('vaadin-button').addEventListener('click', function() {
-        //         dialog.opened = true;
-        //     });
-        // });
+                <!--prima riga (opzionale)-->
+                <div style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]];">
+                    <h3>[[headerText]]</h3>
+                </div>
+                <!--seconda riga (obbligatoria)-->
+                <div style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
+                    <div>[[bodyText]]</div>
+                </div>
+                <!--terza riga (obbligatoria)-->
+                <div style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-end; background-color:[backgroundColorFooter];">
+                    <vaadin-button on-click="handleClickAnnulla" style="width:8em; margin-left:1em; margin-right:6em"
+                                   theme="raised secondary">
+<!--                        <iron-icon icon=[[iconaAnnulla]] slot="prefix" style="font-size:small; "></iron-icon>-->
+                        <iron-icon icon=[[iconaAnnulla]] slot="prefix"></iron-icon>
+                        [[textCancelButton]]
+                    </vaadin-button>
+                    <vaadin-button on-click="handleClickConferma" style="width:8em; margin-left:6em; margin-right:1em;"
+                                   theme="raised primary">
+                        <iron-icon icon=[[iconaConferma]] slot="prefix"></iron-icon>
+                        [[textConfirmButton]]
+                    </vaadin-button>
+                </div>
+            </template>
+        </vaadin-dialog>
+    </template>
 
-    class NomeClasseIrrilevanteDialogoDue extends Polymer.Element {
+    <script>
+        class NomeClasseIrrilevanteDialogoDue extends Polymer.Element {
             static get is() {
                 return 'dialogo-due'
             }// end of static script method
         }// end of script class
         customElements.define(NomeClasseIrrilevanteDialogoDue.is, NomeClasseIrrilevanteDialogoDue);
-</script>
-
+    </script>
 </dom-module>

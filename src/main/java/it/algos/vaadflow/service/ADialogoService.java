@@ -65,51 +65,42 @@ public class ADialogoService extends AbstractService {
     }// end of method
 
 
-    public void dialogoUno(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
-        String routeNameTag = "dialogouno";
-        HashMap<String, String> mappa = new HashMap<>();
-        mappa.put(KEY_MAPPA_HEADER, headerText);
-        mappa.put(KEY_MAPPA_BODY, bodyText);
-
-        routeService.navigate(interfacciaUtente, routeNameTag, mappa);
+    public void dialogoUno(Optional<UI> interfacciaUtente, String bodyText) {
+        dialogoUno(interfacciaUtente, "", bodyText);
     }// end of method
 
 
-    public void dialogoUno(Optional<UI> interfacciaUtente, String bodyText) {
+    public void dialogoUno(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
         String routeNameTag = "dialogouno";
-        routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
+        dialogo(interfacciaUtente, headerText, bodyText,routeNameTag);
+    }// end of method
+
+
+    public void dialogoDue(Optional<UI> interfacciaUtente, String bodyText) {
+        dialogoDue(interfacciaUtente, "", bodyText);
     }// end of method
 
 
     public void dialogoDue(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
         String routeNameTag = "dialogodue";
-        routeNameTag = "xx";
-        HashMap<String, String> mappa = new HashMap<>();
-        mappa.put(KEY_MAPPA_HEADER, headerText);
-        mappa.put(KEY_MAPPA_BODY, bodyText);
-
-        routeService.navigate(interfacciaUtente, routeNameTag, mappa);
+        dialogo(interfacciaUtente, headerText, bodyText,routeNameTag);
     }// end of method
 
 
-//    public void routeVersoDialogo(Optional<UI> interfacciaUtente, String bodyText, String routeNameTag) {
-////        String bodyTextUTF8;
-////        UI ui = null;
-////
-////        if (interfacciaUtente != null) {
-////            ui = interfacciaUtente.get();
-////        }// end of if cycle
-////
-////        try { // prova ad eseguire il codice
-////            if (ui != null) {
-////                bodyTextUTF8 = routeService.codifica(bodyText);
-////                ui.navigate(routeNameTag + "/" + bodyTextUTF8);
-////            }// end of if cycle
-////        } catch (Exception unErrore) { // intercetta l'errore
-////        }// fine del blocco try-catch
-////
-//        routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
-//    }// end of method
+    public void dialogo(Optional<UI> interfacciaUtente, String headerText, String bodyText, String routeNameTag) {
+        if (text.isValid(headerText)) {
+            routeService.navigate(interfacciaUtente, routeNameTag, getMappa(headerText, bodyText));
+        } else {
+            routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
+        }// end of if/else cycle
+    }// end of method
 
+
+    public HashMap<String, String> getMappa(String headerText, String bodyText) {
+        HashMap<String, String> mappa = new HashMap<>();
+        mappa.put(KEY_MAPPA_HEADER, headerText);
+        mappa.put(KEY_MAPPA_BODY, bodyText);
+        return mappa;
+    }// end of method
 
 }// end of class
