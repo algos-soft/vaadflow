@@ -32,14 +32,14 @@ public class DialogoDuePolymer extends DialogoPolymer {
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
-    @Id("header")
-    private Span header;
+//    @Id("header")
+    private Span header=new Span();
 
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
-    @Id("annulla")
-    protected Button annulla;
+//    @Id("annulla")
+    protected Button annulla=new Button();
 
     /**
      * Preferenze standard.

@@ -242,14 +242,14 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
-    @Id("body")
-    protected Span body;
+//    @Id("body")
+    protected Span body=new Span();
 
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
-    @Id("conferma")
-    protected Button conferma;
+//    @Id("conferma")
+    protected Button conferma= new Button();
 
 
 //    public DialogoPolymer(String title, String content, ComponentEventListener listener) {

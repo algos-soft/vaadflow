@@ -4,48 +4,61 @@
 <link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../../../src/views/dialoghi/dialogo-uno.html">
 
 <dom-module id="dialogo-due">
-    <style>
-    </style>
-    <template>
-        <!--form centrato orizzontalmente nella pagina, contiene tutto-->
-        <div style="display: flex; flex-direction:column; align-items: center; margin-top: 1em;">
 
-            <!--prima riga (opzionale)-->
-            <div style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-end; margin-top:1em; background-color:[[backgroundColorHeader]];">
-                <span id="header"
-                      style="width: [[width]]; margin-left: 1.5em; margin-top:2em; margin-bottom:0.5em; font-weight: bold"></span>
-            </div>
-            <vaadin-dialog opened>
-                <template>
-                    Sample dialog
-                </template>
-            </vaadin-dialog>
-            <!--seconda riga (obbligatoria)-->
-            <div style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-start; background-color:[[backgroundColorBody]];">
-                <span id="body" style="width: [[width]]; margin-left: 1.5em; margin-top: 0.5em; "></span>
-            </div>
 
-            <!--terza riga (obbligatoria)-->
-            <div style="height:[[heightFooter]]; width: [[width]];  display: flex; flex-direction:row;  align-items: center; background-color:[[backgroundColorFooter]];">
-                <div style=" width:[[width]]; display: flex; flex-direction:column; align-items:flex-start; background-color:[[backgroundColorFooter]];">
-                    <vaadin-button id="annulla" style="width: 8em;" theme="raised secondary"></vaadin-button>
-                </div>
-                <div style=" width:[[width]]; display: flex; flex-direction:column; align-items: flex-end; background-color:[[backgroundColorFooter]];">
-                    <vaadin-button id="conferma" style="width:8em;" theme="raised primary"></vaadin-button>
-                </div>
-            </div>
-        </div>
-    </template>
+    <vaadin-dialog opened>
+            <template>
+                <dialogo-uno></dialogo-uno>
+<!--            Sample dialog-->
+<!--            [[width]]-->
+<!--            <vaadin-button id="conferma" style="width:3em;" theme="raised primary"></vaadin-button>-->
+        </template>
+    </vaadin-dialog>    <script>
+        // customElements.whenDefined('vaadin-dialog').then(function() {
+        //     const dialog = document.querySelector('vaadin-dialog');
+        //     dialog.renderer = function(root, dialog) {
+        //         // Check if there is a DOM generated with the previous renderer call to update its content instead of recreation
+        //         if (root.firstElementChild) {
+        //             return;
+        //         }
+        //         const div = window.document.createElement('div');
+        //         div.textContent = 'Are you sure?';
+        //
+        //         const br = window.document.createElement('br');
+        //
+        //         const okButton = window.document.createElement('vaadin-button');
+        //         okButton.setAttribute('theme', 'primary');
+        //         okButton.textContent = 'OK';
+        //         okButton.setAttribute('style', 'margin-right: 1em');
+        //         okButton.addEventListener('click', function() {
+        //             dialog.opened = false;
+        //         });
+        //
+        //         const cancelButton = window.document.createElement('vaadin-button');
+        //         cancelButton.textContent = 'Cancel';
+        //         cancelButton.addEventListener('click', function() {
+        //             dialog.opened = false;
+        //         });
+        //
+        //         root.appendChild(div);
+        //         root.appendChild(br);
+        //         root.appendChild(okButton);
+        //         root.appendChild(cancelButton);
+        //     };
+        //     document.querySelector('vaadin-button').addEventListener('click', function() {
+        //         dialog.opened = true;
+        //     });
+        // });
 
-    <script>
-        class NomeClasseIrrilevanteDialogoDue extends Polymer.Element {
+    class NomeClasseIrrilevanteDialogoDue extends Polymer.Element {
             static get is() {
                 return 'dialogo-due'
             }// end of static script method
         }// end of script class
         customElements.define(NomeClasseIrrilevanteDialogoDue.is, NomeClasseIrrilevanteDialogoDue);
-    </script>
+</script>
 
 </dom-module>
