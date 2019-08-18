@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_BODY;
@@ -60,6 +59,12 @@ public class ADialogoService extends AbstractService {
     }// end of static method
 
 
+    public void dialogoZero(Optional<UI> interfacciaUtente, String bodyText) {
+        String routeNameTag = "dialogozero";
+        routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
+    }// end of method
+
+
     public void dialogoUno(Optional<UI> interfacciaUtente, String bodyText) {
         String routeNameTag = "dialogouno";
         routeService.navigate(interfacciaUtente, routeNameTag, bodyText);
@@ -68,10 +73,10 @@ public class ADialogoService extends AbstractService {
 
     public void dialogoDue(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
         String routeNameTag = "dialogodue";
-         routeNameTag = "xx";
-        HashMap<String, String> mappa=new HashMap<>();
-        mappa.put(KEY_MAPPA_HEADER,headerText);
-        mappa.put(KEY_MAPPA_BODY,bodyText);
+        routeNameTag = "xx";
+        HashMap<String, String> mappa = new HashMap<>();
+        mappa.put(KEY_MAPPA_HEADER, headerText);
+        mappa.put(KEY_MAPPA_BODY, bodyText);
 
         routeService.navigate(interfacciaUtente, routeNameTag, mappa);
     }// end of method

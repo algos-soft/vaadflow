@@ -1,39 +1,25 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 
+<!--form centrato orizzontalmente nella pagina, contiene tutto-->
+<!--solo testo, senza bottoni (da cui DialogoZero=zero bottoni)-->
+<!--occorre un template generale e poi, dentro, <vaadin-dialog> che a sua volta contiene un template-->
+<!--dentro il dialogo NON si possono usare Component iniettati con @ID ma occorre usare un TemplateModel-->
 <dom-module id="dialogo-zero">
     <template>
-        <!--form centrato orizzontalmente nella pagina, contiene tutto-->
-        <div style="display: flex; flex-direction:column; align-items: center; margin-top: 1em;">
-
-            <!--prima riga-->
-            <div style="display: flex; flex-direction:row; align-items: center; margin-top:1.5em">
-                <vaadin-button id="funzione" style="width: 8em;"></vaadin-button>
-                <vaadin-button id="milite" style="width: 11em;"></vaadin-button>
-            </div>
-
-            <!--seconda riga-->
-            <div style="display: flex; flex-direction:row; align-items: center;">
-            </div>
-
-            <!--terza riga-->
-            <div style="display: flex; flex-direction:row; align-items: center;">
-                <vaadin-text-field id="note" style="width: 7em"></vaadin-text-field>
-                <vaadin-button id="milite2" style="width: 11em;"></vaadin-button>
-            </div>
-        </div>
+        <vaadin-dialog id="dialogo">
+            <template>
+                <div>[[bodyText]]</div>
+            </template>
+        </vaadin-dialog>
     </template>
 
     <script>
-        class NomeClasseIrrilevanteEdit extends Polymer.Element {
+        class NomeClasseIrrilevanteDialogoZero extends Polymer.Element {
             static get is() {
                 return 'dialogo-zero'
             }// end of static script method
         }// end of script class
-        customElements.define(NomeClasseIrrilevanteEdit.is, NomeClasseIrrilevanteEdit);
+        customElements.define(NomeClasseIrrilevanteDialogoZero.is, NomeClasseIrrilevanteDialogoZero);
     </script>
 
 </dom-module>

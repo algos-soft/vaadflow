@@ -2,6 +2,7 @@ package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
@@ -239,17 +240,27 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 
     protected String bodyText;
 
+
+    /**
+     * Quasto Component viene iniettato nel file html SOLO se esiste un componente (compatibile) con lo stesso ID <br>
+     * L'ID deve essere esattamente lo stesso <br>
+     * La property di questo file Java invece può avere qualsiasi nome <br>
+     */
+    @Id("dialogo")
+    protected Dialog dialog;
+
+
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
 //    @Id("body")
-    protected Span body=new Span();
+    protected Span body = new Span();
 
     /**
      * Component iniettato nel polymer html con lo stesso ID <br>
      */
 //    @Id("conferma")
-    protected Button conferma= new Button();
+    protected Button conferma = new Button();
 
 
 //    public DialogoPolymer(String title, String content, ComponentEventListener listener) {
@@ -346,6 +357,11 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         getModel().setHeightHeader(heightHeader);
         getModel().setHeightBody(heightBody);
         getModel().setHeightFooter(heightFooter);
+        getModel().setHeaderText(headerText);
+        getModel().setBodyText(bodyText);
+
+        dialog.addDialogCloseActionListener(e -> this.close());
+        dialog.open();
     }// end of method
 
 
@@ -378,7 +394,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     protected void fixFooter() {
         conferma.setText(textConfirmButton);
         conferma.setIcon(new Icon(VaadinIcon.CHECK));
-        conferma.getElement().getStyle().set("margin-right", "auto") ;
+        conferma.getElement().getStyle().set("margin-right", "auto");
         conferma.addClickListener(buttonClickEvent -> close());
     }// end of method
 
@@ -742,6 +758,10 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      * Modello dati per collegare questa classe java col polymer
      */
     public interface DialogoModel extends TemplateModel {
+
+        void setHeaderText(String headerText);
+
+        void setBodyText(String bodyText);
 
         void setWidth(String width);
 

@@ -1,24 +1,26 @@
 <link rel="import" href="/frontend/bower_components/polymer/polymer-element.html">
 <link rel="import" href="/frontend/bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-<!--<link rel="import" href="/frontend/bower_components/vaadin-button/src/vaadin-button.html">-->
 
 <dom-module id="a-a">
     <template>
-        <vaadin-dialog id="dialog">
+        <vaadin-dialog id="dialogo">
             <template>
                 <div>XX</div>
-                <vaadin-button id="conferma" style="width:3em; background-color:[[backgroundColorFooter]];">Alfa</vaadin-button>
+                <vaadin-button id="conferma" style="width:3em; background-color:[[backgroundColorFooter]];">Alfa
+                </vaadin-button>
                 <div>{{width}}</div>
             </template>
         </vaadin-dialog>
-        <slot></slot>
     </template>
     <script>
         class A extends Polymer.Element {
-            static get is() { return 'a-a' }
+            static get is() {
+                return 'a-a'
+            }
 
         }
+
         customElements.define(A.is, A);
     </script>
 </dom-module>

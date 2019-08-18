@@ -145,7 +145,7 @@ public class ProvaDialoghi extends VerticalLayout {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Nuovo dialogo: ");
+        Label label = new Label("Nuovo dialogo senza bottoni: ");
         Button button = new Button("Dialogo");
         button.addClickListener(e -> usaNuovoDialogo());
         layout.add(label);
@@ -156,7 +156,7 @@ public class ProvaDialoghi extends VerticalLayout {
 
 
     public void usaNuovoDialogo() {
-        dialogoService.dialogoUno(getUI(),"Sei sicuro di voler procedere abbastanza a lungo?");
+        dialogoService.dialogoZero(getUI(),"La tua iscrizione al turno è stata effettuata correttamente.");
     }// end of method
 
 

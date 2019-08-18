@@ -2,8 +2,10 @@ package it.algos.vaadtest;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.Route;
@@ -20,8 +22,11 @@ import org.springframework.context.annotation.Scope;
 @Tag("a-a")
 public class AViewxx extends PolymerTemplate<AViewxx.DialogoModel> implements HasComponents {
 
-    private @Id
+    @Id("dialogo")
     Dialog dialog;
+
+    private
+    Button bottone;
 
 
     public AViewxx() {
@@ -29,6 +34,7 @@ public class AViewxx extends PolymerTemplate<AViewxx.DialogoModel> implements Ha
         getModel().setBackgroundColorFooter("#FFFF00");
         dialog.setCloseOnOutsideClick(true);
         dialog.setCloseOnEsc(true);
+
         Registration registration = dialog.addDialogCloseActionListener(e -> close());
         dialog.open();
 
@@ -47,10 +53,16 @@ public class AViewxx extends PolymerTemplate<AViewxx.DialogoModel> implements Ha
     }
 
 
-
     public void close() {
         dialog.close();
         System.out.println("Uscito");
+    }
+
+    @EventHandler
+    public void handleClickRegistra() {
+    }
+    @EventHandler
+    public void handleClickTap() {
     }
 
 
