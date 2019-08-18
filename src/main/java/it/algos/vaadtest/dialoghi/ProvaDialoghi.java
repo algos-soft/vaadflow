@@ -9,12 +9,8 @@ import it.algos.vaadflow.service.ADialogoService;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
 import it.algos.vaadflow.ui.dialog.DialogoConferma;
-import it.algos.vaadtest.AViewxx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-
-import java.net.URLEncoder;
-import java.util.Optional;
 
 /**
  * Project vaadflow
@@ -28,6 +24,7 @@ public class ProvaDialoghi extends VerticalLayout {
 
     @Autowired
     protected ApplicationContext appContext;
+
     @Autowired
     protected ADialogoService dialogoService;
 
@@ -42,6 +39,7 @@ public class ProvaDialoghi extends VerticalLayout {
         avvisoUnBottone();
         dialogoConferma();
         nuovoDialogo();
+        nuovoDialogoUnBottone();
         nuovoDialogoDueBottoni();
     }// end of constructor
 
@@ -156,7 +154,31 @@ public class ProvaDialoghi extends VerticalLayout {
 
 
     public void usaNuovoDialogo() {
-        dialogoService.dialogoZero(getUI(),"La tua iscrizione al turno è stata effettuata correttamente.");
+        dialogoService.dialogoZero(getUI(), "La tua iscrizione al turno è stata effettuata correttamente.");
+    }// end of method
+
+
+    /**
+     * Nuovo dialogo, completamente riscritto con due bottoni
+     */
+    public void nuovoDialogoUnBottone() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Nuovo dialogo con un bottone: ");
+        Button button = new Button("Dialogo bottone");
+        button.addClickListener(e -> usaNuovoDialogoUnBottone());
+        layout.add(label);
+        layout.add(button);
+        this.add(layout);
+
+    }// end of method
+
+
+    public void usaNuovoDialogoUnBottone() {
+//        AViewxx dia= appContext.getBean(AViewxx.class);
+//        dia.open();
+        dialogoService.dialogoUno(getUI(), "Delete","Registrazione effettuata correttamente.");
     }// end of method
 
 
@@ -180,7 +202,7 @@ public class ProvaDialoghi extends VerticalLayout {
     public void usaNuovoDialogoDueBottoni() {
 //        AViewxx dia= appContext.getBean(AViewxx.class);
 //        dia.open();
-        dialogoService.dialogoDue(getUI(),"Unsaved changes","Do you want to save or discard your changes before navigating away?");
+        dialogoService.dialogoDue(getUI(), "Unsaved changes", "Do you want to save or discard your changes before navigating away?");
     }// end of method
 
 

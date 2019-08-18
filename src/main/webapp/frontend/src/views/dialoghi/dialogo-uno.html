@@ -1,34 +1,28 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 
 <dom-module id="dialogo-uno">
-    <style>
-        /*#header {*/
-        /*    font-weight: bold;*/
-        /*}*/
-    </style>
     <template>
-        <!--form centrato orizzontalmente nella pagina, contiene tutto-->
-        <div style="display: flex; flex-direction:column; align-items: center; margin-top: 1em;">
-
-            <!--prima riga (opzionale)-->
-<!--            <div style="height:4em; width: 18em; display: flex; flex-direction:row; align-items: center; margin-top:1.5em; background-color:whitesmoke;">-->
-<!--                <span id="header" style="width: 7em"></span>-->
-<!--            </div>-->
-
-            <!--seconda riga (obbligatoria)-->
-            <div style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
-                <span id="body" style="width: [[width]]; margin:2em;"></span>
-            </div>
-
-            <!--terza riga (obbligatoria)-->
-            <div style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-end; background-color:[backgroundColorFooter];">
-                <vaadin-button id="conferma" style="width:3em;" theme="raised primary"></vaadin-button>
-            </div>
-        </div>
+        <vaadin-dialog id="dialogo">
+            <template>
+                <!--prima riga (opzionale)-->
+                <div style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]];">
+                    <h3>[[headerText]]</h3>
+                </div>
+                <!--seconda riga (obbligatoria)-->
+                <div style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
+                    <div>[[bodyText]]</div>
+                </div>
+                <!--terza riga (obbligatoria)-->
+                <div style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:column; align-items: flex-end; background-color:[backgroundColorFooter];">
+                    <vaadin-button on-click="handleClickConferma" style="width:3em;" theme="raised primary">
+                        [[textConfirmButton]]
+                    </vaadin-button>
+                </div>
+            </template>
+        </vaadin-dialog>
     </template>
 
     <script>

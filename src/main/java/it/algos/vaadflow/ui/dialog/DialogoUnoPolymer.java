@@ -2,6 +2,7 @@ package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.enumeration.EAColor;
@@ -33,13 +34,24 @@ public class DialogoUnoPolymer extends DialogoPolymer {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaHeader = false;
-        super.backgroundColorHeader = EAColor.red;
-        super.backgroundColorBody = EAColor.green;
-        super.backgroundColorFooter = EAColor.pink;
+        super.heightHeader = "2em";
+        super.heightBody = "4em";
+        super.heightFooter = "2em";
 
         this.textConfirmButton = "OK";
     }// end of method
 
+    /**
+     * Java event handler on the server, run asynchronously <br>
+     * <p>
+     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
+     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
+     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
+     */
+    @EventHandler
+    @Override
+    public void handleClickConferma() {
+        close();
+    }// end of method
 
 }// end of class

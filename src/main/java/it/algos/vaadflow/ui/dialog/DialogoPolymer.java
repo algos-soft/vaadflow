@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.History;
+import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.BeforeEvent;
@@ -306,9 +307,9 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         this.usaBody = true;
         this.usaFooter = true;
 
-        this.backgroundColorHeader = EAColor.grigio1;
-        this.backgroundColorBody = EAColor.grigio1;
-        this.backgroundColorFooter = EAColor.grigio2;
+        this.backgroundColorHeader = EAColor.white;
+        this.backgroundColorBody = EAColor.white;
+        this.backgroundColorFooter = EAColor.white;
 
         this.width = "30em";
         this.heightHeader = "3em";
@@ -359,25 +360,27 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         getModel().setHeightFooter(heightFooter);
         getModel().setHeaderText(headerText);
         getModel().setBodyText(bodyText);
+        getModel().setTextCancelButton(textCancelButton);
+        getModel().setTextConfirmButton(textConfirmButton);
 
         dialog.addDialogCloseActionListener(e -> this.close());
         dialog.open();
     }// end of method
 
 
-    private void createHeader() {
-        this.title = new Label();
-        Button close = new Button();
-        close.setIcon(VaadinIcon.CLOSE.create());
-//        close.addClickListener(buttonClickEvent -> close());//@todo LEVATO
-
-        HorizontalLayout header = new HorizontalLayout();
-        header.add(this.title, close);
-        header.setFlexGrow(1, this.title);
-        header.setAlignItems(FlexComponent.Alignment.CENTER);
-        header.getStyle().set("background-color", backgroundColorHeader.getEsadecimale());
-//        add(header);//@todo LEVATO
-    }// end of method
+//    private void createHeader() {
+//        this.title = new Label();
+//        Button close = new Button();
+//        close.setIcon(VaadinIcon.CLOSE.create());
+////        close.addClickListener(buttonClickEvent -> close());//@todo LEVATO
+//
+//        HorizontalLayout header = new HorizontalLayout();
+//        header.add(this.title, close);
+//        header.setFlexGrow(1, this.title);
+//        header.setAlignItems(FlexComponent.Alignment.CENTER);
+//        header.getStyle().set("background-color", backgroundColorHeader.getEsadecimale());
+////        add(header);//@todo LEVATO
+//    }// end of method
 
 
     protected void fixHeader() {
@@ -398,6 +401,13 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         conferma.addClickListener(buttonClickEvent -> close());
     }// end of method
 
+
+    public void confermaHandler() {
+        if (confirmHandler != null) {
+            confirmHandler.run();
+        }// end of if cycle
+//        close();//@todo LEVATO
+    }// end of method
 
     protected void close() {
         History history = UI.getCurrent().getPage().getHistory();
@@ -681,20 +691,17 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 //    }// end of method
 
 
-    public void cancellaHandler() {
-        if (cancelHandler != null) {
-            cancelHandler.run();
-        }// end of if cycle
-//        close();//@todo LEVATO
+    /**
+     * Java event handler on the server, run asynchronously <br>
+     * <p>
+     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
+     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
+     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
+     */
+    @EventHandler
+    public void handleClickConferma() {
     }// end of method
 
-
-    public void confermaHandler() {
-        if (confirmHandler != null) {
-            confirmHandler.run();
-        }// end of if cycle
-//        close();//@todo LEVATO
-    }// end of method
 
 
     /**
@@ -776,6 +783,10 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         void setBackgroundColorBody(String backgroundColorBody);
 
         void setBackgroundColorFooter(String backgroundColorFooter);
+
+        void setTextCancelButton(String textCancelButton);
+
+        void setTextConfirmButton(String textConfirmButton);
 
     }// end of interface
 
