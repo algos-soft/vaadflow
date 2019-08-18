@@ -9,6 +9,7 @@ import it.algos.vaadflow.service.ADialogoService;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
 import it.algos.vaadflow.ui.dialog.DialogoConferma;
+import it.algos.vaadtest.AViewxx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -177,6 +178,8 @@ public class ProvaDialoghi extends VerticalLayout {
 
 
     public void usaNuovoDialogoDueBottoni() {
+//        AViewxx dia= appContext.getBean(AViewxx.class);
+//        dia.open();
         dialogoService.dialogoDue(getUI(),"Unsaved changes","Do you want to save or discard your changes before navigating away?");
     }// end of method
 

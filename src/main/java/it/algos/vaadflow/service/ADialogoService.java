@@ -68,6 +68,7 @@ public class ADialogoService extends AbstractService {
 
     public void dialogoDue(Optional<UI> interfacciaUtente, String headerText, String bodyText) {
         String routeNameTag = "dialogodue";
+         routeNameTag = "xx";
         HashMap<String, String> mappa=new HashMap<>();
         mappa.put(KEY_MAPPA_HEADER,headerText);
         mappa.put(KEY_MAPPA_BODY,bodyText);
