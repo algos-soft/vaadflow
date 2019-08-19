@@ -17,6 +17,9 @@ import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_HEADER;
  * User: gac
  * Date: ven, 16-ago-2019
  * Time: 22:36
+ *
+ * Usata per aprire il dialogo in una nuova finestra-indirizzo url, usando @route e Router <br>
+ * In realtà non molto utile. Non è possibile (a meno di complessi metodi) ritornare un valore <br>
  */
 @Service
 @Slf4j

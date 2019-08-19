@@ -1,4 +1,4 @@
-package it.algos.vaadflow.ui.dialog;
+package it.algos.vaadflow.ui.dialog.polymer.route;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -21,5 +21,7 @@ import org.springframework.context.annotation.Scope;
 @HtmlImport("src/views/dialoghi/dialogo-zero.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DialogoZeroPolymer extends DialogoPolymer {
+public class DialogoZeroRoutePolymer extends DialogoRoutePolymer {
+
+
 }// end of class

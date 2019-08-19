@@ -1,11 +1,10 @@
-package it.algos.vaadflow.ui.dialog;
+package it.algos.vaadflow.ui.dialog.polymer.route;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.enumeration.EAColor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -22,7 +21,8 @@ import org.springframework.context.annotation.Scope;
 @HtmlImport("src/views/dialoghi/dialogo-uno.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DialogoUnoPolymer extends DialogoPolymer {
+public class DialogoUnoRoutePolymer extends DialogoRoutePolymer {
+
 
 
     /**
@@ -41,17 +41,5 @@ public class DialogoUnoPolymer extends DialogoPolymer {
         this.textConfirmButton = "OK";
     }// end of method
 
-    /**
-     * Java event handler on the server, run asynchronously <br>
-     * <p>
-     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
-     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
-     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
-     */
-    @EventHandler
-    @Override
-    public void handleClickConferma() {
-        close();
-    }// end of method
 
 }// end of class

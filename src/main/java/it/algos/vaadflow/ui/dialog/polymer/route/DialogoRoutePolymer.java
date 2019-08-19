@@ -1,4 +1,4 @@
-package it.algos.vaadflow.ui.dialog;
+package it.algos.vaadflow.ui.dialog.polymer.route;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -85,7 +85,7 @@ import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_HEADER;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel> implements HasUrlParameter<String> {
+public class DialogoRoutePolymer extends PolymerTemplate<DialogoRoutePolymer.DialogoModel> implements HasUrlParameter<String> {
 
     protected final H2 titleField = new H2();
 
@@ -250,7 +250,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      * L'ID deve essere esattamente lo stesso <br>
      * La property di questo file Java invece può avere qualsiasi nome <br>
      */
-    @Id("dialogo")
+    @Id("dialog")
     protected Dialog dialog;
 
 
@@ -284,6 +284,21 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     private Label question;
 
 
+    public DialogoRoutePolymer() {
+    }// end of constructor
+
+
+    public DialogoRoutePolymer(String bodyText) {
+        this("", bodyText);
+    }// end of constructor
+
+
+    public DialogoRoutePolymer(String headerText, String bodyText) {
+        this.headerText = headerText;
+        this.bodyText = bodyText;
+    }// end of constructor
+
+
     /**
      * Metodo invocato subito DOPO il costruttore
      * L'istanza DEVE essere creata da SpringBoot con Object algos = appContext.getBean(AlgosClass.class);  <br>
@@ -296,7 +311,14 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
      */
     @PostConstruct
     protected void inizia() {
+        dialog.setCloseOnEsc(true);
+        dialog.setCloseOnOutsideClick(true);
         fixPreferenze();
+        fixHeader();
+        fixBody();
+        fixFooter();
+
+        layoutPolymer();
     }// end of method
 
 
@@ -322,12 +344,13 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         this.textCancelButton = "Annulla";
         this.textConfirmButton = "Conferma";
 
-        this.iconaAnnulla="icons:close";
-        this.iconaConferma="icons:check";
+        this.iconaAnnulla = "icons:close";
+        this.iconaConferma = "icons:check";
     }// end of method
 
 
     /**
+     * Può essere costruito via broser <br>
      * Recupera i parametri ricevuti dal router di Vaadin (via broser) <br>
      *
      * @param event        con la Location, segments, target, source, ecc
@@ -370,7 +393,7 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
         getModel().setTextConfirmButton(textConfirmButton);
         getModel().setIconaAnnulla(iconaAnnulla);
         getModel().setIconaConferma(iconaConferma);
-        dialog.addDialogCloseActionListener(e -> this.close());
+//        dialog.addDialogCloseActionListener(e -> close());
         dialog.open();
     }// end of method
 
@@ -409,11 +432,37 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
     }// end of method
 
 
-    public void confermaHandler() {
-        if (confirmHandler != null) {
-            confirmHandler.run();
-        }// end of if cycle
-//        close();//@todo LEVATO
+//    public void confermaHandler() {
+//        if (confirmHandler != null) {
+//            confirmHandler.run();
+//        }// end of if cycle
+////        close();//@todo LEVATO
+//    }// end of method
+
+
+    /**
+     * Java event handler on the server, run asynchronously <br>
+     * <p>
+     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
+     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
+     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
+     */
+    @EventHandler
+    public void handleClickAnnulla() {
+        this.close();
+    }// end of method
+
+
+    /**
+     * Java event handler on the server, run asynchronously <br>
+     * <p>
+     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
+     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
+     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
+     */
+    @EventHandler
+    public void handleClickConferma() {
+        this.close();
     }// end of method
 
 
@@ -697,18 +746,6 @@ public class DialogoPolymer extends PolymerTemplate<DialogoPolymer.DialogoModel>
 //        }// end of if cycle
 //        bottomLayout.setAlignItems(FlexComponent.Alignment.END);
 //    }// end of method
-
-
-    /**
-     * Java event handler on the server, run asynchronously <br>
-     * <p>
-     * Evento ricevuto dal file html collegato e che 'gira' sul Client <br>
-     * Il collegamento tra il Client sul browser e queste API del Server viene gestito da Flow <br>
-     * Uno scritp con lo stesso nome viene (eventualmente) eseguito in maniera sincrona sul Client <br>
-     */
-    @EventHandler
-    public void handleClickConferma() {
-    }// end of method
 
 
     /**

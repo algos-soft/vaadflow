@@ -9,6 +9,9 @@ import it.algos.vaadflow.service.ADialogoService;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
 import it.algos.vaadflow.ui.dialog.DialogoConferma;
+import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoUnoBeanPolymer;
+import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoZeroBeanPolymer;
+import it.algos.vaadflow.ui.dialog.polymer.route.DialogoZeroRoutePolymer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -34,62 +37,56 @@ public class ProvaDialoghi extends VerticalLayout {
         this.setSpacing(false);
         add(new Label("Prova di alcuni dialoghi"));
         add(new Label(""));
-        avvisoSemplice();
-        avvisoSempliceBean();
+        avvisoSempliceOld();
+        avvisoSempliceOldBean();
         avvisoUnBottone();
         dialogoConferma();
-        nuovoDialogo();
-        nuovoDialogoUnBottone();
-        nuovoDialogoDueBottoni();
+        add(new Label("Nuovi via @route"));
+        nuovoDialogoRoute();
+        nuovoDialogoRouteUnBottone();
+        nuovoDialogoRouteDueBottoni();
+        add(new Label("Nuovi via getBean()"));
+        nuovoDialogoBean();
+        nuovoDialogoBeanUnBottone();
     }// end of constructor
 
 
     /**
      * Questo NON ha bottoni e si chiude con un click fuori dal dialogo oppure con Escape
      */
-    public void avvisoSemplice() {
+    public void avvisoSempliceOld() {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Avviso semplice: ");
+        Label label = new Label("Avviso semplice old: ");
         Button button = new Button("Avviso");
-        button.addClickListener(e -> usaAvvisoSemplice());
-        layout.add(label);
-        layout.add(button);
+        button.addClickListener(e -> {
+            new AvvisoSemplice().open();
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
     }// end of method
 
-
-    public void usaAvvisoSemplice() {
-        AvvisoSemplice avviso = new AvvisoSemplice();
-        avviso.open();
-    }// end of method
 
 
     /**
      * Questo NON ha bottoni e si chiude con un click fuori dal dialogo oppure con Escape
      * Costruito con getBean(). Meglio.
      */
-    public void avvisoSempliceBean() {
+    public void avvisoSempliceOldBean() {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Avviso semplice costruito con getBean(): ");
+        Label label = new Label("Avviso semplice old costruito con getBean(): ");
         Button button = new Button("Avviso");
-        button.addClickListener(e -> usaAvvisoSempliceBean());
-        layout.add(label);
-        layout.add(button);
+        button.addClickListener(e -> {
+            appContext.getBean(AvvisoSemplice.class).open();
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
     }// end of method
 
 
-    /**
-     * Costruito con getBean(). Meglio.
-     */
-    public void usaAvvisoSempliceBean() {
-        AvvisoSemplice avviso = appContext.getBean(AvvisoSemplice.class);
-        avviso.open();
-    }// end of method
 
 
     /**
@@ -99,19 +96,15 @@ public class ProvaDialoghi extends VerticalLayout {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Avviso con bottone di conferma avvenuta lettura: ");
+        Label label = new Label("Avviso old con bottone di conferma avvenuta lettura: ");
         Button button = new Button("Avviso");
-        button.addClickListener(e -> usaAvvisoUnBottone());
-        layout.add(label);
-        layout.add(button);
+        button.addClickListener(e -> {
+            appContext.getBean(AvvisoConferma.class).open();
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
     }// end of method
 
-
-    public void usaAvvisoUnBottone() {
-        AvvisoConferma avviso = appContext.getBean(AvvisoConferma.class);
-        avviso.open();
-    }// end of method
 
 
     /**
@@ -121,90 +114,104 @@ public class ProvaDialoghi extends VerticalLayout {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Dialogo con due bottoni: ");
+        Label label = new Label("Dialogo old con due bottoni: ");
         Button button = new Button("Dialogo");
-        button.addClickListener(e -> usaDialogoConferma());
-        layout.add(label);
-        layout.add(button);
+        button.addClickListener(e -> {
+            appContext.getBean(DialogoConferma.class).open();
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
     }// end of method
 
 
-    public void usaDialogoConferma() {
-        DialogoConferma avviso = appContext.getBean(DialogoConferma.class);
-        avviso.open();
+
+    /**
+     * Nuovo dialogo, completamente riscritto
+     */
+    public void nuovoDialogoRoute() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Avviso route senza bottoni: ");
+        Button button = new Button("Avviso");
+        button.addClickListener(e -> {
+            dialogoService.dialogoZero(getUI(), "La tua iscrizione al turno è stata effettuata correttamente.");
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
+        this.add(layout);
+    }// end of method
+
+
+
+    /**
+     * Nuovo dialogo, completamente riscritto con un bottone
+     */
+    public void nuovoDialogoRouteUnBottone() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Nuovo dialogo route con un bottone: ");
+        Button button = new Button("Dialogo bottone");
+        button.addClickListener(e -> {
+            dialogoService.dialogoUno(getUI(), "Delete", "Registrazione effettuata correttamente.");
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
+        this.add(layout);
+    }// end of method
+
+
+
+    /**
+     * Nuovo dialogo, completamente riscritto con due bottoni
+     */
+    public void nuovoDialogoRouteDueBottoni() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Nuovo dialogo route con due bottoni: ");
+        Button button = new Button("Dialogo doppio");
+        button.addClickListener(e -> {
+            dialogoService.dialogoDue(getUI(), "Unsaved changes", "Do you want to save or discard your changes before navigating away?");
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
+        this.add(layout);
+
     }// end of method
 
 
     /**
      * Nuovo dialogo, completamente riscritto
      */
-    public void nuovoDialogo() {
+    public void nuovoDialogoBean() {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Nuovo dialogo senza bottoni: ");
-        Button button = new Button("Dialogo");
-        button.addClickListener(e -> usaNuovoDialogo());
-        layout.add(label);
-        layout.add(button);
+        Label label = new Label("Avviso bean() senza bottoni: ");
+        Button button = new Button("Avviso");
+        button.addClickListener(e -> {
+            DialogoZeroBeanPolymer dialogo = appContext.getBean(DialogoZeroBeanPolymer.class, "La tua iscrizione al turno è stata effettuata correttamente");
+            this.add(dialogo);
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
-
     }// end of method
-
-
-    public void usaNuovoDialogo() {
-        dialogoService.dialogoZero(getUI(), "La tua iscrizione al turno è stata effettuata correttamente.");
-    }// end of method
-
 
     /**
-     * Nuovo dialogo, completamente riscritto con due bottoni
+     * Nuovo dialogo, completamente riscritto con un bottone
      */
-    public void nuovoDialogoUnBottone() {
+    public void nuovoDialogoBeanUnBottone() {
         HorizontalLayout layout = new HorizontalLayout();
         this.setSpacing(true);
 
-        Label label = new Label("Nuovo dialogo con un bottone: ");
+        Label label = new Label("Nuovo dialogo bean() con un bottone: ");
         Button button = new Button("Dialogo bottone");
-        button.addClickListener(e -> usaNuovoDialogoUnBottone());
-        layout.add(label);
-        layout.add(button);
+        button.addClickListener(e -> {
+            DialogoUnoBeanPolymer dialogo = appContext.getBean(DialogoUnoBeanPolymer.class, "Delete","Registrazione effettuata correttamente");
+            this.add(dialogo);
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
         this.add(layout);
-
     }// end of method
-
-
-    public void usaNuovoDialogoUnBottone() {
-//        AViewxx dia= appContext.getBean(AViewxx.class);
-//        dia.open();
-        dialogoService.dialogoUno(getUI(), "Delete","Registrazione effettuata correttamente.");
-    }// end of method
-
-
-    /**
-     * Nuovo dialogo, completamente riscritto con due bottoni
-     */
-    public void nuovoDialogoDueBottoni() {
-        HorizontalLayout layout = new HorizontalLayout();
-        this.setSpacing(true);
-
-        Label label = new Label("Nuovo dialogo con due bottoni: ");
-        Button button = new Button("Dialogo doppio");
-        button.addClickListener(e -> usaNuovoDialogoDueBottoni());
-        layout.add(label);
-        layout.add(button);
-        this.add(layout);
-
-    }// end of method
-
-
-    public void usaNuovoDialogoDueBottoni() {
-//        AViewxx dia= appContext.getBean(AViewxx.class);
-//        dia.open();
-        dialogoService.dialogoDue(getUI(), "Unsaved changes", "Do you want to save or discard your changes before navigating away?");
-    }// end of method
-
 
     public void conferma() {
         add(new Label("Dialogo confermato"));
