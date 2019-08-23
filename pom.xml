@@ -106,6 +106,7 @@
         </dependency>
 
         <!-- MultiSelectCombo -->
+        <!-- Da cambiare in 2.0.0.rc3 -->
         <dependency>
             <groupId>org.vaadin.gatanaso</groupId>
             <artifactId>multiselect-combo-box-flow</artifactId>
@@ -125,10 +126,11 @@
         </dependency>
 
         <!-- Spring -->
+        <!-- Probabilmente da cambiare in 14.0.1 -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
-            <version>${vaadin.version}</version>
+            <version>13.0.12</version>
         </dependency>
 
         <!-- Spring mail-->
