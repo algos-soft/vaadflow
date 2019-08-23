@@ -1,6 +1,6 @@
 package it.algos.vaadflow.ui.list;
 
-import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
@@ -372,7 +372,7 @@ public abstract class APropertyViewList extends VerticalLayout {
 
     protected ADeleteDialog deleteDialog;
 
-    protected ArrayList<AppLayoutMenuItem> specificMenuItems = new ArrayList<AppLayoutMenuItem>();
+//    protected ArrayList<AppLayoutMenuItem> specificMenuItems = new ArrayList<AppLayoutMenuItem>();
 
     /**
      * Flag di preferenza per usare una route view come detail della singola istanza. Normalmente true. <br>

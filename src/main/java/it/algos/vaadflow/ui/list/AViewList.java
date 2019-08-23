@@ -2,8 +2,8 @@ package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.applayout.AppLayoutMenu;
-import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+//import com.vaadin.flow.component.applayout.AppLayoutMenu;
+//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.icon.Icon;
@@ -314,15 +314,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     protected void addRoute(Class<? extends AViewList> viewClazz) {
         MainLayout mainLayout = context.getMainLayout();
-        if (specificMenuItems != null && specificMenuItems.size() > 0) {
-            specificMenuItems.add(mainLayout.addMenu(viewClazz));
-        }// end of if cycle
+//        if (specificMenuItems != null && specificMenuItems.size() > 0) {
+//            specificMenuItems.add(mainLayout.addMenu(viewClazz));
+//        }// end of if cycle
     }// end of method
 
 
     @Override
     public void beforeLeave(BeforeLeaveEvent beforeLeaveEvent) {
-        AppLayoutMenu appMenu = context.getAppMenu();
+//        AppLayoutMenu appMenu = context.getAppMenu();
 
         if (dialog != null) {
             dialog.close();
@@ -330,11 +330,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         if (deleteDialog != null) {
             deleteDialog.close();
         }// end of if cycle
-        if (specificMenuItems != null && specificMenuItems.size() > 0) {
-            for (AppLayoutMenuItem menuItem : specificMenuItems) {
-                appMenu.removeMenuItem(menuItem);
-            }// end of for cycle
-        }// end of if cycle
+//        if (specificMenuItems != null && specificMenuItems.size() > 0) {
+//            for (AppLayoutMenuItem menuItem : specificMenuItems) {
+//                appMenu.removeMenuItem(menuItem);
+//            }// end of for cycle
+//        }// end of if cycle
     }// end of method
 
 

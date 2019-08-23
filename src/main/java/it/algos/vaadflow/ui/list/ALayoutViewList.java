@@ -107,9 +107,9 @@ public abstract class ALayoutViewList extends APrefViewList {
                     this.add(menu.getComp());
                     break;
                 case vaadin:
-                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
-                    this.add(new Label("."));
-                    this.add(((AFlowingcodeAppLayoutMenu) menu).getAppLayoutFlowing());
+//                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
+//                    this.add(new Label("."));
+//                    this.add(((AFlowingcodeAppLayoutMenu) menu).getAppLayoutFlowing());
                     break;
                 default:
                     log.warn("Switch - caso non definito");

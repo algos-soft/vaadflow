@@ -7,8 +7,8 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.AppLayoutMenu;
-import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+//import com.vaadin.flow.component.applayout.AppLayoutMenu;
+//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
@@ -69,7 +69,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     protected AppLayout appLayout;
 
-    protected AppLayoutMenu appMenu;
+//    protected AppLayoutMenu appMenu;
 
     private AAnnotationService annotation = AAnnotationService.getInstance();
 
@@ -137,7 +137,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
         if (context != null) {
             context.setMainLayout(this);
             context.setAppLayout(appLayout);
-            context.setAppMenu(appMenu);
+//            context.setAppMenu(appMenu);
         }// end of if cycle
     }// end of method
 
@@ -147,7 +147,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      */
     protected void creaVaadindMenu() {
         appLayout = new AppLayout();
-        appMenu = appLayout.createMenu();
+//        appMenu = appLayout.createMenu();
         mappaClassi = creaMappa(menuClazzList);
 //        this.add(appLayout);
     }// end of method
@@ -166,9 +166,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      */
     private void creaMenuDeveloper() {
         if (context != null && context.isDev()) {
-            addMenu(UtenteViewList.class);
-            addMenu(VersioneViewList.class);
-            addMenu(PreferenzaViewList.class);
+//            addMenu(UtenteViewList.class);
+//            addMenu(VersioneViewList.class);
+//            addMenu(PreferenzaViewList.class);
         }// end of if cycle
     }// end of method
 
@@ -178,7 +178,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      */
     private void creaMenuAdmin() {
         if (context != null && context.isAdmin()) {
-            addMenu(LogViewList.class);
+//            addMenu(LogViewList.class);
         }// end of if cycle
     }// end of method
 
@@ -195,7 +195,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
         if (userClazzList != null && userClazzList.size() > 0) {
             for (Class viewClazz : userClazzList) {
-                addMenu(viewClazz);
+//                addMenu(viewClazz);
             }// end of for cycle
         }// end of if cycle
 
@@ -206,8 +206,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
      * Menu logout sempre presente
      */
     protected void creaMenuLogout() {
-        appMenu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.SIGN_OUT.create(), "Logout", e -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
-    }// end of method
+//        appMenu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.SIGN_OUT.create(), "Logout", e -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
+    }// end of metho
 
 
     protected void logout() {
@@ -422,25 +422,25 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     }// end of method
 
 
-    /**
-     * Crea il singolo item di menu <br>
-     */
-    public AppLayoutMenuItem addMenu(Class<? extends AViewList> viewClazz) {
-        String linkRoute;
-        String menuName;
-        VaadinIcon icon;
-
-        menuName = annotation.getMenuName(viewClazz);
-        icon = reflection.getIconView(viewClazz);
-        linkRoute = annotation.getRouteName(viewClazz);
-
-        if (text.isValid(menuName) && text.isValid(linkRoute)) {
-            return appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
-        } else {
-            return null;
-        }// end of if/else cycle
-
-    }// end of method
+//    /**
+//     * Crea il singolo item di menu <br>
+//     */
+//    public AppLayoutMenuItem addMenu(Class<? extends AViewList> viewClazz) {
+//        String linkRoute;
+//        String menuName;
+//        VaadinIcon icon;
+//
+//        menuName = annotation.getMenuName(viewClazz);
+//        icon = reflection.getIconView(viewClazz);
+//        linkRoute = annotation.getRouteName(viewClazz);
+//
+//        if (text.isValid(menuName) && text.isValid(linkRoute)) {
+//            return appMenu.addMenuItem(new AppLayoutMenuItem(icon.create(), menuName, linkRoute));
+//        } else {
+//            return null;
+//        }// end of if/else cycle
+//
+//    }// end of method
 
 //    /**
 //     * Crea il singolo item di menu <br>
