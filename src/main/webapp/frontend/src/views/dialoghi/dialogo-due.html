@@ -1,32 +1,36 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../../bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../../../src/views/dialoghi/dialogo-uno.html">
 
+<!--form centrato orizzontalmente nella pagina, contiene tutto-->
+<!--testo e un bottone (da cui DialogoDue=due bottoni)-->
+<!--occorre un template generale e poi, dentro, <vaadin-dialog> che a sua volta contiene un template-->
+<!--dentro il dialogo NON si possono usare Component iniettati con @ID ma occorre usare un TemplateModel-->
+<!--i Component con id NON vengono iniettati automaticamente perché-->
+<!--Corresponding element was found in a sub template, for which injection is not supported-->
+<!--li uso lo stesso in modo che in futuro, se trovo il modo, possano essere usati-->
 <dom-module id="dialogo-due">
     <template>
         <vaadin-dialog id="dialog">
             <template>
                 <!--prima riga (opzionale)-->
-                <div style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]];">
+                <div id="header" style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]];">
                     <h3>[[headerText]]</h3>
                 </div>
                 <!--seconda riga (obbligatoria)-->
-                <div style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
+                <div id="body" style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
                     <div>[[bodyText]]</div>
                 </div>
                 <!--terza riga (obbligatoria)-->
-                <div style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-end; background-color:[backgroundColorFooter];">
-                    <vaadin-button on-click="handleClickAnnulla" style="width:8em; margin-left:1em; margin-right:6em"
+                <div id="footer" style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:row; align-items: flex-end; background-color:[backgroundColorFooter];">
+                    <vaadin-button id="annulla" on-click="handleClickAnnulla" style="width:8em; margin-left:1em; margin-right:6em"
                                    theme="raised secondary">
-<!--                        <iron-icon icon=[[iconaAnnulla]] slot="prefix" style="font-size:small; "></iron-icon>-->
+                        <!--                        <iron-icon icon=[[iconaAnnulla]] slot="prefix" style="font-size:small; "></iron-icon>-->
                         <iron-icon icon=[[iconaAnnulla]] slot="prefix"></iron-icon>
                         [[textCancelButton]]
                     </vaadin-button>
-                    <vaadin-button on-click="handleClickConferma" style="width:8em; margin-left:6em; margin-right:1em;"
+                    <vaadin-button id="conferma" on-click="handleClickConferma" style="width:8em; margin-left:6em; margin-right:1em;"
                                    theme="raised primary">
                         <iron-icon icon=[[iconaConferma]] slot="prefix"></iron-icon>
                         [[textConfirmButton]]
@@ -44,4 +48,5 @@
         }// end of script class
         customElements.define(NomeClasseIrrilevanteDialogoDue.is, NomeClasseIrrilevanteDialogoDue);
     </script>
+
 </dom-module>

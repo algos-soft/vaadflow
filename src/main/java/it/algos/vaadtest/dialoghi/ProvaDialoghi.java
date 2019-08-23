@@ -9,11 +9,12 @@ import it.algos.vaadflow.service.ADialogoService;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
 import it.algos.vaadflow.ui.dialog.DialogoConferma;
+import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoDueBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoUnoBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoZeroBeanPolymer;
-import it.algos.vaadflow.ui.dialog.polymer.route.DialogoZeroRoutePolymer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Project vaadflow
@@ -30,6 +31,10 @@ public class ProvaDialoghi extends VerticalLayout {
 
     @Autowired
     protected ADialogoService dialogoService;
+
+    Annulla azioneAnnulla = new Annulla();
+
+    Conferma azioneConferma = new Conferma();
 
 
     public ProvaDialoghi() {
@@ -48,6 +53,7 @@ public class ProvaDialoghi extends VerticalLayout {
         add(new Label("Nuovi via getBean()"));
         nuovoDialogoBean();
         nuovoDialogoBeanUnBottone();
+        nuovoDialogoBeanDueBottoni();
     }// end of constructor
 
 
@@ -68,7 +74,6 @@ public class ProvaDialoghi extends VerticalLayout {
     }// end of method
 
 
-
     /**
      * Questo NON ha bottoni e si chiude con un click fuori dal dialogo oppure con Escape
      * Costruito con getBean(). Meglio.
@@ -85,8 +90,6 @@ public class ProvaDialoghi extends VerticalLayout {
         layout.add(label, button);
         this.add(layout);
     }// end of method
-
-
 
 
     /**
@@ -106,7 +109,6 @@ public class ProvaDialoghi extends VerticalLayout {
     }// end of method
 
 
-
     /**
      * Questo ha DUE bottone per annullare e confermare
      */
@@ -122,7 +124,6 @@ public class ProvaDialoghi extends VerticalLayout {
         layout.add(label, button);
         this.add(layout);
     }// end of method
-
 
 
     /**
@@ -142,7 +143,6 @@ public class ProvaDialoghi extends VerticalLayout {
     }// end of method
 
 
-
     /**
      * Nuovo dialogo, completamente riscritto con un bottone
      */
@@ -158,7 +158,6 @@ public class ProvaDialoghi extends VerticalLayout {
         layout.add(label, button);
         this.add(layout);
     }// end of method
-
 
 
     /**
@@ -196,6 +195,7 @@ public class ProvaDialoghi extends VerticalLayout {
         this.add(layout);
     }// end of method
 
+
     /**
      * Nuovo dialogo, completamente riscritto con un bottone
      */
@@ -206,15 +206,89 @@ public class ProvaDialoghi extends VerticalLayout {
         Label label = new Label("Nuovo dialogo bean() con un bottone: ");
         Button button = new Button("Dialogo bottone");
         button.addClickListener(e -> {
-            DialogoUnoBeanPolymer dialogo = appContext.getBean(DialogoUnoBeanPolymer.class, "Delete","Registrazione effettuata correttamente");
+            DialogoUnoBeanPolymer dialogo = appContext.getBean(DialogoUnoBeanPolymer.class,
+                    "Delete",
+                    "Registrazione effettuata correttamente",
+                    azioneConferma);
             this.add(dialogo);
         });//end of lambda expressions and anonymous inner class
         layout.add(label, button);
         this.add(layout);
     }// end of method
 
+
+    /**
+     * Nuovo dialogo, completamente riscritto con due bottoni
+     */
+    public void nuovoDialogoBeanDueBottoni() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+
+        Label label = new Label("Nuovo dialogo bean() con due bottoni: ");
+        Button button = new Button("Dialogo bottone");
+        button.addClickListener(e -> {
+            DialogoDueBeanPolymer dialogo =
+                    appContext.getBean(
+                            DialogoDueBeanPolymer.class,
+                            "Delete",
+                            "Registrazione effettuata correttamente",
+                            azioneConferma, azioneAnnulla);
+            this.add(dialogo);
+        });//end of lambda expressions and anonymous inner class
+        layout.add(label, button);
+        this.add(layout);
+    }// end of method
+
+
+    public void annulla() {
+        add(new Label("Dialogo anullato"));
+    }// end of method
+
+
     public void conferma() {
         add(new Label("Dialogo confermato"));
     }// end of method
+
+
+    private class Annulla implements Runnable {
+
+        /**
+         * When an object implementing interface <code>Runnable</code> is used
+         * to create a thread, starting the thread causes the object's
+         * <code>run</code> method to be called in that separately executing
+         * thread.
+         * <p>
+         * The general contract of the method <code>run</code> is that it may
+         * take any action whatsoever.
+         *
+         * @see Thread#run()
+         */
+        @Override
+        public void run() {
+            annulla();
+        }// end of method
+
+    }// end of class
+
+
+    private class Conferma implements Runnable {
+
+        /**
+         * When an object implementing interface <code>Runnable</code> is used
+         * to create a thread, starting the thread causes the object's
+         * <code>run</code> method to be called in that separately executing
+         * thread.
+         * <p>
+         * The general contract of the method <code>run</code> is that it may
+         * take any action whatsoever.
+         *
+         * @see Thread#run()
+         */
+        @Override
+        public void run() {
+            conferma();
+        }// end of method
+
+    }// end of class
 
 }// end of class
