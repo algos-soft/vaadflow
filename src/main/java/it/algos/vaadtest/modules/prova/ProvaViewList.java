@@ -24,6 +24,7 @@ import it.algos.vaadflow.ui.dialog.AConfirmDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,7 +62,7 @@ import static it.algos.vaadtest.application.TestCost.*;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_PRO)
+@Route(value = TAG_PRO, layout = MainLayout14.class)
 @Qualifier(TAG_PRO)
 @Slf4j
 @AIView(menuName = "prove", searchProperty = "code", roleTypeVisibility = EARoleType.user)
@@ -237,13 +238,13 @@ public class ProvaViewList extends AGridViewList {
         Button polymer2 = new Button("Polymer2", new Icon(VaadinIcon.ASTERISK));
         polymer2.getElement().setAttribute("theme", "error");
         polymer2.addClassName("view-toolbar__button");
-        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF+"2")));
+        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF + "2")));
         topPlaceholder.add(polymer2);
 
         Button polymer3 = new Button("polymer3", new Icon(VaadinIcon.ASTERISK));
         polymer3.getElement().setAttribute("theme", "error");
         polymer3.addClassName("view-toolbar__button");
-        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF+"3")));
+        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF + "3")));
         topPlaceholder.add(polymer3);
 
         Button una = new Button("una", new Icon(VaadinIcon.ASTERISK));
@@ -347,7 +348,7 @@ public class ProvaViewList extends AGridViewList {
         String colorName2 = "#ef6c00";
         Grid.Column colonna2 = grid.addComponentColumn(servizio -> {
             Label label = new Label();
-            String htmlCode="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            String htmlCode = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             label.getElement().setProperty("innerHTML", htmlCode);
             label.getElement().getStyle().set("background-color", colorName2);
             label.getElement().getStyle().set("color", colorName2);

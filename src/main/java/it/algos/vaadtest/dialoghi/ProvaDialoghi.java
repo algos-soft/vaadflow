@@ -12,9 +12,9 @@ import it.algos.vaadflow.ui.dialog.DialogoConferma;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoDueBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoUnoBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoZeroBeanPolymer;
+import it.algos.vaadtest.application.MainLayout14;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Project vaadflow
@@ -23,7 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * Date: gio, 15-ago-2019
  * Time: 17:28
  */
-@Route(value = "dialoghi")
+@Route(value = "dialoghi", layout = MainLayout14.class)
 public class ProvaDialoghi extends VerticalLayout {
 
     @Autowired

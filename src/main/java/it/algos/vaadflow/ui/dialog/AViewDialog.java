@@ -742,6 +742,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected void saveClicked(EAOperation operation) {
         boolean isValid = false;
         if (currentItem != null) {
+            //--trasferisce tutti i valori (se accettabili nel loro insieme) dai campi GUI al currentItem
             isValid = binder.writeBeanIfValid(currentItem);
         }// end of if cycle
 

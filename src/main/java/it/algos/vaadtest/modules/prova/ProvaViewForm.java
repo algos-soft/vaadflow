@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.SPAZIO;
-import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
+import static it.algos.vaadflow.service.ATextService.VIRGOLA;
 import static it.algos.vaadtest.application.TestCost.TAG_VIEW_FORM;
 
 /**

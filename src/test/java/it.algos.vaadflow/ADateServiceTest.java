@@ -3,6 +3,7 @@ package it.algos.vaadflow;
 import it.algos.vaadflow.enumeration.EATime;
 import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
+import lombok.extern.slf4j.Slf4j;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("date")
 @DisplayName("Test sul service di elaborazione date")
+@Slf4j
 public class ADateServiceTest extends ATest {
 
 
@@ -654,8 +656,12 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
 
         for (EATime eaTime : EATime.values()) {
-            if (eaTime != EATime.iso8601) {
-                ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
+            if (eaTime != EATime.iso8601&&eaTime != EATime.completaOrario) {
+                try { // prova ad eseguire il codice
+                    ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error(unErrore.toString());
+                }// fine del blocco try-catch
                 System.out.println("Tipo: " + eaTime.getTag() + " -> " + ottenuto);
             }// end of if cycle
         }// end of for cycle
@@ -676,7 +682,7 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
-    /**
+    /** bv
      * Restituisce come stringa (intelligente) una durata espressa in long
      * - Meno di 1 secondo
      * - Meno di 1 minuto
@@ -1144,5 +1150,28 @@ public class ADateServiceTest extends ATest {
         ottenutoBooleano = service.isValid(LOCAL_TIME_VUOTO);
         assertEquals(ottenutoBooleano, previstoBooleano);
     }// end of single test
+
+
+    /**
+     * Restituisce la data e l'ora attuali nella forma del pattern completo
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     * Esempio: domenica, 5-ottobre-2014 <br>
+     *
+     * @return la data sotto forma di stringa
+     */
+    @Test
+    public void getDataOraComplete() {
+        ottenuto = service.getDataOraComplete();
+
+        System.out.println("*************");
+        System.out.println("Data e ora attuali nella forma " + EATime.completaOrario.getEsempio());
+        System.out.println("*************");
+        System.out.println(ottenuto);
+        System.out.println("");
+
+    }// end of method
 
 }// end of class
