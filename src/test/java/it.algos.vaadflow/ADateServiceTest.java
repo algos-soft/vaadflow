@@ -1171,7 +1171,6 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
         System.out.println(ottenuto);
         System.out.println("");
-
     }// end of method
 
 }// end of class
