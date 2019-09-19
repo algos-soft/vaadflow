@@ -6,11 +6,21 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PageConfigurator;
+import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.service.AMenuService;
+import it.algos.vaadflow.service.AVaadinService;
+import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.prova.ProvaViewList;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 
 /**
  * Project vaadflow
@@ -29,17 +39,92 @@ import it.algos.vaadtest.modules.prova.ProvaViewList;
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
 public class MainLayout14 extends AppLayout implements RouterLayout {
 
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la UI. <br>
+     * Viene regolato nel service specifico (AVaadinService) <br>
+     */
+    private AContext context;
+
+    /**
+     * Mantenuto nel 'context' <br>
+     */
+    private ALogin login;
+
+    /**
+     * Service (@Scope = 'singleton') iniettato da StaticContextAccessor e usato come libreria <br>
+     * Unico per tutta l'applicazione. Usato come libreria.
+     */
+    private AVaadinService vaadinService = StaticContextAccessor.getBean(AVaadinService.class);
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct o comunque dopo l'init (anche implicito) del costruttore <br>
+     */
+    @Autowired
+    private AMenuService menuService;
+
+    //--property
+    private VerticalLayout menuLayout;
+
+    //--property
+    private Map<String, ArrayList<Class<? extends IAView>>> mappa;
+
+
     public MainLayout14() {
-        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Vaadin Logo");
+        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Algos");
+//        Image img = new Image("images/Visualpharm-Office-Space-User.ico", "Algos");
         img.setHeight("44px");
         addToNavbar(new DrawerToggle(), img);
 
-        final RouterLink prove = new RouterLink("Prove", ProvaViewList.class);
-        final RouterLink dialoghi = new RouterLink("Dialoghi", ProvaDialoghi.class);
-        final VerticalLayout menuLayout = new VerticalLayout(prove, dialoghi);
+        menuLayout = new VerticalLayout();
         addToDrawer(menuLayout);
         this.setDrawerOpened(false);
     }// end of constructor
 
+
+    /**
+     * Metodo invocato subito DOPO il costruttore
+     * L'istanza DEVE essere creata da SpringBoot con Object algos = appContext.getBean(AlgosClass.class);  <br>
+     * <p>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, <br>
+     * ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+     */
+    @PostConstruct
+    protected void inizia() {
+        context = vaadinService.getSessionContext();
+        login = context != null ? context.getLogin() : null;
+
+        mappa = menuService.creaMappa();
+
+//        menuLayout.add(menuService.creaRouter(ProvaDialoghi.class));
+//        menuLayout.add(menuService.creaAlgosRouter(ProvaViewList.class));
+
+        menuLayout.add(menuService.creaMenuDeveloper(mappa));
+
+        if (usaSecurity) {
+            //--crea menu dello sviluppatore (se loggato)
+            if (context.isDev()) {
+                menuLayout.add(menuService.creaMenuDeveloper(mappa));
+            }// end of if cycle
+
+            //--crea menu dell'admin (se loggato)
+            if (context.isDev() || context.isAdmin()) {
+//                creaMenuAdmin();
+            }// end of if cycle
+
+            //--crea menu utente normale (sempre)
+//            creaMenuUser();
+
+            //--crea menu logout (sempre)
+//            creaMenuLogout();
+        } else {
+            //--crea menu indifferenziato
+//            creaMenuNoSecurity();
+        }// end of if/else cycle
+    }// end of method
 
 }// end of class
