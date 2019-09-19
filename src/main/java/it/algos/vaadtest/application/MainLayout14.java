@@ -12,8 +12,6 @@ import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.service.AMenuService;
 import it.algos.vaadflow.service.AVaadinService;
 import it.algos.vaadflow.ui.IAView;
-import it.algos.vaadtest.dialoghi.ProvaDialoghi;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -72,6 +70,7 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
 
 
     public MainLayout14() {
+        //@todo DA FARE cambiare immagine
         Image img = new Image("https://i.imgur.com/GPpnszs.png", "Algos");
 //        Image img = new Image("images/Visualpharm-Office-Space-User.ico", "Algos");
         img.setHeight("44px");
@@ -95,35 +94,46 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
      */
     @PostConstruct
     protected void inizia() {
+        fixSessione();
+        fixMenu();
+    }// end of method
+
+
+    /**
+     * Recupera i dati della sessione
+     */
+    protected void fixSessione() {
         context = vaadinService.getSessionContext();
         login = context != null ? context.getLogin() : null;
+    }// end of method
 
+
+    /**
+     * Regola i menu
+     * Può essere sovrascritto
+     */
+    protected void fixMenu() {
         mappa = menuService.creaMappa();
-
-//        menuLayout.add(menuService.creaRouter(ProvaDialoghi.class));
-//        menuLayout.add(menuService.creaAlgosRouter(ProvaViewList.class));
-
-        menuLayout.add(menuService.creaMenuDeveloper(mappa));
 
         if (usaSecurity) {
             //--crea menu dello sviluppatore (se loggato)
             if (context.isDev()) {
-                menuLayout.add(menuService.creaMenuDeveloper(mappa));
+                menuLayout.add(menuService.creaRouterDeveloper(mappa));
             }// end of if cycle
 
             //--crea menu dell'admin (se loggato)
             if (context.isDev() || context.isAdmin()) {
-//                creaMenuAdmin();
+                menuLayout.add(menuService.creaRouterAdmin(mappa));
             }// end of if cycle
 
             //--crea menu utente normale (sempre)
-//            creaMenuUser();
+            menuLayout.add(menuService.creaRouterUser(mappa));
 
             //--crea menu logout (sempre)
-//            creaMenuLogout();
+            menuLayout.add(menuService.creaMenuLogout());
         } else {
             //--crea menu indifferenziato
-//            creaMenuNoSecurity();
+            menuLayout.add(menuService.creaRouterNoSecurity(mappa));
         }// end of if/else cycle
     }// end of method
 

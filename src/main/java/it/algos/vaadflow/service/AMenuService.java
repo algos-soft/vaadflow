@@ -39,9 +39,60 @@ public class AMenuService extends AService {
 
 
     /**
+     * Items di menu
+     *
+     * @param clazzList di classi raggiungibili da @Route
+     */
+    public RouterLink[] creaRouterBase(List<Class<? extends IAView>> clazzList) {
+        List<RouterLink> routers = null;
+
+        if (array.isValid(clazzList)) {
+            routers = new ArrayList<>();
+            for (Class viewClazz : clazzList) {
+                routers.add(creaAlgosRouter(viewClazz));
+            }// end of for cycle
+        }// end of if cycle
+
+        return routers.toArray(new RouterLink[routers.size()]);
+    }// end of method
+
+
+    /**
      * Eventuali item di menu, se collegato come sviluppatore
      */
-    public RouterLink[] creaMenuDeveloper(List<Class<? extends IAView>> devClazzList) {
+    public RouterLink[] creaRouterDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRouterBase(mappaClassi.get(EARole.developer.toString()));
+    }// end of method
+
+
+    /**
+     * Eventuali item di menu, se collegato come admin
+     */
+    public RouterLink[] creaRouterAdmin(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRouterBase(mappaClassi.get(EARole.admin.toString()));
+    }// end of method
+
+
+    /**
+     * Eventuali item di menu, se collegato come utente
+     */
+    public RouterLink[] creaRouterUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRouterBase(mappaClassi.get(EARole.user.toString()));
+    }// end of method
+
+
+    /**
+     * Menu logout sempre presente
+     */
+    public RouterLink[] creaMenuLogout() {
+        return null;
+    }// end of method
+
+
+    /**
+     * Items di menu, se collegato come sviluppatore
+     */
+    public RouterLink[] creaRouterNoSecurity(List<Class<? extends IAView>> devClazzList) {
         List<RouterLink> routers = null;
 
         if (array.isValid(devClazzList)) {
@@ -56,19 +107,19 @@ public class AMenuService extends AService {
 
 
     /**
-     * Eventuali item di menu, se collegato come sviluppatore
+     * Items di menu, se collegato come sviluppatore
      */
-    public RouterLink[] creaMenuDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-//        return creaMenuDeveloper(mappaClassi.get(EARole.developer.toString()));
-        return creaMenuDeveloper(mappaClassi.get(KEY_MAPPA_CRONO));
-    }// end of method
+    public RouterLink[] creaRouterNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        List<RouterLink> routers = new ArrayList<>();
 
+        for (RouterLink router : creaRouterBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
+            routers.add(router);
+        }// end of for cycle
+        for (RouterLink router : creaRouterBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO))) {
+            routers.add(router);
+        }// end of for cycle
 
-    /**
-     * Eventuali item di menu, se collegato come sviluppatore
-     */
-    public RouterLink[] creaMenuDeveloper() {
-        return null;
+        return routers.toArray(new RouterLink[routers.size()]);
     }// end of method
 
 
@@ -153,12 +204,12 @@ public class AMenuService extends AService {
      */
     public Map<String, ArrayList<Class<? extends IAView>>> creaMappa(List<Class> listaClassiMenu) {
         Map<String, ArrayList<Class<? extends IAView>>> mappa = new HashMap<>();
-        ArrayList<Class<? extends IAView>>   devClazzList = new ArrayList<>();
-        ArrayList<Class<? extends IAView>>  cronoClazzList = new ArrayList<>();
-        ArrayList<Class<? extends IAView>>  adminClazzList = new ArrayList<>();
-        ArrayList<Class<? extends IAView>>   userClazzList = new ArrayList<>();
-        ArrayList<Class<? extends IAView>>   progettoBaseClazzList = new ArrayList<>();
-        ArrayList<Class<? extends IAView>>  progettoSpecificoClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> devClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> cronoClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> adminClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> userClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> progettoBaseClazzList = new ArrayList<>();
+        ArrayList<Class<? extends IAView>> progettoSpecificoClazzList = new ArrayList<>();
         EARoleType type = null;
         List<String> cronoList = Arrays.asList(new String[]{"Secoli", "Anni", "Mesi", "Giorni"});
         String menuName;

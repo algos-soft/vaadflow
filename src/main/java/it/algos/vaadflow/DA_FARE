@@ -1,0 +1,8 @@
+* Icona del menu di partenza
+* Logout del menu di partenza
+* Controllare differenze tra
+    <Class<? extends IAView> e qualcosa di simile
+    Class<?>
+    Class<? extends AViewList>
+* IAView o AViewList
+* Controller
