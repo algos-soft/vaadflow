@@ -16,6 +16,7 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AMongoService;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
@@ -97,8 +98,9 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
-    public AViewList(IAPresenter presenter, IADialog dialog) {
+    public AViewList(IAPresenter presenter, IADialog dialog,IAService service) {
         this.presenter = presenter;
+        this.service = service;
         this.dialog = dialog;
         if (presenter != null) {
             this.presenter.setView(this);
@@ -113,8 +115,9 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
-    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit) {
+    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit, IAService service) {
         this.presenter = presenter;
+        this.service = service;
         this.dialog = dialog;
         if (presenter != null) {
             this.presenter.setView(this);

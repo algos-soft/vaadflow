@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
@@ -18,13 +18,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
+import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadtest <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Fix date: @TODAY@ <br>
+ * User: Gac <br>
+ * Fix date: 19-set-2019 21.19.13 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -61,18 +61,18 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * Una (e una sola) property deve avere @AIColumn(flexGrow = true) per fissare la larghezza della Grid <br>
  */
 @Entity
-@Document(collection = "@PACKAGE@")
-@TypeAlias("@PACKAGE@")
+@Document(collection = "beta")
+@TypeAlias("beta")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builder@ENTITY@")
+@Builder(builderMethodName = "builderBeta")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = @USACOMPANY@)
-@AIList(fields = {@PROPERTIES@})
-@AIForm(fields = {@PROPERTIES@})
+@AIEntity(company = EACompanyRequired.nonUsata)
+@AIList(fields = {"ordine", "code"})
+@AIForm(fields = {"ordine", "code"})
 @AIScript(sovrascrivibile = false)
-public class @ENTITY@ extends @SUPERCLASSENTITY@ {
+public class Beta extends AEntity {
 
 
     /**
@@ -80,16 +80,36 @@ public class @ENTITY@ extends @SUPERCLASSENTITY@ {
      */
     private final static long serialVersionUID = 1L;
 
-    @ORDINE@
-    @CODE@
-    @DESCRIZIONE@
+    
+	/**
+     * ordine di presentazione (obbligatorio, unico) <br>
+     * il più importante per primo <br>
+     */
+    @NotNull
+    @Indexed()
+    @Field("ord")
+    @AIField(type = EAFieldType.integer, widthEM = 5)
+    @AIColumn(name = "#", widthEM = 5)
+    public int ordine;
+    
+	/**
+     * codice di riferimento (obbligatorio, unico) <br>
+     */
+    @NotNull
+    @Indexed()
+    @Size(min = 3)
+    @Field("cod")
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
+    @AIColumn(widthEM = 7)
+    public String code;
+    
 
     /**
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        @TOSTRING@
+        return code;
     }// end of method
 
 

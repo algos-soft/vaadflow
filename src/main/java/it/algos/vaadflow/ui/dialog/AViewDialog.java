@@ -236,13 +236,16 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Deprecated
     public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
-        this.presenter = presenter;
-        this.service = presenter.getService();
+        if (presenter!=null) {
+            this.presenter = presenter;
+            this.service = presenter.getService();
+            this.binderClass = presenter.getEntityClazz();
+            this.fieldService = presenter.getService().getFieldService();
+        }// end of if cycle
+
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
         this.itemAnnulla = itemAnnulla;
-        this.binderClass = presenter.getEntityClazz();
-        this.fieldService = presenter.getService().getFieldService();
 
         if (confermaSenzaRegistrare) {
             this.fixConfermaAndNotRegistrazione();

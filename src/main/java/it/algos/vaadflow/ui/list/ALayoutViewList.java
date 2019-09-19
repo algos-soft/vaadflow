@@ -15,6 +15,7 @@ import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.menu.*;
@@ -46,8 +47,8 @@ public abstract class ALayoutViewList extends APrefViewList {
      * @param presenter per gestire la business logic del package
      * @param dialog    per visualizzare i fields
      */
-    public ALayoutViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog);
+    public ALayoutViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+        super(presenter, dialog,service);
     }// end of Spring constructor
 
 

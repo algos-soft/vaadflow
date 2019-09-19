@@ -1,9 +1,11 @@
 package it.algos.vaadtest.application;
 
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
 import it.algos.vaadflow.modules.giorno.GiornoViewList;
 import it.algos.vaadflow.modules.mese.MeseViewList;
@@ -193,7 +195,8 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(SecoloViewList.class);
         FlowVar.menuClazzList.add(ProvaViewList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
-    }// end of method
+		FlowVar.menuClazzList.add(BetaList.class);
+	}// end of method
 
 
 }// end of boot class

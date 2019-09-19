@@ -12,6 +12,7 @@ import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -52,7 +53,10 @@ public abstract class AGridViewList extends ALayoutViewList {
      * @param dialog    per visualizzare i fields
      */
     public AGridViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog);
+        super(presenter, dialog,null);
+    }// end of Spring constructor
+    public AGridViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+        super(presenter, dialog,service);
     }// end of Spring constructor
 
 

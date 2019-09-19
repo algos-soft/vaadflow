@@ -2,6 +2,7 @@ package it.algos.vaadflow.ui.list;
 
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.dialog.IADialog;
 
@@ -26,8 +27,8 @@ public abstract class APrefViewList extends AViewList {
      * @param presenter per gestire la business logic del package
      * @param dialog    per visualizzare i fields
      */
-    public APrefViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog);
+    public APrefViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+        super(presenter, dialog,service);
     }// end of Spring constructor
 
 

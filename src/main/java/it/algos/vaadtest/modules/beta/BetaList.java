@@ -1,23 +1,23 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.AViewList;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
+import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadtest <br>
  * Created by Algos <br>
- * User: @USER@ <br>
- * Fix date: @TODAY@ <br>
+ * User: Gac <br>
+ * Fix date: 19-set-2019 21.19.13 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -36,11 +36,11 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = @QUALIFIER@, layout = MainLayout.class)
-@Qualifier(@QUALIFIER@)
+@Route(value = TAG_BET, layout = MainLayout.class)
+@Qualifier(TAG_BET)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class @ENTITY@ViewList extends AGridViewList {
+public class BetaList extends AGridViewList {
 
 
     /**
@@ -56,13 +56,13 @@ public class @ENTITY@ViewList extends AGridViewList {
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public @ENTITY@ViewList(@Qualifier(@QUALIFIER@) IAPresenter presenter, @Qualifier(@QUALIFIER@) IADialog dialog) {
-        super(presenter, dialog);
-        ((@ENTITY@ViewDialog) dialog).fixFunzioni(this::save, this::delete);
+    public BetaList(@Qualifier(TAG_BET) IADialog dialog, @Qualifier(TAG_BET) IAService service) {
+        super(null, dialog, service);
+        super.entityClazz = Beta.class;
+        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
 

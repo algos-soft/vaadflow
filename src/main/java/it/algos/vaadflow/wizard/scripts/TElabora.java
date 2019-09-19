@@ -77,7 +77,7 @@ public class TElabora {
     private static final String METHOD_NEW_ORDINE_COMPANY = METHOD + "NewOrdineCompany" + SOURCE_SUFFIX;
     private static final String METHOD_ID_KEY_SPECIFICA = METHOD + "IdKeySpecifica" + SOURCE_SUFFIX;
     private static final String METHOD_READ_COMPANY = METHOD + "ReadCompany" + SOURCE_SUFFIX;
-    private static final String VIEW_SUFFIX = "ViewList";
+    private static final String VIEW_SUFFIX = "List";
     private static final String POM = "pom";
     //    private static final String COST_NAME = "ProjectCost";
     private static final String HOME_NAME = "HomeView";
@@ -953,7 +953,7 @@ public class TElabora {
         String aCapoImport = "\n";
         String aCapoPre = "\t";
         String aCapoPost = "\n\t";
-        String tagRoute = "FlowCost.MENU_CLAZZ_LIST.add(" + max + VIEW_SUFFIX + ".class);" + aCapoPost;
+        String tagRoute = "FlowVar.menuClazzList.add(" + max + VIEW_SUFFIX + ".class);" + aCapoPost;
         String tagImport = "import it.algos." + targetModuleName + ".modules." + newPackageName + "." + max + VIEW_SUFFIX + ";";
 
         if (targetModuleName.equals(PROJECT_BASE_NAME)) {

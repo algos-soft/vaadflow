@@ -1,4 +1,4 @@
-package it.algos.@MODULELOWER@.modules.@PACKAGE@;
+package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
+import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
- * Project @MODULELOWER@ <br>
+ * Project vaadtest <br>
  * Created by Algos
- * User: @USER@
- * Fix date: @TODAY@ <br>
+ * User: Gac
+ * Fix date: 19-set-2019 21.19.13 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -29,24 +29,21 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(@QUALIFIER@)
+@Qualifier(TAG_BET)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class @ENTITY@ViewDialog extends AViewDialog<@ENTITY@> {
+public class BetaDialog extends AViewDialog<Beta> {
 
 
    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
      */
     @Autowired
-    public @ENTITY@ViewDialog(@Qualifier(@QUALIFIER@) IAPresenter presenter) {
-        super(presenter);
+    public BetaDialog() {
+        super(null);
     }// end of Spring constructor
 
-    @READCOMPANY@
+    
 }// end of class
-
