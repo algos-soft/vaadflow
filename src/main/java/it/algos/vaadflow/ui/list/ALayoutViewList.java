@@ -103,8 +103,8 @@ public abstract class ALayoutViewList extends APrefViewList {
                     this.add(menu.getComp());
                     break;
                 case flowing:
-                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
-                    this.add(menu.getComp());
+//                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
+//                    this.add(menu.getComp());
                     break;
                 case vaadin:
 //                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);

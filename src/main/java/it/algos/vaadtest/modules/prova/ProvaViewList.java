@@ -70,7 +70,6 @@ import static it.algos.vaadtest.application.TestCost.*;
 public class ProvaViewList extends AGridViewList {
 
     /**
-     * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
@@ -109,7 +108,6 @@ public class ProvaViewList extends AGridViewList {
         super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
-
 
     /**
      * Le preferenze standard <br>

@@ -598,6 +598,8 @@ public class AColumnService extends AbstractService {
                 break;
             case pref:
                 break;
+            case calculated:
+                break;
             default:
                 log.warn("Switch - caso non definito");
                 break;
