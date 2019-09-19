@@ -372,6 +372,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    /**
+     * Apertura del dialogo per una nuova entity <br>
+     * Sovrascritto <br>
+     */
     protected void openNew() {
         dialog.open(service.newEntity(), EAOperation.addNew, context);
     }// end of method

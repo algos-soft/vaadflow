@@ -3,7 +3,9 @@ package it.algos.vaadtest.modules.beta;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +36,16 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIScript(sovrascrivibile = true)
 public class BetaDialog extends AViewDialog<Beta> {
 
+    public BetaDialog() {
+        super(null);
+    }// end of Spring constructor
 
    /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Costruttore <br>
      */
-    @Autowired
-    public BetaDialog() {
+   public BetaDialog(IAService service, Class<? extends AEntity> binderClass) {
+//        this.service = presenter.getService();
+//        this.binderClass = presenter.getEntityClazz();
         super(null);
     }// end of Spring constructor
 

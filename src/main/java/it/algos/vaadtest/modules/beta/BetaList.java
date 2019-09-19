@@ -4,13 +4,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -51,19 +53,28 @@ public class BetaList extends AGridViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
-     * @param dialog    per visualizzare i fields
+     * @param dialog per visualizzare i fields
      */
     @Autowired
     public BetaList(@Qualifier(TAG_BET) IADialog dialog, @Qualifier(TAG_BET) IAService service) {
-        super(null, dialog, service);
+        super(null, null, service);
         super.entityClazz = Beta.class;
-        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
+
+    /**
+     * Apertura del dialogo per una nuova entity <br>
+     * Sovrascritto <br>
+     */
+    protected void openNew() {
+        dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
+        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
+        dialog.open(service.newEntity(), EAOperation.addNew, context);
+    }// end of method
 
 }// end of class
