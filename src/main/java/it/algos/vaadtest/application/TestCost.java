@@ -16,6 +16,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class TestCost {
+	public final static String TAG_DEL = "delta";
 	public final static String TAG_NOP = "nopresenter";
 	public final static String TAG_CAT = "categoria";
 	public final static String TAG_BET = "beta";

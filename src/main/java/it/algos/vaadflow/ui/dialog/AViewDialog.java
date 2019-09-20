@@ -164,6 +164,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected LinkedHashMap<String, AbstractField> fieldMap;
 
+    @Autowired
     protected AFieldService fieldService;
 
     protected T currentItem;
@@ -467,10 +468,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         this.currentItem = (T) entityBean;
         this.operation = operation;
         this.context = context;
-        Object view = presenter.getView();
-        if (view != null) {
-            this.itemType = presenter.getView().getMenuName();
-        }// end of if cycle
+//        Object view = presenter.getView();
+//        if (view != null) {
+//            this.itemType = presenter.getView().getMenuName();
+//        }// end of if cycle
         this.fixTitleLayout(title);
 
         if (registrationForSave != null) {

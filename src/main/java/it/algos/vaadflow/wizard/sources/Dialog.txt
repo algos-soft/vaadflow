@@ -5,6 +5,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,15 +37,18 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 public class @ENTITY@Dialog extends AViewDialog<@ENTITY@> {
 
 
-   /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     */
-    @Autowired
     public @ENTITY@Dialog() {
         super(null);
     }// end of Spring constructor
+
+   /**
+     * Costruttore
+     */
+    public @ENTITY@Dialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(null);
+        this.service = service;
+        this.binderClass = binderClass;
+  }// end of Spring constructor
 
     @READCOMPANY@
 }// end of class

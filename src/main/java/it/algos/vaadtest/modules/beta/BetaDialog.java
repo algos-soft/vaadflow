@@ -3,10 +3,10 @@ package it.algos.vaadtest.modules.beta;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +18,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 19-set-2019 21.19.13 <br>
+ * Fix date: 20-set-2019 7.13.31 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * <p>
@@ -36,18 +36,19 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIScript(sovrascrivibile = true)
 public class BetaDialog extends AViewDialog<Beta> {
 
+
     public BetaDialog() {
         super(null);
     }// end of Spring constructor
 
    /**
-     * Costruttore <br>
+     * Costruttore
      */
-   public BetaDialog(IAService service, Class<? extends AEntity> binderClass) {
-//        this.service = presenter.getService();
-//        this.binderClass = presenter.getEntityClazz();
+    public BetaDialog(IAService service, Class<? extends AEntity> binderClass) {
         super(null);
-    }// end of Spring constructor
+        this.service = service;
+        this.binderClass = binderClass;
+  }// end of Spring constructor
 
     
 }// end of class

@@ -4,22 +4,22 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 19-set-2019 21.19.13 <br>
+ * Fix date: 20-set-2019 7.13.31 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -38,7 +38,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_BET, layout = MainLayout.class)
+@Route(value = TAG_BET, layout = MainLayout14.class)
 @Qualifier(TAG_BET)
 @Slf4j
 @AIScript(sovrascrivibile = true)
@@ -53,12 +53,12 @@ public class BetaList extends AGridViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-    /**
+   /**
      * Costruttore @Autowired <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
-     * @param dialog per visualizzare i fields
+     * @param dialog    per visualizzare i fields
      */
     @Autowired
     public BetaList(@Qualifier(TAG_BET) IADialog dialog, @Qualifier(TAG_BET) IAService service) {
