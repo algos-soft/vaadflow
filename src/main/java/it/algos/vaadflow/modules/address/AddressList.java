@@ -1,29 +1,30 @@
-package it.algos.vaadflow.modules.mese;
+package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.ACronoViewList;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_MES;
+import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 17.58.04 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -38,12 +39,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_MES)
-@Qualifier(TAG_MES)
-@AIView(vaadflow = true, menuName = "mesi", roleTypeVisibility = EARoleType.developer)
+@Route(value = TAG_ADD, layout = MainLayout14.class)
+@Qualifier(TAG_ADD)
 @Slf4j
-@AIScript(sovrascrivibile = false)
-public class MeseViewList extends ACronoViewList {
+@AIScript(sovrascrivibile = true)
+public class AddressList extends AGridViewList {
 
 
     /**
@@ -52,33 +52,30 @@ public class MeseViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
-    public static final String IRON_ICON = "today";
 
 
     /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public MeseViewList(@Qualifier(TAG_MES) IAPresenter presenter, @Qualifier(TAG_MES) IADialog dialog) {
-        super(presenter, dialog);
-        ((MeseViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public AddressList(@Qualifier(TAG_ADD) IAService service) {
+        super(service);
+        super.entityClazz = Address.class;
+    }// end of Vaadin/@Route constructor
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
      */
-    @Override
-    protected void fixPreferenze() {
-        super.fixPreferenze();
-        super.usaPopupFiltro = false;
+    protected void openDialog(AEntity entityBean) {
+        AddressDialog dialog = appContext.getBean(AddressDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
     }// end of method
 
 }// end of class

@@ -18,7 +18,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AConfirmDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -271,7 +271,7 @@ public class ProvaViewList extends AGridViewList {
      */
     @Override
     protected void addSpecificRoutes() {
-        addRoute(SecoloViewList.class);
+        addRoute(SecoloList.class);
     }// end of method
 
 

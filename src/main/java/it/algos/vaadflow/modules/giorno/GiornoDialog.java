@@ -1,24 +1,28 @@
-package it.algos.vaadflow.modules.anno;
+package it.algos.vaadflow.modules.giorno;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
+import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 
 /**
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 18.39.35 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
+ * Costruita (nella List) con appContext.getBean(GiornoDialog.class, service, entityClazz);
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
@@ -29,23 +33,31 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(TAG_ANN)
+@Qualifier(TAG_GIO)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class AnnoViewDialog extends AViewDialog<Anno> {
+public class GiornoDialog extends AViewDialog<Giorno> {
 
 
-   /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+    /**
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public AnnoViewDialog(@Qualifier(TAG_ANN) IAPresenter presenter) {
-        super(presenter);
-    }// end of Spring constructor
+    public GiornoDialog() {
+    }// end of constructor
+
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(GiornoDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public GiornoDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
 
     
 }// end of class

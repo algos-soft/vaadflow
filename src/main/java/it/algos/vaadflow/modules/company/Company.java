@@ -5,7 +5,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.modules.person.PersonPresenter;
 import lombok.*;
@@ -128,7 +128,7 @@ public class Company extends AEntity {
      * riferimento statico SENZA @DBRef
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
     public Address indirizzo;
 
 

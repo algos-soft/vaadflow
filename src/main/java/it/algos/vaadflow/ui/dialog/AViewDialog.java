@@ -506,6 +506,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         if (entityBean == null) {
             entityBean = service.newEntity();
+            operation=EAOperation.addNew;
         }// end of if cycle
 
         if (entityBean == null) {
@@ -520,7 +521,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (registrationForSave != null) {
             registrationForSave.remove();
         }
-        registrationForSave = saveButton.addClickListener(e -> saveClicked(operation));
+        registrationForSave = saveButton.addClickListener(e -> saveClicked(this.operation));
 
         //--Controlla la visibilità dei bottoni
         saveButton.setVisible(operation.isSaveEnabled());

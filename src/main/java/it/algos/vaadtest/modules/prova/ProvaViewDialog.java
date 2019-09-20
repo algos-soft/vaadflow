@@ -9,7 +9,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
@@ -17,9 +16,8 @@ import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.address.AddressViewDialog;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -65,11 +63,9 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     @Autowired
     ApplicationContext appContext;
 
-    private AddressPresenter addressPresenter;
-
     private AddressService addressService;
 
-    private AddressViewDialog addressDialog;
+    private AddressDialog addressDialog;
 
     private Address indirizzoTemporaneo;
 
@@ -117,11 +113,9 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
     protected void addSpecificAlgosFields() {
         super.addSpecificAlgosFields();
 
-        addressPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
-        addressService = (AddressService) addressPresenter.getService();
+        addressService = StaticContextAccessor.getBean(AddressService.class);
 
-        addressDialog = StaticContextAccessor.getBean(AddressViewDialog.class);
-        addressDialog.setPresenter(addressPresenter);
+        addressDialog = StaticContextAccessor.getBean(AddressDialog.class);
         addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
         addressDialog.fixConfermaAndNotRegistrazione();
 

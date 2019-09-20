@@ -6,9 +6,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.address.AddressViewDialog;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.person.Person;
 import it.algos.vaadflow.modules.person.PersonPresenter;
 import it.algos.vaadflow.modules.person.PersonService;
@@ -55,9 +54,8 @@ public class CompanyViewDialog extends AViewDialog<Company> {
     protected Person contattoTemporaneo;
     protected ATextField contattoField;
 
-    private AddressPresenter indirizzoPresenter;
     private AddressService indirizzoService;
-    private AddressViewDialog indirizzoDialog;
+    private AddressDialog indirizzoDialog;
     private Address indirizzoTemporaneo;
     private ATextField indirizzoField;
 
@@ -95,11 +93,8 @@ public class CompanyViewDialog extends AViewDialog<Company> {
             contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), EAOperation.edit, null, CONTATTO));//todo sistemare il null
         }// end of if cycle
 
-        indirizzoPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
-        indirizzoService = (AddressService) indirizzoPresenter.getService();
-
-        indirizzoDialog = StaticContextAccessor.getBean(AddressViewDialog.class);
-        indirizzoDialog.setPresenter(indirizzoPresenter);
+        indirizzoService = StaticContextAccessor.getBean(AddressService.class);
+        indirizzoDialog = StaticContextAccessor.getBean(AddressDialog.class);
         indirizzoDialog.fixFunzioni(this::saveUpdateInd, this::deleteUpdateInd, this::annullaInd);
         indirizzoDialog.fixConfermaAndNotRegistrazione();
         indirizzoField = (ATextField) getField(INDIRIZZO);

@@ -5,27 +5,28 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.AViewList;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 20.13.49 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -40,12 +41,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_TYP)
+@Route(value = TAG_TYP, layout = MainLayout14.class)
 @Qualifier(TAG_TYP)
-@AIView(vaadflow = true, menuName = "logTypes", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class LogtypeViewList extends AGridViewList {
+public class LogtypeList extends AGridViewList {
 
 
     /**
@@ -55,22 +55,20 @@ public class LogtypeViewList extends AGridViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
-    public static final String IRON_ICON = "menu";
-
 
     /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public LogtypeViewList(@Qualifier(TAG_TYP) IAPresenter presenter, @Qualifier(TAG_TYP) IADialog dialog) {
-        super(presenter, dialog);
-        ((LogtypeViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public LogtypeList(@Qualifier(TAG_TYP) IAService service) {
+        super(service);
+        super.entityClazz = Logtype.class;
+    }// end of Vaadin/@Route constructor
 
 
     /**
@@ -85,7 +83,6 @@ public class LogtypeViewList extends AGridViewList {
         super.isEntityDeveloper = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;
-        super.usaSearch = true;
         super.usaSearchDialog = false;
         super.isEntityUsaDatiDemo = true;
     }// end of method
@@ -103,5 +100,14 @@ public class LogtypeViewList extends AGridViewList {
         alertPlacehorder.add(new Label("Serve per aggiungere altri eventuali 'type' specifici per i logs dell'applicazione"));
     }// end of method
 
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        LogtypeDialog dialog = appContext.getBean(LogtypeDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
+    }// end of method
 
 }// end of class

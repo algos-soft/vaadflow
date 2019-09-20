@@ -4,7 +4,7 @@ import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.utente.Utente;
 import lombok.*;
 import org.springframework.data.annotation.Transient;
@@ -117,7 +117,7 @@ public class Person extends Utente {
      * riferimento statico SENZA @DBRef (embedded)
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
     @AIColumn(name = "ind", flexGrow = true, sortable = false)
     public Address indirizzo;
 

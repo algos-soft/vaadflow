@@ -6,7 +6,7 @@ import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
@@ -259,7 +259,7 @@ public class Prova extends ACEntity {
      * riferimento statico SENZA @DBRef (embedded)
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
     @AIColumn(name = "ind")
     public Address indirizzoStatico;
 

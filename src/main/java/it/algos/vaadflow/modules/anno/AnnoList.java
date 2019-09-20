@@ -1,23 +1,18 @@
 package it.algos.vaadflow.modules.anno;
 
-import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.giorno.GiornoService;
-import it.algos.vaadflow.modules.mese.Mese;
-import it.algos.vaadflow.modules.mese.MeseService;
-import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.ACronoViewList;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,11 +24,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 18.19.24 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -48,13 +43,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_ANN)
+@Route(value = TAG_ANN, layout = MainLayout14.class)
 @Qualifier(TAG_ANN)
-@AIView(vaadflow = true, menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class AnnoViewList extends ACronoViewList {
-
+public class AnnoList extends ACronoViewList {
 
     /**
      * Icona visibile nel menu (facoltativa)
@@ -62,6 +55,7 @@ public class AnnoViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
     public static final String IRON_ICON = "today";
 
 
@@ -74,19 +68,20 @@ public class AnnoViewList extends ACronoViewList {
     @Autowired
     protected SecoloService secoloService;
 
+
     /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public AnnoViewList(@Qualifier(TAG_ANN) IAPresenter presenter, @Qualifier(TAG_ANN) IADialog dialog) {
-        super(presenter, dialog);
-        ((AnnoViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public AnnoList(@Qualifier(TAG_ANN) IAService service) {
+        super(service);
+        super.entityClazz = Anno.class;
+    }// end of Vaadin/@Route constructor
 
 
     /**
@@ -99,6 +94,19 @@ public class AnnoViewList extends ACronoViewList {
         super.fixPreferenze();
         super.grid = new PaginatedGrid<Anno>();
     }// end of method
+
+    /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Sono considerati gli anni da 1.000 a.c. a 2030 d.c. Non si possono cancellare ne aggiungere elementi."));
+    }// end of method
+
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
@@ -119,6 +127,16 @@ public class AnnoViewList extends ACronoViewList {
     public void updateItems() {
         Secolo secolo = (Secolo) filtroComboBox.getValue();
         items = ((AnnoService) service).findAllBySecolo(secolo);
+    }// end of method
+
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        AnnoDialog dialog = appContext.getBean(AnnoDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 }// end of class

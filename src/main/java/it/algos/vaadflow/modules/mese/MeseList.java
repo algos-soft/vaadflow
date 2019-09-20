@@ -1,33 +1,30 @@
-package it.algos.vaadflow.modules.secolo;
+package it.algos.vaadflow.modules.mese;
 
-import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.ACronoViewList;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.vaadin.klaudeta.PaginatedGrid;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
+import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 19.27.41 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -41,13 +38,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@UIScope
-@Route(value = TAG_SEC)
-@Qualifier(TAG_SEC)
-@AIView(vaadflow = true, menuName = "secoli", roleTypeVisibility = EARoleType.developer)
+@Route(value = TAG_MES, layout = MainLayout14.class)
+@Qualifier(TAG_MES)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class SecoloViewList extends ACronoViewList {
+public class MeseList extends ACronoViewList {
 
 
     /**
@@ -56,22 +51,24 @@ public class SecoloViewList extends ACronoViewList {
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
+
     public static final String IRON_ICON = "today";
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public SecoloViewList(@Qualifier(TAG_SEC) IAPresenter presenter, @Qualifier(TAG_SEC) IADialog dialog) {
-        super(presenter, dialog);
-        ((SecoloViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public MeseList(@Qualifier(TAG_MES) IAService service) {
+        super(service);
+        super.entityClazz = Mese.class;
+    }// end of Vaadin/@Route constructor
+
 
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
@@ -82,6 +79,28 @@ public class SecoloViewList extends ACronoViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
         super.usaPopupFiltro = false;
+    }// end of method
+
+
+    /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Ci sono 12 mesi. Non si possono cancellare ne aggiungere elementi."));
+    }// end of method
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        MeseDialog dialog = appContext.getBean(MeseDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 }// end of class

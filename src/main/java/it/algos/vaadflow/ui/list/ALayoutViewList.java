@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAMenu;
@@ -18,7 +19,9 @@ import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
-import it.algos.vaadflow.ui.menu.*;
+import it.algos.vaadflow.ui.menu.AButtonMenu;
+import it.algos.vaadflow.ui.menu.APopupMenu;
+import it.algos.vaadflow.ui.menu.IAMenu;
 import lombok.extern.slf4j.Slf4j;
 
 import static it.algos.vaadflow.application.FlowCost.*;
@@ -62,7 +65,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      */
     @Deprecated
     public ALayoutViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        super(presenter, dialog,service);
+        super(presenter, dialog, service);
     }// end of Spring constructor
 
 
@@ -198,7 +201,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 
-        if (usaBottoneDeleteAll && isDeveloper) {
+        if ((!FlowVar.usaSecurity && usaBottoneDeleteAll) || (isDeveloper && usaBottoneDeleteAll)) {
             deleteAllButton = new Button("Delete all", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
@@ -206,7 +209,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(deleteAllButton);
         }// end of if cycle
 
-        if (usaBottoneReset && isDeveloper) {
+        if ((!FlowVar.usaSecurity && usaBottoneReset) || (isDeveloper && usaBottoneReset)) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");

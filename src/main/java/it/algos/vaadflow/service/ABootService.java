@@ -2,19 +2,18 @@ package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.company.CompanyViewList;
-import it.algos.vaadflow.modules.anno.AnnoViewList;
+import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
 import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
 import it.algos.vaadflow.modules.log.LogViewList;
-import it.algos.vaadflow.modules.address.AddressViewList;
-import it.algos.vaadflow.modules.mese.MeseViewList;
-import it.algos.vaadflow.modules.giorno.GiornoViewList;
+import it.algos.vaadflow.modules.address.AddressList;
+import it.algos.vaadflow.modules.mese.MeseList;
+import it.algos.vaadflow.modules.giorno.GiornoList;
 import it.algos.vaadflow.modules.person.PersonViewList;
-import it.algos.vaadflow.modules.secolo.SecoloViewList;
-import it.algos.vaadflow.modules.role.RoleViewList;
-import it.algos.vaadflow.modules.logtype.LogtypeViewList;
+import it.algos.vaadflow.modules.secolo.SecoloList;
+import it.algos.vaadflow.modules.logtype.LogtypeList;
 import it.algos.vaadflow.developer.DeveloperView;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
@@ -102,13 +101,13 @@ public class ABootService extends AbstractService {
             FlowVar.menuClazzList.add(UtenteViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showLogType.getCode())) {
-            FlowVar.menuClazzList.add(LogtypeViewList.class);
+            FlowVar.menuClazzList.add(LogtypeList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showCompany.getCode())) {
             FlowVar.menuClazzList.add(CompanyViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showAddress.getCode())) {
-            FlowVar.menuClazzList.add(AddressViewList.class);
+            FlowVar.menuClazzList.add(AddressList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showPerson.getCode())) {
             FlowVar.menuClazzList.add(PersonViewList.class);
@@ -117,16 +116,16 @@ public class ABootService extends AbstractService {
             FlowVar.menuClazzList.add(VersioneViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showGiorno.getCode())) {
-            FlowVar.menuClazzList.add(GiornoViewList.class);
+            FlowVar.menuClazzList.add(GiornoList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showAnno.getCode())) {
-            FlowVar.menuClazzList.add(AnnoViewList.class);
+            FlowVar.menuClazzList.add(AnnoList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showMese.getCode())) {
-            FlowVar.menuClazzList.add(MeseViewList.class);
+            FlowVar.menuClazzList.add(MeseList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showSecolo.getCode())) {
-            FlowVar.menuClazzList.add(SecoloViewList.class);
+            FlowVar.menuClazzList.add(SecoloList.class);
         }// end of if cycle
 
         //--admin
@@ -153,30 +152,30 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(LogViewList.class);
 
         FlowVar.menuClazzList.add(CompanyViewList.class);
-        FlowVar.menuClazzList.add(AddressViewList.class);
+        FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(PersonViewList.class);
 
-        FlowVar.menuClazzList.add(LogtypeViewList.class);
+        FlowVar.menuClazzList.add(LogtypeList.class);
         FlowVar.menuClazzList.add(RoleList.class);
         FlowVar.menuClazzList.add(PersonViewList.class);
-        FlowVar.menuClazzList.add(AddressViewList.class);
+        FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
         FlowVar.menuClazzList.add(VersioneViewList.class);
         FlowVar.menuClazzList.add(UtenteViewList.class);
         FlowVar.menuClazzList.add(CompanyViewList.class);
-        FlowVar.menuClazzList.add(LogtypeViewList.class);
+        FlowVar.menuClazzList.add(LogtypeList.class);
         FlowVar.menuClazzList.add(RoleList.class);
-        FlowVar.menuClazzList.add(SecoloViewList.class);
+        FlowVar.menuClazzList.add(SecoloList.class);
         FlowVar.menuClazzList.add(PersonViewList.class);
-        FlowVar.menuClazzList.add(GiornoViewList.class);
-        FlowVar.menuClazzList.add(MeseViewList.class);
-        FlowVar.menuClazzList.add(AddressViewList.class);
+        FlowVar.menuClazzList.add(GiornoList.class);
+        FlowVar.menuClazzList.add(MeseList.class);
+        FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
         FlowVar.menuClazzList.add(VersioneViewList.class);
         FlowVar.menuClazzList.add(UtenteViewList.class);
-        FlowVar.menuClazzList.add(AnnoViewList.class);
+        FlowVar.menuClazzList.add(AnnoList.class);
         FlowVar.menuClazzList.add(CompanyViewList.class);
 	}// end of method
 

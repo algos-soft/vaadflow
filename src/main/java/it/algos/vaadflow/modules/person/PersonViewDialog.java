@@ -6,9 +6,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
 import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.address.AddressViewDialog;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -48,11 +47,9 @@ public class PersonViewDialog extends AViewDialog<Person> {
 
     private final static String INDIRIZZO = "indirizzo";
 
-    private AddressPresenter addressPresenter;
-
     private AddressService addressService;
 
-    private AddressViewDialog addressDialog;
+    private AddressDialog addressDialog;
 
     private Address indirizzoTemporaneo;
 
@@ -84,11 +81,9 @@ public class PersonViewDialog extends AViewDialog<Person> {
      */
     @Override
     protected void addSpecificAlgosFields() {
-        addressPresenter = StaticContextAccessor.getBean(AddressPresenter.class);
-        addressService = (AddressService) addressPresenter.getService();
+        addressService = StaticContextAccessor.getBean(AddressService.class);
 
-        addressDialog = StaticContextAccessor.getBean(AddressViewDialog.class);
-        addressDialog.setPresenter(addressPresenter);
+        addressDialog = StaticContextAccessor.getBean(AddressDialog.class);
         addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
         addressDialog.fixConfermaAndNotRegistrazione();
 
