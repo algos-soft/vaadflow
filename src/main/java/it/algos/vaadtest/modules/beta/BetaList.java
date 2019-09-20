@@ -20,11 +20,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 10.57.42 <br>
+ * Fix date: 20-set-2019 15.29.38 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -54,39 +54,28 @@ public class BetaList extends AGridViewList {
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public BetaList(@Qualifier(TAG_BET) IADialog dialog, @Qualifier(TAG_BET) IAService service) {
-        super(null, null, service);
+    public BetaList(@Qualifier(TAG_BET) IAService service) {
+        super(service);
         super.entityClazz = Beta.class;
-    }// end of Spring constructor
+    }// end of Vaadin/@Route constructor
 
 
     /**
-     * Apertura del dialogo per una nuova entity <br>
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
      * Sovrascritto <br>
      */
-    protected void openNew() {
-        dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
-        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
-        dialog.open(service.newEntity(), EAOperation.addNew, context);
-    }// end of method
-
-
-    /**
-     * Apertura del dialogo per una entity esistente <br>
-     * Sovrascritto <br>
-     */
-    protected void openEdit(AEntity entityBean) {
-        dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
-        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
-        dialog.open(entityBean, EAOperation.edit, context);
+    protected void openDialog(AEntity entityBean) {
+        BetaDialog dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
     }// end of method
 
 }// end of class

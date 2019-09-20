@@ -97,9 +97,22 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public AViewList(IAService service) {
+        this.service = service;
+    }// end of Vaadin/@Route constructor
+
+    /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
+    @Deprecated
     public AViewList(IAPresenter presenter, IADialog dialog, IAService service) {
         this.presenter = presenter;
         this.service = service;
@@ -117,6 +130,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
+    @Deprecated
     public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit, IAService service) {
         this.presenter = presenter;
         this.service = service;
@@ -352,7 +366,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     protected Button createEditButton(AEntity entityBean) {
-        Button edit = new Button("", event -> openEdit(entityBean));
+        Button edit = new Button("", event -> openDialog(entityBean));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -379,14 +393,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Sovrascritto <br>
      */
     protected void openNew() {
-        dialog.open(service.newEntity(), EAOperation.addNew, context);
+//        dialog.open(service.newEntity(), EAOperation.addNew, context);
+        openDialog(null);
     }// end of method
 
     /**
      * Apertura del dialogo per una entity esistente <br>
      * Sovrascritto <br>
      */
-    protected void openEdit(AEntity entityBean) {
+    protected void openDialog(AEntity entityBean) {
         dialog.open(entityBean, EAOperation.edit, context);
     }// end of method
 

@@ -47,16 +47,33 @@ import static it.algos.vaadflow.application.FlowCost.USA_SEARCH_CASE_SENSITIVE;
 public abstract class AGridViewList extends ALayoutViewList {
 
     /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public AGridViewList(IAService service) {
+        super(service);
+    }// end of Vaadin/@Route constructor
+
+
+    /**
      * Costruttore <br>
      *
      * @param presenter per gestire la business logic del package
      * @param dialog    per visualizzare i fields
      */
+    @Deprecated
     public AGridViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog,null);
+        super(presenter, dialog, null);
     }// end of Spring constructor
+
+
+    @Deprecated
     public AGridViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        super(presenter, dialog,service);
+        super(presenter, dialog, service);
     }// end of Spring constructor
 
 

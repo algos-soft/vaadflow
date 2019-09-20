@@ -18,10 +18,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 20-set-2019 10.57.42 <br>
+ * Fix date: 20-set-2019 15.29.38 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
+ * Costruita (nella List) con appContext.getBean(BetaDialog.class, service, entityClazz);
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
@@ -38,18 +39,25 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 public class BetaDialog extends AViewDialog<Beta> {
 
 
+    /**
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
+     */
     public BetaDialog() {
-        super(null);
-    }// end of Spring constructor
+    }// end of constructor
 
-   /**
-     * Costruttore
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
      */
     public BetaDialog(IAService service, Class<? extends AEntity> binderClass) {
-        super(null);
-        this.service = service;
-        this.binderClass = binderClass;
-  }// end of Spring constructor
+        super(service, binderClass);
+    }// end of constructor
 
     
 }// end of class

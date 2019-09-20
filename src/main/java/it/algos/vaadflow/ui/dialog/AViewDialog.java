@@ -202,6 +202,15 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso il parametro del costruttore usato <br>
+     */
+    public AViewDialog() {
+    }// end of constructor
+
+
+    /**
      * Constructs a new instance.
      *
      * @param presenter per gestire la business logic del package
@@ -254,6 +263,19 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public AViewDialog(IAService service, Class<? extends AEntity> binderClass) {
+        this.service = service;
+        this.binderClass = binderClass;
+    }// end of constructor
+
+
+    /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
      * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
@@ -294,15 +316,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
+    @Deprecated
     public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         fixFunzioni(itemSaver, itemDeleter, null);
     }// end of method
 
 
+    @Deprecated
     public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
-        this.itemAnnulla = itemAnnulla;
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
+        this.itemAnnulla = itemAnnulla;
     }// end of method
 
 
@@ -425,16 +449,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation, AContext context) {
-        open(item, operation, context, "");
+    @Deprecated
+    public void open(AEntity entityBean, EAOperation operation, AContext context) {
+        open(entityBean, operation, context, "");
     }// end of method
 
 
@@ -446,10 +463,37 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param entityBean The item to edit; it may be an existing or a newly created instance
      * @param operation  The operation being performed on the item
      * @param context    legato alla sessione
-     * @param title      of the window dialog
      */
     @Override
+    @Deprecated
     public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     *
+     * @param entityBean  The item to edit; it may be an existing or a newly created instance
+     * @param operation   The operation being performed on the item
+     * @param itemSaver   funzione associata al bottone 'registra'
+     * @param itemDeleter funzione associata al bottone 'annulla'
+     */
+    public void open(AEntity entityBean, EAOperation operation, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+        this.itemSaver = itemSaver;
+        this.itemDeleter = itemDeleter;
+        open(entityBean, operation);
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     * Riceve la entityBean <br>
+     * Crea i fields <br>
+     *
+     * @param entityBean The item to edit; it may be an existing or a newly created instance
+     * @param operation  The operation being performed on the item
+     */
+    public void open(AEntity entityBean, EAOperation operation) {
         //--controllo iniziale di sicurezza
         if (service == null) {
             return;
@@ -459,6 +503,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
+
+        if (entityBean == null) {
+            entityBean = service.newEntity();
+        }// end of if cycle
+
         if (entityBean == null) {
             Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
@@ -466,7 +515,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         this.currentItem = (T) entityBean;
         this.operation = operation;
-        this.context = context;
         this.fixTitleLayout();
 
         if (registrationForSave != null) {

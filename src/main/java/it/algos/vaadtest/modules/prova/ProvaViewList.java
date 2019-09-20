@@ -97,6 +97,7 @@ public class ProvaViewList extends AGridViewList {
 
     /**
      * Costruttore @Autowired <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
@@ -104,10 +105,11 @@ public class ProvaViewList extends AGridViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
+    @Deprecated
     public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
         super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    }// end of Vaadin/@Route constructor
 
     /**
      * Le preferenze standard <br>
