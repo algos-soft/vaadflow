@@ -25,11 +25,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 20-set-2019 16.08.21 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -43,11 +43,12 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
+@Route(value = TAG_ROL, layout = MainLayout14.class)
 @Qualifier(TAG_ROL)
 @AIView(vaadflow = true, menuName = "ruoli", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class RoleViewList extends AGridViewList {
+public class RoleList extends AGridViewList {
 
 
     /**
@@ -70,7 +71,7 @@ public class RoleViewList extends AGridViewList {
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public RoleViewList(@Qualifier(TAG_ROL) IAService service) {
+    public RoleList(@Qualifier(TAG_ROL) IAService service) {
         super(service);
         super.entityClazz = Beta.class;
     }// end of Vaadin/@Route constructor

@@ -3,6 +3,7 @@ package it.algos.vaadflow.service;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.anno.AnnoViewList;
+import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
 import it.algos.vaadflow.modules.versione.VersioneViewList;
 import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
@@ -95,7 +96,7 @@ public class ABootService extends AbstractService {
             FlowVar.menuClazzList.add(WizardView.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showRole.getCode())) {
-            FlowVar.menuClazzList.add(RoleViewList.class);
+            FlowVar.menuClazzList.add(RoleList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showUser.getCode())) {
             FlowVar.menuClazzList.add(UtenteViewList.class);
@@ -143,7 +144,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList = new ArrayList<>();
 
         FlowVar.menuClazzList.add(DeveloperView.class);
-        FlowVar.menuClazzList.add(RoleViewList.class);
+        FlowVar.menuClazzList.add(RoleList.class);
         FlowVar.menuClazzList.add(UtenteViewList.class);
         FlowVar.menuClazzList.add(WizardView.class);
 
@@ -156,7 +157,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(PersonViewList.class);
 
         FlowVar.menuClazzList.add(LogtypeViewList.class);
-        FlowVar.menuClazzList.add(RoleViewList.class);
+        FlowVar.menuClazzList.add(RoleList.class);
         FlowVar.menuClazzList.add(PersonViewList.class);
         FlowVar.menuClazzList.add(AddressViewList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
@@ -165,7 +166,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(UtenteViewList.class);
         FlowVar.menuClazzList.add(CompanyViewList.class);
         FlowVar.menuClazzList.add(LogtypeViewList.class);
-        FlowVar.menuClazzList.add(RoleViewList.class);
+        FlowVar.menuClazzList.add(RoleList.class);
         FlowVar.menuClazzList.add(SecoloViewList.class);
         FlowVar.menuClazzList.add(PersonViewList.class);
         FlowVar.menuClazzList.add(GiornoViewList.class);

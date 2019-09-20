@@ -31,4 +31,4 @@ public interface @ENTITY@Repository extends MongoRepository<@ENTITY@, String> {
 
     @QUERY@
 
-}// end of class
+}// end of interface
