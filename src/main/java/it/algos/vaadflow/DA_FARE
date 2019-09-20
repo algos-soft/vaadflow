@@ -5,4 +5,9 @@
     Class<?>
     Class<? extends AViewList>
 * IAView o AViewList
-* Controller
+* Controller FATTO
+* Scelta tra un componente 'allargabile': BubbleDialog, label-more, tooltips4vaadin, paged-tab, PaperMenuButton,Iron Collapse
+
+*Dialoghi: confirm-dialog
+*Exporter
+* Master/Detail View, Crud UI Add-on

@@ -3,15 +3,23 @@ package it.algos.vaadtest.application;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.service.AMenuService;
 import it.algos.vaadflow.service.AVaadinService;
 import it.algos.vaadflow.ui.IAView;
+import it.algos.vaadtest.modules.beta.BetaList;
+import it.algos.vaadtest.modules.prova.ProvaViewList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +43,8 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
  * and top menus are repositioned below the main content.
  */
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
+@BodySize
+@Theme(Lumo.class)
 public class MainLayout14 extends AppLayout implements RouterLayout {
 
     /**
@@ -62,22 +72,14 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @Autowired
     private AMenuService menuService;
 
-    //--property
-    private VerticalLayout menuLayout;
-
-    //--property
-    private Map<String, ArrayList<Class<? extends IAView>>> mappa;
 
 
     public MainLayout14() {
         //@todo DA FARE cambiare immagine
         Image img = new Image("https://i.imgur.com/GPpnszs.png", "Algos");
-//        Image img = new Image("images/Visualpharm-Office-Space-User.ico", "Algos");
         img.setHeight("44px");
-        addToNavbar(new DrawerToggle(), img);
 
-        menuLayout = new VerticalLayout();
-        addToDrawer(menuLayout);
+        addToNavbar(new DrawerToggle(), img);
         this.setDrawerOpened(false);
     }// end of constructor
 
@@ -95,7 +97,8 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @PostConstruct
     protected void inizia() {
         fixSessione();
-        fixMenu();
+//        addToDrawer(getRouterMenu());
+        addToDrawer(getTabMenu());
     }// end of method
 
 
@@ -109,11 +112,12 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
 
 
     /**
-     * Regola i menu
+     * Regola i routers
      * Può essere sovrascritto
      */
-    protected void fixMenu() {
-        mappa = menuService.creaMappa();
+    protected VerticalLayout getRouterMenu() {
+        VerticalLayout menuLayout = new VerticalLayout();
+        Map<String, ArrayList<Class<? extends IAView>>> mappa = menuService.creaMappa();
 
         if (usaSecurity) {
             //--crea menu dello sviluppatore (se loggato)
@@ -135,6 +139,31 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
             //--crea menu indifferenziato
             menuLayout.add(menuService.creaRouterNoSecurity(mappa));
         }// end of if/else cycle
+
+        return menuLayout;
+    }// end of method
+
+    /**
+     * Regola i tabs
+     * Può essere sovrascritto
+     */
+    protected Tab[] getTabMenu() {
+        Tab[] tabs=new Tab[2];
+        RouterLink link = new RouterLink(null, BetaList.class);
+        link.add(VaadinIcon.ARROW_RIGHT.create());
+        link.add("Beta");
+        Tab tab = new Tab();
+        tab.add(link);
+        tabs[0]=tab;
+
+        RouterLink link2 = new RouterLink(null, ProvaViewList.class);
+        link2.add(VaadinIcon.ARROW_RIGHT.create());
+        link2.add("Prova");
+        Tab tab2 = new Tab();
+        tab2.add(link2);
+        tabs[1]=tab2;
+
+        return tabs;
     }// end of method
 
 }// end of class
