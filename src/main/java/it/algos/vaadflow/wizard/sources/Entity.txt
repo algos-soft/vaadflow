@@ -68,7 +68,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 @AllArgsConstructor
 @Builder(builderMethodName = "builder@ENTITY@")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = @USACOMPANY@)
+@AIEntity(recordName = "@PACKAGE@", company = @USACOMPANY@)
 @AIList(fields = {@PROPERTIES@})
 @AIForm(fields = {@PROPERTIES@})
 @AIScript(sovrascrivibile = false)

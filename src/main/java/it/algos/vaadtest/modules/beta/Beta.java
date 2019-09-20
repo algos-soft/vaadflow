@@ -24,7 +24,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 7.13.31 <br>
+ * Fix date: 20-set-2019 10.57.42 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -68,7 +68,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderBeta")
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(company = EACompanyRequired.nonUsata)
+@AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code"})
 @AIScript(sovrascrivibile = false)
@@ -88,19 +88,19 @@ public class Beta extends AEntity {
     @NotNull
     @Indexed()
     @Field("ord")
-    @AIField(type = EAFieldType.integer, widthEM = 5)
-    @AIColumn(name = "#", widthEM = 5)
+    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIColumn(name = "#", widthEM = 3)
     public int ordine;
     
 	/**
      * codice di riferimento (obbligatorio, unico) <br>
      */
-    @NotNull
+    @NotNull(message = "Il codice è obbligatorio")
     @Indexed()
-    @Size(min = 3)
+    @Size(min = 2)
     @Field("cod")
-    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 7)
+    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
+    @AIColumn(widthEM = 8)
     public String code;
     
 

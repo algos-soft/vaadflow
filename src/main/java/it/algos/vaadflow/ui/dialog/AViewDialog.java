@@ -69,7 +69,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected final Div titleLayout = new Div();
+    protected final Div titlePlaceholder = new Div();
 
     /**
      * Corpo centrale del Form <br>
@@ -191,8 +191,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     private Consumer<T> itemDeleter;
 
-    private String itemType;
-
     private Registration registrationForSave;
 
     /**
@@ -208,6 +206,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      *
      * @param presenter per gestire la business logic del package
      */
+    @Deprecated
     public AViewDialog(IAPresenter presenter) {
         this(presenter, null, null);
     }// end of constructor
@@ -237,7 +236,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Deprecated
     public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
-        if (presenter!=null) {
+        if (presenter != null) {
             this.presenter = presenter;
             this.service = presenter.getService();
             this.binderClass = presenter.getEntityClazz();
@@ -348,7 +347,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Placeholder (eventuale, presente di default) <br>
      */
     private Component creaTitleLayout() {
-        return titleLayout;
+        return titlePlaceholder;
     }// end of method
 
 
@@ -468,11 +467,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         this.currentItem = (T) entityBean;
         this.operation = operation;
         this.context = context;
-//        Object view = presenter.getView();
-//        if (view != null) {
-//            this.itemType = presenter.getView().getMenuName();
-//        }// end of if cycle
-        this.fixTitleLayout(title);
+        this.fixTitleLayout();
 
         if (registrationForSave != null) {
             registrationForSave.remove();
@@ -492,12 +487,16 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     /**
      * Regola il titolo del dialogo <br>
+     * Recupera recordName dalle @Annotation della classe Entity. Non dovrebbe mai essere vuoto. <br>
+     * Costruisce il titolo con la descrizione dell'operazione (New, Edit,...) ed il recordName <br>
+     * Sostituisce interamente il titlePlaceholder <br>
      */
-    protected void fixTitleLayout(String title) {
-        title = text.isValid(title) ? title : text.isValid(itemType) ? itemType : "Error";
-//        title = title.equals("") ? itemType : title;
-        titleLayout.removeAll();
-        titleLayout.add(new H2(operation.getNameInTitle() + " " + title.toLowerCase()));
+    protected void fixTitleLayout() {
+        String recordName = annotation.getRecordName(binderClass);
+        String title = text.isValid(recordName) ? recordName : "Error";
+
+        titlePlaceholder.removeAll();
+        titlePlaceholder.add(new H2(operation.getNameInTitle() + " " + title.toLowerCase()));
     }// end of method
 
 

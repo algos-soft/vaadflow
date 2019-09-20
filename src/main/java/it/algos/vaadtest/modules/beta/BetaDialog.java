@@ -18,9 +18,10 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 20-set-2019 7.13.31 <br>
+ * Fix date: 20-set-2019 10.57.42 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>

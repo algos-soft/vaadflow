@@ -5,6 +5,6 @@
     @NotNull
     @Indexed()
     @Field("ord")
-    @AIField(type = EAFieldType.integer, widthEM = 5)
-    @AIColumn(name = "#", widthEM = 5)
+    @AIField(type = EAFieldType.integer, widthEM = 3)
+    @AIColumn(name = "#", widthEM = 3)
     public int ordine;

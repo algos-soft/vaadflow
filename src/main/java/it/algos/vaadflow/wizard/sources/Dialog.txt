@@ -21,6 +21,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * Fix date: @TODAY@ <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>

@@ -2,6 +2,7 @@ package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouterLink;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.role.EARole;
@@ -43,7 +44,7 @@ public class AMenuService extends AService {
      *
      * @param clazzList di classi raggiungibili da @Route
      */
-    public RouterLink[] creaRouterBase(List<Class<? extends IAView>> clazzList) {
+    public RouterLink[] creaRoutersBase(List<Class<? extends IAView>> clazzList) {
         List<RouterLink> routers = null;
 
         if (array.isValid(clazzList)) {
@@ -60,24 +61,24 @@ public class AMenuService extends AService {
     /**
      * Eventuali item di menu, se collegato come sviluppatore
      */
-    public RouterLink[] creaRouterDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        return creaRouterBase(mappaClassi.get(EARole.developer.toString()));
+    public RouterLink[] creaRoutersDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRoutersBase(mappaClassi.get(EARole.developer.toString()));
     }// end of method
 
 
     /**
      * Eventuali item di menu, se collegato come admin
      */
-    public RouterLink[] creaRouterAdmin(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        return creaRouterBase(mappaClassi.get(EARole.admin.toString()));
+    public RouterLink[] creaRoutersAdmin(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRoutersBase(mappaClassi.get(EARole.admin.toString()));
     }// end of method
 
 
     /**
      * Eventuali item di menu, se collegato come utente
      */
-    public RouterLink[] creaRouterUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        return creaRouterBase(mappaClassi.get(EARole.user.toString()));
+    public RouterLink[] creaRoutersUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaRoutersBase(mappaClassi.get(EARole.user.toString()));
     }// end of method
 
 
@@ -92,34 +93,77 @@ public class AMenuService extends AService {
     /**
      * Items di menu, se collegato come sviluppatore
      */
-    public RouterLink[] creaRouterNoSecurity(List<Class<? extends IAView>> devClazzList) {
-        List<RouterLink> routers = null;
+    public RouterLink[] creaRoutersNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        List<RouterLink> routers = new ArrayList<>();
 
-        if (array.isValid(devClazzList)) {
-            routers = new ArrayList<>();
-            for (Class viewClazz : devClazzList) {
-                routers.add(creaAlgosRouter(viewClazz));
-            }// end of for cycle
-        }// end of if cycle
+        for (RouterLink router : creaRoutersBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
+            routers.add(router);
+        }// end of for cycle
+        for (RouterLink router : creaRoutersBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO))) {
+            routers.add(router);
+        }// end of for cycle
 
         return routers.toArray(new RouterLink[routers.size()]);
     }// end of method
 
 
     /**
+     * Items di menu
+     *
+     * @param clazzList di classi raggiungibili da @Route
+     */
+    public Tab[] creaTabsBase(List<Class<? extends IAView>> clazzList) {
+        List<Tab> tabs = null;
+
+        if (array.isValid(clazzList)) {
+            tabs = new ArrayList<>();
+            for (Class viewClazz : clazzList) {
+                tabs.add(creaAlgosTab(viewClazz));
+            }// end of for cycle
+        }// end of if cycle
+
+        return tabs.toArray(new Tab[tabs.size()]);
+    }// end of method
+
+
+    /**
+     * Eventuali item di menu, se collegato come sviluppatore
+     */
+    public Tab[] creaTabsDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaTabsBase(mappaClassi.get(EARole.developer.toString()));
+    }// end of method
+
+
+    /**
+     * Eventuali item di menu, se collegato come admin
+     */
+    public Tab[] creaTabsAdmin(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaTabsBase(mappaClassi.get(EARole.admin.toString()));
+    }// end of method
+
+
+    /**
+     * Eventuali item di menu, se collegato come utente
+     */
+    public Tab[] creaTabsUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        return creaTabsBase(mappaClassi.get(EARole.user.toString()));
+    }// end of method
+
+
+    /**
      * Items di menu, se collegato come sviluppatore
      */
-    public RouterLink[] creaRouterNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        List<RouterLink> routers = new ArrayList<>();
+    public Tab[] creaTabsNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        List<Tab> tabs = new ArrayList<>();
 
-        for (RouterLink router : creaRouterBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
-            routers.add(router);
+        for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
+            tabs.add(tab);
         }// end of for cycle
-        for (RouterLink router : creaRouterBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO))) {
-            routers.add(router);
+        for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO))) {
+            tabs.add(tab);
         }// end of for cycle
 
-        return routers.toArray(new RouterLink[routers.size()]);
+        return tabs.toArray(new Tab[tabs.size()]);
     }// end of method
 
 
@@ -188,6 +232,32 @@ public class AMenuService extends AService {
         menuName = text.isValid(menuName) ? menuName : viewClazz.getSimpleName();
         router = new RouterLink(menuName, viewClazz);
         return router;
+    }// end of method
+
+
+    /**
+     * Aggiunge il singolo tab <br>
+     *
+     * @param viewClazz di qualsiasi tipo Component
+     *
+     * @return RouterLink
+     */
+    public Tab creaAlgosTab(Class<? extends AViewList> viewClazz) {
+        Tab tab = new Tab();
+        String menuName = "";
+        VaadinIcon icon;
+
+        menuName = annotation.getMenuName(viewClazz);
+        menuName = text.primaMaiuscola(menuName);
+        icon = reflection.getIconView(viewClazz);
+        menuName = text.isValid(menuName) ? menuName : viewClazz.getSimpleName();
+
+        RouterLink link = new RouterLink(menuName, viewClazz);
+//        if (icon != null) {
+//            link.add(icon.create());
+//        }// end of if cycle
+        tab.add(link);
+        return tab;
     }// end of method
 
 

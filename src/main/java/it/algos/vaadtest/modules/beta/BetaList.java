@@ -10,6 +10,7 @@ import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +20,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 7.13.31 <br>
+ * Fix date: 20-set-2019 10.57.42 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * <p>
@@ -75,6 +76,17 @@ public class BetaList extends AGridViewList {
         dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
         ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
         dialog.open(service.newEntity(), EAOperation.addNew, context);
+    }// end of method
+
+
+    /**
+     * Apertura del dialogo per una entity esistente <br>
+     * Sovrascritto <br>
+     */
+    protected void openEdit(AEntity entityBean) {
+        dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
+        ((BetaDialog) dialog).fixFunzioni(this::save, this::delete);
+        dialog.open(entityBean, EAOperation.edit, context);
     }// end of method
 
 }// end of class

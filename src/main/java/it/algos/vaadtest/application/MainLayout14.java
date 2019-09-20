@@ -2,6 +2,7 @@ package it.algos.vaadtest.application;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.shared.ui.LoadMode;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import it.algos.vaadflow.application.AContext;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowVar.usaSecurity;
@@ -44,6 +47,8 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
  */
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
 @BodySize
+@HtmlImport(value = "styles/shared-styles.html", loadMode = LoadMode.INLINE)
+@HtmlImport(value = "styles/algos-styles.html", loadMode = LoadMode.INLINE)
 @Theme(Lumo.class)
 public class MainLayout14 extends AppLayout implements RouterLayout {
 
@@ -73,7 +78,6 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     private AMenuService menuService;
 
 
-
     public MainLayout14() {
         //@todo DA FARE cambiare immagine
         Image img = new Image("https://i.imgur.com/GPpnszs.png", "Algos");
@@ -97,7 +101,6 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @PostConstruct
     protected void inizia() {
         fixSessione();
-//        addToDrawer(getRouterMenu());
         addToDrawer(getTabMenu());
     }// end of method
 
@@ -115,6 +118,7 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
      * Regola i routers
      * Può essere sovrascritto
      */
+    @Deprecated
     protected VerticalLayout getRouterMenu() {
         VerticalLayout menuLayout = new VerticalLayout();
         Map<String, ArrayList<Class<? extends IAView>>> mappa = menuService.creaMappa();
@@ -122,46 +126,56 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
         if (usaSecurity) {
             //--crea menu dello sviluppatore (se loggato)
             if (context.isDev()) {
-                menuLayout.add(menuService.creaRouterDeveloper(mappa));
+                menuLayout.add(menuService.creaRoutersDeveloper(mappa));
             }// end of if cycle
 
             //--crea menu dell'admin (se loggato)
             if (context.isDev() || context.isAdmin()) {
-                menuLayout.add(menuService.creaRouterAdmin(mappa));
+                menuLayout.add(menuService.creaRoutersAdmin(mappa));
             }// end of if cycle
 
             //--crea menu utente normale (sempre)
-            menuLayout.add(menuService.creaRouterUser(mappa));
+            menuLayout.add(menuService.creaRoutersUser(mappa));
 
             //--crea menu logout (sempre)
             menuLayout.add(menuService.creaMenuLogout());
         } else {
             //--crea menu indifferenziato
-            menuLayout.add(menuService.creaRouterNoSecurity(mappa));
+            menuLayout.add(menuService.creaRoutersNoSecurity(mappa));
         }// end of if/else cycle
 
         return menuLayout;
     }// end of method
+
 
     /**
      * Regola i tabs
      * Può essere sovrascritto
      */
     protected Tab[] getTabMenu() {
-        Tab[] tabs=new Tab[2];
-        RouterLink link = new RouterLink(null, BetaList.class);
-        link.add(VaadinIcon.ARROW_RIGHT.create());
-        link.add("Beta");
-        Tab tab = new Tab();
-        tab.add(link);
-        tabs[0]=tab;
+        Tab[] tabs=null;
+        Map<String, ArrayList<Class<? extends IAView>>> mappa = menuService.creaMappa();
 
-        RouterLink link2 = new RouterLink(null, ProvaViewList.class);
-        link2.add(VaadinIcon.ARROW_RIGHT.create());
-        link2.add("Prova");
-        Tab tab2 = new Tab();
-        tab2.add(link2);
-        tabs[1]=tab2;
+        if (usaSecurity) {
+            //--crea menu dello sviluppatore (se loggato)
+            if (context.isDev()) {
+                tabs = menuService.creaTabsDeveloper(mappa);
+            }// end of if cycle
+
+            //--crea menu dell'admin (se loggato)
+            if (context.isDev() || context.isAdmin()) {
+                tabs = menuService.creaTabsAdmin(mappa);
+            }// end of if cycle
+
+            //--crea menu utente normale (sempre)
+            tabs = menuService.creaTabsUser(mappa);
+
+            //--crea menu logout (sempre)
+//            menuLayout.add(menuService.creaMenuLogout());
+        } else {
+            //--crea menu indifferenziato
+            tabs = menuService.creaTabsNoSecurity(mappa);
+        }// end of if/else cycle
 
         return tabs;
     }// end of method
