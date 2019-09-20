@@ -101,7 +101,7 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @PostConstruct
     protected void inizia() {
         fixSessione();
-        addToDrawer(getTabMenu());
+        addToDrawer(getRouterMenu());
     }// end of method
 
 

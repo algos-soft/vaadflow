@@ -5,7 +5,7 @@ import it.algos.vaadflow.modules.company.CompanyViewList;
 import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteViewList;
-import it.algos.vaadflow.modules.versione.VersioneViewList;
+import it.algos.vaadflow.modules.versione.VersioneList;
 import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
 import it.algos.vaadflow.modules.log.LogViewList;
 import it.algos.vaadflow.modules.address.AddressList;
@@ -113,7 +113,7 @@ public class ABootService extends AbstractService {
             FlowVar.menuClazzList.add(PersonViewList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showVersione.getCode())) {
-            FlowVar.menuClazzList.add(VersioneViewList.class);
+            FlowVar.menuClazzList.add(VersioneList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showGiorno.getCode())) {
             FlowVar.menuClazzList.add(GiornoList.class);
@@ -148,7 +148,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(WizardView.class);
 
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
-        FlowVar.menuClazzList.add(VersioneViewList.class);
+        FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
 
         FlowVar.menuClazzList.add(CompanyViewList.class);
@@ -161,7 +161,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
-        FlowVar.menuClazzList.add(VersioneViewList.class);
+        FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteViewList.class);
         FlowVar.menuClazzList.add(CompanyViewList.class);
         FlowVar.menuClazzList.add(LogtypeList.class);
@@ -173,7 +173,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogViewList.class);
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
-        FlowVar.menuClazzList.add(VersioneViewList.class);
+        FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteViewList.class);
         FlowVar.menuClazzList.add(AnnoList.class);
         FlowVar.menuClazzList.add(CompanyViewList.class);

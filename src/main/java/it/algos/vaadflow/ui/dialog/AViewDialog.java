@@ -506,7 +506,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         if (entityBean == null) {
             entityBean = service.newEntity();
-            operation=EAOperation.addNew;
+            operation = EAOperation.addNew;
         }// end of if cycle
 
         if (entityBean == null) {
