@@ -25,7 +25,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 16.08.21 <br>
+ * Fix date: 20-set-2019 16.12.25 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -73,7 +73,7 @@ public class RoleList extends AGridViewList {
     @Autowired
     public RoleList(@Qualifier(TAG_ROL) IAService service) {
         super(service);
-        super.entityClazz = Beta.class;
+        super.entityClazz = Role.class;
     }// end of Vaadin/@Route constructor
 
     /**

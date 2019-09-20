@@ -5,6 +5,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +18,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 20-set-2019 16.08.21 <br>
+ * Fix date: 20-set-2019 16.12.25 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
@@ -33,21 +35,29 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_ROL)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovrascrivibile = true)
 public class RoleDialog extends AViewDialog<Role> {
 
 
     /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public RoleDialog(@Qualifier(TAG_ROL) IAPresenter presenter) {
-        super(presenter);
-    }// end of Spring constructor
+    public RoleDialog() {
+    }// end of constructor
 
 
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(RoleDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public RoleDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
+
+    
 }// end of class

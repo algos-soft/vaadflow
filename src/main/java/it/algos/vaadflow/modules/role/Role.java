@@ -26,7 +26,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 16.08.21 <br>
+ * Fix date: 20-set-2019 16.12.25 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
