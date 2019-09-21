@@ -3,12 +3,15 @@ package it.algos.vaadflow.modules.preferenza;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AEnumerationService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.fields.ACheckBox;
 import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.fields.AIntegerField;
@@ -29,9 +32,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 8.28.35 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
+ * Costruita (nella List) con appContext.getBean(PreferenzaDialog.class, service, entityClazz);
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
@@ -39,6 +44,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
+ * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -69,17 +76,24 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
 
     /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public PreferenzaDialog(@Qualifier(TAG_PRE) IAPresenter presenter) {
-        super(presenter);
+    public PreferenzaDialog() {
     }// end of constructor
 
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(PreferenzaDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public PreferenzaDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
 
     /**
      * Aggiunge al binder eventuali fields specifici, prima di trascrivere la entityBean nel binder
@@ -276,6 +290,5 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
         return type;
     }// end of method
-
 
 }// end of class
