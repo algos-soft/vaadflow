@@ -5,8 +5,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadtest.application.MainLayout14;
@@ -43,7 +45,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @Route(value = TAG_VER, layout = MainLayout14.class)
 @Qualifier(TAG_VER)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "versioni", searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 public class VersioneList extends AGridViewList {
 
 

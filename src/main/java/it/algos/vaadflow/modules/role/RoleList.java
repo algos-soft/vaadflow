@@ -45,9 +45,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  */
 @Route(value = TAG_ROL, layout = MainLayout14.class)
 @Qualifier(TAG_ROL)
-@AIView(vaadflow = true, menuName = "ruoli", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "ruoli", roleTypeVisibility = EARoleType.developer)
 public class RoleList extends AGridViewList {
 
 

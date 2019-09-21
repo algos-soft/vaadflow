@@ -43,10 +43,10 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  */
 @UIScope
 @Route(value = TAG_UTE, layout = MainLayout14.class)
-@AIView(vaadflow = true, menuName = "utenti", searchProperty = "username", roleTypeVisibility = EARoleType.developer)
 @Qualifier(TAG_UTE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "utenti", searchProperty = "username", roleTypeVisibility = EARoleType.developer)
 public class UtenteList extends AGridViewList {
 
 

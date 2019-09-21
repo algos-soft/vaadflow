@@ -18,7 +18,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 20-set-2019 15.54.37 <br>
+ * Fix date: 21-set-2019 8.07.20 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
@@ -30,6 +30,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * - La documentazione precedente a questo tag viene SEMPRE riscritta <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

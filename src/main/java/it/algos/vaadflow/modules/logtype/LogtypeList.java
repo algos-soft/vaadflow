@@ -5,6 +5,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
@@ -22,7 +24,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 20.13.49 <br>
+ * Fix date: 21-set-2019 7.43.41 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -43,8 +45,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @UIScope
 @Route(value = TAG_TYP, layout = MainLayout14.class)
 @Qualifier(TAG_TYP)
-@Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "companies", searchProperty = "code", roleTypeVisibility = EARoleType.admin)
 public class LogtypeList extends AGridViewList {
 
 

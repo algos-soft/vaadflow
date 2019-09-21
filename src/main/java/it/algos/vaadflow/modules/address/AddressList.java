@@ -4,6 +4,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
@@ -42,7 +44,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @Route(value = TAG_ADD, layout = MainLayout14.class)
 @Qualifier(TAG_ADD)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "indirizzi", searchProperty = "localita", roleTypeVisibility = EARoleType.developer)
 public class AddressList extends AGridViewList {
 
 

@@ -5,8 +5,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.IAService;
@@ -47,6 +49,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @Qualifier(TAG_ANN)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
 public class AnnoList extends ACronoViewList {
 
     /**

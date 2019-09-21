@@ -5,6 +5,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -45,6 +47,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @Qualifier(TAG_SEC)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "secoli", roleTypeVisibility = EARoleType.developer)
 public class SecoloList extends ACronoViewList {
 
 

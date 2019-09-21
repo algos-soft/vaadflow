@@ -47,9 +47,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @UIScope
 @Route(value = TAG_PER, layout = MainLayout14.class)
 @Qualifier(TAG_PER)
-@AIView(vaadflow = true, menuName = "persone", searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "persone", searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
 public class PersonList extends AGridViewList {
 
 

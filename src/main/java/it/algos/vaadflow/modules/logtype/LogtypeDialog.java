@@ -13,13 +13,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
-import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 20-set-2019 20.13.49 <br>
+ * Fix date: 21-set-2019 7.43.41 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
@@ -34,7 +33,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(TAG_TYP)
+@Qualifier(TAG_LOG)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class LogtypeDialog extends AViewDialog<Logtype> {

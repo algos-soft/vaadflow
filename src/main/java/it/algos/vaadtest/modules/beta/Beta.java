@@ -24,7 +24,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 20-set-2019 15.54.37 <br>
+ * Fix date: 21-set-2019 8.07.20 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -41,10 +41,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * - lets you automatically produce the code required to have your class be instantiable with code such as:
  * - Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
  * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze della classe <br>
+ * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * - La documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * Annotated with @AIEntity (facoltativo Algos) per alcuni parametri generali del modulo <br>
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Grid nella lista <br>
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici nel dialogo del Form <br>
- * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * <p>
  * Inserisce SEMPRE la versione di serializzazione <br>
  * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
@@ -68,10 +69,10 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderBeta")
 @EqualsAndHashCode(callSuper = false)
+@AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code"})
-@AIScript(sovrascrivibile = false)
 public class Beta extends AEntity {
 
 

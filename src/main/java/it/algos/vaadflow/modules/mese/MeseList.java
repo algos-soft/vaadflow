@@ -4,8 +4,10 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.ACronoViewList;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -42,6 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 @Qualifier(TAG_MES)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "mesi", roleTypeVisibility = EARoleType.developer)
 public class MeseList extends ACronoViewList {
 
 

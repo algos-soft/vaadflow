@@ -1,7 +1,7 @@
 package it.algos.vaadflow.service;
 
 import it.algos.vaadflow.application.FlowVar;
-import it.algos.vaadflow.modules.company.CompanyViewList;
+import it.algos.vaadflow.modules.company.CompanyList;
 import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteList;
@@ -104,7 +104,7 @@ public class ABootService extends AbstractService {
             FlowVar.menuClazzList.add(LogtypeList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showCompany.getCode())) {
-            FlowVar.menuClazzList.add(CompanyViewList.class);
+            FlowVar.menuClazzList.add(CompanyList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showAddress.getCode())) {
             FlowVar.menuClazzList.add(AddressList.class);
@@ -151,7 +151,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(LogList.class);
 
-        FlowVar.menuClazzList.add(CompanyViewList.class);
+        FlowVar.menuClazzList.add(CompanyList.class);
         FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(PersonList.class);
 
@@ -163,7 +163,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(PreferenzaViewList.class);
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteList.class);
-        FlowVar.menuClazzList.add(CompanyViewList.class);
+        FlowVar.menuClazzList.add(CompanyList.class);
         FlowVar.menuClazzList.add(LogtypeList.class);
         FlowVar.menuClazzList.add(RoleList.class);
         FlowVar.menuClazzList.add(SecoloList.class);
@@ -176,7 +176,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteList.class);
         FlowVar.menuClazzList.add(AnnoList.class);
-        FlowVar.menuClazzList.add(CompanyViewList.class);
+        FlowVar.menuClazzList.add(CompanyList.class);
 	}// end of method
 
 

@@ -43,9 +43,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @UIScope
 @Route(value = TAG_PRE)
 @Qualifier(TAG_PRE)
-@AIView(vaadflow = true, menuName = "preferenze", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
+@AIView(vaadflow = true, menuName = "preferenze", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class PreferenzaViewList extends AGridViewList {
 
 
