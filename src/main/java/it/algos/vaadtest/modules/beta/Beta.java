@@ -24,7 +24,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 21-set-2019 8.07.20 <br>
+ * Fix date: 21-set-2019 8.21.04 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -42,7 +42,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * - Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
  * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze della classe <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
- * - La documentazione precedente a questo tag viene SEMPRE riscritta <br>
+ * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
+ * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  * Annotated with @AIEntity (facoltativo Algos) per alcuni parametri generali del modulo <br>
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Grid nella lista <br>
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici nel dialogo del Form <br>
