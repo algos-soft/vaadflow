@@ -6,7 +6,7 @@ import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteList;
 import it.algos.vaadflow.modules.versione.VersioneList;
-import it.algos.vaadflow.modules.preferenza.PreferenzaViewList;
+import it.algos.vaadflow.modules.preferenza.PreferenzaList;
 import it.algos.vaadflow.modules.log.LogList;
 import it.algos.vaadflow.modules.address.AddressList;
 import it.algos.vaadflow.modules.mese.MeseList;
@@ -130,7 +130,7 @@ public class ABootService extends AbstractService {
 
         //--admin
         if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {
-            FlowVar.menuClazzList.add(PreferenzaViewList.class);
+            FlowVar.menuClazzList.add(PreferenzaList.class);
         }// end of if cycle
         if (pref.isBool(EAPreferenza.showLog.getCode())) {
             FlowVar.menuClazzList.add(LogList.class);
@@ -147,7 +147,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(UtenteList.class);
         FlowVar.menuClazzList.add(WizardView.class);
 
-        FlowVar.menuClazzList.add(PreferenzaViewList.class);
+        FlowVar.menuClazzList.add(PreferenzaList.class);
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(LogList.class);
 
@@ -160,7 +160,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(PersonList.class);
         FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogList.class);
-        FlowVar.menuClazzList.add(PreferenzaViewList.class);
+        FlowVar.menuClazzList.add(PreferenzaList.class);
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteList.class);
         FlowVar.menuClazzList.add(CompanyList.class);
@@ -172,7 +172,7 @@ public class ABootService extends AbstractService {
         FlowVar.menuClazzList.add(MeseList.class);
         FlowVar.menuClazzList.add(AddressList.class);
         FlowVar.menuClazzList.add(LogList.class);
-        FlowVar.menuClazzList.add(PreferenzaViewList.class);
+        FlowVar.menuClazzList.add(PreferenzaList.class);
         FlowVar.menuClazzList.add(VersioneList.class);
         FlowVar.menuClazzList.add(UtenteList.class);
         FlowVar.menuClazzList.add(AnnoList.class);
@@ -183,7 +183,7 @@ public class ABootService extends AbstractService {
     public void creaRouteStandardAdmin() {
         FlowVar.menuClazzList = new ArrayList<>();
 
-        FlowVar.menuClazzList.add(PreferenzaViewList.class);
+        FlowVar.menuClazzList.add(PreferenzaList.class);
         FlowVar.menuClazzList.add(LogList.class);
 
     }// end of method

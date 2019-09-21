@@ -57,10 +57,10 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderPreferenza")
 @EqualsAndHashCode(callSuper = false)
+@AIScript(sovrascrivibile = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = { "ordine", "code", "type", "value", "descrizione"})
 @AIForm(fields = {"company", "ordine", "code", "descrizione", "type"})
-@AIScript(sovrascrivibile = false)
 public class Preferenza extends ACEntity {
 
 

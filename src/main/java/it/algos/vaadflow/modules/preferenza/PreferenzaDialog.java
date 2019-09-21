@@ -45,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @Qualifier(TAG_PRE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
+public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
 
     private final static String TIPO_FIELD_NAME = "type";
@@ -76,7 +76,7 @@ public class PreferenzaViewDialog extends AViewDialog<Preferenza> {
      * @param presenter per gestire la business logic del package
      */
     @Autowired
-    public PreferenzaViewDialog(@Qualifier(TAG_PRE) IAPresenter presenter) {
+    public PreferenzaDialog(@Qualifier(TAG_PRE) IAPresenter presenter) {
         super(presenter);
     }// end of constructor
 

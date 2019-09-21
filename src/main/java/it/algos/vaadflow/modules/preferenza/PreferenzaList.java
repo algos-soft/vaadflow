@@ -1,8 +1,6 @@
 package it.algos.vaadflow.modules.preferenza;
 
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -46,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @Slf4j
 @AIScript(sovrascrivibile = false)
 @AIView(vaadflow = true, menuName = "preferenze", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
-public class PreferenzaViewList extends AGridViewList {
+public class PreferenzaList extends AGridViewList {
 
 
     /**
@@ -68,9 +66,9 @@ public class PreferenzaViewList extends AGridViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
-    public PreferenzaViewList(@Qualifier(TAG_PRE) IAPresenter presenter, @Qualifier(TAG_PRE) IADialog dialog) {
+    public PreferenzaList(@Qualifier(TAG_PRE) IAPresenter presenter, @Qualifier(TAG_PRE) IADialog dialog) {
         super(presenter, dialog);
-        ((PreferenzaViewDialog) dialog).fixFunzioni(this::save, this::delete);
+        ((PreferenzaDialog) dialog).fixFunzioni(this::save, this::delete);
     }// end of Spring constructor
 
 
