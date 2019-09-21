@@ -5,25 +5,32 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.AViewList;
 import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadtest.modules.beta.Beta;
+import it.algos.vaadtest.modules.beta.BetaDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
+import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
+import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 7.14.53 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -38,12 +45,12 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_PER)
+@Route(value = TAG_PER, layout = MainLayout14.class)
 @Qualifier(TAG_PER)
 @AIView(vaadflow = true, menuName = "persone", searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class PersonViewList extends AGridViewList {
+public class PersonList extends AGridViewList {
 
 
     /**
@@ -55,19 +62,20 @@ public class PersonViewList extends AGridViewList {
     public static final String IRON_ICON = "account-circle";
 
 
-   /**
+    /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public PersonViewList(@Qualifier(TAG_PER) IAPresenter presenter, @Qualifier(TAG_PER) IADialog dialog) {
-        super(presenter, dialog);
-        ((PersonViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public PersonList(@Qualifier(TAG_PER) IAService service) {
+        super(service);
+        super.entityClazz = Person.class;
+    }// end of Vaadin/@Route constructor
+
 
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
@@ -85,6 +93,16 @@ public class PersonViewList extends AGridViewList {
         super.isEntityDeveloper = true;
         super.isEntityEmbedded = true;
         super.isEntityUsaDatiDemo = true;
+    }// end of method
+
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        PersonDialog dialog = appContext.getBean(PersonDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
     }// end of method
 
 }// end of class

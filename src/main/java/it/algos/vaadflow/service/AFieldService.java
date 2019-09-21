@@ -358,8 +358,8 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 break;
             case localdatetime:
-                //@todo andrà inserito quando ci sarà un DatePicker che accetti i LocalDateTime
-//                field = new ADatePicker(caption);
+                //@todo andrà modificato quando ci sarà un DatePicker che accetti i LocalDateTime
+                field = new ADatePicker(caption);
 //                field = new ATextField(caption);
 //                binder.forField(field).bind(fieldName);
                 break;

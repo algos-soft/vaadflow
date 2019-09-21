@@ -6,10 +6,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,11 +23,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 7.02.16 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -40,12 +42,12 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
 @UIScope
-@Route(value = TAG_UTE)
-@Qualifier(TAG_UTE)
+@Route(value = TAG_UTE, layout = MainLayout14.class)
 @AIView(vaadflow = true, menuName = "utenti", searchProperty = "username", roleTypeVisibility = EARoleType.developer)
+@Qualifier(TAG_UTE)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class UtenteViewList extends AGridViewList {
+public class UtenteList extends AGridViewList {
 
 
     /**
@@ -57,27 +59,22 @@ public class UtenteViewList extends AGridViewList {
 
     public static final String IRON_ICON = "account-circle";
 
-
-    /**
-     * Istanza (@Scope = 'singleton') inietta da Spring <br>
-     */
-//    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
     /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public UtenteViewList(@Qualifier(TAG_UTE) IAPresenter presenter, @Qualifier(TAG_UTE) IADialog dialog) {
-        super(presenter, dialog);
-        ((UtenteViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public UtenteList(@Qualifier(TAG_UTE) IAService service) {
+        super(service);
+        super.entityClazz = Utente.class;
+    }// end of Vaadin/@Route constructor
 
 
     /**
@@ -113,5 +110,14 @@ public class UtenteViewList extends AGridViewList {
         alertPlacehorder.add(new Label("La entity 'utente' fa da superclasse per le anagrafiche: Persona, Milite, ecc."));
     }// end of method
 
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        UtenteDialog dialog = appContext.getBean(UtenteDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
+    }// end of method
 
 }// end of class

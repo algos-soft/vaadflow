@@ -1,24 +1,28 @@
-package it.algos.vaadflow.modules.utente;
+package it.algos.vaadflow.modules.log;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 
 /**
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 6.34.44 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
+ * Costruita (nella List) con appContext.getBean(LogDialog.class, service, entityClazz);
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
@@ -29,23 +33,31 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(TAG_UTE)
+@Qualifier(TAG_LOG)
 @Slf4j
 @AIScript(sovrascrivibile = true)
-public class UtenteViewDialog extends AViewDialog<Utente> {
+public class LogDialog extends AViewDialog<Log> {
 
 
-   /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+    /**
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public UtenteViewDialog(@Qualifier(TAG_UTE) IAPresenter presenter) {
-        super(presenter);
-    }// end of Spring constructor
+    public LogDialog() {
+    }// end of constructor
+
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(LogDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public LogDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
 
     
 }// end of class

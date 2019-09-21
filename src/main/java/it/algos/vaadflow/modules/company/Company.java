@@ -7,7 +7,7 @@ import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.person.Person;
-import it.algos.vaadflow.modules.person.PersonPresenter;
+import it.algos.vaadflow.modules.person.PersonDialog;
 import lombok.*;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.IndexDirection;
@@ -100,7 +100,7 @@ public class Company extends AEntity {
      * riferimento statico SENZA @DBRef
      */
     @Field("contatto")
-    @AIField(type = EAFieldType.link, linkClazz = PersonPresenter.class, help = "Riferimento")
+    @AIField(type = EAFieldType.link, linkClazz = PersonDialog.class, help = "Riferimento")
     @AIColumn(name = "riferimento", widthEM = 10, sortable = false)
     public Person contatto;
 

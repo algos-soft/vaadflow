@@ -1,13 +1,16 @@
 package it.algos.vaadflow.modules.log;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.application.FlowVar;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,11 +22,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 6.34.44 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
- * <p>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * <p>
  * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
@@ -37,12 +40,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  */
-@Route(value = TAG_LOG)
+@UIScope
+@Route(value = TAG_LOG, layout = MainLayout14.class)
 @Qualifier(TAG_LOG)
-@AIView(vaadflow = true, menuName = "logs", searchProperty = "descrizione", roleTypeVisibility = EARoleType.developer)
 @Slf4j
-@AIScript(sovrascrivibile = false)
-public class LogViewList extends AGridViewList {
+@AIScript(sovrascrivibile = true)
+public class LogList extends AGridViewList {
+
 
     /**
      * Icona visibile nel menu (facoltativa)
@@ -56,17 +60,17 @@ public class LogViewList extends AGridViewList {
 
     /**
      * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public LogViewList(@Qualifier(TAG_LOG) IAPresenter presenter, @Qualifier(TAG_LOG) IADialog dialog) {
-        super(presenter, dialog);
-        ((LogViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
+    public LogList(@Qualifier(TAG_LOG) IAService service) {
+        super(service);
+        super.entityClazz = Log.class;
+    }// end of Vaadin/@Route constructor
 
 
     /**
@@ -78,7 +82,7 @@ public class LogViewList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        if (login.isDeveloper()) {
+        if (!FlowVar.usaSecurity || login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
         }// end of if cycle
         super.usaSearch = false;
@@ -87,6 +91,19 @@ public class LogViewList extends AGridViewList {
         super.usaBottoneNew = false;
 
         super.grid = new PaginatedGrid<Log>();
+    }// end of method
+
+
+    /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Lista creata dal programma."));
     }// end of method
 
 
@@ -109,6 +126,16 @@ public class LogViewList extends AGridViewList {
     public void updateItems() {
         Livello livello = (Livello) filtroComboBox.getValue();
         items = ((LogService) service).findAllByLivello(livello);
+    }// end of method
+
+
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        LogDialog dialog = appContext.getBean(LogDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 }// end of class

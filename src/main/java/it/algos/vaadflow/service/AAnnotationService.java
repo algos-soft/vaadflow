@@ -1094,6 +1094,10 @@ public class AAnnotationService extends AbstractService {
             type = getFormType(reflectionJavaField);
         }// end of if cycle
 
+        if (type == null) {
+            type = getFormType(reflectionJavaField);
+        }// end of if cycle
+
         return type;
     }// end of method
 

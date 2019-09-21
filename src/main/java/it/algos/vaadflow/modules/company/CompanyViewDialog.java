@@ -9,9 +9,8 @@ import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.person.Person;
-import it.algos.vaadflow.modules.person.PersonPresenter;
 import it.algos.vaadflow.modules.person.PersonService;
-import it.algos.vaadflow.modules.person.PersonViewDialog;
+import it.algos.vaadflow.modules.person.PersonDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -48,9 +47,8 @@ public class CompanyViewDialog extends AViewDialog<Company> {
     public static String CONTATTO = "contatto";
     public static String INDIRIZZO = "indirizzo";
 
-    protected PersonPresenter contattoPresenter;
     protected PersonService contattoService;
-    protected PersonViewDialog contattoDialog;
+    protected PersonDialog contattoDialog;
     protected Person contattoTemporaneo;
     protected ATextField contattoField;
 
@@ -81,11 +79,9 @@ public class CompanyViewDialog extends AViewDialog<Company> {
      */
     @Override
     protected void addSpecificAlgosFields() {
-        contattoPresenter = StaticContextAccessor.getBean(PersonPresenter.class);
-        contattoService = (PersonService) contattoPresenter.getService();
+        contattoService = StaticContextAccessor.getBean(PersonService.class);
 
-        contattoDialog = StaticContextAccessor.getBean(PersonViewDialog.class);
-        contattoDialog.setPresenter(contattoPresenter);
+        contattoDialog = StaticContextAccessor.getBean(PersonDialog.class);
         contattoDialog.fixFunzioni(this::saveUpdateCon, this::deleteUpdateCon, this::annullaCon);
         contattoDialog.fixConfermaAndNotRegistrazione();
         contattoField = (ATextField) getField(CONTATTO);

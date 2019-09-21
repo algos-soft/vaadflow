@@ -4,11 +4,13 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +28,11 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 26-ott-2018 9.59.58 <br>
+ * Fix date: 21-set-2019 7.14.53 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
+ * Necessario per la tipizzazione del binder <br>
+ * Costruita (nella List) con appContext.getBean(PersonDialog.class, service, entityClazz);
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Annotated with @SpringComponent (obbligatorio) <br>
@@ -42,7 +46,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Qualifier(TAG_PER)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class PersonViewDialog extends AViewDialog<Person> {
+public class PersonDialog extends AViewDialog<Person> {
 
 
     private final static String INDIRIZZO = "indirizzo";
@@ -61,16 +65,25 @@ public class PersonViewDialog extends AViewDialog<Person> {
 
 
     /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public PersonViewDialog(@Qualifier(TAG_PER) IAPresenter presenter) {
-        super(presenter);
+    public PersonDialog() {
     }// end of constructor
+
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public PersonDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
+
 
 
     /**
