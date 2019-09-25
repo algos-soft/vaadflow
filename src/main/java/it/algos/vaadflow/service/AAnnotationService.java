@@ -417,7 +417,7 @@ public class AAnnotationService extends AbstractService {
 
     /**
      * Restituisce il nome del menu
-     * 1) Cerca in @interface AIView della classe la property menuName
+     * 1) Cerca in @interface AIView della classe AViewList la property menuName
      * 2) Se non la trova, cerca nella classe la property statica MENU_NAME
      * 3) Se non la trova, di default usa la property 'value' di @interface Route
      *
@@ -460,6 +460,39 @@ public class AAnnotationService extends AbstractService {
         menuName = text.isValid(menuName) ? text.primaMaiuscola(menuName) : "Home";
 
         return menuName;
+    }// end of method
+
+
+    /**
+     * Restituisce il nome del record (da usare nel Dialog)
+     * 1) Cerca in @interface AIEntity della classe AEntity la property recordName
+     * 2) Se non lo trova, cerca in @interface Document della classe AEntity la property collection
+     *
+     * @param entityClazz the entity class
+     *
+     * @return the name of the recordName
+     */
+    public String getRecordName(final Class<? extends AEntity> entityClazz) {
+        String recordName = "";
+        AIEntity annotationEntity ;
+
+        /**
+         * 1) Cerca in @interface AIEntity della classe AEntity la property recordName
+         */
+        annotationEntity = this.getAIEntity(entityClazz);
+        if (annotationEntity != null) {
+            recordName = annotationEntity.recordName();
+        }// end of if cycle
+
+
+        /**
+         * 2) Se non la trova, cerca in @interface Document della classe AEntity la property collection
+         */
+        if (text.isEmpty(recordName)) {
+            recordName = getCollectionName(entityClazz);
+        }// end of if cycle
+
+        return recordName;
     }// end of method
 
 
@@ -572,9 +605,9 @@ public class AAnnotationService extends AbstractService {
      * @param clazz the entity class
      */
     @SuppressWarnings("all")
-    public EACompanyRequired getCompanyRequired(final Class<? extends AEntity> clazz) {
+    public EACompanyRequired getCompanyRequired(final Class<? extends AEntity> entityClazz) {
         EACompanyRequired companyRequired = EACompanyRequired.nonUsata;
-        AIEntity annotation = getAIEntity(clazz);
+        AIEntity annotation = getAIEntity(entityClazz);
 
         if (annotation != null) {
             companyRequired = annotation.company();
@@ -1058,6 +1091,10 @@ public class AAnnotationService extends AbstractService {
         }// end of if cycle
 
         if (type == EAFieldType.ugualeAlForm) {
+            type = getFormType(reflectionJavaField);
+        }// end of if cycle
+
+        if (type == null) {
             type = getFormType(reflectionJavaField);
         }// end of if cycle
 

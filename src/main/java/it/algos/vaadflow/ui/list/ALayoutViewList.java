@@ -11,13 +11,17 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AComboBox;
-import it.algos.vaadflow.ui.menu.*;
+import it.algos.vaadflow.ui.menu.AButtonMenu;
+import it.algos.vaadflow.ui.menu.APopupMenu;
+import it.algos.vaadflow.ui.menu.IAMenu;
 import lombok.extern.slf4j.Slf4j;
 
 import static it.algos.vaadflow.application.FlowCost.*;
@@ -41,13 +45,27 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 public abstract class ALayoutViewList extends APrefViewList {
 
     /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public ALayoutViewList(IAService service) {
+        super(service);
+    }// end of Vaadin/@Route constructor
+
+
+    /**
      * Costruttore <br>
      *
      * @param presenter per gestire la business logic del package
      * @param dialog    per visualizzare i fields
      */
-    public ALayoutViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog);
+    @Deprecated
+    public ALayoutViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+        super(presenter, dialog, service);
     }// end of Spring constructor
 
 
@@ -103,8 +121,8 @@ public abstract class ALayoutViewList extends APrefViewList {
                     this.add(menu.getComp());
                     break;
                 case flowing:
-                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
-                    this.add(menu.getComp());
+//                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
+//                    this.add(menu.getComp());
                     break;
                 case vaadin:
 //                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
@@ -183,7 +201,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 
-        if (usaBottoneDeleteAll && isDeveloper) {
+        if ((!FlowVar.usaSecurity && usaBottoneDeleteAll) || (isDeveloper && usaBottoneDeleteAll)) {
             deleteAllButton = new Button("Delete all", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
@@ -191,7 +209,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(deleteAllButton);
         }// end of if cycle
 
-        if (usaBottoneReset && isDeveloper) {
+        if ((!FlowVar.usaSecurity && usaBottoneReset) || (isDeveloper && usaBottoneReset)) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");

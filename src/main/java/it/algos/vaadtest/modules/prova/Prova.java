@@ -6,7 +6,7 @@ import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressPresenter;
+import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.mese.Mese;
 import it.algos.vaadflow.modules.mese.MeseService;
@@ -72,8 +72,8 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
-@AIList(fields = {"ordine", "pageid", "code", "colore","descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica"})
-@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica", "mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
+@AIList(fields = {"ordine", "pageid", "code", "colore","descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica","mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 @AIScript(sovrascrivibile = false)
 public class Prova extends ACEntity {
 
@@ -115,6 +115,7 @@ public class Prova extends ACEntity {
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true)
+    @AIColumn()
     public String code;
 
     /**
@@ -258,7 +259,7 @@ public class Prova extends ACEntity {
      * riferimento statico SENZA @DBRef (embedded)
      */
     @Field("ind")
-    @AIField(type = EAFieldType.link, linkClazz = AddressPresenter.class, help = "Indirizzo")
+    @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
     @AIColumn(name = "ind")
     public Address indirizzoStatico;
 

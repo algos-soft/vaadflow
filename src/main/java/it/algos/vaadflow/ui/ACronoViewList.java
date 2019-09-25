@@ -1,11 +1,17 @@
 package it.algos.vaadflow.ui;
 
 import com.vaadin.flow.component.html.Label;
+import it.algos.vaadflow.modules.anno.Anno;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.ALayoutViewList;
 import it.algos.vaadflow.ui.list.AViewList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 
 /**
  * Project vaadflow
@@ -14,16 +20,26 @@ import it.algos.vaadflow.ui.list.AViewList;
  * Date: dom, 14-ott-2018
  * Time: 16:28
  */
-//@SpringComponent
-//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-//@Slf4j
 public abstract class ACronoViewList extends AGridViewList {
+
+    /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public ACronoViewList(IAService service) {
+        super(service);
+    }// end of Vaadin/@Route constructor
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
+    @Deprecated
     public ACronoViewList(IAPresenter presenter, IADialog dialog) {
         super(presenter, dialog);
     }// end of Spring constructor
@@ -57,8 +73,7 @@ public abstract class ACronoViewList extends AGridViewList {
     protected void creaAlertLayout() {
         super.creaAlertLayout();
         alertPlacehorder.add(new Label("Lista visibile solo ai developer."));
-        alertPlacehorder.add(new Label("Serve per costruire liste cronologiche"));
-        alertPlacehorder.add(new Label("La lista viene creata in automatico allo startup del programma. Non si possono cancellare ne aggiungere elementi."));
+        alertPlacehorder.add(new Label("Serve per costruire liste cronologiche. La lista viene creata in automatico allo startup del programma."));
     }// end of method
 
 }// end of class

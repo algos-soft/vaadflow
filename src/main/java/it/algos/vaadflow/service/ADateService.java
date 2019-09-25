@@ -1165,7 +1165,7 @@ public class ADateService extends AbstractService {
         EAMese mese = EAMese.getMese(numMese);
         nomeMese = EAMese.getLong(numMese);
         giorniDelMese = EAMese.getGiorni(numMese, 2016);
-        final int taglioBisestile = 60;
+        final int taglioBisestile = 59;
         String tag;
         String tagUno;
 

@@ -2,8 +2,6 @@ package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.UI;
-//import com.vaadin.flow.component.applayout.AppLayoutMenu;
-//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.icon.Icon;
@@ -16,6 +14,7 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AMongoService;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
@@ -31,6 +30,10 @@ import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+
+//import com.vaadin.flow.component.applayout.AppLayoutMenu;
+//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+
 
 /**
  * Project it.algos.vaadflow
@@ -94,11 +97,25 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public AViewList(IAService service) {
+        this.service = service;
+    }// end of Vaadin/@Route constructor
+
+    /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
-    public AViewList(IAPresenter presenter, IADialog dialog) {
+    @Deprecated
+    public AViewList(IAPresenter presenter, IADialog dialog, IAService service) {
         this.presenter = presenter;
+        this.service = service;
         this.dialog = dialog;
         if (presenter != null) {
             this.presenter.setView(this);
@@ -113,8 +130,10 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      */
-    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit) {
+    @Deprecated
+    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit, IAService service) {
         this.presenter = presenter;
+        this.service = service;
         this.dialog = dialog;
         if (presenter != null) {
             this.presenter.setView(this);
@@ -347,7 +366,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     protected Button createEditButton(AEntity entityBean) {
-        Button edit = new Button("", event -> dialog.open(entityBean, EAOperation.edit, context));
+        Button edit = new Button("", event -> openDialog(entityBean));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -369,8 +388,21 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    /**
+     * Apertura del dialogo per una nuova entity <br>
+     * Sovrascritto <br>
+     */
     protected void openNew() {
-        dialog.open(service.newEntity(), EAOperation.addNew, context);
+//        dialog.open(service.newEntity(), EAOperation.addNew, context);
+        openDialog(null);
+    }// end of method
+
+    /**
+     * Apertura del dialogo per una entity esistente <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        dialog.open(entityBean, EAOperation.edit, context);
     }// end of method
 
 

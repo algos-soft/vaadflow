@@ -18,7 +18,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.ui.dialog.AConfirmDialog;
 import it.algos.vaadflow.ui.dialog.IADialog;
@@ -70,7 +70,6 @@ import static it.algos.vaadtest.application.TestCost.*;
 public class ProvaViewList extends AGridViewList {
 
     /**
-     * Icona visibile nel menu (facoltativa)
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
      * Se manca il MENU_NAME, di default usa il 'name' della view
      */
@@ -98,6 +97,7 @@ public class ProvaViewList extends AGridViewList {
 
     /**
      * Costruttore @Autowired <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
      *
@@ -105,11 +105,11 @@ public class ProvaViewList extends AGridViewList {
      * @param dialog    per visualizzare i fields
      */
     @Autowired
+    @Deprecated
     public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
         super(presenter, dialog);
         ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
-    }// end of Spring constructor
-
+    }// end of Vaadin/@Route constructor
 
     /**
      * Le preferenze standard <br>
@@ -271,7 +271,7 @@ public class ProvaViewList extends AGridViewList {
      */
     @Override
     protected void addSpecificRoutes() {
-        addRoute(SecoloViewList.class);
+        addRoute(SecoloList.class);
     }// end of method
 
 

@@ -69,7 +69,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected final Div titleLayout = new Div();
+    protected final Div titlePlaceholder = new Div();
 
     /**
      * Corpo centrale del Form <br>
@@ -164,6 +164,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected LinkedHashMap<String, AbstractField> fieldMap;
 
+    @Autowired
     protected AFieldService fieldService;
 
     protected T currentItem;
@@ -190,8 +191,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     private Consumer<T> itemDeleter;
 
-    private String itemType;
-
     private Registration registrationForSave;
 
     /**
@@ -203,10 +202,20 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso il parametro del costruttore usato <br>
+     */
+    public AViewDialog() {
+    }// end of constructor
+
+
+    /**
      * Constructs a new instance.
      *
      * @param presenter per gestire la business logic del package
      */
+    @Deprecated
     public AViewDialog(IAPresenter presenter) {
         this(presenter, null, null);
     }// end of constructor
@@ -236,17 +245,33 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     @Deprecated
     public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
-        this.presenter = presenter;
-        this.service = presenter.getService();
+        if (presenter != null) {
+            this.presenter = presenter;
+            this.service = presenter.getService();
+            this.binderClass = presenter.getEntityClazz();
+            this.fieldService = presenter.getService().getFieldService();
+        }// end of if cycle
+
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
         this.itemAnnulla = itemAnnulla;
-        this.binderClass = presenter.getEntityClazz();
-        this.fieldService = presenter.getService().getFieldService();
 
         if (confermaSenzaRegistrare) {
             this.fixConfermaAndNotRegistrazione();
         }// end of if cycle
+    }// end of constructor
+
+
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public AViewDialog(IAService service, Class<? extends AEntity> binderClass) {
+        this.service = service;
+        this.binderClass = binderClass;
     }// end of constructor
 
 
@@ -291,15 +316,17 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
+    @Deprecated
     public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         fixFunzioni(itemSaver, itemDeleter, null);
     }// end of method
 
 
+    @Deprecated
     public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
-        this.itemAnnulla = itemAnnulla;
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
+        this.itemAnnulla = itemAnnulla;
     }// end of method
 
 
@@ -344,7 +371,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Placeholder (eventuale, presente di default) <br>
      */
     private Component creaTitleLayout() {
-        return titleLayout;
+        return titlePlaceholder;
     }// end of method
 
 
@@ -422,16 +449,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation, AContext context) {
-        open(item, operation, context, "");
+    @Deprecated
+    public void open(AEntity entityBean, EAOperation operation, AContext context) {
+        open(entityBean, operation, context, "");
     }// end of method
 
 
@@ -443,10 +463,37 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param entityBean The item to edit; it may be an existing or a newly created instance
      * @param operation  The operation being performed on the item
      * @param context    legato alla sessione
-     * @param title      of the window dialog
      */
     @Override
+    @Deprecated
     public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     *
+     * @param entityBean  The item to edit; it may be an existing or a newly created instance
+     * @param operation   The operation being performed on the item
+     * @param itemSaver   funzione associata al bottone 'registra'
+     * @param itemDeleter funzione associata al bottone 'annulla'
+     */
+    public void open(AEntity entityBean, EAOperation operation, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+        this.itemSaver = itemSaver;
+        this.itemDeleter = itemDeleter;
+        open(entityBean, operation);
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     * Riceve la entityBean <br>
+     * Crea i fields <br>
+     *
+     * @param entityBean The item to edit; it may be an existing or a newly created instance
+     * @param operation  The operation being performed on the item
+     */
+    public void open(AEntity entityBean, EAOperation operation) {
         //--controllo iniziale di sicurezza
         if (service == null) {
             return;
@@ -456,6 +503,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
+
+        if (entityBean == null) {
+            entityBean = service.newEntity();
+            operation = EAOperation.addNew;
+        }// end of if cycle
+
         if (entityBean == null) {
             Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
@@ -463,17 +516,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         this.currentItem = (T) entityBean;
         this.operation = operation;
-        this.context = context;
-        Object view = presenter.getView();
-        if (view != null) {
-            this.itemType = presenter.getView().getMenuName();
-        }// end of if cycle
-        this.fixTitleLayout(title);
+        this.fixTitleLayout();
 
         if (registrationForSave != null) {
             registrationForSave.remove();
         }
-        registrationForSave = saveButton.addClickListener(e -> saveClicked(operation));
+        registrationForSave = saveButton.addClickListener(e -> saveClicked(this.operation));
 
         //--Controlla la visibilità dei bottoni
         saveButton.setVisible(operation.isSaveEnabled());
@@ -488,12 +536,16 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     /**
      * Regola il titolo del dialogo <br>
+     * Recupera recordName dalle @Annotation della classe Entity. Non dovrebbe mai essere vuoto. <br>
+     * Costruisce il titolo con la descrizione dell'operazione (New, Edit,...) ed il recordName <br>
+     * Sostituisce interamente il titlePlaceholder <br>
      */
-    protected void fixTitleLayout(String title) {
-        title = text.isValid(title) ? title : text.isValid(itemType) ? itemType : "Error";
-//        title = title.equals("") ? itemType : title;
-        titleLayout.removeAll();
-        titleLayout.add(new H2(operation.getNameInTitle() + " " + title.toLowerCase()));
+    protected void fixTitleLayout() {
+        String recordName = annotation.getRecordName(binderClass);
+        String title = text.isValid(recordName) ? recordName : "Error";
+
+        titlePlaceholder.removeAll();
+        titlePlaceholder.add(new H2(operation.getNameInTitle() + " " + title.toLowerCase()));
     }// end of method
 
 

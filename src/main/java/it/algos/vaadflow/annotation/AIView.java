@@ -22,7 +22,7 @@ public @interface AIView {
     /**
      * (Optional) Label del menu
      * Vaadin usa SEMPRE il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
-     * Nella menuBar appare invece visibile il menuName, indicato qui (con il primo carattere maiuscolo)
+     * Nella menuBar appare invece visibile (con il primo carattere maiuscolo) il menuName, indicato qui
      * Di default usa il 'name' della view (@Route)
      */
     String menuName() default "";

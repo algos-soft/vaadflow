@@ -150,17 +150,17 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.flowingcode.addons.applayout</groupId>
-            <artifactId>app-layout-addon</artifactId>
-            <version>1.0.6</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.flowingcode.addons.applayout</groupId>-->
+<!--            <artifactId>app-layout-addon</artifactId>-->
+<!--            <version>1.0.6</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-simple</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <!-- Security -->
         <dependency>

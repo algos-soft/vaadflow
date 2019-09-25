@@ -4,12 +4,13 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadflow.modules.anno.AnnoViewList;
-import it.algos.vaadflow.modules.giorno.GiornoViewList;
-import it.algos.vaadflow.modules.mese.MeseViewList;
+import it.algos.vaadtest.modules.beta.BetaList;
+import it.algos.vaadflow.modules.anno.AnnoList;
+import it.algos.vaadflow.modules.giorno.GiornoList;
+import it.algos.vaadflow.modules.mese.MeseList;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
 import it.algos.vaadflow.modules.preferenza.EAPreferenza;
-import it.algos.vaadflow.modules.secolo.SecoloViewList;
+import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.prova.ProvaService;
@@ -141,13 +142,13 @@ public class TestBoot extends ABoot {
          * Versione dell'applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
-        FlowVar.projectVersion = 1.3;
+        FlowVar.projectVersion = 1.4;
 
         /**
          * Data della versione dell'applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
-        FlowVar.versionDate = LocalDate.of(2019, 8, 13);
+        FlowVar.versionDate = LocalDate.of(2019, 9, 20);
 
         /**
          * Service da usare per recuperare dal mongoDB l'utenza loggata tramite 'username' che è unico <br>
@@ -187,13 +188,14 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowVar.menuClazzList.add(GiornoViewList.class);
-        FlowVar.menuClazzList.add(AnnoViewList.class);
-        FlowVar.menuClazzList.add(MeseViewList.class);
-        FlowVar.menuClazzList.add(SecoloViewList.class);
+        FlowVar.menuClazzList.add(GiornoList.class);
+        FlowVar.menuClazzList.add(AnnoList.class);
+        FlowVar.menuClazzList.add(MeseList.class);
+        FlowVar.menuClazzList.add(SecoloList.class);
         FlowVar.menuClazzList.add(ProvaViewList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
-    }// end of method
+		FlowVar.menuClazzList.add(BetaList.class);
+	}// end of method
 
 
 }// end of boot class
