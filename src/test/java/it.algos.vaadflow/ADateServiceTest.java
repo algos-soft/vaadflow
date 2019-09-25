@@ -1165,7 +1165,6 @@ public class ADateServiceTest extends ATest {
     @Test
     public void getDataOraComplete() {
         ottenuto = service.getDataOraComplete();
-
         System.out.println("*************");
         System.out.println("Data e ora attuali nella forma " + EATime.completaOrario.getEsempio());
         System.out.println("*************");
