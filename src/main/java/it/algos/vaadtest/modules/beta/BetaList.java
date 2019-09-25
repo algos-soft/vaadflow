@@ -4,16 +4,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadtest.application.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadtest.application.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -66,8 +65,7 @@ public class BetaList extends AGridViewList {
      */
     @Autowired
     public BetaList(@Qualifier(TAG_BET) IAService service) {
-        super(service);
-        super.entityClazz = Beta.class;
+        super(service, Beta.class);
     }// end of Vaadin/@Route constructor
 
 

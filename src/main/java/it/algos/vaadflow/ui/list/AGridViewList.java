@@ -57,6 +57,18 @@ public abstract class AGridViewList extends ALayoutViewList {
     public AGridViewList(IAService service) {
         super(service);
     }// end of Vaadin/@Route constructor
+    /**
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     *
+     * @param service business class e layer di collegamento per la Repository
+     */
+    public AGridViewList(IAService service, Class clazz) {
+        super(service);
+        super.entityClazz = clazz;
+    }// end of Vaadin/@Route constructor
 
 
     /**
