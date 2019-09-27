@@ -111,41 +111,41 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of Vaadin/@Route constructor
 
 
-    /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     */
-    @Deprecated
-    public AViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        this.presenter = presenter;
-        this.service = service;
-        this.dialog = dialog;
-        if (presenter != null) {
-            this.presenter.setView(this);
-            this.service = presenter.getService();
-            this.entityClazz = presenter.getEntityClazz();
-        }// end of if cycle
-    }// end of Spring constructor
+//    /**
+//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+//     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
+//     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+//     */
+//    @Deprecated
+//    public AViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+//        this.presenter = presenter;
+//        this.service = service;
+//        this.dialog = dialog;
+//        if (presenter != null) {
+//            this.presenter.setView(this);
+//            this.service = presenter.getService();
+//            this.entityClazz = presenter.getEntityClazz();
+//        }// end of if cycle
+//    }// end of Spring constructor
 
 
-    /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     */
-    @Deprecated
-    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit, IAService service) {
-        this.presenter = presenter;
-        this.service = service;
-        this.dialog = dialog;
-        if (presenter != null) {
-            this.presenter.setView(this);
-            this.service = presenter.getService();
-            this.entityClazz = presenter.getEntityClazz();
-        }// end of if cycle
-        this.routeNameFormEdit = routeNameFormEdit;
-    }// end of Spring constructor
+//    /**
+//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+//     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
+//     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+//     */
+//    @Deprecated
+//    public AViewList(IAPresenter presenter, IADialog dialog, String routeNameFormEdit, IAService service) {
+//        this.presenter = presenter;
+//        this.service = service;
+//        this.dialog = dialog;
+//        if (presenter != null) {
+//            this.presenter.setView(this);
+//            this.service = presenter.getService();
+//            this.entityClazz = presenter.getEntityClazz();
+//        }// end of if cycle
+//        this.routeNameFormEdit = routeNameFormEdit;
+//    }// end of Spring constructor
 
 
     /**

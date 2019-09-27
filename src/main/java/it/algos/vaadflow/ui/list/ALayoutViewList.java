@@ -45,6 +45,7 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 @Slf4j
 public abstract class ALayoutViewList extends APrefViewList {
 
+
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -72,16 +73,16 @@ public abstract class ALayoutViewList extends APrefViewList {
 //    }// end of Vaadin/@Route constructor
 
 
-    /**
-     * Costruttore <br>
-     *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
-     */
-    @Deprecated
-    public ALayoutViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        super(presenter, dialog, service);
-    }// end of Spring constructor
+//    /**
+//     * Costruttore <br>
+//     *
+//     * @param presenter per gestire la business logic del package
+//     * @param dialog    per visualizzare i fields
+//     */
+//    @Deprecated
+//    public ALayoutViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+//        super(presenter, dialog, service);
+//    }// end of Spring constructor
 
 
     /**

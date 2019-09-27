@@ -75,22 +75,22 @@ public abstract class AGridViewList extends ALayoutViewList {
 //    }// end of Vaadin/@Route constructor
 
 
-    /**
-     * Costruttore <br>
-     *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
-     */
-    @Deprecated
-    public AGridViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog, null);
-    }// end of Spring constructor
-
-
-    @Deprecated
-    public AGridViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        super(presenter, dialog, service);
-    }// end of Spring constructor
+//    /**
+//     * Costruttore <br>
+//     *
+//     * @param presenter per gestire la business logic del package
+//     * @param dialog    per visualizzare i fields
+//     */
+//    @Deprecated
+//    public AGridViewList(IAPresenter presenter, IADialog dialog) {
+//        super(presenter, dialog, null);
+//    }// end of Spring constructor
+//
+//
+//    @Deprecated
+//    public AGridViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+//        super(presenter, dialog, service);
+//    }// end of Spring constructor
 
 
     /**

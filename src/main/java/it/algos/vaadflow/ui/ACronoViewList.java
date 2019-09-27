@@ -37,15 +37,15 @@ public abstract class ACronoViewList extends AGridViewList {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
 
-    /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     */
-    @Deprecated
-    public ACronoViewList(IAPresenter presenter, IADialog dialog) {
-        super(presenter, dialog);
-    }// end of Spring constructor
+//    /**
+//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+//     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
+//     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+//     */
+//    @Deprecated
+//    public ACronoViewList(IAPresenter presenter, IADialog dialog) {
+//        super(presenter, dialog);
+//    }// end of Spring constructor
 
 
     /**

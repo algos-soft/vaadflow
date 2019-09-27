@@ -36,16 +36,16 @@ public abstract class APrefViewList extends AViewList {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
 
-    /**
-     * Costruttore <br>
-     *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
-     */
-   @Deprecated
-    public APrefViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-        super(presenter, dialog,service);
-    }// end of Spring constructor
+//    /**
+//     * Costruttore <br>
+//     *
+//     * @param presenter per gestire la business logic del package
+//     * @param dialog    per visualizzare i fields
+//     */
+//   @Deprecated
+//    public APrefViewList(IAPresenter presenter, IADialog dialog, IAService service) {
+//        super(presenter, dialog,service);
+//    }// end of Spring constructor
 
 
     /**
