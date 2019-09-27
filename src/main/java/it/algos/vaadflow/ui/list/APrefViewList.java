@@ -22,6 +22,7 @@ import it.algos.vaadflow.ui.dialog.IADialog;
  */
 public abstract class APrefViewList extends AViewList {
 
+
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -36,16 +37,6 @@ public abstract class APrefViewList extends AViewList {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
 
-//    /**
-//     * Costruttore <br>
-//     *
-//     * @param presenter per gestire la business logic del package
-//     * @param dialog    per visualizzare i fields
-//     */
-//   @Deprecated
-//    public APrefViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-//        super(presenter, dialog,service);
-//    }// end of Spring constructor
 
 
     /**
@@ -55,7 +46,6 @@ public abstract class APrefViewList extends AViewList {
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
      */
     protected void fixPreferenze() {
-
 
         /**
          * Flag di preferenza per usare la ricerca e selezione nella barra dei menu. <br>

@@ -75,13 +75,6 @@ public class ProvaList extends AGridViewList {
      */
     public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
-//    /**
-//     * Label del menu (facoltativa)
-//     * Vaadin usa il 'name' della Annotation @Route per identificare (internamente) e recuperare la view
-//     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-//     * Se manca il MENU_NAME, di default usa il 'name' della view
-//     */
-//    public static final String MENU_NAME = "pluto";
 
     private AComboBox<String> comboUpload;
 

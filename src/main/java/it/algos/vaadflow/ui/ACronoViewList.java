@@ -23,6 +23,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
  */
 public abstract class ACronoViewList extends AGridViewList {
 
+
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -36,16 +37,6 @@ public abstract class ACronoViewList extends AGridViewList {
     public ACronoViewList(IAService service, Class<? extends AEntity> entityClazz) {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
-
-//    /**
-//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-//     * La sottoclasse usa un @Qualifier(), per avere la sottoclasse specifica <br>
-//     * La sottoclasse usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-//     */
-//    @Deprecated
-//    public ACronoViewList(IAPresenter presenter, IADialog dialog) {
-//        super(presenter, dialog);
-//    }// end of Spring constructor
 
 
     /**

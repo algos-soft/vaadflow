@@ -46,6 +46,7 @@ import static it.algos.vaadflow.application.FlowCost.USA_SEARCH_CASE_SENSITIVE;
 @Slf4j
 public abstract class AGridViewList extends ALayoutViewList {
 
+
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -59,38 +60,6 @@ public abstract class AGridViewList extends ALayoutViewList {
     public AGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
-
-
-//    /**
-//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-//     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
-//     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-//     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
-//     *
-//     * @param service business class e layer di collegamento per la Repository
-//     */
-//    public AGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
-//        super(service);
-//        super.entityClazz = entityClazz;
-//    }// end of Vaadin/@Route constructor
-
-
-//    /**
-//     * Costruttore <br>
-//     *
-//     * @param presenter per gestire la business logic del package
-//     * @param dialog    per visualizzare i fields
-//     */
-//    @Deprecated
-//    public AGridViewList(IAPresenter presenter, IADialog dialog) {
-//        super(presenter, dialog, null);
-//    }// end of Spring constructor
-//
-//
-//    @Deprecated
-//    public AGridViewList(IAPresenter presenter, IADialog dialog, IAService service) {
-//        super(presenter, dialog, service);
-//    }// end of Spring constructor
 
 
     /**
