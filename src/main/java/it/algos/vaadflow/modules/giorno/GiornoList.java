@@ -52,13 +52,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 public class GiornoList extends ACronoViewList {
 
 
-    /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.CALENDAR;
-
     public static final String IRON_ICON = "today";
 
 
@@ -77,13 +70,13 @@ public class GiornoList extends ACronoViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
     public GiornoList(@Qualifier(TAG_GIO) IAService service) {
-        super(service);
-        super.entityClazz = Giorno.class;
+        super(service, Giorno.class);
     }// end of Vaadin/@Route constructor
 
 
@@ -111,6 +104,7 @@ public class GiornoList extends ACronoViewList {
         super.creaAlertLayout();
         alertPlacehorder.add(new Label("Considerando il 29 febbraio, ci sono 366 giorni. Non si possono cancellare ne aggiungere elementi."));
     }// end of method
+
 
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>

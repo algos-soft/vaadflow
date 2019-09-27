@@ -5,15 +5,16 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.ui.MainLayout14;
-import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
@@ -48,25 +49,17 @@ public class AddressList extends AGridViewList {
 
 
     /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
-
-
-    /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
     public AddressList(@Qualifier(TAG_ADD) IAService service) {
-        super(service);
-        super.entityClazz = Address.class;
+        super(service, Address.class);
     }// end of Vaadin/@Route constructor
 
 

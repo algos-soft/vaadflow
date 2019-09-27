@@ -105,8 +105,7 @@ public class ProvaList extends AGridViewList {
      */
     @Autowired
     public ProvaList(@Qualifier(TAG_PRO) IAService service) {
-        super(service);
-        super.entityClazz = Prova.class;
+        super(service, Prova.class);
     }// end of Vaadin/@Route constructor
 
 

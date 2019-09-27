@@ -50,13 +50,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 public class UtenteList extends AGridViewList {
 
 
-    /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.USER;
-
     public static final String IRON_ICON = "account-circle";
 
     private PasswordEncoder passwordEncoder;
@@ -67,13 +60,13 @@ public class UtenteList extends AGridViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
     public UtenteList(@Qualifier(TAG_UTE) IAService service) {
-        super(service);
-        super.entityClazz = Utente.class;
+        super(service, Utente.class);
     }// end of Vaadin/@Route constructor
 
 

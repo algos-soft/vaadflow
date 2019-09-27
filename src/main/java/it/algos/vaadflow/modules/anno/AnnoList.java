@@ -51,12 +51,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @AIView(vaadflow = true, menuName = "anni", searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
 public class AnnoList extends ACronoViewList {
 
-    /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
     public static final String IRON_ICON = "today";
 
@@ -76,13 +70,13 @@ public class AnnoList extends ACronoViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
     public AnnoList(@Qualifier(TAG_ANN) IAService service) {
-        super(service);
-        super.entityClazz = Anno.class;
+        super(service, Anno.class);
     }// end of Vaadin/@Route constructor
 
 

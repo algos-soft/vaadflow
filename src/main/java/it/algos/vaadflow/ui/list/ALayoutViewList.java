@@ -13,6 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAMenu;
 import it.algos.vaadflow.presenter.IAPresenter;
@@ -45,16 +46,30 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 public abstract class ALayoutViewList extends APrefViewList {
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
+     * @param entityClazz modello-dati specifico di questo modulo
      */
-    public ALayoutViewList(IAService service) {
-        super(service);
+    public ALayoutViewList(IAService service, Class<? extends AEntity> entityClazz) {
+        super(service, entityClazz);
     }// end of Vaadin/@Route constructor
+
+//    /**
+//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+//     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+//     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+//     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+//     *
+//     * @param service business class e layer di collegamento per la Repository
+//     */
+//    public ALayoutViewList(IAService service) {
+//        super(service);
+//    }// end of Vaadin/@Route constructor
 
 
     /**

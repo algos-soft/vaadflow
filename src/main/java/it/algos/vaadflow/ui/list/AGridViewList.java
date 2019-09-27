@@ -47,30 +47,32 @@ import static it.algos.vaadflow.application.FlowCost.USA_SEARCH_CASE_SENSITIVE;
 public abstract class AGridViewList extends ALayoutViewList {
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
-     */
-    public AGridViewList(IAService service) {
-        super(service);
-    }// end of Vaadin/@Route constructor
-
-
-    /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
-     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
-     *
-     * @param service business class e layer di collegamento per la Repository
+     * @param entityClazz modello-dati specifico di questo modulo
      */
     public AGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
-        super(service);
-        super.entityClazz = entityClazz;
+        super(service, entityClazz);
     }// end of Vaadin/@Route constructor
+
+
+//    /**
+//     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+//     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+//     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+//     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+//     *
+//     * @param service business class e layer di collegamento per la Repository
+//     */
+//    public AGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
+//        super(service);
+//        super.entityClazz = entityClazz;
+//    }// end of Vaadin/@Route constructor
 
 
     /**

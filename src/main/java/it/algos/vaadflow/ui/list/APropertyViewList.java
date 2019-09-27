@@ -175,7 +175,7 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected IAService service;
 
     /**
-     * Il modello-dati specifico viene recuperato dal presenter <br>
+     * Modello-dati specifico <br>
      */
     protected Class<? extends AEntity> entityClazz;
 

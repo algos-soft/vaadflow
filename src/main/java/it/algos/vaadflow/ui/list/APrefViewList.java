@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui.list;
 
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
@@ -22,15 +23,17 @@ import it.algos.vaadflow.ui.dialog.IADialog;
 public abstract class APrefViewList extends AViewList {
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
+     * @param entityClazz modello-dati specifico di questo modulo
      */
-    public APrefViewList(IAService service) {
-        super(service);
+    public APrefViewList(IAService service, Class<? extends AEntity> entityClazz) {
+        super(service, entityClazz);
     }// end of Vaadin/@Route constructor
 
     /**

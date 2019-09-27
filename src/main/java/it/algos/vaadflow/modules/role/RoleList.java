@@ -8,8 +8,8 @@ import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,15 +46,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 public class RoleList extends AGridViewList {
 
 
-    /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.MENU;
-
     public static final String IRON_ICON = "menu";
-
 
 
     /**
@@ -62,14 +54,15 @@ public class RoleList extends AGridViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
     public RoleList(@Qualifier(TAG_ROL) IAService service) {
-        super(service);
-        super.entityClazz = Role.class;
+        super(service, Role.class);
     }// end of Vaadin/@Route constructor
+
 
     /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
@@ -97,6 +90,7 @@ public class RoleList extends AGridViewList {
         super.creaAlertLayout();
         alertPlacehorder.add(new Label("Serve per aggiungere altre eventuali 'authority' specifiche dell'applicazione"));
     }// end of method
+
 
     /**
      * Apertura del dialogo per una entity esistente oppure nuova <br>

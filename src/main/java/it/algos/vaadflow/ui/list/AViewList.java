@@ -96,16 +96,20 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
-     * @param service business class e layer di collegamento per la Repository
+     * @param service     business class e layer di collegamento per la Repository
+     * @param entityClazz modello-dati specifico di questo modulo
      */
-    public AViewList(IAService service) {
+    public AViewList(IAService service, Class<? extends AEntity> entityClazz) {
         this.service = service;
+        this.entityClazz = entityClazz;
     }// end of Vaadin/@Route constructor
+
 
     /**
      * Costruttore @Autowired (nella sottoclasse concreta) <br>
@@ -396,6 +400,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 //        dialog.open(service.newEntity(), EAOperation.addNew, context);
         openDialog(null);
     }// end of method
+
 
     /**
      * Apertura del dialogo per una entity esistente <br>

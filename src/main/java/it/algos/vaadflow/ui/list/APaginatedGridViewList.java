@@ -1,5 +1,6 @@
 package it.algos.vaadflow.ui.list;
 
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -17,29 +18,18 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 public abstract class APaginatedGridViewList extends ALayoutViewList {
 
     /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
+     * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
+     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
+     * @param entityClazz modello-dati specifico di questo modulo
      */
-    public APaginatedGridViewList(IAService service) {
-        super(service);
+    public APaginatedGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
+        super(service, entityClazz);
     }// end of Vaadin/@Route constructor
 
-
-    /**
-     * Costruttore @Autowired (nella sottoclasse concreta) <br>
-     * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
-     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
-     *
-     * @param service business class e layer di collegamento per la Repository
-     */
-    public APaginatedGridViewList(IAService service, Class clazz) {
-        super(service);
-        super.entityClazz = clazz;
-    }// end of Vaadin/@Route constructor
 
 }// end of class
