@@ -1,5 +1,6 @@
 package it.algos.vaadflow.annotation;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.modules.role.EARoleType;
 
 import java.lang.annotation.ElementType;
@@ -28,9 +29,20 @@ public @interface AIView {
     String menuName() default "";
 
     /**
+     * (Optional) Icona visibile nel menu
+     * Di default un asterisco
+     */
+    VaadinIcon menuIcon() default VaadinIcon.ASTERISK;
+
+    /**
      * (Optional) Property per la ricerca tramite il searchField
      */
     String searchProperty() default "";
+
+    /**
+     * (Optional) Appartenenza al progetto Base VaadFlow
+     */
+    boolean vaadflow() default false;
 
     /**
      * (Optional) Visibilità a secondo del ruolo dell'User collegato
@@ -38,9 +50,5 @@ public @interface AIView {
      */
     EARoleType roleTypeVisibility() default EARoleType.user;
 
-    /**
-     * (Optional) Appartenenza al progetto Base VaadFlow
-     */
-    boolean vaadflow() default false;
 
 }// end of interface annotation

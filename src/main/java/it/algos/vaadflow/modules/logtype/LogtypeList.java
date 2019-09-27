@@ -6,18 +6,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadtest.application.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
-import lombok.extern.slf4j.Slf4j;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.MainLayout14;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
@@ -41,21 +37,15 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la sottoclasse specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * Annotated with @AIView (facoltativo Algos) per regolare alcune property associate a questa classe <br>
  */
 @UIScope
 @Route(value = TAG_TYP, layout = MainLayout14.class)
 @Qualifier(TAG_TYP)
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = true, menuName = "logTypes", searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "logTypes", menuIcon = VaadinIcon.ASTERISK, searchProperty = "code")
 public class LogtypeList extends AGridViewList {
 
-
-    /**
-     * Icona visibile nel menu (facoltativa)
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
     /**
@@ -68,8 +58,7 @@ public class LogtypeList extends AGridViewList {
      */
     @Autowired
     public LogtypeList(@Qualifier(TAG_TYP) IAService service) {
-        super(service);
-        super.entityClazz = Logtype.class;
+        super(service, Logtype.class);
     }// end of Vaadin/@Route constructor
 
 
@@ -105,6 +94,7 @@ public class LogtypeList extends AGridViewList {
 
     /**
      * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
      * Sovrascritto <br>
      */
     protected void openDialog(AEntity entityBean) {

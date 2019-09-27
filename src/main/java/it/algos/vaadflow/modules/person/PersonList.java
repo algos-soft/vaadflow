@@ -8,19 +8,13 @@ import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadtest.application.MainLayout14;
-import it.algos.vaadtest.modules.beta.Beta;
-import it.algos.vaadtest.modules.beta.BetaDialog;
+import it.algos.vaadflow.ui.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
-import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
-import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadflow <br>

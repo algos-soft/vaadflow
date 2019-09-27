@@ -14,7 +14,7 @@ import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.prova.ProvaService;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
+import it.algos.vaadtest.modules.prova.ProvaList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -192,7 +192,7 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(AnnoList.class);
         FlowVar.menuClazzList.add(MeseList.class);
         FlowVar.menuClazzList.add(SecoloList.class);
-        FlowVar.menuClazzList.add(ProvaViewList.class);
+        FlowVar.menuClazzList.add(ProvaList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
 		FlowVar.menuClazzList.add(BetaList.class);
 	}// end of method

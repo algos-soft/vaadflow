@@ -13,8 +13,7 @@ import it.algos.vaadflow.modules.mese.MeseService;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.ACronoViewList;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadflow.ui.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,6 +95,7 @@ public class GiornoList extends ACronoViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
         super.grid = new PaginatedGrid<Giorno>();
     }// end of method
 

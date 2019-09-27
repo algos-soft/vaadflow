@@ -17,14 +17,14 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloList;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AConfirmDialog;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadtest.application.MainLayout14;
+import it.algos.vaadflow.ui.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,9 +65,9 @@ import static it.algos.vaadtest.application.TestCost.*;
 @Route(value = TAG_PRO, layout = MainLayout14.class)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIView(menuName = "prove", searchProperty = "code", roleTypeVisibility = EARoleType.user)
-@AIScript(sovrascrivibile = true)
-public class ProvaViewList extends AGridViewList {
+@AIScript(sovrascrivibile = false)
+@AIView(vaadflow = false, menuName = "prove", searchProperty = "code", roleTypeVisibility = EARoleType.user)
+public class ProvaList extends AGridViewList {
 
     /**
      * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
@@ -98,18 +98,17 @@ public class ProvaViewList extends AGridViewList {
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
+     * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
+     * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
      *
-     * @param presenter per gestire la business logic del package
-     * @param dialog    per visualizzare i fields
+     * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    @Deprecated
-    public ProvaViewList(@Qualifier(TAG_PRO) IAPresenter presenter, @Qualifier(TAG_PRO) IADialog dialog) {
-        super(presenter, dialog);
-        ((ProvaViewDialog) dialog).fixFunzioni(this::save, this::delete);
+    public ProvaList(@Qualifier(TAG_PRO) IAService service) {
+        super(service);
+        super.entityClazz = Prova.class;
     }// end of Vaadin/@Route constructor
+
 
     /**
      * Le preferenze standard <br>
@@ -126,7 +125,7 @@ public class ProvaViewList extends AGridViewList {
         super.usaSearchDialog = false;
         super.usaPopupFiltro = false;
         super.usaBottoneEdit = true;
-        super.usaPagination = true;
+        super.usaPagination = false;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
@@ -565,6 +564,14 @@ public class ProvaViewList extends AGridViewList {
         this.updateView();
 
         creaAlertLayout();
+    }// end of method
+    /**
+     * Apertura del dialogo per una entity esistente oppure nuova <br>
+     * Sovrascritto <br>
+     */
+    protected void openDialog(AEntity entityBean) {
+        ProvaDialog dialog = appContext.getBean(ProvaDialog.class, service, entityClazz);
+        dialog.open(entityBean, EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 

@@ -13,12 +13,14 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
 import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -55,8 +57,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIScript(sovrascrivibile = true)
-public class ProvaViewDialog extends AViewDialog<Prova> {
+@AIScript(sovrascrivibile = false)
+public class ProvaDialog extends AViewDialog<Prova> {
 
     private final static String INDIRIZZO = "indirizzoStatico";
 
@@ -73,22 +75,24 @@ public class ProvaViewDialog extends AViewDialog<Prova> {
 
 
     /**
-     * Costruttore @Autowired <br>
-     * Si usa un @Qualifier(), per avere la sottoclasse specifica <br>
-     * Si usa una costante statica, per essere sicuri di scrivere sempre uguali i riferimenti <br>
-     *
-     * @param presenter per gestire la business logic del package
+     * Costruttore base senza parametri <br>
+     * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
-    @Autowired
-    public ProvaViewDialog(@Qualifier(TAG_PRO) IAPresenter presenter) {
-        super(presenter);
-    }// end of Spring constructor
+    public ProvaDialog() {
+    }// end of constructor
 
 
-//    @Override
-//    protected void initButtonBar() {
-//        super.initButtonBar();
-//    }
+    /**
+     * Costruttore base con parametri <br>
+     * L'istanza DEVE essere creata con appContext.getBean(GiornoDialog.class, service, entityClazz); <br>
+     *
+     * @param service     business class e layer di collegamento per la Repository
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
+     */
+    public ProvaDialog(IAService service, Class<? extends AEntity> binderClass) {
+        super(service, binderClass);
+    }// end of constructor
 
 
     /**

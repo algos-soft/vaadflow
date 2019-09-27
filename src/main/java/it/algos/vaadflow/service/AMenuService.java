@@ -249,13 +249,13 @@ public class AMenuService extends AService {
 
         menuName = annotation.getMenuName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
-        icon = reflection.getIconView(viewClazz);
+        icon = annotation.getMenuIcon(viewClazz);
         menuName = text.isValid(menuName) ? menuName : viewClazz.getSimpleName();
 
         RouterLink link = new RouterLink(menuName, viewClazz);
-//        if (icon != null) {
-//            link.add(icon.create());
-//        }// end of if cycle
+        if (icon != null) {
+            link.add(icon.create());
+        }// end of if cycle
         tab.add(link);
         return tab;
     }// end of method

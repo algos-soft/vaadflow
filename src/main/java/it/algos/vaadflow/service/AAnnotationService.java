@@ -462,6 +462,25 @@ public class AAnnotationService extends AbstractService {
         return menuName;
     }// end of method
 
+    /**
+     * Valore della VaadinIcon di una view
+     *
+     * @param viewClazz classe view su cui operare la riflessione
+     */
+    public VaadinIcon getMenuIcon(final Class<? extends IAView> viewClazz) {
+        VaadinIcon menuIcon = null;
+        AIView annotationView = null;
+
+        /**
+         * 1) Cerca in @interface AIView della classe la property menuIcon
+         */
+        annotationView = this.getAIView(viewClazz);
+        if (annotationView != null) {
+            menuIcon = annotationView.menuIcon();
+        }// end of if cycle
+
+        return menuIcon;
+    }// end of method
 
     /**
      * Restituisce il nome del record (da usare nel Dialog)

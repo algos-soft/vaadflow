@@ -213,11 +213,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");
-            resetButton.addClickListener(e -> {
-                service.reset();
-                updateItems();
-                updateView();
-            });
+            resetButton.addClickListener(e -> reset());
             topPlaceholder.add(resetButton);
         }// end of if cycle
 

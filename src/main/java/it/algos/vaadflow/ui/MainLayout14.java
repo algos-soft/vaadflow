@@ -1,32 +1,28 @@
-package it.algos.vaadtest.application;
+package it.algos.vaadflow.ui;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.shared.ui.LoadMode;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import it.algos.vaadflow.application.AContext;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.login.ALogin;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.AMenuService;
 import it.algos.vaadflow.service.AVaadinService;
-import it.algos.vaadflow.ui.IAView;
-import it.algos.vaadtest.modules.beta.BetaList;
-import it.algos.vaadtest.modules.prova.ProvaViewList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowVar.usaSecurity;
@@ -77,6 +73,14 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @Autowired
     private AMenuService menuService;
 
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile SOLO DOPO @PostConstruct o comunque dopo l'init (anche implicito) del costruttore <br>
+     */
+    @Autowired
+    private PreferenzaService pref;
+
 
     public MainLayout14() {
         //@todo DA FARE cambiare immagine
@@ -101,7 +105,7 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     @PostConstruct
     protected void inizia() {
         fixSessione();
-        addToDrawer(getRouterMenu());
+        fixType();
     }// end of method
 
 
@@ -111,6 +115,26 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
     protected void fixSessione() {
         context = vaadinService.getSessionContext();
         login = context != null ? context.getLogin() : null;
+    }// end of method
+
+
+    /**
+     * Regola il tipo di presentazione del menu
+     */
+    protected void fixType() {
+        String type = pref.getStr(FlowCost.USA_MENU);
+
+        switch (type) {
+            case "routers":
+                addToDrawer(getRouterMenu());
+                break;
+            case "tabs":
+                addToDrawer(getTabMenu());
+                break;
+            default:
+                break;
+        } // end of switch statement
+
     }// end of method
 
 
@@ -153,7 +177,7 @@ public class MainLayout14 extends AppLayout implements RouterLayout {
      * Può essere sovrascritto
      */
     protected Tab[] getTabMenu() {
-        Tab[] tabs=null;
+        Tab[] tabs = null;
         Map<String, ArrayList<Class<? extends IAView>>> mappa = menuService.creaMappa();
 
         if (usaSecurity) {

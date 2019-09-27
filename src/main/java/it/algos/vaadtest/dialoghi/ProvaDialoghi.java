@@ -5,10 +5,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
-import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.ADialogoService;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
@@ -16,13 +12,9 @@ import it.algos.vaadflow.ui.dialog.DialogoConferma;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoDueBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoUnoBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoZeroBeanPolymer;
-import it.algos.vaadtest.application.MainLayout14;
-import lombok.extern.slf4j.Slf4j;
+import it.algos.vaadflow.ui.MainLayout14;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-
-import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
 /**
  * Project vaadflow

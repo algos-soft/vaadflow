@@ -36,7 +36,7 @@ public enum EAPreferenza {
     mailTo(FlowCost.MAIL_TO, "Email di default a cui spedire i log di posta", EAPrefType.string, "gac@algos.it"),
     maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Numero di elementi oltre il quale scatta la pagination automatica della Grid (se attiva)", EAPrefType.integer, 15),
     mongoPageLimit(FlowCost.MONGO_PAGE_LIMIT, "Limite di elementi nelle query mongoDB", EAPrefType.integer, 50000),
-    usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.enumeration, "buttons,popup,flowing,vaadin;flowing"),
+    usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.enumeration, "routers,tabs,buttons,popup,flowing,vaadin;tabs"),
     textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.enumeration, "cerca,ricerca,find;cerca"),
     textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.enumeration, "new,nuovo;nuovo"),
     showAccount(FlowCost.SHOW_ACCOUNT_ON_MENU, "Mostra l'account nella barra di menu", EAPrefType.bool, true),
