@@ -97,7 +97,7 @@ public class Preferenza extends ACEntity {
     @Size(min = 3)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 12)
-    @AIColumn(widthEM = 12)
+    @AIColumn(widthEM = 14)
     public String code;
 
     /**

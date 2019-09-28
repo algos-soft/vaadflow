@@ -3,15 +3,13 @@ package it.algos.vaadflow.modules.preferenza;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.company.CompanyService;
-import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AEnumerationService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ACheckBox;
 import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.fields.AIntegerField;
@@ -94,6 +92,7 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
     public PreferenzaDialog(IAService service, Class<? extends AEntity> binderClass) {
         super(service, binderClass);
     }// end of constructor
+
 
     /**
      * Aggiunge al binder eventuali fields specifici, prima di trascrivere la entityBean nel binder
@@ -265,8 +264,12 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                 case date:
                     break;
                 case enumeration:
-                    mongoEnumValue = (String) currentItem.getType().bytesToObject(currentItem.value);
-                    genericFieldValue = enumService.convertToModel(mongoEnumValue, (String) genericFieldValue);
+                    if (currentItem != null && text.isValid(currentItem.id)) {
+                        mongoEnumValue = (String) currentItem.getType().bytesToObject(currentItem.value);
+                        genericFieldValue = enumService.convertToModel(mongoEnumValue, (String) genericFieldValue);
+                    } else {
+                        genericFieldValue=genericFieldValue;
+                    }// end of if/else cycle
                     break;
                 default:
                     log.warn("Switch - caso non definito");

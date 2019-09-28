@@ -1,10 +1,10 @@
 package it.algos.vaadflow.modules.preferenza;
 
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
@@ -78,7 +78,7 @@ public class PreferenzaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        if (login.isDeveloper()) {
+        if (!FlowVar.usaSecurity || login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
             super.usaBottoneReset = true;
             super.usaBottoneNew = true;
