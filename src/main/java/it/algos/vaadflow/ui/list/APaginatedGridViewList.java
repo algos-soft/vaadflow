@@ -34,7 +34,7 @@ public abstract class APaginatedGridViewList extends AGridViewList {
 
 
     /**
-     * Costruttore @Autowired <br>
+     * Costruttore @Autowired (nella sottoclasse concreta) <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>

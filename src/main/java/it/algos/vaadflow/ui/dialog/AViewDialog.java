@@ -202,69 +202,70 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
-     * Costruttore base senza parametri <br>
+     * Costruttore senza parametri <br>
      * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
-     * Se manca, manda in rosso il parametro del costruttore usato <br>
+     * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
     public AViewDialog() {
     }// end of constructor
 
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param presenter per gestire la business logic del package
-     */
-    @Deprecated
-    public AViewDialog(IAPresenter presenter) {
-        this(presenter, null, null);
-    }// end of constructor
+//    /**
+//     * Constructs a new instance.
+//     *
+//     * @param presenter per gestire la business logic del package
+//     */
+//    @Deprecated
+//    public AViewDialog(IAPresenter presenter) {
+//        this(presenter, null, null);
+//    }// end of constructor
+//
+//
+//    /**
+//     * Constructs a new instance.
+//     *
+//     * @param presenter   per gestire la business logic del package
+//     * @param itemSaver   funzione associata al bottone 'registra'
+//     * @param itemDeleter funzione associata al bottone 'annulla'
+//     */
+//    @Deprecated
+//    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+//        this(presenter, itemSaver, itemDeleter, null, false);
+//    }// end of constructor
+
+
+//    /**
+//     * Constructs a new instance.
+//     *
+//     * @param presenter               per gestire la business logic del package
+//     * @param itemSaver               funzione associata al bottone 'registra'
+//     * @param itemDeleter             funzione associata al bottone 'annulla'
+//     * @param itemAnnulla             funzione associata al bottone 'annulla'
+//     * @param confermaSenzaRegistrare cambia il testo del bottone 'Registra' in 'Conferma'
+//     */
+//    @Deprecated
+//    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
+//        if (presenter != null) {
+//            this.presenter = presenter;
+//            this.service = presenter.getService();
+//            this.binderClass = presenter.getEntityClazz();
+//            this.fieldService = presenter.getService().getFieldService();
+//        }// end of if cycle
+//
+//        this.itemSaver = itemSaver;
+//        this.itemDeleter = itemDeleter;
+//        this.itemAnnulla = itemAnnulla;
+//
+//        if (confermaSenzaRegistrare) {
+//            this.fixConfermaAndNotRegistrazione();
+//        }// end of if cycle
+//    }// end of constructor
 
 
     /**
-     * Constructs a new instance.
-     *
-     * @param presenter   per gestire la business logic del package
-     * @param itemSaver   funzione associata al bottone 'registra'
-     * @param itemDeleter funzione associata al bottone 'annulla'
-     */
-    @Deprecated
-    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
-        this(presenter, itemSaver, itemDeleter, null, false);
-    }// end of constructor
-
-
-    /**
-     * Constructs a new instance.
-     *
-     * @param presenter               per gestire la business logic del package
-     * @param itemSaver               funzione associata al bottone 'registra'
-     * @param itemDeleter             funzione associata al bottone 'annulla'
-     * @param itemAnnulla             funzione associata al bottone 'annulla'
-     * @param confermaSenzaRegistrare cambia il testo del bottone 'Registra' in 'Conferma'
-     */
-    @Deprecated
-    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
-        if (presenter != null) {
-            this.presenter = presenter;
-            this.service = presenter.getService();
-            this.binderClass = presenter.getEntityClazz();
-            this.fieldService = presenter.getService().getFieldService();
-        }// end of if cycle
-
-        this.itemSaver = itemSaver;
-        this.itemDeleter = itemDeleter;
-        this.itemAnnulla = itemAnnulla;
-
-        if (confermaSenzaRegistrare) {
-            this.fixConfermaAndNotRegistrazione();
-        }// end of if cycle
-    }// end of constructor
-
-
-    /**
-     * Costruttore base con parametri <br>
-     * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
+     * Costruttore con parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * L'istanza DEVE essere creata con appContext.getBean(xxxDialog.class, service, entityClazz); <br>
      *
      * @param service     business class e layer di collegamento per la Repository
      * @param binderClass di tipo AEntity usata dal Binder dei Fields

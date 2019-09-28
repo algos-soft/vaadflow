@@ -42,7 +42,7 @@ public class BetaDialog extends AViewDialog<Beta> {
 
 
     /**
-     * Costruttore base senza parametri <br>
+     * Costruttore senza parametri <br>
      * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
      * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
@@ -51,7 +51,7 @@ public class BetaDialog extends AViewDialog<Beta> {
 
 
     /**
-     * Costruttore base con parametri <br>
+     * Costruttore con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
      * L'istanza DEVE essere creata con appContext.getBean(BetaDialog.class, service, entityClazz); <br>
      *
