@@ -186,6 +186,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaTopLayout() {
         topPlaceholder.removeAll();
         topPlaceholder.addClassName("view-toolbar");
@@ -193,19 +194,21 @@ public abstract class ALayoutViewList extends APrefViewList {
         boolean isDeveloper = login.isDeveloper();
         boolean isAdmin = login.isAdmin();
 
+        //--il bottone associa un evento standard -> AViewList.openConfirmDelete(), che può essere sovrascritto
         if ((!FlowVar.usaSecurity && usaBottoneDeleteAll) || (isDeveloper && usaBottoneDeleteAll)) {
             deleteAllButton = new Button("Delete all", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
-            deleteAllButton.addClickListener(e -> openConfirmDialogDelete());
+            deleteAllButton.addClickListener(event -> openConfirmDelete());
             topPlaceholder.add(deleteAllButton);
         }// end of if cycle
 
+        //--il bottone associa un evento standard -> AViewList.openConfirmReset(), che rinvia al service specifico
         if ((!FlowVar.usaSecurity && usaBottoneReset) || (isDeveloper && usaBottoneReset)) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");
-            resetButton.addClickListener(e -> reset());
+            resetButton.addClickListener(e -> openConfirmReset());
             topPlaceholder.add(resetButton);
         }// end of if cycle
 
@@ -213,6 +216,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         if (usaSearch) {
             //--bottone per aprire un DialogSearch con diverse property selezionabili
             if (usaSearchDialog) {
+                //--il bottone associa un evento standard -> openConfirmDialogDelete(), che deve essere sovrascritto
                 buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
                 searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
                 searchButton.getElement().setAttribute("theme", "secondary");
@@ -251,13 +255,14 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(filtroComboBox);
         }// end of if cycle
 
-
+        //--il bottone associa un evento standard -> AViewList.openNew()
+        //--il bottone associa, se previsto da pref, un tasto shortcut
         if (usaBottoneNew) {
             buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
             newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
             newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(e -> openNew());
+            newButton.addClickListener(event -> openNew());
             if (pref.isBool(USA_BUTTON_SHORTCUT)) {
                 newButton.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
             }// end of if cycle

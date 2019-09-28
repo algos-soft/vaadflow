@@ -21,7 +21,7 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.AConfirmDialog;
+import it.algos.vaadflow.ui.dialog.AConfirmDialogOldino;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.MainLayout14;
@@ -429,7 +429,7 @@ public class ProvaList extends AGridViewList {
 
         String message = "Vuoi continuare ?";
         String additionalMessage = "L'operazione non si può interrompere";
-        AConfirmDialog dialog = appContext.getBean(AConfirmDialog.class);
+        AConfirmDialogOldino dialog = appContext.getBean(AConfirmDialogOldino.class);
 //        dialog.open(message, additionalMessage, this::esegueProvaDialogo, null);
         dialog.open(message, additionalMessage, new Pippo(value), null);
 //            comboUpload.setValue("Popup");

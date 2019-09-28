@@ -238,13 +238,19 @@ public class ADialog extends Dialog implements IADialog {
     }// end of method
 
 
+//    /**
+//     * Apre un dialogo di 'avviso' <br>
+//     * Il title è già stato regolato dal costruttore <br>
+//     */
+//    public void open() {
+////        this.usaCancelButton = false;
+//        this.open("", "", (Runnable) null, (Runnable) null);
+//    }// end of method
     /**
-     * Apre un dialogo di 'avviso' <br>
-     * Il title è già stato regolato dal costruttore <br>
+     * Rimanda alla superclasse <br>
      */
     public void open() {
-//        this.usaCancelButton = false;
-        this.open("", "", (Runnable) null, (Runnable) null);
+        super.open();
     }// end of method
 
 
@@ -271,6 +277,8 @@ public class ADialog extends Dialog implements IADialog {
         this.usaCancelButton = false;
         this.open(message, additionalMessage, (Runnable) null, (Runnable) null);
     }// end of method
+
+
 
 
     /**
@@ -369,6 +377,8 @@ public class ADialog extends Dialog implements IADialog {
      */
     public void open(AEntity entityBean, EAOperation operation, BiConsumer itemSaver, Consumer itemDeleter) {
 
+    }
+    public void open(String message, Consumer itemSaver) {
     }
 
 

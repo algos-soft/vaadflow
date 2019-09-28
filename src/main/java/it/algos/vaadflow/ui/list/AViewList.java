@@ -7,7 +7,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.application.FlowCost;
@@ -19,6 +18,7 @@ import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
+import it.algos.vaadflow.ui.dialog.AResetDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
 import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
@@ -348,7 +348,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     protected void apreDialogo(ItemDoubleClickEvent evento) {
         AEntity entity;
-        if (evento != null ) {
+        if (evento != null) {
             if (evento.getItem().getClass().getName().equals(entityClazz.getName())) {
                 entity = (AEntity) evento.getItem();
                 if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
@@ -361,10 +361,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    /**
-     * Apertura del dialogo per una nuova entity <br>
-     * Sovrascritto <br>
-     */
     /**
      * Creazione ed apertura del dialogo per una nuova entity <br>
      * Rimanda al metodo openDialog passandolgi un parametro nullo <br>
@@ -390,6 +386,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    //@todo da rendere getBean il dialogo
     protected void openSearch() {
         searchDialog = appContext.getBean(ASearchDialog.class, service);
         searchDialog.open("", "", this::updateViewDopoSearch, null);
@@ -430,27 +427,48 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Opens the confirmation dialog before deleting all items.
+     * Opens the confirmation dialog before deleting all items. <br>
      * <p>
-     * The dialog will display the given title and message(s), then call
+     * The dialog will display the given title and message(s), then call <br>
+     * Può essere sovrascritto dalla classe specifica se servono avvisi diversi <br>
      */
-    protected final void openConfirmDialogDelete() {
-        String message = "Vuoi veramente cancellare TUTTE le entities di questa collezione ?";
-        String additionalMessage = "L'operazione non è reversibile";
-        deleteDialog = appContext.getBean(ADeleteDialog.class);
-        deleteDialog.open(message, additionalMessage, this::deleteCollection, null);
+    protected final void openConfirmDelete() {
+        appContext.getBean(ADeleteDialog.class).open(this::deleteCollection);
     }// end of method
 
 
-    protected void reset() {
-        service.reset();
+    /**
+     * Opens the confirmation dialog before reset all items. <br>
+     * <p>
+     * The dialog will display the given title and message(s), then call <br>
+     * Può essere sovrascrtitto dalla classe specifica se servono avvisi diversi <br>
+     */
+    protected final void openConfirmReset() {
+        appContext.getBean(AResetDialog.class).open(this::reset);
+    }// end of method
+
+
+    /**
+     * Cancellazione effettiva (dopo dialogo di conferma) di tutte le entities della collezione. <br>
+     * Rimanda al service specifico <br>
+     * Azzera gli items <br>
+     * Ridisegna la GUI <br>
+     */
+    public void deleteCollection() {
+        service.deleteAll();
         updateItems();
         updateView();
     }// end of method
 
 
-    protected void deleteCollection() {
-        service.deleteAll();
+    /**
+     * Reset effettivo (dopo dialogo di conferma) di tutte le entities della collezione. <br>
+     * Rimanda al service specifico <br>
+     * Azzera gli items <br>
+     * Ridisegna la GUI <br>
+     */
+    protected void reset() {
+        service.reset();
         updateItems();
         updateView();
     }// end of method

@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class AConfirmDialog extends ADialog {
+public class AConfirmDialogOldino extends ADialog {
 
     //--Titolo standard, eventualmente modificabile nelle sottoclassi
     private static String TITOLO = "Conferma";
@@ -32,7 +32,7 @@ public class AConfirmDialog extends ADialog {
     /**
      * Costruttore <br>
      */
-    public AConfirmDialog() {
+    public AConfirmDialogOldino() {
         super(TITOLO);
     }// end of constructor
 

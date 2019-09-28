@@ -1,14 +1,13 @@
 package it.algos.vaadflow.ui.dialog;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
@@ -17,26 +16,26 @@ import java.io.Serializable;
  * Project vaadflow
  * Created by Algos
  * User: gac
- * Date: lun, 10-dic-2018
- * Time: 17:08
+ * Date: sab, 28-set-2019
+ * Time: 21:47
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class ADeleteDialog<T extends Serializable> extends ADialog {
+public class AResetDialog<T extends Serializable> extends ADialog {
 
     //--Titolo standard, eventualmente modificabile nelle sottoclassi
-    private static String TITOLO = "Delete";
+    private static String TITOLO = "Reset";
 
     protected Button deleteButton = new Button(TITOLO);
 
-    private static  String message = "Vuoi veramente cancellare TUTTE le entities di questa collezione ?";
-    private static  String additionalMessage = "L'operazione non è reversibile";
+    private static  String message = "Vuoi veramente ripristinare i valori originali predeterminati di questa collezione ?";
+    private static  String additionalMessage = "L'operazione cancellerà tutti i valori successivamente aggiunti o modificati";
 
     /**
      * Costruttore <br>
      */
-    public ADeleteDialog() {
+    public AResetDialog() {
         super(TITOLO);
     }// end of constructor
 
@@ -83,11 +82,11 @@ public class ADeleteDialog<T extends Serializable> extends ADialog {
     /**
      * Apre il dialogo <br>
      *
-     * @param deleteHandler The confirmation handler function for deleting entities
+     * @param resetHandler The confirmation handler function for resetting entities
      */
-    public void open(Runnable deleteHandler) {
+    public void open(Runnable resetHandler) {
         this.usaCancelButton = true;
-        this.confirmHandler = deleteHandler;
+        this.confirmHandler = resetHandler;
 
         //--Body placeholder
         this.fixBodyLayout(message, additionalMessage);
