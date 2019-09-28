@@ -5,19 +5,17 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.APaginatedGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import static it.algos.vaadtest.application.TestCost.TAG_BET;
 import org.vaadin.klaudeta.PaginatedGrid;
+
+import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
@@ -71,6 +69,20 @@ public class BetaList extends APaginatedGridViewList {
         super(service, Beta.class);
     }// end of Vaadin/@Route constructor
 
+
+    /**
+     * Le preferenze standard
+     * Può essere sovrascritto, per aggiungere informazioni
+     * Invocare PRIMA il metodo della superclasse
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.usaBottoneEdit = true;
+    }// end of method
+
+
     /**
      * Crea la GridPaginata <br>
      * Per usare una GridPaginata occorre:
@@ -85,6 +97,7 @@ public class BetaList extends APaginatedGridViewList {
         super.creaGridPaginata();
     }// end of method
 
+
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
      * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
@@ -98,8 +111,8 @@ public class BetaList extends APaginatedGridViewList {
      * @param entityBean item corrente, null se nuova entity
      */
     @Override
-     protected void openDialog(AEntity entityBean) {
+    protected void openDialog(AEntity entityBean) {
         appContext.getBean(BetaDialog.class, service, entityClazz).open(entityBean, EAOperation.edit, this::save, this::delete);
-     }// end of method
+    }// end of method
 
 }// end of class

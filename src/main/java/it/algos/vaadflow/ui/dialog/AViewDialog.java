@@ -262,20 +262,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-//    @Deprecated
-//    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
-//        fixFunzioni(itemSaver, itemDeleter, null);
-//    }// end of method
-//
-//
-//    @Deprecated
-//    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
-//        this.itemSaver = itemSaver;
-//        this.itemDeleter = itemDeleter;
-//        this.itemAnnulla = itemAnnulla;
-//    }// end of method
-
-
     /**
      * Esclude la possibilità di registrare  <br>
      * Dialogo in modalità 'show' <br>
@@ -334,15 +320,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-//    /**
-//     * Corpo centrale del Dialog, alternativo al Form <br>
-//     * Placeholder (eventuale, presente di default) <br>
-//     */
-//    private Component creaBodyLayout() {
-//        return bodyLayout;
-//    }// end of method
-
-
     /**
      * Barra dei bottoni
      */
@@ -388,38 +365,36 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    @Deprecated
-    public void open(AEntity entityBean, EAOperation operation, AContext context) {
-        open(entityBean, operation, context, "");
-    }// end of method
-
-
-    /**
-     * Opens the given item for editing in the dialog.
-     * Riceve la entityBean <br>
-     * Crea i fields <br>
-     *
-     * @param entityBean The item to edit; it may be an existing or a newly created instance
-     * @param operation  The operation being performed on the item
-     * @param context    legato alla sessione
-     */
-//    @Override
-    @Deprecated
-    public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
-    }// end of method
+//    @Deprecated
+//    public void open(AEntity entityBean, EAOperation operation, AContext context) {
+//        open(entityBean, operation, context, "");
+//    }// end of method
+//
+//
+//    /**
+//     * Opens the given item for editing in the dialog.
+//     * Riceve la entityBean <br>
+//     * Crea i fields <br>
+//     *
+//     * @param entityBean The item to edit; it may be an existing or a newly created instance
+//     * @param operation  The operation being performed on the item
+//     * @param context    legato alla sessione
+//     */
+//    @Deprecated
+//    public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
+//    }// end of method
 
 
     /**
      * Opens the given item for editing in the dialog.
      * Crea i fields e visualizza il dialogo <br>
      *
-     * @param entityBean  The item to edit; it may be an existing or a newly created instance
-     * @param operation   The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
-     * @param itemSaver   funzione associata al bottone 'accetta' ('registra', 'conferma')
-     * @param itemDeleter funzione associata al bottone 'delete'
+     * @param entityBean        The item to edit; it may be an existing or a newly created instance
+     * @param operationProposed The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
+     * @param itemSaver         funzione associata al bottone 'accetta' ('registra', 'conferma')
+     * @param itemDeleter       funzione associata al bottone 'delete'
      */
-//        public void open( AEntity entityBean, EAOperation operation, BiConsumer itemSaver, Consumer itemDeleter){
-    public void open( AEntity entityBean, EAOperation operation, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+    public void open(final AEntity entityBean, EAOperation operationProposed, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
 
@@ -427,30 +402,33 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (service == null) {
             return;
         }// end of if cycle
+        final EAOperation operationActive;
+        this.currentItem = (T) entityBean;
 
         if (((AService) service).mancaCompanyNecessaria()) {
             Notification.show("Non è stata selezionata nessuna company in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
 
-        if (entityBean == null) {
-            entityBean = service.newEntity();
-            operation = EAOperation.addNew;
-        }// end of if cycle
+        if (currentItem == null) {
+            currentItem = (T) service.newEntity();
+            operationActive = EAOperation.addNew;
+        } else {
+            operationActive = operationProposed;
+        }// end of if/else cycle
+        this.operation = operationActive;
 
-        if (entityBean == null) {
+        if (currentItem == null) {
             Notification.show("Qualcosa non ha funzionato in AViewDialog.open()", DURATA, Notification.Position.BOTTOM_START);
             return;
         }// end of if cycle
 
-        this.currentItem = (T) entityBean;
-        this.operation = operation;
         this.fixTitleLayout();
 
         if (registrationForSave != null) {
             registrationForSave.remove();
         }
-        registrationForSave = saveButton.addClickListener(e -> saveClicked(this.operation));
+        registrationForSave = saveButton.addClickListener(e -> saveClicked(operationActive));
 
         //--Controlla la visibilità dei bottoni
         saveButton.setVisible(operation.isSaveEnabled());

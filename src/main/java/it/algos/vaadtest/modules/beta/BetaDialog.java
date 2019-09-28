@@ -1,17 +1,15 @@
 package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -62,5 +60,5 @@ public class BetaDialog extends AViewDialog<Beta> {
         super(service, binderClass);
     }// end of constructor
 
-    
+
 }// end of class

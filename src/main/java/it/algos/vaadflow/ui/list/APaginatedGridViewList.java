@@ -2,6 +2,7 @@ package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
@@ -133,8 +134,8 @@ public abstract class APaginatedGridViewList extends AGridViewList {
             }// end of if/else cycle
             colonna.setFlexGrow(0);
         } else {
-            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
-            paginatedGrid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
+            paginatedGrid.setSelectionMode(Grid.SelectionMode.NONE);
+            paginatedGrid.addItemDoubleClickListener(event -> apreDialogo((ItemDoubleClickEvent) event));
         }// end of if/else cycle
     }// end of method
 

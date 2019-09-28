@@ -4,6 +4,7 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
@@ -345,14 +346,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    protected void apreDialogo(SingleSelectionEvent evento, EAOperation operation) {
-        if (evento != null && evento.getOldValue() != evento.getValue()) {
-            if (evento.getValue().getClass().getName().equals(entityClazz.getName())) {
+    protected void apreDialogo(ItemDoubleClickEvent evento) {
+        AEntity entity;
+        if (evento != null ) {
+            if (evento.getItem().getClass().getName().equals(entityClazz.getName())) {
+                entity = (AEntity) evento.getItem();
                 if (usaRouteFormView && text.isValid(routeNameFormEdit)) {
-                    AEntity entity = (AEntity) evento.getValue();
                     routeVerso(routeNameFormEdit, entity);
                 } else {
-//                    dialog.open((AEntity) evento.getValue(), operation, context); //@todo ARRIVA QUI ?
+                    openDialog(entity);
                 }// end of if/else cycle
             }// end of if cycle
         }// end of if cycle
@@ -363,9 +365,12 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Apertura del dialogo per una nuova entity <br>
      * Sovrascritto <br>
      */
+    /**
+     * Creazione ed apertura del dialogo per una nuova entity <br>
+     * Rimanda al metodo openDialog passandolgi un parametro nullo <br>
+     */
     protected void openNew() {
-//        dialog.open(service.newEntity(), EAOperation.addNew, context);
-        openDialog(null);
+        openDialog((AEntity) null);
     }// end of method
 
 

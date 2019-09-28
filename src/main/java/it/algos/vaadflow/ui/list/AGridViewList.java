@@ -2,6 +2,7 @@ package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -229,8 +230,8 @@ public abstract class AGridViewList extends ALayoutViewList {
             }// end of if/else cycle
             colonna.setFlexGrow(0);
         } else {
-            EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;
-            grid.addSelectionListener(evento -> apreDialogo((SingleSelectionEvent) evento, operation));
+            grid.setSelectionMode(Grid.SelectionMode.NONE);
+            grid.addItemDoubleClickListener(event -> apreDialogo((ItemDoubleClickEvent) event));
         }// end of if/else cycle
     }// end of method
 

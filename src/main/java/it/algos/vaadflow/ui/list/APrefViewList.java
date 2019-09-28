@@ -7,6 +7,8 @@ import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.dialog.IADialog;
 
+import static it.algos.vaadflow.application.FlowCost.USA_EDIT_BUTTON;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -84,7 +86,9 @@ public abstract class APrefViewList extends AViewList {
         isEntityModificabile = true;
 
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
-        usaBottoneEdit = true;
+        //--Di norma fissato nelle preferenze per avere omogeneità di funzionamento del programma
+        //--Può comunque essere modificato nella sottoclasse specifica
+        usaBottoneEdit = pref.isBool(USA_EDIT_BUTTON);
 
         //--Flag di preferenza per usare il placeholder di botoni ggiuntivi sotto la Grid. Normalmente false.
         usaBottomLayout = false;
