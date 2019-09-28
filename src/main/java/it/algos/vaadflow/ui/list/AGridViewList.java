@@ -9,13 +9,13 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +149,6 @@ public abstract class AGridViewList extends ALayoutViewList {
     }// end of method
 
 
-
-
     /**
      * Costruisce una lista di nomi delle properties <br>
      * 1) Cerca nell'annotation @AIList della Entity e usa quella lista (con o senza ID) <br>
@@ -221,7 +219,14 @@ public abstract class AGridViewList extends ALayoutViewList {
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             Grid.Column colonna = grid.addColumn(renderer);
-            colonna.setWidth("3em");
+
+            if (pref.isBool(FlowCost.USA_TEXT_EDIT_BUTTON)) {
+                int lar = pref.getStr(FlowCost.FLAG_TEXT_EDIT).length();
+                lar += 1;
+                colonna.setWidth(lar + "em");
+            } else {
+                colonna.setWidth("3em");
+            }// end of if/else cycle
             colonna.setFlexGrow(0);
         } else {
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;

@@ -9,17 +9,16 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.LoadMode;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.footer.AFooter;
-import it.algos.vaadflow.presenter.IAPresenter;
 import it.algos.vaadflow.service.AMongoService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
-import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -95,7 +94,6 @@ import java.util.*;
 public abstract class AViewList extends APropertyViewList implements IAView, BeforeEnterObserver, BeforeLeaveObserver {
 
 
-
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -110,8 +108,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         this.service = service;
         this.entityClazz = entityClazz;
     }// end of Vaadin/@Route constructor
-
-
 
 
     /**
@@ -336,7 +332,12 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     protected Button createEditButton(AEntity entityBean) {
-        Button edit = new Button("", event -> openDialog(entityBean));
+        String label = "";
+        if (pref.isBool(FlowCost.USA_TEXT_EDIT_BUTTON)) {
+            label = pref.getStr(FlowCost.FLAG_TEXT_EDIT);
+        }// end of if cycle
+
+        Button edit = new Button(label, event -> openDialog(entityBean));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -369,11 +370,18 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Apertura del dialogo per una entity esistente <br>
-     * Sovrascritto <br>
+     * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
+     * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
+     * Nella creazione vengono regolati il service e la entityClazz di riferimento <br>
+     * Contestualmente alla creazione, il dialogo viene aperto con l'item corrente (ricevuto come parametro) <br>
+     * Se entityBean è null, nella superclasse AViewDialog viene modificato il flag a EAOperation.addNew <br>
+     * Si passano al dialogo anche i metodi locali (di questa classe AViewList) <br>
+     * come ritorno dalle azioni save e delete al click dei rispettivi bottoni <br>
+     * Il metodo DEVE essere sovrascritto <br>
+     *
+     * @param entityBean item corrente, null se nuova entity
      */
     protected void openDialog(AEntity entityBean) {
-        dialog.open(entityBean, EAOperation.edit, context);
     }// end of method
 
 

@@ -97,10 +97,11 @@ public abstract class APaginatedGridViewList extends AGridViewList {
 
     /**
      * Crea la GridPaginata <br>
-     * DEVE essere creata in creaGridPaginata() della sottoclasse
-     * con la PaginatedGrid specifica della Collection <br>
-     * Invocare DOPO il metodo della superclasse <br>
-     * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
+     * Per usare una GridPaginata occorre:
+     * 1) la view xxxList deve estendere APaginatedGridViewList anziche AGridViewList <br>
+     * 2) deve essere sovrascritto questo metodo nella classe xxxList <br>
+     * 3) nel metodo sovrascritto va creata la PaginatedGrid 'tipizzata' con la entityClazz (Collection) specifica <br>
+     * 4) il metodo sovrascritto DOPO deve invocare questo stesso superMetodo in APaginatedGridViewList <br>
      */
     protected void creaGridPaginata() {
         if (paginatedGrid != null) {

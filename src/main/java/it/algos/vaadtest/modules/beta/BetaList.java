@@ -5,23 +5,25 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.dialog.IADialog;
+import it.algos.vaadflow.ui.MainLayout;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.list.APaginatedGridViewList;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.backend.entity.AEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.vaadin.klaudeta.PaginatedGrid;
-
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 27-set-2019 18.35.00 <br>
+ * Fix date: 28-set-2019 13.27.50 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -41,6 +43,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  * Annotated with @AIView (facoltativo Algos) per regolare alcune property associate a questa classe <br>
+ * Se serve una Grid paginata estende APaginatedGridViewList altrimenti AGridViewList <br>
+ * Se si usa APaginatedGridViewList è obbligatorio creare la PaginatedGrid
+ * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata <br>
  */
 @UIScope
 @Route(value = TAG_BET, layout = MainLayout14.class)
@@ -56,7 +61,8 @@ public class BetaList extends APaginatedGridViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
-     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
+     * Passa alla superclasse il service iniettato qui da Vaadin/@Route <br>
+     * Passa alla superclasse anche la entityClazz che viene definita qui (specifica di questo modulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
@@ -65,13 +71,13 @@ public class BetaList extends APaginatedGridViewList {
         super(service, Beta.class);
     }// end of Vaadin/@Route constructor
 
-
     /**
      * Crea la GridPaginata <br>
-     * DEVE essere creata in creaGridPaginata() della sottoclasse
-     * con la PaginatedGrid specifica della Collection <br>
-     * Invocare DOPO il metodo della superclasse <br>
-     * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe specifica <br>
+     * Per usare una GridPaginata occorre:
+     * 1) la view xxxList deve estendere APaginatedGridViewList anziche AGridViewList <br>
+     * 2) deve essere sovrascritto questo metodo nella classe xxxList <br>
+     * 3) nel metodo sovrascritto va creata la PaginatedGrid 'tipizzata' con la entityClazz (Collection) specifica <br>
+     * 4) il metodo sovrascritto deve invocare DOPO questo stesso superMetodo in APaginatedGridViewList <br>
      */
     @Override
     protected void creaGridPaginata() {
@@ -79,16 +85,21 @@ public class BetaList extends APaginatedGridViewList {
         super.creaGridPaginata();
     }// end of method
 
-
     /**
-     * Apertura del dialogo per una nuova entity oppure per una esistente <br>
+     * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
      * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
-     * Sovrascritto <br>
+     * Nella creazione vengono regolati il service e la entityClazz di riferimento <br>
+     * Contestualmente alla creazione, il dialogo viene aperto con l'item corrente (ricevuto come parametro) <br>
+     * Se entityBean è null, nella superclasse AViewDialog viene modificato il flag a EAOperation.addNew <br>
+     * Si passano al dialogo anche i metodi locali (di questa classe AViewList) <br>
+     * come ritorno dalle azioni save e delete al click dei rispettivi bottoni <br>
+     * Il metodo DEVE essere sovrascritto <br>
+     *
+     * @param entityBean item corrente, null se nuova entity
      */
     @Override
-    protected void openDialog(AEntity entityBean) {
-        BetaDialog dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
-        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
-    }// end of method
+     protected void openDialog(AEntity entityBean) {
+        appContext.getBean(BetaDialog.class, service, entityClazz).open(entityBean, EAOperation.edit, this::save, this::delete);
+     }// end of method
 
 }// end of class

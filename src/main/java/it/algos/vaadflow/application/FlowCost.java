@@ -140,6 +140,7 @@ public abstract class FlowCost {
     public static final String FLAG_TEXT_SEARCH = "textSearch";
 
     public static final String FLAG_TEXT_NEW = "textNew";
+    public static final String FLAG_TEXT_EDIT = "textEdit";
 
     public static final String BOT_ACCETTA = "Accetta";
 
@@ -253,6 +254,7 @@ public abstract class FlowCost {
     public static final String USA_BUTTON_SHORTCUT = "usaButtonShortcut";
 
     public static final String USA_GRID_HEADER_PRIMA_MAIUSCOLA = "usaGridHeaderPrimaMaiuscola";
+    public static final String USA_TEXT_EDIT_BUTTON = "usaTextEditButton";
 
     // moduli visibili
     public static final String SHOW_COMPANY = "showCompany";

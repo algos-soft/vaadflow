@@ -1,7 +1,6 @@
 package it.algos.vaadflow.modules.role;
 
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -96,9 +95,9 @@ public class RoleList extends AGridViewList {
      * Apertura del dialogo per una entity esistente oppure nuova <br>
      * Sovrascritto <br>
      */
+    @Override
     protected void openDialog(AEntity entityBean) {
-        RoleDialog dialog = appContext.getBean(RoleDialog.class, service, entityClazz);
-        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
+        appContext.getBean(RoleDialog.class, service, entityClazz).open(entityBean, EAOperation.edit, this::save, this::delete);
     }// end of method
 
 }// end of class
