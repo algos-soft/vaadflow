@@ -106,7 +106,7 @@ public class Preferenza extends ACEntity {
     @NotNull(message = "La descrizione è obbligatoria")
     @Size(min = 2, max = 50)
     @Field("desc")
-    @AIField(type = EAFieldType.text, firstCapital = true, widthEM = 24)
+    @AIField(type = EAFieldType.textarea, firstCapital = true, widthEM = 24)
     @AIColumn(flexGrow = true)
     public String descrizione;
 
