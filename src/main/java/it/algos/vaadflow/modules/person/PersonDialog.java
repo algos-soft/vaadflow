@@ -97,12 +97,12 @@ public class PersonDialog extends AViewDialog<Person> {
         addressService = StaticContextAccessor.getBean(AddressService.class);
 
         addressDialog = StaticContextAccessor.getBean(AddressDialog.class);
-        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
+//        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
         addressDialog.fixConfermaAndNotRegistrazione();
 
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));
+//            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));//@todo creare dialog con getBean...
         }// end of if cycle
     }// end of method
 

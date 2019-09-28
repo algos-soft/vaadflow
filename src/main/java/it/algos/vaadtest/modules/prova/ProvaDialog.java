@@ -96,15 +96,16 @@ public class ProvaDialog extends AViewDialog<Prova> {
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Preferenze standard e specifiche, eventualmente sovrascritte nella sottoclasse <br>
+     * Può essere sovrascritto, per aggiungere e/o modificareinformazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
-    protected void fixPreferenzeSpecifiche() {
-        super.fixPreferenzeSpecifiche();
+    protected void fixPreferenze() {
+        super.fixPreferenze();
         super.usaFormDueColonne = false;
     }// end of method
+
 
 
     /**
@@ -120,12 +121,12 @@ public class ProvaDialog extends AViewDialog<Prova> {
         addressService = StaticContextAccessor.getBean(AddressService.class);
 
         addressDialog = StaticContextAccessor.getBean(AddressDialog.class);
-        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
+//        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
         addressDialog.fixConfermaAndNotRegistrazione();
 
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));
+//            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));//@todo creare dialog con getBean...
         }// end of if cycle
 
         AbstractField propertyField = null;

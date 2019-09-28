@@ -40,9 +40,9 @@ public abstract class ACronoViewList extends AGridViewList {
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Preferenze standard e specifiche, eventualmente sovrascritte nella sottoclasse <br>
+     * Può essere sovrascritto, per aggiungere e/o modificareinformazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
     protected void fixPreferenze() {

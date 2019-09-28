@@ -352,7 +352,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
                     AEntity entity = (AEntity) evento.getValue();
                     routeVerso(routeNameFormEdit, entity);
                 } else {
-                    dialog.open((AEntity) evento.getValue(), operation, context);
+//                    dialog.open((AEntity) evento.getValue(), operation, context); //@todo ARRIVA QUI ?
                 }// end of if/else cycle
             }// end of if cycle
         }// end of if cycle

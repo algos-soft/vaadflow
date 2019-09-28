@@ -210,58 +210,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of constructor
 
 
-//    /**
-//     * Constructs a new instance.
-//     *
-//     * @param presenter per gestire la business logic del package
-//     */
-//    @Deprecated
-//    public AViewDialog(IAPresenter presenter) {
-//        this(presenter, null, null);
-//    }// end of constructor
-//
-//
-//    /**
-//     * Constructs a new instance.
-//     *
-//     * @param presenter   per gestire la business logic del package
-//     * @param itemSaver   funzione associata al bottone 'registra'
-//     * @param itemDeleter funzione associata al bottone 'annulla'
-//     */
-//    @Deprecated
-//    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
-//        this(presenter, itemSaver, itemDeleter, null, false);
-//    }// end of constructor
-
-
-//    /**
-//     * Constructs a new instance.
-//     *
-//     * @param presenter               per gestire la business logic del package
-//     * @param itemSaver               funzione associata al bottone 'registra'
-//     * @param itemDeleter             funzione associata al bottone 'annulla'
-//     * @param itemAnnulla             funzione associata al bottone 'annulla'
-//     * @param confermaSenzaRegistrare cambia il testo del bottone 'Registra' in 'Conferma'
-//     */
-//    @Deprecated
-//    public AViewDialog(IAPresenter presenter, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla, boolean confermaSenzaRegistrare) {
-//        if (presenter != null) {
-//            this.presenter = presenter;
-//            this.service = presenter.getService();
-//            this.binderClass = presenter.getEntityClazz();
-//            this.fieldService = presenter.getService().getFieldService();
-//        }// end of if cycle
-//
-//        this.itemSaver = itemSaver;
-//        this.itemDeleter = itemDeleter;
-//        this.itemAnnulla = itemAnnulla;
-//
-//        if (confermaSenzaRegistrare) {
-//            this.fixConfermaAndNotRegistrazione();
-//        }// end of if cycle
-//    }// end of constructor
-
-
     /**
      * Costruttore con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -289,10 +237,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         context = vaadinService.getSessionContext();
 
         //--Le preferenze standard
-        fixPreferenze();
-
         //--Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-        fixPreferenzeSpecifiche();
+        fixPreferenze();
 
         //--Titolo placeholder del dialogo, regolato dopo open()
         this.add(creaTitleLayout());
@@ -306,7 +252,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Barra placeholder dei bottoni, creati adesso ma regolabili dopo open()
         this.add(creaBottomLayout());
 
-
         setCloseOnEsc(true);
         setCloseOnOutsideClick(false);
         addOpenedChangeListener(event -> {
@@ -317,18 +262,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    @Deprecated
-    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
-        fixFunzioni(itemSaver, itemDeleter, null);
-    }// end of method
-
-
-    @Deprecated
-    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
-        this.itemSaver = itemSaver;
-        this.itemDeleter = itemDeleter;
-        this.itemAnnulla = itemAnnulla;
-    }// end of method
+//    @Deprecated
+//    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+//        fixFunzioni(itemSaver, itemDeleter, null);
+//    }// end of method
+//
+//
+//    @Deprecated
+//    public void fixFunzioni(BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
+//        this.itemSaver = itemSaver;
+//        this.itemDeleter = itemDeleter;
+//        this.itemAnnulla = itemAnnulla;
+//    }// end of method
 
 
     /**
@@ -341,9 +286,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Preferenze standard e specifiche, eventualmente sovrascritte nella sottoclasse <br>
+     * Può essere sovrascritto, per aggiungere e/o modificareinformazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
-    private void fixPreferenze() {
+    protected void fixPreferenze() {
         //--Flag di preferenza per usare il bottone Cancel. Normalmente true.
         usaCancelButton = true;
 
@@ -355,15 +302,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //Flag di preferenza per le due colonne nel form. Normalmente true.
         usaFormDueColonne = true;
-    }// end of method
-
-
-    /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected void fixPreferenzeSpecifiche() {
     }// end of method
 
 
@@ -465,7 +403,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param operation  The operation being performed on the item
      * @param context    legato alla sessione
      */
-    @Override
+//    @Override
     @Deprecated
     public void open(AEntity entityBean, EAOperation operation, AContext context, String title) {
     }// end of method
@@ -473,28 +411,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     /**
      * Opens the given item for editing in the dialog.
+     * Crea i fields e visualizza il dialogo <br>
      *
      * @param entityBean  The item to edit; it may be an existing or a newly created instance
-     * @param operation   The operation being performed on the item
-     * @param itemSaver   funzione associata al bottone 'registra'
-     * @param itemDeleter funzione associata al bottone 'annulla'
+     * @param operation   The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
+     * @param itemSaver   funzione associata al bottone 'accetta' ('registra', 'conferma')
+     * @param itemDeleter funzione associata al bottone 'delete'
      */
-    public void open(AEntity entityBean, EAOperation operation, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+//        public void open( AEntity entityBean, EAOperation operation, BiConsumer itemSaver, Consumer itemDeleter){
+    public void open( AEntity entityBean, EAOperation operation, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
-        open(entityBean, operation);
-    }// end of method
 
-
-    /**
-     * Opens the given item for editing in the dialog.
-     * Riceve la entityBean <br>
-     * Crea i fields <br>
-     *
-     * @param entityBean The item to edit; it may be an existing or a newly created instance
-     * @param operation  The operation being performed on the item
-     */
-    public void open(AEntity entityBean, EAOperation operation) {
         //--controllo iniziale di sicurezza
         if (service == null) {
             return;

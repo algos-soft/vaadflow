@@ -7,6 +7,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.selection.SingleSelectionEvent;
+import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
@@ -122,7 +123,14 @@ public abstract class APaginatedGridViewList extends AGridViewList {
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
             Grid.Column colonna = paginatedGrid.addColumn(renderer);
-            colonna.setWidth("3em");
+
+            if (pref.isBool(FlowCost.USA_TEXT_EDIT_BUTTON)) {
+                int lar = pref.getStr(FlowCost.FLAG_TEXT_EDIT).length();
+                lar += 1;
+                colonna.setWidth(lar + "em");
+            } else {
+                colonna.setWidth("3em");
+            }// end of if/else cycle
             colonna.setFlexGrow(0);
         } else {
             EAOperation operation = isEntityModificabile ? EAOperation.edit : EAOperation.showOnly;

@@ -103,9 +103,8 @@ public class ProvaList extends AGridViewList {
 
 
     /**
-     * Le preferenze standard <br>
-     * Le preferenze specifiche della sottoclasse <br>
-     * Può essere sovrascritto, per modificare le preferenze standard <br>
+     * Preferenze standard e specifiche, eventualmente sovrascritte nella sottoclasse <br>
+     * Può essere sovrascritto, per aggiungere e/o modificareinformazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override

@@ -94,20 +94,20 @@ public class CompanyDialog extends AViewDialog<Company> {
         contattoService = StaticContextAccessor.getBean(PersonService.class);
 
         contattoDialog = StaticContextAccessor.getBean(PersonDialog.class);
-        contattoDialog.fixFunzioni(this::saveUpdateCon, this::deleteUpdateCon, this::annullaCon);
+//        contattoDialog.fixFunzioni(this::saveUpdateCon, this::deleteUpdateCon, this::annullaCon);
         contattoDialog.fixConfermaAndNotRegistrazione();
         contattoField = (ATextField) getField(CONTATTO);
         if (contattoField != null) {
-            contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), EAOperation.edit, null, CONTATTO));//todo sistemare il null
+//            contattoField.addFocusListener(e -> contattoDialog.open(getContatto(), EAOperation.edit, null, CONTATTO));//todo cambiare OPEN
         }// end of if cycle
 
         indirizzoService = StaticContextAccessor.getBean(AddressService.class);
         indirizzoDialog = StaticContextAccessor.getBean(AddressDialog.class);
-        indirizzoDialog.fixFunzioni(this::saveUpdateInd, this::deleteUpdateInd, this::annullaInd);
+//        indirizzoDialog.fixFunzioni(this::saveUpdateInd, this::deleteUpdateInd, this::annullaInd);
         indirizzoDialog.fixConfermaAndNotRegistrazione();
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), EAOperation.edit, null, INDIRIZZO));//todo sistemare il null
+//            indirizzoField.addFocusListener(e -> indirizzoDialog.open(getIndirizzo(), EAOperation.edit, null, INDIRIZZO));//todo cambiare OPEN
         }// end of if cycle
     }// end of method
 

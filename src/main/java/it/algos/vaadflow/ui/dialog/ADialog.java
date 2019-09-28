@@ -23,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -356,6 +359,20 @@ public class ADialog extends Dialog implements IADialog {
 
 
     /**
+     * Opens the given item for editing in the dialog.
+     * Crea i fields e visualizza il dialogo <br>
+     *
+     * @param entityBean  The item to edit; it may be an existing or a newly created instance
+     * @param operation   The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
+     * @param itemSaver   funzione associata al bottone 'accetta' ('registra', 'conferma')
+     * @param itemDeleter funzione associata al bottone 'delete'
+     */
+    public void open(AEntity entityBean, EAOperation operation, BiConsumer itemSaver, Consumer itemDeleter) {
+
+    }
+
+
+    /**
      * Corpo centrale del Dialog, alternativo al Form <br>
      *
      * @param message           Detail message
@@ -448,29 +465,29 @@ public class ADialog extends Dialog implements IADialog {
     }// end of method
 
 
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation, AContext context) {
-    }
-
-
-    /**
-     * Opens the given item for editing in the dialog.
-     *
-     * @param item      The item to edit; it may be an existing or a newly created instance
-     * @param operation The operation being performed on the item
-     * @param context   legato alla sessione
-     * @param title     of the window dialog
-     */
-    @Override
-    public void open(AEntity item, EAOperation operation, AContext context, String title) {
-    }
+//    /**
+//     * Opens the given item for editing in the dialog.
+//     *
+//     * @param item      The item to edit; it may be an existing or a newly created instance
+//     * @param operation The operation being performed on the item
+//     * @param context   legato alla sessione
+//     */
+//    @Override
+//    public void open(AEntity item, EAOperation operation, AContext context) {
+//    }
+//
+//
+//    /**
+//     * Opens the given item for editing in the dialog.
+//     *
+//     * @param item      The item to edit; it may be an existing or a newly created instance
+//     * @param operation The operation being performed on the item
+//     * @param context   legato alla sessione
+//     * @param title     of the window dialog
+//     */
+//    @Override
+//    public void open(AEntity item, EAOperation operation, AContext context, String title) {
+//    }
 
 
 //    /**
