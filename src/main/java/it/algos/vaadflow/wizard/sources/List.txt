@@ -71,9 +71,10 @@ public class @ENTITY@List extends AGridViewList {
      * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
      * Sovrascritto <br>
      */
-    protected void openDialog(AEntity entityBean) {
+     @Override
+     protected void openDialog(AEntity entityBean) {
         @ENTITY@Dialog dialog = appContext.getBean(@ENTITY@Dialog.class, service, entityClazz);
         dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
-    }// end of method
+     }// end of method
 
 }// end of class

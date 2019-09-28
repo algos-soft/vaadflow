@@ -5,16 +5,16 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.vaadin.klaudeta.PaginatedGrid;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -48,7 +48,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Slf4j
 @AIScript(sovrascrivibile = true)
 @AIView(vaadflow = false, menuName = TAG_BET, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code")
-public class BetaList extends AGridViewList {
+public class BetaList extends APaginatedGridViewList {
 
 
     /**
@@ -67,10 +67,25 @@ public class BetaList extends AGridViewList {
 
 
     /**
+     * Crea la GridPaginata <br>
+     * DEVE essere creata in creaGridPaginata() della sottoclasse
+     * con la PaginatedGrid specifica della Collection <br>
+     * Invocare DOPO il metodo della superclasse <br>
+     * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe specifica <br>
+     */
+    @Override
+    protected void creaGridPaginata() {
+        paginatedGrid = new PaginatedGrid<Beta>();
+        super.creaGridPaginata();
+    }// end of method
+
+
+    /**
      * Apertura del dialogo per una nuova entity oppure per una esistente <br>
      * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
      * Sovrascritto <br>
      */
+    @Override
     protected void openDialog(AEntity entityBean) {
         BetaDialog dialog = appContext.getBean(BetaDialog.class, service, entityClazz);
         dialog.open(entityBean, EAOperation.edit, this::save, this::delete);

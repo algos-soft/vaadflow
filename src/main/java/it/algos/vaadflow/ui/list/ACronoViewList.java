@@ -1,4 +1,4 @@
-package it.algos.vaadflow.ui;
+package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.html.Label;
 import it.algos.vaadflow.backend.entity.AEntity;

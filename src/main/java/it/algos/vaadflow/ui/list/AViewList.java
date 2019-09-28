@@ -165,7 +165,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--body con la Grid
         //--seleziona quale grid usare e la aggiunge al layout
-        this.creaGrid();
+        this.creaBody();
         this.add(gridPlaceholder);
 
         //--aggiunge il footer standard
@@ -258,7 +258,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Seleziona quale grid usare e la aggiunge al layout <br>
      * Eventuale barra di bottoni sotto la grid <br>
      */
-    protected void creaGrid() {
+    protected void creaBody() {
     }// end of method
 
 
