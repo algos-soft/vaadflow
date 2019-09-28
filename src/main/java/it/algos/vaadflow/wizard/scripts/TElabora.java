@@ -93,6 +93,10 @@ public class TElabora {
 
     private static final String SUPERCLASS_ENTITY_COMPANY = "ACEntity";
 
+    private static final String SUPERCLASS_GRID = "AGridViewList";
+
+    private static final String SUPERCLASS_PAGINATED_GRID = "APaginatedGridViewList";
+
     private static final String PROPERTY = "Property";
 
     private static final String METHOD = "Method";
@@ -120,6 +124,7 @@ public class TElabora {
     private static final String METHOD_ID_KEY_SPECIFICA = METHOD + "IdKeySpecifica" + SOURCE_SUFFIX;
 
     private static final String METHOD_READ_COMPANY = METHOD + "ReadCompany" + SOURCE_SUFFIX;
+    private static final String METHOD_CREA_GRID = METHOD + "CreaGrid" + SOURCE_SUFFIX;
 
     private static final String VIEW_SUFFIX = "List";
 
@@ -165,6 +170,8 @@ public class TElabora {
     public boolean flagKeyCode;            //--dal dialogo di input
 
     public boolean flagCompany;            //--dal dialogo di input
+
+    public boolean flagGrid;            //--dal dialogo di input
 
     //--regolate indipendentemente dai risultati del dialogo
     private String userDir;                 //--di sistema
@@ -267,10 +274,13 @@ public class TElabora {
     private String methodBuilderText;
 
     private String methodReadCompanyText;
+    private String methodGridPaginatedText;
 
     private String superClassEntity;
 
     private String importCost;
+
+    private String gridSuperclass;
 
 
     public TElabora() {
@@ -528,6 +538,15 @@ public class TElabora {
             }// end of if/else cycle
         }// end of if cycle
 
+        if (mappaInput.containsKey(Chiave.flagGrid)) {
+            this.flagGrid = (boolean) mappaInput.get(Chiave.flagGrid);
+            if (flagGrid) {
+                gridSuperclass = SUPERCLASS_PAGINATED_GRID;
+            } else {
+                gridSuperclass = SUPERCLASS_GRID;
+            }// end of if/else cycle
+        }// end of if cycle
+
         if (mappaInput.containsKey(Chiave.flagSovrascrive)) {
             this.flagSovrascrive = (boolean) mappaInput.get(Chiave.flagSovrascrive);
         }// end of if cycle
@@ -690,6 +709,8 @@ public class TElabora {
         mappa.put(Token.superClassEntity, superClassEntity);
         mappa.put(Token.usaCompany, creaUsaCompany());
         mappa.put(Token.readCompany, creaReadCompany());
+        mappa.put(Token.grid, gridSuperclass);
+        mappa.put(Token.creaGrid, creaGrid());
         mappa.put(Token.methodFind, creaFind());
         mappa.put(Token.parametersDoc, creaParametersDoc());
         mappa.put(Token.keyUnica, creaKeyUnica());
@@ -758,6 +779,18 @@ public class TElabora {
         }// end of if cycle
 
         return methodReadCompanyText;
+    }// end of method
+
+
+    private String creaGrid() {
+        methodGridPaginatedText = "";
+
+        if (flagGrid) {
+            methodGridPaginatedText += leggeFile(METHOD_CREA_GRID);
+            methodGridPaginatedText = Token.replace(Token.entity, methodGridPaginatedText, newEntityName);
+        }// end of if cycle
+
+        return methodGridPaginatedText;
     }// end of method
 
 

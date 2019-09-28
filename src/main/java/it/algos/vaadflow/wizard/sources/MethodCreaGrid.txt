@@ -1,0 +1,12 @@
+    /**
+     * Crea la GridPaginata <br>
+     * DEVE essere creata in creaGridPaginata() della sottoclasse
+     * con la PaginatedGrid specifica della Collection <br>
+     * Invocare DOPO il metodo della superclasse <br>
+     * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe specifica <br>
+     */
+    @Override
+    protected void creaGridPaginata() {
+        paginatedGrid = new PaginatedGrid<@ENTITY@>();
+        super.creaGridPaginata();
+    }// end of method

@@ -9,6 +9,7 @@ import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 /**
  * Project @MODULELOWER@ <br>
@@ -41,6 +43,8 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
  * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  * Annotated with @AIView (facoltativo Algos) per regolare alcune property associate a questa classe <br>
+ * Se serve una Grid paginata estende APaginatedGridViewList altrimenti AGridViewList <br>
+ * Se si usa APaginatedGridViewList è obbligatorio creare la PaginatedGrid 'tipizzata' nel metodo creaGridPaginata <br>
  */
 @UIScope
 @Route(value = @QUALIFIER@, layout = MainLayout14.class)
@@ -48,7 +52,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 @Slf4j
 @AIScript(sovrascrivibile = true)
 @AIView(vaadflow = false, menuName = @QUALIFIER@, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code")
-public class @ENTITY@List extends AGridViewList {
+public class @ENTITY@List extends @GRID@ {
 
 
     /**
@@ -65,6 +69,7 @@ public class @ENTITY@List extends AGridViewList {
         super(service, @ENTITY@.class);
     }// end of Vaadin/@Route constructor
 
+    @CREAGRID@
 
     /**
      * Apertura del dialogo per una nuova entity oppure per una esistente <br>
