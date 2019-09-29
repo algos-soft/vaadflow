@@ -1,5 +1,6 @@
 package it.algos.vaadflow.ui.dialog;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -11,6 +12,8 @@ import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+
+import static it.algos.vaadflow.application.FlowCost.USA_BUTTON_SHORTCUT;
 
 /**
  * Project vaadflow
@@ -83,6 +86,9 @@ public class ADeleteDialog<T extends Serializable> extends ADialog {
         cancelButton.getElement().setAttribute("theme", "primary");
         cancelButton.addClickListener(e -> cancellaHandler());
         cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
+        if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+            cancelButton.addClickShortcut(Key.ARROW_LEFT);
+        }// end of if cycle
         bottomLayout.add(cancelButton);
 
         deleteButton.getElement().setAttribute("theme", "error");

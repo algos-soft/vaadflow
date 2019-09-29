@@ -80,14 +80,14 @@ public class GiornoList extends ACronoViewList {
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Preferenze standard <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
-    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-
+        super.usaBottoneEdit = false;
         super.grid = new PaginatedGrid<Giorno>();
     }// end of method
 

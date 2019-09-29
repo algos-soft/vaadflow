@@ -66,6 +66,18 @@ public class SecoloList extends ACronoViewList {
 
 
     /**
+     * Preferenze standard <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
+     */
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.usaPopupFiltro = false;
+    }// end of method
+
+
+    /**
      * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
      * Normalmente ad uso esclusivo del developer <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
@@ -77,16 +89,6 @@ public class SecoloList extends ACronoViewList {
         alertPlacehorder.add(new Label("Sono considerati i secoli dal X a.c. al XXI d.c. Non si possono cancellare ne aggiungere elementi."));
     }// end of method
 
-    /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     */
-    @Override
-    protected void fixPreferenze() {
-        super.fixPreferenze();
-        super.usaPopupFiltro = false;
-    }// end of method
 
 
     /**

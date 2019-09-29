@@ -54,6 +54,7 @@ public abstract class ACronoViewList extends AGridViewList {
         super.usaBottoneReset = true;
         super.isEntityDeveloper = true;
         super.usaBottoneNew = false;
+        super.usaBottoneEdit = true;
     }// end of method
 
 

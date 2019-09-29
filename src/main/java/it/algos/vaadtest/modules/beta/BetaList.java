@@ -79,7 +79,6 @@ public class BetaList extends APaginatedGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-        super.usaBottoneEdit = true;
     }// end of method
 
 

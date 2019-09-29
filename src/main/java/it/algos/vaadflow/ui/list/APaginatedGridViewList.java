@@ -1,18 +1,13 @@
 package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
-import com.vaadin.flow.data.selection.SingleSelectionEvent;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadtest.modules.prova.Prova;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.klaudeta.PaginatedGrid;
 
@@ -48,6 +43,18 @@ public abstract class APaginatedGridViewList extends AGridViewList {
     public APaginatedGridViewList(IAService service, Class<? extends AEntity> entityClazz) {
         super(service, entityClazz);
     }// end of Vaadin/@Route constructor
+
+
+    /**
+     * Preferenze standard <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
+     */
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        super.usaBottoneEdit = false;
+    }// end of method
 
 
     /**
@@ -139,6 +146,7 @@ public abstract class APaginatedGridViewList extends AGridViewList {
         }// end of if/else cycle
     }// end of method
 
+
     /**
      * Aggiunge in automatico le colonne previste in gridPropertyNamesList <br>
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
@@ -153,6 +161,7 @@ public abstract class APaginatedGridViewList extends AGridViewList {
             }// end of if cycle
         }// end of if cycle
     }// end of method
+
 
     /**
      * Eventuale header text <br>
@@ -170,6 +179,7 @@ public abstract class APaginatedGridViewList extends AGridViewList {
 //            log.error(unErrore.toString());
 //        }// fine del blocco try-catch
     }// end of method
+
 
     /**
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>

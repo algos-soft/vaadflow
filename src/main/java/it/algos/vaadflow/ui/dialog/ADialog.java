@@ -16,6 +16,7 @@ import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.service.AVaadinService;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +94,15 @@ public class ADialog extends Dialog implements IADialog {
      */
     @Autowired
     public ATextService text = ATextService.getInstance();
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    public PreferenzaService pref ;
 
     public Runnable cancelHandler;
 
