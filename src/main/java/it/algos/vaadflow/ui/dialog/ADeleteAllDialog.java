@@ -4,10 +4,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
@@ -16,39 +16,28 @@ import java.io.Serializable;
  * Project vaadflow
  * Created by Algos
  * User: gac
- * Date: lun, 10-dic-2018
- * Time: 17:08
+ * Date: dom, 29-set-2019
+ * Time: 07:49
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class ADeleteDialog<T extends Serializable> extends ADialog {
+public class ADeleteAllDialog<T extends Serializable> extends ADialog {
 
     //--Titolo standard, eventualmente modificabile nelle sottoclassi
     private static String TITOLO = "Delete";
 
-    private static String message = "Vuoi veramente cancellare questo elemento ?";
-
-    private static String additionalMessage = "L'operazione non è reversibile";
-
     protected Button deleteButton = new Button(TITOLO);
 
+    private static  String message = "Vuoi veramente cancellare TUTTE le entities di questa collezione ?";
+    private static  String additionalMessage = "L'operazione non è reversibile";
 
     /**
      * Costruttore <br>
      */
-    public ADeleteDialog() {
+    public ADeleteAllDialog() {
         super(TITOLO);
     }// end of constructor
-
-
-    /**
-     * Costruttore <br>
-     */
-    public ADeleteDialog(String entityName) {
-        super(TITOLO + " "+entityName);
-    }// end of constructor
-
 
     /**
      * Metodo invocato subito DOPO il costruttore.
@@ -64,7 +53,6 @@ public class ADeleteDialog<T extends Serializable> extends ADialog {
     protected void inizializzazione() {
         super.inizia();
     }// end of method
-
 
     /**
      * Barra dei bottoni
@@ -90,7 +78,6 @@ public class ADeleteDialog<T extends Serializable> extends ADialog {
         deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
         bottomLayout.add(deleteButton);
     }// end of method
-
 
     /**
      * Apre il dialogo <br>

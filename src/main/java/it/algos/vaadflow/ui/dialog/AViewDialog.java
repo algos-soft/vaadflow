@@ -718,47 +718,18 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    /**
-     * Azione proveniente dal click sul bottone Cancella (delete)
-     */
-    private void deleteClicked() {
-//        if (confirmDialog.getElement().getParent() == null) {
-//            getUI().ifPresent(ui -> ui.add(confirmDialog));
-//        }
-        openConfirmDialog();
-    }// end of method\
-
-
-//    /**
-//     * Azione proveniente dal click sul bottone Annulla
-//     */
-//    public void close() {
-//        super.close();
-////        IAView vista = presenter.getView();
-////        if (vista != null) {
-////            vista.updateView();
-////        }// end of if cycle
-////        UI.getCurrent().getPage().reload();
-//    }// end of method
-
 
     /**
-     * Opens the confirmation dialog before deleting the current item.
+     * Opens the confirmation dialog before deleting all items. <br>
      * <p>
-     * The dialog will display the given title and message(s), then call
+     * The dialog will display the given title and message(s), then call <br>
      * {@link #deleteConfirmed(Serializable)} if the Delete button is clicked.
-     * <p>
-     * //     * @param title             The title text
-     * //     * @param message           Detail message (optional, may be empty)
-     * //     * @param additionalMessage Additional message (optional, may be empty)
+     * Può essere sovrascritto dalla classe specifica se servono avvisi diversi <br>
      */
-    protected final void openConfirmDialog() {
-        String title = BOT_DELETE;
-        String message = "Vuoi veramente cancellare questo elemento ?";
-        String additionalMessage = "L'operazione non è reversibile";
-        ADeleteDialog dialog = appContext.getBean(ADeleteDialog.class);
-        dialog.open(message, additionalMessage, this::deleteConfirmed);
+    protected final void deleteClicked() {
+        appContext.getBean(ADeleteDialog.class,currentItem.toString()).open(this::deleteConfirmed);
     }// end of method
+
 
 
     private void deleteConfirmed() {
