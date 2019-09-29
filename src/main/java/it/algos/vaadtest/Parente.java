@@ -19,7 +19,6 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class Parente {
 
-
     public Parente(){
         System.out.println("Parent-----constructor");
     }
