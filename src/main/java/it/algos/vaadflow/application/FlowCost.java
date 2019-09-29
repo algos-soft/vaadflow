@@ -140,6 +140,7 @@ public abstract class FlowCost {
     public static final String FLAG_TEXT_SEARCH = "textSearch";
 
     public static final String FLAG_TEXT_NEW = "textNew";
+    public static final String FLAG_TEXT_SHOW = "textShow";
     public static final String FLAG_TEXT_EDIT = "textEdit";
 
     public static final String BOT_ACCETTA = "Accetta";

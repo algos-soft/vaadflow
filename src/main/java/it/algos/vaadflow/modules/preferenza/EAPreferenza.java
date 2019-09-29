@@ -40,6 +40,7 @@ public enum EAPreferenza {
     usaMenu(FlowCost.USA_MENU, "Tipo di menu in uso", EAPrefType.enumeration, "routers,tabs,buttons,popup,flowing,vaadin;routers"),
     textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.enumeration, "cerca,ricerca,find;cerca"),
     textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.enumeration, "new,nuovo;nuovo"),
+    textButtonShow(FlowCost.FLAG_TEXT_SHOW, "Testo del bottone Show (potrebbe esserci solo l'icona)", EAPrefType.enumeration, "show,mostra,vedi;show"),
     textButtonEdit(FlowCost.FLAG_TEXT_EDIT, "Testo del bottone Edit (potrebbe esserci solo l'icona)", EAPrefType.enumeration, "open,edit,modifica,apre,apri;edit"),
     usaTextEditButton(FlowCost.USA_TEXT_EDIT_BUTTON, "Usa un testo (oltre all'icona) per il bottone di Edit che apre il dialog", EAPrefType.bool, true),
     usaEditButton(FlowCost.USA_EDIT_BUTTON, "Usa una colonna di bottoni Edit per aprire il dialogo. Se falso, usa un doppio clik nella riga", EAPrefType.bool, true),

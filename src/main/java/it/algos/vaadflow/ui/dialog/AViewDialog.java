@@ -15,6 +15,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -344,9 +345,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (usaSaveButton) {
             saveButton.getElement().setAttribute("theme", "primary");
             saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                saveButton.addClickShortcut(Key.ENTER);
-            }// end of if cycle
+//            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+//                saveButton.addClickShortcut(Key.ENTER);
+//            }// end of if cycle
             bottomLayout.add(saveButton);
         }// end of if cycle
 
@@ -475,7 +476,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     private void creaFields() {
         List<String> propertyNamesList;
-        AbstractField propertyField = null;
 
         //--Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
         fieldMap = new LinkedHashMap<>();
@@ -490,14 +490,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         binder = new Binder(binderClass);
 
         //--Costruisce ogni singolo field
-        //--Aggiunge il field al binder, nel metodo create() del fieldService
-        //--Aggiunge il field ad una fieldMap, per recuperare i fields dal nome
-        for (String propertyName : propertyNamesList) {
-            propertyField = fieldService.create(appContext, binder, binderClass, propertyName);
-            if (propertyField != null) {
-                fieldMap.put(propertyName, propertyField);
-            }// end of if cycle
-        }// end of for cycle
+        creaFieldsBase(propertyNamesList);
 
         //--Eventuali regolazioni aggiuntive ai fields del binder
         fixStandardAlgosFields();
@@ -529,6 +522,37 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //--Regola in lettura l'eeventuale field company (un combo). Dal DB alla UI
         readCompanyField();
+    }// end of method
+
+
+    /**
+     * Costruisce ogni singolo field <br>
+     * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service <br>
+     * Inizializza le properties grafiche (caption, visible, editable, width, ecc) <br>
+     * Aggiunge il field al binder, nel metodo create() del fieldService <br>
+     * Aggiunge il field ad una fieldMap, per recuperare i fields dal nome <br>
+     * Controlla l'esistenza tra i field di un eventuale field di tipo textArea. Se NON esiste, abilita il tasto 'return'
+     */
+    protected void creaFieldsBase(List<String> propertyNamesList) {
+        AbstractField propertyField = null;
+        boolean esisteTextArea = false;
+
+        for (String propertyName : propertyNamesList) {
+            propertyField = fieldService.create(appContext, binder, binderClass, propertyName);
+            if (propertyField != null) {
+                fieldMap.put(propertyName, propertyField);
+            }// end of if cycle
+            if (propertyField instanceof TextArea) {
+                esisteTextArea = true;
+            }// end of if cycle
+        }// end of for cycle
+
+        if (!esisteTextArea) {
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                saveButton.addClickShortcut(Key.ENTER);
+            }// end of if cycle
+        }// end of if cycle
+
     }// end of method
 
 
@@ -718,7 +742,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-
     /**
      * Opens the confirmation dialog before deleting all items. <br>
      * <p>
@@ -727,9 +750,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Può essere sovrascritto dalla classe specifica se servono avvisi diversi <br>
      */
     protected final void deleteClicked() {
-        appContext.getBean(ADeleteDialog.class,currentItem.toString()).open(this::deleteConfirmed);
+        appContext.getBean(ADeleteDialog.class, currentItem.toString()).open(this::deleteConfirmed);
     }// end of method
-
 
 
     private void deleteConfirmed() {
