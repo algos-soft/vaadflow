@@ -237,7 +237,7 @@ public class AFieldService extends AbstractService {
                 field = new EmailField(caption);
                 ((EmailField)field).setClearButtonVisible(true);
                 if (binder != null) {
-                    binder.forField(field).withValidator(new EmailValidator("Inserisci un indirizzo eMail valido")).bind(fieldName);
+                    binder.forField(field).withValidator(new EmailValidator("L'indirizzo eMail non è valido")).bind(fieldName);
                 }// end of if cycle
                 break;
             case textarea:

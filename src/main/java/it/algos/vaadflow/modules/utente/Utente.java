@@ -168,7 +168,7 @@ public class Utente extends ACEntity implements UserDetails {
      */
     @Field("mail")
     @AIField(type = EAFieldType.email, widthEM = 24)
-    @AIColumn(name = "eMail", flexGrow = true, sortable = false)
+    @AIColumn(name = "mail", flexGrow = true, sortable = false)
     public String mail;
 
 

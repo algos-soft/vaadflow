@@ -1,6 +1,5 @@
 package it.algos.vaadflow.modules.person;
 
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -9,11 +8,12 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 
 /**
@@ -90,7 +90,7 @@ public class PersonList extends AGridViewList {
      */
     protected void openDialog(AEntity entityBean) {
         PersonDialog dialog = appContext.getBean(PersonDialog.class, service, entityClazz);
-        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
+        dialog.open(entityBean, EAOperation.edit, this::save, this::delete, this::updateDopoDialog);
     }// end of method
 
 }// end of class

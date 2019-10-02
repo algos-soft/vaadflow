@@ -1,17 +1,15 @@
 package it.algos.vaadflow.modules.address;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 
 /**
@@ -49,7 +47,8 @@ public class AddressDialog extends AViewDialog<Address> {
 
 
     /**
-     * Costruttore base con parametri <br>
+     * Costruttore con parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
      * L'istanza DEVE essere creata con appContext.getBean(AddressDialog.class, service, entityClazz); <br>
      *
      * @param service     business class e layer di collegamento per la Repository
@@ -59,5 +58,19 @@ public class AddressDialog extends AViewDialog<Address> {
         super(service, binderClass);
     }// end of constructor
 
-    
+
+    /**
+     * Costruttore con parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * L'istanza DEVE essere creata con appContext.getBean(AddressDialog.class, service, entityClazz, isDialogoPrimoLivello); <br>
+     *
+     * @param service               business class e layer di collegamento per la Repository
+     * @param binderClass           di tipo AEntity usata dal Binder dei Fields
+     * @param isDialogoPrimoLivello flag per differenziare i dialoghi di secondo livello, aperti dai primi
+     */
+    public AddressDialog(IAService service, Class<? extends AEntity> binderClass, boolean isDialogoPrimoLivello) {
+        super(service, binderClass, isDialogoPrimoLivello);
+    }// end of constructor
+
+
 }// end of class

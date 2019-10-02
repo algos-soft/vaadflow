@@ -385,15 +385,19 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     protected void openDialog(AEntity entityBean) {
     }// end of method
 
+    public void updateDopoDialog(AEntity entityBean) {
+        this.updateItems();
+        this.updateView();
+    }// end of method
 
     //@todo da rendere getBean il dialogo
     protected void openSearch() {
         searchDialog = appContext.getBean(ASearchDialog.class, service);
-        searchDialog.open("", "", this::updateViewDopoSearch, null);
+        searchDialog.open("", "", this::updateDopoSearch, null);
     }// end of method
 
 
-    public void updateViewDopoSearch() {
+    public void updateDopoSearch() {
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
         List<AEntity> lista;
         IAField field;

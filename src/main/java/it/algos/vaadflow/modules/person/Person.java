@@ -124,7 +124,7 @@ public class Person extends Utente {
      */
     @Field("ind")
     @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
-    @AIColumn(name = "ind.", flexGrow = true, sortable = false)
+    @AIColumn(name = "indirizzo", flexGrow = true, sortable = false)
     public Address indirizzo;
 
 

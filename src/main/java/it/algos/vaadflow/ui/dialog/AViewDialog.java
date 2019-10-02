@@ -98,8 +98,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     public ATextService text = ATextService.getInstance();
 
-    public Consumer<T> itemAnnulla;
-
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
@@ -153,6 +151,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected boolean usaFormDueColonne;
 
+    /**
+     * Flag per differenziare i dialoghi di secondo livello, aperti dai primi. Normalmente true.
+     */
+    protected boolean isDialogoPrimoLivello;
 
     protected IAService service;
 
@@ -175,6 +177,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
     protected AComboBox companyField;
 
+
     /**
      * Istanza (@VaadinSessionScope) inietta da Spring ed unica nella sessione <br>
      */
@@ -191,6 +194,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     protected EAOperation operation;
 
     private Consumer<T> itemDeleter;
+
+    private Consumer<T> itemAnnulla;
 
     private Registration registrationForSave;
 
@@ -220,8 +225,23 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param binderClass di tipo AEntity usata dal Binder dei Fields
      */
     public AViewDialog(IAService service, Class<? extends AEntity> binderClass) {
+        this(service, binderClass, true);
+    }// end of constructor
+
+
+    /**
+     * Costruttore con parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * L'istanza DEVE essere creata con appContext.getBean(xxxDialog.class, service, entityClazz, isDialogoPrimoLivello); <br>
+     *
+     * @param service               business class e layer di collegamento per la Repository
+     * @param binderClass           di tipo AEntity usata dal Binder dei Fields
+     * @param isDialogoPrimoLivello flag per differenziare i dialoghi di secondo livello, aperti dai primi
+     */
+    public AViewDialog(IAService service, Class<? extends AEntity> binderClass, boolean isDialogoPrimoLivello) {
         this.service = service;
         this.binderClass = binderClass;
+        this.isDialogoPrimoLivello = isDialogoPrimoLivello;
     }// end of constructor
 
 
@@ -287,8 +307,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Flag di preferenza per usare il bottone Delete. Normalmente true.
         usaDeleteButton = true;
 
-        //Flag di preferenza per le due colonne nel form. Normalmente true.
+        //--Flag di preferenza per le due colonne nel form. Normalmente true.
         usaFormDueColonne = true;
+
+        //--Flag per differenziare i dialoghi di secondo livello, aperti dai primi. Normalmente true.
+        isDialogoPrimoLivello = true;
     }// end of method
 
 
@@ -336,7 +359,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         if (usaCancelButton) {
             cancelButton.addClickListener(e -> close());
             cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+            if (pref.isBool(USA_BUTTON_SHORTCUT) && isDialogoPrimoLivello) {
                 cancelButton.addClickShortcut(Key.ARROW_LEFT);
             }// end of if cycle
             bottomLayout.add(cancelButton);
@@ -355,7 +378,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             deleteButton.addClickListener(e -> deleteClicked());
             deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteButton.getElement().setAttribute("theme", "error");
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+            if (pref.isBool(USA_BUTTON_SHORTCUT) && isDialogoPrimoLivello) {
                 deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.ALT);
             }// end of if cycle
             bottomLayout.add(deleteButton);
@@ -393,11 +416,27 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * @param entityBean        The item to edit; it may be an existing or a newly created instance
      * @param operationProposed The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
      * @param itemSaver         funzione associata al bottone 'accetta' ('registra', 'conferma')
-     * @param itemDeleter       funzione associata al bottone 'delete'
+     * @param itemDeleter       funzione associata al bottone 'delete' (eventuale)
      */
     public void open(final AEntity entityBean, EAOperation operationProposed, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter) {
+        open(entityBean, operationProposed, itemSaver, itemDeleter, null);
+    }// end of method
+
+
+    /**
+     * Opens the given item for editing in the dialog.
+     * Crea i fields e visualizza il dialogo <br>
+     *
+     * @param entityBean        The item to edit; it may be an existing or a newly created instance
+     * @param operationProposed The operation being performed on the item (addNew, edit, editNoDelete, editDaLink, showOnly)
+     * @param itemSaver         funzione associata al bottone 'accetta' ('registra', 'conferma')
+     * @param itemDeleter       funzione associata al bottone 'delete' (eventuale)
+     * @param itemAnnulla       funzione associata al bottone 'annulla' (bottone obbligatorio, azione facoltativa)
+     */
+    public void open(final AEntity entityBean, EAOperation operationProposed, BiConsumer<T, EAOperation> itemSaver, Consumer<T> itemDeleter, Consumer<T> itemAnnulla) {
         this.itemSaver = itemSaver;
         this.itemDeleter = itemDeleter;
+        this.itemAnnulla = itemAnnulla;
 
         //--controllo iniziale di sicurezza
         if (service == null) {
@@ -548,7 +587,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         }// end of for cycle
 
         if (!esisteTextArea) {
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+            if (pref.isBool(USA_BUTTON_SHORTCUT) && isDialogoPrimoLivello) {
                 saveButton.addClickShortcut(Key.ENTER);
             }// end of if cycle
         }// end of if cycle
@@ -757,6 +796,11 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     private void deleteConfirmed() {
         itemDeleter.accept(currentItem);
         close();
+    }// end of method
+
+    public void close() {
+        super.close();
+        itemAnnulla.accept(currentItem);
     }// end of method
 
 

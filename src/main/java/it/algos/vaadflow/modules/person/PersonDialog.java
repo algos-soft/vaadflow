@@ -1,15 +1,14 @@
 package it.algos.vaadflow.modules.person;
 
+import com.vaadin.flow.component.FocusNotifier;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -51,13 +50,12 @@ public class PersonDialog extends AViewDialog<Person> {
 
     private final static String INDIRIZZO = "indirizzo";
 
-    private AddressService addressService;
-
-    private AddressDialog addressDialog;
-
     private Address indirizzoTemporaneo;
 
     private ATextField indirizzoField;
+
+    @Autowired
+    private AddressService addressService;
 
     private ATextField mailField;
 
@@ -85,7 +83,6 @@ public class PersonDialog extends AViewDialog<Person> {
     }// end of constructor
 
 
-
     /**
      * Costruisce eventuali fields specifici (costruiti non come standard type)
      * Aggiunge i fields specifici al binder
@@ -94,16 +91,18 @@ public class PersonDialog extends AViewDialog<Person> {
      */
     @Override
     protected void addSpecificAlgosFields() {
-        addressService = StaticContextAccessor.getBean(AddressService.class);
-
-        addressDialog = StaticContextAccessor.getBean(AddressDialog.class);
-//        addressDialog.fixFunzioni(this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
-        addressDialog.fixConfermaAndNotRegistrazione();
-
         indirizzoField = (ATextField) getField(INDIRIZZO);
         if (indirizzoField != null) {
-//            indirizzoField.addFocusListener(e -> addressDialog.open(getIndirizzo(), EAOperation.edit, context));//@todo creare dialog con getBean...
+            indirizzoField.addFocusListener(event -> apreIndirizzo(event));
         }// end of if cycle
+    }// end of method
+
+
+    protected void apreIndirizzo(FocusNotifier.FocusEvent event) {
+        AddressService addressService = appContext.getBean(AddressService.class);
+        AddressDialog addressDialog = appContext.getBean(AddressDialog.class, addressService, Address.class, false);
+        addressDialog.fixConfermaAndNotRegistrazione();
+        addressDialog.open(getIndirizzoCorrente(), EAOperation.edit, this::saveUpdate, this::annullaUpdate);
     }// end of method
 
 
