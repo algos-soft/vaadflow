@@ -71,7 +71,7 @@ import javax.validation.constraints.Size;
 @Builder(builderMethodName = "builderPerson")
 @EqualsAndHashCode(callSuper = false)
 @AIEntity(recordName = "persona", company = EACompanyRequired.facoltativa)
-@AIList(fields = {"nome", "cognome", "telefono", "indirizzo"})
+@AIList(fields = {"nome", "cognome", "telefono", "indirizzo", "mail"})
 @AIForm(fields = {"nome", "cognome", "telefono", "indirizzo", "mail"})
 @AIScript(sovrascrivibile = false)
 public class Person extends Utente {
@@ -114,7 +114,7 @@ public class Person extends Utente {
      */
     @Field("tel")
     @AIField(type = EAFieldType.text)
-    @AIColumn(name = "tel", widthEM = 8, sortable = false)
+    @AIColumn(name = "tel.", widthEM = 8, sortable = false)
     public String telefono;
 
 
@@ -124,7 +124,7 @@ public class Person extends Utente {
      */
     @Field("ind")
     @AIField(type = EAFieldType.link, linkClazz = AddressDialog.class, help = "Indirizzo")
-    @AIColumn(name = "ind", flexGrow = true, sortable = false)
+    @AIColumn(name = "ind.", flexGrow = true, sortable = false)
     public Address indirizzo;
 
 

@@ -1,10 +1,12 @@
 package it.algos.vaadflow.service;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import it.algos.vaadflow.annotation.AIField;
 import it.algos.vaadflow.application.StaticContextAccessor;
@@ -232,9 +234,10 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 break;
             case email:
-                field = new ATextField(caption);
+                field = new EmailField(caption);
+                ((EmailField)field).setClearButtonVisible(true);
                 if (binder != null) {
-                    binder.forField(field).bind(fieldName);
+                    binder.forField(field).withValidator(new EmailValidator("Inserisci un indirizzo eMail valido")).bind(fieldName);
                 }// end of if cycle
                 break;
             case textarea:
@@ -365,7 +368,7 @@ public class AFieldService extends AbstractService {
                 break;
             case localtime:
                 field = new TimePicker(caption);
-                ((TimePicker)field).setStep(Duration.ofHours(1)); //standard
+                ((TimePicker) field).setStep(Duration.ofHours(1)); //standard
                 binder.forField(field).bind(fieldName);
                 break;
             case vaadinIcon:
