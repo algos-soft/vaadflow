@@ -102,7 +102,7 @@ public class PersonDialog extends AViewDialog<Person> {
         AddressService addressService = appContext.getBean(AddressService.class);
         AddressDialog addressDialog = appContext.getBean(AddressDialog.class, addressService, Address.class, false);
         addressDialog.fixConfermaAndNotRegistrazione();
-        addressDialog.open(getIndirizzoCorrente(), EAOperation.edit, this::saveUpdate, this::annullaUpdate);
+        addressDialog.open(getIndirizzoCorrente(), EAOperation.edit, this::saveUpdate, this::deleteUpdate, this::annullaUpdate);
     }// end of method
 
 
@@ -161,15 +161,15 @@ public class PersonDialog extends AViewDialog<Person> {
     }// end of method
 
 
-    private Address getIndirizzo() {
-        Address indirizzo = getIndirizzoCorrente();
-
-        if (indirizzo == null) {
-            indirizzo = addressService.newEntity();
-        }// end of if cycle
-
-        return indirizzo;
-    }// end of method
+//    private Address getIndirizzo() {
+//        Address indirizzo = getIndirizzoCorrente();
+//
+//        if (indirizzo == null) {
+//            indirizzo = addressService.newEntity();
+//        }// end of if cycle
+//
+//        return indirizzo;
+//    }// end of method
 
 
     public void close() {

@@ -798,6 +798,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         close();
     }// end of method
 
+
     public void close() {
         super.close();
         itemAnnulla.accept(currentItem);
