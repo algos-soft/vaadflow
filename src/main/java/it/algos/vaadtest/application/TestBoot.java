@@ -142,13 +142,13 @@ public class TestBoot extends ABoot {
          * Versione dell'applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
-        FlowVar.projectVersion = 1.4;
+        FlowVar.projectVersion = 1.5;
 
         /**
          * Data della versione dell'applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
-        FlowVar.versionDate = LocalDate.of(2019, 9, 20);
+        FlowVar.versionDate = LocalDate.of(2019, 10, 3);
 
         /**
          * Service da usare per recuperare dal mongoDB l'utenza loggata tramite 'username' che è unico <br>
