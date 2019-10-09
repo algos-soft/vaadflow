@@ -1,7 +1,9 @@
 package it.algos.vaadflow.ui.list;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
@@ -65,6 +67,9 @@ public abstract class APaginatedGridViewList extends AGridViewList {
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto <br>
      */
     protected Grid creaGrid(List<String> gridPropertyNamesList) {
+        if (!usaPagination) {
+            return super.creaGrid(gridPropertyNamesList);
+        }// end of if cycle
 
         //--regola la gridPaginated in fixPreferenze() della sottoclasse
         creaGridPaginata();
@@ -127,6 +132,11 @@ public abstract class APaginatedGridViewList extends AGridViewList {
      */
     @Override
     protected void addDetailDialog() {
+        if (!usaPagination) {
+            super.addDetailDialog();
+            return;
+        }// end of if cycle
+
         //--Flag di preferenza per aprire il dialog di detail con un bottone Edit. Normalmente true.
         if (usaBottoneEdit) {
             ComponentRenderer renderer = new ComponentRenderer<>(this::createEditButton);
@@ -153,6 +163,11 @@ public abstract class APaginatedGridViewList extends AGridViewList {
      */
     @Override
     protected void addColumnsGrid(List<String> gridPropertyNamesList) {
+        if (!usaPagination) {
+            super.addColumnsGrid(gridPropertyNamesList);
+            return;
+        }// end of if cycle
+
         if (paginatedGrid != null) {
             if (gridPropertyNamesList != null) {
                 for (String propertyName : gridPropertyNamesList) {
@@ -169,15 +184,20 @@ public abstract class APaginatedGridViewList extends AGridViewList {
      */
     @Override
     protected void fixGridHeader() {
-//        try { // prova ad eseguire il codice
-//            HeaderRow topRow = paginatedGrid.prependHeaderRow();
-//            Grid.Column[] matrix = array.getColumnArray(paginatedGrid);
-//            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
-//            headerGridHolder = new Label("x");
-//            informationCell.setComponent(headerGridHolder);
-//        } catch (Exception unErrore) { // intercetta l'errore
-//            log.error(unErrore.toString());
-//        }// fine del blocco try-catch
+        if (!usaPagination) {
+            super.fixGridHeader();
+            return;
+        }// end of if cycle
+
+        try { // prova ad eseguire il codice
+            HeaderRow topRow = paginatedGrid.prependHeaderRow();
+            Grid.Column[] matrix = array.getColumnArray(paginatedGrid);
+            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+            headerGridHolder = new Label("x");
+            informationCell.setComponent(headerGridHolder);
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error(unErrore.toString());
+        }// fine del blocco try-catch
     }// end of method
 
 

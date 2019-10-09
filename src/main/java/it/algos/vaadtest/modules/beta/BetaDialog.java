@@ -1,22 +1,24 @@
 package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 28-set-2019 13.27.50 <br>
+ * Fix date: 7-ott-2019 8.25.50 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
@@ -60,5 +62,5 @@ public class BetaDialog extends AViewDialog<Beta> {
         super(service, binderClass);
     }// end of constructor
 
-
+    
 }// end of class

@@ -10,11 +10,9 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
@@ -22,7 +20,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 28-set-2019 13.27.50 <br>
+ * Fix date: 7-ott-2019 8.25.50 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -50,7 +48,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Route(value = TAG_BET, layout = MainLayout14.class)
 @Qualifier(TAG_BET)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_BET, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code")
 public class BetaList extends AGridViewList {
 
@@ -72,30 +70,16 @@ public class BetaList extends AGridViewList {
 
 
     /**
-     * Le preferenze standard
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+     * Preferenze standard <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+        super.isEntityModificabile = false;
     }// end of method
-
-
-//    /**
-//     * Crea la GridPaginata <br>
-//     * Per usare una GridPaginata occorre:
-//     * 1) la view xxxList deve estendere APaginatedGridViewList anziche AGridViewList <br>
-//     * 2) deve essere sovrascritto questo metodo nella classe xxxList <br>
-//     * 3) nel metodo sovrascritto va creata la PaginatedGrid 'tipizzata' con la entityClazz (Collection) specifica <br>
-//     * 4) il metodo sovrascritto deve invocare DOPO questo stesso superMetodo in APaginatedGridViewList <br>
-//     */
-//    @Override
-//    protected void creaGridPaginata() {
-//        paginatedGrid = new PaginatedGrid<Beta>();
-//        super.creaGridPaginata();
-//    }// end of method
 
 
     /**
@@ -112,7 +96,7 @@ public class BetaList extends AGridViewList {
      */
     @Override
     protected void openDialog(AEntity entityBean) {
-        appContext.getBean(BetaDialog.class, service, entityClazz).open(entityBean, EAOperation.edit, this::save, this::delete);
+        appContext.getBean(BetaDialog.class, service, entityClazz).open(entityBean, isEntityModificabile ? EAOperation.edit : EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 }// end of class

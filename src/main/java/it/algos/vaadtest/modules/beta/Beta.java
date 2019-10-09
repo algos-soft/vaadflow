@@ -1,30 +1,27 @@
 package it.algos.vaadtest.modules.beta;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.ui.fields.AIndirizzo;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 28-set-2019 13.27.50 <br>
+ * Fix date: 7-ott-2019 8.25.50 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -73,7 +70,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code"})
-@AIForm(fields = {"ordine", "code"})
+@AIForm(fields = {"ordine", "code", "indirizzo"})
 public class Beta extends AEntity {
 
 
@@ -82,8 +79,8 @@ public class Beta extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-    
-	/**
+
+    /**
      * ordine di presentazione (obbligatorio, unico) <br>
      * il più importante per primo <br>
      */
@@ -93,8 +90,8 @@ public class Beta extends AEntity {
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", widthEM = 3)
     public int ordine;
-    
-	/**
+
+    /**
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull(message = "Il codice è obbligatorio")
@@ -104,7 +101,17 @@ public class Beta extends AEntity {
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
     @AIColumn(widthEM = 8)
     public String code;
-    
+
+    /**
+     * indirizzo (facoltativo, non unica)
+     * riferimento dinamico CON @DBRef
+     */
+    @DBRef
+    @Field("ind2")
+    @AIField(type = EAFieldType.custom, serviceClazz = AIndirizzo.class, help = "Indirizzo")
+    @AIColumn(name = "ind2")
+    public Address indirizzo;
+
 
     /**
      * @return a string representation of the object.

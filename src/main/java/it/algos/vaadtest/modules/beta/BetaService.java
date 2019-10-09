@@ -1,27 +1,28 @@
 package it.algos.vaadtest.modules.beta;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.address.Address;
+import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 28-set-2019 13.27.50 <br>
+ * Fix date: 7-ott-2019 8.25.50 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
@@ -42,12 +43,10 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIScript(sovrascrivibile = false)
 public class BetaService extends AService {
 
-
     /**
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
-
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -55,6 +54,9 @@ public class BetaService extends AService {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public BetaRepository repository;
+
+    @Autowired
+    private AddressService addressService;
 
 
     /**
@@ -70,7 +72,8 @@ public class BetaService extends AService {
         super(repository);
         super.entityClass = Beta.class;
         this.repository = (BetaRepository) repository;
-   }// end of Spring constructor
+    }// end of Spring constructor
+
 
     /**
      * Ricerca di una entity (la crea se non la trova) <br>
@@ -89,6 +92,7 @@ public class BetaService extends AService {
         return entity;
     }// end of method
 
+
     /**
      * Crea una entity e la registra <br>
      *
@@ -97,48 +101,49 @@ public class BetaService extends AService {
      * @return la entity appena creata
      */
     public Beta crea(String code) {
-         return (Beta)save(newEntity(0, code));
+        return (Beta) save(newEntity(0, code));
     }// end of method
 
-     /**
-      * Creazione in memoria di una nuova entity che NON viene salvata
-      * Eventuali regolazioni iniziali delle property
-      * Senza properties per compatibilità con la superclasse
-      *
-      * @return la nuova entity appena creata (non salvata)
-      */
-     @Override
-     public Beta newEntity() {
-         return newEntity(0, "");
-     }// end of method
 
-
-     /**
-      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-      * Eventuali regolazioni iniziali delle property <br>
-      * All properties <br>
-      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata
+     * Eventuali regolazioni iniziali delle property
+     * Senza properties per compatibilità con la superclasse
      *
-      * @param ordine      di presentazione (obbligatorio con inserimento automatico se è zero)
-	* @param code        codice di riferimento (obbligatorio)
-      *
-      * @return la nuova entity appena creata (non salvata)
-      */
-     public Beta newEntity(int ordine, String code) {
-         Beta entity = null;
+     * @return la nuova entity appena creata (non salvata)
+     */
+    @Override
+    public Beta newEntity() {
+        return newEntity(0, "");
+    }// end of method
 
-         entity = findByKeyUnica(code);
-		if (entity != null) {
-			return findByKeyUnica(code);
-		}// end of if cycle
-		
-         entity = Beta.builderBeta()
-				.ordine(ordine != 0 ? ordine : this.getNewOrdine())
-				.code(text.isValid(code) ? code : null)
-				.build();
 
-         return (Beta)creaIdKeySpecifica(entity);
-     }// end of method
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
+     * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
+     *
+     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
+     * @param code   codice di riferimento (obbligatorio)
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Beta newEntity(int ordine, String code) {
+        Beta entity = null;
+
+        entity = findByKeyUnica(code);
+        if (entity != null) {
+            return findByKeyUnica(code);
+        }// end of if cycle
+
+        entity = Beta.builderBeta()
+                .ordine(ordine != 0 ? ordine : this.getNewOrdine())
+                .code(text.isValid(code) ? code : null)
+                .build();
+
+        return (Beta) creaIdKeySpecifica(entity);
+    }// end of method
 
 
     /**
@@ -152,6 +157,19 @@ public class BetaService extends AService {
         return repository.findByCode(code);
     }// end of method
 
-    
+
+    /**
+     * Proviene da Lista (quasi sempre)
+     * Primo ingresso dopo il click sul bottone <br>
+     *
+     * @param entityBean
+     * @param operation
+     */
+    @Override
+    public AEntity save(AEntity entityBean, EAOperation operation) {
+        List lista = addressService.findAll();
+        ((Beta) entityBean).indirizzo = (Address) lista.get(1);
+        return super.save(entityBean, operation);
+    }
 
 }// end of class

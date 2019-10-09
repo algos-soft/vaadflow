@@ -1,5 +1,6 @@
 package it.algos.vaadflow.modules.preferenza;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
@@ -94,6 +95,18 @@ public class PreferenzaList extends AGridViewList {
         super.grid = new PaginatedGrid<Preferenza>();
     }// end of method
 
+
+    /**
+     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
+     * Normalmente ad uso esclusivo del developer <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaAlertLayout() {
+        super.creaAlertLayout();
+        alertPlacehorder.add(new Label("Preferenze per regolare alcune funzionalità del programma"));
+    }// end of method
 
     /**
      * Apertura del dialogo per una entity esistente oppure nuova <br>

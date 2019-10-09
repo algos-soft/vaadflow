@@ -20,6 +20,7 @@ import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.dialog.ADeleteDialog;
 import it.algos.vaadflow.ui.dialog.AResetDialog;
 import it.algos.vaadflow.ui.dialog.ASearchDialog;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.AIntegerField;
 import it.algos.vaadflow.ui.fields.ATextArea;
 import it.algos.vaadflow.ui.fields.ATextField;
@@ -30,6 +31,9 @@ import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+
+import static it.algos.vaadflow.application.FlowCost.FLAG_TEXT_EDIT;
+import static it.algos.vaadflow.application.FlowCost.FLAG_TEXT_SHOW;
 
 //import com.vaadin.flow.component.applayout.AppLayoutMenu;
 //import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
@@ -93,7 +97,6 @@ import java.util.*;
 @HtmlImport(value = "styles/algos-styles.html", loadMode = LoadMode.INLINE)
 @Slf4j
 public abstract class AViewList extends APropertyViewList implements IAView, BeforeEnterObserver, BeforeLeaveObserver {
-
 
     /**
      * Costruttore @Autowired <br>
@@ -333,12 +336,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     protected Button createEditButton(AEntity entityBean) {
-        String label = "";
-        if (pref.isBool(FlowCost.USA_TEXT_EDIT_BUTTON)) {
-            label = pref.getStr(FlowCost.FLAG_TEXT_EDIT);
-        }// end of if cycle
-
-        Button edit = new Button(label, event -> openDialog(entityBean));
+        Button edit = new Button(isEntityModificabile ? pref.getStr(FLAG_TEXT_EDIT) : pref.getStr(FLAG_TEXT_SHOW), event -> openDialog(entityBean));
         edit.setIcon(new Icon("lumo", "edit"));
         edit.addClassName("review__edit");
         edit.getElement().setAttribute("theme", "tertiary");
@@ -384,6 +382,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     protected void openDialog(AEntity entityBean) {
     }// end of method
+
 
     public void updateDopoDialog(AEntity entityBean) {
         this.updateItems();
