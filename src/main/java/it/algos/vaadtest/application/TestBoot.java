@@ -4,18 +4,16 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.prova.ProvaList;
-import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.giorno.GiornoList;
 import it.algos.vaadflow.modules.mese.MeseList;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
-import it.algos.vaadflow.modules.preferenza.EAPreferenza;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
-import it.algos.vaadtest.modules.prova.ProvaService;
+import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadtest.modules.prova.ProvaList;
+import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -97,19 +95,50 @@ public class TestBoot extends ABoot {
 
 
     /**
-     * Regola alcune preferenze iniziali
-     * Se non esistono, le crea
-     * Se esistono, sostituisce i valori esistenti con quelli indicati qui
+     * Riferimento alla sottoclasse specifica di ABoot per utilizzare il metodo sovrascritto resetPreferenze() <br>
+     * Il metodo DEVE essere sovrascritto nella sottoclasse specifica <br>
      */
-    protected void regolaPreferenze() {
-        super.regolaPreferenze();
-        pref.saveValue(EAPreferenza.loadUtenti.getCode(), true);
-//        pref.saveValue(EAPreferenza.showAnno.getCode(), false);
-//        pref.saveValue(EAPreferenza.showMese.getCode(), false);
-//        pref.saveValue(EAPreferenza.showGiorno.getCode(), false);
+    protected void regolaRiferimenti() {
+        preferenzaService.applicationBoot = this;
+    }// end of method
+
+
+    /**
+     * Crea le preferenze standard <br>
+     * Se non esistono, le crea <br>
+     * Se esistono, NON modifica i valori esistenti <br>
+     * Per un reset ai valori di default, c'è il metodo reset() chiamato da preferenzaService <br>
+     * Il metodo può essere sovrascritto per creare le preferenze specifiche dell'applicazione <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public int creaPreferenze() {
+        int numPref = super.creaPreferenze();
 
         pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, "ordine,code,descrizione;code");
 
+        return numPref;
+    }// end of method
+
+
+    /**
+     * Cancella e ricrea le preferenze standard <br>
+     * Metodo invocato dal metodo reset() di preferenzeService per poter usufruire della sovrascrittura
+     * nella sottoclasse specifica dell'applicazione <br>
+     * Il metodo può essere sovrascitto per ricreare le preferenze specifiche dell'applicazione <br>
+     * Le preferenze standard sono create dalla enumeration EAPreferenza <br>
+     * Le preferenze specifiche possono essere create da una Enumeration specifica, oppure singolarmente <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     *
+     * @return numero di preferenze creato
+     */
+    @Override
+    public int resetPreferenze() {
+        int numPref = super.resetPreferenze();
+
+        pref.crea("poltrona", "divano", EAPrefType.enumeration, "ordine,code,descrizione;code");
+
+        return numPref;
     }// end of method
 
 
@@ -195,9 +224,9 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(SecoloList.class);
         FlowVar.menuClazzList.add(ProvaList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
-		FlowVar.menuClazzList.add(BetaList.class);
-		FlowVar.menuClazzList.add(ProvaList.class);
-	}// end of method
+        FlowVar.menuClazzList.add(BetaList.class);
+        FlowVar.menuClazzList.add(ProvaList.class);
+    }// end of method
 
 
 }// end of boot class
