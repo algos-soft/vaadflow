@@ -50,6 +50,7 @@ public class ALogin {
         this.roleType = roleType;
     }// end of constructor
 
+
     public ALogin(Utente utente, Company company) {
         this.utente = utente;
         this.company = company;
@@ -69,7 +70,7 @@ public class ALogin {
 
 
     public void setUtente(Utente utente) {
-        this.setUtenteAndCompany(utente, (Company) null);
+        this.utente = utente;
     }// end of method
 
 

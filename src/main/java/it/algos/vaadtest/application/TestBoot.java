@@ -8,6 +8,7 @@ import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.giorno.GiornoList;
 import it.algos.vaadflow.modules.mese.MeseList;
 import it.algos.vaadflow.modules.preferenza.EAPrefType;
+import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
@@ -112,12 +113,23 @@ public class TestBoot extends ABoot {
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
-    public int creaPreferenze() {
+    protected int creaPreferenze() {
         int numPref = super.creaPreferenze();
 
-        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, "ordine,code,descrizione;code");
+        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
 
         return numPref;
+    }// end of method
+
+
+    /**
+     * Eventuali regolazione delle preferenze standard effettuata nella sottoclasse specifica <br>
+     * Serve per modificare solo per l'applicazione specifica il valore standard della preferenza <br>
+     * Eventuali modifiche delle preferenze specifiche (che peraltro possono essere modificate all'origine) <br>
+     * Metodo che DEVE essere sovrascritto <br>
+     */
+    @Override
+    protected void fixPreferenze() {
     }// end of method
 
 
@@ -136,7 +148,7 @@ public class TestBoot extends ABoot {
     public int resetPreferenze() {
         int numPref = super.resetPreferenze();
 
-        pref.crea("poltrona", "divano", EAPrefType.enumeration, "ordine,code,descrizione;code");
+        pref.crea("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
 
         return numPref;
     }// end of method
@@ -161,12 +173,19 @@ public class TestBoot extends ABoot {
          */
         FlowVar.usaCompany = false;
 
-
         /**
          * Nome identificativo dell'applicazione <br>
+         * Usato (eventualmente) nella barra di menu in testa pagina <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
         FlowVar.projectName = "test";
+
+        /**
+         * Derscrizione completa dell'applicazione <br>
+         * Usato (eventualmente) nella barra di menu in testa pagina <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.projectBanner = "Programma di prova per testare vaadflow";
 
         /**
          * Versione dell'applicazione <br>
@@ -222,7 +241,6 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(AnnoList.class);
         FlowVar.menuClazzList.add(MeseList.class);
         FlowVar.menuClazzList.add(SecoloList.class);
-        FlowVar.menuClazzList.add(ProvaList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
         FlowVar.menuClazzList.add(BetaList.class);
         FlowVar.menuClazzList.add(ProvaList.class);

@@ -137,6 +137,7 @@ public abstract class ABoot implements ServletContextListener {
         this.iniziaVersioni();
         this.regolaRiferimenti();
         this.creaPreferenze();
+        this.fixPreferenze();
         this.iniziaDataStandard();
         this.iniziaDataProgettoSpecifico();
         this.regolaInfo();
@@ -179,7 +180,7 @@ public abstract class ABoot implements ServletContextListener {
      * Il metodo può essere sovrascritto per creare le preferenze specifiche dell'applicazione <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
-    public int creaPreferenze() {
+    protected int creaPreferenze() {
         int numPref = 0;
 
         for (EAPreferenza eaPref : EAPreferenza.values()) {
@@ -189,6 +190,15 @@ public abstract class ABoot implements ServletContextListener {
         return numPref;
     }// end of method
 
+
+    /**
+     * Eventuali regolazioni delle preferenze standard effettuata nella sottoclasse specifica <br>
+     * Serve per modificare solo per l'applicazione specifica il valore standard della preferenza <br>
+     * Eventuali modifiche delle preferenze specifiche (che peraltro possono essere modificate all'origine) <br>
+     * Metodo che DEVE essere sovrascritto <br>
+     */
+    protected void fixPreferenze() {
+    }// end of method
 
     /**
      * Cancella e ricrea le preferenze standard <br>

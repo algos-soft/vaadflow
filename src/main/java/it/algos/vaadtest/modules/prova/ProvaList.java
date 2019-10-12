@@ -21,10 +21,10 @@ import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.dialog.AConfirmDialogOldino;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.MainLayout14;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,7 +72,7 @@ import static it.algos.vaadtest.application.TestCost.*;
 @Qualifier(TAG_PRO)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = "prove", searchProperty = "code", roleTypeVisibility = EARoleType.user)
+@AIView(vaadflow = false, menuName = "prove", menuIcon = VaadinIcon.BOAT, searchProperty = "code", roleTypeVisibility = EARoleType.user)
 public class ProvaList extends AGridViewList {
 
     /**
@@ -562,6 +562,8 @@ public class ProvaList extends AGridViewList {
 
         creaAlertLayout();
     }// end of method
+
+
     /**
      * Apertura del dialogo per una entity esistente oppure nuova <br>
      * Sovrascritto <br>

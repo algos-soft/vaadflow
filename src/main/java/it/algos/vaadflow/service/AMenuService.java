@@ -3,12 +3,14 @@ package it.algos.vaadflow.service;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.ui.IAView;
 import it.algos.vaadflow.ui.list.AViewList;
+import it.algos.vaadflow.ui.login.LogoutView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static it.algos.vaadflow.application.FlowCost.SHOW_ICONS_MENU;
 import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 import static it.algos.vaadflow.ui.MainLayout.*;
 
@@ -85,8 +88,24 @@ public class AMenuService extends AService {
     /**
      * Menu logout sempre presente
      */
-    public RouterLink[] creaMenuLogout() {
+    public RouterLink creaMenuLogoutRouter() {
         return null;
+        //appLayout.setToolbarIconButtons(new MenuItem("Logout", "exit-to-app", () -> UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
+
+    }// end of method
+
+
+    /**
+     * Menu logout sempre presente
+     */
+    public Tabs addMenuLogout(Tabs tabs) {
+        Tab tab = creaAlgosTab(LogoutView.class);
+
+        if (tabs != null && tab != null) {
+            tabs.add(tab);
+        }// end of if cycle
+
+        return tabs;
     }// end of method
 
 
@@ -129,8 +148,14 @@ public class AMenuService extends AService {
     /**
      * Eventuali item di menu, se collegato come sviluppatore
      */
-    public Tab[] creaTabsDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        return creaTabsBase(mappaClassi.get(EARole.developer.toString()));
+    public Tabs creaTabsDeveloper(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        Tabs tabs = new Tabs();
+
+        for (Tab tab : creaTabsBase(mappaClassi.get(EARole.developer.toString()))) {
+            tabs.add(tab);
+        }// end of for cycle
+
+        return tabs;
     }// end of method
 
 
@@ -145,16 +170,22 @@ public class AMenuService extends AService {
     /**
      * Eventuali item di menu, se collegato come utente
      */
-    public Tab[] creaTabsUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        return creaTabsBase(mappaClassi.get(EARole.user.toString()));
+    public Tabs creaTabsUser(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        Tabs tabs = new Tabs();
+
+        for (Tab tab : creaTabsBase(mappaClassi.get(EARole.user.toString()))) {
+            tabs.add(tab);
+        }// end of for cycle
+
+        return tabs;
     }// end of method
 
 
     /**
      * Items di menu, se collegato come sviluppatore
      */
-    public Tab[] creaTabsNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
-        List<Tab> tabs = new ArrayList<>();
+    public Tabs creaTabsNoSecurity(Map<String, ArrayList<Class<? extends IAView>>> mappaClassi) {
+        Tabs tabs = new Tabs();
 
         for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
             tabs.add(tab);
@@ -163,7 +194,7 @@ public class AMenuService extends AService {
             tabs.add(tab);
         }// end of for cycle
 
-        return tabs.toArray(new Tab[tabs.size()]);
+        return tabs;
     }// end of method
 
 
@@ -246,17 +277,21 @@ public class AMenuService extends AService {
         Tab tab = new Tab();
         String menuName = "";
         VaadinIcon icon;
+        boolean showIcons = pref.isBool(SHOW_ICONS_MENU);
 
         menuName = annotation.getMenuName(viewClazz);
         menuName = text.primaMaiuscola(menuName);
         icon = annotation.getMenuIcon(viewClazz);
         menuName = text.isValid(menuName) ? menuName : viewClazz.getSimpleName();
 
-        RouterLink link = new RouterLink(menuName, viewClazz);
-        if (icon != null) {
+        RouterLink link = new RouterLink(null, viewClazz);
+        if (showIcons && icon != null) {
             link.add(icon.create());
         }// end of if cycle
+        link.add("     ");
+        link.add(menuName);
         tab.add(link);
+
         return tab;
     }// end of method
 
