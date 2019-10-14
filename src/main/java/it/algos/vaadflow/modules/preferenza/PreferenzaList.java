@@ -16,6 +16,7 @@ import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.annotation.Secured;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
@@ -25,7 +26,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Created by Algos <br>
  * User: Gac <br>
  * Fix date: 21-set-2019 8.28.35 <br>
- * <br>
+ * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * <p>
@@ -40,14 +41,18 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Annotated with @Route (obbligatorio) per la selezione della vista. @Route(value = "") per la vista iniziale <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la sottoclasse specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
+ * Annotated with @Secured (facoltativo) per l'accesso con security a seconda del ruolo dell'utente loggato <br>
+ * - 'developer' o 'admin' o 'user' <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
+ * Annotated with @AIView (facoltativo Algos) per il menu-name, l'icona-menu, la property-search e la visibilità <br>
  */
 @UIScope
 @Route(value = TAG_PRE, layout = MainLayout14.class)
 @Qualifier(TAG_PRE)
 @Slf4j
+@Secured("developer")
 @AIScript(sovrascrivibile = false)
 @AIView(vaadflow = true, menuName = "preferenze", menuIcon = VaadinIcon.SCREWDRIVER, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class PreferenzaList extends AGridViewList {

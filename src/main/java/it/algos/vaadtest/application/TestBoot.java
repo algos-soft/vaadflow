@@ -13,7 +13,6 @@ import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
-import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
