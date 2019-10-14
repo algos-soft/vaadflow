@@ -24,8 +24,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 12-ott-2019 16.16.55 <br>
- * <br>
+ * Fix date: 14-ott-2019 18.35.01 <br>
+ * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * <p>
@@ -84,10 +84,12 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Annotated with @Route (obbligatorio) per la selezione della vista. @Route(value = "") per la vista iniziale <br>
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la sottoclasse specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
+ * Annotated with @Secured (facoltativo) per l'accesso con security a seconda del ruolo dell'utente loggato <br>
+ * - 'developer' o 'admin' o 'user' <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
- * Annotated with @AIView (facoltativo Algos) per regolare alcune property associate a questa classe <br>
+ * Annotated with @AIView (facoltativo Algos) per il menu-name, l'icona-menu, la property-search e la visibilità <br>
  * Se serve una Grid paginata estende APaginatedGridViewList altrimenti AGridViewList <br>
  * Se si usa APaginatedGridViewList è obbligatorio creare la PaginatedGrid
  * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata <br>
@@ -96,6 +98,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Route(value = TAG_BET, layout = MainLayout14.class)
 @Qualifier(TAG_BET)
 @Slf4j
+@Secured("developer")
 @AIScript(sovrascrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_BET, menuIcon = VaadinIcon.MAILBOX, searchProperty = "code")
 public class BetaList extends AGridViewList {

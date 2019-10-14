@@ -16,7 +16,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 8-ott-2019 7.20.22 <br>
+ * Fix date: 14-ott-2019 18.35.01 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>

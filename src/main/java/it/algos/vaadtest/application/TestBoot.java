@@ -4,6 +4,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.giorno.GiornoList;
@@ -245,6 +246,7 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(BetaList.class);
         FlowVar.menuClazzList.add(ProvaList.class);
     	FlowVar.menuClazzList.add(BetaList.class);
+		FlowVar.menuClazzList.add(ProvaList.class);
 	}// end of method
 
 

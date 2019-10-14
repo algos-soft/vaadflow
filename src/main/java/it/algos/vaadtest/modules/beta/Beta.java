@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 12-ott-2019 16.16.55 <br>
+ * Fix date: 14-ott-2019 18.35.01 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
