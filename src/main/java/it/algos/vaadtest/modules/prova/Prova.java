@@ -34,7 +34,7 @@ import java.util.List;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 14-ott-2019 18.35.01 <br>
+ * Fix date: 14-ott-2019 18.38.54 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>

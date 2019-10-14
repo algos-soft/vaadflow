@@ -18,7 +18,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Project vaadflow <br>
  * Created by Algos
  * User: Gac
- * Fix date: 21-set-2019 7.43.41 <br>
+ * Fix date: 14-ott-2019 18.40.19 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>
@@ -30,6 +30,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  * Annotated with @Qualifier (obbligatorio) per permettere a Spring di istanziare la classe specifica <br>
  * Annotated with @Slf4j (facoltativo) per i logs automatici <br>
  * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
+ * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -40,7 +42,7 @@ public class LogtypeDialog extends AViewDialog<Logtype> {
 
 
     /**
-     * Costruttore base senza parametri <br>
+     * Costruttore senza parametri <br>
      * Non usato. Serve solo per 'coprire' un piccolo bug di Idea <br>
      * Se manca, manda in rosso i parametri del costruttore usato <br>
      */
@@ -49,7 +51,7 @@ public class LogtypeDialog extends AViewDialog<Logtype> {
 
 
     /**
-     * Costruttore base con parametri <br>
+     * Costruttore con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
      * L'istanza DEVE essere creata con appContext.getBean(LogtypeDialog.class, service, entityClazz); <br>
      *

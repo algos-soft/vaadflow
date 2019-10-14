@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 21-set-2019 7.43.41 <br>
+ * Fix date: 14-ott-2019 18.40.19 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -36,10 +36,12 @@ import javax.validation.constraints.Size;
  * - lets you automatically produce the code required to have your class be instantiable with code such as:
  * - Person.builder().name("Adam Savage").city("San Francisco").build(); <br>
  * Annotated with @EqualsAndHashCode (Lombok) per l'uguaglianza di due istanze della classe <br>
+ * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
+ * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
+ * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  * Annotated with @AIEntity (facoltativo Algos) per alcuni parametri generali del modulo <br>
  * Annotated with @AIList (facoltativo Algos) per le colonne automatiche della Grid nella lista <br>
  * Annotated with @AIForm (facoltativo Algos) per i fields automatici nel dialogo del Form <br>
- * Annotated with @AIScript (facoltativo Algos) per controllare la ri-creazione di questo file dal Wizard <br>
  * <p>
  * Inserisce SEMPRE la versione di serializzazione <br>
  * Le singole property sono pubbliche in modo da poterne leggere il valore tramite 'reflection' <br>
