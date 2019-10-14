@@ -81,6 +81,9 @@ import java.util.List;
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
+@AIEntity(company = EACompanyRequired.facoltativa)
+@AIList(fields = {"ordine", "pageid", "code", "colore","descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli"})
+@AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica","mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})
 public class Prova extends ACEntity {
 
 

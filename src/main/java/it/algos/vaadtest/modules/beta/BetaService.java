@@ -22,7 +22,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2019 8.25.50 <br>
+ * Fix date: 12-ott-2019 16.16.55 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>

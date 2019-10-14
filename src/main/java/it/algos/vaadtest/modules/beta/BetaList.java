@@ -1,7 +1,8 @@
 package it.algos.vaadtest.modules.beta;
 
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -14,21 +15,68 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.util.List;
+import java.util.Map;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2019 8.25.50 <br>
+ * Fix date: 12-ott-2019 16.16.55 <br>
  * <br>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
  * <p>
- * Le istanze @Autowired usate da questa classe vengono iniettate automaticamente da SpringBoot se: <br>
- * 1) vengono dichiarate nel costruttore @Autowired di questa classe, oppure <br>
- * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), oppure <br>
- * 3) vengono usate in un un metodo @PostConstruct di questa classe, perché SpringBoot le inietta DOPO init() <br>
+ * La classe viene divisa verticalmente in alcune classi astratte, per 'leggerla' meglio (era troppo grossa) <br>
+ * Nell'ordine (dall'alto):
+ * - 1 APropertyViewList (che estende la classe Vaadin VerticalLayout) per elencare tutte le property usate <br>
+ * - 2 AViewList con la business logic principale <br>
+ * - 3 APrefViewList per regolare le preferenze ed i flags <br>
+ * - 4 ALayoutViewList per regolare il layout <br>
+ * - 5 AGridViewList per gestire la Grid <br>
+ * - 6 APaginatedGridViewList (opzionale) per gestire una Grid specializzata (add-on) che usa le Pagine <br>
+ * L'utilizzo pratico per il programmatore è come se fosse una classe sola <br>
+ * <p>
+ * La sottoclasse concreta viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
+ * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
+ * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
+ * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
+ *    con AxxService.getInstance() <br>
+ * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
+ * <p>
+ * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
+ * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'0appendici di init() del
+ * costruttore.
+ * Meglio spostare tutta la logica iniziale nel metodo beforeEnter() <br>
+ * <p>
+ * Graficamente abbiamo in tutte (di solito) le XxxViewList:
+ * 1) una barra di menu (obbligatorio) di tipo IAMenu
+ * 2) un topPlaceholder (eventuale, presente di default) di tipo HorizontalLayout
+ * - con o senza campo edit search, regolato da preferenza o da parametro
+ * - con o senza bottone New, regolato da preferenza o da parametro
+ * - con eventuali bottoni specifici, aggiuntivi o sostitutivi
+ * 3) un alertPlaceholder di avviso (eventuale) con label o altro per informazioni; di norma per il developer
+ * 4) un headerGridHolder della Grid (obbligatoria) con informazioni sugli elementi della lista
+ * 5) una Grid (obbligatoria); alcune regolazioni da preferenza o da parametro (bottone Edit, ad esempio)
+ * 6) un bottomPlacehorder della Grid (eventuale) con informazioni sugli elementi della lista; di norma delle somme
+ * 7) un bottomPlacehorder (eventuale) con bottoni aggiuntivi
+ * 8) un footer (obbligatorio) con informazioni generali
+ * <p>
+ * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse
+ * <p>
+ * Annotation @Route(value = "") per la vista iniziale - Ce ne può essere solo una per applicazione
+ * ATTENZIONE: se rimangono due (o più) classi con @Route(value = ""), in fase di compilazione appare l'errore:
+ * -'org.springframework.context.ApplicationContextException:
+ * -Unable to start web server;
+ * -nested exception is org.springframework.boot.web.server.WebServerException:
+ * -Unable to start embedded Tomcat'
+ * <p>
+ * Usa l'interfaccia HasUrlParameter col metodo setParameter(BeforeEvent event, ...) per ricevere parametri opzionali
+ * anche per chiamate che usano @Route <br>
+ * Usa l'interfaccia BeforeEnterObserver col metodo beforeEnter()
+ * invocato da @Route al termine dell'init() di questa classe e DOPO il metodo @PostConstruct <br>
  * <p>
  * Not annotated with @SpringView (sbagliato) perché usa la @Route di VaadinFlow <br>
  * Not annotated with @SpringComponent (sbagliato) perché usa la @Route di VaadinFlow <br>
@@ -68,6 +116,28 @@ public class BetaList extends AGridViewList {
         super(service, Beta.class);
     }// end of Vaadin/@Route constructor
 
+    /**
+     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter <br>
+     *
+     * @param event     con la location, ui, navigationTarget, source, ecc
+     * @param parameter opzionali nella chiamata del browser
+     */
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+    }// end of method
+
+
+    /**
+     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Chiamato DOPO @PostConstruct e DOPO beforeEnter <br>
+     *
+     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
+     */
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        super.beforeEnter(beforeEnterEvent);
+    }// end of method
 
     /**
      * Preferenze standard <br>
@@ -79,6 +149,20 @@ public class BetaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
         super.isEntityModificabile = false;
+        super.usaBottomLayout = true;
+    }// end of method
+
+
+    /**
+     * Costruisce un (eventuale) layout con bottoni aggiuntivi <br>
+     * Facoltativo (assente di default) <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaGridBottomLayout() {
+        super.creaGridBottomLayout();
+        bottomPlacehorder.add(new Label("Pippoz"));
     }// end of method
 
 

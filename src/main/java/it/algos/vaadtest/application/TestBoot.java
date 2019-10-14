@@ -4,6 +4,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadflow.modules.anno.AnnoList;
 import it.algos.vaadflow.modules.giorno.GiornoList;
 import it.algos.vaadflow.modules.mese.MeseList;
@@ -205,7 +206,7 @@ public class TestBoot extends ABoot {
          * Eventuale casting a carico del chiamante <br>
          * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
          */
-        FlowVar.logServiceClazz = UtenteService.class;
+        FlowVar.loginServiceClazz = UtenteService.class;
 
         /**
          * Classe da usare per gestire le informazioni dell'utenza loggata <br>
@@ -244,7 +245,8 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
         FlowVar.menuClazzList.add(BetaList.class);
         FlowVar.menuClazzList.add(ProvaList.class);
-    }// end of method
+    	FlowVar.menuClazzList.add(BetaList.class);
+	}// end of method
 
 
 }// end of boot class

@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 7-ott-2019 8.25.50 <br>
+ * Fix date: 12-ott-2019 16.16.55 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -67,10 +67,10 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderBeta")
 @EqualsAndHashCode(callSuper = false)
+@AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code", "indirizzo"})
-@AIScript(sovrascrivibile = false)
 public class Beta extends AEntity {
 
 
