@@ -118,6 +118,9 @@ public class AMenuService extends AService {
         for (RouterLink router : creaRoutersBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE))) {
             routers.add(router);
         }// end of for cycle
+        for (RouterLink router : creaRoutersBase(mappaClassi.get(KEY_MAPPA_CRONO))) {
+            routers.add(router);
+        }// end of for cycle
         for (RouterLink router : creaRoutersBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO))) {
             routers.add(router);
         }// end of for cycle
@@ -206,6 +209,9 @@ public class AMenuService extends AService {
         Tabs tabs = new Tabs();
 
         for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_PROGETTO_BASE), "")) {
+            tabs.add(tab);
+        }// end of for cycle
+        for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_CRONO), "")) {
             tabs.add(tab);
         }// end of for cycle
         for (Tab tab : creaTabsBase(mappaClassi.get(KEY_MAPPA_PROGETTO_SPECIFICO), "")) {

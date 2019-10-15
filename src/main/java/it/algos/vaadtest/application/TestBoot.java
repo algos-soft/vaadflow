@@ -238,15 +238,9 @@ public class TestBoot extends ABoot {
      * Verranno lette da MainLayout la prima volta che il browser 'chiama' una view
      */
     protected void addRouteSpecifiche() {
-        FlowVar.menuClazzList.add(GiornoList.class);
-        FlowVar.menuClazzList.add(AnnoList.class);
-        FlowVar.menuClazzList.add(MeseList.class);
-        FlowVar.menuClazzList.add(SecoloList.class);
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
-        FlowVar.menuClazzList.add(BetaList.class);
         FlowVar.menuClazzList.add(ProvaList.class);
     	FlowVar.menuClazzList.add(BetaList.class);
-		FlowVar.menuClazzList.add(ProvaList.class);
 	}// end of method
 
 
