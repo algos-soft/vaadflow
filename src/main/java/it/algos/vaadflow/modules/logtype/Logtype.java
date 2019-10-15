@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
+
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
@@ -58,8 +60,8 @@ import javax.validation.constraints.Size;
  * Una (e una sola) property deve avere @AIColumn(flexGrow = true) per fissare la larghezza della Grid <br>
  */
 @Entity
-@Document(collection = "logtype")
-@TypeAlias("logtype")
+@Document(collection = TAG_TYP)
+@TypeAlias(TAG_TYP)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

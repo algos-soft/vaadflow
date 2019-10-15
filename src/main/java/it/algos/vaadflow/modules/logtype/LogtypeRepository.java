@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
@@ -27,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_LOG)
+@Qualifier(TAG_TYP)
 @AIScript(sovrascrivibile = false)
 public interface LogtypeRepository extends MongoRepository<Logtype, String> {
 

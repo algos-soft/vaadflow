@@ -35,7 +35,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_LOG)
+@Qualifier(TAG_TYP)
 @Slf4j
 @AIScript(sovrascrivibile = false)
 public class LogtypeService extends AService {

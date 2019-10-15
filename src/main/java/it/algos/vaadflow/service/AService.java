@@ -1063,13 +1063,12 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     /**
-     * Creazione di alcuni dati demo iniziali <br>
+     * Creazione di alcuni dati iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
-     * La collezione viene svuotata <br>
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>
-     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse che cancella tutta la Collection <br>
      *
-     * @return numero di elementi creato
+     * @return numero di elementi creati
      */
     @Override
     public int reset() {

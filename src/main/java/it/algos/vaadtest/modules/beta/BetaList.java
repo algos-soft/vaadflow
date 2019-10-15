@@ -25,7 +25,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 14-ott-2019 18.38.54 <br>
+ * Fix date: 14-ott-2019 18.56.46 <br>
  * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>

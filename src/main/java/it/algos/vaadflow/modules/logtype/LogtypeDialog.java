@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
@@ -35,7 +36,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Qualifier(TAG_LOG)
+@Qualifier(TAG_TYP)
 @Slf4j
 @AIScript(sovrascrivibile = true)
 public class LogtypeDialog extends AViewDialog<Logtype> {
