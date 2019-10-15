@@ -133,7 +133,6 @@ public class TestBoot extends ABoot {
     protected void fixPreferenze() {
     }// end of method
 
-
     /**
      * Cancella e ricrea le preferenze standard <br>
      * Metodo invocato dal metodo reset() di preferenzeService per poter usufruire della sovrascrittura
