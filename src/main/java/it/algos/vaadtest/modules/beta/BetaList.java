@@ -2,7 +2,10 @@ package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -16,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 
-import java.util.List;
-import java.util.Map;
-
+import static it.algos.vaadflow.application.FlowCost.MAX_RIGHE_GRID;
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -44,7 +45,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
- *    con AxxService.getInstance() <br>
+ * con AxxService.getInstance() <br>
  * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
  * <p>
  * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
@@ -120,6 +121,7 @@ public class BetaList extends AGridViewList {
         super(service, Beta.class);
     }// end of Vaadin/@Route constructor
 
+
     /**
      * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
      * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter <br>
@@ -143,6 +145,7 @@ public class BetaList extends AGridViewList {
         super.beforeEnter(beforeEnterEvent);
     }// end of method
 
+
     /**
      * Preferenze standard <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
@@ -152,7 +155,10 @@ public class BetaList extends AGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-        super.isEntityModificabile = false;
+
+        super.usaBottoneEdit = true;
+        super.isEntityModificabile = true;
+        limit = pref.getInt(MAX_RIGHE_GRID);
         super.usaBottomLayout = true;
     }// end of method
 

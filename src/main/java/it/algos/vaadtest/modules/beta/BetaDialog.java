@@ -1,17 +1,22 @@
 package it.algos.vaadtest.modules.beta;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -62,5 +67,78 @@ public class BetaDialog extends AViewDialog<Beta> {
         super(service, binderClass);
     }// end of constructor
 
-    
+
+    /**
+     * Eventuali aggiustamenti finali al layout
+     * Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
+     * Sovrascritto nella sottoclasse
+     */
+    @Override
+    protected void fixLayout() {
+        super.fixLayout();
+
+//        Component comp = creaSelect();
+//        getFormLayout().add(comp);
+    }// end of method
+
+
+    public Component creaSelect() {
+
+//        ComboBox<EAIconeBeta> comboBox = new ComboBox();
+//        comboBox.setLabel("Icone");
+//        comboBox.setItems(EAIconeBeta.getIcons());
+//        comboBox.setWidth("4em");
+
+
+        Select<EAIconeBeta> select = new Select<>();
+        select.setLabel("How are you feeling today?");
+
+        EAIconeBeta[] items=  EAIconeBeta.class.getEnumConstants();
+//        select.setItems(EAIconeBeta.getIcons());
+        select.setItems(items);
+
+        select.setRenderer(new ComponentRenderer<>(enumeration -> {
+            Div text = new Div();
+            text.setText(enumeration.name().toLowerCase());
+
+            FlexLayout wrapper = new FlexLayout();
+            text.getStyle().set("margin-left", "0.5em");
+            wrapper.add(((EAIconeBeta)enumeration).getIcon().create(), text);
+            return wrapper;
+        }));
+
+        return select;
+    }// end of method
+
+//    /**
+//     * Costruisce un comboBox di colori, costruendo una classe ad hoc con testo e bottone-colore.
+//     */
+//    private void addComboColor() {
+////        Component comp = new AColor("maroon");
+////        ComboBox<AColor> combo = new ComboBox<>();
+//
+//        Select<ProvaDialog.AColor> select = new Select<>();
+//        select.setLabel("Seleziona un colore");
+//
+//        ArrayList<ProvaDialog.AColor> items = new ArrayList<>();
+//        for (EAColor color : EAColor.values()) {
+//            items.add();
+//        }// end of for cycle
+//
+//        select.setItems(items);
+//        select.setRenderer(new ComponentRenderer<>(color -> {
+//            Div div = new Div();
+//            div.getStyle().set("text-align", "left");
+//            div.setText((color.getName()));
+//
+//            FlexLayout wrapper = new FlexLayout();
+//            wrapper.setFlexGrow(1, div);
+//            wrapper.add(color.getColore(), new Label("&nbsp;&nbsp;&nbsp;"), div);
+//            return wrapper;
+//        }));
+//
+//        select.setWidth("8em");
+//        getFormLayout().add(select);
+//    }// end of method
+
 }// end of class

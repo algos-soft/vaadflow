@@ -138,7 +138,10 @@ public class MainLayout14 extends AppLayout {
     protected void fixView() {
         //@todo DA FARE cambiare immagine
         Image img = new Image("https://i.imgur.com/GPpnszs.png", "Algos");
+        Image immagine = new Image("frontend/images/ambulanza.jpg", "Algos");
+
         img.setHeight("44px");
+        immagine.setHeight("44px");
 
         String desc = login.getCompany() != null ? login.getCompany().descrizione : text.primaMaiuscola(FlowVar.projectBanner);
 
@@ -148,7 +151,9 @@ public class MainLayout14 extends AppLayout {
         label.getElement().getStyle().set("color", "blue");
 
 //        addToNavbar(new DrawerToggle(), img, label);
-        addToNavbar(new DrawerToggle(), label);
+        DrawerToggle drawer = new DrawerToggle();
+//        addToNavbar(drawer, label);
+        addToNavbar(drawer, immagine, label);
         this.setDrawerOpened(false);
     }// end of method
 
@@ -230,7 +235,7 @@ public class MainLayout14 extends AppLayout {
             if (context.isDev() || context.isAdmin()) {
                 tabs = menuService.addTabsUser(tabs, mappa);
             } else {
-                tabs = menuService.creaTabsUser( mappa);
+                tabs = menuService.creaTabsUser(mappa);
             }// end of if/else cycle
 
             //--aggiunge il menu logout (sempre se usa la security)

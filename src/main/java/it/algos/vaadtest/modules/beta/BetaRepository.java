@@ -1,13 +1,14 @@
 package it.algos.vaadtest.modules.beta;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -31,8 +32,12 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIScript(sovrascrivibile = false)
 public interface BetaRepository extends MongoRepository<Beta, String> {
 
+    public int countByCode(String code);
+
     public Beta findByCode(String code);
 
-	public List<Beta> findAllByOrderByOrdineAsc();
+    public Beta findFirstByCode(String code);
+
+    public List<Beta> findAllByOrderByOrdineAsc();
 
 }// end of interface

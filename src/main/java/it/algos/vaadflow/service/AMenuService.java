@@ -135,10 +135,9 @@ public class AMenuService extends AService {
      * @param clazzList di classi raggiungibili da @Route
      */
     public Tab[] creaTabsBase(List<Class<? extends IAView>> clazzList, String titoloGruppo) {
-        List<Tab> tabs = null;
+        List<Tab> tabs = new ArrayList<>();
 
         if (array.isValid(clazzList)) {
-            tabs = new ArrayList<>();
             if (text.isValid(titoloGruppo)) {
                 tabs.add(new Tab("==" + titoloGruppo + "=="));
             }// end of if cycle

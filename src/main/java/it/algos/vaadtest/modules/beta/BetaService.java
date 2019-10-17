@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.beta;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
@@ -83,7 +84,7 @@ public class BetaService extends AService {
      * @return la entity trovata o appena creata
      */
     public Beta findOrCrea(String code) {
-        Beta entity = findByKeyUnica(code);
+        Beta entity=null;
 
         if (entity == null) {
             entity = crea(code);
@@ -132,10 +133,10 @@ public class BetaService extends AService {
     public Beta newEntity(int ordine, String code) {
         Beta entity = null;
 
-        entity = findByKeyUnica(code);
-        if (entity != null) {
-            return findByKeyUnica(code);
-        }// end of if cycle
+//        entity = findByKeyUnica(code);
+//        if (entity != null) {
+//            return findByKeyUnica(code);
+//        }// end of if cycle
 
         entity = Beta.builderBeta()
                 .ordine(ordine != 0 ? ordine : this.getNewOrdine())
@@ -147,6 +148,33 @@ public class BetaService extends AService {
 
 
     /**
+     * Operazioni eseguite PRIMA del save <br>
+     * Regolazioni automatiche di property <br>
+     * Controllo della validità delle properties obbligatorie <br>
+     * Può essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @param entityBean da regolare prima del save
+     * @param operation  del dialogo (NEW, Edit)
+     *
+     * @return the modified entity
+     */
+    @Override
+    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
+//        ((Beta)entityBean).icona= VaadinIcon.DEL;
+        return super.beforeSave(entityBean, operation);
+    }
+
+
+    public String getKeyUnica(AEntity entityBean) {
+        int num= repository.countByCode(((Beta)entityBean).code);
+        int num2=num;
+        Beta alfa= repository.findFirstByCode(((Beta)entityBean).code);
+Object beta=alfa;
+        int a=87;
+        return "";
+    }// end of method
+
+    /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
      * @param code di riferimento (obbligatorio)
@@ -154,7 +182,10 @@ public class BetaService extends AService {
      * @return istanza della Entity, null se non trovata
      */
     public Beta findByKeyUnica(String code) {
-        return repository.findByCode(code);
+        Beta beta= repository.findByCode(code);
+
+int a=87;
+        return null;
     }// end of method
 
 

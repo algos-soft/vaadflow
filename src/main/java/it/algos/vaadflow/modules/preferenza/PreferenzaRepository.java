@@ -1,13 +1,14 @@
 package it.algos.vaadflow.modules.preferenza;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 
 /**
@@ -31,18 +32,22 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @AIScript(sovrascrivibile = false)
 public interface PreferenzaRepository extends MongoRepository<Preferenza, String> {
 
-	public Preferenza findByCode(String code);
+    public Preferenza findByCode(String code);
 
-	public List<Preferenza> findAllByOrderByCodeAsc();
+    public int countByCode(String code);
 
-	public Preferenza findByDescrizione(String descrizione);
+    public Preferenza findFirstByCode(String code);
 
-	public List<Preferenza> findAllByOrderByDescrizioneAsc();
+    public List<Preferenza> findAllByOrderByCodeAsc();
 
-	public Preferenza findByOrdine(int ordine);
+    public Preferenza findByDescrizione(String descrizione);
 
-	public List<Preferenza> findAllByOrderByOrdineAsc();
+    public List<Preferenza> findAllByOrderByDescrizioneAsc();
 
-	public List<Preferenza> findTop1AllByOrderByOrdineDesc();
+    public Preferenza findByOrdine(int ordine);
+
+    public List<Preferenza> findAllByOrderByOrdineAsc();
+
+    public List<Preferenza> findTop1AllByOrderByOrdineDesc();
 
 }// end of class

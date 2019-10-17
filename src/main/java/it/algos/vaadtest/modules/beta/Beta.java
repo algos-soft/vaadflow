@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.beta;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
@@ -54,9 +55,9 @@ import javax.validation.constraints.Size;
  * -The property name (i.e. 'descrizione') would be used as the field key if this annotation was not included.
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  * Le property non primitive, di default sono EMBEDDED con un riferimento statico
- *      (EAFieldType.link e XxxPresenter.class)
+ * (EAFieldType.link e XxxPresenter.class)
  * Le singole property possono essere annotate con @DBRef per un riferimento DINAMICO (not embedded)
- *      (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
+ * (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
  * Una (e una sola) property deve avere @AIColumn(flexGrow = true) per fissare la larghezza della Grid <br>
  */
 @Entity
@@ -69,8 +70,8 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordine", "code"})
-@AIForm(fields = {"ordine", "code", "indirizzo"})
+@AIList(fields = {"ordine", "code", "icona"})
+@AIForm(fields = {"ordine", "code", "indirizzo", "icona"})
 public class Beta extends AEntity {
 
 
@@ -95,12 +96,20 @@ public class Beta extends AEntity {
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull(message = "Il codice è obbligatorio")
-    @Indexed()
+//    @Indexed()
     @Size(min = 2)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
     @AIColumn(widthEM = 8)
     public String code;
+
+    /**
+     * icona (facoltativa)
+     */
+    @Field("icon")
+    @AIField(type = EAFieldType.vaadinIcon, serviceClazz = TestIconService.class, widthEM = 8, color = "verde")
+    @AIColumn(headerIcon = VaadinIcon.USERS, headerIconColor = "green")
+    public VaadinIcon icona;
 
     /**
      * indirizzo (facoltativo, non unica)

@@ -402,7 +402,9 @@ public class AColumnService extends AbstractService {
 
                     try { // prova ad eseguire il codice
                         vaadinIcon = (VaadinIcon) field.get(entity);
-                        icon = vaadinIcon.create();
+                        if (vaadinIcon!=null) {
+                            icon = vaadinIcon.create();
+                        }// end of if cycle
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.application.FlowCost;
+import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.backend.entity.ACEntity;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -586,9 +587,12 @@ public abstract class AService extends AbstractService implements IAService {
         boolean status = false;
         EACompanyRequired tableCompanyRequired = null;
 
-        //--se la EntityClass non estende ACCompany, non deve fare nulla
-        tableCompanyRequired = annotation.getCompanyRequired(entityClass);
-        status = tableCompanyRequired == EACompanyRequired.obbligatoria || tableCompanyRequired == EACompanyRequired.facoltativa;
+        //--se l'applicazione non è multiCompany, non deve far nulla
+        if (FlowVar.usaCompany) {
+            //--se la EntityClass non estende ACCompany, non deve fare nulla
+            tableCompanyRequired = annotation.getCompanyRequired(entityClass);
+            status = tableCompanyRequired == EACompanyRequired.obbligatoria || tableCompanyRequired == EACompanyRequired.facoltativa;
+        }// end of if cycle
 
         return status;
     }// end of method

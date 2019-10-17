@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
- *    con AxxService.getInstance() <br>
+ * con AxxService.getInstance() <br>
  * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
  * <p>
  * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
@@ -157,6 +157,8 @@ public class PreferenzaList extends AGridViewList {
     protected void creaAlertLayout() {
         super.creaAlertLayout();
         alertPlacehorder.add(new Label("Preferenze per regolare alcune funzionalità del programma"));
+        alertPlacehorder.add(new Label("Reset cancella tutte le preferenze."));
+        alertPlacehorder.add(new Label("Se l'applicazione è multiCompany, le preferenze con companySpecifica=true vengono ricrete, col valore di default, per TUTTE le company esistenti."));
     }// end of method
 
 
