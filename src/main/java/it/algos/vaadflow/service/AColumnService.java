@@ -402,9 +402,7 @@ public class AColumnService extends AbstractService {
 
                     try { // prova ad eseguire il codice
                         vaadinIcon = (VaadinIcon) field.get(entity);
-                        if (vaadinIcon!=null) {
-                            icon = vaadinIcon.create();
-                        }// end of if cycle
+                        icon = vaadinIcon.create();
                     } catch (Exception unErrore) { // intercetta l'errore
                         log.error(unErrore.toString());
                     }// fine del blocco try-catch
@@ -644,6 +642,7 @@ public class AColumnService extends AbstractService {
 
             if (isFlexGrow) {
                 colonna.setFlexGrow(1);
+                colonna.setWidth(width);
             } else {
                 if (text.isValid(width)) {
                     colonna.setWidth(width);
