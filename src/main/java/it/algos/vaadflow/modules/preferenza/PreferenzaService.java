@@ -309,7 +309,7 @@ public class PreferenzaService extends AService {
 
         if (((Preferenza) entityBean).companySpecifica) {
             //--questa preferenza DEVE specificare una company nel keyID
-            if (!usaCompany) {
+            if (usaCompany) {
                 //--l'applicazione è multiCompany
                 company = ((Preferenza) entityBean).company;
                 if (company != null) {

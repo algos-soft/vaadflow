@@ -4,16 +4,9 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.prova.ProvaList;
-import it.algos.vaadtest.modules.beta.BetaList;
-import it.algos.vaadflow.modules.anno.AnnoList;
-import it.algos.vaadflow.modules.giorno.GiornoList;
-import it.algos.vaadflow.modules.mese.MeseList;
-import it.algos.vaadflow.modules.preferenza.EAPrefType;
-import it.algos.vaadflow.modules.role.EARole;
-import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
+import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
@@ -133,6 +126,7 @@ public class TestBoot extends ABoot {
     protected void fixPreferenze() {
     }// end of method
 
+
     /**
      * Cancella e ricrea le preferenze standard <br>
      * Metodo invocato dal metodo reset() di preferenzeService per poter usufruire della sovrascrittura
@@ -171,7 +165,7 @@ public class TestBoot extends ABoot {
          * Di defaul (per sicurezza) uguale a true <br>
          * Deve essere regolato in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
          */
-        FlowVar.usaCompany = false;
+        FlowVar.usaCompany = true; //@todo provvisorio
 
         /**
          * Nome identificativo dell'applicazione <br>
@@ -239,8 +233,8 @@ public class TestBoot extends ABoot {
     protected void addRouteSpecifiche() {
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
         FlowVar.menuClazzList.add(ProvaList.class);
-    	FlowVar.menuClazzList.add(BetaList.class);
-	}// end of method
+        FlowVar.menuClazzList.add(BetaList.class);
+    }// end of method
 
 
 }// end of boot class

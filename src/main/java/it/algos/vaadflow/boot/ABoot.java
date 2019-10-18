@@ -195,23 +195,23 @@ public abstract class ABoot implements ServletContextListener {
         int numPref = 0;
         List<Company> listaCompany = null;
 
-//        if (!usaCompany) {
-//            listaCompany = companyService.findAll();
-//            for (EAPreferenza eaPref : EAPreferenza.values()) {
-//                //--se usa company ed è companySpecifica=true, crea una preferenza per ogni company
-//                if (eaPref.isCompanySpecifica()) {
-//                    for (Company company : listaCompany) {
-//                        numPref = preferenzaService.creaIfNotExist(eaPref, company) ? numPref + 1 : numPref;
-//                    }// end of for cycle
-//                } else {
-//                    numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
-//                }// end of if/else cycle
-//            }// end of for cycle
-//        } else {
-//            for (EAPreferenza eaPref : EAPreferenza.values()) {
-//                numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
-//            }// end of for cycle
-//        }// end of if/else cycle
+        if (usaCompany) {
+            listaCompany = companyService.findAll();
+            for (EAPreferenza eaPref : EAPreferenza.values()) {
+                //--se usa company ed è companySpecifica=true, crea una preferenza per ogni company
+                if (eaPref.isCompanySpecifica()) {
+                    for (Company company : listaCompany) {
+                        numPref = preferenzaService.creaIfNotExist(eaPref, company) ? numPref + 1 : numPref;
+                    }// end of for cycle
+                } else {
+                    numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
+                }// end of if/else cycle
+            }// end of for cycle
+        } else {
+            for (EAPreferenza eaPref : EAPreferenza.values()) {
+                numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
+            }// end of for cycle
+        }// end of if/else cycle
 
         return numPref;
     }// end of method
