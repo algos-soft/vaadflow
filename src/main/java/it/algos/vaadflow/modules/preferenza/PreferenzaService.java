@@ -5,6 +5,7 @@ import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EAPreferenza;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARole;
 import it.algos.vaadflow.service.AService;
@@ -136,8 +137,14 @@ public class PreferenzaService extends AService {
      */
     public boolean creaIfNotExist(IAPreferenza eaPref, Company company) {
         boolean creata = false;
+        String keyUnica;
+        if (company != null) {
+            keyUnica = company.code + text.primaMaiuscola(eaPref.getCode());
+        } else {
+            keyUnica = eaPref.getCode();
+        }// end of if/else cycle
 
-        if (isMancaByKeyUnica(eaPref.getCode())) {
+        if (findById(keyUnica) == null) {
             AEntity entity = save(newEntity(eaPref, company));
             creata = entity != null;
         }// end of if cycle
@@ -299,16 +306,15 @@ public class PreferenzaService extends AService {
     public String addKeyCompany(AEntity entityBean, String keyCode) {
         String keyUnica = "";
         Company company = null;
-        String companyCode = "";
 
         if (((Preferenza) entityBean).companySpecifica) {
             //--questa preferenza DEVE specificare una company nel keyID
-            if (usaCompany) {
+            if (!usaCompany) {
                 //--l'applicazione è multiCompany
                 company = ((Preferenza) entityBean).company;
                 if (company != null) {
                     //--questa preferenza DOVREBBE avere una company specificata
-                    keyUnica = companyCode + text.primaMaiuscola(keyCode);
+                    keyUnica = company.code + text.primaMaiuscola(keyCode);
                 } else {
                     //--se non ce l'ha, usa la sigla del programma
                     keyUnica = projectName + text.primaMaiuscola(keyCode);
@@ -321,22 +327,6 @@ public class PreferenzaService extends AService {
         }// end of if/else cycle
 
         return keyUnica;
-    }// end of method
-
-
-    /**
-     * Operazioni eseguite PRIMA del save <br>
-     * Regolazioni automatiche di property <br>
-     * Controllo della validità delle properties obbligatorie <br>
-     *
-     * @param entityBean da regolare prima del save
-     * @param operation  del dialogo (NEW, Edit)
-     *
-     * @return the modified entity
-     */
-    @Override
-    public AEntity beforeSave(AEntity entityBean, EAOperation operation) {
-        return super.beforeSave(entityBean, operation);
     }// end of method
 
 
@@ -583,15 +573,42 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
-    public LocalDateTime getDate(String code) {
-        LocalDateTime value = null;
-        Object genericValue = getValue(code);
+    public String getStr(EAPreferenza eaPref) {
+        return getStr(eaPref.getCode(), (String) eaPref.getValue());
+    } // end of method
 
-        if (genericValue instanceof LocalDateTime) {
-            value = (LocalDateTime) genericValue;
-        }// end of if cycle
 
-        return value;
+    public String getStr(String keyCode) {
+        return getStr(keyCode, "");
+    } // end of method
+
+
+    public String getStr(String keyCode, String defaultValue) {
+        String valoreTesto = defaultValue;
+        Object value = null;
+        Preferenza pref = findByKeyUnica(keyCode);
+
+        if (pref != null) {
+            if (pref.type == EAPrefType.enumeration) {
+                valoreTesto = getEnumStr(keyCode);
+            } else {
+                value = getValue(keyCode);
+                if (value != null && value instanceof String) {
+                    valoreTesto = (String) value;
+                } else {
+                    log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
+                }// end of if/else cycle
+            }// end of if/else cycle
+        } else {
+            log.warn("Algos - Preferenze. Non esiste la preferenza: " + keyCode);
+        }// end of if/else cycle
+
+        return valoreTesto;
+    } // end of method
+
+
+    public Boolean isBool(EAPreferenza eaPref) {
+        return isBool(eaPref.getCode());
     } // end of method
 
 
@@ -610,6 +627,11 @@ public class PreferenzaService extends AService {
         }// end of if/else cycle
 
         return status;
+    } // end of method
+
+
+    public int getInt(EAPreferenza eaPref) {
+        return getInt(eaPref.getCode(), (int) eaPref.getValue());
     } // end of method
 
 
@@ -636,28 +658,23 @@ public class PreferenzaService extends AService {
     } // end of method
 
 
-    public String getStr(String keyCode) {
-        String valoreTesto = "";
-        Object value = null;
-        Preferenza pref = findByKeyUnica(keyCode);
+    public String getEnumStr(EAPreferenza eaPref) {
+        return getEnumStr(eaPref.getCode(), (String) eaPref.getValue());
+    } // end of method
 
-        if (pref.type == EAPrefType.enumeration) {
-            valoreTesto = getEnumStr(keyCode);
-        } else {
-            value = getValue(keyCode);
-            if (value != null && value instanceof String) {
-                valoreTesto = (String) value;
-            } else {
-                log.error("Algos - Preferenze. La preferenza: " + keyCode + " è del tipo sbagliato");
-            }// end of if/else cycle
-        }// end of if/else cycle
 
-        return valoreTesto;
+    public String getEnumStr(EAPreferenza eaPref, String defaultValue) {
+        return getEnumStr(eaPref.getCode(), defaultValue);
     } // end of method
 
 
     public String getEnumStr(String keyCode) {
-        String valoreTesto = "";
+        return getEnumStr(keyCode, "");
+    } // end of method
+
+
+    public String getEnumStr(String keyCode, String defaultValue) {
+        String valoreTesto = defaultValue;
         String rawValue = (String) getValue(keyCode);
 
         if (text.isValid(rawValue)) {
@@ -667,6 +684,18 @@ public class PreferenzaService extends AService {
         }// end of if/else cycle
 
         return valoreTesto;
+    } // end of method
+
+
+    public LocalDateTime getDate(String code) {
+        LocalDateTime value = null;
+        Object genericValue = getValue(code);
+
+        if (genericValue instanceof LocalDateTime) {
+            value = (LocalDateTime) genericValue;
+        }// end of if cycle
+
+        return value;
     } // end of method
 
 

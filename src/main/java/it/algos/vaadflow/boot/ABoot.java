@@ -3,6 +3,8 @@ package it.algos.vaadflow.boot;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.data.FlowData;
 import it.algos.vaadflow.enumeration.EAPreferenza;
+import it.algos.vaadflow.modules.company.Company;
+import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.ABootService;
 import it.algos.vaadflow.service.AMongoService;
@@ -12,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowVar.usaCompany;
 
 /**
  * Project it.algos.vaadflow
@@ -110,6 +115,11 @@ public abstract class ABoot implements ServletContextListener {
     @Autowired
     private FlowData flowData;
 
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    protected CompanyService companyService;
 
     /**
      * Executed on container startup
@@ -183,16 +193,25 @@ public abstract class ABoot implements ServletContextListener {
      */
     protected int creaPreferenze() {
         int numPref = 0;
+        List<Company> listaCompany = null;
 
-        if (FlowVar.usaCompany) {
-            for (EAPreferenza eaPref : EAPreferenza.values()) {
-                numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
-            }// end of for cycle
-        } else {
-            for (EAPreferenza eaPref : EAPreferenza.values()) {
-                numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
-            }// end of for cycle
-        }// end of if/else cycle
+//        if (!usaCompany) {
+//            listaCompany = companyService.findAll();
+//            for (EAPreferenza eaPref : EAPreferenza.values()) {
+//                //--se usa company ed è companySpecifica=true, crea una preferenza per ogni company
+//                if (eaPref.isCompanySpecifica()) {
+//                    for (Company company : listaCompany) {
+//                        numPref = preferenzaService.creaIfNotExist(eaPref, company) ? numPref + 1 : numPref;
+//                    }// end of for cycle
+//                } else {
+//                    numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
+//                }// end of if/else cycle
+//            }// end of for cycle
+//        } else {
+//            for (EAPreferenza eaPref : EAPreferenza.values()) {
+//                numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
+//            }// end of for cycle
+//        }// end of if/else cycle
 
         return numPref;
     }// end of method
@@ -219,23 +238,10 @@ public abstract class ABoot implements ServletContextListener {
      * @return numero di preferenze creato
      */
     public int resetPreferenze() {
-        int numPref = 0;
-
         //--cancella tutte le preferenze
         preferenzaService.deleteAll();
 
-        //--ricrea tutte le preferenze standard coi valori di default iniziali
-        if (FlowVar.usaCompany) {
-            for (EAPreferenza eaPref : EAPreferenza.values()) {
-                numPref = preferenzaService.crea(eaPref) ? numPref + 1 : numPref;
-            }// end of for cycle
-        } else {
-            for (EAPreferenza eaPref : EAPreferenza.values()) {
-                numPref = preferenzaService.crea(eaPref) ? numPref + 1 : numPref;
-            }// end of for cycle
-        }// end of if/else cycle
-
-        return numPref;
+        return creaPreferenze();
     }// end of method
 
 

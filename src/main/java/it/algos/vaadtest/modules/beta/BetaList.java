@@ -11,6 +11,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EAPreferenza;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -158,7 +159,7 @@ public class BetaList extends AGridViewList {
 
         super.usaBottoneEdit = true;
         super.isEntityModificabile = true;
-        limit = pref.getInt(MAX_RIGHE_GRID);
+        limit = pref.getInt(EAPreferenza.maxRigheGrid);
         super.usaBottomLayout = true;
     }// end of method
 

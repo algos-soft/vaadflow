@@ -117,7 +117,7 @@ public class TestBoot extends ABoot {
     protected int creaPreferenze() {
         int numPref = super.creaPreferenze();
 
-        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
+//        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
 
         return numPref;
     }// end of method
@@ -148,7 +148,7 @@ public class TestBoot extends ABoot {
     public int resetPreferenze() {
         int numPref = super.resetPreferenze();
 
-        pref.crea("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
+//        pref.crea("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
 
         return numPref;
     }// end of method
