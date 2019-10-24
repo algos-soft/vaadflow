@@ -47,6 +47,12 @@ import java.time.LocalDate;
 public class TestBoot extends ABoot {
 
 
+    private final static String PROJECT_NAME = "test";
+
+    private final static double PROJECT_VERSION = 1.5;
+
+    private final static LocalDate VERSION_DATE = LocalDate.of(2019, 10, 22);
+
     @Autowired
     public ProvaService provaService;
 
@@ -155,11 +161,29 @@ public class TestBoot extends ABoot {
      */
     protected void regolaInfo() {
         /**
-         * Controlla se l'applicazione usa il login oppure no <br>
-         * Se si usa il login, occorre la classe SecurityConfiguration <br>
-         * Se non si usa il login, occorre disabilitare l'Annotation @EnableWebSecurity di SecurityConfiguration <br>
-         * Di defaul (per sicurezza) uguale a true <br>
+         * Nome identificativo dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          */
+        FlowVar.projectName = PROJECT_NAME;
+
+        /**
+         * Versione dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.projectVersion = PROJECT_VERSION;
+
+        /**
+         * Data della versione dell'applicazione <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         */
+        FlowVar.versionDate = VERSION_DATE;
+
+        /**
+          * Controlla se l'applicazione usa il login oppure no <br>
+          * Se si usa il login, occorre la classe SecurityConfiguration <br>
+          * Se non si usa il login, occorre disabilitare l'Annotation @EnableWebSecurity di SecurityConfiguration <br>
+          * Di defaul (per sicurezza) uguale a true <br>
+          */
         FlowVar.usaSecurity = false;
 
         /**
@@ -169,12 +193,6 @@ public class TestBoot extends ABoot {
          */
         FlowVar.usaCompany = true;
 
-        /**
-         * Nome identificativo dell'applicazione <br>
-         * Usato (eventualmente) nella barra di menu in testa pagina <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         */
-        FlowVar.projectName = "test";
 
         /**
          * Derscrizione completa dell'applicazione <br>
@@ -183,17 +201,6 @@ public class TestBoot extends ABoot {
          */
         FlowVar.projectBanner = "Programma di prova per testare vaadflow";
 
-        /**
-         * Versione dell'applicazione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         */
-        FlowVar.projectVersion = 1.5;
-
-        /**
-         * Data della versione dell'applicazione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         */
-        FlowVar.versionDate = LocalDate.of(2019, 10, 3);
 
         /**
          * Service da usare per recuperare dal mongoDB l'utenza loggata tramite 'username' che è unico <br>
