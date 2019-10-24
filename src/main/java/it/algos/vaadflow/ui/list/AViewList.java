@@ -217,6 +217,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         }// end of if cycle
 
         //--barra/menu dei bottoni specifici del modulo
+        //--crea i bottoni SENZA i listeners che vengono aggiunti dopo aver recuperato gli items
         this.creaTopLayout();
         if (topPlaceholder.getComponentCount() > 0) {
             this.add(topPlaceholder);
@@ -230,9 +231,16 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         this.add(appContext.getBean(AFooter.class));
 
         this.addSpecificRoutes();
-        this.updateItems();
+
+        //--recupera gli items la PRIMA volta <br>
+        this.creaItems();
+
+        //--aggiunge tutti i listeners ai bottoni della barra/menu
+        this.addListeners();
+
         this.updateView();
     }// end of method
+
 
     /**
      * Le preferenze standard <br>
@@ -277,17 +285,21 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Placeholder SOPRA la Grid <br>
-     * Contenuto eventuale, presente di default <br>
+     * Placeholder SOPRA la Grid (non obbligatoria, ma quasi sempre presente) <br>
+     * <p>
      * - con o senza un bottone per cancellare tutta la collezione
      * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
      * - con o senza gruppo di ricerca:
      * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
      * -    bottone per aprire un DialogSearch con diverse property selezionabili
      * -    bottone per annullare la ricerca e riselezionare tutta la collezione
-     * - con eventuale Popup di selezione, filtro e ordinamento
-     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuale Popup di selezione della company (se applicazione multiCompany)
+     * - con eventuale Popup di selezione specifico, filtro e ordinamento
      * - con eventuali altri bottoni specifici <br>
+     * <p>
+     * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -370,7 +382,22 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    protected List<CriteriaDefinition> creaItems() {
+        return null;
+    }// end of method
+
+
     protected void updateItems() {
+    }// end of method
+
+
+    /**
+     * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void addListeners() {
     }// end of method
 
 

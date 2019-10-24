@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.alfa;
 
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -107,6 +108,10 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 @AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class AlfaList extends AGridViewList {
 
+    private Checkbox checkbox1;
+
+    private Checkbox checkbox2;
+
 
     /**
      * Costruttore @Autowired <br>
@@ -146,6 +151,7 @@ public class AlfaList extends AGridViewList {
      */
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
+
         List<String> items = new ArrayList<>();
         items.add("francese");
         items.add("inglese");
@@ -162,12 +168,52 @@ public class AlfaList extends AGridViewList {
     }// end of method
 
 
+    /**
+     * Placeholder SOPRA la Grid <br>
+     * Contenuto eventuale, presente di default <br>
+     * - con o senza un bottone per cancellare tutta la collezione
+     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza gruppo di ricerca:
+     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
+     * -    bottone per aprire un DialogSearch con diverse property selezionabili
+     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
+     * - con eventuale Popup di selezione, filtro e ordinamento
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuali altri bottoni specifici <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
     @Override
-    protected void updateItems() {
-        Company company = null;
+    protected void creaTopLayout() {
+        super.creaTopLayout();
+
+        checkbox1 = new Checkbox();
+        checkbox1.setLabel("Ragazzo");
+        checkbox1.setIndeterminate(true);
+        checkbox1.setValue(true);
+        checkbox1.addValueChangeListener(e -> {
+            updateItems();
+            updateView();
+        });
+        topPlaceholder.add(checkbox1);
+
+        checkbox2 = new Checkbox();
+        checkbox2.setLabel("Simpatico");
+        checkbox2.setIndeterminate(true);
+        checkbox2.setValue(true);
+        checkbox2.addValueChangeListener(e -> {
+            updateItems();
+            updateView();
+        });
+        topPlaceholder.add(checkbox2);
+    }// end of method
+
+
+    @Override
+    protected List<CriteriaDefinition> creaItems() {
+        List<CriteriaDefinition> listaFiltri = new ArrayList();
+        Company company;
         String nazionalita = "";
-        List<AEntity> lista = null;
-        ArrayList<CriteriaDefinition> listaFiltri = new ArrayList();
 
         if (filtroCompany != null && filtroCompany.getValue() != null) {
             company = (Company) filtroCompany.getValue();
@@ -177,6 +223,27 @@ public class AlfaList extends AGridViewList {
         if (filtroComboBox != null && filtroComboBox.getValue() != null) {
             nazionalita = (String) filtroComboBox.getValue();
             listaFiltri.add(Criteria.where("nazionalita").is(nazionalita));
+        }// end of if cycle
+
+        items = mongo.findAllByProperty(Alfa.class, listaFiltri);
+        return listaFiltri;
+    }// end of method
+
+
+    @Override
+    protected void updateItems() {
+        boolean ragazzo;
+        boolean simpatico;
+        List<CriteriaDefinition> listaFiltri = creaItems();
+
+        if (checkbox1 != null && !checkbox1.isIndeterminate()) {
+            ragazzo = checkbox1.getValue();
+            listaFiltri.add(Criteria.where("ragazzo").is(ragazzo));
+        }// end of if cycle
+
+        if (checkbox2 != null && !checkbox1.isIndeterminate()) {
+            simpatico = checkbox2.getValue();
+            listaFiltri.add(Criteria.where("simpatico").is(simpatico));
         }// end of if cycle
 
         items = mongo.findAllByProperty(Alfa.class, listaFiltri);

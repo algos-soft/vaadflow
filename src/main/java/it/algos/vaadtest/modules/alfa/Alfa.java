@@ -63,7 +63,7 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "alfa", company = EACompanyRequired.facoltativa)
-@AIList(fields = {"company", "descrizione", "ragazzo", "nazionalita", "simpatico"})
+@AIList(fields = {"company", "descrizione", "nazionalita", "ragazzo",  "simpatico"})
 @AIForm(fields = {"descrizione", "ragazzo", "nazionalita", "simpatico"})
 public class Alfa extends ACEntity {
 

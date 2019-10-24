@@ -185,17 +185,21 @@ public abstract class ALayoutViewList extends APrefViewList {
 
 
     /**
-     * Placeholder SOPRA la Grid <br>
-     * Contenuto eventuale, presente di default <br>
+     * Placeholder SOPRA la Grid (non obbligatoria, ma quasi sempre presente) <br>
+     * <p>
      * - con o senza un bottone per cancellare tutta la collezione
      * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
+     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
      * - con o senza gruppo di ricerca:
      * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
      * -    bottone per aprire un DialogSearch con diverse property selezionabili
      * -    bottone per annullare la ricerca e riselezionare tutta la collezione
-     * - con eventuale Popup di selezione, filtro e ordinamento
-     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
+     * - con eventuale Popup di selezione della company (se applicazione multiCompany)
+     * - con eventuale Popup di selezione specifico, filtro e ordinamento
      * - con eventuali altri bottoni specifici <br>
+     * <p>
+     * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -212,17 +216,30 @@ public abstract class ALayoutViewList extends APrefViewList {
             deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
             deleteAllButton.addClassName("view-toolbar__button");
-            deleteAllButton.addClickListener(event -> openConfirmDelete());
             topPlaceholder.add(deleteAllButton);
         }// end of if cycle
+
 
         //--il bottone associa un evento standard -> AViewList.openConfirmReset(), che rinvia al service specifico
         if ((!FlowVar.usaSecurity && usaBottoneReset) || (isDeveloper && usaBottoneReset)) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
             resetButton.addClassName("view-toolbar__button");
-            resetButton.addClickListener(e -> openConfirmReset());
             topPlaceholder.add(resetButton);
+        }// end of if cycle
+
+
+        //--il bottone associa un evento standard -> AViewList.openNew()
+        //--il bottone associa, se previsto da pref, un tasto shortcut
+        if (usaBottoneNew) {
+            buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
+            newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
+            newButton.getElement().setAttribute("theme", "primary");
+            newButton.addClassName("view-toolbar__button");
+            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
+                newButton.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
+            }// end of if cycle
+            topPlaceholder.add(newButton);
         }// end of if cycle
 
         //--con o senza gruppo di ricerca
@@ -234,15 +251,9 @@ public abstract class ALayoutViewList extends APrefViewList {
                 searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
                 searchButton.getElement().setAttribute("theme", "secondary");
                 searchButton.addClassName("view-toolbar__button");
-                searchButton.addClickListener(e -> openSearch());
 
                 //--bottone piccolo per eliminare i filtri di una ricerca e restituire tutte le entities
                 clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-                clearFilterButton.addClickListener(e -> {
-                    updateItems();
-                    updateView();
-                });
-
                 topPlaceholder.add(searchButton, clearFilterButton);
             } else {
                 //--campo EditSearch predisposto su un unica property
@@ -250,33 +261,11 @@ public abstract class ALayoutViewList extends APrefViewList {
                 searchField.setPrefixComponent(new Icon("lumo", "search"));
                 searchField.addClassName("view-toolbar__search-field");
                 searchField.setValueChangeMode(ValueChangeMode.EAGER);
-                searchField.addValueChangeListener(e -> {
-                    updateItems();
-                    updateView();
-                });
 
                 //--bottone piccolo per pulire il campo testo di ricerca
                 clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-                clearFilterButton.addClickListener(e -> searchField.clear());
-
                 topPlaceholder.add(searchField, clearFilterButton);
             }// end of if/else cycle
-        }// end of if cycle
-
-
-
-        //--il bottone associa un evento standard -> AViewList.openNew()
-        //--il bottone associa, se previsto da pref, un tasto shortcut
-        if (usaBottoneNew) {
-            buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
-            newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
-            newButton.getElement().setAttribute("theme", "primary");
-            newButton.addClassName("view-toolbar__button");
-            newButton.addClickListener(event -> openNew());
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                newButton.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
-            }// end of if cycle
-            topPlaceholder.add(newButton);
         }// end of if cycle
 
         //--eventuali filtri
@@ -290,6 +279,62 @@ public abstract class ALayoutViewList extends APrefViewList {
         }// end of if cycle
     }// end of method
 
+
+    /**
+     * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void addListeners() {
+        super.addListeners();
+
+        if (deleteAllButton != null) {
+            deleteAllButton.addClickListener(event -> openConfirmDelete());
+        }// end of if cycle
+
+        if (resetButton != null) {
+            resetButton.addClickListener(e -> openConfirmReset());
+        }// end of if cycle
+
+        if (newButton != null) {
+            newButton.addClickListener(event -> openNew());
+        }// end of if cycle
+
+        if (searchButton != null) {
+            searchButton.addClickListener(e -> openSearch());
+        }// end of if cycle
+
+        if (clearFilterButton != null) {
+            clearFilterButton.addClickListener(e -> {
+                updateItems();
+                updateView();
+            });//end of lambda expressions
+        }// end of if cycle
+
+        if (searchField != null) {
+            searchField.addValueChangeListener(e -> {
+                updateItems();
+                updateView();
+            });//end of lambda expression
+        }// end of if cycle
+
+        if (searchButton != null) {
+            searchButton.addClickListener(e -> openSearch());
+            if (clearFilterButton != null) {
+                clearFilterButton.addClickListener(e -> searchField.clear());
+            }// end of if cycle
+        }// end of if cycle
+
+        if (filtroCompany != null) {
+            filtroCompany.addValueChangeListener(e -> {
+                updateItems();
+                updateView();
+            });// end of lambda expressions
+        }// end of if cycle
+
+    }// end of method
 
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
@@ -311,10 +356,6 @@ public abstract class ALayoutViewList extends APrefViewList {
         filtroCompany.setPlaceholder("company ...");
         filtroCompany.setWidth("9em");
         filtroCompany.setItems(companyService.findAll());
-        filtroCompany.addValueChangeListener(e -> {
-            updateItems();
-            updateView();
-        });
     }// end of method
 
 }// end of class
