@@ -4,6 +4,8 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadtest.modules.alfa.AlfaList;
+import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.beta.BetaList;
@@ -165,7 +167,7 @@ public class TestBoot extends ABoot {
          * Di defaul (per sicurezza) uguale a true <br>
          * Deve essere regolato in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
          */
-        FlowVar.usaCompany = false;
+        FlowVar.usaCompany = true;
 
         /**
          * Nome identificativo dell'applicazione <br>
@@ -209,6 +211,14 @@ public class TestBoot extends ABoot {
          */
         FlowVar.loginClazz = ALogin.class;
 
+        /**
+         * Service da usare per recuperare la lista delle Company (o sottoclassi) <br>
+         * Di default CompanyService oppure eventuale sottoclasse specializzata per Company particolari <br>
+         * Eventuale casting a carico del chiamante <br>
+         * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+         */
+        FlowVar.companyServiceClazz = CompanyService.class;
+
     }// end of method
 
 
@@ -234,7 +244,8 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
         FlowVar.menuClazzList.add(ProvaList.class);
         FlowVar.menuClazzList.add(BetaList.class);
-    }// end of method
+		FlowVar.menuClazzList.add(AlfaList.class);
+	}// end of method
 
 
 }// end of boot class

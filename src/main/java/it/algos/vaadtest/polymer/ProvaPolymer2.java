@@ -4,7 +4,6 @@ import com.vaadin.flow.component.EventData;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static it.algos.vaadtest.application.TestCost.TAG_ALF;
+import static it.algos.vaadtest.application.TestCost.TAG_ABC;
 
 /**
  * Project vaadflow
@@ -30,7 +29,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
  * Date: lun, 05-ago-2019
  * Time: 08:04
  */
-@Route(value = TAG_ALF+"2")
+@Route(value = TAG_ABC +"2")
 @Tag("prova-polymer")
 @HtmlImport("src/views/prova/prova-polymer.html")
 @HtmlImport("src/views/prova/prova-polymer2.html")//questo non funziona perché il Tag (unico) è 'prova-polymer'

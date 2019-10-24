@@ -276,19 +276,19 @@ public class ProvaList extends AGridViewList {
         Button polymer = new Button("Polymer", new Icon(VaadinIcon.ASTERISK));
         polymer.getElement().setAttribute("theme", "secondary");
         polymer.addClassName("view-toolbar__button");
-        polymer.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF)));
+        polymer.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC)));
         topPlaceholder.add(polymer);
 
         Button polymer2 = new Button("Polymer2", new Icon(VaadinIcon.ASTERISK));
         polymer2.getElement().setAttribute("theme", "error");
         polymer2.addClassName("view-toolbar__button");
-        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF + "2")));
+        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "2")));
         topPlaceholder.add(polymer2);
 
         Button polymer3 = new Button("polymer3", new Icon(VaadinIcon.ASTERISK));
         polymer3.getElement().setAttribute("theme", "error");
         polymer3.addClassName("view-toolbar__button");
-        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ALF + "3")));
+        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "3")));
         topPlaceholder.add(polymer3);
 
         Button una = new Button("una", new Icon(VaadinIcon.ASTERISK));
@@ -600,7 +600,7 @@ public class ProvaList extends AGridViewList {
             }// end of if cycle
         }// end of for cycle
 
-        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex.stream().toArray(CriteriaDefinition[]::new));
+        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
 
         if (array.isValid(lista)) {
             items = lista;

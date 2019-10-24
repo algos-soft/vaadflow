@@ -1,32 +1,34 @@
-package it.algos.vaadflow.modules.preferenza;
+package it.algos.vaadtest.modules.alfa;
 
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.utente.IUtenteService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.security.access.annotation.Secured;
-import org.vaadin.klaudeta.PaginatedGrid;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
+import java.util.ArrayList;
+import java.util.List;
+
+import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 
 /**
- * Project vaadflow <br>
+ * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 14-ott-2019 18.44.27 <br>
+ * Fix date: 23-ott-2019 13.52.45 <br>
  * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -97,16 +99,13 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
  * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata <br>
  */
 @UIScope
-@Route(value = TAG_PRE, layout = MainLayout14.class)
-@Qualifier(TAG_PRE)
+@Route(value = TAG_ALF, layout = MainLayout14.class)
+@Qualifier(TAG_ALF)
 @Slf4j
-@Secured("developer")
+@Secured("user")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = true, menuName = "preferenze", menuIcon = VaadinIcon.SCREWDRIVER, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
-public class PreferenzaList extends AGridViewList {
-
-
-    public static final String IRON_ICON = "menu";
+@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+public class AlfaList extends AGridViewList {
 
 
     /**
@@ -114,81 +113,91 @@ public class PreferenzaList extends AGridViewList {
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      * Nella sottoclasse concreta si usa un @Qualifier(), per avere la sottoclasse specifica <br>
      * Nella sottoclasse concreta si usa una costante statica, per scrivere sempre uguali i riferimenti <br>
-     * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
+     * Passa alla superclasse il service iniettato qui da Vaadin/@Route <br>
+     * Passa alla superclasse anche la entityClazz che viene definita qui (specifica di questo modulo) <br>
      *
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public PreferenzaList(@Qualifier(TAG_PRE) IAService service) {
-        super(service, Preferenza.class);
+    public AlfaList(@Qualifier(TAG_ALF) IAService service) {
+        super(service, Alfa.class);
     }// end of Vaadin/@Route constructor
 
 
     /**
-     * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Preferenze standard <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        if (!FlowVar.usaSecurity || login.isDeveloper()) {
-            super.usaBottoneDeleteAll = true;
-            super.usaBottoneReset = true;
-        }// end of if cycle
-
-        super.usaSearch = false;
-        super.usaSearchDialog = false;
-        super.usaBottoneNew = false;
-        super.isEntityDeveloper = true;
-        super.usaPagination = true;
-
-        super.grid = new PaginatedGrid<Preferenza>();
+        super.usaPopupFiltro = true;
+        super.usaBottoneReset = true;
     }// end of method
 
 
     /**
-     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
-     * Normalmente ad uso esclusivo del developer <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
+     * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void creaAlertLayout() {
-        super.creaAlertLayout();
-        alertPlacehorder.add(new Label("Preferenze per regolare alcune funzionalità del programma"));
-        alertPlacehorder.add(new Label("Reset cancella tutte le preferenze."));
-        alertPlacehorder.add(new Label("Se l'applicazione è multiCompany, le preferenze con companySpecifica=true vengono ricrete, col valore di default, per TUTTE le company esistenti."));
-    }// end of method
-
-
-    /**
-     * Crea un Popup di selezione della company <br>
-     * Creato solo se devleper=true e usaCompany=true <br>
-     * Può essere sovrascritto, per caricare gli items da una sottoclasse di Company <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    protected void creaCompanyFiltro() {
-        super.creaCompanyFiltro();
-
-        IAService  serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
-
-        filtroCompany.setItems(serviceCompany.findAll());
-        filtroCompany.addValueChangeListener(e -> {
+    protected void creaPopupFiltro() {
+        super.creaPopupFiltro();
+        List<String> items = new ArrayList<>();
+        items.add("francese");
+        items.add("inglese");
+        items.add("tedesca");
+        items.add("turco");
+        items.add("russo");
+        filtroComboBox.setPlaceholder("nazionalità ...");
+        filtroComboBox.setWidth("10em");
+        filtroComboBox.setItems(items);
+        filtroComboBox.addValueChangeListener(e -> {
             updateItems();
             updateView();
         });
     }// end of method
 
 
+    @Override
+    protected void updateItems() {
+        Company company = null;
+        String nazionalita = "";
+        List<AEntity> lista = null;
+        ArrayList<CriteriaDefinition> listaFiltri = new ArrayList();
+
+        if (filtroCompany != null && filtroCompany.getValue() != null) {
+            company = (Company) filtroCompany.getValue();
+            listaFiltri.add(Criteria.where("company").is(company));
+        }// end of if cycle
+
+        if (filtroComboBox != null && filtroComboBox.getValue() != null) {
+            nazionalita = (String) filtroComboBox.getValue();
+            listaFiltri.add(Criteria.where("nazionalita").is(nazionalita));
+        }// end of if cycle
+
+        items = mongo.findAllByProperty(Alfa.class, listaFiltri);
+    }// end of method
+
+
     /**
-     * Apertura del dialogo per una entity esistente oppure nuova <br>
-     * Sovrascritto <br>
+     * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
+     * Il dialogo è PROTOTYPE e viene creato esclusivamente da appContext.getBean(... <br>
+     * Nella creazione vengono regolati il service e la entityClazz di riferimento <br>
+     * Contestualmente alla creazione, il dialogo viene aperto con l'item corrente (ricevuto come parametro) <br>
+     * Se entityBean è null, nella superclasse AViewDialog viene modificato il flag a EAOperation.addNew <br>
+     * Si passano al dialogo anche i metodi locali (di questa classe AViewList) <br>
+     * come ritorno dalle azioni save e delete al click dei rispettivi bottoni <br>
+     * Il metodo DEVE essere sovrascritto <br>
+     *
+     * @param entityBean item corrente, null se nuova entity
      */
+    @Override
     protected void openDialog(AEntity entityBean) {
-        PreferenzaDialog dialog = appContext.getBean(PreferenzaDialog.class, service, entityClazz);
-        dialog.open(entityBean, EAOperation.edit, this::save, this::delete);
+        appContext.getBean(AlfaDialog.class, service, entityClazz).open(entityBean, isEntityModificabile ? EAOperation.edit : EAOperation.showOnly, this::save, this::delete);
     }// end of method
 
 }// end of class

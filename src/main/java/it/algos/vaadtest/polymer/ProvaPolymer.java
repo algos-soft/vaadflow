@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static it.algos.vaadtest.application.TestCost.TAG_ALF;
+import static it.algos.vaadtest.application.TestCost.TAG_ABC;
 
 /**
  * Project vaadflow
@@ -31,7 +31,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
  * Date: lun, 05-ago-2019
  * Time: 08:04
  */
-@Route(value = TAG_ALF)
+@Route(value = TAG_ABC)
 @Tag("prova-polymer")
 @HtmlImport("src/views/prova/prova-polymer.html")
 @HtmlImport("src/views/prova/prova-polymer2.html")//questo non funziona perché il Tag (unico) è 'prova-polymer'

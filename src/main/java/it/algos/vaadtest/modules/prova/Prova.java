@@ -252,7 +252,6 @@ public class Prova extends ACEntity {
     /**
      * combo multiplo <br>
      */
-    @Field("rol")
     @AIField(type = EAFieldType.multicombo, serviceClazz = RoleService.class, widthEM = 4)
     @AIColumn(widthEM = 6)
     public List<Role> ruoli;

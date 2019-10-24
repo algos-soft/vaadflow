@@ -5,11 +5,13 @@ import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -656,7 +658,7 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
 
         for (EATime eaTime : EATime.values()) {
-            if (eaTime != EATime.iso8601&&eaTime != EATime.completaOrario) {
+            if (eaTime != EATime.iso8601 && eaTime != EATime.completaOrario) {
                 try { // prova ad eseguire il codice
                     ottenuto = service.get(LOCAL_DATE_DUE, eaTime);
                 } catch (Exception unErrore) { // intercetta l'errore
@@ -682,7 +684,8 @@ public class ADateServiceTest extends ATest {
     }// end of single test
 
 
-    /** bv
+    /**
+     * bv
      * Restituisce come stringa (intelligente) una durata espressa in long
      * - Meno di 1 secondo
      * - Meno di 1 minuto
@@ -1170,6 +1173,24 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
         System.out.println(ottenuto);
         System.out.println("");
+    }// end of method
+
+
+    /**
+     * Sorgente è una data/timestamp del vecchi webambulanze (sql)
+     * da cui estrarre l'ora (in formato LocalTime) che dovrebbe esser '7'
+     * va gestita la differenza di ora legale (2 ore nell'esempio)
+     */
+    @Test
+    public void oraLegale() {
+        sorgente = "2019-10-04T09:00:00.000+0200";
+        previstoIntero = 7;
+
+//        DateTime dt = new DateTime( "2010-01-01T12:00:00+01:00") ;
+        Timestamp stamp= Timestamp.valueOf(sorgente);
+        java.sql.Date data = java.sql.Date.valueOf(sorgente);
+        ottenutoIntero = service.getOre(data);
+        assertEquals(ottenutoIntero, previstoIntero);
     }// end of method
 
 }// end of class

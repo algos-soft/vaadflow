@@ -1,12 +1,11 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.modules.role.RoleService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +55,15 @@ public class ProvaService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
-
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public ProvaRepository repository;
+
+    @Autowired
+    protected RoleService role;
 
 
     public ProvaService() {
@@ -247,6 +248,7 @@ public class ProvaService extends AService {
         String code = "";
         String desc = "";
         Prova prova;
+        List<Role> ruoli = role.findAll();
 
         for (int k = 1; k <= numRecord; k++) {
 
@@ -275,10 +277,11 @@ public class ProvaService extends AService {
             if (k == 2 || k == 3 || k == 4 || k == 7 || k == 14 || k == 15) {
                 prova.yesnobold = true;
             }// end of if cycle
-            prova.ordine = 178 + k;
+            prova.ordine = 178 - k;
             prova.pageid = 1000000L + (14 * k) + k + 8;
             prova.inizio = LocalTime.of(k, k + 2);
             prova.fine = LocalTime.of(k + 1, k * 3);
+            prova.ruoli = ruoli;
             save(prova);
         }// end of for cycle
 
@@ -293,6 +296,7 @@ public class ProvaService extends AService {
         return "" + date.durata(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
     }// end of method
 
+
     /**
      * Durata di un periodo in minuti <br>
      */
@@ -300,12 +304,13 @@ public class ProvaService extends AService {
         return "" + date.differenza(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
     }// end of method
 
+
     /**
      * Durata di un periodo in LocalTime <br>
      */
     public String durataTempo(AEntity entityBean) {
-        LocalTime tempo= date.periodo(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
-        return  date.getOrario(tempo);
+        LocalTime tempo = date.periodo(((Prova) entityBean).fine, ((Prova) entityBean).inizio);
+        return date.getOrario(tempo);
     }// end of method
 
 }// end of class

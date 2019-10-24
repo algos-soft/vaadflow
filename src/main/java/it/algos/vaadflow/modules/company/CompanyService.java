@@ -50,7 +50,8 @@ public class CompanyService extends AService {
      */
     private static final String ALGOS = "algos";
 
-    private static final String DEMO = "algos";
+    private static final String DEMO = "demo";
+    private static final String TEST = "test";
 
     /**
      * versione della classe per la serializzazione
@@ -276,6 +277,13 @@ public class CompanyService extends AService {
      */
     public Company getDemo() {
         return repository.findByCode(DEMO);
+    }// end of method
+
+    /**
+     * Recupera dal db mongo la company (se esiste)
+     */
+    public Company getTest() {
+        return repository.findByCode(TEST);
     }// end of method
 
 }// end of class

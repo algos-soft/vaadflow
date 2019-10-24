@@ -10,12 +10,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Scope;
 
-import java.util.Optional;
-
-import static it.algos.vaadtest.application.TestCost.TAG_ALF;
+import static it.algos.vaadtest.application.TestCost.TAG_ABC;
 
 /**
  * Project vaadflow
@@ -24,7 +21,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
  * Date: ven, 09-ago-2019
  * Time: 07:52
  */
-@Route(value = TAG_ALF + "3")
+@Route(value = TAG_ABC + "3")
 @Tag("prova-polymer3")
 @HtmlImport("src/views/prova/prova-polymer3.html")
 @SpringComponent

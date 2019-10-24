@@ -359,8 +359,10 @@ public class AFieldService extends AbstractService {
                     binder.forField(field).bind(fieldName);
                 }// end of if cycle
                 break;
+            case booleano:
             case checkbox:
             case yesno:
+            case yesnobold:
                 field = new ACheckBox(caption);
                 if (binder != null) {
                     binder.forField(field).bind(fieldName);
@@ -401,9 +403,11 @@ public class AFieldService extends AbstractService {
                         wrapper.add(((VaadinIcon)icon).create(), text);
                         return wrapper;
                     }));
+                    if (binder != null) {
+                        binder.forField(field).bind(fieldName);
+                    }// end of if cycle
                 } else {
                 }// end of if/else cycle
-                binder.forField(field).bind(fieldName);
                 break;
             case link:
                 field = new ATextField(caption);

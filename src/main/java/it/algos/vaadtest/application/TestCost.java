@@ -16,12 +16,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class TestCost {
+	public final static String TAG_ALF = "alfa";
 	public final static String TAG_PIP = "pippo";
 	public final static String TAG_DEL = "delta";
 	public final static String TAG_NOP = "nopresenter";
 	public final static String TAG_CAT = "categoria";
 	public final static String TAG_BET = "beta";
-	public final static String TAG_ALF = "alfa";
+	public final static String TAG_ABC = "abc";
 	public final static String TAG_BOL = "bolla";
 	public final static String TAG_PRO = "prova";
 	public final static String TAG_VIEW_FORM = "provaView";
