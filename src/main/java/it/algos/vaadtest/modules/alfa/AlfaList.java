@@ -163,7 +163,7 @@ public class AlfaList extends AGridViewList {
         filtroComboBox.setItems(items);
         filtroComboBox.addValueChangeListener(e -> {
             updateItems();
-            updateView();
+            updateGrid();
         });
     }// end of method
 
@@ -193,7 +193,7 @@ public class AlfaList extends AGridViewList {
         checkbox1.setValue(true);
         checkbox1.addValueChangeListener(e -> {
             updateItems();
-            updateView();
+            updateGrid();
         });
         topPlaceholder.add(checkbox1);
 
@@ -203,7 +203,7 @@ public class AlfaList extends AGridViewList {
         checkbox2.setValue(true);
         checkbox2.addValueChangeListener(e -> {
             updateItems();
-            updateView();
+            updateGrid();
         });
         topPlaceholder.add(checkbox2);
     }// end of method

@@ -217,9 +217,9 @@ public abstract class APaginatedGridViewList extends AGridViewList {
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
     @Override
-    public void updateView() {
+    public void updateGrid() {
         if (!usaPagination) {
-            super.updateView();
+            super.updateGrid();
             return;
         }// end of if cycle
 

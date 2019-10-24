@@ -13,7 +13,6 @@ import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
-import it.algos.vaadflow.ui.list.ACronoViewList;
 import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +127,7 @@ public class AnnoList extends APaginatedGridViewList {
         filtroComboBox.setItems(secoloService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
             updateItems();
-            updateView();
+            updateGrid();
         });
     }// end of method
 

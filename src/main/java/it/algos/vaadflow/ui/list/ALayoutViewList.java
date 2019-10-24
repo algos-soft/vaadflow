@@ -268,14 +268,20 @@ public abstract class ALayoutViewList extends APrefViewList {
             }// end of if/else cycle
         }// end of if cycle
 
-        //--eventuali filtri
+        //--eventuale filtro sulla company
         if (usaCompany && login.isDeveloper()) {
             creaCompanyFiltro();
-            topPlaceholder.add(filtroCompany);
+            if (filtroCompany != null) {
+                topPlaceholder.add(filtroCompany);
+            }// end of if cycle
         }// end of if cycle
+
+        //--eventuale filtro specifico
         if (usaPopupFiltro) {
             creaPopupFiltro();
-            topPlaceholder.add(filtroComboBox);
+            if (filtroComboBox != null) {
+                topPlaceholder.add(filtroComboBox);
+            }// end of if cycle
         }// end of if cycle
     }// end of method
 
@@ -309,14 +315,14 @@ public abstract class ALayoutViewList extends APrefViewList {
         if (clearFilterButton != null) {
             clearFilterButton.addClickListener(e -> {
                 updateItems();
-                updateView();
+                updateGrid();
             });//end of lambda expressions
         }// end of if cycle
 
         if (searchField != null) {
             searchField.addValueChangeListener(e -> {
                 updateItems();
-                updateView();
+                updateGrid();
             });//end of lambda expression
         }// end of if cycle
 
@@ -330,11 +336,12 @@ public abstract class ALayoutViewList extends APrefViewList {
         if (filtroCompany != null) {
             filtroCompany.addValueChangeListener(e -> {
                 updateItems();
-                updateView();
+                updateGrid();
             });// end of lambda expressions
         }// end of if cycle
 
     }// end of method
+
 
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
@@ -352,10 +359,12 @@ public abstract class ALayoutViewList extends APrefViewList {
      * Creato solo se devleper=true e usaCompany=true <br>
      */
     protected void creaCompanyFiltro() {
-        filtroCompany = new AComboBox();
-        filtroCompany.setPlaceholder("company ...");
-        filtroCompany.setWidth("9em");
-        filtroCompany.setItems(companyService.findAll());
+        if (false) {
+            filtroCompany = new AComboBox();
+            filtroCompany.setPlaceholder("company ...");
+            filtroCompany.setWidth("9em");
+            filtroCompany.setItems(companyService.findAll());
+        }// end of if cycle
     }// end of method
 
 }// end of class

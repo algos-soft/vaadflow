@@ -606,7 +606,7 @@ public class ProvaList extends AGridViewList {
             items = lista;
         }// end of if cycle
 
-        this.updateView();
+        this.updateGrid();
 
         creaAlertLayout();
     }// end of method

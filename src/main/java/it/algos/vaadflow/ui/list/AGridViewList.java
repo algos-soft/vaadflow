@@ -12,6 +12,7 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadtest.modules.alfa.Alfa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -296,7 +297,34 @@ public abstract class AGridViewList extends ALayoutViewList {
         return testo;
     }// end of method
 
+    @Override
+    protected List<CriteriaDefinition> creaItems() {
+        List<CriteriaDefinition> listaFiltri = new ArrayList();
 
+        if (usaCompany) {
+            if (login.isDeveloper()) {
+                if (filtroCompany != null) {
+                    Company company = (Company) filtroCompany.getValue();
+                    if (company != null) {
+                        items = service.findAllByCompany(company);
+                    } else {
+                        items = service != null ? service.findAll() : null;
+                    }// end of if/else cycle
+                } else {
+                    items = service != null ? service.findAll() : null;
+                }// end of if/else cycle
+            } else {
+                //
+            }// end of if/else cycle
+        } else {
+            items = service != null ? service.findAll() : null;
+        }// end of if/else cycle
+
+        return listaFiltri;
+    }// end of method
+
+
+    @Override
     protected void updateItems() {
         List<AEntity> lista = null;
         ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
@@ -346,7 +374,7 @@ public abstract class AGridViewList extends ALayoutViewList {
     /**
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
-    public void updateView() {
+    public void updateGrid() {
         if (items != null) {
             try { // prova ad eseguire il codice
                 grid.deselectAll();

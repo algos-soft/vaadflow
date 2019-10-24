@@ -238,7 +238,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         //--aggiunge tutti i listeners ai bottoni della barra/menu
         this.addListeners();
 
-        this.updateView();
+        this.updateGrid();
     }// end of method
 
 
@@ -401,7 +401,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    public void updateView() {
+    public void updateGrid() {
     }// end of method
 
 
@@ -458,7 +458,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     public void updateDopoDialog(AEntity entityBean) {
         this.updateItems();
-        this.updateView();
+        this.updateGrid();
     }// end of method
 
 
@@ -496,7 +496,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
             items = lista;
         }// end of if cycle
 
-        this.updateView();
+        this.updateGrid();
 
         creaAlertLayout();
     }// end of method
@@ -533,7 +533,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     public void deleteCollection() {
         service.deleteAll();
         updateItems();
-        updateView();
+        updateGrid();
     }// end of method
 
 
@@ -546,7 +546,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     protected void reset() {
         service.reset();
         updateItems();
-        updateView();
+        updateGrid();
     }// end of method
 
 
@@ -556,7 +556,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     protected void save(AEntity entityBean, EAOperation operation) {
         if (service.save(entityBean, operation) != null) {
             updateItems();
-            updateView();
+            updateGrid();
         }// end of if cycle
     }// end of method
 
@@ -567,7 +567,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         if (usaRefresh) {
             updateItems();
-            updateView();
+            updateGrid();
         }// end of if cycle
     }// end of method
 

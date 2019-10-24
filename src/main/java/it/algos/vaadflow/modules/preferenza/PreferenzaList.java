@@ -10,7 +10,6 @@ import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.modules.utente.IUtenteService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -174,11 +173,14 @@ public class PreferenzaList extends AGridViewList {
 
         IAService  serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
 
-        filtroCompany.setItems(serviceCompany.findAll());
-        filtroCompany.addValueChangeListener(e -> {
-            updateItems();
-            updateView();
-        });
+        if (filtroCompany!=null) {
+            filtroCompany.setItems(serviceCompany.findAll());
+            filtroCompany.addValueChangeListener(e -> {
+                updateItems();
+                updateGrid();
+            });//end of lambda expressions
+        }// end of if cycle
+
     }// end of method
 
 
