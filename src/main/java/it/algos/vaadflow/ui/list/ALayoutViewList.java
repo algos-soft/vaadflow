@@ -77,6 +77,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      * Può essere sovrascritto, per modificare il layout standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void fixLayout() {
         super.fixLayout();
         this.setMargin(false);
@@ -86,8 +87,6 @@ public abstract class ALayoutViewList extends APrefViewList {
         this.topPlaceholder = new HorizontalLayout();
         this.alertPlacehorder = new VerticalLayout();
         this.gridPlaceholder = new VerticalLayout();
-
-        //this.gridPlaceholder.setSizeFull();
 
         this.bottomPlacehorder = new HorizontalLayout();
 
@@ -144,14 +143,16 @@ public abstract class ALayoutViewList extends APrefViewList {
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive alla grid ed alla lista di elementi
-     * Normalmente ad uso esclusivo del developer
-     * Può essere sovrascritto, per aggiungere informazioni
-     * Invocare PRIMA il metodo della superclasse
+     * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaAlertLayout() {
         alertPlacehorder.removeAll();
-//        alertPlacehorder.addClassName("view-toolbar");
         alertPlacehorder.setMargin(false);
         alertPlacehorder.setSpacing(false);
         alertPlacehorder.setPadding(false);
@@ -288,6 +289,7 @@ public abstract class ALayoutViewList extends APrefViewList {
 
     /**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
+     * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
@@ -314,14 +316,14 @@ public abstract class ALayoutViewList extends APrefViewList {
 
         if (clearFilterButton != null) {
             clearFilterButton.addClickListener(e -> {
-                updateItems();
+                updateFiltri();
                 updateGrid();
             });//end of lambda expressions
         }// end of if cycle
 
         if (searchField != null) {
             searchField.addValueChangeListener(e -> {
-                updateItems();
+                updateFiltri();
                 updateGrid();
             });//end of lambda expression
         }// end of if cycle
@@ -335,9 +337,29 @@ public abstract class ALayoutViewList extends APrefViewList {
 
         if (filtroCompany != null) {
             filtroCompany.addValueChangeListener(e -> {
-                updateItems();
+                updateFiltri();
                 updateGrid();
             });// end of lambda expressions
+        }// end of if cycle
+
+    }// end of method
+
+
+    /**
+     * Crea un Popup di selezione della company <br>
+     * Creato solo se develeper=true e usaCompany=true <br>
+     * Può essere sovrascritto, per caricare gli items da una sottoclasse di Company <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void creaCompanyFiltro() {
+        IAService serviceCompany;
+
+        if (usaFiltroCompany) {
+            serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
+            filtroCompany = new AComboBox();
+            filtroCompany.setPlaceholder("company ...");
+            filtroCompany.setWidth("9em");
+            filtroCompany.setItems(serviceCompany.findAll());
         }// end of if cycle
 
     }// end of method
@@ -351,20 +373,6 @@ public abstract class ALayoutViewList extends APrefViewList {
     protected void creaPopupFiltro() {
         filtroComboBox = new AComboBox();
         filtroComboBox.setWidth("8em");
-    }// end of method
-
-
-    /**
-     * Crea un Popup di selezione della company <br>
-     * Creato solo se devleper=true e usaCompany=true <br>
-     */
-    protected void creaCompanyFiltro() {
-        if (false) {
-            filtroCompany = new AComboBox();
-            filtroCompany.setPlaceholder("company ...");
-            filtroCompany.setWidth("9em");
-            filtroCompany.setItems(companyService.findAll());
-        }// end of if cycle
     }// end of method
 
 }// end of class

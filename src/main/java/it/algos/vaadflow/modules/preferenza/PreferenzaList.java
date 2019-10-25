@@ -164,19 +164,19 @@ public class PreferenzaList extends AGridViewList {
 
     /**
      * Crea un Popup di selezione della company <br>
-     * Creato solo se devleper=true e usaCompany=true <br>
+     * Creato solo se develeper=true e usaCompany=true <br>
      * Può essere sovrascritto, per caricare gli items da una sottoclasse di Company <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
-    protected void creaCompanyFiltro() {
+    protected void creaCompanyFiltroNo() {
         super.creaCompanyFiltro();
 
-        IAService  serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
+        IAService serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
 
-        if (filtroCompany!=null) {
+        if (filtroCompany != null) {
             filtroCompany.setItems(serviceCompany.findAll());
             filtroCompany.addValueChangeListener(e -> {
-                updateItems();
+                updateFiltri();
                 updateGrid();
             });//end of lambda expressions
         }// end of if cycle

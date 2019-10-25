@@ -214,6 +214,10 @@ public abstract class APaginatedGridViewList extends AGridViewList {
 
 
     /**
+     * Aggiorna gli items della Grid, utilizzando i filtri. <br>
+     * Chiamato per modifiche effettuate ai filtri, popup, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Sviluppato nella sottoclasse AGridViewList, oppure APaginatedGridViewList <br>
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
     @Override

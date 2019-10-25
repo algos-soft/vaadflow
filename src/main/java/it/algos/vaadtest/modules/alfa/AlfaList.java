@@ -130,10 +130,11 @@ public class AlfaList extends AGridViewList {
 
 
     /**
-     * Preferenze standard <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Preferenze specifiche di questa view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>
+     * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
     @Override
     protected void fixPreferenze() {
@@ -141,6 +142,18 @@ public class AlfaList extends AGridViewList {
 
         super.usaPopupFiltro = true;
         super.usaBottoneReset = true;
+    }// end of method
+
+
+    /**
+     * Eventuali regolazioni sulle preferenze DOPO avere invocato il metodo fixPreferenze() della sotoclasse <br>
+     * <p>
+     * Chiamato da AViewList.initView() DOPO fixPreferenze() e sviluppato nella sottoclasse APrefViewList <br>
+     * Non può essere sovrascritto <br>
+     */
+    @Override
+    protected void postPreferenze() {
+        super.postPreferenze();
     }// end of method
 
 
@@ -162,7 +175,7 @@ public class AlfaList extends AGridViewList {
         filtroComboBox.setWidth("10em");
         filtroComboBox.setItems(items);
         filtroComboBox.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
     }// end of method
@@ -192,7 +205,7 @@ public class AlfaList extends AGridViewList {
         checkbox1.setIndeterminate(true);
         checkbox1.setValue(true);
         checkbox1.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
         topPlaceholder.add(checkbox1);
@@ -202,15 +215,23 @@ public class AlfaList extends AGridViewList {
         checkbox2.setIndeterminate(true);
         checkbox2.setValue(true);
         checkbox2.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
         topPlaceholder.add(checkbox2);
     }// end of method
 
 
+    /**
+     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
     @Override
-    protected List<CriteriaDefinition> creaItems() {
+    protected void creaFiltri() {
         List<CriteriaDefinition> listaFiltri = new ArrayList();
         Company company;
         String nazionalita = "";
@@ -226,27 +247,44 @@ public class AlfaList extends AGridViewList {
         }// end of if cycle
 
         items = mongo.findAllByProperty(Alfa.class, listaFiltri);
-        return listaFiltri;
     }// end of method
 
 
+    /**
+     * Aggiorna gli items (righe) della Grid. Modificati per: filtri, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Alla prima visualizzazione della view usa SOLO creaItems() e non questo metodo <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
     @Override
-    protected void updateItems() {
+    protected void updateFiltri() {
+        super.updateFiltri();
+
+        String nazionalita = "";
         boolean ragazzo;
         boolean simpatico;
-        List<CriteriaDefinition> listaFiltri = creaItems();
+
+//        if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
+//            company = (Company) filtroCompany.getValue();
+//            filtri.add(Criteria.where("company").is(company));
+//        }// end of if cycle
+
+        if (filtroComboBox != null && filtroComboBox.getValue() != null) {
+            nazionalita = (String) filtroComboBox.getValue();
+            filtri.add(Criteria.where("nazionalita").is(nazionalita));
+        }// end of if cycle
 
         if (checkbox1 != null && !checkbox1.isIndeterminate()) {
             ragazzo = checkbox1.getValue();
-            listaFiltri.add(Criteria.where("ragazzo").is(ragazzo));
+            filtri.add(Criteria.where("ragazzo").is(ragazzo));
         }// end of if cycle
 
         if (checkbox2 != null && !checkbox1.isIndeterminate()) {
             simpatico = checkbox2.getValue();
-            listaFiltri.add(Criteria.where("simpatico").is(simpatico));
+            filtri.add(Criteria.where("simpatico").is(simpatico));
         }// end of if cycle
-
-        items = mongo.findAllByProperty(Alfa.class, listaFiltri);
     }// end of method
 
 

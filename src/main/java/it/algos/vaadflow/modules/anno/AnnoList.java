@@ -126,13 +126,13 @@ public class AnnoList extends APaginatedGridViewList {
         filtroComboBox.setWidth("12em");
         filtroComboBox.setItems(secoloService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
     }// end of method
 
 
-    public void updateItems() {
+    public void updateFiltri() {
         Secolo secolo = (Secolo) filtroComboBox.getValue();
         items = ((AnnoService) service).findAllBySecolo(secolo);
     }// end of method

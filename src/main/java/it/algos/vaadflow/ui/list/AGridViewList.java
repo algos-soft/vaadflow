@@ -12,7 +12,6 @@ import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadtest.modules.alfa.Alfa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -297,84 +296,111 @@ public abstract class AGridViewList extends ALayoutViewList {
         return testo;
     }// end of method
 
-    @Override
-    protected List<CriteriaDefinition> creaItems() {
-        List<CriteriaDefinition> listaFiltri = new ArrayList();
 
-        if (usaCompany) {
-            if (login.isDeveloper()) {
-                if (filtroCompany != null) {
-                    Company company = (Company) filtroCompany.getValue();
-                    if (company != null) {
-                        items = service.findAllByCompany(company);
-                    } else {
-                        items = service != null ? service.findAll() : null;
-                    }// end of if/else cycle
-                } else {
-                    items = service != null ? service.findAll() : null;
-                }// end of if/else cycle
+    /**
+     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaFiltri() {
+        filtri = new ArrayList<CriteriaDefinition>();
+
+        if (usaFiltroCompany && filtroCompany != null) {
+            Company company = (Company) filtroCompany.getValue();
+            if (company != null) {
+                items = service.findAllByCompany(company);
             } else {
-                //
+                items = service != null ? service.findAll() : null;
             }// end of if/else cycle
         } else {
             items = service != null ? service.findAll() : null;
         }// end of if/else cycle
 
-        return listaFiltri;
-    }// end of method
-
-
-    @Override
-    protected void updateItems() {
-        List<AEntity> lista = null;
-        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
-
-        if (usaSearch) {
-            if (!usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
-                items = service != null ? service.findAll() : null;
-            } else {
-                if (searchField != null) {
-                    if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
-                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
-                    } else {
-                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i"));
-                    }// end of if/else cycle
-                    lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
-                } else {
-                    items = service != null ? service.findAll() : null;
-                }// end of if/else cycle
-
-                if (array.isValid(lista)) {
-                    items = lista;
-                }// end of if cycle
-            }// end of if/else cycle
-        } else {
-            if (usaCompany) {
-                if (login.isDeveloper()) {
-                    if (filtroCompany != null) {
-                        Company company = (Company) filtroCompany.getValue();
-                        if (company != null) {
-                            items = service.findAllByCompany(company);
-                        } else {
-                            items = service != null ? service.findAll() : null;
-                        }// end of if/else cycle
-                    } else {
-                        items = service != null ? service.findAll() : null;
-                    }// end of if/else cycle
-                } else {
-                    //
-                }// end of if/else cycle
-            } else {
-                items = service != null ? service.findAll() : null;
-            }// end of if/else cycle
-        }// end of if/else cycle
     }// end of method
 
 
     /**
+     * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void updateFiltri() {
+        filtri = new ArrayList<CriteriaDefinition>();
+        Company company;
+
+        if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
+            company = (Company) filtroCompany.getValue();
+            filtri.add(Criteria.where("company").is(company));
+        }// end of if cycle
+
+
+//        List<AEntity> lista = null;
+//        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
+//
+//        if (usaSearch) {
+//            if (!usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
+//                items = service != null ? service.findAll() : null;
+//            } else {
+//                if (searchField != null) {
+//                    if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
+//                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
+//                    } else {
+//                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i"));
+//                    }// end of if/else cycle
+//                    lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
+//                } else {
+//                    items = service != null ? service.findAll() : null;
+//                }// end of if/else cycle
+//
+//                if (array.isValid(lista)) {
+//                    items = lista;
+//                }// end of if cycle
+//            }// end of if/else cycle
+//        } else {
+//            if (usaCompany) {
+//                if (login.isDeveloper()) {
+//                    if (filtroCompany != null) {
+//                        Company company = (Company) filtroCompany.getValue();
+//                        if (company != null) {
+//                            items = service.findAllByCompany(company);
+//                        } else {
+//                            items = service != null ? service.findAll() : null;
+//                        }// end of if/else cycle
+//                    } else {
+//                        items = service != null ? service.findAll() : null;
+//                    }// end of if/else cycle
+//                } else {
+//                    //
+//                }// end of if/else cycle
+//            } else {
+//                items = service != null ? service.findAll() : null;
+//            }// end of if/else cycle
+//        }// end of if/else cycle
+    }// end of method
+
+
+    /**
+     * Aggiorna gli items della Grid, utilizzando i filtri. <br>
+     * Chiamato per modifiche effettuate ai filtri, popup, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Sviluppato nella sottoclasse AGridViewList, oppure APaginatedGridViewList <br>
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
     public void updateGrid() {
+        if (array.isValid(filtri)) {
+            items = mongo.findAllByProperty(entityClazz, filtri);
+        } else {
+            items = service != null ? service.findAll() : null;
+        }// end of if/else cycle
+
         if (items != null) {
             try { // prova ad eseguire il codice
                 grid.deselectAll();

@@ -24,6 +24,7 @@ import it.algos.vaadflow.ui.fields.AComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import java.util.Collection;
 import java.util.List;
@@ -367,6 +368,11 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected boolean usaRefresh;
 
     /**
+     * Flag di preferenza per filtrare la mcompany. Normalmente true. Elaborato in APrefViewList.postPreferenze() <br>
+     */
+    protected boolean usaFiltroCompany;
+
+    /**
      * Flag di preferenza per selezionare il numero di righe visibili della Grid. <br>
      * Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID). <br>
      */
@@ -395,6 +401,8 @@ public abstract class APropertyViewList extends VerticalLayout {
 //    protected boolean isPagination;
 
     protected Collection items;
+
+    protected List<CriteriaDefinition> filtri;
 
     protected ADeleteDialog deleteDialog;
 

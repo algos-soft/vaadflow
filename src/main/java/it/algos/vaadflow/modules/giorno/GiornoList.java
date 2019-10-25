@@ -125,13 +125,13 @@ public class GiornoList extends APaginatedGridViewList {
         filtroComboBox.setWidth("10em");
         filtroComboBox.setItems(meseService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
     }// end of method
 
 
-    public void updateItems() {
+    public void updateFiltri() {
         Mese mese = (Mese) filtroComboBox.getValue();
         items = ((GiornoService) service).findAllByMese(mese);
     }// end of method

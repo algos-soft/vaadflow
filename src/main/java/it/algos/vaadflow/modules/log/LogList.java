@@ -115,13 +115,13 @@ public class LogList extends AGridViewList {
 
         filtroComboBox.setItems(Livello.values());
         filtroComboBox.addValueChangeListener(e -> {
-            updateItems();
+            updateFiltri();
             updateGrid();
         });
     }// end of method
 
 
-    public void updateItems() {
+    public void updateFiltri() {
         Livello livello = (Livello) filtroComboBox.getValue();
         items = ((LogService) service).findAllByLivello(livello);
     }// end of method

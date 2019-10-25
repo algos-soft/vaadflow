@@ -201,10 +201,13 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
             return;
         }// end of if cycle
 
-        //--Le preferenze standard e specifiche
+        //--Preferenze specifiche di questa view
         this.fixPreferenze();
 
-        //--Placeholder
+        //--Eventuali regolazioni sulle preferenze DOPO avere invocato il metodo fixPreferenze() della sotoclasse
+        this.postPreferenze();
+
+        //--Costruisce gli oggetti base (placeholder) di questa view
         this.fixLayout();
 
         //--menu generale dell'applicazione
@@ -232,8 +235,8 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         this.addSpecificRoutes();
 
-        //--recupera gli items la PRIMA volta <br>
-        this.creaItems();
+        //--Crea gli items (righe) della Grid alla prima visualizzazione della view
+        this.creaFiltri();
 
         //--aggiunge tutti i listeners ai bottoni della barra/menu
         this.addListeners();
@@ -243,9 +246,9 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Le preferenze standard <br>
-     * Le preferenze specifiche della sottoclasse <br>
-     * Gestito nella classe specializzata APrefViewList <br>
+     * Preferenze specifiche di questa view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>
      * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -254,9 +257,20 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
+     * Eventuali regolazioni sulle preferenze DOPO avere invocato il metodo fixPreferenze() della sotoclasse <br>
+     * <p>
+     * Chiamato da AViewList.initView() DOPO fixPreferenze() e sviluppato nella sottoclasse APrefViewList <br>
+     * Non può essere sovrascritto <br>
+     */
+    protected void postPreferenze() {
+    }// end of method
+
+
+    /**
      * Costruisce gli oggetti base (placeholder) di questa view <br>
+     * <p>
      * Li aggiunge alla view stessa <br>
-     * Gestito nella classe specializzata ALayoutViewList <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per modificare il layout standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -270,13 +284,16 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * Può essere sovrascritto
      * Invocare PRIMA il metodo della superclasse
      */
+    @Deprecated
     protected void creaMenuLayout() {
     }// end of method
 
 
     /**
-     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
-     * Normalmente ad uso esclusivo del developer <br>
+     * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -382,17 +399,33 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    protected List<CriteriaDefinition> creaItems() {
-        return null;
+    /**
+     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void creaFiltri() {
     }// end of method
 
 
-    protected void updateItems() {
+    /**
+     * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Sviluppato nella sottoclasse AGridViewList <br>
+     * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void updateFiltri() {
     }// end of method
 
 
     /**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
+     * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
@@ -401,6 +434,13 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
+    /**
+     * Aggiorna gli items della Grid, utilizzando i filtri. <br>
+     * Chiamato per modifiche effettuate ai filtri, popup, newEntity, deleteEntity, ecc... <br>
+     * <p>
+     * Sviluppato nella sottoclasse AGridViewList, oppure APaginatedGridViewList <br>
+     * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
+     */
     public void updateGrid() {
     }// end of method
 
@@ -457,7 +497,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     public void updateDopoDialog(AEntity entityBean) {
-        this.updateItems();
+        this.updateFiltri();
         this.updateGrid();
     }// end of method
 
@@ -532,7 +572,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     public void deleteCollection() {
         service.deleteAll();
-        updateItems();
+        updateFiltri();
         updateGrid();
     }// end of method
 
@@ -545,7 +585,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     protected void reset() {
         service.reset();
-        updateItems();
+        updateFiltri();
         updateGrid();
     }// end of method
 
@@ -555,7 +595,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      */
     protected void save(AEntity entityBean, EAOperation operation) {
         if (service.save(entityBean, operation) != null) {
-            updateItems();
+            updateFiltri();
             updateGrid();
         }// end of if cycle
     }// end of method
@@ -566,7 +606,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
         Notification.show(entityBean + " successfully deleted.", 3000, Notification.Position.BOTTOM_START);
 
         if (usaRefresh) {
-            updateItems();
+            updateFiltri();
             updateGrid();
         }// end of if cycle
     }// end of method
