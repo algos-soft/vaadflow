@@ -145,16 +145,6 @@ public class AlfaList extends AGridViewList {
     }// end of method
 
 
-    /**
-     * Eventuali regolazioni sulle preferenze DOPO avere invocato il metodo fixPreferenze() della sotoclasse <br>
-     * <p>
-     * Chiamato da AViewList.initView() DOPO fixPreferenze() e sviluppato nella sottoclasse APrefViewList <br>
-     * Non può essere sovrascritto <br>
-     */
-    @Override
-    protected void postPreferenze() {
-        super.postPreferenze();
-    }// end of method
 
 
     /**

@@ -45,6 +45,13 @@ public enum Token {
     readCompany("READCOMPANY"),
     grid("GRID"),
     creaGrid("CREAGRID"),
+    fixPreferenze("FIXPREFERENZE"),
+    fixLayout("FIXLAYOUT"),
+    creaAlertLayout("CREAALERTLAYOUT"),
+    creaTopLayout("CREATOPLAYOUT"),
+    creaFiltri("CREAFILTRI"),
+    updateFiltri("UPDATEFILTRI"),
+    addListeners("ADDLISTENERS"),
     ;
 
     private String tokenTag;

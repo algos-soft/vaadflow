@@ -124,7 +124,22 @@ public class TElabora {
     private static final String METHOD_ID_KEY_SPECIFICA = METHOD + "IdKeySpecifica" + SOURCE_SUFFIX;
 
     private static final String METHOD_READ_COMPANY = METHOD + "ReadCompany" + SOURCE_SUFFIX;
+
     private static final String METHOD_CREA_GRID = METHOD + "CreaGrid" + SOURCE_SUFFIX;
+
+    private static final String METHOD_FIX_PREFERENZE = METHOD + "FixPreferenze" + SOURCE_SUFFIX;
+
+    private static final String METHOD_FIX_LAYOUT = METHOD + "FixLayout" + SOURCE_SUFFIX;
+
+    private static final String METHOD_CREA_ALERT_LAYOUT = METHOD + "CreaAlertLayout" + SOURCE_SUFFIX;
+
+    private static final String METHOD_CREA_TOP_LAYOUT = METHOD + "CreaTopLayout" + SOURCE_SUFFIX;
+
+    private static final String METHOD_CREA_FILTRI = METHOD + "CreaFiltri" + SOURCE_SUFFIX;
+
+    private static final String METHOD_UPDATE_FILTRI = METHOD + "UpdateFiltri" + SOURCE_SUFFIX;
+
+    private static final String METHOD_ADD_LISTENERS = METHOD + "AddListeners" + SOURCE_SUFFIX;
 
     private static final String VIEW_SUFFIX = "List";
 
@@ -172,6 +187,8 @@ public class TElabora {
     public boolean flagCompany;            //--dal dialogo di input
 
     public boolean flagGrid;            //--dal dialogo di input
+
+    public boolean flagList;            //--dal dialogo di input
 
     //--regolate indipendentemente dai risultati del dialogo
     private String userDir;                 //--di sistema
@@ -274,7 +291,23 @@ public class TElabora {
     private String methodBuilderText;
 
     private String methodReadCompanyText;
+
     private String methodGridPaginatedText;
+
+    private String methodFixPreferenzeText;
+
+    private String methodFixLayoutText;
+
+    private String methodCreaAlertLayoutText;
+
+    private String methodCreaTopLayoutText;
+
+    private String methodCreaFiltriText;
+
+    private String methodUpdateFiltriText;
+
+    private String methodAddListenersText;
+
 
     private String superClassEntity;
 
@@ -547,6 +580,15 @@ public class TElabora {
             }// end of if/else cycle
         }// end of if cycle
 
+        if (mappaInput.containsKey(Chiave.flagList)) {
+            this.flagList = (boolean) mappaInput.get(Chiave.flagList);
+            if (flagList) {
+//                gridSuperclass = SUPERCLASS_PAGINATED_GRID;//@todo DODODODO
+            } else {
+//                gridSuperclass = SUPERCLASS_GRID;//@todo DODODODO
+            }// end of if/else cycle
+        }// end of if cycle
+
         if (mappaInput.containsKey(Chiave.flagSovrascrive)) {
             this.flagSovrascrive = (boolean) mappaInput.get(Chiave.flagSovrascrive);
         }// end of if cycle
@@ -711,6 +753,13 @@ public class TElabora {
         mappa.put(Token.readCompany, creaReadCompany());
         mappa.put(Token.grid, gridSuperclass);
         mappa.put(Token.creaGrid, creaGrid());
+        mappa.put(Token.fixPreferenze, fixPreferenze());
+        mappa.put(Token.fixLayout, fixLayout());
+        mappa.put(Token.creaAlertLayout, creaAlertLayout());
+        mappa.put(Token.creaTopLayout, creaTopLayout());
+        mappa.put(Token.creaFiltri, creaFiltri());
+        mappa.put(Token.updateFiltri, updateFiltri());
+        mappa.put(Token.addListeners, addListeners());
         mappa.put(Token.methodFind, creaFind());
         mappa.put(Token.parametersDoc, creaParametersDoc());
         mappa.put(Token.keyUnica, creaKeyUnica());
@@ -791,6 +840,90 @@ public class TElabora {
         }// end of if cycle
 
         return methodGridPaginatedText;
+    }// end of method
+
+
+    private String fixPreferenze() {
+        methodFixPreferenzeText = "";
+
+        if (flagList) {
+            methodFixPreferenzeText += leggeFile(METHOD_FIX_PREFERENZE);
+            methodFixPreferenzeText = Token.replace(Token.entity, methodFixPreferenzeText, newEntityName);
+        }// end of if cycle
+
+        return methodFixPreferenzeText;
+    }// end of method
+
+
+    private String fixLayout() {
+        methodFixLayoutText = "";
+
+        if (flagList) {
+            methodFixLayoutText += leggeFile(METHOD_FIX_LAYOUT);
+            methodFixLayoutText = Token.replace(Token.entity, methodFixLayoutText, newEntityName);
+        }// end of if cycle
+
+        return methodFixLayoutText;
+    }// end of method
+
+
+    private String creaAlertLayout() {
+        methodCreaAlertLayoutText = "";
+
+        if (flagList) {
+            methodCreaAlertLayoutText += leggeFile(METHOD_CREA_ALERT_LAYOUT);
+            methodCreaAlertLayoutText = Token.replace(Token.entity, methodCreaAlertLayoutText, newEntityName);
+        }// end of if cycle
+
+        return methodCreaAlertLayoutText;
+    }// end of method
+
+
+    private String creaTopLayout() {
+        methodCreaTopLayoutText = "";
+
+        if (flagList) {
+            methodCreaTopLayoutText += leggeFile(METHOD_CREA_TOP_LAYOUT);
+            methodCreaTopLayoutText = Token.replace(Token.entity, methodCreaTopLayoutText, newEntityName);
+        }// end of if cycle
+
+        return methodCreaTopLayoutText;
+    }// end of method
+
+
+    private String creaFiltri() {
+        methodCreaFiltriText = "";
+
+        if (flagList) {
+            methodCreaFiltriText += leggeFile(METHOD_CREA_FILTRI);
+            methodCreaFiltriText = Token.replace(Token.entity, methodCreaFiltriText, newEntityName);
+        }// end of if cycle
+
+        return methodCreaFiltriText;
+    }// end of method
+
+
+    private String updateFiltri() {
+        methodUpdateFiltriText = "";
+
+        if (flagList) {
+            methodUpdateFiltriText += leggeFile(METHOD_UPDATE_FILTRI);
+            methodUpdateFiltriText = Token.replace(Token.entity, methodUpdateFiltriText, newEntityName);
+        }// end of if cycle
+
+        return methodUpdateFiltriText;
+    }// end of method
+
+
+    private String addListeners() {
+        methodAddListenersText = "";
+
+        if (flagList) {
+            methodAddListenersText += leggeFile(METHOD_ADD_LISTENERS);
+            methodAddListenersText = Token.replace(Token.entity, methodAddListenersText, newEntityName);
+        }// end of if cycle
+
+        return methodAddListenersText;
     }// end of method
 
 

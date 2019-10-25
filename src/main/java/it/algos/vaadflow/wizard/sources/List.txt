@@ -100,7 +100,7 @@ import org.vaadin.klaudeta.PaginatedGrid;
 @Qualifier(@QUALIFIER@)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovrascrivibile = true)
 @AIView(vaadflow = false, menuName = @QUALIFIER@, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class @ENTITY@List extends @GRID@ {
 
@@ -121,6 +121,20 @@ public class @ENTITY@List extends @GRID@ {
     }// end of Vaadin/@Route constructor
 
     @CREAGRID@
+
+    @FIXPREFERENZE@
+
+    @FIXLAYOUT@
+
+    @CREAALERTLAYOUT@
+
+    @CREATOPLAYOUT@
+
+    @CREAFILTRI@
+
+    @UPDATEFILTRI@
+
+    @ADDLISTENERS@
 
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>

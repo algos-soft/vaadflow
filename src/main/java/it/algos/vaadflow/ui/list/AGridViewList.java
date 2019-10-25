@@ -307,6 +307,7 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     @Override
     protected void creaFiltri() {
+        super.creaFiltri();
         filtri = new ArrayList<CriteriaDefinition>();
 
         if (usaFiltroCompany && filtroCompany != null) {
