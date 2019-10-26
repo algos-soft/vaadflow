@@ -2,6 +2,9 @@ package it.algos.@MODULELOWER@.modules.@PACKAGE@;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 import org.vaadin.klaudeta.PaginatedGrid;
+import javax.annotation.PostConstruct;
 
 /**
  * Project @MODULELOWER@ <br>
@@ -44,13 +48,19 @@ import org.vaadin.klaudeta.PaginatedGrid;
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
- *    con AxxService.getInstance() <br>
+ * con AxxService.getInstance() <br>
  * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
  * <p>
+ * La sequenza di costruzione da parte di SpringBott/Vaadin/Route è:
+ * 1) Costruttore esterno visibile (Vaadin/@Route constructor) (sempre presente anche implicitamente)
+ * 2) init() interno del costruttore Java (sempre presente)
+ * 3) @PostConstruct -> postConstruct() (facoltativo, sempre possibile)
+ * 4) setParameter() (solo per questa view creata da @Route via browser)
+ * 5) beforeEnter() (solo per questa view creata da @Route via browser)
  * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
- * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'0appendici di init() del
+ * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'appendici di init() del
  * costruttore.
- * Meglio spostare tutta la logica iniziale nel metodo beforeEnter() <br>
+ * Meglio spostare tutta la logica iniziale nel metodo beforeEnter() che è l'ultimo della catena di creazione <br>
  * <p>
  * Graficamente abbiamo in tutte (di solito) le XxxViewList:
  * 1) una barra di menu (obbligatorio) di tipo IAMenu
@@ -121,6 +131,12 @@ public class @ENTITY@List extends @GRID@ {
     }// end of Vaadin/@Route constructor
 
     @CREAGRID@
+
+    @POSTCONSTRUCT@
+
+    @SETPARAMETER@
+
+    @BEFOREENTER@
 
     @FIXPREFERENZE@
 

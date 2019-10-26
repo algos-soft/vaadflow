@@ -6,6 +6,7 @@
      * Può essere sovrascritto, per modificare il layout standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void fixLayout() {
         super.fixLayout();
     }// end of method

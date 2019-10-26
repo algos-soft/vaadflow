@@ -6,6 +6,7 @@
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaAlertLayout() {
         super.creaAlertLayout();
     }// end of method

@@ -2,6 +2,9 @@ package it.algos.vaadtest.modules.gamma;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
@@ -20,12 +23,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 import org.vaadin.klaudeta.PaginatedGrid;
+import javax.annotation.PostConstruct;
 
 /**
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 25-ott-2019 19.57.12 <br>
+ * Fix date: 26-ott-2019 9.23.23 <br>
  * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -44,13 +48,19 @@ import org.vaadin.klaudeta.PaginatedGrid;
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
- *    con AxxService.getInstance() <br>
+ * con AxxService.getInstance() <br>
  * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
  * <p>
+ * La sequenza di costruzione da parte di SpringBott/Vaadin/Route è:
+ * 1) Costruttore esterno visibile (Vaadin/@Route constructor) (sempre presente anche implicitamente)
+ * 2) init() interno del costruttore Java (sempre presente)
+ * 3) @PostConstruct -> postConstruct() (facoltativo, sempre possibile)
+ * 4) setParameter() (solo per questa view creata da @Route via browser)
+ * 5) beforeEnter() (solo per questa view creata da @Route via browser)
  * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
- * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'0appendici di init() del
+ * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'appendici di init() del
  * costruttore.
- * Meglio spostare tutta la logica iniziale nel metodo beforeEnter() <br>
+ * Meglio spostare tutta la logica iniziale nel metodo beforeEnter() che è l'ultimo della catena di creazione <br>
  * <p>
  * Graficamente abbiamo in tutte (di solito) le XxxViewList:
  * 1) una barra di menu (obbligatorio) di tipo IAMenu
@@ -123,12 +133,60 @@ public class GammaList extends AGridViewList {
     
 
     /**
+     * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
+     * Si usa un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Performing the initialization in a constructor is not suggested
+     * as the state of the UI is not properly set up when the constructor is invoked.
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
+     * ma l'ordine con cui vengono chiamati NON è garantito
+     * DEVE essere inserito nella sottoclasse e invocare (eventualmente) un metodo della superclasse.
+     */
+    @PostConstruct
+    protected void postConstruct() {
+    }// end of method
+
+    /**
+     * Regola i parametri del browser per una view costruita da @Route <br>
+     * <p>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewList <br>
+     * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter() <br>
+     * Può essere sovrascritto, per gestire diversamente i parametri in ingresso <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     *
+     * @param event     con la location, ui, navigationTarget, source, ecc
+     * @param parameter opzionali nella chiamata del browser
+     */
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+        super.setParameter(event, parameter);
+    }// end of method
+
+    /**
+     * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
+     * <p>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>
+     * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
+     * Qui va tutta la logica inizale della view <br>
+     * Può essere sovrascritto, per costruire diversamente la view <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     *
+     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
+     */
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        super.beforeEnter(beforeEnterEvent);
+    }// end of method
+
+    /**
      * Preferenze specifiche di questa view <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>
      * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
     }// end of method
@@ -141,6 +199,7 @@ public class GammaList extends AGridViewList {
      * Può essere sovrascritto, per modificare il layout standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void fixLayout() {
         super.fixLayout();
     }// end of method
@@ -153,6 +212,7 @@ public class GammaList extends AGridViewList {
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaAlertLayout() {
         super.creaAlertLayout();
     }// end of method
@@ -176,6 +236,7 @@ public class GammaList extends AGridViewList {
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaTopLayout() {
         super.creaTopLayout();
     }// end of method
@@ -201,10 +262,11 @@ public class GammaList extends AGridViewList {
      * Può essere sovrascritto, per modificare la selezione dei filtri <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void updateFiltri() {
         super.updateFiltri();
     }// end of method
-    
+
     /**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
      * <p>
@@ -212,6 +274,7 @@ public class GammaList extends AGridViewList {
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void addListeners() {
         super.addListeners();
     }// end of method

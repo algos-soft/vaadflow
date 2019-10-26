@@ -5,6 +5,7 @@
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void addListeners() {
         super.addListeners();
     }// end of method

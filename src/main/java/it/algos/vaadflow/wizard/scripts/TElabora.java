@@ -127,6 +127,12 @@ public class TElabora {
 
     private static final String METHOD_CREA_GRID = METHOD + "CreaGrid" + SOURCE_SUFFIX;
 
+    private static final String METHOD_POST_CONSTRUCT = METHOD + "PostConstruct" + SOURCE_SUFFIX;
+
+    private static final String METHOD_SET_PARAMETER = METHOD + "SetParameter" + SOURCE_SUFFIX;
+
+    private static final String METHOD_BEFORE_ENTER = METHOD + "BeforeEnter" + SOURCE_SUFFIX;
+
     private static final String METHOD_FIX_PREFERENZE = METHOD + "FixPreferenze" + SOURCE_SUFFIX;
 
     private static final String METHOD_FIX_LAYOUT = METHOD + "FixLayout" + SOURCE_SUFFIX;
@@ -291,23 +297,6 @@ public class TElabora {
     private String methodBuilderText;
 
     private String methodReadCompanyText;
-
-    private String methodGridPaginatedText;
-
-    private String methodFixPreferenzeText;
-
-    private String methodFixLayoutText;
-
-    private String methodCreaAlertLayoutText;
-
-    private String methodCreaTopLayoutText;
-
-    private String methodCreaFiltriText;
-
-    private String methodUpdateFiltriText;
-
-    private String methodAddListenersText;
-
 
     private String superClassEntity;
 
@@ -753,6 +742,9 @@ public class TElabora {
         mappa.put(Token.readCompany, creaReadCompany());
         mappa.put(Token.grid, gridSuperclass);
         mappa.put(Token.creaGrid, creaGrid());
+        mappa.put(Token.postConstruct, postConstruct());
+        mappa.put(Token.setParameter, setParameter());
+        mappa.put(Token.beforeEnter, beforeEnter());
         mappa.put(Token.fixPreferenze, fixPreferenze());
         mappa.put(Token.fixLayout, fixLayout());
         mappa.put(Token.creaAlertLayout, creaAlertLayout());
@@ -832,98 +824,134 @@ public class TElabora {
 
 
     private String creaGrid() {
-        methodGridPaginatedText = "";
+        String testo = "";
 
         if (flagGrid) {
-            methodGridPaginatedText += leggeFile(METHOD_CREA_GRID);
-            methodGridPaginatedText = Token.replace(Token.entity, methodGridPaginatedText, newEntityName);
+            testo += leggeFile(METHOD_CREA_GRID);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodGridPaginatedText;
+        return testo;
+    }// end of method
+
+
+    private String postConstruct() {
+        String testo = "";
+
+        if (flagList) {
+            testo += leggeFile(METHOD_POST_CONSTRUCT);
+            testo = Token.replace(Token.entity, testo, newEntityName);
+        }// end of if cycle
+
+        return testo;
+    }// end of method
+
+
+    private String setParameter() {
+        String testo = "";
+
+        if (flagList) {
+            testo += leggeFile(METHOD_SET_PARAMETER);
+            testo = Token.replace(Token.entity, testo, newEntityName);
+        }// end of if cycle
+
+        return testo;
+    }// end of method
+
+
+    private String beforeEnter() {
+        String testo = "";
+
+        if (flagList) {
+            testo += leggeFile(METHOD_BEFORE_ENTER);
+            testo = Token.replace(Token.entity, testo, newEntityName);
+        }// end of if cycle
+
+        return testo;
     }// end of method
 
 
     private String fixPreferenze() {
-        methodFixPreferenzeText = "";
+        String testo = "";
 
         if (flagList) {
-            methodFixPreferenzeText += leggeFile(METHOD_FIX_PREFERENZE);
-            methodFixPreferenzeText = Token.replace(Token.entity, methodFixPreferenzeText, newEntityName);
+            testo += leggeFile(METHOD_FIX_PREFERENZE);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodFixPreferenzeText;
+        return testo;
     }// end of method
 
 
     private String fixLayout() {
-        methodFixLayoutText = "";
+        String testo = "";
 
         if (flagList) {
-            methodFixLayoutText += leggeFile(METHOD_FIX_LAYOUT);
-            methodFixLayoutText = Token.replace(Token.entity, methodFixLayoutText, newEntityName);
+            testo += leggeFile(METHOD_FIX_LAYOUT);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodFixLayoutText;
+        return testo;
     }// end of method
 
 
     private String creaAlertLayout() {
-        methodCreaAlertLayoutText = "";
+        String testo = "";
 
         if (flagList) {
-            methodCreaAlertLayoutText += leggeFile(METHOD_CREA_ALERT_LAYOUT);
-            methodCreaAlertLayoutText = Token.replace(Token.entity, methodCreaAlertLayoutText, newEntityName);
+            testo += leggeFile(METHOD_CREA_ALERT_LAYOUT);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodCreaAlertLayoutText;
+        return testo;
     }// end of method
 
 
     private String creaTopLayout() {
-        methodCreaTopLayoutText = "";
+        String testo = "";
 
         if (flagList) {
-            methodCreaTopLayoutText += leggeFile(METHOD_CREA_TOP_LAYOUT);
-            methodCreaTopLayoutText = Token.replace(Token.entity, methodCreaTopLayoutText, newEntityName);
+            testo += leggeFile(METHOD_CREA_TOP_LAYOUT);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodCreaTopLayoutText;
+        return testo;
     }// end of method
 
 
     private String creaFiltri() {
-        methodCreaFiltriText = "";
+        String testo = "";
 
         if (flagList) {
-            methodCreaFiltriText += leggeFile(METHOD_CREA_FILTRI);
-            methodCreaFiltriText = Token.replace(Token.entity, methodCreaFiltriText, newEntityName);
+            testo += leggeFile(METHOD_CREA_FILTRI);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodCreaFiltriText;
+        return testo;
     }// end of method
 
 
     private String updateFiltri() {
-        methodUpdateFiltriText = "";
+        String testo = "";
 
         if (flagList) {
-            methodUpdateFiltriText += leggeFile(METHOD_UPDATE_FILTRI);
-            methodUpdateFiltriText = Token.replace(Token.entity, methodUpdateFiltriText, newEntityName);
+            testo += leggeFile(METHOD_UPDATE_FILTRI);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodUpdateFiltriText;
+        return testo;
     }// end of method
 
 
     private String addListeners() {
-        methodAddListenersText = "";
+        String testo = "";
 
         if (flagList) {
-            methodAddListenersText += leggeFile(METHOD_ADD_LISTENERS);
-            methodAddListenersText = Token.replace(Token.entity, methodAddListenersText, newEntityName);
+            testo += leggeFile(METHOD_ADD_LISTENERS);
+            testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
-        return methodAddListenersText;
+        return testo;
     }// end of method
 
 

@@ -6,6 +6,7 @@
      * Può essere sovrascritto, per modificare la selezione dei filtri <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void updateFiltri() {
         super.updateFiltri();
     }// end of method
