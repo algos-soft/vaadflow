@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.security.access.annotation.Secured;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_ALF;
@@ -157,19 +158,8 @@ public class AlfaList extends AGridViewList {
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
 
-        List<String> items = new ArrayList<>();
-        items.add("francese");
-        items.add("inglese");
-        items.add("tedesca");
-        items.add("turco");
-        items.add("russo");
         filtroComboBox.setPlaceholder("nazionalità ...");
-        filtroComboBox.setWidth("10em");
-        filtroComboBox.setItems(items);
-        filtroComboBox.addValueChangeListener(e -> {
-            updateFiltri();
-            updateGrid();
-        });
+        filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca","turco","russo")));
     }// end of method
 
 
@@ -224,21 +214,14 @@ public class AlfaList extends AGridViewList {
      */
     @Override
     protected void creaFiltri() {
-        List<CriteriaDefinition> listaFiltri = new ArrayList();
+        super.creaFiltri();
         Company company;
         String nazionalita = "";
 
-        if (filtroCompany != null && filtroCompany.getValue() != null) {
-            company = (Company) filtroCompany.getValue();
-            listaFiltri.add(Criteria.where("company").is(company));
-        }// end of if cycle
-
         if (filtroComboBox != null && filtroComboBox.getValue() != null) {
             nazionalita = (String) filtroComboBox.getValue();
-            listaFiltri.add(Criteria.where("nazionalita").is(nazionalita));
+            filtri.add(Criteria.where("nazionalita").is(nazionalita));
         }// end of if cycle
-
-        items = mongo.findAllByProperty(Alfa.class, listaFiltri);
     }// end of method
 
 
@@ -257,11 +240,6 @@ public class AlfaList extends AGridViewList {
         String nazionalita = "";
         boolean ragazzo;
         boolean simpatico;
-
-//        if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
-//            company = (Company) filtroCompany.getValue();
-//            filtri.add(Criteria.where("company").is(company));
-//        }// end of if cycle
 
         if (filtroComboBox != null && filtroComboBox.getValue() != null) {
             nazionalita = (String) filtroComboBox.getValue();

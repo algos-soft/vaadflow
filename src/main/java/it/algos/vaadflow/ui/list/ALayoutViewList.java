@@ -365,6 +365,13 @@ public abstract class ALayoutViewList extends APrefViewList {
             });// end of lambda expressions
         }// end of if cycle
 
+        if (filtroComboBox != null) {
+            filtroComboBox.addValueChangeListener(e -> {
+                updateFiltri();
+                updateGrid();
+            });// end of lambda expressions
+        }// end of if cycle
+
     }// end of method
 
 
@@ -395,7 +402,7 @@ public abstract class ALayoutViewList extends APrefViewList {
      */
     protected void creaPopupFiltro() {
         filtroComboBox = new AComboBox();
-        filtroComboBox.setWidth("8em");
+        filtroComboBox.setWidth("10em");
     }// end of method
 
 }// end of class

@@ -11,7 +11,6 @@ import com.vaadin.flow.data.selection.SelectionListener;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EASearch;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -308,19 +307,12 @@ public abstract class AGridViewList extends ALayoutViewList {
     @Override
     protected void creaFiltri() {
         super.creaFiltri();
-        filtri = new ArrayList<CriteriaDefinition>();
 
-        if (usaFiltroCompany && filtroCompany != null) {
-            Company company = (Company) filtroCompany.getValue();
-            if (company != null) {
-                items = service.findAllByCompany(company);
-            } else {
-                items = service != null ? service.findAll() : null;
-            }// end of if/else cycle
-        } else {
-            items = service != null ? service.findAll() : null;
-        }// end of if/else cycle
-
+        if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
+            if (filtroCompany.getValue() != null) {
+                filtri.add(Criteria.where("company").is(filtroCompany.getValue()));
+            }// end of if cycle
+        }// end of if cycle
     }// end of method
 
 
@@ -335,70 +327,21 @@ public abstract class AGridViewList extends ALayoutViewList {
     @Override
     protected void updateFiltri() {
         filtri = new ArrayList<CriteriaDefinition>();
-        Company company;
-        String value = "";
 
         //--ricerca iniziale
-       if (searchType == EASearch.editField && searchField != null) {
-            value = searchField.getValue();
+        if (searchType == EASearch.editField && searchField != null) {
             if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
-                filtri.add(Criteria.where(searchProperty).regex("^" + value));
+                filtri.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
             } else {
-                filtri.add(Criteria.where(searchProperty).regex("^" + value, "i"));
+                filtri.add(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i"));
             }// end of if/else cycle
         }// end of if cycle
 
-        if (searchType == EASearch.dialog ) {
-        }// end of if cycle
-
         if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
-            company = (Company) filtroCompany.getValue();
-            filtri.add(Criteria.where("company").is(company));
+            if (filtroCompany.getValue() != null) {
+                filtri.add(Criteria.where("company").is(filtroCompany.getValue()));
+            }// end of if cycle
         }// end of if cycle
-
-
-//        List<AEntity> lista = null;
-//        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
-//
-//        if (usaSearch) {
-//            if (!usaSearchDialog && searchField != null && text.isEmpty(searchField.getValue())) {
-//                items = service != null ? service.findAll() : null;
-//            } else {
-//                if (searchField != null) {
-//                    if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
-//                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue()));
-//                    } else {
-//                        listaCriteriaDefinitionRegex.add(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i"));
-//                    }// end of if/else cycle
-//                    lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
-//                } else {
-//                    items = service != null ? service.findAll() : null;
-//                }// end of if/else cycle
-//
-//                if (array.isValid(lista)) {
-//                    items = lista;
-//                }// end of if cycle
-//            }// end of if/else cycle
-//        } else {
-//            if (usaCompany) {
-//                if (login.isDeveloper()) {
-//                    if (filtroCompany != null) {
-//                        Company company = (Company) filtroCompany.getValue();
-//                        if (company != null) {
-//                            items = service.findAllByCompany(company);
-//                        } else {
-//                            items = service != null ? service.findAll() : null;
-//                        }// end of if/else cycle
-//                    } else {
-//                        items = service != null ? service.findAll() : null;
-//                    }// end of if/else cycle
-//                } else {
-//                    //
-//                }// end of if/else cycle
-//            } else {
-//                items = service != null ? service.findAll() : null;
-//            }// end of if/else cycle
-//        }// end of if/else cycle
     }// end of method
 
 
