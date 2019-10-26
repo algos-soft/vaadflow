@@ -90,7 +90,6 @@ public class AnnoList extends APaginatedGridViewList {
         super.fixPreferenze();
 
         super.limit = 25;
-        super.usaSearch = false;
         super.usaPopupFiltro = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneReset = true;

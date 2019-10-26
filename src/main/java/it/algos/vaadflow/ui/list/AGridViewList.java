@@ -10,6 +10,7 @@ import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.USA_SEARCH_CASE_SENSITIVE;
-import static it.algos.vaadflow.application.FlowVar.usaCompany;
 
 /**
  * Project vaadflow
@@ -336,6 +336,20 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected void updateFiltri() {
         filtri = new ArrayList<CriteriaDefinition>();
         Company company;
+        String value = "";
+
+        //--ricerca iniziale
+       if (searchType == EASearch.editField && searchField != null) {
+            value = searchField.getValue();
+            if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
+                filtri.add(Criteria.where(searchProperty).regex("^" + value));
+            } else {
+                filtri.add(Criteria.where(searchProperty).regex("^" + value, "i"));
+            }// end of if/else cycle
+        }// end of if cycle
+
+        if (searchType == EASearch.dialog ) {
+        }// end of if cycle
 
         if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
             company = (Company) filtroCompany.getValue();

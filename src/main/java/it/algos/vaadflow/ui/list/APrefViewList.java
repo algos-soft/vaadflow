@@ -3,10 +3,13 @@ package it.algos.vaadflow.ui.list;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAPreferenza;
+import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.service.IAService;
 
 import static it.algos.vaadflow.application.FlowCost.USA_EDIT_BUTTON;
 import static it.algos.vaadflow.application.FlowVar.usaCompany;
+import static it.algos.vaadflow.service.AService.FIELD_NAME_CODE;
+import static it.algos.vaadflow.service.AService.FIELD_NAME_DESCRIZIONE;
 
 /**
  * Project vaadflow
@@ -62,23 +65,6 @@ public abstract class APrefViewList extends AViewList {
      */
     @Override
     protected void fixPreferenze() {
-        /**
-         * Flag di preferenza per usare la ricerca e selezione nella barra dei menu. <br>
-         * Se è true, un altro flag seleziona il textField o il textDialog <br>
-         * Se è true, il bottone usaAllButton è sempre presente <br>
-         * Normalmente true. <br>
-         */
-        usaSearch = false;
-
-
-        /**
-         * Flag di preferenza per selezionare la ricerca:
-         * true per aprire un dialogo di ricerca e selezione su diverse properties <br>
-         * false per presentare un textEdit predisposto per la ricerca su un unica property <br>
-         * Normalmente true.
-         */
-        usaSearchDialog = true;
-
         /**
          * Flag di preferenza per usare il popup di selezione, filtro e ordinamento situato nella searchBar.
          * Normalmente false <br>
@@ -156,10 +142,22 @@ public abstract class APrefViewList extends AViewList {
         //--Espressa come numero per comodità; poi viene convertita in "em".
         gridWith = 90;
 
+
+        /**
+         * Flag di preferenza per selezionare la ricerca testuale:
+         * 1) nessuna
+         * 2) campo editText di selezione per una property specificata in searchProperty
+         * 3) dialogo di selezione
+         */
+        searchType = EASearch.editField;
+
+
         //--property per la ricerca con searchField.
-        //--Viene letta da una @Annotation.
+        //--Ha senso solo se searchType=EASearch.editField
+        //--Viene letta da una @Annotation. Di default 'code' o 'descrizione'
         //--Può essere sovrascritta in fixPreferenze() della sottoclasse specifica
-        searchProperty = annotation.getSearchPropertyName(this.getClass());
+        searchProperty = this.getSearchPropertyName();
+
 
         //--il flag viene provvisoriamente impostato con la preferenza generale del programma
         //--può essere sovrascritto
@@ -185,6 +183,30 @@ public abstract class APrefViewList extends AViewList {
             }// end of if/else cycle
         }// end of if cycle
 
+    }// end of method
+
+
+    /**
+     * Restituisce il nome della property per le ricerche con searchField <br>
+     * Se non la trova, prova a vedere se esiste la property 'code' <br>
+     * Se non la trova, prova a vedere se esiste la property 'descrizione' <br>
+     *
+     * @return the name of the property
+     */
+    private String getSearchPropertyName() {
+        String searchProperty = annotation.getSearchPropertyName(this.getClass());
+
+        if (text.isEmpty(searchProperty)) {
+            if (reflection.isEsiste(entityClazz, FIELD_NAME_CODE)) {
+                searchProperty = FIELD_NAME_CODE;
+            } else {
+                if (reflection.isEsiste(entityClazz, FIELD_NAME_DESCRIZIONE)) {
+                    searchProperty = FIELD_NAME_DESCRIZIONE;
+                }// end of if cycle
+            }// end of if/else cycle
+        }// end of if cycle
+
+        return searchProperty;
     }// end of method
 
 }// end of class

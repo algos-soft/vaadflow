@@ -83,7 +83,6 @@ public class LogList extends AGridViewList {
         if (!FlowVar.usaSecurity || login.isDeveloper()) {
             super.usaBottoneDeleteAll = true;
         }// end of if cycle
-        super.usaSearch = false;
         super.usaPopupFiltro = true;
         super.isEntityAdmin = true;
         super.usaBottoneNew = false;

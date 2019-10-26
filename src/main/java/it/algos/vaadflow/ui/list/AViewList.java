@@ -504,6 +504,7 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     //@todo da rendere getBean il dialogo
     protected void openSearch() {
+        filtri.clear();
         searchDialog = appContext.getBean(ASearchDialog.class, service);
         searchDialog.open("", "", this::updateDopoSearch, null);
     }// end of method
@@ -511,33 +512,30 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
     public void updateDopoSearch() {
         LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
-        List<AEntity> lista;
         IAField field;
         Object fieldValue = null;
-        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
 
+        //--ricerca della parola completa
         for (String fieldName : searchDialog.fieldMap.keySet()) {
             field = (IAField) searchDialog.fieldMap.get(fieldName);
             fieldValue = field.getValore();
             if (field instanceof ATextField || field instanceof ATextArea) {
                 if (text.isValid(fieldValue)) {
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex("^" + fieldValue));
+                    filtri.add(Criteria.where(fieldName).is(fieldValue));
                 }// end of if cycle
             }// end of if cycle
             if (field instanceof AIntegerField) {
                 if ((Integer) fieldValue > 0) {
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex("^" + fieldValue));
+                    filtri.add(Criteria.where(fieldName).is(fieldValue));
                 }// end of if cycle
             }// end of if cycle
         }// end of for cycle
-        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
 
-        if (array.isValid(lista)) {
-            items = lista;
+        if (clearFilterButton != null) {
+            clearFilterButton.setEnabled(true);
         }// end of if cycle
 
         this.updateGrid();
-
         creaAlertLayout();
     }// end of method
 

@@ -166,8 +166,6 @@ public class ProvaList extends AGridViewList {
         super.fixPreferenze();
 
         super.usaBottoneReset = true;
-        super.usaSearch = true;
-        super.usaSearchDialog = false;
         super.usaPopupFiltro = false;
         super.usaBottoneEdit = true;
         super.usaPagination = false;

@@ -243,20 +243,11 @@ public abstract class ALayoutViewList extends APrefViewList {
             topPlaceholder.add(newButton);
         }// end of if cycle
 
-        //--con o senza gruppo di ricerca
-        if (usaSearch) {
-            //--bottone per aprire un DialogSearch con diverse property selezionabili
-            if (usaSearchDialog) {
-                //--il bottone associa un evento standard -> openConfirmDialogDelete(), che deve essere sovrascritto
-                buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
-                searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
-                searchButton.getElement().setAttribute("theme", "secondary");
-                searchButton.addClassName("view-toolbar__button");
-
-                //--bottone piccolo per eliminare i filtri di una ricerca e restituire tutte le entities
-                clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
-                topPlaceholder.add(searchButton, clearFilterButton);
-            } else {
+        //--eventuale campo o dialogo diu ricerca
+        switch (searchType) {
+            case nonUsata:
+                break;
+            case editField:
                 //--campo EditSearch predisposto su un unica property
                 searchField = new TextField("", "Search");
                 searchField.setPrefixComponent(new Icon("lumo", "search"));
@@ -265,9 +256,26 @@ public abstract class ALayoutViewList extends APrefViewList {
 
                 //--bottone piccolo per pulire il campo testo di ricerca
                 clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+                clearFilterButton.setEnabled(false);
                 topPlaceholder.add(searchField, clearFilterButton);
-            }// end of if/else cycle
-        }// end of if cycle
+
+                break;
+            case dialog:
+                //--il bottone associa un evento standard -> openConfirmDialogDelete(), che deve essere sovrascritto
+                buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
+                searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
+                searchButton.getElement().setAttribute("theme", "secondary");
+                searchButton.addClassName("view-toolbar__button");
+
+                //--bottone piccolo per ripristinare la condizione senza filtro
+                clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
+                clearFilterButton.setEnabled(false);
+                topPlaceholder.add(searchButton, clearFilterButton);
+                break;
+            default:
+                log.warn("Switch - caso non definito");
+                break;
+        } // end of switch statement
 
         //--eventuale filtro sulla company
         if (usaCompany && login.isDeveloper()) {
@@ -310,30 +318,34 @@ public abstract class ALayoutViewList extends APrefViewList {
             newButton.addClickListener(event -> openNew());
         }// end of if cycle
 
-        if (searchButton != null) {
-            searchButton.addClickListener(e -> openSearch());
-        }// end of if cycle
-
-        if (clearFilterButton != null) {
-            clearFilterButton.addClickListener(e -> {
-                updateFiltri();
-                updateGrid();
-            });//end of lambda expressions
-        }// end of if cycle
-
         if (searchField != null) {
             searchField.addValueChangeListener(e -> {
                 updateFiltri();
                 updateGrid();
+                clearFilterButton.setEnabled(true);
             });//end of lambda expression
+            if (clearFilterButton != null) {
+                clearFilterButton.addClickListener(e -> {
+                    searchField.clear();
+                    updateFiltri();
+                    updateGrid();
+                    clearFilterButton.setEnabled(false);
+                });//end of lambda expressions
+            }// end of if cycle
         }// end of if cycle
+
 
         if (searchButton != null) {
             searchButton.addClickListener(e -> openSearch());
             if (clearFilterButton != null) {
-                clearFilterButton.addClickListener(e -> searchField.clear());
+                clearFilterButton.addClickListener(e -> {
+                    updateFiltri();
+                    updateGrid();
+                    clearFilterButton.setEnabled(false);
+                });//end of lambda expressions
             }// end of if cycle
         }// end of if cycle
+
 
         if (filtroCompany != null) {
             filtroCompany.addValueChangeListener(e -> {

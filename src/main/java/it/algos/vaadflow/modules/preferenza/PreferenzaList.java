@@ -137,8 +137,6 @@ public class PreferenzaList extends AGridViewList {
             super.usaBottoneReset = true;
         }// end of if cycle
 
-        super.usaSearch = false;
-        super.usaSearchDialog = false;
         super.usaBottoneNew = false;
         super.isEntityDeveloper = true;
         super.usaPagination = true;
