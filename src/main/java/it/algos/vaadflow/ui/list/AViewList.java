@@ -25,7 +25,6 @@ import it.algos.vaadflow.ui.fields.ATextField;
 import it.algos.vaadflow.ui.fields.IAField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -502,9 +501,11 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     }// end of method
 
 
-    //@todo da rendere getBean il dialogo
     protected void openSearch() {
-        filtri.clear();
+        if (filtri != null) {
+            filtri.clear();
+        }// end of if cycle
+
         searchDialog = appContext.getBean(ASearchDialog.class, service);
         searchDialog.open("", "", this::updateDopoSearch, null);
     }// end of method

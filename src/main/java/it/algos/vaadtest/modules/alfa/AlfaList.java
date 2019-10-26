@@ -8,6 +8,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
@@ -140,6 +141,7 @@ public class AlfaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.searchType = EASearch.dialog;
         super.usaPopupFiltro = true;
         super.usaBottoneReset = true;
     }// end of method

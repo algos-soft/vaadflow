@@ -216,6 +216,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         if ((!FlowVar.usaSecurity && usaBottoneDeleteAll) || (isDeveloper && usaBottoneDeleteAll)) {
             deleteAllButton = new Button("Delete", new Icon(VaadinIcon.CLOSE_CIRCLE));
             deleteAllButton.getElement().setAttribute("theme", "error");
+            deleteAllButton.getElement().setAttribute("title", "Cancella tutta la collezione");
             deleteAllButton.addClassName("view-toolbar__button");
             topPlaceholder.add(deleteAllButton);
         }// end of if cycle
@@ -225,6 +226,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         if ((!FlowVar.usaSecurity && usaBottoneReset) || (isDeveloper && usaBottoneReset)) {
             resetButton = new Button("Reset", new Icon(VaadinIcon.CLOSE_CIRCLE));
             resetButton.getElement().setAttribute("theme", "error");
+            resetButton.getElement().setAttribute("title", "Ripristina tutta la collezione");
             resetButton.addClassName("view-toolbar__button");
             topPlaceholder.add(resetButton);
         }// end of if cycle
@@ -236,6 +238,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_NEW));
             newButton = new Button(buttonTitle, new Icon("lumo", "plus"));
             newButton.getElement().setAttribute("theme", "primary");
+            newButton.getElement().setAttribute("title", "Crea una nuova entity");
             newButton.addClassName("view-toolbar__button");
             if (pref.isBool(USA_BUTTON_SHORTCUT)) {
                 newButton.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
@@ -249,14 +252,16 @@ public abstract class ALayoutViewList extends APrefViewList {
                 break;
             case editField:
                 //--campo EditSearch predisposto su un unica property
-                searchField = new TextField("", "Search");
+                searchField = new TextField("", "Cerca");
                 searchField.setPrefixComponent(new Icon("lumo", "search"));
+                searchField.getElement().setAttribute("title", "Caratteri iniziali della ricerca");
                 searchField.addClassName("view-toolbar__search-field");
                 searchField.setValueChangeMode(ValueChangeMode.EAGER);
 
                 //--bottone piccolo per pulire il campo testo di ricerca
                 clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
                 clearFilterButton.setEnabled(false);
+                clearFilterButton.getElement().setAttribute("title", "Pulisce il campo di ricerca");
                 topPlaceholder.add(searchField, clearFilterButton);
 
                 break;
@@ -265,11 +270,13 @@ public abstract class ALayoutViewList extends APrefViewList {
                 buttonTitle = text.primaMaiuscola(pref.getStr(FlowCost.FLAG_TEXT_SEARCH));
                 searchButton = new Button(buttonTitle, new Icon("lumo", "search"));
                 searchButton.getElement().setAttribute("theme", "secondary");
+                searchButton.getElement().setAttribute("title", "Apre una finestra di dialogo");
                 searchButton.addClassName("view-toolbar__button");
 
                 //--bottone piccolo per ripristinare la condizione senza filtro
                 clearFilterButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE));
                 clearFilterButton.setEnabled(false);
+                clearFilterButton.getElement().setAttribute("title", "Annulla la selezione effettuata");
                 topPlaceholder.add(searchButton, clearFilterButton);
                 break;
             default:
@@ -322,7 +329,11 @@ public abstract class ALayoutViewList extends APrefViewList {
             searchField.addValueChangeListener(e -> {
                 updateFiltri();
                 updateGrid();
-                clearFilterButton.setEnabled(true);
+                if (searchField.getValue().isEmpty()) {
+                    clearFilterButton.setEnabled(false);
+                } else {
+                    clearFilterButton.setEnabled(true);
+                }// end of if/else cycle
             });//end of lambda expression
             if (clearFilterButton != null) {
                 clearFilterButton.addClickListener(e -> {
