@@ -142,9 +142,12 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia HasUrlParameter <br>
+     * Regola i parametri del browser per una view costruita da @Route <br>
+     * <p>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewList <br>
      * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter() <br>
-     * Può essere sovrascritto. Invocare PRIMA il metodo della superclasse <br>
+     * Può essere sovrascritto, per gestire diversamente i parametri in ingresso <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      *
      * @param event     con la location, ui, navigationTarget, source, ecc
      * @param parameter opzionali nella chiamata del browser
@@ -170,9 +173,13 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
+     * <p>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>
      * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
      * Qui va tutta la logica inizale della view <br>
+     * Può essere sovrascritto, per costruire diversamente la view <br>
+     * Invocare PRIMA il metodo della superclasse <br>
      *
      * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
      */
@@ -208,9 +215,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
         //--Costruisce gli oggetti base (placeholder) di questa view
         this.fixLayout();
-
-        //--menu generale dell'applicazione
-        this.creaMenuLayout();
 
         //--una o più righe di avvisi
         this.creaAlertLayout();
@@ -278,17 +282,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Costruisce la barra di menu e l'aggiunge alla UI <br>
-     * Lo standard è 'Flowingcode'
-     * Può essere sovrascritto
-     * Invocare PRIMA il metodo della superclasse
-     */
-    @Deprecated
-    protected void creaMenuLayout() {
-    }// end of method
-
-
-    /**
      * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
@@ -301,18 +294,17 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Placeholder SOPRA la Grid (non obbligatoria, ma quasi sempre presente) <br>
+     * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
      * <p>
-     * - con o senza un bottone per cancellare tutta la collezione
-     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
-     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
-     * - con o senza gruppo di ricerca:
-     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
-     * -    bottone per aprire un DialogSearch con diverse property selezionabili
-     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
-     * - con eventuale Popup di selezione della company (se applicazione multiCompany)
-     * - con eventuale Popup di selezione specifico, filtro e ordinamento
-     * - con eventuali altri bottoni specifici <br>
+     * In fixPreferenze() si regola quali bottoni mostrare. Nell'ordine: <br>
+     * 1) eventuale bottone per cancellare tutta la collezione <br>
+     * 2) eventuale bottone di reset per ripristinare (se previsto in automatico) la collezione <br>
+     * 3) eventuale bottone New, con testo regolato da preferenza o da parametro <br>
+     * 4) eventuale bottone 'Cerca...' per aprire un DialogSearch oppure un campo EditSearch per la ricerca <br>
+     * 5) eventuale bottone per annullare la ricerca e riselezionare tutta la collezione <br>
+     * 6) eventuale combobox di selezione della company (se applicazione multiCompany) <br>
+     * 7) eventuale combobox di selezione specifico <br>
+     * 8) eventuali altri bottoni specifici <br>
      * <p>
      * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
@@ -324,7 +316,8 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
-     * Crea il corpo centrale della view <br>
+     * Crea il corpo centrale della view inserito in 'gridPlaceholder' <br>
+     * <p>
      * Componente grafico obbligatorio <br>
      * Seleziona quale grid usare e la aggiunge al layout <br>
      * Eventuale barra di bottoni sotto la grid <br>

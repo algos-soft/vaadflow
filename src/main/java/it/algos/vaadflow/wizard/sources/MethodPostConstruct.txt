@@ -11,4 +11,5 @@
      */
     @PostConstruct
     protected void postConstruct() {
+        //super.inizia();
     }// end of method

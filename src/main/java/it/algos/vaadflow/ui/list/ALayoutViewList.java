@@ -73,7 +73,9 @@ public abstract class ALayoutViewList extends APrefViewList {
 
     /**
      * Costruisce gli oggetti base (placeholder) di questa view <br>
+     * <p>
      * Li aggiunge alla view stessa <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
      * Può essere sovrascritto, per modificare il layout standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -103,43 +105,6 @@ public abstract class ALayoutViewList extends APrefViewList {
         gridPlaceholder.setPadding(false);
     }// end of method
 
-
-    /**
-     * Costruisce la barra di menu e l'aggiunge alla UI <br>
-     * Lo standard è 'Flowingcode'
-     * Può essere sovrascritto
-     * Invocare PRIMA il metodo della superclasse
-     */
-    protected void creaMenuLayout() {
-        IAMenu menu;
-        EAMenu typeMenu = EAMenu.getMenu(pref.getEnumStr(USA_MENU));
-
-        if (typeMenu != null) {
-            switch (typeMenu) {
-                case buttons:
-                    menu = StaticContextAccessor.getBean(AButtonMenu.class);
-                    this.add(menu.getComp());
-                    break;
-                case popup:
-                    menu = StaticContextAccessor.getBean(APopupMenu.class);
-                    this.add(menu.getComp());
-                    break;
-                case flowing:
-//                    menu = StaticContextAccessor.getBean(AFlowingcodeAppLayoutMenu.class);
-//                    this.add(menu.getComp());
-                    break;
-                case vaadin:
-//                    menu = StaticContextAccessor.getBean(AAppLayoutMenu.class);
-//                    this.add(new Label("."));
-//                    this.add(((AFlowingcodeAppLayoutMenu) menu).getAppLayoutFlowing());
-                    break;
-                default:
-                    log.warn("Switch - caso non definito");
-                    break;
-            } // end of switch statement
-        }// end of if cycle
-
-    }// end of method
 
 
     /**
@@ -186,18 +151,17 @@ public abstract class ALayoutViewList extends APrefViewList {
 
 
     /**
-     * Placeholder SOPRA la Grid (non obbligatoria, ma quasi sempre presente) <br>
+     * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
      * <p>
-     * - con o senza un bottone per cancellare tutta la collezione
-     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
-     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
-     * - con o senza gruppo di ricerca:
-     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
-     * -    bottone per aprire un DialogSearch con diverse property selezionabili
-     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
-     * - con eventuale Popup di selezione della company (se applicazione multiCompany)
-     * - con eventuale Popup di selezione specifico, filtro e ordinamento
-     * - con eventuali altri bottoni specifici <br>
+     * In fixPreferenze() si regola quali bottoni mostrare. Nell'ordine: <br>
+     * 1) eventuale bottone per cancellare tutta la collezione <br>
+     * 2) eventuale bottone di reset per ripristinare (se previsto in automatico) la collezione <br>
+     * 3) eventuale bottone New, con testo regolato da preferenza o da parametro <br>
+     * 4) eventuale bottone 'Cerca...' per aprire un DialogSearch oppure un campo EditSearch per la ricerca <br>
+     * 5) eventuale bottone per annullare la ricerca e riselezionare tutta la collezione <br>
+     * 6) eventuale combobox di selezione della company (se applicazione multiCompany) <br>
+     * 7) eventuale combobox di selezione specifico <br>
+     * 8) eventuali altri bottoni specifici <br>
      * <p>
      * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
@@ -345,7 +309,6 @@ public abstract class ALayoutViewList extends APrefViewList {
             }// end of if cycle
         }// end of if cycle
 
-
         if (searchButton != null) {
             searchButton.addClickListener(e -> openSearch());
             if (clearFilterButton != null) {
@@ -356,7 +319,6 @@ public abstract class ALayoutViewList extends APrefViewList {
                 });//end of lambda expressions
             }// end of if cycle
         }// end of if cycle
-
 
         if (filtroCompany != null) {
             filtroCompany.addValueChangeListener(e -> {

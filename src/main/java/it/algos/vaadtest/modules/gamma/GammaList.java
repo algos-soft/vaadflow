@@ -29,7 +29,7 @@ import javax.annotation.PostConstruct;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 27-ott-2019 7.38.04 <br>
+ * Fix date: 27-ott-2019 8.06.20 <br>
  * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -145,6 +145,7 @@ public class GammaList extends AGridViewList {
      */
     @PostConstruct
     protected void postConstruct() {
+        //super.inizia();
     }// end of method
 
     /**
@@ -255,31 +256,26 @@ public class GammaList extends AGridViewList {
     }// end of method
 
     /**
-     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
+     * I filtri normali vanno in updateFiltri() <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
      * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Può essere sovrascritto SOLO se ci sono dei filtri che devono essere attivi già alla partenza della Grid <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
     protected void creaFiltri() {
         super.creaFiltri();
-
-        //esempio
-        //String nazionalita = "";
-        //if (filtroComboBox != null && filtroComboBox.getValue() != null) {
-        //    nazionalita = (String) filtroComboBox.getValue();
-        //    filtri.add(Criteria.where("nazionalita").is(nazionalita));
-        //}// end of if cycle
     }// end of method
 
     /**
      * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
+     * Normalmente tutti i filtri  vanno qui <br>
      * <p>
-     * Sviluppato nella sottoclasse AGridViewList <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
      * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Può essere sovrascritto, per costruire i filtri specifici dei combobox, popup, ecc. <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
