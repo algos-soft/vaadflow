@@ -108,7 +108,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 @Slf4j
 @Secured("user")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione", roleTypeVisibility = EARoleType.developer)
 public class AlfaList extends AGridViewList {
 
     private Checkbox checkbox1;
@@ -143,7 +143,7 @@ public class AlfaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.searchType = EASearch.dialog;
+//        super.searchType = EASearch.dialog;
         super.usaPopupFiltro = true;
         super.usaBottoneReset = true;
     }// end of method

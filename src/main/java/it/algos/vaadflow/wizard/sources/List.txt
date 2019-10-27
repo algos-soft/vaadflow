@@ -110,7 +110,7 @@ import javax.annotation.PostConstruct;
 @Qualifier(@QUALIFIER@)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = true)
+@AIScript(sovrascrivibile = false)
 @AIView(vaadflow = false, menuName = @QUALIFIER@, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class @ENTITY@List extends @GRID@ {
 
