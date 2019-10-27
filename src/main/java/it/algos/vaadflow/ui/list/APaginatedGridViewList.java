@@ -60,11 +60,13 @@ public abstract class APaginatedGridViewList extends AGridViewList {
 
 
     /**
-     * Preferenze standard <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Preferenze specifiche di questa view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>
+     * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
+    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
         super.usaBottoneEdit = false;
@@ -103,7 +105,6 @@ public abstract class APaginatedGridViewList extends AGridViewList {
         paginatedGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         paginatedGrid.setPageSize(limit);
         paginatedGrid.setHeightByRows(true);
-        paginatedGrid.setWidth(gridWith + "em");
         paginatedGrid.getElement().getStyle().set("background-color", "#aabbcc");
 
         fixGridHeader();
@@ -226,6 +227,12 @@ public abstract class APaginatedGridViewList extends AGridViewList {
             super.updateGrid();
             return;
         }// end of if cycle
+
+        if (array.isValid(filtri)) {
+            items = mongo.findAllByProperty(entityClazz, filtri);
+        } else {
+            items = service != null ? service.findAll() : null;
+        }// end of if/else cycle
 
         if (items != null) {
             try { // prova ad eseguire il codice

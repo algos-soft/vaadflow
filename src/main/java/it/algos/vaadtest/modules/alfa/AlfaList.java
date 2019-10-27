@@ -14,6 +14,7 @@ import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -148,8 +149,6 @@ public class AlfaList extends AGridViewList {
     }// end of method
 
 
-
-
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
@@ -186,41 +185,39 @@ public class AlfaList extends AGridViewList {
         checkbox1.setLabel("Ragazzo");
         checkbox1.setIndeterminate(true);
         checkbox1.setValue(true);
-        checkbox1.addValueChangeListener(e -> {
-            updateFiltri();
-            updateGrid();
-        });
         topPlaceholder.add(checkbox1);
 
         checkbox2 = new Checkbox();
         checkbox2.setLabel("Simpatico");
         checkbox2.setIndeterminate(true);
         checkbox2.setValue(true);
-        checkbox2.addValueChangeListener(e -> {
-            updateFiltri();
-            updateGrid();
-        });
         topPlaceholder.add(checkbox2);
     }// end of method
 
 
     /**
-     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
      * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
-     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
-    protected void creaFiltri() {
-        super.creaFiltri();
-        Company company;
-        String nazionalita = "";
+    protected void addListeners() {
+        super.addListeners();
 
-        if (filtroComboBox != null && filtroComboBox.getValue() != null) {
-            nazionalita = (String) filtroComboBox.getValue();
-            filtri.add(Criteria.where("nazionalita").is(nazionalita));
+        if (checkbox1 != null) {
+            checkbox1.addValueChangeListener(e -> {
+                updateFiltri();
+                updateGrid();
+            });//end of lambda expression
+        }// end of if cycle
+
+        if (checkbox2 != null) {
+            checkbox2.addValueChangeListener(e -> {
+                updateFiltri();
+                updateGrid();
+            });//end of lambda expression
         }// end of if cycle
     }// end of method
 
@@ -251,7 +248,7 @@ public class AlfaList extends AGridViewList {
             filtri.add(Criteria.where("ragazzo").is(ragazzo));
         }// end of if cycle
 
-        if (checkbox2 != null && !checkbox1.isIndeterminate()) {
+        if (checkbox2 != null && !checkbox2.isIndeterminate()) {
             simpatico = checkbox2.getValue();
             filtri.add(Criteria.where("simpatico").is(simpatico));
         }// end of if cycle

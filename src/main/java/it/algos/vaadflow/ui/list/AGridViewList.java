@@ -297,16 +297,17 @@ public abstract class AGridViewList extends ALayoutViewList {
 
 
     /**
-     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
+     * I filtri normali vanno in updateFiltri() <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
      * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Può essere sovrascritto SOLO se ci sono dei filtri che devono essere attivi già alla partenza della Grid <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
     protected void creaFiltri() {
-        super.creaFiltri();
+        filtri = new ArrayList<CriteriaDefinition>();
 
         if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
             if (filtroCompany.getValue() != null) {
@@ -318,15 +319,16 @@ public abstract class AGridViewList extends ALayoutViewList {
 
     /**
      * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
+     * Normalmente tutti i filtri  vanno qui <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
      * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Può essere sovrascritto, per costruire i filtri specifici dei combobox, popup, ecc. <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
     @Override
     protected void updateFiltri() {
-        filtri = new ArrayList<CriteriaDefinition>();
+        this.creaFiltri();
 
         //--ricerca iniziale
         if (searchType == EASearch.editField && searchField != null) {
@@ -337,11 +339,6 @@ public abstract class AGridViewList extends ALayoutViewList {
             }// end of if/else cycle
         }// end of if cycle
 
-        if (usaFiltroCompany && filtroCompany != null && filtroCompany.getValue() != null) {
-            if (filtroCompany.getValue() != null) {
-                filtri.add(Criteria.where("company").is(filtroCompany.getValue()));
-            }// end of if cycle
-        }// end of if cycle
     }// end of method
 
 
@@ -352,6 +349,7 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Sviluppato nella sottoclasse AGridViewList, oppure APaginatedGridViewList <br>
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
+    @Override
     public void updateGrid() {
         if (array.isValid(filtri)) {
             items = mongo.findAllByProperty(entityClazz, filtri);

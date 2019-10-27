@@ -146,6 +146,8 @@ public class @ENTITY@List extends @GRID@ {
 
     @CREATOPLAYOUT@
 
+    @CREAPOPUPFILTRO@
+
     @CREAFILTRI@
 
     @UPDATEFILTRI@

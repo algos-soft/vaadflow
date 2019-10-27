@@ -8,6 +8,7 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.modules.secolo.Secolo;
 import it.algos.vaadflow.modules.secolo.SecoloService;
@@ -17,8 +18,12 @@ import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.klaudeta.PaginatedGrid;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 
@@ -50,7 +55,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @Slf4j
 @Secured("developer")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = true, menuName = "anni", menuIcon = VaadinIcon.CALENDAR, searchProperty = "secolo", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = true, menuName = "anni", menuIcon = VaadinIcon.CALENDAR, searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 public class AnnoList extends APaginatedGridViewList {
 
 
@@ -81,11 +86,13 @@ public class AnnoList extends APaginatedGridViewList {
 
 
     /**
-     * Preferenze standard <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * Preferenze specifiche di questa view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>
+     * Può essere sovrascritto, per modificare le preferenze standard <br>
      * Invocare PRIMA il metodo della superclasse <br>
-     * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
+    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
@@ -96,14 +103,14 @@ public class AnnoList extends APaginatedGridViewList {
         super.isEntityDeveloper = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
-
-        super.paginatedGrid = new PaginatedGrid<Anno>();
     }// end of method
 
 
     /**
-     * Placeholder (eventuale) per informazioni aggiuntive alla grid ed alla lista di elementi <br>
-     * Normalmente ad uso esclusivo del developer <br>
+     * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
+     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
      * Può essere sovrascritto, per aggiungere informazioni <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
@@ -119,23 +126,55 @@ public class AnnoList extends APaginatedGridViewList {
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
+    @Override
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
 
         filtroComboBox.setWidth("12em");
+        filtroComboBox.setPlaceholder("secolo ...");
         filtroComboBox.setItems(secoloService.findAll());
-        filtroComboBox.addValueChangeListener(e -> {
-            updateFiltri();
-            updateGrid();
-        });
     }// end of method
 
 
-    public void updateFiltri() {
-        Secolo secolo = (Secolo) filtroComboBox.getValue();
-        items = ((AnnoService) service).findAllBySecolo(secolo);
+//    public void updateFiltri() {
+//        Secolo secolo = (Secolo) filtroComboBox.getValue();
+//        items = ((AnnoService) service).findAllBySecolo(secolo);
+//    }// end of method
+
+    /**
+     * Crea la GridPaginata <br>
+     * Per usare una GridPaginata occorre:
+     * 1) la view xxxList deve estendere APaginatedGridViewList anziche AGridViewList <br>
+     * 2) deve essere sovrascritto questo metodo nella classe xxxList <br>
+     * 3) nel metodo sovrascritto va creata la PaginatedGrid 'tipizzata' con la entityClazz (Collection) specifica <br>
+     * 4) il metodo sovrascritto DOPO deve invocare questo stesso superMetodo in APaginatedGridViewList <br>
+     */
+    @Override
+    protected void creaGridPaginata() {
+        super.paginatedGrid = new PaginatedGrid<Anno>();
+        super.creaGridPaginata();
     }// end of method
 
+    /**
+     * Crea la lista dei filtri della Grid alla prima visualizzazione della view <br>
+     * <p>
+     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
+     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
+     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void creaFiltri() {
+        super.creaFiltri();
+        Secolo secolo = null;
+//        v = (Secolo) filtroComboBox.getValue();
+//        items = ((AnnoService) service).findAllBySecolo(secolo);
+
+        if (filtroComboBox != null && filtroComboBox.getValue() != null) {
+            secolo = (Secolo) filtroComboBox.getValue();
+            filtri.add(Criteria.where("secolo").is(secolo));
+        }// end of if cycle
+    }// end of method
 
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>

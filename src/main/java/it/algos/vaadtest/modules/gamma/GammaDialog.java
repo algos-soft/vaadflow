@@ -18,7 +18,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
  * Project vaadtest <br>
  * Created by Algos
  * User: Gac
- * Fix date: 26-ott-2019 9.23.23 <br>
+ * Fix date: 27-ott-2019 7.38.04 <br>
  * <p>
  * Estende la classe astratta AViewDialog per visualizzare i fields <br>
  * Necessario per la tipizzazione del binder <br>

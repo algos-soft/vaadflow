@@ -52,6 +52,7 @@ public enum Token {
     fixLayout("FIXLAYOUT"),
     creaAlertLayout("CREAALERTLAYOUT"),
     creaTopLayout("CREATOPLAYOUT"),
+    creaPopupFiltro("CREAPOPUPFILTRO"),
     creaFiltri("CREAFILTRI"),
     updateFiltri("UPDATEFILTRI"),
     addListeners("ADDLISTENERS"),

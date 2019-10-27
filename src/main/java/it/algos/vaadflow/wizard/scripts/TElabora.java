@@ -141,6 +141,8 @@ public class TElabora {
 
     private static final String METHOD_CREA_TOP_LAYOUT = METHOD + "CreaTopLayout" + SOURCE_SUFFIX;
 
+    private static final String METHOD_CREA_POPUP_FILTRO = METHOD + "CreaPopupFiltro" + SOURCE_SUFFIX;
+
     private static final String METHOD_CREA_FILTRI = METHOD + "CreaFiltri" + SOURCE_SUFFIX;
 
     private static final String METHOD_UPDATE_FILTRI = METHOD + "UpdateFiltri" + SOURCE_SUFFIX;
@@ -749,6 +751,7 @@ public class TElabora {
         mappa.put(Token.fixLayout, fixLayout());
         mappa.put(Token.creaAlertLayout, creaAlertLayout());
         mappa.put(Token.creaTopLayout, creaTopLayout());
+        mappa.put(Token.creaPopupFiltro, creaPopupFiltro());
         mappa.put(Token.creaFiltri, creaFiltri());
         mappa.put(Token.updateFiltri, updateFiltri());
         mappa.put(Token.addListeners, addListeners());
@@ -912,6 +915,18 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_CREA_TOP_LAYOUT);
+            testo = Token.replace(Token.entity, testo, newEntityName);
+        }// end of if cycle
+
+        return testo;
+    }// end of method
+
+
+    private String creaPopupFiltro() {
+        String testo = "";
+
+        if (flagList) {
+            testo += leggeFile(METHOD_CREA_POPUP_FILTRO);
             testo = Token.replace(Token.entity, testo, newEntityName);
         }// end of if cycle
 
