@@ -50,9 +50,9 @@ public class TestBoot extends ABoot {
 
     private final static String PROJECT_NAME = "test";
 
-    private final static double PROJECT_VERSION = 1.5;
+    private final static double PROJECT_VERSION = 1.6;
 
-    private final static LocalDate VERSION_DATE = LocalDate.of(2019, 10, 22);
+    private final static LocalDate VERSION_DATE = LocalDate.of(2019, 10, 27);
 
     @Autowired
     public ProvaService provaService;
