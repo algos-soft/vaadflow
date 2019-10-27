@@ -78,7 +78,7 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Facoltativo (presente di default) il bottone Edit (flag da mongo eventualmente sovrascritto) <br>
      */
     protected void creaBody() {
-        this.add(gridPlaceholder);
+        gridPlaceholder.removeAll();
         gridPlaceholder.setMargin(false);
         gridPlaceholder.setSpacing(false);
         gridPlaceholder.setPadding(false);
@@ -107,20 +107,18 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto <br>
      */
     protected Grid creaGrid(List<String> gridPropertyNamesList) {
-        if (grid == null) {
-            if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
-                try { // prova ad eseguire il codice
-                    //--Costruisce la Grid SENZA creare automaticamente le colonne
-                    //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
-                    grid = new Grid(entityClazz, false);
-                } catch (Exception unErrore) { // intercetta l'errore
-                    log.error(unErrore.toString());
-                    return null;
-                }// fine del blocco try-catch
-            } else {
-                grid = new Grid();
-            }// end of if/else cycle
-        }// end of if cycle
+        if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
+            try { // prova ad eseguire il codice
+                //--Costruisce la Grid SENZA creare automaticamente le colonne
+                //--Si possono così inserire colonne manuali prima e dopo di quelle automatiche
+                grid = new Grid(entityClazz, false);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+                return null;
+            }// fine del blocco try-catch
+        } else {
+            grid = new Grid();
+        }// end of if/else cycle
 
         //        //--regolazioni eventuali se la Grid è paginata in fixPreferenze() della sottoclasse
 //        fixGridPaginata();
