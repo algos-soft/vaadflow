@@ -11,20 +11,21 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.router.QueryParameters;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.dialog.AConfirmDialogOldino;
 import it.algos.vaadflow.ui.fields.*;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -63,7 +64,7 @@ import static it.algos.vaadtest.application.TestCost.*;
  * Le property di questa classe/sottoclasse vengono iniettate (@Autowired) automaticamente se: <br>
  * 1) vengono dichiarate nel costruttore @Autowired della sottoclasse concreta, oppure <br>
  * 2) la property è di una classe con @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) e viene richiamate
- *    con AxxService.getInstance() <br>
+ * con AxxService.getInstance() <br>
  * 3) sono annotate @Autowired; sono disponibili SOLO DOPO @PostConstruct <br>
  * <p>
  * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
@@ -121,18 +122,12 @@ import static it.algos.vaadtest.application.TestCost.*;
 @Secured("developer")
 @AIScript(sovrascrivibile = false)
 @AIView(vaadflow = false, menuName = "prove", menuIcon = VaadinIcon.BOAT, searchProperty = "code", roleTypeVisibility = EARoleType.user)
-public class ProvaList extends AGridViewList {
+public class ProvaList extends APaginatedGridViewList {
 
-    /**
-     * Nella menuBar appare invece visibile il MENU_NAME, indicato qui
-     * Se manca il MENU_NAME, di default usa il 'name' della view
-     */
-    public static final VaadinIcon VIEW_ICON = VaadinIcon.ASTERISK;
 
 
     private AComboBox<String> comboUpload;
-
-    private PaginatedGrid<Prova> gridPaginated;
+//    protected PaginatedGrid paginatedGrid=null;
 
 //    @Id("search")
 //    private TextField search;
@@ -155,6 +150,35 @@ public class ProvaList extends AGridViewList {
         super(service, Prova.class);
     }// end of Vaadin/@Route constructor
 
+    /**
+     * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
+     * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter <br>
+     *
+     * @param event     con la location, ui, navigationTarget, source, ecc
+     * @param parameter opzionali nella chiamata del browser
+     */
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+    }// end of method
+
+
+    /**
+     * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
+     * <p>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>
+     * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
+     * Qui va tutta la logica inizale della view <br>
+     * Può essere sovrascritto, per costruire diversamente la view <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     *
+     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
+     */
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        super.beforeEnter(beforeEnterEvent);
+//        super.paginatedGrid=null;
+    }// end of method
+
 
     /**
      * Preferenze standard e specifiche, eventualmente sovrascritte nella sottoclasse <br>
@@ -168,14 +192,26 @@ public class ProvaList extends AGridViewList {
         super.usaBottoneReset = true;
         super.usaPopupFiltro = false;
         super.usaBottoneEdit = true;
-        super.usaPagination = false;
+        super.usaPagination = true;
         ArrayList lista = service.findAllProperty("code", Prova.class);
         ArrayList lista2 = service.findAllProperty("ordine", Prova.class);
         logger.debug("Alfetta");
 //        super.gridWith = 100;
 
 //        super.searchProperty="descrizione";
-        super.grid = new PaginatedGrid<Prova>();
+//        super.grid = new PaginatedGrid<Prova>();
+//        ((PaginatedGrid)super.grid).setPaginatorSize(1);
+    }// end of method
+    /**
+     * Crea la GridPaginata <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
+     */
+    protected void creaGridPaginata() {
+        super.paginatedGrid = new PaginatedGrid<Prova>();
+        paginatedGrid.setPaginatorSize(1);
+
     }// end of method
 
 
@@ -363,19 +399,35 @@ public class ProvaList extends AGridViewList {
 //        nameLabel.add(nameIcon);
 //        grid().addColumn(Client::getName).setHeader(nameLabel).setFlexGrow(5).setSortable(true).setKey("name");  }// end of method
 
+        if (grid != null) {
+            colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                return new Label("x");
+            }));//end of lambda expressions and anonymous inner class
+            colonna.setKey("abbaco");
+            colonna.setHeader(nameLabel);
+            colonna.setWidth("10em");
+            colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
+                return new Label("y");
+            }));//end of lambda expressions and anonymous inner class
+            colonna2.setKey("rovina");
+            colonna2.setHeader(nameLabel2);
+            colonna2.setWidth("2em");
+        }// end of if cycle
 
-        colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-            return new Label("x");
-        }));//end of lambda expressions and anonymous inner class
-        colonna.setKey("abbaco");
-        colonna.setHeader(nameLabel);
-        colonna.setWidth("10em");
-        colonna2 = grid.addColumn(new ComponentRenderer<>(entity -> {
-            return new Label("y");
-        }));//end of lambda expressions and anonymous inner class
-        colonna2.setKey("rovina");
-        colonna2.setHeader(nameLabel2);
-        colonna2.setWidth("2em");
+        if (paginatedGrid != null) {
+            colonna = paginatedGrid.addColumn(new ComponentRenderer<>(entity -> {
+                return new Label("x");
+            }));//end of lambda expressions and anonymous inner class
+            colonna.setKey("abbaco");
+            colonna.setHeader(nameLabel);
+            colonna.setWidth("10em");
+            colonna2 = paginatedGrid.addColumn(new ComponentRenderer<>(entity -> {
+                return new Label("y");
+            }));//end of lambda expressions and anonymous inner class
+            colonna2.setKey("rovina");
+            colonna2.setHeader(nameLabel2);
+            colonna2.setWidth("2em");
+        }// end of if cycle
 
 
     }// end of method
@@ -388,35 +440,41 @@ public class ProvaList extends AGridViewList {
     @Override
     protected void addSpecificColumnsAfter() {
         String colorName2 = "#ef6c00";
-        Grid.Column colonna2 = grid.addComponentColumn(servizio -> {
-            Label label = new Label();
-            String htmlCode = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-            label.getElement().setProperty("innerHTML", htmlCode);
-            label.getElement().getStyle().set("background-color", colorName2);
-            label.getElement().getStyle().set("color", colorName2);
+        if (grid != null) {
+            Grid.Column colonna2 = grid.addComponentColumn(servizio -> {
+                Label label = new Label();
+                String htmlCode = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                label.getElement().setProperty("innerHTML", htmlCode);
+                label.getElement().getStyle().set("background-color", colorName2);
+                label.getElement().getStyle().set("color", colorName2);
 
-            return label;
-        });//end of lambda expressions
+                return label;
+            });//end of lambda expressions
+            colonna2.setId("idColor2");
+            colonna2.setHeader("G");
+            colonna2.setWidth("3em");
+            colonna2.setFlexGrow(0);
+        }// end of if cycle
 
-        colonna2.setId("idColor2");
-        colonna2.setHeader("G");
-        colonna2.setWidth("3em");
-        colonna2.setFlexGrow(0);
+        if (paginatedGrid != null) {
+            Grid.Column colonna2 = paginatedGrid.addComponentColumn(servizio -> {
+                Label label = new Label();
+                String htmlCode = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                label.getElement().setProperty("innerHTML", htmlCode);
+                label.getElement().getStyle().set("background-color", colorName2);
+                label.getElement().getStyle().set("color", colorName2);
+
+                return label;
+            });//end of lambda expressions
+            colonna2.setId("idColor2");
+            colonna2.setHeader("G");
+            colonna2.setWidth("3em");
+            colonna2.setFlexGrow(0);
+        }// end of if cycle
+
     }
 
 
-    /**
-     * Crea la GridPaginata <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse , se non sono standard <br>
-     */
-    protected void creaGridPaginata2() {
-//        PaginatedGrid<Prova> gridPaginated = new PaginatedGrid<Prova>();
-//        super.grid = new PaginatedGrid<Prova>();
-
-//        super.creaGridPaginata();
-    }// end of method
 
 
 //    /**

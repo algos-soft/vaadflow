@@ -18,6 +18,8 @@ import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.annotation.Secured;
 
 import static it.algos.vaadflow.application.FlowCost.MAX_RIGHE_GRID;
@@ -97,7 +99,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Se si usa APaginatedGridViewList è obbligatorio creare la PaginatedGrid
  * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata <br>
  */
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Route(value = TAG_BET, layout = MainLayout14.class)
 @Qualifier(TAG_BET)
 @Slf4j
