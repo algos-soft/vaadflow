@@ -300,7 +300,7 @@ public abstract class APropertyViewList extends VerticalLayout {
 
     /**
      * Flag per costruire una Grid normale o una PaginatedGrid. <br>
-     * Viene regolato da codice. <br>
+     * Viene regolato in postPreferenze(). <br>
      */
     protected boolean isPaginata;
 

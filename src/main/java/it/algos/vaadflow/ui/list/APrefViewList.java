@@ -71,7 +71,6 @@ public abstract class APrefViewList extends AViewList {
          */
         usaPopupFiltro = false;
 
-
         //--Flag di preferenza per usare il bottone new situato nella barra topLayout. Normalmente true.
         usaBottoneNew = true;
 
@@ -131,12 +130,6 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per limitare le righe della Grid e mostrarle a gruppi (pagine). Normalmente true.
         usaPagination = true;
 
-        //--controllo della paginazione
-        if (service != null) {
-            isPaginata = usaPagination && service.count() > limit;
-        } else {
-            isPaginata = false;
-        }// end of if/else cycle
 
         //--Flag per la larghezza della Grid. Default a 80.
         //--Espressa come numero per comodità; poi viene convertita in "em".
@@ -175,6 +168,13 @@ public abstract class APrefViewList extends AViewList {
      */
     @Override
     protected void postPreferenze() {
+        //--controllo della paginazione
+        if (service != null) {
+            isPaginata = usaPagination && service.count() > limit;
+        } else {
+            isPaginata = false;
+        }// end of if/else cycle
+
         //--controlla alcune condizioni indispensabili
         if (usaFiltroCompany) {
             if (usaCompany && login.isDeveloper()) {
@@ -182,7 +182,6 @@ public abstract class APrefViewList extends AViewList {
                 usaFiltroCompany = false;
             }// end of if/else cycle
         }// end of if cycle
-
     }// end of method
 
 

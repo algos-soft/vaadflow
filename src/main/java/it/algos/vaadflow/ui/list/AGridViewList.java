@@ -83,7 +83,11 @@ public abstract class AGridViewList extends ALayoutViewList {
     protected Grid creaGrid() {
         if (entityClazz != null && AEntity.class.isAssignableFrom(entityClazz)) {
             //--Crea effettivamente il Component Grid
-            grid = creaGridComponent();
+            if (isPaginata) {
+                grid = creaGridComponent();
+            } else {
+                grid = new Grid(entityClazz, false);
+            }// end of if/else cycle
         } else {
             return null;
         }// end of if/else cycle

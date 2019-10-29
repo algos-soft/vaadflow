@@ -1,5 +1,6 @@
 package it.algos.vaadtest.modules.gamma;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -28,7 +29,7 @@ import javax.annotation.PostConstruct;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 27-ott-2019 8.06.20 <br>
+ * Fix date: 29-ott-2019 18.18.44 <br>
  * <p>
  * Estende la classe astratta AViewList per visualizzare la Grid <br>
  * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -102,15 +103,15 @@ import javax.annotation.PostConstruct;
  * Annotated with @AIView (facoltativo Algos) per il menu-name, l'icona-menu, la property-search e la visibilità <br>
  * Se serve una Grid paginata estende APaginatedGridViewList altrimenti AGridViewList <br>
  * Se si usa APaginatedGridViewList è obbligatorio creare la PaginatedGrid
- * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata <br>
+ * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata() <br>
  */
 @UIScope
 @Route(value = TAG_GAM, layout = MainLayout14.class)
 @Qualifier(TAG_GAM)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = true)
-@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "ordine", roleTypeVisibility = EARoleType.developer)
+@AIScript(sovrascrivibile = false)
+@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class GammaList extends AGridViewList {
 
 
@@ -129,7 +130,18 @@ public class GammaList extends AGridViewList {
         super(service, Gamma.class);
     }// end of Vaadin/@Route constructor
 
-    
+    /**
+     * Crea effettivamente il Component Grid <br>
+     * <p>
+     * Può essere Grid oppure PaginatedGrid <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse, se non sono standard <br>
+     */
+    @Override
+    protected Grid creaGridComponent() {
+        return new PaginatedGrid<Gamma>();
+    }// end of method
 
     /**
      * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
@@ -189,8 +201,6 @@ public class GammaList extends AGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-
-        super.usaBottoneReset=true;
     }// end of method
 
     /**
@@ -220,18 +230,17 @@ public class GammaList extends AGridViewList {
     }// end of method
 
     /**
-     * Placeholder SOPRA la Grid (non obbligatoria, ma quasi sempre presente) <br>
+     * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
      * <p>
-     * - con o senza un bottone per cancellare tutta la collezione
-     * - con o senza un bottone di reset per ripristinare (se previsto in automatico) la collezione
-     * - con o senza bottone New, con testo regolato da preferenza o da parametro <br>
-     * - con o senza gruppo di ricerca:
-     * -    campo EditSearch predisposto su un unica property, oppure (in alternativa)
-     * -    bottone per aprire un DialogSearch con diverse property selezionabili
-     * -    bottone per annullare la ricerca e riselezionare tutta la collezione
-     * - con eventuale Popup di selezione della company (se applicazione multiCompany)
-     * - con eventuale Popup di selezione specifico, filtro e ordinamento
-     * - con eventuali altri bottoni specifici <br>
+     * In fixPreferenze() si regola quali bottoni mostrare. Nell'ordine: <br>
+     * 1) eventuale bottone per cancellare tutta la collezione <br>
+     * 2) eventuale bottone di reset per ripristinare (se previsto in automatico) la collezione <br>
+     * 3) eventuale bottone New, con testo regolato da preferenza o da parametro <br>
+     * 4) eventuale bottone 'Cerca...' per aprire un DialogSearch oppure un campo EditSearch per la ricerca <br>
+     * 5) eventuale bottone per annullare la ricerca e riselezionare tutta la collezione <br>
+     * 6) eventuale combobox di selezione della company (se applicazione multiCompany) <br>
+     * 7) eventuale combobox di selezione specifico <br>
+     * 8) eventuali altri bottoni specifici <br>
      * <p>
      * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>

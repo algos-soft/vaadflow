@@ -24,7 +24,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
  * Project vaadtest <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 27-ott-2019 8.06.20 <br>
+ * Fix date: 29-ott-2019 18.18.44 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -103,7 +103,7 @@ public class Gamma extends AEntity {
     @Size(min = 2)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
-    @AIColumn(widthEM = 8)
+    @AIColumn(flexGrow = true)
     public String code;
     
 
