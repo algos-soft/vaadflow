@@ -12,7 +12,6 @@ import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
 import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.ui.list.APaginatedGridViewList;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.ui.MainLayout14;
@@ -111,7 +110,7 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Secured("user")
 @AIScript(sovrascrivibile = true)
-@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "ordine", roleTypeVisibility = EARoleType.developer)
 public class GammaList extends AGridViewList {
 
 
@@ -190,6 +189,8 @@ public class GammaList extends AGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaBottoneReset=true;
     }// end of method
 
     /**

@@ -152,6 +152,24 @@ public class GammaService extends AService {
         return repository.findByCode(code);
     }// end of method
 
-    
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
 
-}// end of class
+        for (int k = 0; k < 24; k++) {
+            findOrCrea("code"+k);
+        }// end of for cycle
+
+        return 0;
+    }// end of method
+
+
+    }// end of class

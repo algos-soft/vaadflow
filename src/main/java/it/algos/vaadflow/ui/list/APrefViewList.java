@@ -115,9 +115,9 @@ public abstract class APrefViewList extends AViewList {
 
         //--Flag di preferenza per la soglia di elementi che fanno scattare la pagination della Grid.
         //--Normalmente limit = pref.getInt(FlowCost.MAX_RIGHE_GRID) .
-        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 15
-        //--Se non usa il bottone Edit: limit = pref.getInt(FlowCost.maxRigheGridClick) .
         //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 20
+        //--Se non usa il bottone Edit: limit = pref.getInt(FlowCost.maxRigheGridClick) .
+        //--Specifico di ogni ViewList. Se non specificato è uguale alla preferenza. Default 25
         if (pref.isBool(USA_EDIT_BUTTON)) {
             limit = pref.getInt(EAPreferenza.maxRigheGrid);
         } else {
