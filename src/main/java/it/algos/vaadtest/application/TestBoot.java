@@ -4,20 +4,23 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.gamma.GammaList;
-import it.algos.vaadtest.modules.alfa.AlfaList;
 import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
+import it.algos.vaadtest.modules.alfa.AlfaList;
 import it.algos.vaadtest.modules.beta.BetaList;
+import it.algos.vaadtest.modules.gamma.GammaList;
 import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContextEvent;
 import java.time.LocalDate;
 
@@ -75,17 +78,44 @@ public class TestBoot extends ABoot {
     }// end of Spring constructor
 
 
-    /**
-     * Executed on container startup <br>
-     * Setup non-UI logic here <br>
-     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
-     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
-     * questa sottoclasse concreta può singolarmente modificarle <br>
-     */
-    @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-        super.inizia();
-    }// end of method
+//    /**
+//     * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
+//     * Si usa un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+//     * <p>
+//     * Performing the initialization in a constructor is not suggested
+//     * as the state of the UI is not properly set up when the constructor is invoked.
+//     * <p>
+//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
+//     * ma l'ordine con cui vengono chiamati NON è garantito
+//     * DEVE essere inserito nella sottoclasse e invocare (eventualmente) un metodo della superclasse.
+//     */
+//    @PostConstruct
+//    protected void postConstruct() {
+//    }// end of method
+
+//    /**
+//     * Executed on container startup <br>
+//     * Setup non-UI logic here <br>
+//     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
+//     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
+//     * questa sottoclasse concreta può singolarmente modificarle <br>
+//     */
+//    @EventListener
+//    public void onApplicationEvent(ContextRefreshedEvent event) {
+//        super.inizia();
+//    }// end of method
+
+//    /**
+//     * Executed on container startup <br>
+//     * Setup non-UI logic here <br>
+//     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
+//     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
+//     * questa sottoclasse concreta può singolarmente modificarle <br>
+//     */
+//    @Override
+//    public void contextInitialized(ServletContextEvent servletContextEvent) {
+////        super.inizia();
+//    }// end of method
 
 
     /**
@@ -180,11 +210,11 @@ public class TestBoot extends ABoot {
         FlowVar.versionDate = VERSION_DATE;
 
         /**
-          * Controlla se l'applicazione usa il login oppure no <br>
-          * Se si usa il login, occorre la classe SecurityConfiguration <br>
-          * Se non si usa il login, occorre disabilitare l'Annotation @EnableWebSecurity di SecurityConfiguration <br>
-          * Di defaul (per sicurezza) uguale a true <br>
-          */
+         * Controlla se l'applicazione usa il login oppure no <br>
+         * Se si usa il login, occorre la classe SecurityConfiguration <br>
+         * Se non si usa il login, occorre disabilitare l'Annotation @EnableWebSecurity di SecurityConfiguration <br>
+         * Di defaul (per sicurezza) uguale a true <br>
+         */
         FlowVar.usaSecurity = false;
 
         /**
@@ -227,6 +257,7 @@ public class TestBoot extends ABoot {
          */
         FlowVar.companyServiceClazz = CompanyService.class;
 
+
     }// end of method
 
 
@@ -252,9 +283,9 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(ProvaDialoghi.class);
         FlowVar.menuClazzList.add(ProvaList.class);
         FlowVar.menuClazzList.add(BetaList.class);
-		FlowVar.menuClazzList.add(AlfaList.class);
-		FlowVar.menuClazzList.add(GammaList.class);
-	}// end of method
+        FlowVar.menuClazzList.add(AlfaList.class);
+        FlowVar.menuClazzList.add(GammaList.class);
+    }// end of method
 
 
 }// end of boot class
