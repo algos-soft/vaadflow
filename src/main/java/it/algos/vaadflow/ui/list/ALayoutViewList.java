@@ -212,7 +212,7 @@ public abstract class ALayoutViewList extends APrefViewList {
                 break;
             case editField:
                 //--campo EditSearch predisposto su un unica property
-                searchField = new TextField("", "Cerca");
+                searchField = new TextField("", "Cerca...");
                 searchField.setPrefixComponent(new Icon("lumo", "search"));
                 searchField.getElement().setAttribute("title", "Caratteri iniziali della ricerca");
                 searchField.addClassName("view-toolbar__search-field");
@@ -346,7 +346,7 @@ public abstract class ALayoutViewList extends APrefViewList {
         if (usaFiltroCompany) {
             serviceCompany = (IAService) appContext.getBean(FlowVar.companyServiceClazz);
             filtroCompany = new AComboBox();
-            filtroCompany.setPlaceholder("company ...");
+            filtroCompany.setPlaceholder(text.primaMaiuscola(FlowVar.companyClazzName) + " ...");
             filtroCompany.setWidth("9em");
             filtroCompany.setItems(serviceCompany.findAllAll());
             if (login != null) {

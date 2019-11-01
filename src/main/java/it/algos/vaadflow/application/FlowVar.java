@@ -106,6 +106,15 @@ public class FlowVar {
 
 
     /**
+     * Nome da usare per recuperare la lista delle Company (o sottoclassi) <br>
+     * Di default 'company' oppure eventuale sottoclasse specializzata per Company particolari <br>
+     * Eventuale casting a carico del chiamante <br>
+     * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
+     */
+    public static String companyClazzName = "company";
+
+
+    /**
      * Path per recuperare dalle risorse un'immagine da inserire nella barra di menu di MainLayout14 <br>
      * Ogni applicazione può modificarla <br>
      * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
