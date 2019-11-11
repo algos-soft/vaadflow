@@ -300,9 +300,7 @@ public abstract class ALayoutViewList extends APrefViewList {
             if (clearFilterButton != null) {
                 clearFilterButton.addClickListener(e -> {
                     searchField.clear();
-                    updateFiltri();
-                    updateGrid();
-                    clearFilterButton.setEnabled(false);
+                    actionSincroSearch();
                 });//end of lambda expressions
             }// end of if cycle
         }// end of if cycle
@@ -311,24 +309,20 @@ public abstract class ALayoutViewList extends APrefViewList {
             searchButton.addClickListener(e -> openSearch());
             if (clearFilterButton != null) {
                 clearFilterButton.addClickListener(e -> {
-                    updateFiltri();
-                    updateGrid();
-                    clearFilterButton.setEnabled(false);
+                    actionSincroSearch();
                 });//end of lambda expressions
             }// end of if cycle
         }// end of if cycle
 
         if (filtroCompany != null) {
             filtroCompany.addValueChangeListener(e -> {
-                updateFiltri();
-                updateGrid();
+                actionSincroCompany();
             });// end of lambda expressions
         }// end of if cycle
 
         if (filtroComboBox != null) {
             filtroComboBox.addValueChangeListener(e -> {
-                updateFiltri();
-                updateGrid();
+                actionSincroCombo();
             });// end of lambda expressions
         }// end of if cycle
 

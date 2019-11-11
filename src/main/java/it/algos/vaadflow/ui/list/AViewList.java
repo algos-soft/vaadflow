@@ -446,6 +446,45 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
 
 
     /**
+     * Sincronizza i filtri. <br>
+     * Chiamato dal listener di 'clearFilterButton' <br>
+     * <p>
+     * Può essere sovrascritto, per modificare la gestione dei filtri <br>
+     */
+    protected void actionSincroSearch() {
+        updateFiltri();
+        updateGrid();
+        if (clearFilterButton != null) {
+            clearFilterButton.setEnabled(false);
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Sincronizza la company in uso. <br>
+     * Chiamato dal listener di 'filtroCompany' <br>
+     * <p>
+     * Può essere sovrascritto, per modificare la gestione delle company <br>
+     */
+    protected void actionSincroCompany() {
+        updateFiltri();
+        updateGrid();
+    }// end of method
+
+
+    /**
+     * Sincronizza i filtri. <br>
+     * Chiamato dal listener di 'clearFilterButton' <br>
+     * <p>
+     * Può essere sovrascritto, per modificare la gestione dei filtri <br>
+     */
+    public void actionSincroCombo() {
+        updateFiltri();
+        updateGrid();
+    }// end of method
+
+
+    /**
      * Aggiorna gli items della Grid, utilizzando i filtri. <br>
      * Chiamato per modifiche effettuate ai filtri, popup, newEntity, deleteEntity, ecc... <br>
      * <p>
