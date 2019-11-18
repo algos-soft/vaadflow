@@ -11,10 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,9 +43,11 @@ public class AArrayServiceTest extends ATest {
 
     private final static ArrayList<Long> longList = new ArrayList(Arrays.asList(longArray));
 
-    private List<String> prevista;
+    private HashMap mappaSorgente;
 
-    private List<String> ottenuta;
+    private HashMap mappaPrevista;
+
+    private HashMap mappaOttenuta;
 
 
     @InjectMocks
@@ -652,5 +651,43 @@ public class AArrayServiceTest extends ATest {
 
     }// end of single tes
 
+
+    /**
+     * Ordina la mappa secondo la chiave
+     *
+     * @param mappaDisordinata in ingresso
+     *
+     * @return mappa ordinata, null se mappaDisordinata è null
+     */
+    @Test
+    public void sort() {
+        mappaSorgente = new LinkedHashMap();
+        mappaSorgente.put("beta", "irrilevante");
+        mappaSorgente.put("alfa", "irrilevante2");
+        mappaSorgente.put("delta", "irrilevante3");
+
+        mappaPrevista = new LinkedHashMap();
+        mappaPrevista.put("alfa", "irrilevante2");
+        mappaPrevista.put("beta", "irrilevante");
+        mappaPrevista.put("delta", "irrilevante3");
+
+        mappaOttenuta = service.sort(mappaSorgente);
+        assertNotNull(mappaOttenuta);
+        assertEquals(mappaPrevista, mappaOttenuta);
+
+        mappaSorgente = new LinkedHashMap();
+        mappaSorgente.put(2, "irrilevante");
+        mappaSorgente.put(1, "irrilevante2");
+        mappaSorgente.put(3, "irrilevante3");
+
+        mappaPrevista = new LinkedHashMap();
+        mappaPrevista.put(1, "irrilevante2");
+        mappaPrevista.put(2, "irrilevante");
+        mappaPrevista.put(3, "irrilevante3");
+
+        mappaOttenuta = service.sort(mappaSorgente);
+        assertNotNull(mappaOttenuta);
+        assertEquals(mappaPrevista, mappaOttenuta);
+    }// end of method
 
 }// end of class

@@ -44,7 +44,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableVaadin({"it.algos"})
 @EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
 @EnableMongoRepositories({"it.algos"})
-@Configuration
+//@Configuration
 public class TestApplication extends SpringBootServletInitializer {
 
     /**

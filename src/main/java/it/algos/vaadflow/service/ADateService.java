@@ -3,7 +3,6 @@ package it.algos.vaadflow.service;
 import it.algos.vaadflow.enumeration.EATime;
 import it.algos.vaadflow.modules.mese.EAMese;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -147,6 +146,7 @@ public class ADateService extends AbstractService {
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }// end of method
 
+
     /**
      * Convert java.util.Date to java.time.LocalDateTime
      * Date HA ore, minuti e secondi
@@ -161,6 +161,7 @@ public class ADateService extends AbstractService {
         Instant instant = Instant.ofEpochMilli(data.getTime());
         return LocalDateTime.ofInstant(instant, ZoneId.of("UTC"));
     }// end of method
+
 
     /**
      * Convert java.time.LocalDateTime to java.util.Date
@@ -405,6 +406,7 @@ public class ADateService extends AbstractService {
         return LocalDate.now().getMonthValue();
     }// end of method
 
+
     /**
      * Restituisce il giorno della settimana in forma estesa
      * <p>
@@ -540,7 +542,7 @@ public class ADateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getTime(LocalDateTime localDateTime) {
-        return getDate(localDateTime) + SPAZIO + getOrario(localDateTime);
+        return getDate(localDateTime) + " dfralle " + getOrario(localDateTime);
     }// end of method
 
 
@@ -710,6 +712,7 @@ public class ADateService extends AbstractService {
     public String getWeekShort(LocalDate localDate) {
         return get(localDate, EATime.weekShort);
     }// end of method
+
 
     /**
      * Ritorna il giorno (numero) del mese ed il mese (testo)  di una data fornita.
@@ -1059,6 +1062,15 @@ public class ADateService extends AbstractService {
     }// end of  method
 
 
+    public String toTextMinuti(long durata) {
+        return toTextSecondi(durata * 60);
+    }// end of  method
+
+    public String toTextSecondi(long durata) {
+        return toText(durata * 1000);
+    }// end of  method
+
+
     /**
      * Restituisce come stringa (intelligente) una durata espressa in long
      * - Meno di 1 secondo
@@ -1066,6 +1078,8 @@ public class ADateService extends AbstractService {
      * - Meno di 1 ora
      * - Meno di 1 giorno
      * - Meno di 1 anno
+     *
+     * @param durata in millisecondi
      *
      * @return durata (arrotondata e semplificata) in forma leggibile
      */

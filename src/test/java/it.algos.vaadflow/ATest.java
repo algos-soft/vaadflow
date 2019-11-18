@@ -147,6 +147,12 @@ public class ATest {
 
     protected int ottenutoIntero = 0;
 
+    protected long sorgenteLungo = 0;
+
+    protected long previstoLungo = 0;
+
+    protected long ottenutoLungo = 0;
+
     protected ArrayList<String> previstoList;
 
     protected List<String> ottenutoList;

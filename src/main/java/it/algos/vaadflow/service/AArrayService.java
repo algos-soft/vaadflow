@@ -67,7 +67,7 @@ public class AArrayService extends AbstractService {
      *
      * @return lista ordinata, null se listaDisordinata è null
      */
-    public ArrayList sort(ArrayList listaDisordinata) {
+    public ArrayList sort(List listaDisordinata) {
         ArrayList<Object> objList;
         Object[] objArray = listaDisordinata.toArray();
 
@@ -78,6 +78,30 @@ public class AArrayService extends AbstractService {
         objList = fromObj(objArray);
 
         return objList;
+    }// end of method
+
+
+    /**
+     * Ordina la mappa secondo la chiave
+     *
+     * @param mappaDisordinata in ingresso
+     *
+     * @return mappa ordinata, null se mappaDisordinata è null
+     */
+    public LinkedHashMap sort(HashMap mappaDisordinata) {
+        LinkedHashMap mappaOrdinata = new LinkedHashMap();
+        Object[] listaChiavi = mappaDisordinata.keySet().toArray();
+
+        try { // prova ad eseguire il codice
+            Arrays.sort(listaChiavi);
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+
+        for (Object chiave : listaChiavi) {
+            mappaOrdinata.put(chiave,mappaDisordinata.get(chiave));
+        }// end of for cycle
+
+        return mappaOrdinata;
     }// end of method
 
 
@@ -656,6 +680,7 @@ public class AArrayService extends AbstractService {
         return listaStringhe;
     }// end of method
 
+
     /**
      * Controlla se la mappa può essere semplicficata
      * La mappa prevede delle liste di valori per ogni key, quindi Map<String, List<String>>
@@ -672,6 +697,7 @@ public class AArrayService extends AbstractService {
 
         return status;
     }// end of method
+
 
     /**
      * Semplifica la mappa
