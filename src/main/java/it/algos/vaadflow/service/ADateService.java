@@ -51,7 +51,9 @@ public class ADateService extends AbstractService {
     private static final ADateService INSTANCE = new ADateService();
 
 
-    private static final String INFERIORE_SECONDO = "meno di un sec.";
+    private static final String INFERIORE_SECONDO = "meno di un secondo";
+
+    private static final String INFERIORE_MINUTO = "meno di un minuto";
 
     private static final String SECONDI = " sec.";
 
@@ -542,7 +544,7 @@ public class ADateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getTime(LocalDateTime localDateTime) {
-        return getDate(localDateTime) + " dfralle " + getOrario(localDateTime);
+        return getDate(localDateTime) + " alle " + getOrario(localDateTime);
     }// end of method
 
 
@@ -1063,8 +1065,9 @@ public class ADateService extends AbstractService {
 
 
     public String toTextMinuti(long durata) {
-        return toTextSecondi(durata * 60);
+        return durata < 1 ? INFERIORE_MINUTO : toTextSecondi(durata * 60);
     }// end of  method
+
 
     public String toTextSecondi(long durata) {
         return toText(durata * 1000);

@@ -5,7 +5,6 @@ import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
 import lombok.extern.slf4j.Slf4j;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -335,7 +334,7 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void getTime() {
-        previsto = "5-ott-14 7:04";
+        previsto = "5-ott-14 alle 7:04";
 
 
 //         Date pippo = new Date(1412485480000L); // 5 ottobre 2014, 7 e 12
@@ -701,16 +700,40 @@ public class ADateServiceTest extends ATest {
         int minuto = 60000;
 
         System.out.println("*************");
-        System.out.println("Durata");
+        System.out.println("Durata - ingresso in millisecondi");
         System.out.println("Meno di 1 secondo: " + service.toText(87));
-        System.out.println("Mezzo minuto: " + service.toText(30000));
+        System.out.println("20 sec.: " + service.toText(20000));
+        System.out.println("59 secondi: " + service.toText(59000));
         System.out.println("58 minuti: " + service.toText(58 * minuto));
         System.out.println("118 minuti: " + service.toText(118 * minuto));
         System.out.println("122 minuti: " + service.toText(122 * minuto));
         System.out.println("Meno di 1 giorno: " + service.toText(7500000));
         System.out.println("Meno di 1 anno: " + service.toText(86500000));
         System.out.println("*************");
-        service.toText(durata);
+
+        System.out.println("*************");
+        System.out.println("Durata - ingresso in secondi");
+        System.out.println("Meno di 1 secondo: " + service.toTextSecondi(0));
+        System.out.println("20 sec.: " + service.toTextSecondi(20));
+        System.out.println("59 secondi: " + service.toTextSecondi(59));
+        System.out.println("58 minuti: " + service.toTextSecondi(58 * 60));
+        System.out.println("118 minuti: " + service.toTextSecondi(118 * 60));
+        System.out.println("122 minuti: " + service.toTextSecondi(122 * 60));
+        System.out.println("Meno di 1 giorno: " + service.toTextSecondi(7500));
+        System.out.println("Meno di 1 anno: " + service.toTextSecondi(86500));
+        System.out.println("*************");
+
+        System.out.println("*************");
+        System.out.println("Durata - ingresso in minuti");
+        System.out.println("Meno di 1 secondo: " + service.toTextMinuti(0));
+        System.out.println("20 sec.: " + service.toTextMinuti(0));
+        System.out.println("59 secondi: " + service.toTextMinuti(0));
+        System.out.println("58 minuti: " + service.toTextMinuti(58));
+        System.out.println("118 minuti: " + service.toTextMinuti(118));
+        System.out.println("122 minuti: " + service.toTextMinuti(122));
+        System.out.println("Meno di 1 giorno: " + service.toTextMinuti(7500 / 60));
+        System.out.println("Meno di 1 anno: " + service.toTextMinuti(86500 / 60));
+        System.out.println("*************");
     }// end of single test
 
 
@@ -951,7 +974,7 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void getWeekShortMese() {
-        previsto = "dom 5 ott";
+        previsto = "dom, 5 ott";
 
         ottenuto = service.getWeekShortMese(LOCAL_DATE_DUE);
         assertEquals(ottenuto, previsto);
@@ -1173,7 +1196,7 @@ public class ADateServiceTest extends ATest {
         System.out.println("*************");
         System.out.println(ottenuto);
         System.out.println("");
-    }// end of method
+    }// end of single test
 
 
     /**
@@ -1183,14 +1206,16 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void oraLegale() {
-        sorgente = "2019-10-04T09:00:00.000+0200";
-        previstoIntero = 7;
+        String sorgenteTime = "2019-10-04 09:00:00.0000";
+        String sorgenteDate = "2019-10-04";
+        previstoIntero = 0;
 
 //        DateTime dt = new DateTime( "2010-01-01T12:00:00+01:00") ;
-        Timestamp stamp= Timestamp.valueOf(sorgente);
-        java.sql.Date data = java.sql.Date.valueOf(sorgente);
+        Timestamp stamp = Timestamp.valueOf(sorgenteTime);
+        java.sql.Date data = java.sql.Date.valueOf(sorgenteDate);
         ottenutoIntero = service.getOre(data);
         assertEquals(ottenutoIntero, previstoIntero);
-    }// end of method
+    }// end of single test
+
 
 }// end of class
