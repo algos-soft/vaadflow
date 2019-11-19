@@ -153,6 +153,10 @@ public class ATest {
 
     protected long ottenutoLungo = 0;
 
+    protected double previstoDouble = 0;
+
+    protected double ottenutoDouble = 0;
+
     protected ArrayList<String> previstoList;
 
     protected List<String> ottenutoList;

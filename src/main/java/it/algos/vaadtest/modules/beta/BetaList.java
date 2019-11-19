@@ -172,7 +172,6 @@ public class BetaList extends AGridViewList {
 
         super.usaBottoneEdit = true;
         super.isEntityModificabile = true;
-        limit = pref.getInt(EAPreferenza.maxRigheGrid);
         super.usaBottomLayout = true;
     }// end of method
 
