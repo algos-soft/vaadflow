@@ -89,7 +89,7 @@ public class Beta extends AEntity {
     @Indexed()
     @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 3)
+    @AIColumn(sortable = true, name = "#", widthEM = 5)
     public int ordine;
 
     /**
@@ -100,7 +100,7 @@ public class Beta extends AEntity {
     @Size(min = 2)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
-    @AIColumn(widthEM = 8)
+    @AIColumn(sortable = true, widthEM = 8)
     public String code;
 
     /**
