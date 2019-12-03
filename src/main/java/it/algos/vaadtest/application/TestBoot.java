@@ -9,6 +9,7 @@ import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.alfa.AlfaList;
 import it.algos.vaadtest.modules.beta.BetaList;
+import it.algos.vaadtest.modules.beta.BetaService;
 import it.algos.vaadtest.modules.gamma.GammaList;
 import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.prova.ProvaService;
@@ -59,6 +60,9 @@ public class TestBoot extends ABoot {
 
     @Autowired
     public ProvaService provaService;
+
+    @Autowired
+    public BetaService betaService;
 
     /**
      * Iniettata dal costruttore <br>
@@ -266,6 +270,7 @@ public class TestBoot extends ABoot {
      */
     protected void iniziaDataProgettoSpecifico() {
         provaService.reset();
+        betaService.reset();
     }// end of method
 
 

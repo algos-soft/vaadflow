@@ -200,7 +200,7 @@ public class ProvaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaBottoneReset = true;
+        super.usaButtonReset = true;
         super.usaPopupFiltro = false;
         super.usaBottoneEdit = true;
         super.usaPagination = true;

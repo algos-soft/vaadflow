@@ -1,6 +1,5 @@
 package it.algos.vaadtest.modules.beta;
 
-import com.vaadin.flow.component.icon.VaadinIcon;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
@@ -15,6 +14,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
@@ -84,7 +86,7 @@ public class BetaService extends AService {
      * @return la entity trovata o appena creata
      */
     public Beta findOrCrea(String code) {
-        Beta entity=null;
+        Beta entity = null;
 
         if (entity == null) {
             entity = crea(code);
@@ -166,13 +168,14 @@ public class BetaService extends AService {
 
 
     public String getKeyUnica(AEntity entityBean) {
-        int num= repository.countByCode(((Beta)entityBean).code);
-        int num2=num;
-        Beta alfa= repository.findFirstByCode(((Beta)entityBean).code);
-Object beta=alfa;
-        int a=87;
+        int num = repository.countByCode(((Beta) entityBean).code);
+        int num2 = num;
+        Beta alfa = repository.findFirstByCode(((Beta) entityBean).code);
+        Object beta = alfa;
+        int a = 87;
         return "";
     }// end of method
+
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
@@ -182,9 +185,9 @@ Object beta=alfa;
      * @return istanza della Entity, null se non trovata
      */
     public Beta findByKeyUnica(String code) {
-        Beta beta= repository.findByCode(code);
+        Beta beta = repository.findByCode(code);
 
-int a=87;
+        int a = 87;
         return null;
     }// end of method
 
@@ -202,5 +205,42 @@ int a=87;
         ((Beta) entityBean).indirizzo = (Address) lista.get(1);
         return super.save(entityBean, operation);
     }
+
+
+    /**
+     * Creazione di alcuni dati demo iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * La collezione viene svuotata <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse
+     *
+     * @return numero di elementi creato
+     */
+    @Override
+    public int reset() {
+        super.reset();
+
+        Beta beta;
+
+        beta = crea("alfa");
+        beta.data = LocalDate.now();
+        beta.datetime = LocalDateTime.now();
+        beta.time = LocalTime.now();
+        save(beta);
+
+        beta = crea("beta");
+        beta.data = null;
+        beta.datetime = null;
+        beta.time = null;
+        save(beta);
+
+        beta = crea("gamma");
+        beta.data = LocalDate.now();
+        beta.datetime = LocalDateTime.now();
+        beta.time = LocalTime.now();
+        save(beta);
+
+        return 0;
+    }// end of method
 
 }// end of class

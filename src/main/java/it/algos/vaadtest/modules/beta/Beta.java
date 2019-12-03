@@ -17,6 +17,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Project vaadtest <br>
@@ -70,7 +73,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordine", "code", "icona"})
+@AIList(fields = {"ordine", "code", "data", "datetime", "time","icona"})
 @AIForm(fields = {"ordine", "code", "indirizzo", "icona"})
 public class Beta extends AEntity {
 
@@ -120,6 +123,15 @@ public class Beta extends AEntity {
     @AIField(type = EAFieldType.custom, serviceClazz = AIndirizzo.class, help = "Indirizzo")
     @AIColumn(name = "ind2")
     public Address indirizzo;
+
+    @AIField(type = EAFieldType.localdate)
+    public LocalDate data;
+
+    @AIField(type = EAFieldType.localdatetime)
+    public LocalDateTime datetime;
+
+    @AIField(type = EAFieldType.localtime)
+    public LocalTime time;
 
 
     /**

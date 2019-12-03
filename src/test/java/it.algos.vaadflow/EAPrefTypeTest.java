@@ -36,7 +36,7 @@ public class EAPrefTypeTest extends ATest {
     private EAPrefType typeString = EAPrefType.string;
     private EAPrefType typeBool = EAPrefType.bool;
     private EAPrefType typeInt = EAPrefType.integer;
-    private EAPrefType typeDate = EAPrefType.date;
+    private EAPrefType typeDate = EAPrefType.localdatetime;
     private EAPrefType typeEmail = EAPrefType.email;
     private Date dataOttenuta = null;
     private LocalDate localDataPrevista = null;

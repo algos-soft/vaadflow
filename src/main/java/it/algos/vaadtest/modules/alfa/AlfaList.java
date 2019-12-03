@@ -8,8 +8,6 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.enumeration.EASearch;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
@@ -18,12 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.security.access.annotation.Secured;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 
@@ -144,7 +140,7 @@ public class AlfaList extends AGridViewList {
 
 //        super.searchType = EASearch.dialog;
         super.usaPopupFiltro = true;
-        super.usaBottoneReset = true;
+        super.usaButtonReset = true;
     }// end of method
 
 
