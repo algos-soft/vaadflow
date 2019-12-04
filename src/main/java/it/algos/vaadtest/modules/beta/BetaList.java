@@ -1,27 +1,14 @@
 package it.algos.vaadtest.modules.beta;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.enumeration.EAPreferenza;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -32,7 +19,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.annotation.Secured;
 
-import static it.algos.vaadflow.application.FlowCost.MAX_RIGHE_GRID;
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -147,7 +133,6 @@ public class BetaList extends AGridViewList {
     }// end of method
 
 
-
     /**
      * Metodo chiamato da com.vaadin.flow.router.Router verso questa view tramite l'interfaccia BeforeEnterObserver <br>
      * Chiamato DOPO @PostConstruct e DOPO beforeEnter <br>
@@ -173,6 +158,10 @@ public class BetaList extends AGridViewList {
         super.usaBottoneEdit = true;
         super.isEntityModificabile = true;
         super.usaBottomLayout = true;
+        logger.debug("Prova mail", getClass(), "fixPreferenze");
+        logger.info("Prova mail", getClass(), "fixPreferenze");
+        logger.warn("Prova mail", getClass(), "fixPreferenze");
+        logger.error("Prova mail", getClass(), "fixPreferenze");
     }// end of method
 
 
@@ -185,7 +174,7 @@ public class BetaList extends AGridViewList {
     @Override
     protected void creaGridBottomLayout() {
         super.creaGridBottomLayout();
-        bottomPlacehorder.add(new Label("Pippoz"));
+//        bottomPlacehorder.add(new Label("Pippoz"));
     }// end of method
 
 
