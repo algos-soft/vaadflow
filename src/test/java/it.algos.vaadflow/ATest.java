@@ -157,7 +157,9 @@ public class ATest {
 
     protected double ottenutoDouble = 0;
 
-    protected ArrayList<String> previstoList;
+    protected List<String> previstoList;
+
+    protected List<String> sorgenteList;
 
     protected List<String> ottenutoList;
 
