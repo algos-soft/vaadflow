@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project springvaadin
@@ -100,7 +100,7 @@ public class AArrayService extends AbstractService {
         }// fine del blocco try-catch
 
         for (Object chiave : listaChiavi) {
-            mappaOrdinata.put(chiave,mappaDisordinata.get(chiave));
+            mappaOrdinata.put(chiave, mappaDisordinata.get(chiave));
         }// end of for cycle
 
         return mappaOrdinata;
@@ -345,6 +345,22 @@ public class AArrayService extends AbstractService {
 
 
     /**
+     * Convert a stringArray to List
+     *
+     * @param strArray to convert
+     *
+     * @return the corresponding casted List
+     */
+    public List<String> fromStr(String[] strArray) {
+        List<String> strList = new ArrayList<String>();
+
+        Collections.addAll(strList, strArray);
+
+        return strList;
+    }// end of method
+
+
+    /**
      * Costruisce una stringa con i singoli valori divisi da un pipe
      * <p>
      *
@@ -355,6 +371,21 @@ public class AArrayService extends AbstractService {
     public String toStringaPipe(ArrayList array) {
         return toStringa(array, "|");
     }// end of method
+
+
+    /**
+     * Costruisce una stringa con i singoli valori divisi da una virgola seguita da uno spazio
+     * <p>
+     *
+     * @param array lista di valori
+     *
+     * @return stringa con i singoli valori divisi da un separatore
+     */
+    public String toStringaSpazio(List array) {
+        return toStringa(array, VIRGOLA + SPAZIO);
+    }// end of method
+
+
     /**
      * Costruisce una stringa con i singoli valori divisi da un separatore virgola
      * <p>
@@ -378,15 +409,18 @@ public class AArrayService extends AbstractService {
      * @return stringa con i singoli valori divisi da un separatore
      */
     public String toStringa(List array, String sep) {
-        String testo;
-        StringBuilder textBuffer = new StringBuilder();
+        String testo = VUOTA;
+        StringBuilder textBuffer = null;
 
-        for (Object obj : array) {
-            textBuffer.append(obj.toString());
-            textBuffer.append(sep);
-        } // fine del ciclo for-each
-        testo = textBuffer.toString();
-        testo = text.levaCoda(testo, sep);
+        if (array != null) {
+            textBuffer = new StringBuilder();
+            for (Object obj : array) {
+                textBuffer.append(obj.toString());
+                textBuffer.append(sep);
+            } // fine del ciclo for-each
+            testo = textBuffer.toString();
+            testo = text.levaCoda(testo, sep);
+        }// end of if cycle
 
         return testo;
     }// end of method

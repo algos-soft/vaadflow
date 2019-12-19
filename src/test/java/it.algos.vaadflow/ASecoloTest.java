@@ -75,7 +75,6 @@ class ASecoloTest extends ATest {
     public void getOrder() {
         previstoIntero = 23;
         sorgente = "XIII secolo";
-
         ottenutoIntero = EASecolo.getOrder(sorgente);
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test

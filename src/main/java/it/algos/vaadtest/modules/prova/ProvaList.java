@@ -609,40 +609,40 @@ public class ProvaList extends AGridViewList {
 //    }// end of method
 
 
-    public void updateViewDopoSearch() {
-        LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
-        List<AEntity> lista;
-        IAField field;
-        Object fieldValue = null;
-        ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
-        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
-
-        for (String fieldName : searchDialog.fieldMap.keySet()) {
-            field = (IAField) searchDialog.fieldMap.get(fieldName);
-            fieldValue = field.getValore();
-            if (field instanceof ATextField || field instanceof ATextArea) {
-                if (text.isValid(fieldValue)) {
-//                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
-                }// end of if cycle
-            }// end of if cycle
-            if (field instanceof AIntegerField) {
-                if ((Integer) fieldValue > 0) {
-                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
-                }// end of if cycle
-            }// end of if cycle
-        }// end of for cycle
-
-        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
-
-        if (array.isValid(lista)) {
-            items = lista;
-        }// end of if cycle
-
-        this.updateGrid();
-
-        creaAlertLayout();
-    }// end of method
+//    public void updateViewDopoSearch() {
+//        LinkedHashMap<String, AbstractField> fieldMap = searchDialog.fieldMap;
+//        List<AEntity> lista;
+//        IAField field;
+//        Object fieldValue = null;
+//        ArrayList<CriteriaDefinition> listaCriteriaDefinition = new ArrayList();
+//        ArrayList<CriteriaDefinition> listaCriteriaDefinitionRegex = new ArrayList();
+//
+//        for (String fieldName : searchDialog.fieldMap.keySet()) {
+//            field = (IAField) searchDialog.fieldMap.get(fieldName);
+//            fieldValue = field.getValore();
+//            if (field instanceof ATextField || field instanceof ATextArea) {
+//                if (text.isValid(fieldValue)) {
+////                    listaCriteriaDefinition.add(Criteria.where(fieldName).is(fieldValue));
+//                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
+//                }// end of if cycle
+//            }// end of if cycle
+//            if (field instanceof AIntegerField) {
+//                if ((Integer) fieldValue > 0) {
+//                    listaCriteriaDefinitionRegex.add(Criteria.where(fieldName).regex((String) fieldValue));
+//                }// end of if cycle
+//            }// end of if cycle
+//        }// end of for cycle
+//
+//        lista = mongo.findAllByProperty(entityClazz, listaCriteriaDefinitionRegex);
+//
+//        if (array.isValid(lista)) {
+//            items = lista;
+//        }// end of if cycle
+//
+//        this.updateGrid();
+//
+//        creaAlertLayout();
+//    }// end of method
 
 
     /**

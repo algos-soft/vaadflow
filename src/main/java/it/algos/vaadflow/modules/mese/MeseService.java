@@ -219,7 +219,7 @@ public class MeseService extends AService {
         HashMap<Integer, String> mappa;
         int key;
 
-        if (array.isValid(listaDisordinata)) {
+        if (listaDisordinata != null && listaDisordinata.size() > 0) {
             mappa = new LinkedHashMap();
             keyList = new ArrayList<>();
 

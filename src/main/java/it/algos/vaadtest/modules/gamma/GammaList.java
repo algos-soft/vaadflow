@@ -280,24 +280,13 @@ public class GammaList extends AGridViewList {
     }// end of method
 
     /**
-     * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
-     * Normalmente tutti i filtri  vanno qui <br>
+     * Aggiorna i filtri specifici della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
      * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
-     * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
      * Può essere sovrascritto, per costruire i filtri specifici dei combobox, popup, ecc. <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void updateFiltri() {
-        super.updateFiltri();
-
-        //esempio
-        //String nazionalita = "";
-        //if (filtroComboBox != null && filtroComboBox.getValue() != null) {
-        //    nazionalita = (String) filtroComboBox.getValue();
-        //    filtri.add(Criteria.where("nazionalita").is(nazionalita));
-        //}// end of if cycle
+    protected void updateFiltriSpecifici() {
+        super.updateFiltriSpecifici();
     }// end of method
 
     /**

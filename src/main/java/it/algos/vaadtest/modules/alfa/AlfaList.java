@@ -12,6 +12,7 @@ import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.wrapper.AFiltro;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -218,16 +219,13 @@ public class AlfaList extends AGridViewList {
 
 
     /**
-     * Aggiorna gli items (righe) della Grid. Modificati per: filtri, newEntity, deleteEntity, ecc... <br>
+     * Aggiorna i filtri specifici della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
      * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
-     * Alla prima visualizzazione della view usa SOLO creaItems() e non questo metodo <br>
-     * Può essere sovrascritto, per modificare la selezione dei filtri <br>
+     * Può essere sovrascritto, per costruire i filtri specifici dei combobox, popup, ecc. <br>
      * Invocare PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void updateFiltri() {
-        super.updateFiltri();
+    protected void updateFiltriSpecifici() {
+        super.updateFiltriSpecifici();
 
         String nazionalita = "";
         boolean ragazzo;
@@ -235,17 +233,17 @@ public class AlfaList extends AGridViewList {
 
         if (filtroComboBox != null && filtroComboBox.getValue() != null) {
             nazionalita = (String) filtroComboBox.getValue();
-            filtri.add(Criteria.where("nazionalita").is(nazionalita));
+            filtri.add(new AFiltro(Criteria.where("nazionalita").is(nazionalita)));
         }// end of if cycle
 
         if (checkbox1 != null && !checkbox1.isIndeterminate()) {
             ragazzo = checkbox1.getValue();
-            filtri.add(Criteria.where("ragazzo").is(ragazzo));
+            filtri.add(new AFiltro(Criteria.where("ragazzo").is(ragazzo)));
         }// end of if cycle
 
         if (checkbox2 != null && !checkbox2.isIndeterminate()) {
             simpatico = checkbox2.getValue();
-            filtri.add(Criteria.where("simpatico").is(simpatico));
+            filtri.add(new AFiltro(Criteria.where("simpatico").is(simpatico)));
         }// end of if cycle
     }// end of method
 

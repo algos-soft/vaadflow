@@ -5,6 +5,7 @@ import com.mongodb.client.MongoDatabase;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.service.AMongoService;
+import it.algos.vaadflow.wrapper.AFiltro;
 import it.algos.vaadtest.TestApplication;
 import it.algos.vaadtest.modules.alfa.Alfa;
 import it.algos.vaadtest.modules.prova.Prova;
@@ -207,11 +208,11 @@ public class MongoServiceTest {
 
         //--condizione ragazzo=true AND simpatico=true
         previstoIntero = 5;
-        List<CriteriaDefinition> listaCriteriaDefinition=new ArrayList<>();
+        List<AFiltro> listaCriteriaDefinition=new ArrayList<>();
         CriteriaDefinition criteria1 = Criteria.where("ragazzo").is(true);
         CriteriaDefinition criteria2 = Criteria.where("simpatico").is(true);
-        listaCriteriaDefinition.add(criteria1);
-        listaCriteriaDefinition.add(criteria2);
+        listaCriteriaDefinition.add(new AFiltro(criteria1));
+        listaCriteriaDefinition.add(new AFiltro(criteria2));
 //        listaProvaLocale = (List<AEntity>) service.mongoOp.find(query, ALFA_ENTITY_CLASS);
         listaProvaLocale = service.findAllByProperty(ALFA_ENTITY_CLASS, listaCriteriaDefinition);
         Assert.assertNotNull(listaProvaLocale);
