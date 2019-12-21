@@ -50,6 +50,7 @@ public abstract class FlowCost {
     public static final String VUOTA = "";
 
     public static final String SPAZIO = " ";
+
     public static final String SEP = " - ";
 
     public static final String VIRGOLA = ",";
@@ -241,6 +242,8 @@ public abstract class FlowCost {
     public static final String LOG_ERROR = "logError";
 
     public static final String LOG_IMPORT = "logImport";
+
+    public static final String LOG_LEVEL_CORRENTE = "logLevelCorrente";
 
     // generali
     public static final String USA_DEBUG = "usaDebug";

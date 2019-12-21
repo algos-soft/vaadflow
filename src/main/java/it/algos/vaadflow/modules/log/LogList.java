@@ -1,5 +1,6 @@
 package it.algos.vaadflow.modules.log;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
@@ -8,15 +9,20 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.enumeration.EALogLivello;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.wrapper.AFiltro;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.klaudeta.PaginatedGrid;
 
@@ -73,6 +79,20 @@ public class LogList extends AGridViewList {
 
 
     /**
+     * Crea effettivamente il Component Grid <br>
+     * <p>
+     * Può essere Grid oppure PaginatedGrid <br>
+     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+     * Oppure queste possono essere fatte nella sottoclasse, se non sono standard <br>
+     */
+    @Override
+    protected Grid creaGridComponent() {
+        return new PaginatedGrid<Log>();
+    }// end of method
+
+
+    /**
      * Le preferenze specifiche, eventualmente sovrascritte nella sottoclasse
      * Può essere sovrascritto, per aggiungere informazioni
      * Invocare PRIMA il metodo della superclasse
@@ -84,11 +104,12 @@ public class LogList extends AGridViewList {
         if (!FlowVar.usaSecurity || login.isDeveloper()) {
             super.usaButtonDelete = true;
         }// end of if cycle
-        super.usaPopupFiltro = true;
-        super.isEntityAdmin = true;
-        super.usaButtonNew = false;
 
-        super.grid = new PaginatedGrid<Log>();
+        super.usaPopupFiltro = true;
+        super.usaBottoneEdit = false;
+        super.usaButtonNew = false;
+        super.isEntityAdmin = true;
+        super.usaPagination = true;
     }// end of method
 
 
@@ -133,8 +154,20 @@ public class LogList extends AGridViewList {
     protected void updateFiltriSpecifici() {
         super.updateFiltriSpecifici();
 
-        EALogLivello livello = (EALogLivello) filtroComboBox.getValue();
-        items = ((LogService) service).findAllByLivello(livello);
+        String fieldName = "livello";
+        String fieldSort = "descrizione";
+        EALogLivello levelType = (EALogLivello) filtroComboBox.getValue();
+
+        if (levelType!=null) {
+            CriteriaDefinition criteria = Criteria.where(fieldName).is(levelType);
+            Sort sort = new Sort(Sort.Direction.ASC, fieldSort);
+            AFiltro filtro = new AFiltro(criteria, sort);
+
+            filtri.add(filtro);
+        }// end of if cycle
+
+//        EALogLivello livello = (EALogLivello) filtroComboBox.getValue();
+//        items = ((LogService) service).findAllByLivello(livello);
     }// end of method
 
 

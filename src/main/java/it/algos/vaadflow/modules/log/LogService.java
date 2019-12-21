@@ -9,6 +9,7 @@ import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.logtype.Logtype;
 import it.algos.vaadflow.modules.logtype.LogtypeService;
+import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.AMailService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,13 @@ public class LogService extends AService {
     protected AMailService mail;
 
     /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Disponibile solo dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    protected ADateService date;
+
+    /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
@@ -113,6 +121,59 @@ public class LogService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
+     * @param typeName    raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
+     *
+     * @return la entity appena creata
+     */
+    public Log crea(String typeName, String descrizione) {
+        return crea(typeName, descrizione, 0);
+    }// end of method
+
+
+    /**
+     * Crea una entity e la registra <br>
+     *
+     * @param typeName    raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
+     * @param inizio      (facoltativo), per calcolare la durata <br>
+     *
+     * @return la entity appena creata
+     */
+    public Log crea(String typeName, String descrizione, long inizio) {
+        return crea(EALogLivello.get(pref), logtype.findByKeyUnica(typeName), descrizione, inizio);
+    }// end of method
+
+
+    /**
+     * Crea una entity e la registra <br>
+     *
+     * @param type        raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
+     *
+     * @return la entity appena creata
+     */
+    public Log crea(Logtype type, String descrizione) {
+        return crea(EALogLivello.get(pref), type, descrizione, 0);
+    }// end of method
+
+
+    /**
+     * Crea una entity e la registra <br>
+     *
+     * @param logType     raggruppamento logico dei log per type di eventi (obbligatorio)
+     * @param descrizione (obbligatoria, non unica) <br>
+     *
+     * @return la entity appena creata
+     */
+    public Log crea(EALogType logType, String descrizione) {
+        return crea(EALogLivello.get(pref), logtype.findByKeyUnica(logType.getTag()), descrizione, 0);
+    }// end of method
+
+
+    /**
+     * Crea una entity e la registra <br>
+     *
      * @param livello     rilevanza del log (obbligatorio)
      * @param logType     raggruppamento logico dei log per type di eventi (obbligatorio)
      * @param descrizione (obbligatoria, non unica) <br>
@@ -120,7 +181,7 @@ public class LogService extends AService {
      * @return la entity appena creata
      */
     public Log crea(EALogLivello livello, EALogType logType, String descrizione) {
-        return crea(livello, logtype.findByKeyUnica(logType.getTag()), descrizione);
+        return crea(livello, logtype.findByKeyUnica(logType.getTag()), descrizione, 0);
     }// end of method
 
 
@@ -133,7 +194,11 @@ public class LogService extends AService {
      *
      * @return la entity appena creata
      */
-    public Log crea(EALogLivello livello, Logtype type, String descrizione) {
+    public Log crea(EALogLivello livello, Logtype type, String descrizione, long inizio) {
+        if (inizio > 0) {
+            descrizione = fixInizio(descrizione, inizio);
+        }// end of if cycle
+
         Log entity = newEntity(livello, type, descrizione);
         save(entity);
         return entity;
@@ -223,6 +288,20 @@ public class LogService extends AService {
         return entity;
     }// end of method
 
+
+    public String fixInizio(String descrizioneSemplice, long inizio) {
+        String descrizioneFinale = descrizioneSemplice;
+        String tempo;
+
+        if (text.isValid(descrizioneSemplice) && inizio > 0) {
+            long fine = System.currentTimeMillis();
+            long durata = fine - inizio;
+            tempo = date.toText(durata);
+            descrizioneFinale += " in " + tempo;
+        }// end of if cycle
+
+        return descrizioneFinale;
+    }// end of method
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
@@ -416,7 +495,7 @@ public class LogService extends AService {
 
     //--registra un avviso
     public void importo(String descrizione) {
-        crea(EALogLivello.debug, logtype.getImport(), descrizione);
+        crea(EALogLivello.debug, logtype.getImport(), descrizione, 0);
     }// fine del metodo
 
 

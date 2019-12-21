@@ -119,7 +119,7 @@ public class Log extends ACEntity {
     @Indexed()
     @Field("type")
     @AIField(type = EAFieldType.combo, serviceClazz = LogtypeService.class, nullSelectionAllowed = false, widthEM = 10)
-    @AIColumn(widthEM = 7, sortable = false)
+    @AIColumn(widthEM = 8, sortable = false)
     public Logtype type;
 
 
