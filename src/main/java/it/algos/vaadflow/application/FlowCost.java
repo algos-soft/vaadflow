@@ -227,7 +227,6 @@ public abstract class FlowCost {
 
     public static final String CONFERMA = "Conferma";
 
-
     public static final String LOG_LEVEL_CORRENTE = "logLevelCorrente";
 
     // generali
@@ -236,8 +235,6 @@ public abstract class FlowCost {
     public static final String USA_LOG_DEBUG = "usaLogDebug";
 
     public static final String LOG_ERROR_VIEW = "errorView";
-
-//    public static final String USA_COMPANY = "usaCompany";
 
     public static final String USA_LOG_MAIL = "usaLogMail";
 
