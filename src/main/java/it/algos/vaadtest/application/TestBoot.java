@@ -4,7 +4,9 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
+import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.modules.company.CompanyService;
+import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.modules.utente.UtenteService;
 import it.algos.vaadtest.dialoghi.ProvaDialoghi;
 import it.algos.vaadtest.modules.alfa.AlfaList;
@@ -63,6 +65,12 @@ public class TestBoot extends ABoot {
 
     @Autowired
     public BetaService betaService;
+
+    /**
+     * La injection viene fatta da SpringBoot in automatico <br>
+     */
+    @Autowired
+    protected LogService logger;
 
     /**
      * Iniettata dal costruttore <br>
@@ -153,7 +161,9 @@ public class TestBoot extends ABoot {
     protected int creaPreferenze() {
         int numPref = super.creaPreferenze();
 
-//        pref.creaIfNotExist("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
+        for (EAPreferenzaTest eaPref : EAPreferenzaTest.values()) {
+            numPref = preferenzaService.creaIfNotExist(eaPref) ? numPref + 1 : numPref;
+        }// end of for cycle
 
         return numPref;
     }// end of method
@@ -185,7 +195,9 @@ public class TestBoot extends ABoot {
     public int resetPreferenze() {
         int numPref = super.resetPreferenze();
 
-//        pref.crea("poltrona", "divano", EAPrefType.enumeration, EARole.user, "ordine,code,descrizione;code");
+        for (EAPreferenzaTest eaPref : EAPreferenzaTest.values()) {
+            numPref = preferenzaService.crea(eaPref) ? numPref + 1 : numPref;
+        }// end of for cycle
 
         return numPref;
     }// end of method
@@ -271,6 +283,12 @@ public class TestBoot extends ABoot {
     protected void iniziaDataProgettoSpecifico() {
         provaService.reset();
         betaService.reset();
+
+//        logger.crea(EALogType.debug,"Zanzibar");
+//        logger.crea(EALogType.debug,"Alfetta");
+//        logger.crea(EALogType.warn,"Domani");
+//        logger.crea(EALogType.warn,"Oggi");
+//        logger.crea(EALogType.warn,"Befana");
     }// end of method
 
 

@@ -9,9 +9,9 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EALogLivello;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.enumeration.EAPrefType;
+import it.algos.vaadflow.modules.logtype.Logtype;
+import it.algos.vaadflow.modules.logtype.LogtypeService;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
@@ -61,6 +61,13 @@ public class LogList extends AGridViewList {
 
 
     public static final String IRON_ICON = "history";
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     * Disponibile solo dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    protected LogtypeService typeService;
 
 
     /**
@@ -135,8 +142,8 @@ public class LogList extends AGridViewList {
     protected void creaPopupFiltro() {
         super.creaPopupFiltro();
 
-        filtroComboBox.setPlaceholder("Livello ...");
-        filtroComboBox.setItems(EALogLivello.values());
+        filtroComboBox.setPlaceholder("Types ...");
+        filtroComboBox.setItems(typeService.findAll());
         filtroComboBox.addValueChangeListener(e -> {
             updateFiltri();
             updateGrid();
@@ -154,20 +161,17 @@ public class LogList extends AGridViewList {
     protected void updateFiltriSpecifici() {
         super.updateFiltriSpecifici();
 
-        String fieldName = "livello";
-        String fieldSort = "descrizione";
-        EALogLivello levelType = (EALogLivello) filtroComboBox.getValue();
+        String fieldName = "type";
+        String fieldSort = "evento";
+        Logtype type = (Logtype) filtroComboBox.getValue();
 
-        if (levelType!=null) {
-            CriteriaDefinition criteria = Criteria.where(fieldName).is(levelType);
-            Sort sort = new Sort(Sort.Direction.ASC, fieldSort);
+        if (type != null) {
+            CriteriaDefinition criteria = Criteria.where(fieldName).is(type);
+            Sort sort = new Sort(Sort.Direction.DESC, fieldSort);
             AFiltro filtro = new AFiltro(criteria, sort);
 
             filtri.add(filtro);
         }// end of if cycle
-
-//        EALogLivello livello = (EALogLivello) filtroComboBox.getValue();
-//        items = ((LogService) service).findAllByLivello(livello);
     }// end of method
 
 
