@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.preferenza;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
@@ -156,6 +157,8 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
         valueField = sincro(type);
         switch (type) {
             case string:
+                valueField.setValue(stringValue);
+                break;
             case email:
                 valueField.setValue(stringValue);
                 break;
@@ -223,7 +226,9 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                 valueField = new ATextField(caption + "(string)");
                 break;
             case email:
-                valueField = new ATextField(caption + "(string)");
+                valueField = new EmailField(caption + "(email)");
+                String message = "L'indirizzo eMail non è valido";
+                ((EmailField)valueField).setErrorMessage(message);
                 break;
             case integer:
                 valueField = new AIntegerField(caption + "(solo numeri)");
@@ -238,8 +243,8 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                 valueField = new ADateTimePicker(caption + "(giorno)");
                 break;
             case localtime:
-                valueField = new TimePicker(caption + "orario");
-                ((TimePicker) valueField).setStep(Duration.ofMinutes(15));
+                valueField = new ATimePicker(caption + "orario");
+                ((ATimePicker) valueField).setStep(Duration.ofMinutes(15));
                 break;
             case enumeration:
                 if (operation == EAOperation.addNew) {
@@ -279,6 +284,8 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
             switch (type) {
                 case string:
+                    break;
+                case email:
                     break;
                 case integer:
                     break;

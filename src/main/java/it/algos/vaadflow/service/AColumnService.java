@@ -122,6 +122,7 @@ public class AColumnService extends AbstractService {
         switch (type) {
             case text://@todo in futuro vanno differenziati
             case email:
+            case password:
             case textarea:
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
@@ -559,6 +560,11 @@ public class AColumnService extends AbstractService {
                 //--larghezza di default per un mail = 18em
                 //--per larghezze diverse, inserire widthEM = ... nell'annotation @AIColumn della Entity
                 width = text.isValid(width) ? width : "18em";
+                break;
+            case password:
+                //--larghezza di default per un testo = 7em
+                //--per larghezze minori o maggiori, inserire widthEM = ... nell'annotation @AIColumn della Entity
+                width = text.isValid(width) ? width : "9em";
                 break;
             case integer:
                 //--larghezza di default per un intero = 3em

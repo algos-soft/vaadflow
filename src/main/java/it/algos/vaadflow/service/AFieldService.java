@@ -6,6 +6,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
@@ -252,6 +255,14 @@ public class AFieldService extends AbstractService {
                     }// end of if/else cycle
                 }// end of if cycle
                 break;
+            case password:
+                field = new PasswordField(caption);
+                ((PasswordField)field).setPlaceholder("Enter password");
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
+                field.setReadOnly(false);
+                break;
             case textarea:
                 field = new ATextArea(caption);
                 if (binder != null) {
@@ -381,8 +392,8 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 break;
             case localtime:
-                field = new TimePicker(caption);
-                ((TimePicker) field).setStep(Duration.ofMinutes(15)); //standard
+                field = new ATimePicker(caption);
+                ((ATimePicker) field).setStep(Duration.ofMinutes(15)); //standard
                 if (binder != null) {
                     binder.forField(field).bind(fieldName);
                 }// end of if cycle

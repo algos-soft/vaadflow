@@ -73,8 +73,8 @@ import java.time.LocalTime;
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordine", "code", "data", "datetime", "time", "icona"})
-@AIForm(fields = {"ordine", "code", "indirizzo", "data", "datetime", "time", "icona"})
+@AIList(fields = {"ordine", "code", "data", "datetime", "time", "icona", "posta", "password"})
+@AIForm(fields = {"ordine", "code", "indirizzo", "data", "datetime", "time", "icona", "posta", "password"})
 public class Beta extends AEntity {
 
 
@@ -132,6 +132,12 @@ public class Beta extends AEntity {
 
     @AIField(type = EAFieldType.localtime)
     public LocalTime time;
+
+    @AIField(type = EAFieldType.email)
+    public String posta;
+
+    @AIField(type = EAFieldType.password)
+    public String password;
 
 
     /**

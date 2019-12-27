@@ -32,11 +32,17 @@ public class ADateTimePicker extends CustomField<LocalDateTime> {
     private final Duration STEP = Duration.ofMinutes(15);
 
 
+    /**
+     * Costruttore base senza parametri <br>
+     */
     public ADateTimePicker() {
-        this("Start datetime");
+        this("Data e tempo");
     }// end of constructor
 
 
+    /**
+     * Costruttore con parametri <br>
+     */
     public ADateTimePicker(String caption) {
         setLabel(caption);
         add(datePicker, timePicker);
@@ -48,20 +54,15 @@ public class ADateTimePicker extends CustomField<LocalDateTime> {
     protected LocalDateTime generateModelValue() {
         final LocalDate date = datePicker.getValue();
         final LocalTime time = timePicker.getValue();
-        return date != null && time != null ?
-                LocalDateTime.of(date, time) :
-                null;
+
+        return date != null && time != null ? LocalDateTime.of(date, time) : null;
     }// end of method
 
 
     @Override
     protected void setPresentationValue(LocalDateTime newPresentationValue) {
-        datePicker.setValue(newPresentationValue != null ?
-                newPresentationValue.toLocalDate() :
-                null);
-        timePicker.setValue(newPresentationValue != null ?
-                newPresentationValue.toLocalTime() :
-                null);
+        datePicker.setValue(newPresentationValue != null ? newPresentationValue.toLocalDate() : null);
+        timePicker.setValue(newPresentationValue != null ? newPresentationValue.toLocalTime() : null);
     }// end of method
 
 
