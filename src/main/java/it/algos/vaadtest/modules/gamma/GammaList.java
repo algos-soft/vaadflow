@@ -1,6 +1,8 @@
 package it.algos.vaadtest.modules.gamma;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -201,6 +203,8 @@ public class GammaList extends AGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaSecondTopPlaceholder=true;
     }// end of method
 
     /**
@@ -250,6 +254,19 @@ public class GammaList extends AGridViewList {
     @Override
     protected void creaTopLayout() {
         super.creaTopLayout();
+
+        //--statistiche didascalie
+        Button didascalieButton = new Button("Didascalie", new Icon(VaadinIcon.UPLOAD));
+        didascalieButton.getElement().setAttribute("theme", "error");
+//        didascalieButton.addClickListener(e -> uploadDidascalie());
+        secondTopPlaceholder.add(didascalieButton);
+
+        //--statistiche didascalie
+        Button didascalie2Button = new Button("Pippoz", new Icon(VaadinIcon.SEARCH));
+        didascalie2Button.getElement().setAttribute("theme", "primary");
+//        didascalieButton.addClickListener(e -> uploadDidascalie());
+        secondTopPlaceholder.add(didascalie2Button);
+
     }// end of method
 
     /**
