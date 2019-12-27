@@ -375,15 +375,17 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 break;
             case localdatetime:
-                //@todo andrà modificato quando ci sarà un DatePicker che accetti i LocalDateTime
-                field = new ADatePicker(caption);
-//                field = new ATextField(caption);
-//                binder.forField(field).bind(fieldName);
+                field = new ADateTimePicker(caption);
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case localtime:
                 field = new TimePicker(caption);
-                ((TimePicker) field).setStep(Duration.ofHours(1)); //standard
-                binder.forField(field).bind(fieldName);
+                ((TimePicker) field).setStep(Duration.ofMinutes(15)); //standard
+                if (binder != null) {
+                    binder.forField(field).bind(fieldName);
+                }// end of if cycle
                 break;
             case vaadinIcon:
                 if (serviceClazz != null) {

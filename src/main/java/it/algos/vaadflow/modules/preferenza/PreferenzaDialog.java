@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.preferenza;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -11,10 +12,7 @@ import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.service.AEnumerationService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
-import it.algos.vaadflow.ui.fields.ACheckBox;
-import it.algos.vaadflow.ui.fields.AComboBox;
-import it.algos.vaadflow.ui.fields.AIntegerField;
-import it.algos.vaadflow.ui.fields.ATextField;
+import it.algos.vaadflow.ui.fields.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +20,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
@@ -155,6 +156,7 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
         valueField = sincro(type);
         switch (type) {
             case string:
+            case email:
                 valueField.setValue(stringValue);
                 break;
             case integer:
@@ -163,11 +165,20 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
             case bool:
                 valueField.setValue((boolean) genericValue);
                 break;
+            case localdate:
+                if (genericValue instanceof LocalDate) {
+                    valueField.setValue(genericValue);
+                }// end of if cycle
+                break;
             case localdatetime:
                 if (genericValue instanceof LocalDateTime) {
-                    genericValue = date.localDateTimeToLocalDate((LocalDateTime) genericValue);
+                    valueField.setValue(genericValue);
                 }// end of if cycle
-                valueField.setValue(genericValue);
+                break;
+            case localtime:
+                if (genericValue instanceof LocalTime) {
+                    valueField.setValue(genericValue);
+                }// end of if cycle
                 break;
             case enumeration:
                 if (text.isValid(stringValue)) {
@@ -211,14 +222,24 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
             case string:
                 valueField = new ATextField(caption + "(string)");
                 break;
+            case email:
+                valueField = new ATextField(caption + "(string)");
+                break;
             case integer:
                 valueField = new AIntegerField(caption + "(solo numeri)");
                 break;
             case bool:
                 valueField = new ACheckBox(caption + "(vero/falso)");
                 break;
+            case localdate:
+                valueField = new ADatePicker(caption + "(giorno)");
+                break;
             case localdatetime:
-                valueField = new DatePicker(caption + "(giorno)");
+                valueField = new ADateTimePicker(caption + "(giorno)");
+                break;
+            case localtime:
+                valueField = new TimePicker(caption + "orario");
+                ((TimePicker) valueField).setStep(Duration.ofMinutes(15));
                 break;
             case enumeration:
                 if (operation == EAOperation.addNew) {
@@ -263,14 +284,18 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                     break;
                 case bool:
                     break;
+                case localdate:
+                    break;
                 case localdatetime:
+                    break;
+                case localtime:
                     break;
                 case enumeration:
                     if (currentItem != null && text.isValid(currentItem.id)) {
                         mongoEnumValue = (String) currentItem.getType().bytesToObject(currentItem.value);
                         genericFieldValue = enumService.convertToModel(mongoEnumValue, (String) genericFieldValue);
                     } else {
-                        genericFieldValue=genericFieldValue;
+                        genericFieldValue = genericFieldValue;
                     }// end of if/else cycle
                     break;
                 default:
