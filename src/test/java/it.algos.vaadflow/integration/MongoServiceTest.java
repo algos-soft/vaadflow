@@ -144,7 +144,7 @@ public class MongoServiceTest {
         int a = 87;
 
         Prova prova = (Prova) service.findByProperty(PROVA_ENTITY_CLASS, "code", "4cod");
-        Role role = prova.ruoli.get(2);
+        Role role = (Role)prova.ruoli.toArray()[2];
 
 //        provaCollection.find(and(gt("dim_cm", 15), lt("dim_cm", 20)));
 

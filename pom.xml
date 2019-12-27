@@ -19,8 +19,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependencies -->
-        <!-- Va tenuta aggiornata la versione di VAADIN 14.0.12 -->
-        <vaadin.version>14.0.12</vaadin.version>
+        <!-- Va tenuta aggiornata la versione di VAADIN 14.1.3 -->
+        <vaadin.version>14.1.3</vaadin.version>
 
         <!-- Va tenuta aggiornata la versione di spring-boot -->
         <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
@@ -107,7 +107,6 @@
         </dependency>
 
         <!-- MultiSelectCombo -->
-        <!-- Da cambiare in 2.0.0.rc3 -->
         <dependency>
             <groupId>org.vaadin.gatanaso</groupId>
             <artifactId>multiselect-combo-box-flow</artifactId>

@@ -1,15 +1,12 @@
 package it.algos.vaadtest.modules.gamma;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.role.Role;
+import it.algos.vaadflow.modules.role.RoleService;
 import lombok.*;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static it.algos.vaadtest.application.TestCost.TAG_GAM;
+import java.util.Set;
 
 /**
  * Project vaadtest <br>
@@ -58,9 +55,9 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  * -va usato SOLO per 'collection' molto grandi (per evitare confusione sul nome della property da usare).
  * Le property non primitive, di default sono EMBEDDED con un riferimento statico
- *      (EAFieldType.link e XxxPresenter.class)
+ * (EAFieldType.link e XxxPresenter.class)
  * Le singole property possono essere annotate con @DBRef per un riferimento DINAMICO (not embedded)
- *      (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
+ * (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
  * Una (e una sola) property deve avere @AIColumn(flexGrow = true) per fissare la larghezza della Grid <br>
  */
 @Entity
@@ -73,8 +70,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
 @AIEntity(recordName = "gamma", company = EACompanyRequired.nonUsata)
-@AIList(fields = {"ordine", "code"})
-@AIForm(fields = {"ordine", "code"})
+@AIList(fields = {"ordine", "code", "ruoli"})
+@AIForm(fields = {"ordine", "code", "ruoli"})
 public class Gamma extends AEntity {
 
 
@@ -83,8 +80,8 @@ public class Gamma extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-    
-	/**
+
+    /**
      * ordine di presentazione (obbligatorio, unico) <br>
      * il più importante per primo <br>
      */
@@ -94,18 +91,25 @@ public class Gamma extends AEntity {
     @AIField(type = EAFieldType.integer, widthEM = 3)
     @AIColumn(name = "#", widthEM = 3)
     public int ordine;
-    
-	/**
+
+    /**
      * codice di riferimento (obbligatorio, unico) <br>
      */
     @NotNull(message = "Il codice è obbligatorio")
     @Indexed()
     @Size(min = 2)
     @Field("cod")
-    @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
+    @AIField(type = EAFieldType.text, required = true, widthEM = 8)
     @AIColumn(flexGrow = true)
     public String code;
-    
+
+    /**
+     * combo multiplo <br>
+     */
+    @AIField(type = EAFieldType.multicombo, serviceClazz = RoleService.class, widthEM = 14)
+    @AIColumn(widthEM = 16)
+    public Set<Role> ruoli;
+
 
     /**
      * @return a string representation of the object.

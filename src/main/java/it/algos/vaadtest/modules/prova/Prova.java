@@ -29,6 +29,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Project vaadtest <br>
@@ -252,9 +253,9 @@ public class Prova extends ACEntity {
     /**
      * combo multiplo <br>
      */
-    @AIField(type = EAFieldType.multicombo, serviceClazz = RoleService.class, widthEM = 4)
-    @AIColumn(widthEM = 6)
-    public List<Role> ruoli;
+    @AIField(type = EAFieldType.multicombo, serviceClazz = RoleService.class, widthEM = 14)
+    @AIColumn(widthEM = 16)
+    public Set<Role> ruoli;
 
 
     @Indexed(direction = IndexDirection.DESCENDING)

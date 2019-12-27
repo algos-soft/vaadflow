@@ -137,14 +137,14 @@ public class ProvaDialog extends AViewDialog<Prova> {
         propertyField = new ATextField("Alfa");
         ((ATextField) propertyField).setWidth("2em");
 
-        if (propertyField != null) {
-            AbstractField comboField = fieldMap.get("ruoli");
-            List lista = new ArrayList<>();
-            lista.add("alfetta");
-            lista.add("domani");
-            lista.add("mattina");
-            ((MultiselectComboBox) comboField).setItems(lista);
-        }// end of if cycle
+//        if (propertyField != null) {
+//            AbstractField comboField = fieldMap.get("ruoli");
+//            List lista = new ArrayList<>();
+//            lista.add("alfetta");
+//            lista.add("domani");
+//            lista.add("mattina");
+//            ((MultiselectComboBox) comboField).setItems(lista);
+//        }// end of if cycle
 
     }// end of method
 

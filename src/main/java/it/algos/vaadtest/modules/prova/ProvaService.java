@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -281,7 +283,11 @@ public class ProvaService extends AService {
             prova.pageid = 1000000L + (14 * k) + k + 8;
             prova.inizio = LocalTime.of(k, k + 2);
             prova.fine = LocalTime.of(k + 1, k * 3);
-            prova.ruoli = ruoli;
+
+            Set<Role> hSet = new HashSet<Role>(ruoli);
+            hSet.addAll(ruoli);
+
+            prova.ruoli = hSet;
             save(prova);
         }// end of for cycle
 

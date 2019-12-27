@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.preferenza;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
@@ -163,7 +164,9 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                 valueField.setValue(stringValue);
                 break;
             case integer:
-                valueField.setValue(genericValue.toString());
+                if (genericValue instanceof Number) {
+                    valueField.setValue(genericValue);
+                }// end of if cycle
                 break;
             case bool:
                 valueField.setValue((boolean) genericValue);
@@ -231,7 +234,7 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
                 ((EmailField)valueField).setErrorMessage(message);
                 break;
             case integer:
-                valueField = new AIntegerField(caption + "(solo numeri)");
+                valueField = new IntegerField(caption + "(solo numeri)");
                 break;
             case bool:
                 valueField = new ACheckBox(caption + "(vero/falso)");
