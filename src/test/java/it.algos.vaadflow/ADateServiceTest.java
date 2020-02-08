@@ -1158,6 +1158,72 @@ public class ADateServiceTest extends ATest {
 
 
     /**
+     * Controlla la validità del localDate
+     * Deve esistere (not null)
+     * Deve avere valore più recente del 1 gennaio 1970
+     *
+     * @param localDate in ingresso da controllare
+     *
+     * @return vero se il localDate soddisfa le condizioni previste
+     */
+    @Test
+    public void isValidDate() {
+        previstoBooleano = true;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_UNO);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = true;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_PRIMO_VALIDO);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid((LocalDate) null);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_VUOTA);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_OLD);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+    }// end of single test
+
+
+    /**
+     * Controlla la validità del localDateTime
+     * Deve esistere (not null)
+     * Deve avere valore più recente del 1 gennaio 1970, ore zero, minuti zero
+     *
+     * @param localDateTime in ingresso da controllare
+     *
+     * @return vero se il localDateTime soddisfa le condizioni previste
+     */
+    @Test
+    public void isValidDateTime() {
+        previstoBooleano = true;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_TIME_UNO);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = true;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_TIME_PRIMO_VALIDO);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid((LocalDateTime) null);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_TIME_VUOTA);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = service.isValid(LOCAL_DATE_TIME_OLD);
+        assertEquals(ottenutoBooleano, previstoBooleano);
+    }// end of single test
+
+
+    /**
      * Controlla la validità del localTime
      * Deve esistere (not null)
      * Deve avere valori delle ore o dei minuti
@@ -1167,7 +1233,7 @@ public class ADateServiceTest extends ATest {
      * @return vero se il localTime soddisfa le condizioni previste
      */
     @Test
-    public void isValid() {
+    public void isValidTime() {
         previstoBooleano = true;
         ottenutoBooleano = service.isValid(LOCAL_TIME_DUE);
         assertEquals(ottenutoBooleano, previstoBooleano);

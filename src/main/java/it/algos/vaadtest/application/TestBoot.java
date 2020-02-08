@@ -90,20 +90,21 @@ public class TestBoot extends ABoot {
     }// end of Spring constructor
 
 
-//    /**
-//     * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
-//     * Si usa un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Performing the initialization in a constructor is not suggested
-//     * as the state of the UI is not properly set up when the constructor is invoked.
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
-//     * ma l'ordine con cui vengono chiamati NON è garantito
-//     * DEVE essere inserito nella sottoclasse e invocare (eventualmente) un metodo della superclasse.
-//     */
-//    @PostConstruct
-//    protected void postConstruct() {
-//    }// end of method
+    /**
+     * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
+     * Si usa un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Performing the initialization in a constructor is not suggested
+     * as the state of the UI is not properly set up when the constructor is invoked.
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
+     * ma l'ordine con cui vengono chiamati NON è garantito
+     * DEVE essere inserito nella sottoclasse e invocare (eventualmente) un metodo della superclasse.
+     */
+    @PostConstruct
+    protected void postConstruct() {
+        logger.crea("Pippoz");
+    }// end of method
 
 //    /**
 //     * Executed on container startup <br>

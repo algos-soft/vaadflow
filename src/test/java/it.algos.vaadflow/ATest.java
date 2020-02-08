@@ -79,9 +79,21 @@ public class ATest {
 
     protected final static LocalDate LOCAL_DATE_QUATTRO = LocalDate.of(2015, 3, 8);
 
+    protected final static LocalDate LOCAL_DATE_VUOTA = LocalDate.of(1970, 1, 1);
+
+    protected final static LocalDate LOCAL_DATE_PRIMO_VALIDO = LocalDate.of(1970, 1, 2);
+
+    protected final static LocalDate LOCAL_DATE_OLD = LocalDate.of(1946, 10, 28);
+
     protected final static LocalDateTime LOCAL_DATE_TIME_UNO = LocalDateTime.of(2014, 10, 21, 7, 42);
 
     protected final static LocalDateTime LOCAL_DATE_TIME_DUE = LocalDateTime.of(2014, 10, 5, 7, 4);
+
+    protected final static LocalDateTime LOCAL_DATE_TIME_VUOTA = LocalDateTime.of(1970, 1, 1, 0, 0);
+
+    protected final static LocalDateTime LOCAL_DATE_TIME_PRIMO_VALIDO = LocalDateTime.of(1970, 1, 1, 0, 1);
+
+    protected final static LocalDateTime LOCAL_DATE_TIME_OLD = LocalDateTime.of(1946, 10, 28, 0, 0);
 
     protected final static LocalTime LOCAL_TIME_UNO = LocalTime.of(7, 42);
 
