@@ -13,9 +13,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import it.algos.vaadtest.modules.beverage.Review;
+import it.algos.vaadtest.modules.beverage.ReviewModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,40 +34,40 @@ import static it.algos.vaadtest.application.TestCost.TAG_ABC;
  * Time: 08:04
  */
 @Route(value = TAG_ABC +"2")
-@Tag("prova-polymer")
-@HtmlImport("src/views/prova/prova-polymer.html")
-@HtmlImport("src/views/prova/prova-polymer2.html")//questo non funziona perché il Tag (unico) è 'prova-polymer'
+@Tag("prova-polymer2")
+@HtmlImport("src/views/prova/prova-polymer.html")//questo non funziona perché il Tag (unico) è 'prova-polymer2'
+@HtmlImport("src/views/prova/prova-polymer2.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Viewport("width=device-width")
-public class ProvaPolymer2 extends PolymerTemplate<ProvaPolymer2.MessagesModel> {
+public class ProvaPolymer2 extends PolymerTemplate<ReviewModel> {
 
 //    @Id("title")
 //    private H3 title;
 
-    @Id("first")
-    private TextField first;//solo campo vuoto
-
-    @Id("second")
-    private TextField second;//valore nel campo. Regolato dal Server e non modificabile
-
-    @Id("terzo")
-    private TextField terzo;//valore in una property separata passata tramite ModelloDati e non modificabile (quadre)
-
-    @Id("quarto")
-    private TextField quarto;//valore in una property separata passata tramite ModelloDati e modificabile (graffe)
-
-    @Id("buttons")
-    private FormButtonsBar buttons;
-
-    @Id("conferma1")
-    private Button conferma1;
-
-    @Id("conferma2")
-    private Button conferma2;
-
-    @Id("conferma3")
-    private Button conferma3;
+//    @Id("first")
+//    private TextField first;//solo campo vuoto
+//
+//    @Id("second")
+//    private TextField second;//valore nel campo. Regolato dal Server e non modificabile
+//
+//    @Id("terzo")
+//    private TextField terzo;//valore in una property separata passata tramite ModelloDati e non modificabile (quadre)
+//
+//    @Id("quarto")
+//    private TextField quarto;//valore in una property separata passata tramite ModelloDati e modificabile (graffe)
+//
+//    @Id("buttons")
+//    private FormButtonsBar buttons;
+//
+//    @Id("conferma1")
+//    private Button conferma1;
+//
+//    @Id("conferma2")
+//    private Button conferma2;
+//
+//    @Id("conferma3")
+//    private Button conferma3;
 
 //    @Id("email")
 //    private TextField email;
@@ -76,18 +80,18 @@ public class ProvaPolymer2 extends PolymerTemplate<ProvaPolymer2.MessagesModel> 
 
 
     public ProvaPolymer2() {
-        this.first.setValue("");
-        this.second.setValue("value");
-        this.terzo.setValue("terzo");
-        this.quarto.setValue("quarto");
-
-        conferma1 = new Button("Server");
-        conferma3.addClickListener(event -> conferma3());
-        List<Message> messages=new ArrayList<>();
-        messages.add(new Message("primo"));
-        messages.add(new Message("secondo"));
-        messages.add(new Message("terzo"));
-        getModel().setMessages(messages);
+//        this.first.setValue("");
+//        this.second.setValue("value");
+//        this.terzo.setValue("terzo");
+//        this.quarto.setValue("quarto");
+//
+//        conferma1 = new Button("Server");
+//        conferma3.addClickListener(event -> conferma3());
+        List<Review> listaElementi=new ArrayList<>();
+        listaElementi.add(new Review(27,"primo",17, LocalTime.of(3,12)));
+        listaElementi.add(new Review(33,"secondo",2, LocalTime.of(14,05)));
+        listaElementi.add(new Review(98,"ultimo",124, LocalTime.NOON));
+        getModel().setReviews(listaElementi);
     }
 
 
@@ -142,6 +146,14 @@ public class ProvaPolymer2 extends PolymerTemplate<ProvaPolymer2.MessagesModel> 
     @EventHandler
     private void handleClick3(@ModelItem ProvaModel modello) {
         System.out.println("Received a message: " + modello.getTerzonome());
+    }
+    @EventHandler
+    private void handleClick4(@ModelItem Review modello) {
+        System.out.println("Nome: " + ((Review)modello).getName());
+        System.out.println("Count: " + ((Review)modello).getCount());
+        System.out.println("Score: " + ((Review)modello).getScore());
+        Object alfa= ((Review)modello).getInizio();
+        System.out.println("Inizio: " + ((Review)modello).getInizio().toString());
     }
 
     public static class Message {

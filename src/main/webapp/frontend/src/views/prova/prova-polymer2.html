@@ -7,6 +7,56 @@
         prova di pazienza222
         <h1 id="header">Topolino secondo</h1>
 
+        <div class="reviews">
+            <template is="dom-repeat" items="[[reviews]]">
+                <div class="review">
+                    <div class="review__rating">
+                        <p class="review__score" data-score$="[[item.score]]">[[item.score]]</p>
+                        <p class="review__count">
+                            [[item.count]]
+                            <span>times tasted</span>
+                        </p>
+                    </div>
+                    <div class="review__pippox">
+                        alfe
+                        <vaadin-time-picker label="Arrival hour (hh:mm)" value="{{item.inizio.hour}}:{{item.inizio.minute}}">Pippoz
+                        </vaadin-time-picker>
+                    </div>
+<!--                    <div class="review__pippox">-->
+<!--                        betta-->
+<!--                        <vaadin-time-picker label="Arrival hour (hh:mm)" value="[[item.inizio]]">Pippoz-->
+<!--                        </vaadin-time-picker>-->
+<!--                    </div>-->
+<!--                    <div class="review__pippox">-->
+<!--                        deltax-->
+<!--                        <vaadin-time-picker label="Arrival hour (hh:mm)" value='[[item.inizio]]'>Pippoz-->
+<!--                        </vaadin-time-picker>-->
+<!--                    </div>-->
+<!--                    <div class="review__pippox">-->
+<!--                        gamman-->
+<!--                        <vaadin-time-picker label="Arrival hour (hh:mm)" value={{item.inizio}}>Pippoz-->
+<!--                        </vaadin-time-picker>-->
+<!--                    </div>-->
+                    <div class="review__details">
+                        <h4 class="review__name">[[item.name]]</h4>
+                        <template is="dom-if" if="[[item.category]]">
+                            <p class="review__category" style$="--category: [[item.category.id]];">
+                                [[item.category.name]]</p>
+                        </template>
+                        <template is="dom-if" if="[[!item.category]]">
+                            <p class="review__category" style="--category: -1;">Undefined</p>
+                        </template>
+                    </div>
+                    <vaadin-button on-click="handleClick4" class="review__edit" theme="tertiary">
+                        <iron-icon icon="lumo:edit"></iron-icon>
+                        <span>Edit</span>
+                    </vaadin-button>
+                </div>
+            </template>
+            <h1 id="header2">Forse</h1>
+        </div>
+
+
         <!--area dei bottoni-->
         <div style="display: flex; flex-direction:row; align-items: center;  justify-content: center; margin-top:2em">
 

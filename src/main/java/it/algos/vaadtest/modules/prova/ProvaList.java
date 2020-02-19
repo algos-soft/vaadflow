@@ -251,6 +251,24 @@ public class ProvaList extends AGridViewList {
 
         topPlaceholder.add(creaPopup());
 
+        Button polymer = new Button("Polymer", new Icon(VaadinIcon.ASTERISK));
+        polymer.getElement().setAttribute("theme", "secondary");
+        polymer.addClassName("view-toolbar__button");
+        polymer.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC)));
+        topPlaceholder.add(polymer);
+
+        Button polymer2 = new Button("Polymer2", new Icon(VaadinIcon.ASTERISK));
+        polymer2.getElement().setAttribute("theme", "error");
+        polymer2.addClassName("view-toolbar__button");
+        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "2")));
+        topPlaceholder.add(polymer2);
+
+        Button polymer3 = new Button("polymer3", new Icon(VaadinIcon.ASTERISK));
+        polymer3.getElement().setAttribute("theme", "error");
+        polymer3.addClassName("view-toolbar__button");
+        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "3")));
+        topPlaceholder.add(polymer3);
+
         Button testVistaSenza = new Button("Test senza parametri", new Icon(VaadinIcon.ASTERISK));
         testVistaSenza.getElement().setAttribute("theme", "secondary");
         testVistaSenza.addClassName("view-toolbar__button");
@@ -306,24 +324,6 @@ public class ProvaList extends AGridViewList {
 
         testVistaMultipli.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_VIEW_FORM, query2)));
         topPlaceholder.add(testVistaMultipli);
-
-        Button polymer = new Button("Polymer", new Icon(VaadinIcon.ASTERISK));
-        polymer.getElement().setAttribute("theme", "secondary");
-        polymer.addClassName("view-toolbar__button");
-        polymer.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC)));
-        topPlaceholder.add(polymer);
-
-        Button polymer2 = new Button("Polymer2", new Icon(VaadinIcon.ASTERISK));
-        polymer2.getElement().setAttribute("theme", "error");
-        polymer2.addClassName("view-toolbar__button");
-        polymer2.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "2")));
-        topPlaceholder.add(polymer2);
-
-        Button polymer3 = new Button("polymer3", new Icon(VaadinIcon.ASTERISK));
-        polymer3.getElement().setAttribute("theme", "error");
-        polymer3.addClassName("view-toolbar__button");
-        polymer3.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate(TAG_ABC + "3")));
-        topPlaceholder.add(polymer3);
 
         Button una = new Button("una", new Icon(VaadinIcon.ASTERISK));
         una.getElement().setAttribute("theme", "error");

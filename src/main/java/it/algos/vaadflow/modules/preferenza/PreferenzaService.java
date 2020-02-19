@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.preferenza;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.enumeration.EAPrefType;
@@ -24,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.*;
-import static it.algos.vaadflow.application.FlowCost.START_TIME;
 import static it.algos.vaadflow.application.FlowVar.projectName;
 import static it.algos.vaadflow.application.FlowVar.usaCompany;
 
@@ -353,12 +351,38 @@ public class PreferenzaService extends AService {
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Preferenza findByKeyUnica(String prefCode) {
+    public Preferenza findByKeyUnica2(String prefCode) {
+        return findByKeyUnica(prefCode, VUOTA);
+    }// end of method
+
+
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     * <p>
+     * Controlla quante entities ci sono con lo stesso 'code' <br>
+     * Cerca la prima usando il campo 'code' <br>
+     * Se la trova, controlla se è companySpecifica=true <br>
+     * Se il flag è falso, usa la preferenza trovata che dovrebbe essere unica <br>
+     * Controlla che sia unica altrimenti lancia un errore <br>
+     * Se il flag è vero, cerca la company corrente <br>
+     * Se non la trova, utilizza il nome breve dell'applicazione <br>
+     * Costruisce la chiave di ricerca per l'ID <br>
+     * Cerca nel campo keyID <br>
+     * Se non trova una singola entity con prefCode, controlla quante ce ne sono <br>
+     * Se sono zero, c'è un errore <br>
+     * Se sono più di una,
+     *
+     * @param prefCode (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Preferenza findByKeyUnica(String prefCode, String companyPrefix) {
         Preferenza pref = null;
         String keyId = "";
         Company company = null;
         String prefix = "";
         int numPrefCode = 0;
+        List<Preferenza> lista;
 
         //--Controlla quante entities ci sono con lo stesso 'code'
         numPrefCode = repository.countByCode(prefCode);
@@ -375,16 +399,21 @@ public class PreferenzaService extends AService {
         if (numPrefCode == 1) {
             pref = repository.findByCode(prefCode);
         } else {
-            pref = repository.findFirstByCode(prefCode);
+            lista = repository.findAllByCode(prefCode);
+//            pref = repository.findFirstByCode(prefCode);
             if (pref.companySpecifica) {
-                //--Se il flag è vero, cerca la company corrente
-                company = getCompany();
-
-                //--Se non la trova, utilizza il nome breve dell'applicazione
-                if (company != null) {
-                    prefix = company.code;
+                if (text.isValid(companyPrefix)) {
+                    prefix = companyPrefix;
                 } else {
-                    prefix = projectName;
+                    //--Se il flag è vero, cerca la company corrente
+                    company = getCompany();
+
+                    //--Se non la trova, utilizza il nome breve dell'applicazione
+                    if (company != null) {
+                        prefix = company.code;
+                    } else {
+                        prefix = projectName;
+                    }// end of if/else cycle
                 }// end of if/else cycle
 
                 //--Costruisce la chiave di ricerca per l'ID
@@ -578,8 +607,13 @@ public class PreferenzaService extends AService {
 
 
     public Object getValue(String keyCode) {
+        return getValue(keyCode, VUOTA);
+    } // end of method
+
+
+    public Object getValue(String keyCode, String companyPrefix) {
         Object value = null;
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null) {
             value = pref.getType().bytesToObject(pref.value);
@@ -590,19 +624,19 @@ public class PreferenzaService extends AService {
 
 
     public String getStr(IAPreferenza eaPref) {
-        return getStr(eaPref.getCode(), (String) eaPref.getValue());
+        return getStr(eaPref.getCode(), (String) eaPref.getValue(), VUOTA);
     } // end of method
 
 
     public String getStr(String keyCode) {
-        return getStr(keyCode, "");
+        return getStr(keyCode, VUOTA, VUOTA);
     } // end of method
 
 
-    public String getStr(String keyCode, String defaultValue) {
+    public String getStr(String keyCode, String defaultValue, String companyPrefix) {
         String valoreTesto = defaultValue;
         Object value = null;
-        Preferenza pref = findByKeyUnica(keyCode);
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null) {
             if (pref.type == EAPrefType.enumeration) {
@@ -776,7 +810,20 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena regolata (non salvata)
      */
     public Preferenza setValue(String keyCode, Object value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        return setValue(keyCode, value, VUOTA);
+    } // end of method
+
+
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
+    public Preferenza setValue(String keyCode, Object value, String companyPrefix) {
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null) {
             pref.setValue(pref.getType().objectToBytes(value));
@@ -795,7 +842,20 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena regolata (non salvata)
      */
     public Preferenza setBool(String keyCode, boolean value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        return setBool(keyCode, value, VUOTA);
+    } // end of method
+
+
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
+    public Preferenza setBool(String keyCode, boolean value, String companyPrefix) {
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null && pref.type == EAPrefType.bool) {
             pref = this.setValue(keyCode, value);
@@ -814,7 +874,20 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena regolata (non salvata)
      */
     public Preferenza setInt(String keyCode, int value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        return setInt(keyCode, value, VUOTA);
+    } // end of method
+
+
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
+    public Preferenza setInt(String keyCode, int value, String companyPrefix) {
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null && pref.type == EAPrefType.integer) {
             pref = this.setValue(keyCode, value);
@@ -833,7 +906,20 @@ public class PreferenzaService extends AService {
      * @return la nuova entity appena regolata (non salvata)
      */
     public Preferenza setDate(String keyCode, LocalDateTime value) {
-        Preferenza pref = findByKeyUnica(keyCode);
+        return setDate(keyCode, value, VUOTA);
+    } // end of method
+
+
+    /**
+     * Regola il valore della entity che NON viene salvata <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return la nuova entity appena regolata (non salvata)
+     */
+    public Preferenza setDate(String keyCode, LocalDateTime value, String companyPrefix) {
+        Preferenza pref = findByKeyUnica(keyCode, companyPrefix);
 
         if (pref != null && pref.type == EAPrefType.localdatetime) {
             pref = this.setValue(keyCode, value);

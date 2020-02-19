@@ -678,4 +678,24 @@ public class ATextServiceTest extends ATest {
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
+
+    /**
+     * Formattazione di un intero con un decimale.
+     * <p>
+     * Il numero è stato moltiplicato per 10 e memorizzato come intero <br>
+     * Va diviso per 10 ed inserita la virgola <br>
+     *
+     * @param value da formattare (intero * 10)
+     *
+     * @return stringa formattata
+     */
+    @Test
+    public void formatOneDecimal() {
+        sorgenteIntero = 234;
+        previsto = "23,4";
+
+        ottenuto= service.formatOneDecimal(sorgenteIntero);
+        assertEquals(previsto, ottenuto);
+    }// end of single test
+
 }// end of class

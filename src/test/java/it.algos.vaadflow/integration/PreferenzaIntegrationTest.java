@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static it.algos.vaadflow.application.FlowCost.USA_TEXT_EDIT_BUTTON;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -59,6 +61,7 @@ public class PreferenzaIntegrationTest extends ATest {
         Assert.assertTrue(ottenutoBooleano);
     }// end of single test
 
+
     @Test
     public void intero() {
         String keyCode = "beta";
@@ -73,6 +76,7 @@ public class PreferenzaIntegrationTest extends ATest {
         ottenutoBooleano = pref.delete(keyCode);
         Assert.assertTrue(ottenutoBooleano);
     }// end of single test
+
 
     @Test
     public void lungo() {
@@ -128,5 +132,13 @@ public class PreferenzaIntegrationTest extends ATest {
 //        ottenutoBooleano = (boolean) service.getValue(keyCode);
 //        assertEquals(previstoBooleano, ottenutoBooleano);
 //    }// end of single test
+
+
+    @Test
+    public void preferenzeMultiple() {
+        sorgente = USA_TEXT_EDIT_BUTTON;
+        ottenutoBooleano = pref.isBool(sorgente);
+    }// end of single test
+
 
 }// end of class

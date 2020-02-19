@@ -22,8 +22,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_ABC;
  * Time: 07:52
  */
 @Route(value = TAG_ABC + "3")
-@Tag("prova-polymer3")
-@HtmlImport("src/views/prova/prova-polymer3.html")
+@Tag("prova-list")
+@HtmlImport("src/views/prova/prova-list.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Viewport("width=device-width")
@@ -31,11 +31,11 @@ public class ProvaPolymer3 extends PolymerTemplate<ProvaPolymer3.ProvaModel> {
 
     private ProvaModel model = getModel();
 
-    @Id("first")
-    private EditIscrizione first;
-
-    @Id("second")
-    private EditIscrizione second;
+//    @Id("first")
+//    private EditIscrizione first;
+//
+//    @Id("second")
+//    private EditIscrizione second;
 
     public ProvaPolymer3() {
 
@@ -61,8 +61,8 @@ public class ProvaPolymer3 extends PolymerTemplate<ProvaPolymer3.ProvaModel> {
 
     @EventHandler
     private void handleClickRegistra() {
-        String alfa = first.getModello().getInizio();
-        String beta = second.getModello().getInizio();
+//        String alfa = first.getModello().getInizio();
+//        String beta = second.getModello().getInizio();
         System.err.println("milite uno ");
     }// end of method
 
