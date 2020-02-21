@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.helger.commons.mock.CommonsAssert.assertEquals;
+import static it.algos.vaadflow.application.FlowCost.MAX_RIGHE_GRID;
 import static it.algos.vaadflow.application.FlowCost.USA_TEXT_EDIT_BUTTON;
 
 /**
@@ -136,9 +138,65 @@ public class PreferenzaIntegrationTest extends ATest {
 
     @Test
     public void preferenzeMultiple() {
-        sorgente = USA_TEXT_EDIT_BUTTON;
-        ottenutoBooleano = pref.isBool(sorgente);
+        sorgente = MAX_RIGHE_GRID;
+
+        previstoIntero = 0;
+        ottenutoIntero = pref.getInt(sorgente);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 37;
+        ottenutoIntero = pref.getInt(sorgente,37);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 25;
+        ottenutoIntero = pref.getInt(sorgente, "demo");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, "algos");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, "Algos");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 0;
+        ottenutoIntero = pref.getInt(sorgente, "ALGOS");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, 37,"algos");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, 37,"Algos");
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 37;
+        ottenutoIntero = pref.getInt(sorgente, 37,"ALGOS");
+        assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
+    @Test
+    public void preferenzeMultiple2() {
+        sorgente = USA_TEXT_EDIT_BUTTON;
+
+        previstoBooleano = false;
+        ottenutoBooleano = pref.isBool(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+
+        previstoBooleano = false;
+        ottenutoBooleano = pref.isBool(sorgente, "demo");
+        assertEquals(previstoBooleano, ottenutoBooleano);
+
+        previstoBooleano = true;
+        ottenutoBooleano = pref.isBool(sorgente, "algos");
+        assertEquals(previstoBooleano, ottenutoBooleano);
+
+        previstoBooleano = true;
+        ottenutoBooleano = pref.isBool(sorgente, "test");
+        assertEquals(previstoBooleano, ottenutoBooleano);
+
+    }// end of single test
 
 }// end of class

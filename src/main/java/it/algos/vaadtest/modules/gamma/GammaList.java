@@ -4,28 +4,28 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
-import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
-import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 import org.vaadin.klaudeta.PaginatedGrid;
+
 import javax.annotation.PostConstruct;
+
+import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 
 /**
  * Project vaadtest <br>
@@ -113,7 +113,7 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Secured("user")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", sortProperty = "ordine", roleTypeVisibility = EARoleType.developer)
 public class GammaList extends AGridViewList {
 
 
@@ -132,18 +132,20 @@ public class GammaList extends AGridViewList {
         super(service, Gamma.class);
     }// end of Vaadin/@Route constructor
 
-    /**
-     * Crea effettivamente il Component Grid <br>
-     * <p>
-     * Può essere Grid oppure PaginatedGrid <br>
-     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
-     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
-     * Oppure queste possono essere fatte nella sottoclasse, se non sono standard <br>
-     */
-    @Override
-    protected Grid creaGridComponent() {
-        return new PaginatedGrid<Gamma>();
-    }// end of method
+
+//    /**
+//     * Crea effettivamente il Component Grid <br>
+//     * <p>
+//     * Può essere Grid oppure PaginatedGrid <br>
+//     * DEVE essere sovrascritto nella sottoclasse con la PaginatedGrid specifica della Collection <br>
+//     * DEVE poi invocare il metodo della superclasse per le regolazioni base della PaginatedGrid <br>
+//     * Oppure queste possono essere fatte nella sottoclasse, se non sono standard <br>
+//     */
+//    @Override
+//    protected Grid creaGridComponent() {
+//        return new PaginatedGrid<Gamma>();
+//    }// end of method
+
 
     /**
      * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
@@ -161,6 +163,7 @@ public class GammaList extends AGridViewList {
         //super.inizia();
     }// end of method
 
+
     /**
      * Regola i parametri del browser per una view costruita da @Route <br>
      * <p>
@@ -176,6 +179,7 @@ public class GammaList extends AGridViewList {
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         super.setParameter(event, parameter);
     }// end of method
+
 
     /**
      * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
@@ -193,6 +197,7 @@ public class GammaList extends AGridViewList {
         super.beforeEnter(beforeEnterEvent);
     }// end of method
 
+
     /**
      * Preferenze specifiche di questa view <br>
      * <p>
@@ -204,8 +209,9 @@ public class GammaList extends AGridViewList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaSecondTopPlaceholder=true;
+        super.usaSecondTopPlaceholder = true;
     }// end of method
+
 
     /**
      * Costruisce gli oggetti base (placeholder) di questa view <br>
@@ -220,6 +226,7 @@ public class GammaList extends AGridViewList {
         super.fixLayout();
     }// end of method
 
+
     /**
      * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
      * <p>
@@ -232,6 +239,7 @@ public class GammaList extends AGridViewList {
     protected void creaAlertLayout() {
         super.creaAlertLayout();
     }// end of method
+
 
     /**
      * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
@@ -269,6 +277,7 @@ public class GammaList extends AGridViewList {
 
     }// end of method
 
+
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
@@ -281,6 +290,7 @@ public class GammaList extends AGridViewList {
         //filtroComboBox.setPlaceholder("nazionalità ...");
         //filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca")));
     }// end of method
+
 
     /**
      * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
@@ -296,6 +306,7 @@ public class GammaList extends AGridViewList {
         super.creaFiltri();
     }// end of method
 
+
     /**
      * Aggiorna i filtri specifici della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
      * <p>
@@ -305,6 +316,7 @@ public class GammaList extends AGridViewList {
     protected void updateFiltriSpecifici() {
         super.updateFiltriSpecifici();
     }// end of method
+
 
     /**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
@@ -317,6 +329,7 @@ public class GammaList extends AGridViewList {
     protected void addListeners() {
         super.addListeners();
     }// end of method
+
 
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
@@ -331,7 +344,7 @@ public class GammaList extends AGridViewList {
      * @param entityBean item corrente, null se nuova entity
      */
     @Override
-     protected void openDialog(AEntity entityBean) {
+    protected void openDialog(AEntity entityBean) {
         appContext.getBean(GammaDialog.class, service, entityClazz).open(entityBean, isEntityModificabile ? EAOperation.edit : EAOperation.showOnly, this::save, this::delete);
     }// end of method
 

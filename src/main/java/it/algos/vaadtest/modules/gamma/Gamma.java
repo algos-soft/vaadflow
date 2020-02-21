@@ -89,7 +89,7 @@ public class Gamma extends AEntity {
     @Indexed()
     @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 3)
-    @AIColumn(name = "#", widthEM = 3)
+    @AIColumn(name = "#", widthEM = 3, sortable = true)
     public int ordine;
 
     /**

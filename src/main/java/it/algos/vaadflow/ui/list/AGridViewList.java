@@ -15,7 +15,9 @@ import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.wrapper.AFiltro;
+import it.algos.vaadtest.modules.gamma.GammaList;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.ArrayList;
@@ -317,7 +319,7 @@ public abstract class AGridViewList extends ALayoutViewList {
         int intValue;
 
         //--ricerca iniziale
-        if (searchType == EASearch.editField && searchField != null&&text.isValid(searchProperty)) {
+        if (searchType == EASearch.editField && searchField != null && text.isValid(searchProperty)) {
             type = annotation.getFormType(entityClazz, searchProperty);
 
             switch (type) {
@@ -367,8 +369,13 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     @Override
     public void updateGrid() {
+        Sort sort = annotation.getSort(GammaList.class);
         if (array.isValid(filtri)) {
-            items = mongo.findAllByProperty(entityClazz, filtri);
+            if (sort != null) {
+                items = mongo.findAllByProperty(entityClazz, filtri, sort);
+            } else {
+                items = mongo.findAllByProperty(entityClazz, filtri);
+            }// end of if/else cycle
         } else {
             items = service != null ? service.findAll() : null;
         }// end of if/else cycle

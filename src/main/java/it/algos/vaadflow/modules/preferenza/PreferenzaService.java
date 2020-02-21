@@ -381,14 +381,14 @@ public class PreferenzaService extends AService {
         String keyId = "";
         Company company = null;
         String prefix = "";
-        int numPrefCode = 0;
+//        int numPrefCode = 0;
         List<Preferenza> lista;
 
         //--Controlla quante entities ci sono con lo stesso 'code'
-        numPrefCode = repository.countByCode(prefCode);
+        lista = repository.findAllByCode(prefCode);
 
         //--Non ne ha trovate e lancia un errore
-        if (numPrefCode == 0) {
+        if (lista.size() == 0) {
             log.error("Manca la preferenza: " + prefCode);
             return null;
         }// end of if cycle
@@ -396,14 +396,13 @@ public class PreferenzaService extends AService {
         //--Se ce n'è una sola, usa quella
         //--Se ne trova più di una, DEVONO essere companySpecifica=true
         //--Prende la prima e costruisce la chaive di ricerca per la keyID
-        if (numPrefCode == 1) {
-            pref = repository.findByCode(prefCode);
+        if (lista.size() == 1) {
+            pref = lista.get(0);
         } else {
-            lista = repository.findAllByCode(prefCode);
 //            pref = repository.findFirstByCode(prefCode);
-            if (pref.companySpecifica) {
+            if (lista != null && lista.get(0).companySpecifica) {
                 if (text.isValid(companyPrefix)) {
-                    prefix = companyPrefix;
+                    prefix = text.primaMinuscola(companyPrefix);
                 } else {
                     //--Se il flag è vero, cerca la company corrente
                     company = getCompany();
@@ -411,9 +410,7 @@ public class PreferenzaService extends AService {
                     //--Se non la trova, utilizza il nome breve dell'applicazione
                     if (company != null) {
                         prefix = company.code;
-                    } else {
-                        prefix = projectName;
-                    }// end of if/else cycle
+                    }// end of if cycle
                 }// end of if/else cycle
 
                 //--Costruisce la chiave di ricerca per l'ID
@@ -663,8 +660,13 @@ public class PreferenzaService extends AService {
 
 
     public Boolean isBool(String keyCode) {
+        return isBool(keyCode, VUOTA);
+    } // end of method
+
+
+    public Boolean isBool(String keyCode, String companyPrefix) {
         boolean status = false;
-        Object value = getValue(keyCode);
+        Object value = getValue(keyCode, companyPrefix);
 
         if (value != null) {
             if (value instanceof Boolean) {
@@ -691,8 +693,18 @@ public class PreferenzaService extends AService {
 
 
     public int getInt(String keyCode, int defaultValue) {
+        return getInt(keyCode, defaultValue, VUOTA);
+    } // end of method
+
+
+    public int getInt(String keyCode, String companyPrefix) {
+        return getInt(keyCode, 0, companyPrefix);
+    } // end of method
+
+
+    public int getInt(String keyCode, int defaultValue, String companyPrefix) {
         int valoreIntero = defaultValue;
-        Object value = getValue(keyCode);
+        Object value = getValue(keyCode, companyPrefix);
 
         if (value != null) {
             if (value instanceof Integer) {
@@ -938,8 +950,21 @@ public class PreferenzaService extends AService {
      * @return true se la entity è stata salvata
      */
     public boolean saveValue(String keyCode, Object value) {
+        return saveValue(keyCode, value, VUOTA);
+    } // end of method
+
+
+    /**
+     * Regola il valore della entity e la salva <br>
+     *
+     * @param keyCode codice di riferimento (obbligatorio)
+     * @param value   (obbligatorio) memorizza tutto in byte[]
+     *
+     * @return true se la entity è stata salvata
+     */
+    public boolean saveValue(String keyCode, Object value, String companyPrefix) {
         boolean salvata = false;
-        Preferenza entity = setValue(keyCode, value);
+        Preferenza entity = setValue(keyCode, value, companyPrefix);
 
         if (entity != null) {
             entity = (Preferenza) this.save(entity);

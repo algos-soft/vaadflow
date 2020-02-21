@@ -17,6 +17,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import static it.algos.vaadflow.application.FlowCost.SPAZIO;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -279,7 +281,7 @@ public class ADateServiceTest extends ATest {
      */
     @Test
     public void getShort() {
-        previsto = "05-04-14";
+        previsto = "5-10-14";
 
         ottenuto = service.getShort(LOCAL_DATE_TIME_DUE);
         assertEquals(ottenuto, previsto);
@@ -287,6 +289,47 @@ public class ADateServiceTest extends ATest {
         System.out.println("Restituisce la data (senza tempo) in forma breve: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
         System.out.println("");
     }// end of single test
+
+
+    /**
+     * Restituisce la data completa di tempo
+     * <p>
+     * 5-ott-14 7:04
+     * <p>
+     * Returns a string representation of the date
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <b>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    @Test
+    public void getDateTime() {
+        LocalDateTime local;
+        previsto = "5-10-14 7:04";
+
+        ottenuto = service.getDateTime(LOCAL_DATE_TIME_DUE);
+        assertEquals(ottenuto, previsto);
+        System.out.println("");
+        System.out.println("Restituisce la data (con tempo) in forma breve: " + LOCAL_DATE_TIME_DUE + " -> " + ottenuto);
+        System.out.println("");
+
+        local = LocalDateTime.of(2020, 10, 29, 7, 04);
+        previsto = "29-10-20 7:04";
+        ottenuto = service.getDateTime(local);
+        assertEquals(ottenuto, previsto);
+
+        local = LocalDateTime.of(2020, 2, 5, 7, 04);
+        previsto = "5-2-20 7:04";
+        ottenuto = service.getDateTime(local);
+        assertEquals(ottenuto, previsto);
+
+        local = LocalDateTime.of(2020, 1, 17, 7, 04);
+        previsto = "17-1-20 7:04";
+        ottenuto = service.getDateTime(local);
+        assertEquals(ottenuto, previsto);
+    }// end of method
 
 
     @SuppressWarnings("javadoc")
