@@ -15,7 +15,6 @@ import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.wrapper.AFiltro;
-import it.algos.vaadtest.modules.gamma.GammaList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -369,7 +368,7 @@ public abstract class AGridViewList extends ALayoutViewList {
      */
     @Override
     public void updateGrid() {
-        Sort sort = annotation.getSort(GammaList.class);
+        Sort sort = annotation.getSort(this.getClass());
         if (array.isValid(filtri)) {
             if (sort != null) {
                 items = mongo.findAllByProperty(entityClazz, filtri, sort);
