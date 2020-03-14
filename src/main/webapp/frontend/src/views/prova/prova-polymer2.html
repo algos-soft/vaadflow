@@ -1,5 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <dom-module id="prova-polymer2">
+    <!--Doppia quadra è 'One way binding' mentre doppia graffa è 'Two way binding'-->
     <template>
         <div class="pippo">
             prova di pazienza
@@ -7,8 +8,14 @@
         prova di pazienza222
         <h1 id="header">Topolino secondo</h1>
 
+        <vaadin-button id="newReview" style=" color:orangered; background-color: gainsboro" >
+            <iron-icon icon="lumo:plus"></iron-icon><span></span>
+        </vaadin-button>
+
+        <vaadin-combo-box id="inizio" selectedValue="[[selectedPlatformId]]" label="Inizio" on-value-changed="change" items="[[items]]"></vaadin-combo-box>
+
         <div class="reviews">
-            <template is="dom-repeat" items="[[reviews]]">
+            <template is="dom-repeat" items="{{reviews}}">
                 <div class="review">
                     <div class="review__rating">
                         <p class="review__score" data-score$="[[item.score]]">[[item.score]]</p>
@@ -19,7 +26,7 @@
                     </div>
                     <div class="review__pippox">
                         alfe
-                        <vaadin-time-picker label="Arrival hour (hh:mm)" value="{{item.inizio.hour}}:{{item.inizio.minute}}">Pippoz
+                        <vaadin-time-picker label="Arrival hour (hh:mm)" value="{{item.inizio}}" on-value-changed="handleChange">
                         </vaadin-time-picker>
                     </div>
 
@@ -91,7 +98,30 @@
             }
         }
 
+        class EventHandler extends Polymer.Element {
+            static get is() { return 'event-handler' }
+        }
         customElements.define(HelloWorld2.is, HelloWorld2);
+        // customElements.whenDefined('vaadin-combo-box').then(function () {
+        //     const combo = document.querySelector('vaadin-combo-box');
+        //
+        //     combo.dataProvider = function () {
+        //         var xhr = new XMLHttpRequest();
+        //         xhr.onload = function () {
+        //             const response = JSON.parse(xhr.responseText);
+        //             // setTimeout(function () {
+        //             //     callback(response.result, response.size);
+        //             // }, 2000);
+        //         };
+        //         // var index = params.page * params.pageSize;
+        //         // const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
+        //         //     '&count=' + params.pageSize +
+        //         //     '&filter=' + params.filter;
+        //         const  url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=4&count=23';
+        //         xhr.open('GET', url, true);
+        //         xhr.send();
+        //     };
+        // });
     </script>
 
 </dom-module>

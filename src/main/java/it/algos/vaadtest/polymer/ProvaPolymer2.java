@@ -5,14 +5,12 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.component.polymertemplate.EventHandler;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.ModelItem;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.polymertemplate.*;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadtest.modules.beverage.Review;
 import it.algos.vaadtest.modules.beverage.ReviewModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -88,21 +86,43 @@ public class ProvaPolymer2 extends PolymerTemplate<ReviewModel> {
 //        conferma1 = new Button("Server");
 //        conferma3.addClickListener(event -> conferma3());
         List<Review> listaElementi=new ArrayList<>();
-        listaElementi.add(new Review(27,"primo",17, LocalTime.of(3,12)));
-        listaElementi.add(new Review(33,"secondo",2, LocalTime.of(14,05)));
-        listaElementi.add(new Review(98,"ultimo",124, LocalTime.NOON));
+        listaElementi.add(new Review(27,"primo",17, LocalTime.of(3,12).toString()));
+        listaElementi.add(new Review(33,"secondo",2, LocalTime.of(14,05).toString()));
+        listaElementi.add(new Review(98,"ultimo",124, LocalTime.NOON.toString()));
         getModel().setReviews(listaElementi);
+
+
+        List<String> listaInizio=new ArrayList<>();
+        listaInizio.add("10:30");
+        listaInizio.add("10:45");
+        listaInizio.add("11:00");
+        listaInizio.add("11:15");
+        listaInizio.add("11:30");
+
+        getModel().setItems(listaInizio);
+        getModel().setSelectedPlatformId("10:45");
     }
 
+    @EventHandler
+    public void change33(@EventData("element.value") ReviewModel betta) {
+        int a = 87;
+    }
+    @EventHandler
+    public void change(@EventData("element.value") String input) {
+        String selectedPlatformId = this.getModel().getSelectedPlatformId();
+        int a = 87;
+    }
 
     @EventHandler
-    public void confermaold() {
+    public void change2(@ModelItem ReviewModel modello) {
+//        Object alfa = modello.getItems();
+//        Object beta = modello.getInput();
+        int a = 87;
 //        ProvaModel modello = getModel();
 //        String alfa = modello.getTerzonome();
 //        String beta = modello.getQuartonome();
 //        int a = 87;
     }
-
 
     @EventHandler
     public void conferma(@ModelItem ProvaModel modello) {
@@ -153,7 +173,39 @@ public class ProvaPolymer2 extends PolymerTemplate<ReviewModel> {
         System.out.println("Count: " + ((Review)modello).getCount());
         System.out.println("Score: " + ((Review)modello).getScore());
         Object alfa= ((Review)modello).getInizio();
-        System.out.println("Inizio: " + ((Review)modello).getInizio().toString());
+        System.out.println("Inizio: " + ((Review)modello).getInizio());
+    }
+
+
+    @EventHandler
+    private void handleChange2(@ModelItem Review modello) {
+        System.out.println("Nome: " + ((Review)modello).getName());
+        System.out.println("Count: " + ((Review)modello).getCount());
+        System.out.println("Score: " + ((Review)modello).getScore());
+        Object alfa= ((Review)modello).getInizio();
+        System.out.println("Inizio: " + ((Review)modello).getInizio());
+        ReviewModel modelloX= (ReviewModel)getModel();
+        Object alfetta= modelloX.getReviews();
+        Object beretta= modelloX.getItems();
+        int a=87;
+    }
+
+
+
+    @EventHandler
+    public void handleChange(@RepeatIndex int itemIndex) {
+
+        int a=87;
+
+    }
+
+
+    @EventHandler
+    private void handleChange7() {
+        ReviewModel modelloX= (ReviewModel)getModel();
+        Object alfetta= modelloX.getReviews();
+        Object beretta= modelloX.getItems();
+        int a=87;
     }
 
     public static class Message {
