@@ -180,7 +180,6 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
      * <p>
      * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>
      * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
-     * Qui va tutta la logica inizale della view <br>
      * Può essere sovrascritto, per costruire diversamente la view <br>
      * Invocare PRIMA il metodo della superclasse <br>
      *

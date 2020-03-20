@@ -73,8 +73,8 @@ public class BetaDialog extends AViewDialog<Beta> {
      * Sovrascritto nella sottoclasse
      */
     @Override
-    protected void fixLayout() {
-        super.fixLayout();
+    protected void fixLayoutFinal() {
+        super.fixLayoutFinal();
 
 //        Component comp = creaSelect();
 //        getFormLayout().add(comp);

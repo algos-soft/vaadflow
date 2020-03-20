@@ -197,7 +197,7 @@ public class ProvaDialog extends AViewDialog<Prova> {
      * Sovrascritto nella sottoclasse
      */
     @Override
-    protected void fixLayout() {
+    protected void fixLayoutFinal() {
 //        Object beta = StaticContextAccessor.getBean(ADialog.class);
         getFormLayout().add(new Label("Prova"));
         getFormLayout().add(new Button("Click", event -> paperino()));
