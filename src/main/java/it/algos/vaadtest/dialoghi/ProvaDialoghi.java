@@ -5,14 +5,15 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import it.algos.vaadflow.service.AAvvisoService;
 import it.algos.vaadflow.service.ADialogoService;
+import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.dialog.AvvisoConferma;
 import it.algos.vaadflow.ui.dialog.AvvisoSemplice;
 import it.algos.vaadflow.ui.dialog.DialogoConferma;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoDueBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoUnoBeanPolymer;
 import it.algos.vaadflow.ui.dialog.polymer.bean.DialogoZeroBeanPolymer;
-import it.algos.vaadflow.ui.MainLayout14;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -31,6 +32,9 @@ public class ProvaDialoghi extends VerticalLayout {
 
     @Autowired
     protected ADialogoService dialogoService;
+
+    @Autowired
+    protected AAvvisoService avvisoService;
 
     Annulla azioneAnnulla = new Annulla();
 
@@ -54,6 +58,7 @@ public class ProvaDialoghi extends VerticalLayout {
         nuovoDialogoBean();
         nuovoDialogoBeanUnBottone();
         nuovoDialogoBeanDueBottoni();
+        nuovissimoAvviso();
     }// end of constructor
 
 
@@ -236,6 +241,33 @@ public class ProvaDialoghi extends VerticalLayout {
             this.add(dialogo);
         });//end of lambda expressions and anonymous inner class
         layout.add(label, button);
+        this.add(layout);
+    }// end of method
+
+
+    /**
+     * Nuovissimo avviso/dialogo, completamente riscritto con un bottone
+     */
+    public void nuovissimoAvviso() {
+        HorizontalLayout layout = new HorizontalLayout();
+        this.setSpacing(true);
+        String testo = "Sempre lo stesso testo";
+
+        Label label = new Label("Nuovissimo avviso bean() con un bottone: ");
+        Button button = new Button("Bottone info");
+        button.addClickListener(e -> {
+            avvisoService.info(this, testo);
+        });//end of lambda expressions and anonymous inner class
+        Button button2 = new Button("Bottone warn");
+        button2.addClickListener(e -> {
+            avvisoService.warn(this, testo);
+        });//end of lambda expressions and anonymous inner class
+        Button button3 = new Button("Bottone error");
+        button3.addClickListener(e -> {
+            avvisoService.error(this, testo);
+        });//end of lambda expressions and anonymous inner class
+
+        layout.add(label, button, button2, button3);
         this.add(layout);
     }// end of method
 

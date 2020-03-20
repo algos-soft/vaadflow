@@ -1,6 +1,5 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 
 <!--form centrato orizzontalmente nella pagina, contiene tutto-->
@@ -15,16 +14,20 @@
         <vaadin-dialog id="dialog">
             <template>
                 <!--prima riga (opzionale)-->
-                <div id="header" style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]];">
+                <div id="header"
+                     style="height:[[heightHeader]]; width: [[width]]; display: flex; flex-direction:row; align-items: center;  background-color:[[backgroundColorHeader]]; color:[[foregroundColorHeader]];">
                     <h3>[[headerText]]</h3>
                 </div>
                 <!--seconda riga (obbligatoria)-->
-                <div id="body" style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]];">
+                <div id="body"
+                     style="height:[[heightBody]]; width: [[width]]; display: flex; flex-direction:row; align-items: center; background-color:[[backgroundColorBody]]; color:[[foregroundColorBody]];">
                     <div>[[bodyText]]</div>
                 </div>
                 <!--terza riga (obbligatoria)-->
-                <div id="footer" style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:column; align-items: flex-end; background-color:[backgroundColorFooter];">
-                    <vaadin-button id="conferma" on-click="handleClickConferma" style="width:3em;" theme="raised primary">
+                <div id="footer"
+                     style="height:[[heightFooter]]; width: [[width]]; display: flex; flex-direction:column; align-items: flex-end; background-color:[[backgroundColorFooter]]; color:[[foregroundColorFooter]];">
+                    <vaadin-button id="conferma" on-click="handleClickConferma" style="width:3em;"
+                                   theme="raised primary">
                         [[textConfirmButton]]
                     </vaadin-button>
                 </div>
