@@ -856,7 +856,7 @@ public class ATextService extends AbstractService {
      * @return true se esiste
      */
     public boolean isTag(String testo, String primoTag, String secondoTag, String terzoTag) {
-        return getPosTag(testo, primoTag, secondoTag, terzoTag) != 0;
+        return getPosFirstTag(testo, primoTag, secondoTag, terzoTag) != 0;
     }// end of method
 
 
@@ -869,8 +869,8 @@ public class ATextService extends AbstractService {
      *
      * @return posizione del tag nel testo - 0 se non esiste
      */
-    public int getPosTag(String testo, String tag) {
-        return getPosTag(testo, REGEX_PIPE, tag, UGUALE);
+    public int getPosFirstTag(String testo, String tag) {
+        return getPosFirstTag(testo, REGEX_PIPE, tag, UGUALE);
     }// end of method
 
 
@@ -883,61 +883,25 @@ public class ATextService extends AbstractService {
      * @param secondoTag significativo (parametro)
      * @param terzoTag   di riferimento (di solito UGUALE))
      *
-     * @return posizione del tag nel testo - 0 se non esiste
+     * @return posizione del PRIMO tag nel testo - 0 se non esiste
      */
-    public int getPosTag(String line, String primoTag, String secondoTag, String terzoTag) {
+    public int getPosFirstTag(String line, String primoTag, String secondoTag, String terzoTag) {
         int pos = 0;
         String regexSpazioVariabile = "\\s*";
         String firstChar = secondoTag.substring(0, 1);
         String rimanentiChars = secondoTag.substring(1);
         String firstInsensitiveChar = "[" + firstChar.toUpperCase() + firstChar.toLowerCase() + "]";
         String regex = primoTag + regexSpazioVariabile + firstInsensitiveChar + rimanentiChars + regexSpazioVariabile + terzoTag;
-//        regex=secondoTag;
+
         // Create a Pattern object
         Pattern pattern = Pattern.compile(regex);
-        String pippo;
+
         // Now create matcher object.
         Matcher matcher = pattern.matcher(line);
 
-//        if (matcher.find()) {
-//            pos = matcher.start();
-//        }// end of if cycle
-
-//        if (matcher.find() && matcher.groupCount() > 0) {
-//            pippo = matcher.group(0);
-//            int abc=  line.indexOf(pippo);
-//
-//            int w;
-//        }// fine del blocco if-else
-
-        while (matcher.find()) {
-            String a = matcher.group();
+        if (matcher.find()) {
             pos = matcher.start();
-            int c = matcher.end();
-            System.out.println("matches() found substring \"" + matcher.group()
-                    + "\" starting at index " + matcher.start()
-                    + " and ending at index " + matcher.end());
-        }
-
-
-//            // Try Matcher.matches(), which tries to match the entrie input string
-//        if (matcher.matches()) {
-//            String a = matcher.group();
-//            int b = matcher.start();
-//            int c = matcher.end();
-//            System.out.println("matches() found substring \"" + matcher.group()
-//                    + "\" starting at index " + matcher.start()
-//                    + " and ending at index " + matcher.end());
-//        } else {
-//            System.out.println("matches() found nothing");
-//        }
-
-//        while (matcher.find()) {
-//           int a= matcher.groupCount();
-//            System.out.print("Start index: " + matcher.start());
-//            System.out.print(" End index: " + matcher.end());
-//            System.out.println(" Found: " + matcher.group());
-//        }
+        }// end of if cycle
 
         return pos;
     }// end of method

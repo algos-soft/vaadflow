@@ -711,50 +711,50 @@ public class ATextServiceTest extends ATest {
      * @return posizione del tag nel testo - 0 se non esiste
      */
     @Test
-    public void getPosTag() {
+    public void getPosFirstTag() {
         String parametro = "Nome";
 
         previstoIntero = 0;
         sorgente = "panchina|Cognome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         previstoIntero = 8;
         sorgente = "panchina|Nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina| Nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina| Nome    =Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina|Nome =Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina|         Nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina|       Nome        =Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina|nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         sorgente = "panchina| nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
 
         previstoIntero = 9;
         sorgente = "panchina |Nome=Giovanni";
-        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
