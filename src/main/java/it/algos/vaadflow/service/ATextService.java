@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
@@ -44,6 +46,14 @@ public class ATextService extends AbstractService {
      * tag per il carattere barra
      */
     public static final String BARRA = "/";
+
+    public static final String REGEX_PIPE = "\\|";
+
+    public static final String PIPE = "|";
+
+    public static final String UGUALE = "=";
+
+    public static final String SPAZIO = " ";
 
     public static final String VIRGOLA = ",";
 
@@ -815,6 +825,119 @@ public class ATextService extends AbstractService {
                 pos = 0;
             }// fine del blocco if-else
         }// fine del blocco if
+
+        return pos;
+    }// end of method
+
+
+    /**
+     * Restituisce la posizione di un tag in un testo <br>
+     * Rimanda al metodo base con i tag iniziali e finali di default <br>
+     *
+     * @param testo in ingresso
+     * @param tag   di riferimento per la ricerca
+     *
+     * @return true se esiste
+     */
+    public boolean isTag(String testo, String tag) {
+        return isTag(testo, REGEX_PIPE, tag, UGUALE);
+    }// end of method
+
+
+    /**
+     * Restituisce la posizione di un gruppo di tag in un testo <br>
+     * Il gruppo è costituito dal primo tag, seguito da n spazi, poi il secondo tag seguito da n spazi, poi il terzo tag <br>
+     *
+     * @param testo      to be scanned to find the pattern
+     * @param primoTag   di riferimento (di solito PIPE))
+     * @param secondoTag significativo (parametro)
+     * @param terzoTag   di riferimento (di solito UGUALE))
+     *
+     * @return true se esiste
+     */
+    public boolean isTag(String testo, String primoTag, String secondoTag, String terzoTag) {
+        return getPosTag(testo, primoTag, secondoTag, terzoTag) != 0;
+    }// end of method
+
+
+    /**
+     * Restituisce la posizione di un tag in un testo <br>
+     * Rimanda al metodo base con i tag iniziali e finali di default <br>
+     *
+     * @param testo in ingresso
+     * @param tag   di riferimento per la ricerca
+     *
+     * @return posizione del tag nel testo - 0 se non esiste
+     */
+    public int getPosTag(String testo, String tag) {
+        return getPosTag(testo, REGEX_PIPE, tag, UGUALE);
+    }// end of method
+
+
+    /**
+     * Restituisce la posizione di un gruppo di tag in un testo <br>
+     * Il gruppo è costituito dal primo tag, seguito da n spazi, poi il secondo tag seguito da n spazi, poi il terzo tag <br>
+     *
+     * @param line       in ingresso
+     * @param primoTag   di riferimento (di solito PIPE))
+     * @param secondoTag significativo (parametro)
+     * @param terzoTag   di riferimento (di solito UGUALE))
+     *
+     * @return posizione del tag nel testo - 0 se non esiste
+     */
+    public int getPosTag(String line, String primoTag, String secondoTag, String terzoTag) {
+        int pos = 0;
+        String regexSpazioVariabile = "\\s*";
+        String firstChar = secondoTag.substring(0, 1);
+        String rimanentiChars = secondoTag.substring(1);
+        String firstInsensitiveChar = "[" + firstChar.toUpperCase() + firstChar.toLowerCase() + "]";
+        String regex = primoTag + regexSpazioVariabile + firstInsensitiveChar + rimanentiChars + regexSpazioVariabile + terzoTag;
+//        regex=secondoTag;
+        // Create a Pattern object
+        Pattern pattern = Pattern.compile(regex);
+        String pippo;
+        // Now create matcher object.
+        Matcher matcher = pattern.matcher(line);
+
+//        if (matcher.find()) {
+//            pos = matcher.start();
+//        }// end of if cycle
+
+//        if (matcher.find() && matcher.groupCount() > 0) {
+//            pippo = matcher.group(0);
+//            int abc=  line.indexOf(pippo);
+//
+//            int w;
+//        }// fine del blocco if-else
+
+        while (matcher.find()) {
+            String a = matcher.group();
+            pos = matcher.start();
+            int c = matcher.end();
+            System.out.println("matches() found substring \"" + matcher.group()
+                    + "\" starting at index " + matcher.start()
+                    + " and ending at index " + matcher.end());
+        }
+
+
+//            // Try Matcher.matches(), which tries to match the entrie input string
+//        if (matcher.matches()) {
+//            String a = matcher.group();
+//            int b = matcher.start();
+//            int c = matcher.end();
+//            System.out.println("matches() found substring \"" + matcher.group()
+//                    + "\" starting at index " + matcher.start()
+//                    + " and ending at index " + matcher.end());
+//        } else {
+//            System.out.println("matches() found nothing");
+//        }
+
+//        while (matcher.find()) {
+//           int a= matcher.groupCount();
+//            System.out.print("Start index: " + matcher.start());
+//            System.out.print(" End index: " + matcher.end());
+//            System.out.println(" Found: " + matcher.group());
+//        }
 
         return pos;
     }// end of method

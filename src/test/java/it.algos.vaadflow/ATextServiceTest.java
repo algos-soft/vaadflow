@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Project springvaadin
@@ -694,8 +694,119 @@ public class ATextServiceTest extends ATest {
         sorgenteIntero = 234;
         previsto = "23,4";
 
-        ottenuto= service.formatOneDecimal(sorgenteIntero);
+        ottenuto = service.formatOneDecimal(sorgenteIntero);
         assertEquals(previsto, ottenuto);
+    }// end of single test
+
+
+
+
+    /**
+     * Restituisce la posizione di un tag in un testo <br>
+     * Rimanda al metodo base con i tag iniziali e finali di default <br>
+     *
+     * @param testo in ingresso
+     * @param tag   di riferimento per la ricerca
+     *
+     * @return posizione del tag nel testo - 0 se non esiste
+     */
+    @Test
+    public void getPosTag() {
+        String parametro = "Nome";
+
+        previstoIntero = 0;
+        sorgente = "panchina|Cognome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 8;
+        sorgente = "panchina|Nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina| Nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina| Nome    =Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina|Nome =Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina|         Nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina|       Nome        =Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina|nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        sorgente = "panchina| nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+
+        previstoIntero = 9;
+        sorgente = "panchina |Nome=Giovanni";
+        ottenutoIntero = service.getPosTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
+    }// end of single test
+
+
+    /**
+     * Restituisce la posizione di un tag in un testo <br>
+     * Rimanda al metodo base con i tag iniziali e finali di default <br>
+     *
+     * @param testo in ingresso
+     * @param tag   di riferimento per la ricerca
+     *
+     * @return true se esiste
+     */
+    @Test
+    public void isTag() {
+        String parametro = "Nome";
+
+        sorgente = "panchina|Cognome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertFalse(ottenutoBooleano);
+
+        sorgente = "panchina|Nome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina| Nome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina| Nome    =Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina|Nome =Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina|         Nome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina|       Nome        =Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina|nome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = "panchina| nome=Giovanni";
+        ottenutoBooleano = service.isTag(sorgente, parametro);
+        assertTrue(ottenutoBooleano);
     }// end of single test
 
 }// end of class
