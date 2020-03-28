@@ -1,15 +1,14 @@
 package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
@@ -74,11 +73,35 @@ public class BetaDialog extends AViewDialog<Beta> {
      * Sovrascritto nella sottoclasse
      */
     @Override
-    protected void fixLayout() {
-        super.fixLayout();
+    protected void fixLayoutFinal() {
+        super.fixLayoutFinal();
 
 //        Component comp = creaSelect();
 //        getFormLayout().add(comp);
+    }// end of method
+
+
+    /**
+     * Eventuali messaggi di avviso specifici di questo dialogo ed inseriti in 'alertPlacehorder' <br>
+     * <p>
+     * Chiamato da AViewDialog.open() <br>
+     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
+     * Può essere sovrascritto, per aggiungere informazioni <br>
+     * DOPO invocare il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixAlertLayout() {
+        alertUser.add("Pippoz - dopotutto si vede (scritto in verde)");
+        alertAdmin.add("L'admin vede questo (scritto in blu)");
+        alertDev.add("Developer vede tutto (scritto in rosso)");
+
+        if (operation == EAOperation.addNew) {
+            alertAdmin.add("Nuovo record");
+        } else {
+            alertAdmin.add("Modifica record");
+        }// end of if/else cycle
+
+        super.fixAlertLayout();
     }// end of method
 
 
@@ -93,7 +116,7 @@ public class BetaDialog extends AViewDialog<Beta> {
         Select<EAIconeBeta> select = new Select<>();
         select.setLabel("How are you feeling today?");
 
-        EAIconeBeta[] items=  EAIconeBeta.class.getEnumConstants();
+        EAIconeBeta[] items = EAIconeBeta.class.getEnumConstants();
 //        select.setItems(EAIconeBeta.getIcons());
         select.setItems(items);
 
@@ -103,7 +126,7 @@ public class BetaDialog extends AViewDialog<Beta> {
 
             FlexLayout wrapper = new FlexLayout();
             text.getStyle().set("margin-left", "0.5em");
-            wrapper.add(((EAIconeBeta)enumeration).getIcon().create(), text);
+            wrapper.add(((EAIconeBeta) enumeration).getIcon().create(), text);
             return wrapper;
         }));
 
