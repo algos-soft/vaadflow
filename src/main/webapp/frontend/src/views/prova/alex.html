@@ -1,0 +1,93 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+
+<vaadin-text-field value="Value"></vaadin-text-field>
+
+<dom-module id="tag-alex">
+    <!--Doppia quadra è 'One way binding' mentre doppia graffa è 'Two way binding'-->
+    <template>
+
+
+        <div style="margin-left:5em">
+
+            <h1>Titolo della pagina</h1>
+
+            <template is="dom-repeat" items="{{items}}">
+
+                <div>
+                    <vaadin-text-field id="name" label="Name" value="[[item.name]]"></vaadin-text-field>
+                    <p>icon: [[item.icon]]</p>
+                    <p>score: [[item.score]]</p>
+                    <p>---------------------</p>
+                </div>
+
+            </template>
+
+        </div>
+
+
+        <!--area dei bottoni-->
+        <div style="display: flex; flex-direction:row; align-items: center;  justify-content: center; margin-top:2em">
+
+            <!--Client-initiated events:-->
+            <!--Client side template code:-->
+            <!--Un click nel button lancia un evento sincrono (di nome handleClickBack) in questo Client-->
+            <!--Un click nel button lancia un evento asincrono (di nome handleClickBack) nel Server-->
+            <!--Doppia graffa è 'One way binding' mentre doppia quadra è 'Two way binding'-->
+            <vaadin-button style="width: 8.5em" theme="secondary" on-click="handleClickBack">
+                <iron-icon icon="icons:arrow-back" slot="prefix"></iron-icon>
+                <div>Annulla</div>
+            </vaadin-button>
+
+            <!--Client-initiated events:-->
+            <!--Client side template code:-->
+            <!--Un click nel button lancia un evento sincrono (di nome handleClickRegistra) in questo Client-->
+            <!--Un click nel button lancia un evento asincrono (di nome handleClickRegistra) nel Server-->
+            <!--Doppia graffa è 'One way binding' mentre doppia quadra è 'Two way binding'-->
+            <vaadin-button disabled="[[!registraAbilitato]]" on-click="handleClickRegistra"
+                           style="width: 8.5em; margin-left:2em" theme="primary">
+                <iron-icon icon="icons:check" slot="prefix"></iron-icon>
+                <div>Conferma</div>
+            </vaadin-button>
+        </div>
+    </template>
+
+    <script>
+
+        class MyPolymerElement extends Polymer.Element {
+            static get is() {
+                return 'tag-alex'
+            }
+        }
+
+        class EventHandler extends Polymer.Element {
+            static get is() { return 'event-handler' }
+        }
+
+
+        customElements.define(MyPolymerElement.is, MyPolymerElement);
+
+
+        // customElements.whenDefined('vaadin-combo-box').then(function () {
+        //     const combo = document.querySelector('vaadin-combo-box');
+        //
+        //     combo.dataProvider = function () {
+        //         var xhr = new XMLHttpRequest();
+        //         xhr.onload = function () {
+        //             const response = JSON.parse(xhr.responseText);
+        //             // setTimeout(function () {
+        //             //     callback(response.result, response.size);
+        //             // }, 2000);
+        //         };
+        //         // var index = params.page * params.pageSize;
+        //         // const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
+        //         //     '&count=' + params.pageSize +
+        //         //     '&filter=' + params.filter;
+        //         const  url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=4&count=23';
+        //         xhr.open('GET', url, true);
+        //         xhr.send();
+        //     };
+        // });
+    </script>
+
+</dom-module>
