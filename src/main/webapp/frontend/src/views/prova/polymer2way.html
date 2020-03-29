@@ -1,0 +1,84 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-radio-button/vaadin-radio-button.html">
+<link rel="import" href="../../../bower_components/vaadin-radio-group/vaadin-radio-group.html">
+<link rel="import" href="../../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+
+
+
+<dom-module id="two-way-template">
+
+    <template>
+
+        <table>
+            <tr>
+                <td>Paper name:</td>
+                <td>
+                    <vaadin-text-field> value="{{name}}"></vaadin-text-field>
+                </td>
+            </tr>
+            <tr>
+                <td>Input name:</td>
+                <td>
+                    <input value="{{name::input}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Change name:</td>
+                <td>
+                    <input value="{{name::change}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Input accepted:</td>
+                <td>
+                    <input type="checkbox" checked="{{accepted::change}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Polymer accepted:</td>
+                <td>
+                    <vaadin-checkbox checked="{{accepted}}"></vaadin-checkbox>
+                </td>
+            </tr>
+            <tr>
+                <td>Size:</td>
+                <td>
+                    <vaadin-radio-group selected="{{size}}">
+                        <vaadin-radio-button name="small">Small</vaadin-radio-button>
+                        <vaadin-radio-button name="medium">Medium</vaadin-radio-button>
+                        <vaadin-radio-button name="large">Large</vaadin-radio-button>
+                    </vaadin-radio-group>
+                </td>
+            </tr>
+            <tr>
+                <td>Size:</td>
+                <td>
+                    <select value="{{size::change}}">
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button on-click="reset">Reset values</button>
+            <button on-click="submit">Submit values</button>
+        </div>
+        <slot></slot>    </template>
+
+    <script>
+
+        class MyTemplate extends Polymer.Element {
+            static get is() {
+                return 'two-way-template'
+            }
+        }
+
+        customElements.define(MyTemplate.is, MyTemplate);
+
+
+    </script>
+
+</dom-module>

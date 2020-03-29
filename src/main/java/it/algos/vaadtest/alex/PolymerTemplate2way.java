@@ -1,0 +1,54 @@
+package it.algos.vaadtest.alex;
+
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.EventHandler;
+import com.vaadin.flow.component.polymertemplate.ModelItem;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.Route;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Route(value = "demo2way")
+@HtmlImport("src/views/prova/demo2way.html")
+@Tag("tag-alex")
+public class PolymerTemplate2way extends PolymerTemplate<PolymerModel> {
+
+    public PolymerTemplate2way() {
+        List<PolymerItem> items=new ArrayList<>();
+        items.add(new PolymerItem("Alberto","lumo:edit","Roma"));
+        items.add(new PolymerItem("Michele","lumo:error","Napoli"));
+        items.add(new PolymerItem("Giuseppe","lumo:play","Bologna"));
+        getModel().setItems(items);
+
+        getModel().setTitle("Demo 2 way binding");
+
+    }
+
+
+    @EventHandler
+    private void submitItem(@ModelItem PolymerItem item) {
+        getModel().setMessage("Submitted item: "+item.getName()+", "+item.getCity());
+    }
+
+
+    @EventHandler
+    public void submitForm() {
+        PolymerModel model = getModel();
+        List<PolymerItem> items = model.getItems();
+        String msg="";
+        for (PolymerItem item : items){
+            String name=item.getName();
+            String city = item.getCity();
+            msg+="["+name+", "+city+"] ";
+        }
+
+        String title= model.getTitle();
+        getModel().setMessage("Submitted form: "+title+": "+msg);
+
+    }
+
+
+
+}

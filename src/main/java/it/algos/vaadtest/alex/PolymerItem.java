@@ -1,65 +1,46 @@
 package it.algos.vaadtest.alex;
 
+import com.vaadin.flow.templatemodel.AllowClientUpdates;
+
 import java.io.Serializable;
 
-/**
- * Singola iscrizione.
- */
 public class PolymerItem implements Serializable {
 
-
     private String name;
-
     private String icon;
-
-    private int score;
-
+    private String city;
 
     public PolymerItem() {
-        reset();
     }
 
-
-    public PolymerItem(String name, String icon, int score) {
+    public PolymerItem(String name, String icon, String city) {
         this.name = name;
         this.icon=icon;
-        this.score = score;
+        this.city = city;
     }
 
-
-
-    /**
-     * Resets all fields to their default values.
-     */
-    public void reset() {
-        this.name = "";
-        this.icon="";
-        this.score = 0;
+    @AllowClientUpdates
+    public void setName(String name) {
+        this.name = name;
     }
-
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @AllowClientUpdates
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
-
     public String getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    @AllowClientUpdates
+    public void setCity(String city) {
+        this.city = city;
     }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+    public String getCity() {
+        return city;
     }
 
     @Override
@@ -67,7 +48,8 @@ public class PolymerItem implements Serializable {
         return "PolymerItem{" +
                 "name='" + name + '\'' +
                 ", icon='" + icon + '\'' +
-                ", score=" + score +
+                ", city=" + city +
                 '}';
     }
+
 }
