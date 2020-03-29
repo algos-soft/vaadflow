@@ -53,7 +53,8 @@ public class PolymerTemplate2way extends PolymerTemplate<PolymerModel> {
         for (PolymerItem item : items){
             String name=item.getName();
             String city = item.getCity();
-            msg+="["+name+", "+city+"] ";
+            String inizio=item.getInizio();
+            msg+="["+name+", "+city+", "+inizio+"] ";
         }
 
         String title= model.getTitle();

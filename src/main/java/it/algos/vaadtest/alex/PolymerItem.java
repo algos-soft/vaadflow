@@ -14,7 +14,6 @@ public class PolymerItem implements Serializable {
 
     private String inizio;
 
-
     public PolymerItem() {
     }
 
@@ -64,10 +63,11 @@ public class PolymerItem implements Serializable {
         return inizio;
     }
 
-
+    @AllowClientUpdates
     public void setInizio(String inizio) {
         this.inizio = inizio;
     }
+
 
 
     @Override
