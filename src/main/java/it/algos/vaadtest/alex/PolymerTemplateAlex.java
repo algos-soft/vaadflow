@@ -39,15 +39,21 @@ public class PolymerTemplateAlex extends PolymerTemplate<PolymerModel> {
 
     public PolymerTemplateAlex() {
         List<PolymerItem> items=new ArrayList<>();
-        items.add(new PolymerItem("primo","icon1",1));
-        items.add(new PolymerItem("secondo","icon1",2));
-        items.add(new PolymerItem("terzo","icon1",3));
+        items.add(new PolymerItem("primo","lumo:edit",1));
+        items.add(new PolymerItem("secondo","lumo:error",2));
+        items.add(new PolymerItem("terzo","lumo:play",3));
         getModel().setItems(items);
     }
 
     @EventHandler
-    public void change33(@EventData("element.value") ReviewModel betta) {
+    public void submit(@ModelItem PolymerModel item) {
         int a = 87;
     }
+
+    @EventHandler
+    private void handleClick(@EventData("event.altKey") boolean altPressed) {
+        System.out.println("Received a handle click event");
+    }
+
 
 }

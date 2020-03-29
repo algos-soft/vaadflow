@@ -201,7 +201,7 @@ public class Prova extends ACEntity {
      */
     @Transient
     @Field("dur")
-    @AIField(type = EAFieldType.calculated, name = "Ore", serviceClazz = ProvaService.class)
+    @AIField(type = EAFieldType.calculatedInt, name = "Ore", serviceClazz = ProvaService.class)
     @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR, methodName = "durataOre")
     public int durataOre;
 
@@ -211,7 +211,7 @@ public class Prova extends ACEntity {
      */
     @Transient
     @Field("dur2")
-    @AIField(type = EAFieldType.calculated, name = "Minuti", serviceClazz = ProvaService.class)
+    @AIField(type = EAFieldType.calculatedInt, name = "Minuti", serviceClazz = ProvaService.class)
     @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR,  methodName = "durataMinuti")
     public int durataMinuti;
 
@@ -221,7 +221,7 @@ public class Prova extends ACEntity {
      */
     @Transient
     @Field("dur23")
-    @AIField(type = EAFieldType.calculated, name = "Tempo", serviceClazz = ProvaService.class)
+    @AIField(type = EAFieldType.calculatedInt, name = "Tempo", serviceClazz = ProvaService.class)
     @AIColumn(headerIcon = VaadinIcon.PROGRESSBAR, methodName = "durataTempo")
     public int durataTempo;
 

@@ -23,6 +23,9 @@ public interface ReviewModel extends TemplateModel {
 
     void setReviews(List<Review> reviews);
 
+    String getDescription();
+    void setDescription(String description);
+
     List<String> getItems();
 
     void setItems(List<String> items);
