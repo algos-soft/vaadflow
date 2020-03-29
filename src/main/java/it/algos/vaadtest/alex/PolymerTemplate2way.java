@@ -27,12 +27,18 @@ public class PolymerTemplate2way extends PolymerTemplate<PolymerModel> {
     }
 
 
+    /**
+     * Click sul bottone
+     */
     @EventHandler
     private void submitItem(@ModelItem PolymerItem item) {
         getModel().setMessage("Submitted item: "+item.getName()+", "+item.getCity()+", "+item.getInizio());
     }
 
 
+    /**
+     * Modifica del valore del timePicker
+     */
     @EventHandler
     private void handleChange(@ModelItem PolymerItem item) {
         getModel().setMessage("Submitted item: "+item.getName()+", "+item.getCity()+", "+item.getInizio());
