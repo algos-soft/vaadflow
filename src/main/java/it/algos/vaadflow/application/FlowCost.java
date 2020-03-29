@@ -54,6 +54,10 @@ public abstract class FlowCost {
 
     public static final String SPAZIO = " ";
 
+    public static final String TRATTINO = "-";
+
+    public static final String SLASH = "/";
+
     public static final String SEP = " - ";
 
     public static final String VIRGOLA = ",";

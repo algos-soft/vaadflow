@@ -699,8 +699,6 @@ public class ATextServiceTest extends ATest {
     }// end of single test
 
 
-
-
     /**
      * Restituisce la posizione di un tag in un testo <br>
      * Rimanda al metodo base con i tag iniziali e finali di default <br>
@@ -756,6 +754,10 @@ public class ATextServiceTest extends ATest {
         sorgente = "panchina |Nome=Giovanni";
         ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
         assertEquals(previstoIntero, ottenutoIntero);
+        previstoIntero = 4;
+        sorgente = "alfa|Nome=Giovanni|Nome=Pippo";
+        ottenutoIntero = service.getPosFirstTag(sorgente, parametro);
+        assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
 
@@ -807,6 +809,62 @@ public class ATextServiceTest extends ATest {
         sorgente = "panchina| nome=Giovanni";
         ottenutoBooleano = service.isTag(sorgente, parametro);
         assertTrue(ottenutoBooleano);
+    }// end of single test
+
+
+    /**
+     * Elimina gli spazi multipli eventualmente presenti <br>
+     * Tutti gli spazi multipli vengono ridotti ad uno spazio singolo <br>
+     *
+     * @param line in ingresso
+     *
+     * @return stringa elaborata con tutti gli spazi ridotti ad 1
+     */
+    @Test
+    public void fixOneSpace() {
+        previsto = "prima dopo";
+
+        //--uno spazio
+        sorgente = "prima dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--due spazi
+        sorgente = "prima  dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--tre spazi
+        sorgente = "prima   dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--quattro spazi
+        sorgente = "prima    dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--cinque spazi
+        sorgente = "prima     dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--cinque spazi
+        sorgente = " prima     dopo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--cinque spazi
+        sorgente = " prima     dopo   ";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
+        //--tre spazi
+        previsto = "prima dopo ultimo";
+        sorgente = " prima   dopo  ultimo";
+        ottenuto = service.fixOneSpace(sorgente);
+        assertEquals(previsto, ottenuto);
+
     }// end of single test
 
 }// end of class

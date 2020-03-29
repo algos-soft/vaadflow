@@ -130,7 +130,7 @@ public abstract class AService extends AbstractService implements IAService {
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
      */
     @Autowired
-    protected ATextService text;
+    public ATextService text;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da Spring <br>
