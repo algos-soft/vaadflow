@@ -1,6 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/vaadin-time-picker/vaadin-time-picker.html">
 
 <dom-module id="tag-alex">
     <!--Doppia quadra è 'One way binding' mentre doppia graffa è 'Two way binding'-->
@@ -20,7 +21,10 @@
                     <div>
                         <iron-icon icon="[[item.icon]]" slot="prefix"></iron-icon>
                         <vaadin-text-field id="name" label="Name" value="{{item.name}}"></vaadin-text-field>
-                        <vaadin-text-field id="city" label="City" value="{{item.city}}"></vaadin-text-field>
+                        <vaadin-text-field id="city" label="Paese" value="{{item.city}}"></vaadin-text-field>
+                        <vaadin-time-picker label="Arrival hour (hh:mm)" value="{{item.inizio}}" on-value-changed="handleChange">
+                            {{item.inizio}}
+                        </vaadin-time-picker>
                         <button on-click="submitItem">Submit item</button>
                         <hr>
                     </div>
@@ -33,11 +37,10 @@
             <div style="margin-top:5em">
                 <button on-click="submitForm">Submit form</button>
                 <p>
-                Message from server: <strong>[[message]]</strong>
+                    Message from server: <strong>[[message]]</strong>
             </div>
 
         </div>
-
 
 
     </template>
@@ -51,7 +54,9 @@
         }
 
         class EventHandler extends Polymer.Element {
-            static get is() { return 'event-handler' }
+            static get is() {
+                return 'event-handler'
+            }
         }
 
 
