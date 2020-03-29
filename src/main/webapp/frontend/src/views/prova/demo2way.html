@@ -21,7 +21,7 @@
 
                     <div>
                         <iron-icon icon="[[item.icon]]" slot="prefix"></iron-icon>
-                        <vaadin-text-field label="Name" value="{{item.name}}"></vaadin-text-field>
+                        <vaadin-text-field label="Name" value="{{item.name}}" on-input="nameInputHandler" on-change="nameChangedHandler"></vaadin-text-field>
                         <vaadin-text-field label="Paese" value="{{item.city}}"></vaadin-text-field>
                         <vaadin-time-picker label="Arrival hour (hh:mm)" value="{{item.inizio}}"></vaadin-time-picker>
 

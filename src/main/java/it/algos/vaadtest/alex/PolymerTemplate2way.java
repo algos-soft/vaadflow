@@ -35,16 +35,6 @@ public class PolymerTemplate2way extends PolymerTemplate<PolymerModel> {
         getModel().setMessage("Submitted item: "+item.getName()+", "+item.getCity()+", "+item.getInizio());
     }
 
-
-    /**
-     * Modifica del valore del timePicker
-     */
-    @EventHandler
-    private void handleChange(@ModelItem PolymerItem item) {
-        getModel().setMessage("Submitted item: "+item.getName()+", "+item.getCity()+", "+item.getInizio());
-    }
-
-
     @EventHandler
     public void submitForm() {
         PolymerModel model = getModel();
@@ -62,6 +52,23 @@ public class PolymerTemplate2way extends PolymerTemplate<PolymerModel> {
 
     }
 
+    /**
+     * Un carattere è stato modificato nel nome
+     */
+    @EventHandler
+    private void nameInputHandler(@ModelItem PolymerItem item) {
+        String name = item.getName();
+//        item.setCity(name);
+    }
+
+    /**
+     * Il valore nel campo nome è stato modificato
+     */
+    @EventHandler
+    private void nameChangedHandler(@ModelItem PolymerItem item) {
+        String name = item.getName();
+//        item.setCity(name);
+    }
 
 
 }
