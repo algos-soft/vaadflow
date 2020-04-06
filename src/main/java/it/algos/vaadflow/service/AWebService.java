@@ -8,9 +8,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-import static it.algos.vaadflow.application.FlowCost.SPAZIO;
-import static it.algos.vaadflow.application.FlowCost.UNDERSCORE;
+import static it.algos.vaadflow.application.FlowCost.*;
 
 /**
  * Project vaadflow
@@ -32,6 +34,10 @@ public class AWebService extends AbstractService {
 
     //--codifica dei caratteri
     public static String INPUT = "UTF8";
+
+    public static String TAG_TABLE_INIZIALE = "<table class=\"wikitable sortable\">";
+
+    public static String TAG_TABLE_BODY = "<tbody><tr>";
 
 
     /**
@@ -111,13 +117,164 @@ public class AWebService extends AbstractService {
      * Request di tipo GET
      * Accetta SOLO un indirizzo di una pagina wiki
      *
-     * @param indirizzoWiki
+     * @param indirizzoWikiGrezzo
      *
      * @return risposta grezza
      */
     public String leggeSorgenteWiki(String indirizzoWikiGrezzo) {
         String indirizzoWikiElaborato = indirizzoWikiGrezzo.replaceAll(SPAZIO, UNDERSCORE);
         return leggeWeb(TAG_WIKI + indirizzoWikiElaborato);
+    } // fine del metodo
+
+
+    /**
+     * Costruisce una stringa di testo coi titoli della Table per individuarla nel sorgente della pagina
+     *
+     * @param titoliTable per individuare una table
+     *
+     * @return stringa di tag per regex
+     */
+    public String costruisceTagTitoliTable(String[] titoliTable) {
+        String testoTable = VUOTA;
+        String tagIniTable = TAG_TABLE_INIZIALE;
+        String tagBody = TAG_TABLE_BODY;
+        String tagIni = "<th>";
+        String tagEnd = "</th>";
+        String tagEndBody = "</tr>";
+
+        if (titoliTable != null && titoliTable.length > 0) {
+            testoTable += tagIniTable;
+            testoTable += tagBody;
+            for (String titolo : titoliTable) {
+                testoTable += tagIni;
+                testoTable += titolo;
+                testoTable += tagEnd;
+            }// end of for cycle
+            testoTable += tagEndBody;
+        }// end of if cycle
+
+        return testoTable;
+    } // fine del metodo
+
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param sorgentePagina
+     * @param titoliTable    per individuarla
+     *
+     * @return testo della table
+     */
+    public String estraeTableWiki(String sorgentePagina, String[] titoliTable) {
+        String testoTable = null;
+        String tagTitoli = VUOTA;
+        String tagEnd = "</tbody></table>";
+
+        if (text.isValid(sorgentePagina)) {
+            tagTitoli = costruisceTagTitoliTable(titoliTable);
+        }// end of if cycle
+
+        if (text.isValid(tagTitoli)) {
+            testoTable = text.estrae(sorgentePagina, tagTitoli, tagEnd);
+        }// end of if cycle
+
+        return testoTable;
+    } // fine del metodo
+
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return testo della table
+     */
+    public String leggeTableWiki(String indirizzoWikiGrezzo, String[] titoliTable) {
+        String testoTable = VUOTA;
+        String sorgentePagina = leggeSorgenteWiki(indirizzoWikiGrezzo);
+
+        if (text.isValid(sorgentePagina)) {
+            testoTable = estraeTableWiki(sorgentePagina, titoliTable);
+        }// end of if cycle
+
+        return testoTable;
+    } // fine del metodo
+
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return lista grezza di righe
+     */
+    public List<String> getRigheTableWiki(String indirizzoWikiGrezzo, String[] titoliTable) {
+        List<String> lista = null;
+        String[] righe = null;
+        String sep = "</td></tr>";
+        String tag = "<tr>";
+        String testoTable = leggeTableWiki(indirizzoWikiGrezzo, titoliTable);
+        String cella;
+
+        if (testoTable != null && testoTable.length() > 0) {
+            righe = testoTable.split(sep);
+        }// end of if cycle
+
+        if (righe != null) {
+            lista = new ArrayList<>();
+            for (String riga : righe) {
+                if (text.isValid(riga)) {
+                    cella = text.levaTesta(riga, tag);
+                    lista.add(cella);
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
+        return lista;
+    } // fine del metodo
+
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return lista grezza di righe
+     */
+    public LinkedHashMap<String, LinkedHashMap<String, String>> getMappaTableWiki(String indirizzoWikiGrezzo, String[] titoliTable) {
+        LinkedHashMap<String, LinkedHashMap<String, String>> mappaTable = null;
+        List<String> lista = getRigheTableWiki(indirizzoWikiGrezzo, titoliTable);
+        String[] parti = null;
+        String sep = "</td><td>";
+        String tag = "<td>";
+        String key;
+        LinkedHashMap<String, String> mappaRiga;
+        String cella;
+
+        if (lista != null && lista.size() > 0) {
+            mappaTable = new LinkedHashMap<>();
+            for (String riga : lista) {
+                parti = riga.split(sep);
+                key = text.levaTesta(parti[0], tag);
+
+                mappaRiga = new LinkedHashMap<>();
+                if (parti != null && parti.length > 0 && parti.length == titoliTable.length) {
+                    for (int k = 0; k < parti.length; k++) {
+                        mappaRiga.put(titoliTable[k], text.levaTesta(parti[k], tag));
+                    }// end of for cycle
+                }// end of if cycle
+                mappaTable.put(key, mappaRiga);
+            }// end of for cycle
+        }// end of if cycle
+
+        return mappaTable;
     } // fine del metodo
 
 }// end of class

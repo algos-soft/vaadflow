@@ -2,7 +2,7 @@ package it.algos.vaadflow.modules.provincia;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.importa.ImportProvincie;
+import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.modules.regione.Regione;
 import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
@@ -188,7 +188,7 @@ public class ProvinciaService extends AService {
     @Override
     public int reset() {
         List<HashMap<String, String>> lista = null;
-        ImportProvincie importService;
+        ImportWiki importService;
         String sigla = VUOTA;
         String nome = VUOTA;
         String regioneTxt = VUOTA;
@@ -197,15 +197,15 @@ public class ProvinciaService extends AService {
         int numRec = super.reset();
 
         //--recupera una lista di tutte le provincie dal server di Wikipedia
-        importService = appContext.getBean(ImportProvincie.class);
-        lista = importService.esegue();
+        importService = appContext.getBean(ImportWiki.class);
+        lista = importService.province();
 
         if (lista != null) {
             for (HashMap<String, String> mappa : lista) {
                 if (mappa != null && mappa.size() == 3) {
-                    sigla = mappa.get(ImportProvincie.KEY_SIGLA);
-                    nome = mappa.get(ImportProvincie.KEY_NOME);
-                    regioneTxt = mappa.get(ImportProvincie.KEY_REGIONE);
+                    sigla = mappa.get(ImportWiki.KEY_SIGLA);
+                    nome = mappa.get(ImportWiki.KEY_NOME);
+                    regioneTxt = mappa.get(ImportWiki.KEY_REGIONE);
                 }// end of if cycle
 
                 if (text.isValid(regioneTxt)) {

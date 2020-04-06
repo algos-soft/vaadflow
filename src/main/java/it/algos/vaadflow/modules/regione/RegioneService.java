@@ -2,7 +2,9 @@ package it.algos.vaadflow.modules.regione;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.wrapper.WrapDueStringhe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
@@ -152,10 +157,11 @@ public class RegioneService extends AService {
         return repository.findByIso(iso);
     }// end of method
 
+
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param nome   (obbligatorio, unico)
+     * @param nome (obbligatorio, unico)
      *
      * @return istanza della Entity, null se non trovata
      */
@@ -185,28 +191,40 @@ public class RegioneService extends AService {
     public int reset() {
         int numRec = super.reset();
 
-        creaIfNotExist("IT-65", "Abruzzo");
-        creaIfNotExist("IT-77", "Basilicata");
-        creaIfNotExist("IT-78", "Calabria");
-        creaIfNotExist("IT-72", "Campania");
-        creaIfNotExist("IT-45", "Emilia-Romagna");
-        creaIfNotExist("IT-36", "Friuli-Venezia Giulia");
-        creaIfNotExist("IT-62", "Lazio");
-        creaIfNotExist("IT-42", "Liguria");
-        creaIfNotExist("IT-25", "Lombardia");
-        creaIfNotExist("IT-57", "Marche");
-        creaIfNotExist("IT-67", "Molise");
-        creaIfNotExist("IT-21", "Piemonte");
-        creaIfNotExist("IT-75", "Puglia");
-        creaIfNotExist("IT-88", "Sardegna");
-        creaIfNotExist("IT-82", "Sicilia");
-        creaIfNotExist("IT-52", "Toscana");
-        creaIfNotExist("IT-32", "Trentino-Alto Adige");
-        creaIfNotExist("IT-55", "Umbria");
-        creaIfNotExist("IT-23", "Valle d'Aosta");
-        creaIfNotExist("IT-34", "Veneto");
+        List<WrapDueStringhe> listaWrap = null;
+        ImportWiki importService;
+        String sigla = VUOTA;
+        String nome = VUOTA;
+        String regioneTxt = VUOTA;
+        Regione regione = null;
+
+        //--recupera una lista di tutte le regioni dal server di Wikipedia
+        importService = appContext.getBean(ImportWiki.class);
+        listaWrap = importService.regioni();
+
+//        creaIfNotExist("IT-65", "Abruzzo");
+//        creaIfNotExist("IT-77", "Basilicata");
+//        creaIfNotExist("IT-78", "Calabria");
+//        creaIfNotExist("IT-72", "Campania");
+//        creaIfNotExist("IT-45", "Emilia-Romagna");
+//        creaIfNotExist("IT-36", "Friuli-Venezia Giulia");
+//        creaIfNotExist("IT-62", "Lazio");
+//        creaIfNotExist("IT-42", "Liguria");
+//        creaIfNotExist("IT-25", "Lombardia");
+//        creaIfNotExist("IT-57", "Marche");
+//        creaIfNotExist("IT-67", "Molise");
+//        creaIfNotExist("IT-21", "Piemonte");
+//        creaIfNotExist("IT-75", "Puglia");
+//        creaIfNotExist("IT-88", "Sardegna");
+//        creaIfNotExist("IT-82", "Sicilia");
+//        creaIfNotExist("IT-52", "Toscana");
+//        creaIfNotExist("IT-32", "Trentino-Alto Adige");
+//        creaIfNotExist("IT-55", "Umbria");
+//        creaIfNotExist("IT-23", "Valle d'Aosta");
+//        creaIfNotExist("IT-34", "Veneto");
 
         return numRec;
     }// end of method
+
 
 }// end of class

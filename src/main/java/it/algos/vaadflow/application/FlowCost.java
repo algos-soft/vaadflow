@@ -70,6 +70,8 @@ public abstract class FlowCost {
 
     public static final String A_CAPO = "\n";
 
+    public static final String A_CAPO_REGEX = "\\\\n";
+
     public static final String ASTERISCO = "*";
 
     public static final Class<? extends RouterLayout> LAYOUT = MainLayout.class;
