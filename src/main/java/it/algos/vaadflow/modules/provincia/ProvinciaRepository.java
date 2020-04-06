@@ -1,4 +1,4 @@
-package it.algos.vaadflow.modules.regione;
+package it.algos.vaadflow.modules.provincia;
 
 import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
+import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 6-apr-2020 10.15.25 <br>
+ * Fix date: 6-apr-2020 11.35.26 <br>
  * <br>
  * Estende la l'interaccia MongoRepository col casting alla Entity relativa di questa repository <br>
  * <br>
@@ -27,12 +27,12 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_REGIONE)
+@Qualifier(TAG_PROVINCIA)
 @AIScript(sovrascrivibile = false)
-public interface RegioneRepository extends MongoRepository<Regione, String> {
+public interface ProvinciaRepository extends MongoRepository<Provincia, String> {
 
-    public Regione findByIso(String iso);
+    public Provincia findBySigla(String sigla);
 
-	public List<Regione> findAllByOrderByIsoAsc();
+	public List<Provincia> findAllByOrderByOrdineAsc();
 
 }// end of interface

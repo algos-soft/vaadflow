@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_REG;
+import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 
 /**
  * Project vaadflow <br>
@@ -100,12 +100,12 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REG;
  * 'tipizzata' con la entityClazz (Collection) specifica nel metodo creaGridPaginata() <br>
  */
 @UIScope
-@Route(value = TAG_REG, layout = MainLayout14.class)
-@Qualifier(TAG_REG)
+@Route(value = TAG_REGIONE, layout = MainLayout14.class)
+@Qualifier(TAG_REGIONE)
 @Slf4j
 @Secured("user")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_REG, menuIcon = VaadinIcon.ASTERISK,  roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = false, menuName = TAG_REGIONE, menuIcon = VaadinIcon.ASTERISK,  roleTypeVisibility = EARoleType.developer)
 public class RegioneList extends AGridViewList {
 
 
@@ -120,7 +120,7 @@ public class RegioneList extends AGridViewList {
      * @param service business class e layer di collegamento per la Repository
      */
     @Autowired
-    public RegioneList(@Qualifier(TAG_REG) IAService service) {
+    public RegioneList(@Qualifier(TAG_REGIONE) IAService service) {
         super(service, Regione.class);
     }// end of Vaadin/@Route constructor
 

@@ -1,7 +1,8 @@
-package it.algos.vaadflow.modules.regione;
+package it.algos.vaadflow.modules.provincia;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.modules.regione.Regione;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
+import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 6-apr-2020 10.15.25 <br>
+ * Fix date: 6-apr-2020 11.35.26 <br>
  * <br>
  * Business class. Layer di collegamento per la Repository. <br>
  * <br>
@@ -34,10 +35,10 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Qualifier(TAG_REGIONE)
+@Qualifier(TAG_PROVINCIA)
 @Slf4j
 @AIScript(sovrascrivibile = false)
-public class RegioneService extends AService {
+public class ProvinciaService extends AService {
 
 
     /**
@@ -51,7 +52,7 @@ public class RegioneService extends AService {
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
-    public RegioneRepository repository;
+    public ProvinciaRepository repository;
 
 
     /**
@@ -63,26 +64,26 @@ public class RegioneService extends AService {
      * @param repository per la persistenza dei dati
      */
     @Autowired
-    public RegioneService(@Qualifier(TAG_REGIONE) MongoRepository repository) {
+    public ProvinciaService(@Qualifier(TAG_PROVINCIA) MongoRepository repository) {
         super(repository);
-        super.entityClass = Regione.class;
-        this.repository = (RegioneRepository) repository;
+        super.entityClass = Provincia.class;
+        this.repository = (ProvinciaRepository) repository;
     }// end of Spring constructor
 
 
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param iso  (obbligatorio, unico)
-     * @param nome (obbligatorio, unico)
+     * @param sigla (obbligatoria, unica)
+     * @param nome  (obbligatorio, unico)
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(String iso, String nome) {
+    public boolean creaIfNotExist(String sigla, String nome) {
         boolean creata = false;
 
-        if (isMancaByKeyUnica(iso)) {
-            AEntity entity = save(newEntity(0, iso, nome));
+        if (isMancaByKeyUnica(sigla)) {
+            AEntity entity = save(newEntity(0, sigla, nome));
             creata = entity != null;
         }// end of if cycle
 
@@ -93,13 +94,13 @@ public class RegioneService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
-     * @param iso  (obbligatorio, unico)
-     * @param nome (obbligatorio, unico)
+     * @param sigla (obbligatoria, unica)
+     * @param nome  (obbligatorio, unico)
      *
      * @return la entity appena creata
      */
-    public Regione crea(String iso, String nome) {
-        return (Regione) save(newEntity(0, iso, nome));
+    public Provincia crea(String sigla, String nome) {
+        return (Provincia) save(newEntity(0, sigla, nome));
     }// end of method
 
 
@@ -111,7 +112,7 @@ public class RegioneService extends AService {
      * @return la nuova entity appena creata (non salvata)
      */
     @Override
-    public Regione newEntity() {
+    public Provincia newEntity() {
         return newEntity(0, VUOTA, VUOTA);
     }// end of method
 
@@ -122,43 +123,42 @@ public class RegioneService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param ordine (obbligatorio, unico)
-     * @param iso    (obbligatorio, unico)
+     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
+     * @param sigla  (obbligatoria, unica)
      * @param nome   (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Regione newEntity(int ordine, String iso, String nome) {
-        Regione entity = null;
+    public Provincia newEntity(int ordine, String sigla, String nome) {
+        Provincia entity = null;
 
-        entity = Regione.builderRegione()
+        entity = Provincia.builderProvincia()
                 .ordine(ordine > 0 ? ordine : getNewOrdine())
-                .iso(text.isValid(iso) ? iso : null)
+                .sigla(text.isValid(sigla) ? sigla : null)
                 .nome(text.isValid(nome) ? nome : null)
                 .build();
 
-        return (Regione) creaIdKeySpecifica(entity);
+        return (Provincia) creaIdKeySpecifica(entity);
     }// end of method
 
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param iso (obbligatorio, unico)
+     * @param sigla  (obbligatoria, unica)
      *
      * @return istanza della Entity, null se non trovata
      */
-    public Regione findByKeyUnica(String iso) {
-        return repository.findByIso(iso);
+    public Provincia findByKeyUnica(String sigla) {
+        return repository.findBySigla(sigla);
     }// end of method
-
 
     /**
      * Property unica (se esiste) <br>
      */
     @Override
     public String getPropertyUnica(AEntity entityBean) {
-        return ((Regione) entityBean).getIso();
+        return ((Provincia) entityBean).getSigla();
     }// end of method
 
 

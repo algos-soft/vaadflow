@@ -94,7 +94,11 @@ public abstract class FlowCost {
 
     public static final String TAG_PRE = "preferenza";
 
-    public static final String TAG_REG = "regione";
+    public static final String TAG_REGIONE = "regione";
+
+    public static final String TAG_PROVINCIA = "provincia";
+
+    public static final String TAG_COMUNE = "comune";
 
     public static final String PAGE_ROOT = "";
 

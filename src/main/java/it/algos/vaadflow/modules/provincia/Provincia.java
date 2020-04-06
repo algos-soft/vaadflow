@@ -1,14 +1,19 @@
-package it.algos.vaadflow.modules.regione;
+package it.algos.vaadflow.modules.provincia;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import lombok.*;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -18,7 +23,7 @@ import javax.validation.constraints.Size;
  * Project vaadflow <br>
  * Created by Algos <br>
  * User: Gac <br>
- * Fix date: 6-apr-2020 10.15.25 <br>
+ * Fix date: 6-apr-2020 11.35.26 <br>
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  * <p>
@@ -52,24 +57,24 @@ import javax.validation.constraints.Size;
  * -Remember that field keys are repeated for every document so using a smaller key name will reduce the required space.
  * -va usato SOLO per 'collection' molto grandi (per evitare confusione sul nome della property da usare).
  * Le property non primitive, di default sono EMBEDDED con un riferimento statico
- * (EAFieldType.link e XxxPresenter.class)
+ *      (EAFieldType.link e XxxPresenter.class)
  * Le singole property possono essere annotate con @DBRef per un riferimento DINAMICO (not embedded)
- * (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
+ *      (EAFieldType.combo e XXService.class, con inserimento automatico nel ViewDialog)
  * Una (e una sola) property deve avere @AIColumn(flexGrow = true) per fissare la larghezza della Grid <br>
  */
 @Entity
-@Document(collection = "regione")
-@TypeAlias("regione")
+@Document(collection = "provincia")
+@TypeAlias("provincia")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builderRegione")
+@Builder(builderMethodName = "builderProvincia")
 @EqualsAndHashCode(callSuper = false)
 @AIScript(sovrascrivibile = false)
-@AIEntity(recordName = "regione", company = EACompanyRequired.nonUsata)
-@AIList(fields = {"iso", "nome"})
-@AIForm(fields = {"ordine", "iso", "nome"})
-public class Regione extends AEntity {
+@AIEntity(recordName = "provincia", company = EACompanyRequired.nonUsata)
+@AIList(fields = {"ordine", "code", "descrizione"})
+@AIForm(fields = {"ordine", "code", "descrizione"})
+public class Provincia extends AEntity {
 
 
     /**
@@ -77,12 +82,14 @@ public class Regione extends AEntity {
      */
     private final static long serialVersionUID = 1L;
 
-
-    /**
-     * ordinamento (obbligatorio, unico) <br>
+    
+	/**
+     * ordine di presentazione (obbligatorio, unico) <br>
+     * il più importante per primo <br>
      */
     @NotNull
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @Indexed()
+    @Field("ord")
     @AIField(type = EAFieldType.integer, widthEM = 4)
     @AIColumn(name = "#", widthEM = 4)
     public int ordine;
@@ -92,10 +99,9 @@ public class Regione extends AEntity {
      */
     @NotNull(message = "Il codice ISO 3166-2:IT è obbligatorio")
     @Indexed()
-    @Size(min = 2)
     @AIField(type = EAFieldType.text, required = true, name = "Codice ISO 3166-2:IT", widthEM = 8)
-    @AIColumn(name = "codice", widthEM = 5)
-    public String iso;
+    @AIColumn(name = "sigla", widthEM = 5)
+    public String sigla;
 
     /**
      * codice di riferimento (obbligatorio, unico) <br>
@@ -106,7 +112,7 @@ public class Regione extends AEntity {
     @AIField(type = EAFieldType.text, required = true, focus = true, firstCapital = true, widthEM = 12)
     @AIColumn(flexGrow = true)
     public String nome;
-
+    
 
     /**
      * @return a string representation of the object.
