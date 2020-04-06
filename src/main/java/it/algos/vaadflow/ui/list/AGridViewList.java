@@ -319,28 +319,30 @@ public abstract class AGridViewList extends ALayoutViewList {
         if (searchType == EASearch.editField && searchField != null && text.isValid(searchProperty)) {
             type = annotation.getFormType(entityClazz, searchProperty);
 
-            switch (type) {
-                case text:
-                    if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
-                        filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue())));
-                    } else {
-                        filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i")));
-                    }// end of if/else cycle
+            if (type != null) {
+                switch (type) {
+                    case text:
+                        if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
+                            filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue())));
+                        } else {
+                            filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i")));
+                        }// end of if/else cycle
 
-                    break;
-                case integer:
-                    try { // prova ad eseguire il codice
-                        intValue = Integer.decode(searchField.getValue());
-                        filtri.add(new AFiltro(Criteria.where(searchProperty).is(intValue)));
-                    } catch (Exception unErrore) { // intercetta l'errore
-                        log.error(unErrore.toString());
-                    }// fine del blocco try-catch
+                        break;
+                    case integer:
+                        try { // prova ad eseguire il codice
+                            intValue = Integer.decode(searchField.getValue());
+                            filtri.add(new AFiltro(Criteria.where(searchProperty).is(intValue)));
+                        } catch (Exception unErrore) { // intercetta l'errore
+                            log.error(unErrore.toString());
+                        }// fine del blocco try-catch
 
-                    break;
-                default:
-                    log.warn("Switch - caso non definito");
-                    break;
-            } // end of switch statement
+                        break;
+                    default:
+                        log.warn("Switch - caso non definito");
+                        break;
+                } // end of switch statement
+            }// end of if cycle
         }// end of if cycle
 
         updateFiltriSpecifici();
@@ -385,7 +387,10 @@ public abstract class AGridViewList extends ALayoutViewList {
                 log.error(unErrore.toString());
             }// fine del blocco try-catch
         }// end of if cycle
-        headerGridHolder.setText(getGridHeaderText());
+
+        if (headerGridHolder != null) {
+            headerGridHolder.setText(getGridHeaderText());
+        }// end of if cycle
 
         creaAlertLayout();
     }// end of method

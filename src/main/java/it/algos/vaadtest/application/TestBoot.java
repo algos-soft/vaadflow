@@ -106,30 +106,6 @@ public class TestBoot extends ABoot {
         logger.crea("Pippoz");
     }// end of method
 
-//    /**
-//     * Executed on container startup <br>
-//     * Setup non-UI logic here <br>
-//     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
-//     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
-//     * questa sottoclasse concreta può singolarmente modificarle <br>
-//     */
-//    @EventListener
-//    public void onApplicationEvent(ContextRefreshedEvent event) {
-//        super.inizia();
-//    }// end of method
-
-//    /**
-//     * Executed on container startup <br>
-//     * Setup non-UI logic here <br>
-//     * Viene sovrascritto in questa sottoclasse concreta che invoca il metodo super.inizia() <br>
-//     * Nella superclasse vengono effettuate delle regolazioni standard; <br>
-//     * questa sottoclasse concreta può singolarmente modificarle <br>
-//     */
-//    @Override
-//    public void contextInitialized(ServletContextEvent servletContextEvent) {
-////        super.inizia();
-//    }// end of method
-
 
     /**
      * Inizializzazione delle versioni standard di vaadinflow <br>
@@ -274,7 +250,6 @@ public class TestBoot extends ABoot {
          */
         FlowVar.companyServiceClazz = CompanyService.class;
 
-
     }// end of method
 
 
@@ -284,12 +259,6 @@ public class TestBoot extends ABoot {
     protected void iniziaDataProgettoSpecifico() {
         provaService.reset();
         betaService.reset();
-
-//        logger.crea(EALogType.debug,"Zanzibar");
-//        logger.crea(EALogType.debug,"Alfetta");
-//        logger.crea(EALogType.warn,"Domani");
-//        logger.crea(EALogType.warn,"Oggi");
-//        logger.crea(EALogType.warn,"Befana");
     }// end of method
 
 

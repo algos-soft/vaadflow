@@ -94,6 +94,8 @@ public abstract class FlowCost {
 
     public static final String TAG_PRE = "preferenza";
 
+    public static final String TAG_REG = "regione";
+
     public static final String PAGE_ROOT = "";
 
     public static final String PAGE_WIZARD = "wizard";
@@ -161,6 +163,8 @@ public abstract class FlowCost {
     public static final String FLAG_TEXT_EDIT = "textEdit";
 
     public static final String FLAG_LOG_ACTION = "logAction";
+
+    public static final String USA_BACK_BUTTON = "usaBackButton";
 
     public static final String BOT_ACCETTA = "Accetta";
 

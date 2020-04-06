@@ -46,7 +46,7 @@ public enum EAPreferenza implements IAPreferenza {
     mailFrom(FlowCost.MAIL_FROM, "Email di default da cui partono i log", EAPrefType.email, EARole.developer, false, "info@algos.it"),
     mailTo(FlowCost.MAIL_TO, "Email di default a cui spedire i log di posta", EAPrefType.email, EARole.admin, false, "gac@algos.it"),
 
-    //--.grid
+    //--grid
     maxRigheGrid(FlowCost.MAX_RIGHE_GRID, "Numero di elementi oltre il quale scatta la pagination automatica della Grid (se attiva)", EAPrefType.integer, EARole.developer, true, 20),
     maxRigheGridClick(FlowCost.MAX_RIGHE_GRID_CLICK, "Numero di elementi oltre il quale scatta la pagination automatica della Grid (se attiva) e se è abilitato il doppio click per aprire il dialogo di edit (le righe sono meno alte)", EAPrefType.integer, EARole.developer, false, 25),
     mongoPageLimit(FlowCost.MONGO_PAGE_LIMIT, "Limite di elementi nelle query mongoDB", EAPrefType.integer, EARole.developer, false, 50000),
@@ -54,13 +54,16 @@ public enum EAPreferenza implements IAPreferenza {
     usaButtonShortcut(FlowCost.USA_BUTTON_SHORTCUT, "Shortcut dei bottoni. Disabilitabile in caso di problemi col browser", EAPrefType.bool, EARole.developer, true, true),
     usaGridHeaderPrimaMaiuscola(FlowCost.USA_GRID_HEADER_PRIMA_MAIUSCOLA, "Prima lettera maiuscola nell'header della Grid", EAPrefType.bool, EARole.developer, true, true),
 
+    //--list e form
     textButtonSearch(FlowCost.FLAG_TEXT_SEARCH, "Testo del bottone Search", EAPrefType.enumeration, EARole.developer, true, EASearchText.cerca),
     textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.enumeration, EARole.developer, true, EANewText.nuovoItaliano),
     textButtonShow(FlowCost.FLAG_TEXT_SHOW, "Testo del bottone Show (potrebbe esserci solo l'icona)", EAPrefType.enumeration, EARole.developer, true, EAShowText.show),
     textButtonEdit(FlowCost.FLAG_TEXT_EDIT, "Testo del bottone Edit (potrebbe esserci solo l'icona)", EAPrefType.enumeration, EARole.developer, true, EAEditText.edit),
     usaTextEditButton(FlowCost.USA_TEXT_EDIT_BUTTON, "Usa un testo (oltre all'icona) per il bottone di Edit che apre il dialog", EAPrefType.bool, EARole.developer, true, true),
     usaEditButton(FlowCost.USA_EDIT_BUTTON, "Usa una colonna di bottoni Edit per aprire il dialogo. Se falso, usa un doppio clik nella riga", EAPrefType.bool, EARole.developer, false, true),
+    usaBackButton(FlowCost.USA_BACK_BUTTON, "Usa un bottone di ritorno per uscire dal dialogo. Se falso, usare il browser", EAPrefType.bool, EARole.developer, false, true),
     logAction(FlowCost.FLAG_LOG_ACTION, "Azione di log", EAPrefType.enumeration, EARole.developer, false, EALogAction.terminale),
+
     ;
 
 

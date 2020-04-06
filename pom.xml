@@ -125,16 +125,7 @@
             <version>1.0.1</version>
         </dependency>
 
-        <!-- Dialog -->
-        <!-- Non usato -->
-<!--        <dependency>-->
-<!--            <groupId>org.claspina</groupId>-->
-<!--            <artifactId>confirm-dialog</artifactId>-->
-<!--            <version>2.0.0</version>-->
-<!--        </dependency>-->
-
         <!-- Spring -->
-        <!-- Probabilmente da cambiare in 14.0.1 -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>

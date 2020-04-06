@@ -348,7 +348,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      */
     protected void fixPreferenze() {
         //--Flag di preferenza per usare il bottone Cancel. Normalmente true.
-        usaCancelButton = true;
+        this.usaCancelButton = pref.isBool(USA_BACK_BUTTON);
 
         //--Flag di preferenza per usare il bottone Save. Normalmente true.
         usaSaveButton = true;
@@ -361,6 +361,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //--Flag per differenziare i dialoghi di secondo livello, aperti dai primi. Normalmente true.
         isDialogoPrimoLivello = true;
+
 
         alertUser = new ArrayList<>();
         alertAdmin = new ArrayList<>();
