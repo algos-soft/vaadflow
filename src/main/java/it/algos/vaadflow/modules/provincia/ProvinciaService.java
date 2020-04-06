@@ -2,7 +2,9 @@ package it.algos.vaadflow.modules.provincia;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.importa.ImportProvincie;
 import it.algos.vaadflow.modules.regione.Regione;
+import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
@@ -46,13 +51,18 @@ public class ProvinciaService extends AService {
      */
     private final static long serialVersionUID = 1L;
 
-
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
      * Spring costruisce una implementazione concreta dell'interfaccia MongoRepository (prevista dal @Qualifier) <br>
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public ProvinciaRepository repository;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private RegioneService regioneService;
 
 
     /**
@@ -74,16 +84,17 @@ public class ProvinciaService extends AService {
     /**
      * Crea una entity solo se non esisteva <br>
      *
-     * @param sigla (obbligatoria, unica)
-     * @param nome  (obbligatorio, unico)
+     * @param regione (obbligatoria)
+     * @param sigla   (obbligatoria, unica)
+     * @param nome    (obbligatorio, unico)
      *
      * @return true se la entity è stata creata
      */
-    public boolean creaIfNotExist(String sigla, String nome) {
+    public boolean creaIfNotExist(Regione regione, String sigla, String nome) {
         boolean creata = false;
 
         if (isMancaByKeyUnica(sigla)) {
-            AEntity entity = save(newEntity(0, sigla, nome));
+            AEntity entity = save(newEntity(0, regione, sigla, nome));
             creata = entity != null;
         }// end of if cycle
 
@@ -94,13 +105,14 @@ public class ProvinciaService extends AService {
     /**
      * Crea una entity e la registra <br>
      *
-     * @param sigla (obbligatoria, unica)
-     * @param nome  (obbligatorio, unico)
+     * @param regione (obbligatoria)
+     * @param sigla   (obbligatoria, unica)
+     * @param nome    (obbligatorio, unico)
      *
      * @return la entity appena creata
      */
-    public Provincia crea(String sigla, String nome) {
-        return (Provincia) save(newEntity(0, sigla, nome));
+    public Provincia crea(Regione regione, String sigla, String nome) {
+        return (Provincia) save(newEntity(0, regione, sigla, nome));
     }// end of method
 
 
@@ -113,7 +125,7 @@ public class ProvinciaService extends AService {
      */
     @Override
     public Provincia newEntity() {
-        return newEntity(0, VUOTA, VUOTA);
+        return newEntity(0, (Regione) null, VUOTA, VUOTA);
     }// end of method
 
 
@@ -123,18 +135,20 @@ public class ProvinciaService extends AService {
      * All properties <br>
      * Utilizza, eventualmente, la newEntity() della superclasse, per le property della superclasse <br>
      *
-     * @param ordine di presentazione (obbligatorio con inserimento automatico se è zero)
-     * @param sigla  (obbligatoria, unica)
-     * @param nome   (obbligatorio, unico)
+     * @param ordine  di presentazione (obbligatorio con inserimento automatico se è zero)
+     * @param regione (obbligatoria)
+     * @param sigla   (obbligatoria, unica)
+     * @param nome    (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Provincia newEntity(int ordine, String sigla, String nome) {
+    public Provincia newEntity(int ordine, Regione regione, String sigla, String nome) {
         Provincia entity = null;
 
         entity = Provincia.builderProvincia()
                 .ordine(ordine > 0 ? ordine : getNewOrdine())
                 .sigla(text.isValid(sigla) ? sigla : null)
+                .regione(regione)
                 .nome(text.isValid(nome) ? nome : null)
                 .build();
 
@@ -145,13 +159,14 @@ public class ProvinciaService extends AService {
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param sigla  (obbligatoria, unica)
+     * @param sigla (obbligatoria, unica)
      *
      * @return istanza della Entity, null se non trovata
      */
     public Provincia findByKeyUnica(String sigla) {
         return repository.findBySigla(sigla);
     }// end of method
+
 
     /**
      * Property unica (se esiste) <br>
@@ -172,28 +187,36 @@ public class ProvinciaService extends AService {
      */
     @Override
     public int reset() {
+        List<HashMap<String, String>> lista = null;
+        ImportProvincie importService;
+        String sigla = VUOTA;
+        String nome = VUOTA;
+        String regioneTxt = VUOTA;
+        Regione regione = null;
+
         int numRec = super.reset();
 
-        creaIfNotExist("IT-65", "Abruzzo");
-        creaIfNotExist("IT-77", "Basilicata");
-        creaIfNotExist("IT-78", "Calabria");
-        creaIfNotExist("IT-72", "Campania");
-        creaIfNotExist("IT-45", "Emilia-Romagna");
-        creaIfNotExist("IT-36", "Friuli-Venezia Giulia");
-        creaIfNotExist("IT-62", "Lazio");
-        creaIfNotExist("IT-42", "Liguria");
-        creaIfNotExist("IT-25", "Lombardia");
-        creaIfNotExist("IT-57", "Marche");
-        creaIfNotExist("IT-67", "Molise");
-        creaIfNotExist("IT-21", "Piemonte");
-        creaIfNotExist("IT-75", "Puglia");
-        creaIfNotExist("IT-88", "Sardegna");
-        creaIfNotExist("IT-82", "Sicilia");
-        creaIfNotExist("IT-52", "Toscana");
-        creaIfNotExist("IT-32", "Trentino-Alto Adige");
-        creaIfNotExist("IT-55", "Umbria");
-        creaIfNotExist("IT-23", "Valle d'Aosta");
-        creaIfNotExist("IT-34", "Veneto");
+        //--recupera una lista di tutte le provincie dal server di Wikipedia
+        importService = appContext.getBean(ImportProvincie.class);
+        lista = importService.esegue();
+
+        if (lista != null) {
+            for (HashMap<String, String> mappa : lista) {
+                if (mappa != null && mappa.size() == 3) {
+                    sigla = mappa.get(ImportProvincie.KEY_SIGLA);
+                    nome = mappa.get(ImportProvincie.KEY_NOME);
+                    regioneTxt = mappa.get(ImportProvincie.KEY_REGIONE);
+                }// end of if cycle
+
+                if (text.isValid(regioneTxt)) {
+                    regione = regioneService.findByNome(regioneTxt);
+                }// end of if cycle
+
+                if (regione != null) {
+                    creaIfNotExist(regione, sigla, nome);
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
 
         return numRec;
     }// end of method

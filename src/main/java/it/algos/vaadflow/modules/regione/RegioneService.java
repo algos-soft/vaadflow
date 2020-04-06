@@ -152,6 +152,17 @@ public class RegioneService extends AService {
         return repository.findByIso(iso);
     }// end of method
 
+    /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param nome   (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Regione findByNome(String nome) {
+        return repository.findByNome(nome);
+    }// end of method
+
 
     /**
      * Property unica (se esiste) <br>

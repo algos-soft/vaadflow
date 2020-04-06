@@ -32,6 +32,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 public interface RegioneRepository extends MongoRepository<Regione, String> {
 
     public Regione findByIso(String iso);
+    public Regione findByNome(String nome);
 
 	public List<Regione> findAllByOrderByIsoAsc();
 
