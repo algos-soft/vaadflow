@@ -2120,9 +2120,46 @@ public class AAnnotationService extends AbstractService {
      *
      * @return the method name
      */
-    public String getMethodName(Class<? extends AEntity> entityClazz, String fieldName) {
+    public String getMethodNameColumn(Class<? extends AEntity> entityClazz, String fieldName) {
         String methodName = "";
         AIColumn annotation = this.getAIColumn(entityClazz, fieldName);
+
+        if (annotation != null) {
+            methodName = annotation.methodName();
+        }// end of if cycle
+
+        return methodName;
+    }// end of method
+
+    /**
+     * Get the color of the property.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the color of the field
+     */
+    public String xxxx(final Field reflectionJavaField) {
+        String color = "";
+        AIField annotation = this.getAIField(reflectionJavaField);
+
+        if (annotation != null) {
+            color = annotation.color();
+        }// end of if cycle
+
+        return color;
+    }// end of method
+
+
+    /**
+     * Get the method name for reflection.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the method name
+     */
+    public String getMethodNameField(final Field reflectionJavaField) {
+        String methodName = "";
+        AIField annotation = this.getAIField(reflectionJavaField);
 
         if (annotation != null) {
             methodName = annotation.methodName();

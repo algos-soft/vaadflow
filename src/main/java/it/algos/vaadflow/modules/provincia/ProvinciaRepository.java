@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.provincia;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.modules.regione.Regione;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -36,6 +37,7 @@ public interface ProvinciaRepository extends MongoRepository<Provincia, String> 
 
     public Provincia findByNome(String nome);
 
-    public List<Provincia> findAllByOrderByOrdineAsc();
+    public List<Provincia> findAllByOrderByNomeAsc();
+    public List<Provincia> findAllByRegioneOrderByNomeAsc(Regione regione);
 
 }// end of interface

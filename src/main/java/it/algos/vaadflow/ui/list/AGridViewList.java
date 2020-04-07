@@ -99,7 +99,9 @@ public abstract class AGridViewList extends ALayoutViewList {
 
         //--Apre il dialog di detail
         //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna
-        this.addDetailDialog();
+        if (pref.isBool(FlowCost.FLAG_EDIT_LEFT)) {
+            this.addDetailDialog();
+        }// end of if cycle
 
         //--Eventuali colonne specifiche aggiunte PRIMA di quelle automatiche
         this.addSpecificColumnsBefore();
@@ -109,6 +111,12 @@ public abstract class AGridViewList extends ALayoutViewList {
 
         //--Eventuali colonne specifiche aggiunte DOPO quelle automatiche
         this.addSpecificColumnsAfter();
+
+        //--Apre il dialog di detail
+        //--Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come ultima colonna
+        if (!pref.isBool(FlowCost.FLAG_EDIT_LEFT)) {
+            this.addDetailDialog();
+        }// end of if cycle
 
         // Sets the max number of items to be rendered on the grid for each page
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -206,7 +214,7 @@ public abstract class AGridViewList extends ALayoutViewList {
 
     /**
      * Apre il dialog di detail <br>
-     * Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima colonna <br>
+     * Eventuale inserimento (se previsto nelle preferenze) del bottone Edit come prima o ultima colonna <br>
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
     protected void addDetailDialog() {

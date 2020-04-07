@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @SpringComponent
 @UIScope
-@Route(value = "")
+@Route(value = "test")
 @HtmlImport(value = "styles/algos-styles.html", loadMode = LoadMode.INLINE)
 @Slf4j
 public class HomeView extends VerticalLayout {
@@ -30,7 +30,7 @@ public class HomeView extends VerticalLayout {
 
     private Image immagine = new Image("frontend/images/ambulanza.jpg", "vaadin");
 
-//    public VaadinWelcome() {
+//    public VaadinWelcome() {aøal
 //        add(immagine);
 //        add(new Paragraph("Hello Vaadin 10"));
 //        add(new Paragraph("Framework di prova con Vaadin 10"));

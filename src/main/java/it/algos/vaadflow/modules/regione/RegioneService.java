@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.regione;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.importa.ImportWiki;
+import it.algos.vaadflow.modules.provincia.Provincia;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.wrapper.WrapDueStringhe;
 import lombok.extern.slf4j.Slf4j;
@@ -177,6 +178,15 @@ public class RegioneService extends AService {
         return ((Regione) entityBean).getIso();
     }// end of method
 
+
+    /**
+     * Returns all entities of the type <br>
+     *
+     * @return all ordered entities
+     */
+    public List<Regione> findAll() {
+        return (List) repository.findAllByOrderByIsoAsc();
+    }// end of method
 
     /**
      * Creazione di alcuni dati iniziali <br>

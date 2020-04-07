@@ -3,6 +3,7 @@ package it.algos.vaadflow.modules.provincia;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.importa.ImportWiki;
+import it.algos.vaadflow.modules.anno.Anno;
 import it.algos.vaadflow.modules.regione.Regione;
 import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
@@ -187,6 +188,24 @@ public class ProvinciaService extends AService {
         return ((Provincia) entityBean).getSigla();
     }// end of method
 
+
+    /**
+     * Returns all entities of the type <br>
+     *
+     * @return all ordered entities
+     */
+    public List<Provincia> findAll() {
+        return (List) repository.findAllByOrderByNomeAsc();
+    }// end of method
+
+    /**
+     * Returns all entities of the type <br>
+     *
+     * @return all ordered entities
+     */
+    public List<Provincia> findAllByRegione(Regione regione) {
+        return (List) repository.findAllByRegioneOrderByNomeAsc(regione);
+    }// end of method
 
     /**
      * Creazione di alcuni dati iniziali <br>

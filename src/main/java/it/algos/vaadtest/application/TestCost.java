@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class TestCost {
+	public final static String TAG_LIE = "lievito";
 
     public final static String TAG_GAM = "gamma";
 

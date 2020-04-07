@@ -1,13 +1,14 @@
 package it.algos.vaadflow.modules.regione;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 
 /**
@@ -32,8 +33,9 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 public interface RegioneRepository extends MongoRepository<Regione, String> {
 
     public Regione findByIso(String iso);
+
     public Regione findByNome(String nome);
 
-	public List<Regione> findAllByOrderByIsoAsc();
+    public List<Regione> findAllByOrderByIsoAsc();
 
 }// end of interface

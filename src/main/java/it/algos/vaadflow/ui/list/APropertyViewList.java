@@ -224,6 +224,15 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected boolean usaButtonNew;
 
     /**
+     * Bottone per aprire il form <br>
+     * Un flag controlla se mostrarlo o meno: FlowCost.USA_EDIT_BUTTON<br>
+     * Un flag controlla se mostrarlo a sinistra, prima di tutte le colonne oppure a destra dopo l'ultima colonna: FlowCost.FLAG_TEXT_EDIT_LEFT <br>
+     * Un flag controlla se mostrare solo l'icona oppure anche un testo: USA_TEXT_EDIT_BUTTON <br>
+     * Un flag controlla quale testo mostrare: FLAG_TEXT_EDIT <br>
+     */
+    protected Button buttonEdit;
+
+    /**
      * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
      * Il service viene recuperato dal presenter, <br>
      * La repository è gestita direttamente dal service <br>

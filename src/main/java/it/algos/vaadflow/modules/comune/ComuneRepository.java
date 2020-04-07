@@ -1,14 +1,14 @@
 package it.algos.vaadflow.modules.comune;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import static it.algos.vaadflow.application.FlowCost.TAG_COM;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
 
 /**
@@ -33,5 +33,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
 public interface ComuneRepository extends MongoRepository<Comune, String> {
 
     public Comune findByNome(String nome);
+
+    public List<Comune> findAllByOrderByNomeAsc();
 
 }// end of interface

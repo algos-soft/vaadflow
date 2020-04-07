@@ -16,6 +16,7 @@ import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import it.algos.vaadflow.annotation.AIField;
 import it.algos.vaadflow.application.StaticContextAccessor;
+import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.ui.fields.*;
@@ -26,10 +27,13 @@ import org.springframework.stereotype.Service;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project it.algos.vaadflow
@@ -134,6 +138,7 @@ public class AFieldService extends AbstractService {
         String message;
         String messageSize;
         int min = 0;
+        List items = null;
 
         clazz = annotation.getClazz(reflectionJavaField);
         notNull = annotation.isNotNull(reflectionJavaField);
@@ -160,6 +165,7 @@ public class AFieldService extends AbstractService {
         ALongZeroValidator longZeroValidator = new ALongZeroValidator();
         AUniqueValidator uniqueValidator = null;
         String color = annotation.getFieldColor(reflectionJavaField);
+        String methodName = annotation.getMethodNameField(reflectionJavaField);
 
         if (type == null) {
             field = new ATextField(caption.equals("") ? "noname" : caption);
@@ -289,7 +295,7 @@ public class AFieldService extends AbstractService {
 
                 if (clazz != null) {
                     IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll();
+                    items = ((IAService) service).findAll();
                     if (items != null) {
                         Set<Role> hSet = new HashSet<Role>(items);
                         hSet.addAll(items);
@@ -308,16 +314,33 @@ public class AFieldService extends AbstractService {
                 break;
             case combo:
                 field = new AComboBox(caption);
+                Method metodo = null;
+                Object serviceInstance = null;
+                String value = VUOTA;
+
                 if (clazz != null) {
-                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    List items = ((IAService) service).findAll();
-                    if (items != null) {
-                        ((AComboBox) field).setItems(items);
-                    }// end of if cycle
+                    if (text.isValid(methodName)) {
+                        try { // prova ad eseguire il codice
+                            metodo = serviceClazz.getDeclaredMethod(methodName, AEntity.class);
+                            serviceInstance = StaticContextAccessor.getBean(serviceClazz);
+                            items = (List) metodo.invoke(serviceInstance);
+                            if (items != null) {
+                                ((AComboBox) field).setItems(items);
+                            }// end of if cycle
+                        } catch (Exception unErrore) { // intercetta l'errore
+                            log.error(unErrore.toString());
+                        }// fine del blocco try-catch
+                    } else {
+                        IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+                        items = ((IAService) service).findAll();
+                        if (items != null) {
+                            ((AComboBox) field).setItems(items);
+                        }// end of if cycle
+                    }// end of if/else cycle
                 }// end of if cycle
                 field.setReadOnly(false);
 
-                if (binder != null) {
+                if (binder != null && items != null) {
                     if (notNull) {
                         binder.forField(field)
                                 .withValidator(nullValidator)
@@ -338,15 +361,15 @@ public class AFieldService extends AbstractService {
                     ((AComboBox) field).setItems(enumItems);
                 } else {
                     if (enumClazz != null) {
-                        Object[] items = enumClazz.getEnumConstants();
-                        if (items != null) {
+                        Object[] elementi = enumClazz.getEnumConstants();
+                        if (elementi != null) {
 //                            ((AComboBox) field).setItems(array.toString(items));
-                            ((AComboBox) field).setItems(items);
+                            ((AComboBox) field).setItems(elementi);
                         }// end of if cycle
                     } else {
                         if (serviceClazz != null) {
                             IAService service = (IAService) StaticContextAccessor.getBean(serviceClazz);
-                            List items = ((IAService) service).findAll();
+                            items = ((IAService) service).findAll();
                             if (items != null) {
 //                                ((AComboBox) field).setItems(array.toString(items));
                                 ((AComboBox) field).setItems(items);
@@ -398,7 +421,7 @@ public class AFieldService extends AbstractService {
                 if (serviceClazz != null) {
                     field = new Select<>();
                     IAIcon service = (IAIcon) StaticContextAccessor.getBean(serviceClazz);
-                    List items = ((IAIcon) service).findIcons();
+                    items = ((IAIcon) service).findIcons();
                     if (items != null) {
                         ((Select) field).setItems(items);
                     }// end of if cycle

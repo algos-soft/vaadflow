@@ -642,8 +642,8 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Costruisce ogni singolo field
         creaFieldsBase(propertyNamesList);
 
-        //--Eventuali regolazioni aggiuntive ai fields del binder
-        fixStandardAlgosFields();
+        //--Eventuali regolazioni aggiuntive ai fields del binder PRIMA di associare i valori
+        fixStandardAlgosFieldsAnte();
 
         //--Costruisce eventuali fields specifici (costruiti non come standard type)
         //--Aggiunge i fields specifici al binder (facoltativo, alcuni fields non funzionano col binder)
@@ -656,6 +656,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
         //--Associa i valori del currentItem al binder. Dal DB alla UI
         binder.readBean(currentItem);
+
+        //--Eventuali regolazioni aggiuntive ai fields del binder DOPO aver associato i valori
+        fixStandardAlgosFieldsPost();
 
         //--Eventuali aggiustamenti finali al layout
         //--Aggiunge eventuali altri componenti direttamente al layout grafico (senza binder e senza fieldMap)
@@ -724,10 +727,10 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
-     * Eventuali specifiche regolazioni aggiuntive ai fields del binder
+     * Eventuali regolazioni aggiuntive ai fields del binder PRIMA di associare i valori <br>
      * Sovrascritto nella sottoclasse
      */
-    protected void fixStandardAlgosFields() {
+    protected void fixStandardAlgosFieldsAnte() {
     }// end of method
 
 
@@ -749,6 +752,13 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         for (String name : fieldMap.keySet()) {
             getFormLayout().add(fieldMap.get(name));
         }// end of for cycle
+    }// end of method
+
+    /**
+     * Eventuali regolazioni aggiuntive ai fields del binder DOPO aver associato i valori <br>
+     * Sovrascritto nella sottoclasse
+     */
+    protected void fixStandardAlgosFieldsPost() {
     }// end of method
 
 

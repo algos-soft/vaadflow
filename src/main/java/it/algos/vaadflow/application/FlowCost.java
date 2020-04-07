@@ -170,6 +170,8 @@ public abstract class FlowCost {
 
     public static final String FLAG_TEXT_EDIT = "textEdit";
 
+    public static final String FLAG_EDIT_LEFT = "editLeft";
+
     public static final String FLAG_LOG_ACTION = "logAction";
 
     public static final String USA_BACK_BUTTON = "usaBackButton";

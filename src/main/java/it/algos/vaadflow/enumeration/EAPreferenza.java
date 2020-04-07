@@ -59,6 +59,7 @@ public enum EAPreferenza implements IAPreferenza {
     textButtonNew(FlowCost.FLAG_TEXT_NEW, "Testo del bottone New", EAPrefType.enumeration, EARole.developer, true, EANewText.nuovoItaliano),
     textButtonShow(FlowCost.FLAG_TEXT_SHOW, "Testo del bottone Show (potrebbe esserci solo l'icona)", EAPrefType.enumeration, EARole.developer, true, EAShowText.show),
     textButtonEdit(FlowCost.FLAG_TEXT_EDIT, "Testo del bottone Edit (potrebbe esserci solo l'icona)", EAPrefType.enumeration, EARole.developer, true, EAEditText.edit),
+    usaButtonEditLeft(FlowCost.FLAG_EDIT_LEFT, "Bottone Edit (se c'è) posizionato a sinistra, prima delle colonne. In alternativa alla estrema destra.", EAPrefType.bool, EARole.developer, true, true),
     usaTextEditButton(FlowCost.USA_TEXT_EDIT_BUTTON, "Usa un testo (oltre all'icona) per il bottone di Edit che apre il dialog", EAPrefType.bool, EARole.developer, true, true),
     usaEditButton(FlowCost.USA_EDIT_BUTTON, "Usa una colonna di bottoni Edit per aprire il dialogo. Se falso, usa un doppio clik nella riga", EAPrefType.bool, EARole.developer, false, true),
     usaBackButton(FlowCost.USA_BACK_BUTTON, "Usa un bottone di ritorno per uscire dal dialogo. Se falso, usare il browser", EAPrefType.bool, EARole.developer, false, true),

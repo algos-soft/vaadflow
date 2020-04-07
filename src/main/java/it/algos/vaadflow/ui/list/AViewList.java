@@ -527,13 +527,13 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
             label = isEntityModificabile ? pref.getStr(FLAG_TEXT_EDIT) : pref.getStr(FLAG_TEXT_SHOW);
         }// end of if cycle
 
-        Button edit = new Button(label, event -> openDialog(entityBean));
-        edit.setIcon(new Icon("lumo", isEntityModificabile ? "edit" : "search"));
-        edit.addClassName("review__edit");
-        edit.getElement().setAttribute("theme", "tertiary");
-        edit.setHeight("1em");
+        buttonEdit = new Button(label, event -> openDialog(entityBean));
+        buttonEdit.setIcon(new Icon("lumo", isEntityModificabile ? "edit" : "search"));
+        buttonEdit.addClassName("review__edit");
+        buttonEdit.getElement().setAttribute("theme", "tertiary");
+        buttonEdit.setHeight("1em");
 
-        return edit;
+        return buttonEdit;
     }// end of method
 
 
