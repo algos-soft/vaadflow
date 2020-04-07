@@ -3,6 +3,9 @@ package it.algos.vaadflow.service;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.modules.company.CompanyList;
 import it.algos.vaadflow.modules.anno.AnnoList;
+import it.algos.vaadflow.modules.comune.ComuneList;
+import it.algos.vaadflow.modules.provincia.ProvinciaList;
+import it.algos.vaadflow.modules.regione.RegioneList;
 import it.algos.vaadflow.modules.role.RoleList;
 import it.algos.vaadflow.modules.utente.UtenteList;
 import it.algos.vaadflow.modules.versione.VersioneList;
@@ -127,6 +130,9 @@ public class ABootService extends AbstractService {
         if (pref.isBool(EAPreferenza.showSecolo.getCode())) {
             FlowVar.menuClazzList.add(SecoloList.class);
         }// end of if cycle
+        FlowVar.menuClazzList.add(RegioneList.class);
+        FlowVar.menuClazzList.add(ProvinciaList.class);
+        FlowVar.menuClazzList.add(ComuneList.class);
 
         //--admin
         if (pref.isBool(EAPreferenza.showPreferenza.getCode())) {

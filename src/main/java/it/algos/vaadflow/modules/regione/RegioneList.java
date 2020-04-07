@@ -140,6 +140,8 @@ public class RegioneList extends AGridViewList {
         super.isEntityDeveloper = true;
         super.usaButtonNew = false;
         super.isEntityModificabile = false;
+
+        super.usaPagination = false;
     }// end of method
 
 

@@ -2,31 +2,29 @@ package it.algos.vaadflow.modules.comune;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.enumeration.EASearch;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EASearch;
+import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
-import static it.algos.vaadflow.application.FlowCost.TAG_COM;
-import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
-
 import org.vaadin.klaudeta.PaginatedGrid;
+
 import javax.annotation.PostConstruct;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
 
 /**
  * Project vaadflow <br>
@@ -133,6 +131,7 @@ public class ComuneList extends AGridViewList {
         super(service, Comune.class);
     }// end of Vaadin/@Route constructor
 
+
     /**
      * Crea effettivamente il Component Grid <br>
      * <p>
@@ -145,6 +144,7 @@ public class ComuneList extends AGridViewList {
     protected Grid creaGridComponent() {
         return new PaginatedGrid<Comune>();
     }// end of method
+
 
     /**
      * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
@@ -162,6 +162,7 @@ public class ComuneList extends AGridViewList {
         //super.inizia();
     }// end of method
 
+
     /**
      * Regola i parametri del browser per una view costruita da @Route <br>
      * <p>
@@ -178,6 +179,7 @@ public class ComuneList extends AGridViewList {
         super.setParameter(event, parameter);
     }// end of method
 
+
     /**
      * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
      * <p>
@@ -193,6 +195,7 @@ public class ComuneList extends AGridViewList {
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         super.beforeEnter(beforeEnterEvent);
     }// end of method
+
 
     /**
      * Preferenze specifiche di questa view <br>
@@ -212,8 +215,9 @@ public class ComuneList extends AGridViewList {
         super.usaButtonNew = false;
         super.isEntityModificabile = false;
 
-        super.usaPagination=true;
+        super.usaPagination = true;
     }// end of method
+
 
     /**
      * Costruisce gli oggetti base (placeholder) di questa view <br>
@@ -228,6 +232,7 @@ public class ComuneList extends AGridViewList {
         super.fixLayout();
     }// end of method
 
+
     /**
      * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
      * <p>
@@ -240,6 +245,7 @@ public class ComuneList extends AGridViewList {
     protected void creaAlertLayout() {
         super.creaAlertLayout();
     }// end of method
+
 
     /**
      * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
@@ -264,6 +270,7 @@ public class ComuneList extends AGridViewList {
         super.creaTopLayout();
     }// end of method
 
+
     /**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
@@ -276,6 +283,7 @@ public class ComuneList extends AGridViewList {
         //filtroComboBox.setPlaceholder("nazionalità ...");
         //filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca")));
     }// end of method
+
 
     /**
      * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
@@ -290,6 +298,7 @@ public class ComuneList extends AGridViewList {
     protected void creaFiltri() {
         super.creaFiltri();
     }// end of method
+
 
     /**
      * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
@@ -312,6 +321,7 @@ public class ComuneList extends AGridViewList {
         //}// end of if cycle
     }// end of method
 
+
     /**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
      * <p>
@@ -323,6 +333,7 @@ public class ComuneList extends AGridViewList {
     protected void addListeners() {
         super.addListeners();
     }// end of method
+
 
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
@@ -337,7 +348,7 @@ public class ComuneList extends AGridViewList {
      * @param entityBean item corrente, null se nuova entity
      */
     @Override
-     protected void openDialog(AEntity entityBean) {
+    protected void openDialog(AEntity entityBean) {
         appContext.getBean(ComuneDialog.class, service, entityClazz).open(entityBean, isEntityModificabile ? EAOperation.edit : EAOperation.showOnly, this::save, this::delete);
     }// end of method
 

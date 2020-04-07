@@ -132,55 +132,6 @@ public class ProvinciaList extends AGridViewList {
         super(service, Provincia.class);
     }// end of Vaadin/@Route constructor
 
-    
-
-    /**
-     * La injection viene fatta da Java/SpringBoot SOLO DOPO l'init() interno del costruttore dell'istanza <br>
-     * Si usa un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-     * <p>
-     * Performing the initialization in a constructor is not suggested
-     * as the state of the UI is not properly set up when the constructor is invoked.
-     * <p>
-     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti,
-     * ma l'ordine con cui vengono chiamati NON è garantito
-     * DEVE essere inserito nella sottoclasse e invocare (eventualmente) un metodo della superclasse.
-     */
-    @PostConstruct
-    protected void postConstruct() {
-        //super.inizia();
-    }// end of method
-
-    /**
-     * Regola i parametri del browser per una view costruita da @Route <br>
-     * <p>
-     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewList <br>
-     * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter() <br>
-     * Può essere sovrascritto, per gestire diversamente i parametri in ingresso <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     *
-     * @param event     con la location, ui, navigationTarget, source, ecc
-     * @param parameter opzionali nella chiamata del browser
-     */
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        super.setParameter(event, parameter);
-    }// end of method
-
-    /**
-     * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
-     * <p>
-     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>
-     * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
-     * Qui va tutta la logica inizale della view <br>
-     * Può essere sovrascritto, per costruire diversamente la view <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     *
-     * @param beforeEnterEvent con la location, ui, navigationTarget, source, ecc
-     */
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        super.beforeEnter(beforeEnterEvent);
-    }// end of method
 
     /**
      * Preferenze specifiche di questa view <br>
@@ -199,116 +150,10 @@ public class ProvinciaList extends AGridViewList {
         super.isEntityDeveloper = true;
         super.usaButtonNew = false;
         super.isEntityModificabile = false;
+
+        super.usaPagination = false;
     }// end of method
 
-    /**
-     * Costruisce gli oggetti base (placeholder) di questa view <br>
-     * <p>
-     * Li aggiunge alla view stessa <br>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
-     * Può essere sovrascritto, per modificare il layout standard <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void fixLayout() {
-        super.fixLayout();
-    }// end of method
-
-    /**
-     * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
-     * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
-     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void creaAlertLayout() {
-        super.creaAlertLayout();
-    }// end of method
-
-    /**
-     * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
-     * <p>
-     * In fixPreferenze() si regola quali bottoni mostrare. Nell'ordine: <br>
-     * 1) eventuale bottone per cancellare tutta la collezione <br>
-     * 2) eventuale bottone di reset per ripristinare (se previsto in automatico) la collezione <br>
-     * 3) eventuale bottone New, con testo regolato da preferenza o da parametro <br>
-     * 4) eventuale bottone 'Cerca...' per aprire un DialogSearch oppure un campo EditSearch per la ricerca <br>
-     * 5) eventuale bottone per annullare la ricerca e riselezionare tutta la collezione <br>
-     * 6) eventuale combobox di selezione della company (se applicazione multiCompany) <br>
-     * 7) eventuale combobox di selezione specifico <br>
-     * 8) eventuali altri bottoni specifici <br>
-     * <p>
-     * I bottoni vengono creati SENZA listeners che vengono regolati nel metodo addListeners() <br>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void creaTopLayout() {
-        super.creaTopLayout();
-    }// end of method
-
-    /**
-     * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
-     * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    protected void creaPopupFiltro() {
-        super.creaPopupFiltro();
-
-        //--esempio
-        //filtroComboBox.setPlaceholder("nazionalità ...");
-        //filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca")));
-    }// end of method
-
-    /**
-     * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
-     * I filtri normali vanno in updateFiltri() <br>
-     * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
-     * Chiamato SOLO alla creazione della view. Successive modifiche ai filtri sono gestite in updateFiltri() <br>
-     * Può essere sovrascritto SOLO se ci sono dei filtri che devono essere attivi già alla partenza della Grid <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void creaFiltri() {
-        super.creaFiltri();
-    }// end of method
-
-    /**
-     * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
-     * Normalmente tutti i filtri  vanno qui <br>
-     * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse AGridViewList <br>
-     * Alla prima visualizzazione della view usa SOLO creaFiltri() e non questo metodo <br>
-     * Può essere sovrascritto, per costruire i filtri specifici dei combobox, popup, ecc. <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void updateFiltri() {
-        super.updateFiltri();
-
-        //esempio
-        //String nazionalita = "";
-        //if (filtroComboBox != null && filtroComboBox.getValue() != null) {
-        //    nazionalita = (String) filtroComboBox.getValue();
-        //    filtri.add(Criteria.where("nazionalita").is(nazionalita));
-        //}// end of if cycle
-    }// end of method
-
-    /**
-     * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
-     * <p>
-     * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void addListeners() {
-        super.addListeners();
-    }// end of method
 
     /**
      * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
