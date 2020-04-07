@@ -9,6 +9,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
+import it.algos.vaadflow.enumeration.EASearch;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.IADialog;
 import it.algos.vaadflow.ui.MainLayout;
@@ -203,6 +204,15 @@ public class ComuneList extends AGridViewList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.searchType = EASearch.nonUsata;
+        super.usaButtonDelete = true;
+        super.usaButtonReset = true;
+        super.isEntityDeveloper = true;
+        super.usaButtonNew = false;
+        super.isEntityModificabile = false;
+
+        super.usaPagination=true;
     }// end of method
 
     /**

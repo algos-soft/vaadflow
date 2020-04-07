@@ -52,6 +52,34 @@ public class ImportWiki {
     }// end of constructor
 
 
+    public List<String> pagineComuni() {
+        List<String> lista = new ArrayList<>();
+
+//        lista.add("Comuni dell'Abruzzo");
+//        lista.add("Comuni della Basilicata");
+//        lista.add("Comuni della Calabria");
+//        lista.add("Comuni della Campania");
+//        lista.add("Comuni dell'Emilia-Romagna");
+//        lista.add("Comuni del Friuli-Venezia Giulia");
+//        lista.add("Comuni del Lazio");
+//        lista.add("Comuni della Liguria");
+//        lista.add("Comuni della Lombardia");
+        lista.add("Comuni delle Marche");
+        lista.add("Comuni del Molise");
+//        lista.add("Comuni del Piemonte");
+//        lista.add("Comuni della Puglia");
+//        lista.add("Comuni della Sardegna");
+//        lista.add("Comuni della Sicilia");
+//        lista.add("Comuni della Toscana");
+//        lista.add("Comuni del Trentino-Alto Adige");
+//        lista.add("Comuni dell'Umbria");
+//        lista.add("Comuni della Valle d'Aosta");
+//        lista.add("Comuni del Veneto");
+
+        return lista;
+    }// end of method
+
+
     /**
      * Sorgente completo di una pagina web <br>
      *
@@ -251,27 +279,52 @@ public class ImportWiki {
 
 
     /**
-     * Import delle provincie da una pagina di wikipedia <br>
+     * Import dei comuni da una pagina di wikipedia <br>
      *
-     * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
+     * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-    public List<WrapTreStringhe> comune() {
-        List<WrapTreStringhe> listaWrap = new ArrayList<>();
-        List<WrapTreStringhe> listaWrapCitta = null;
-        List<WrapTreStringhe> listaWrapProvince = null;
-
+    public List<WrapTreStringhe> comuniBase(String regioneTxt, String pagina, String[] titoliTable) {
+        List<WrapTreStringhe> listaWrap = null;
+        List<WrapTreStringhe> listaWrapGrezzo = null;
         WrapTreStringhe wrapValido;
-        String tagCodice = "Codice";
-        String tagCitta = "Città metropolitane";
-        String tagProvince = "Province";
-        String tagRegioni = "Nella regione";
-        String[] titoliCitta = new String[]{tagCodice, tagCitta, tagRegioni};
-        String[] titoliProvince = new String[]{tagCodice, tagProvince, tagRegioni};
+        String prima;
+        String seconda;
 
-        listaWrapCitta = provinceBase(PAGINA, titoliCitta);
-        listaWrapProvince = provinceBase(PAGINA, titoliProvince);
-        listaWrap.addAll(listaWrapCitta);
-        listaWrap.addAll(listaWrapProvince);
+        listaWrapGrezzo = estraeListaTre(pagina, titoliTable);
+        if (listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
+            listaWrap = new ArrayList<>();
+            for (WrapTreStringhe wrap : listaWrapGrezzo) {
+                prima = wrap.getPrima();
+                seconda = wrap.getSeconda();
+                prima = elaboraNome(prima);
+                seconda = elaboraNome(seconda);
+                wrapValido = new WrapTreStringhe(regioneTxt, seconda, prima);
+                listaWrap.add(wrapValido);
+            }// end of for cycle
+        }// end of if cycle
+
+        return listaWrap;
+    }// end of method
+
+
+    /**
+     * Import dei comuni dalle pagine di wikipedia <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
+     */
+    public List<WrapTreStringhe> comuni() {
+        List<WrapTreStringhe> listaWrap = new ArrayList<>();
+        List<WrapTreStringhe> listaWrapRegione = null;
+        String tag = "Comuni dell'Abruzzo";
+        String regioneTxt = "Abruzzo";
+
+        String tagCodice = "Comune";
+        String tagProvince = "Provincia";
+        String tagPopolazione = "Popolazione";
+         String[] titoli = new String[]{tagCodice, tagProvince, tagPopolazione};
+
+        listaWrapRegione = comuniBase(regioneTxt, tag, titoli);
+        listaWrap.addAll(listaWrapRegione);
         return listaWrap;
     }// end of method
 

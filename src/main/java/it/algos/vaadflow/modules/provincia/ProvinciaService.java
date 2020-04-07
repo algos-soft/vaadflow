@@ -169,6 +169,17 @@ public class ProvinciaService extends AService {
 
 
     /**
+     * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
+     *
+     * @param nome (obbligatorio, unico)
+     *
+     * @return istanza della Entity, null se non trovata
+     */
+    public Provincia findByNome(String nome) {
+        return repository.findByNome(nome);
+    }// end of method
+
+    /**
      * Property unica (se esiste) <br>
      */
     @Override

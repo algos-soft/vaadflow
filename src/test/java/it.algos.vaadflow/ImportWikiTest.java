@@ -85,7 +85,8 @@ public class ImportWikiTest {
         }// end of for cycle
     }// end of single test
 
-    @Test
+
+//    @Test
     public void province() {
         List<WrapTreStringhe> risultato = null;
         risultato = importWiki.province();
@@ -97,6 +98,27 @@ public class ImportWikiTest {
             System.out.println("Codice: " + wrap.getPrima());
             System.out.println("Province: " + wrap.getSeconda());
             System.out.println("Nella regione: " + wrap.getTerza());
+        }// end of for cycle
+    }// end of single test
+
+
+    /**
+     * Import dei comuni dalle pagine di wikipedia <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
+     */
+//    @Test
+    public void comune() {
+        List<WrapTreStringhe> risultato = null;
+        risultato = importWiki.comuni();
+        assertNotNull(risultato);
+
+        System.out.println("");
+        for (WrapTreStringhe wrap : risultato) {
+            System.out.println("");
+            System.out.println("Regione: " + wrap.getPrima());
+            System.out.println("Provincia: " + wrap.getSeconda());
+            System.out.println("Nome: " + wrap.getTerza());
         }// end of for cycle
     }// end of single test
 

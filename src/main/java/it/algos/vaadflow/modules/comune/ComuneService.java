@@ -2,9 +2,13 @@ package it.algos.vaadflow.modules.comune;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.modules.provincia.Provincia;
+import it.algos.vaadflow.modules.provincia.ProvinciaService;
 import it.algos.vaadflow.modules.regione.Regione;
+import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.wrapper.WrapTreStringhe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +17,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import java.util.List;
+
+import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow <br>
@@ -53,6 +60,18 @@ public class ComuneService extends AService {
      * Qui si una una interfaccia locale (col casting nel costruttore) per usare i metodi specifici <br>
      */
     public ComuneRepository repository;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private RegioneService regioneService;
+
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    private ProvinciaService provinciaService;
 
 
     /**
@@ -138,7 +157,7 @@ public class ComuneService extends AService {
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria ed unica) <br>
      *
-     * @param nome      (obbligatorio, unico)
+     * @param nome (obbligatorio, unico)
      *
      * @return istanza della Entity, null se non trovata
      */
@@ -146,12 +165,45 @@ public class ComuneService extends AService {
         return repository.findByNome(nome);
     }// end of method
 
+
     /**
      * Property unica (se esiste) <br>
      */
     @Override
     public String getPropertyUnica(AEntity entityBean) {
         return ((Comune) entityBean).getNome();
+    }// end of method
+
+
+    /**
+     * Creazione di alcuni dati iniziali <br>
+     * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
+     * I dati possono essere presi da una Enumeration o creati direttamemte <br>
+     * Deve essere sovrascritto - Invocare PRIMA il metodo della superclasse che cancella tutta la Collection <br>
+     *
+     * @return numero di elementi creati
+     */
+    @Override
+    public int reset() {
+        List<WrapTreStringhe> listaWrap = null;
+        ImportWiki importService;
+        Regione regione;
+        Provincia provincia;
+        int numRec = super.reset();
+
+        //--recupera una lista di tutte le provincie dal server di Wikipedia
+        importService = appContext.getBean(ImportWiki.class);
+        listaWrap = importService.comuni();
+
+        if (listaWrap != null && listaWrap.size() > 0) {
+            for (WrapTreStringhe wrap : listaWrap) {
+                regione = regioneService.findByNome(wrap.getPrima());
+                provincia = provinciaService.findByNome(wrap.getSeconda());
+                creaIfNotExist(regione,provincia, wrap.getTerza());
+            }// end of for cycle
+        }// end of if cycle
+
+        return numRec;
     }// end of method
 
 }// end of class

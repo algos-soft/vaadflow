@@ -1,13 +1,14 @@
 package it.algos.vaadflow.modules.provincia;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 
 /**
@@ -33,6 +34,8 @@ public interface ProvinciaRepository extends MongoRepository<Provincia, String> 
 
     public Provincia findBySigla(String sigla);
 
-	public List<Provincia> findAllByOrderByOrdineAsc();
+    public Provincia findByNome(String nome);
+
+    public List<Provincia> findAllByOrderByOrdineAsc();
 
 }// end of interface
