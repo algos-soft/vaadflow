@@ -249,4 +249,30 @@ public class ImportWiki {
         return listaWrap;
     }// end of method
 
+
+    /**
+     * Import delle provincie da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
+     */
+    public List<WrapTreStringhe> comune() {
+        List<WrapTreStringhe> listaWrap = new ArrayList<>();
+        List<WrapTreStringhe> listaWrapCitta = null;
+        List<WrapTreStringhe> listaWrapProvince = null;
+
+        WrapTreStringhe wrapValido;
+        String tagCodice = "Codice";
+        String tagCitta = "Città metropolitane";
+        String tagProvince = "Province";
+        String tagRegioni = "Nella regione";
+        String[] titoliCitta = new String[]{tagCodice, tagCitta, tagRegioni};
+        String[] titoliProvince = new String[]{tagCodice, tagProvince, tagRegioni};
+
+        listaWrapCitta = provinceBase(PAGINA, titoliCitta);
+        listaWrapProvince = provinceBase(PAGINA, titoliProvince);
+        listaWrap.addAll(listaWrapCitta);
+        listaWrap.addAll(listaWrapProvince);
+        return listaWrap;
+    }// end of method
+
 }// end of class
