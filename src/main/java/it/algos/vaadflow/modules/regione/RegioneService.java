@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
@@ -193,35 +192,16 @@ public class RegioneService extends AService {
 
         List<WrapDueStringhe> listaWrap = null;
         ImportWiki importService;
-        String sigla = VUOTA;
-        String nome = VUOTA;
-        String regioneTxt = VUOTA;
-        Regione regione = null;
 
         //--recupera una lista di tutte le regioni dal server di Wikipedia
         importService = appContext.getBean(ImportWiki.class);
         listaWrap = importService.regioni();
 
-//        creaIfNotExist("IT-65", "Abruzzo");
-//        creaIfNotExist("IT-77", "Basilicata");
-//        creaIfNotExist("IT-78", "Calabria");
-//        creaIfNotExist("IT-72", "Campania");
-//        creaIfNotExist("IT-45", "Emilia-Romagna");
-//        creaIfNotExist("IT-36", "Friuli-Venezia Giulia");
-//        creaIfNotExist("IT-62", "Lazio");
-//        creaIfNotExist("IT-42", "Liguria");
-//        creaIfNotExist("IT-25", "Lombardia");
-//        creaIfNotExist("IT-57", "Marche");
-//        creaIfNotExist("IT-67", "Molise");
-//        creaIfNotExist("IT-21", "Piemonte");
-//        creaIfNotExist("IT-75", "Puglia");
-//        creaIfNotExist("IT-88", "Sardegna");
-//        creaIfNotExist("IT-82", "Sicilia");
-//        creaIfNotExist("IT-52", "Toscana");
-//        creaIfNotExist("IT-32", "Trentino-Alto Adige");
-//        creaIfNotExist("IT-55", "Umbria");
-//        creaIfNotExist("IT-23", "Valle d'Aosta");
-//        creaIfNotExist("IT-34", "Veneto");
+        if (listaWrap != null && listaWrap.size() > 0) {
+            for (WrapDueStringhe wrap : listaWrap) {
+                creaIfNotExist(wrap.getPrima(), wrap.getSeconda());
+            }// end of for cycle
+        }// end of if cycle
 
         return numRec;
     }// end of method

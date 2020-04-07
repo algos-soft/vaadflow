@@ -6,6 +6,7 @@ import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.modules.regione.Regione;
 import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
+import it.algos.vaadflow.wrapper.WrapTreStringhe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
@@ -187,34 +187,19 @@ public class ProvinciaService extends AService {
      */
     @Override
     public int reset() {
-        List<HashMap<String, String>> lista = null;
+        List<WrapTreStringhe> listaWrap = null;
         ImportWiki importService;
-        String sigla = VUOTA;
-        String nome = VUOTA;
-        String regioneTxt = VUOTA;
-        Regione regione = null;
-
+        Regione regione;
         int numRec = super.reset();
 
         //--recupera una lista di tutte le provincie dal server di Wikipedia
         importService = appContext.getBean(ImportWiki.class);
-        lista = importService.province();
+        listaWrap = importService.province();
 
-        if (lista != null) {
-            for (HashMap<String, String> mappa : lista) {
-                if (mappa != null && mappa.size() == 3) {
-                    sigla = mappa.get(ImportWiki.KEY_SIGLA);
-                    nome = mappa.get(ImportWiki.KEY_NOME);
-                    regioneTxt = mappa.get(ImportWiki.KEY_REGIONE);
-                }// end of if cycle
-
-                if (text.isValid(regioneTxt)) {
-                    regione = regioneService.findByNome(regioneTxt);
-                }// end of if cycle
-
-                if (regione != null) {
-                    creaIfNotExist(regione, sigla, nome);
-                }// end of if cycle
+        if (listaWrap != null && listaWrap.size() > 0) {
+            for (WrapTreStringhe wrap : listaWrap) {
+                regione = regioneService.findByNome(wrap.getTerza());
+                creaIfNotExist(regione, wrap.getPrima(), wrap.getSeconda());
             }// end of for cycle
         }// end of if cycle
 

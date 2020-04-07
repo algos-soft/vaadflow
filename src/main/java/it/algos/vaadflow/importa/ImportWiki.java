@@ -1,19 +1,18 @@
 package it.algos.vaadflow.importa;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.service.AWebService;
 import it.algos.vaadflow.wrapper.WrapDueStringhe;
+import it.algos.vaadflow.wrapper.WrapTreStringhe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow
@@ -42,6 +41,12 @@ public class ImportWiki {
     @Autowired
     public AWebService aWebService;
 
+    /**
+     * Istanza (@Scope = 'singleton') inietta da Spring <br>
+     */
+    @Autowired
+    public ATextService text;
+
 
     public ImportWiki() {
     }// end of constructor
@@ -68,10 +73,10 @@ public class ImportWiki {
      *
      * @return lista di wrapper con due stringhe ognuno
      */
-    public List<WrapDueStringhe> estraeLista(String pagina, String[] titoliTable) {
+    public List<WrapDueStringhe> estraeListaDue(String pagina, String[] titoliTable) {
         List<WrapDueStringhe> listaWrap = null;
         LinkedHashMap<String, LinkedHashMap<String, String>> mappaGenerale = null;
-        LinkedHashMap<String, String> mappaSingola;
+        LinkedHashMap<String, String> mappa;
         String tagUno = titoliTable[0];
         String tagDue = titoliTable[1];
         WrapDueStringhe wrapGrezzo;
@@ -80,8 +85,36 @@ public class ImportWiki {
         if (mappaGenerale != null && mappaGenerale.size() > 0) {
             listaWrap = new ArrayList<>();
             for (String elemento : mappaGenerale.keySet()) {
-                mappaSingola = mappaGenerale.get(elemento);
-                wrapGrezzo = new WrapDueStringhe(mappaSingola.get(tagUno), mappaSingola.get(tagDue));
+                mappa = mappaGenerale.get(elemento);
+                wrapGrezzo = new WrapDueStringhe(mappa.get(tagUno), mappa.get(tagDue));
+                listaWrap.add(wrapGrezzo);
+            }// end of for cycle
+        }// end of if cycle
+
+        return listaWrap;
+    }// end of method
+
+
+    /**
+     * Import da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con due stringhe ognuno
+     */
+    public List<WrapTreStringhe> estraeListaTre(String pagina, String[] titoliTable) {
+        List<WrapTreStringhe> listaWrap = null;
+        LinkedHashMap<String, LinkedHashMap<String, String>> mappaGenerale = null;
+        LinkedHashMap<String, String> mappa;
+        String tagUno = titoliTable[0];
+        String tagDue = titoliTable[1];
+        String tagTre = titoliTable[2];
+        WrapTreStringhe wrapGrezzo;
+
+        mappaGenerale = aWebService.getMappaTableWiki(pagina, titoliTable);
+        if (mappaGenerale != null && mappaGenerale.size() > 0) {
+            listaWrap = new ArrayList<>();
+            for (String elemento : mappaGenerale.keySet()) {
+                mappa = mappaGenerale.get(elemento);
+                wrapGrezzo = new WrapTreStringhe(mappa.get(tagUno), mappa.get(tagDue), mappa.get(tagTre));
                 listaWrap.add(wrapGrezzo);
             }// end of for cycle
         }// end of if cycle
@@ -96,9 +129,33 @@ public class ImportWiki {
      * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
      */
     public String elaboraCodice(String testoGrezzo) {
-        String testoValido = VUOTA;
+        String testoValido = testoGrezzo.trim();
+        String tagIni = "<code>";
+        String tagEnd = "</code>";
 
-        testoValido = testoGrezzo.substring(3, 5);
+        testoValido = text.levaTesta(testoValido, tagIni);
+        testoValido = text.levaCoda(testoValido, tagEnd);
+        testoValido = testoValido.substring(3);
+        return testoValido;
+    }// end of method
+
+
+    /**
+     * Import delle regioni da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
+     */
+    public String elaboraNome(String testoGrezzo) {
+        String testoValido = testoGrezzo.trim();
+        int posIni = 0;
+        int posEnd = 0;
+
+        posEnd = testoValido.lastIndexOf("</a>");
+        if (posEnd > 0) {
+            testoValido = testoValido.substring(0, posEnd);
+        }// end of if cycle
+        posIni = testoValido.lastIndexOf(">") + 1;
+        testoValido = testoValido.substring(posIni);
         return testoValido;
     }// end of method
 
@@ -118,14 +175,14 @@ public class ImportWiki {
         String prima;
         String seconda;
 
-        listaWrapGrezzo = estraeLista(PAGINA, titoli);
+        listaWrapGrezzo = estraeListaDue(PAGINA, titoli);
         if (listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
             listaWrap = new ArrayList<>();
             for (WrapDueStringhe wrap : listaWrapGrezzo) {
                 prima = wrap.getPrima();
                 seconda = wrap.getSeconda();
                 prima = elaboraCodice(prima);
-                seconda = elaboraCodice(seconda);
+                seconda = elaboraNome(seconda);
                 wrapValido = new WrapDueStringhe(prima, seconda);
                 listaWrap.add(wrapValido);
             }// end of for cycle
@@ -140,52 +197,56 @@ public class ImportWiki {
      *
      * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
      */
-    public List<HashMap<String, String>> province() {
-        List<HashMap<String, String>> lista = null;
-        HashMap<String, String> mappa;
-        String templateProvince;
+    public List<WrapTreStringhe> provinceBase(String pagina, String[] titoliTable) {
+        List<WrapTreStringhe> listaWrap = null;
+        List<WrapTreStringhe> listaWrapGrezzo = null;
+        WrapTreStringhe wrapValido;
+        String prima;
+        String seconda;
+        String terza;
 
-        lista = new ArrayList<>();
+        listaWrapGrezzo = estraeListaTre(PAGINA, titoliTable);
+        if (listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
+            listaWrap = new ArrayList<>();
+            for (WrapTreStringhe wrap : listaWrapGrezzo) {
+                prima = wrap.getPrima();
+                seconda = wrap.getSeconda();
+                terza = wrap.getTerza();
+                prima = elaboraCodice(prima);
+                seconda = elaboraNome(seconda);
+                terza = elaboraNome(terza);
+                wrapValido = new WrapTreStringhe(prima, seconda, terza);
+                listaWrap.add(wrapValido);
+            }// end of for cycle
+        }// end of if cycle
 
-        mappa = new HashMap<>();
-        mappa.put(KEY_SIGLA, "CH");
-        mappa.put(KEY_NOME, "Chieti");
-        mappa.put(KEY_REGIONE, "Abruzzo");
-        lista.add(mappa);
+        return listaWrap;
+    }// end of method
 
-        mappa = new HashMap<>();
-        mappa.put(KEY_SIGLA, "AQ");
-        mappa.put(KEY_NOME, "L'Aquila");
-        mappa.put(KEY_REGIONE, "Abruzzo");
-        lista.add(mappa);
 
-        mappa = new HashMap<>();
-        mappa.put(KEY_SIGLA, "PE");
-        mappa.put(KEY_NOME, "Pescara");
-        mappa.put(KEY_REGIONE, "Abruzzo");
-        lista.add(mappa);
+    /**
+     * Import delle provincie da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (sigla, nome, regione)
+     */
+    public List<WrapTreStringhe> province() {
+        List<WrapTreStringhe> listaWrap = new ArrayList<>();
+        List<WrapTreStringhe> listaWrapCitta = null;
+        List<WrapTreStringhe> listaWrapProvince = null;
 
-//        regione = regioneService.findByNome("Abruzzo");
-//        creaIfNotExist(regione, "CH", "Chieti");
-//        creaIfNotExist(regione, "AQ", "L'Aquila");
-//        creaIfNotExist(regione, "PE", "Pescara");
-//        creaIfNotExist(regione, "TE", "Teramo");
-//
-//        regione = regioneService.findByNome("Lombardia");
-//        creaIfNotExist(regione, "BG", "Bergamo");
-//        creaIfNotExist(regione, "BS", "Brescia");
-//        creaIfNotExist(regione, "CO", "Como");
-//        creaIfNotExist(regione, "CR", "Cremona");
-//        creaIfNotExist(regione, "LC", "Lecco");
-//        creaIfNotExist(regione, "LO", "Lodi");
-//        creaIfNotExist(regione, "MN", "Mantova");
-//        creaIfNotExist(regione, "MI", "Milano");
-//        creaIfNotExist(regione, "MB", "Monza e Brianza");
-//        creaIfNotExist(regione, "PV", "Pavia");
-//        creaIfNotExist(regione, "SO", "Sondrio");
-//        creaIfNotExist(regione, "VA", "Varese");
+        WrapTreStringhe wrapValido;
+        String tagCodice = "Codice";
+        String tagCitta = "Città metropolitane";
+        String tagProvince = "Province";
+        String tagRegioni = "Nella regione";
+        String[] titoliCitta = new String[]{tagCodice, tagCitta, tagRegioni};
+        String[] titoliProvince = new String[]{tagCodice, tagProvince, tagRegioni};
 
-        return lista;
+        listaWrapCitta = provinceBase(PAGINA, titoliCitta);
+        listaWrapProvince = provinceBase(PAGINA, titoliProvince);
+        listaWrap.addAll(listaWrapCitta);
+        listaWrap.addAll(listaWrapProvince);
+        return listaWrap;
     }// end of method
 
 }// end of class

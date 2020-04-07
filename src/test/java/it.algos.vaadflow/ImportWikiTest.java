@@ -4,19 +4,15 @@ import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.service.AWebService;
 import it.algos.vaadflow.wrapper.WrapDueStringhe;
+import it.algos.vaadflow.wrapper.WrapTreStringhe;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -47,12 +43,14 @@ public class ImportWikiTest {
     @InjectMocks
     ATextService text;
 
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         MockitoAnnotations.initMocks(importWiki);
         MockitoAnnotations.initMocks(aWebService);
         MockitoAnnotations.initMocks(text);
+        importWiki.text = text;
         importWiki.aWebService = aWebService;
         aWebService.text = text;
     }// end of method
@@ -75,9 +73,31 @@ public class ImportWikiTest {
 
     @Test
     public void regioni() {
-        List<WrapDueStringhe>   risultato = null;
+        List<WrapDueStringhe> risultato = null;
         risultato = importWiki.regioni();
         assertNotNull(risultato);
+
+        System.out.println("");
+        for (WrapDueStringhe wrap : risultato) {
+            System.out.println("");
+            System.out.println("Codice: " + wrap.getPrima());
+            System.out.println("Nome: " + wrap.getSeconda());
+        }// end of for cycle
+    }// end of single test
+
+    @Test
+    public void province() {
+        List<WrapTreStringhe> risultato = null;
+        risultato = importWiki.province();
+        assertNotNull(risultato);
+
+        System.out.println("");
+        for (WrapTreStringhe wrap : risultato) {
+            System.out.println("");
+            System.out.println("Codice: " + wrap.getPrima());
+            System.out.println("Province: " + wrap.getSeconda());
+            System.out.println("Nella regione: " + wrap.getTerza());
+        }// end of for cycle
     }// end of single test
 
 }// end of test class
