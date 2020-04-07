@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -865,6 +866,56 @@ public class ATextServiceTest extends ATest {
         ottenuto = service.fixOneSpace(sorgente);
         assertEquals(previsto, ottenuto);
 
+    }// end of single test
+
+
+    /**
+     * Costruisce un array da una stringa multipla separata da virgole
+     */
+    @Test
+    public void getArray() {
+        sorgente = VUOTA;
+        ottenutoList = service.getArray(sorgente);
+        assertNull(ottenutoList);
+
+
+        sorgente = "Mario-Pippoz-Francesca";
+        previstoIntero=1;
+        previstoList = new ArrayList<>();
+        previstoList.add("Mario-Pippoz-Francesca");
+
+        ottenutoList = service.getArray(sorgente);
+        assertNotNull(ottenutoList);
+        assertEquals(previstoIntero, ottenutoList.size());
+
+        sorgente = "Mario,Pippoz,Francesca";
+        previstoIntero=3;
+        previstoList = new ArrayList<>();
+        previstoList.add("Mario");
+        previstoList.add("Pippoz");
+        previstoList.add("Francesca");
+
+        ottenutoList = service.getArray(sorgente);
+        assertNotNull(ottenutoList);
+        assertEquals(previstoIntero, ottenutoList.size());
+    }// end of single test
+
+
+    /**
+     * Estrae delle singole stringhe separate da virgola
+     */
+    @Test
+    public void getMatrice() {
+        sorgente = VUOTA;
+        ottenutoMatrice = service.getMatrice(sorgente);
+        assertNull(ottenutoMatrice);
+
+
+//        sorgente = "Mario,Pippoz,Francesca";
+//
+//        previstoMatrice = new String[]{"Mario", "Pippoz", "Francesca"};
+//        ottenutoMatrice = service.getMatrice(sorgente);
+//        assertNotNull(ottenutoMatrice);
     }// end of single test
 
 }// end of class

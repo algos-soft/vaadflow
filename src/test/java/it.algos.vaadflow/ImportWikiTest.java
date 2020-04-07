@@ -86,7 +86,7 @@ public class ImportWikiTest {
     }// end of single test
 
 
-//    @Test
+    @Test
     public void province() {
         List<WrapTreStringhe> risultato = null;
         risultato = importWiki.province();
@@ -107,7 +107,7 @@ public class ImportWikiTest {
      *
      * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-//    @Test
+    @Test
     public void comune() {
         List<WrapTreStringhe> risultato = null;
         risultato = importWiki.comuni();

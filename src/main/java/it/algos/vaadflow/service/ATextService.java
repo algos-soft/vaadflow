@@ -1177,4 +1177,48 @@ public class ATextService extends AbstractService {
         return getLabel(message, "blue");
     }// end of method
 
+
+    /**
+     * Costruisce un array da una stringa multipla separata da virgole
+     */
+    public List<String> getArray(String stringaMultipla) {
+        List<String> lista = null;
+        String tag = VIRGOLA;
+        String[] parti = null;
+
+        if (isValid(stringaMultipla)) {
+            lista = new ArrayList<>();
+        } else {
+            return lista;
+        }// end of if/else cycle
+
+        if (stringaMultipla.contains(tag)) {
+            parti = stringaMultipla.split(tag);
+            if (parti != null) {
+                for (String value : parti) {
+                    lista.add(value);
+                }// end of for cycle
+            }// end of if cycle
+        } else {
+            lista.add(stringaMultipla);
+        }// end of if/else cycle
+
+        return lista;
+    }// end of method
+
+
+    /**
+     * Estrae delle singole stringhe separate da virgola
+     */
+    public String[] getMatrice(String stringaMultipla) {
+        String[] matrice = null;
+        List<String> lista = getArray(stringaMultipla);
+
+        if (lista != null) {
+            matrice = lista.toArray(new String[lista.size()]);
+        }// end of if cycle
+
+        return matrice;
+    }// end of method
+
 }// end of class

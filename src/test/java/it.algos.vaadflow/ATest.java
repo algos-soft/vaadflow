@@ -175,6 +175,13 @@ public class ATest {
 
     protected List<String> ottenutoList;
 
+    protected String[] sorgenteMatrice = null;
+
+    protected String[] previstoMatrice = null;
+
+    protected String[] ottenutoMatrice = null;
+
+
     protected ArrayList<Field> previstoFieldList;
 
     protected ArrayList<Field> ottenutoFieldList;

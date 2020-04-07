@@ -9,14 +9,14 @@ package it.algos.vaadflow.enumeration;
  */
 public enum EARegione {
     abruzzo("Abruzzo", "dell'Abruzzo", "Comune,Provincia,Popolazione"),
-    basilicata("Abruzzo", "dell'Abruzzo", ""),
+    basilicata("Basilicata", "della Basilicata", "Comune,Provincia,Popolazione"),
     calabria("Abruzzo", "dell'Abruzzo", ""),
     campania("Abruzzo", "dell'Abruzzo", ""),
     emilia("Abruzzo", "dell'Abruzzo", ""),
     friuli("Abruzzo", "dell'Abruzzo", ""),
     lazio("Abruzzo", "dell'Abruzzo", ""),
     liguria("Abruzzo", "dell'Abruzzo", ""),
-    lombardia("Abruzzo", "dell'Abruzzo", ""),
+    lombardia("Lombardia", "della Lombardia", "Comune,Provincia,Popolazione"),
     marche("Abruzzo", "dell'Abruzzo", ""),
     molise("Abruzzo", "dell'Abruzzo", ""),
     piemonte("Abruzzo", "dell'Abruzzo", ""),
@@ -30,17 +30,38 @@ public enum EARegione {
     veneto("Abruzzo", "dell'Abruzzo", ""),
     ;
 
-     String nome;
+    static String COMUNI = "Comuni ";
 
-     String paginaWiki;
+    String nome;
 
-     String titoli;
+    String paginaWikiShort;
+
+    String titoli;
 
 
-    EARegione(String nome, String paginaWiki, String titoli) {
+    EARegione(String nome, String paginaWikiShort, String titoli) {
         this.nome = nome;
-        this.paginaWiki = paginaWiki;
+        this.paginaWikiShort = paginaWikiShort;
         this.titoli = titoli;
     }// end of constructor
 
+
+    public String getNome() {
+        return nome;
+    }// end of method
+
+
+    public String getPaginaWikiShort() {
+        return paginaWikiShort;
+    }// end of method
+
+
+    public String getPaginaWiki() {
+        return COMUNI + paginaWikiShort;
+    }// end of method
+
+
+    public String getTitoli() {
+        return titoli;
+    }// end of method
 }// end of enum class
