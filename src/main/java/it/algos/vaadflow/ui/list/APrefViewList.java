@@ -83,6 +83,9 @@ public abstract class APrefViewList extends AViewList {
         //--Flag di preferenza per la Label nell'header della Grid grid. Normalmente true.
         usaHaederGrid = true;
 
+        //--Flag per mostrare o meno la Label headerGridHolder. Normalmente true.
+        usaHeaderGridHolder = true;
+
         //--Flag di preferenza per modificare la entity. Normalmente true.
         isEntityModificabile = true;
 

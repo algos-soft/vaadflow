@@ -247,15 +247,17 @@ public abstract class AGridViewList extends ALayoutViewList {
      * Se si usa una PaginatedGrid, il metodo DEVE essere sovrascritto nella classe APaginatedGridViewList <br>
      */
     protected void fixGridHeader() {
-        try { // prova ad eseguire il codice
-            HeaderRow topRow = grid.prependHeaderRow();
-            Grid.Column[] matrix = array.getColumnArray(grid);
-            HeaderRow.HeaderCell informationCell = topRow.join(matrix);
-            headerGridHolder = new Label("x");
-            informationCell.setComponent(headerGridHolder);
-        } catch (Exception unErrore) { // intercetta l'errore
-            log.error(unErrore.toString());
-        }// fine del blocco try-catch
+        if (usaHeaderGridHolder) {
+            try { // prova ad eseguire il codice
+                HeaderRow topRow = grid.prependHeaderRow();
+                Grid.Column[] matrix = array.getColumnArray(grid);
+                HeaderRow.HeaderCell informationCell = topRow.join(matrix);
+                headerGridHolder = new Label("x");
+                informationCell.setComponent(headerGridHolder);
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
     }// end of method
 
 

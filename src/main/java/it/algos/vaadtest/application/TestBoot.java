@@ -216,7 +216,7 @@ public class TestBoot extends ABoot {
          * Di defaul (per sicurezza) uguale a true <br>
          * Deve essere regolato in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
          */
-        FlowVar.usaCompany = true;
+        FlowVar.usaCompany = false;
 
 
         /**

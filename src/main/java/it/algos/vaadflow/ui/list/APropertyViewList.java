@@ -26,7 +26,6 @@ import it.algos.vaadflow.wrapper.AFiltro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 
 import java.util.Collection;
 import java.util.List;
@@ -229,6 +228,7 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Un flag controlla se mostrarlo a sinistra, prima di tutte le colonne oppure a destra dopo l'ultima colonna: FlowCost.FLAG_TEXT_EDIT_LEFT <br>
      * Un flag controlla se mostrare solo l'icona oppure anche un testo: USA_TEXT_EDIT_BUTTON <br>
      * Un flag controlla quale testo mostrare: FLAG_TEXT_EDIT <br>
+     * Un flag controlla quale icona mostrare: FLAG_TEXT_EDIT <br>
      */
     protected Button buttonEdit;
 
@@ -275,10 +275,15 @@ public abstract class APropertyViewList extends VerticalLayout {
     protected HorizontalLayout secondTopPlaceholder;
 
     /**
-     * Label (obbligatoria)  che appare nell'header della Grid. <br>
+     * Label (facoltativa)  che appare nell'header della Grid. <br>
      * Informazioni sugli elementi della lista <br>
      */
     protected Label headerGridHolder;
+
+    /**
+     * Flag per mostrare o meno la Label headerGridHolder <br>
+     */
+    protected boolean usaHeaderGridHolder;
 
     /**
      * Placeholder per la Grid dichiarata nella superclasse oppure <br>

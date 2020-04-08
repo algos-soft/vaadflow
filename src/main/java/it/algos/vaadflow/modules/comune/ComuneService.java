@@ -186,6 +186,15 @@ public class ComuneService extends AService {
 
 
     /**
+     * Returns all entities of the type <br>
+     *
+     * @return all ordered entities
+     */
+    public List<Comune> findAllByProvincia(Provincia provincia) {
+        return (List) repository.findAllByProvinciaOrderByNomeAsc(provincia);
+    }// end of method
+
+    /**
      * Creazione di alcuni dati iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
      * I dati possono essere presi da una Enumeration o creati direttamemte <br>

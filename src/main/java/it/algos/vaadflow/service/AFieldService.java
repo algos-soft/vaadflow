@@ -340,7 +340,7 @@ public class AFieldService extends AbstractService {
                 }// end of if cycle
                 field.setReadOnly(false);
 
-                if (binder != null && items != null) {
+                if (binder != null ) {
                     if (notNull) {
                         binder.forField(field)
                                 .withValidator(nullValidator)

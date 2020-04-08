@@ -2,6 +2,7 @@ package it.algos.vaadflow.modules.comune;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
+import it.algos.vaadflow.modules.provincia.Provincia;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,5 +36,7 @@ public interface ComuneRepository extends MongoRepository<Comune, String> {
     public Comune findByNome(String nome);
 
     public List<Comune> findAllByOrderByNomeAsc();
+
+    public List<Comune> findAllByProvinciaOrderByNomeAsc(Provincia provincia);
 
 }// end of interface
