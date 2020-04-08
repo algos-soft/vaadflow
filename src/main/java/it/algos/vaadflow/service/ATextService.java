@@ -1221,4 +1221,5 @@ public class ATextService extends AbstractService {
         return matrice;
     }// end of method
 
+
 }// end of class

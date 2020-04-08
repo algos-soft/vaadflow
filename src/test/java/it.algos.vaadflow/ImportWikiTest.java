@@ -73,7 +73,7 @@ public class ImportWikiTest extends ATest {
     }// end of single test
 
 
-//    @Test
+    @Test
     public void regioni() {
         List<WrapDueStringhe> risultato = null;
         risultato = importWiki.regioni();
@@ -88,7 +88,7 @@ public class ImportWikiTest extends ATest {
     }// end of single test
 
 
-//    @Test
+    @Test
     public void province() {
         List<WrapTreStringhe> risultato = null;
         risultato = importWiki.province();
@@ -125,7 +125,7 @@ public class ImportWikiTest extends ATest {
     }// end of single test
 
 
-//    @Test
+    @Test
     public void comuniRegioneAbruzzo() {
         singolaRegione(EARegione.abruzzo);
     }// end of single test
@@ -175,7 +175,7 @@ public class ImportWikiTest extends ATest {
         singolaRegione(EARegione.marche);
     }// end of single test
 
-    @Test
+//    @Test
     public void comuniRegioneMolise() {
         singolaRegione(EARegione.molise);
     }// end of single test

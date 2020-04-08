@@ -8,7 +8,7 @@ package it.algos.vaadflow.enumeration;
  * Time: 09:27
  */
 public enum EARegione {
-    abruzzo("Abruzzo", "dell'Abruzzo", "Comune,Provincia,Popolazione", 305),
+    abruzzo("Abruzzo", "dell'Abruzzo", "Comune,Provincia", 305),
     basilicata("Basilicata", "della Basilicata", "Comune,Provincia,Popolazione",131),
     calabria("Calabria", "della Calabria", "Comune,Provincia,Popolazione",404),
     campania("Campania", "della Campania", "Comune,Area,Popolazione",550),

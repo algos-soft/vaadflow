@@ -140,7 +140,6 @@ public class AWebService extends AbstractService {
         String tagBody = TAG_TABLE_BODY;
         String tagIni = "<th>";
         String tagEnd = "</th>";
-        String tagEndBody = "</tr>";
 
         if (titoliTable != null && titoliTable.length > 0) {
             testoTable += tagIniTable;
@@ -150,9 +149,9 @@ public class AWebService extends AbstractService {
                 testoTable += titolo;
                 testoTable += tagEnd;
             }// end of for cycle
-            testoTable += tagEndBody;
         }// end of if cycle
 
+        testoTable = text.levaCoda(testoTable, tagEnd);
         return testoTable;
     } // fine del metodo
 
@@ -169,18 +168,27 @@ public class AWebService extends AbstractService {
     public String estraeTableWiki(String sorgentePagina, String[] titoliTable) {
         String testoTable = null;
         String tagTitoli = VUOTA;
-        String tagEnd = "</tbody></table>";
+        String tagEndHeader = "</tr><tr>";
+        String tagEndTable = "</tbody></table>";
+        int posIniTable;
+        int posEndHeader;
+        int posEndTable;
 
         if (text.isValid(sorgentePagina)) {
             tagTitoli = costruisceTagTitoliTable(titoliTable);
         }// end of if cycle
 
+        posIniTable = sorgentePagina.indexOf(tagTitoli);
+        posEndHeader = sorgentePagina.indexOf(tagEndHeader, posIniTable) + tagEndHeader.length();
+        posEndTable = sorgentePagina.indexOf(tagEndTable, posEndHeader);
+
         if (text.isValid(tagTitoli)) {
-            testoTable = text.estrae(sorgentePagina, tagTitoli, tagEnd);
+            testoTable = sorgentePagina.substring(posEndHeader, posEndTable);
         }// end of if cycle
 
         return testoTable;
     } // fine del metodo
+
 
 
     /**

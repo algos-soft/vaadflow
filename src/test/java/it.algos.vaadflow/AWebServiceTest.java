@@ -106,8 +106,6 @@ public class AWebServiceTest {
         previsto += "<tbody><tr>";
         previsto += "<th>";
         previsto += "Codice";
-        previsto += "</th>";
-        previsto += "</tr>";
 
         ottenuto = aWebService.costruisceTagTitoliTable(titoli);
         assertNotNull(ottenuto);
@@ -125,8 +123,6 @@ public class AWebServiceTest {
         previsto += "</th>";
         previsto += "<th>";
         previsto += "Province";
-        previsto += "</th>";
-        previsto += "</tr>";
 
         ottenuto = aWebService.costruisceTagTitoliTable(titoli);
         assertNotNull(ottenuto);
@@ -147,8 +143,6 @@ public class AWebServiceTest {
         previsto += "</th>";
         previsto += "<th>";
         previsto += "Nella regione";
-        previsto += "</th>";
-        previsto += "</tr>";
 
         ottenuto = aWebService.costruisceTagTitoliTable(titoli);
         assertNotNull(ottenuto);
