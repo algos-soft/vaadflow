@@ -225,4 +225,8 @@ public class ComuneService extends AService {
         return numRec;
     }// end of method
 
+    public List<Comune> findItems(AEntity entityBean) {
+        return findAllByProvincia((Provincia)entityBean);
+    }// end of method
+
 }// end of class

@@ -298,7 +298,9 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         fixPreferenze();
 
         //--Titolo placeholder del dialogo, regolato dopo open()
-        this.add(creaTitleLayout());
+        if (pref.isBool(USA_TITOLO_FORM)) {
+            this.add(creaTitleLayout());
+        }// end of if cycle
 
         //--Costruisce gli oggetti base (placeholder) di questa view
         this.fixLayout();
@@ -557,7 +559,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         deleteButton.setVisible(operation.isDeleteEnabled());
 
         //--Crea i fields
-        creaFields();
+        creaFields( entityBean);
 
         super.open();
     }// end of method
@@ -624,7 +626,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
      * Legge la entityBean ed inserisce nella UI i valori di eventuali fields NON associati al binder
      */
-    private void creaFields() {
+    private void creaFields(AEntity entityBean) {
         List<String> propertyNamesList;
 
         //--Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
@@ -640,7 +642,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         binder = new Binder(binderClass);
 
         //--Costruisce ogni singolo field
-        creaFieldsBase(propertyNamesList);
+        creaFieldsBase( entityBean,propertyNamesList);
 
         //--Eventuali regolazioni aggiuntive ai fields del binder PRIMA di associare i valori
         fixStandardAlgosFieldsAnte();
@@ -689,12 +691,12 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
      * Aggiunge il field ad una fieldMap, per recuperare i fields dal nome <br>
      * Controlla l'esistenza tra i field di un eventuale field di tipo textArea. Se NON esiste, abilita il tasto 'return'
      */
-    protected void creaFieldsBase(List<String> propertyNamesList) {
+    protected void creaFieldsBase(AEntity entityBean,List<String> propertyNamesList) {
         AbstractField propertyField = null;
         boolean esisteTextArea = false;
 
         for (String propertyName : propertyNamesList) {
-            propertyField = fieldService.create(appContext, binder, binderClass, propertyName);
+            propertyField = fieldService.create(entityBean,appContext, binder, binderClass, propertyName);
             if (propertyField != null) {
                 fieldMap.put(propertyName, propertyField);
             }// end of if cycle

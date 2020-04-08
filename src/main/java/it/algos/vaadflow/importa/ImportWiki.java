@@ -291,21 +291,44 @@ public class ImportWiki {
         List<WrapTreStringhe> listaWrap = null;
         List<WrapTreStringhe> listaWrapGrezzo = null;
         WrapTreStringhe wrapValido;
-        String[] titoliTable = text.getMatrice(titoli);
         String prima;
         String seconda;
 
         listaWrapGrezzo = estraeListaTre(pagina, titoli);
-        if (listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
+        if (text.isValid(regioneTxt) && listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
             listaWrap = new ArrayList<>();
             for (WrapTreStringhe wrap : listaWrapGrezzo) {
                 prima = wrap.getPrima();
                 seconda = wrap.getSeconda();
                 prima = elaboraNome(prima);
                 seconda = elaboraNome(seconda);
-                wrapValido = new WrapTreStringhe(regioneTxt, seconda, prima);
-                listaWrap.add(wrapValido);
+                if (text.isValid(seconda) && text.isValid(prima)) {
+                    wrapValido = new WrapTreStringhe(regioneTxt, seconda, prima);
+                    listaWrap.add(wrapValido);
+                }// end of if cycle
             }// end of for cycle
+        }// end of if cycle
+
+        return listaWrap;
+    }// end of method
+
+
+    /**
+     * Import dei comuni di una singola regione <br>
+     *
+     * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
+     */
+    public List<WrapTreStringhe> singolaRegione(EARegione eaRegione) {
+        List<WrapTreStringhe> listaWrap = null;
+        String regioneTxt;
+        String paginaWiki;
+        String titoli;
+
+        regioneTxt = eaRegione.getNome();
+        paginaWiki = eaRegione.getPaginaWiki();
+        titoli = eaRegione.getTitoli();
+        if (text.isValid(titoli)) {
+            listaWrap = comuniBase(regioneTxt, paginaWiki, titoli);
         }// end of if cycle
 
         return listaWrap;
@@ -320,18 +343,10 @@ public class ImportWiki {
     public List<WrapTreStringhe> comuni() {
         List<WrapTreStringhe> listaWrap = new ArrayList<>();
         List<WrapTreStringhe> listaWrapRegione = null;
-        String regioneTxt;
-        String paginaWiki;
-        String titoli;
 
         for (EARegione eaRegione : EARegione.values()) {
-            regioneTxt = eaRegione.getNome();
-            paginaWiki = eaRegione.getPaginaWiki();
-            titoli = eaRegione.getTitoli();
-            if (text.isValid(titoli)) {
-                listaWrapRegione = comuniBase(regioneTxt, paginaWiki, titoli);
-                listaWrap.addAll(listaWrapRegione);
-            }// end of if cycle
+            listaWrapRegione = singolaRegione(eaRegione);
+            listaWrap.addAll(listaWrapRegione);
         }// end of for cycle
 
         return listaWrap;

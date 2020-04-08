@@ -188,8 +188,14 @@ public @interface AIField {
 
     /**
      * (Optional) method name for reflection
-     * Defaults to blue.
+     * Defaults to findItems.
      */
-    String methodName() default "";
+    String methodName() default "findItems";
+
+    /**
+     * (Optional) property name for reflection
+     * Defaults to "".
+     */
+    String propertyLinkata() default "";
 
 }// end of interface annotation

@@ -64,6 +64,7 @@ public enum EAPreferenza implements IAPreferenza {
     usaEditButton(FlowCost.USA_EDIT_BUTTON, "Usa una colonna di bottoni Edit per aprire il dialogo. Se falso, usa un doppio clik nella riga", EAPrefType.bool, EARole.developer, false, true),
     iconaEditButton(FlowCost.ICONA_EDIT_BUTTON, "Icona del bottone Edit, se presente", EAPrefType.enumeration, EARole.developer, true, EAEditIcona.edit),
     usaBackButton(FlowCost.USA_BACK_BUTTON, "Usa un bottone di ritorno per uscire dal dialogo. Se falso, usare il browser", EAPrefType.bool, EARole.developer, false, true),
+    usaTitoloForm(FlowCost.USA_TITOLO_FORM, "Mostra il titolo del dialogo. Di default true.", EAPrefType.bool, EARole.developer, true, true),
     logAction(FlowCost.FLAG_LOG_ACTION, "Azione di log", EAPrefType.enumeration, EARole.developer, false, EALogAction.terminale),
 
     ;

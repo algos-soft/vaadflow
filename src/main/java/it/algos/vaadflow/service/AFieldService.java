@@ -102,11 +102,11 @@ public class AFieldService extends AbstractService {
      * @param binderClass  della Entity di riferimento
      * @param propertyName della property
      */
-    public AbstractField create(ApplicationContext appContext, Binder binder, Class binderClass, String propertyName) {
+    public AbstractField create(AEntity entityBean, ApplicationContext appContext, Binder binder, Class binderClass, String propertyName) {
         Field reflectionJavaField = reflection.getField(binderClass, propertyName);
 
         if (reflectionJavaField != null) {
-            return create(appContext, binder, reflectionJavaField);
+            return create(entityBean, appContext, binder, reflectionJavaField);
         } else {
             return null;
         }// end of if/else cycle
@@ -120,7 +120,7 @@ public class AFieldService extends AbstractService {
      * @param binder              collegamento tra i fields e la entityBean
      * @param reflectionJavaField di riferimento per estrarre le Annotation
      */
-    public AbstractField create(ApplicationContext appContext, Binder binder, Field reflectionJavaField) {
+    public AbstractField create(AEntity entityBean, ApplicationContext appContext, Binder binder, Field reflectionJavaField) {
         AbstractField field = null;
         String fieldName = reflectionJavaField.getName();
 //        int minDefault = 3;
@@ -138,7 +138,6 @@ public class AFieldService extends AbstractService {
         String message;
         String messageSize;
         int min = 0;
-        List items = null;
 
         clazz = annotation.getClazz(reflectionJavaField);
         notNull = annotation.isNotNull(reflectionJavaField);
@@ -166,6 +165,7 @@ public class AFieldService extends AbstractService {
         AUniqueValidator uniqueValidator = null;
         String color = annotation.getFieldColor(reflectionJavaField);
         String methodName = annotation.getMethodNameField(reflectionJavaField);
+        String propertyLinkata = annotation.getPropertyLinkata(reflectionJavaField);
 
         if (type == null) {
             field = new ATextField(caption.equals("") ? "noname" : caption);
@@ -295,7 +295,7 @@ public class AFieldService extends AbstractService {
 
                 if (clazz != null) {
                     IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                    items = ((IAService) service).findAll();
+                    List items = ((IAService) service).findAll();
                     if (items != null) {
                         Set<Role> hSet = new HashSet<Role>(items);
                         hSet.addAll(items);
@@ -307,40 +307,52 @@ public class AFieldService extends AbstractService {
 
                 if (binder != null) {
                     binder.forField(field).bind(fieldName);
-//                    binder.forField(field)
-//                            .withConverter(new AConverterComboBox())
-//                            .bind(fieldName);
                 }// end of if cycle
                 break;
             case combo:
                 field = new AComboBox(caption);
-                Method metodo = null;
-                Object serviceInstance = null;
-                String value = VUOTA;
-
                 if (clazz != null) {
-                    if (text.isValid(methodName)) {
-                        try { // prova ad eseguire il codice
-                            metodo = serviceClazz.getDeclaredMethod(methodName, AEntity.class);
-                            serviceInstance = StaticContextAccessor.getBean(serviceClazz);
-                            items = (List) metodo.invoke(serviceInstance);
-                            if (items != null) {
-                                ((AComboBox) field).setItems(items);
-                            }// end of if cycle
-                        } catch (Exception unErrore) { // intercetta l'errore
-                            log.error(unErrore.toString());
-                        }// fine del blocco try-catch
-                    } else {
-                        IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-                        items = ((IAService) service).findAll();
-                        if (items != null) {
-                            ((AComboBox) field).setItems(items);
-                        }// end of if cycle
-                    }// end of if/else cycle
+                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
+                    List items = ((IAService) service).findAll();
+                    if (items != null) {
+                        ((AComboBox) field).setItems(items);
+                    }// end of if cycle
                 }// end of if cycle
                 field.setReadOnly(false);
 
-                if (binder != null ) {
+                if (binder != null) {
+                    if (notNull) {
+                        binder.forField(field)
+                                .withValidator(nullValidator)
+                                .bind(fieldName);
+                    } else {
+                        binder.forField(field).bind(fieldName);
+                    }// end of if/else cycle
+                }// end of if cycle
+                break;
+            case combolinkato:
+                field = new AComboBox(caption);
+                Method metodo = null;
+                Object serviceInstance = null;
+                String value = VUOTA;
+                List items;
+
+                if (serviceClazz != null && text.isValid(methodName)&&text.isValid(propertyLinkata)) {
+                    try { // prova ad eseguire il codice
+                        metodo = serviceClazz.getDeclaredMethod(methodName, AEntity.class);
+                        serviceInstance = StaticContextAccessor.getBean(serviceClazz);
+                        Object oggetto = reflection.getPropertyValue(entityBean, propertyLinkata);
+                        items = (List) metodo.invoke(serviceInstance, oggetto);
+                        if (items != null) {
+                            ((AComboBox) field).setItems(items);
+                        }// end of if cycle
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error(unErrore.toString());
+                    }// fine del blocco try-catch
+                }// end of if cycle
+                field.setReadOnly(false);
+
+                if (binder != null) {
                     if (notNull) {
                         binder.forField(field)
                                 .withValidator(nullValidator)

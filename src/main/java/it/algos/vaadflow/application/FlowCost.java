@@ -176,6 +176,8 @@ public abstract class FlowCost {
 
     public static final String FLAG_LOG_ACTION = "logAction";
 
+    public static final String USA_TITOLO_FORM = "usaTitoloForm";
+
     public static final String USA_BACK_BUTTON = "usaBackButton";
 
     public static final String BOT_ACCETTA = "Accetta";

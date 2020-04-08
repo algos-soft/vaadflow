@@ -2168,4 +2168,23 @@ public class AAnnotationService extends AbstractService {
         return methodName;
     }// end of method
 
+
+    /**
+     * Get the method name for reflection.
+     *
+     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     *
+     * @return the method name
+     */
+    public String getPropertyLinkata(final Field reflectionJavaField) {
+        String methodName = "";
+        AIField annotation = this.getAIField(reflectionJavaField);
+
+        if (annotation != null) {
+            methodName = annotation.propertyLinkata();
+        }// end of if cycle
+
+        return methodName;
+    }// end of method
+
 }// end of class
