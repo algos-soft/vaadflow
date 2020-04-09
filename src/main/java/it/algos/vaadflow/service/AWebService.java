@@ -190,7 +190,6 @@ public class AWebService extends AbstractService {
     } // fine del metodo
 
 
-
     /**
      * Request di tipo GET
      * Accetta un array di titoli della table
@@ -256,6 +255,7 @@ public class AWebService extends AbstractService {
      *
      * @return lista grezza di righe
      */
+    @Deprecated
     public LinkedHashMap<String, LinkedHashMap<String, String>> getMappaTableWiki(String indirizzoWikiGrezzo, String[] titoliTable) {
         LinkedHashMap<String, LinkedHashMap<String, String>> mappaTable = null;
         List<String> lista = getRigheTableWiki(indirizzoWikiGrezzo, titoliTable);
@@ -273,7 +273,7 @@ public class AWebService extends AbstractService {
                 key = text.levaTesta(parti[0], tag);
 
                 mappaRiga = new LinkedHashMap<>();
-                if (parti != null && parti.length > 0 && parti.length == titoliTable.length) {
+                if (parti != null && parti.length > 0) {
                     for (int k = 0; k < parti.length; k++) {
                         mappaRiga.put(titoliTable[k], text.levaTesta(parti[k], tag));
                     }// end of for cycle
@@ -283,6 +283,42 @@ public class AWebService extends AbstractService {
         }// end of if cycle
 
         return mappaTable;
+    } // fine del metodo
+
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return lista grezza di righe
+     */
+    public List<List<String>> getMatriceTableWiki(String indirizzoWikiGrezzo, String[] titoliTable) {
+        List<List<String>> matriceTable = null;
+        List<String> lista = getRigheTableWiki(indirizzoWikiGrezzo, titoliTable);
+        String[] parti = null;
+        String sep = "</td><td>";
+        String tag = "<td>";
+        List<String> listaRiga;
+
+        if (lista != null && lista.size() > 0) {
+            matriceTable = new ArrayList<>();
+            for (String riga : lista) {
+                parti = riga.split(sep);
+                listaRiga = new ArrayList<>();
+                if (parti != null && parti.length > 0) {
+                    listaRiga.add(text.levaTesta(parti[0], tag));
+                    for (int k = 1; k < parti.length; k++) {
+                        listaRiga.add(parti[k]);
+                    }// end of for cycle
+                }// end of if cycle
+                matriceTable.add(listaRiga);
+            }// end of for cycle
+        }// end of if cycle
+
+        return matriceTable;
     } // fine del metodo
 
 }// end of class

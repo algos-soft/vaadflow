@@ -120,6 +120,7 @@ public class FlowVar {
      * Deve essere regolata in xxxBoot.regolaInfo() sempre presente nella directory 'application' <br>
      */
     public static String pathLogo = "frontend/images/medal.ico";
+//    public static String pathLogo = "frontend/images/spacciamadre.jpg";
 
 
     public static List<Class> menuClazzList = new ArrayList<>();

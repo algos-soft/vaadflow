@@ -248,4 +248,47 @@ public class AWebServiceTest {
         }// end of for cycle
     }// end of single test
 
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return lista grezza di righe
+     */
+    @Test
+    public void getMatriceTableWiki() {
+        List<List<String>> matriceTable = null;
+        String[] titoli = new String[]{"Codice", "Regioni"};
+
+        int previstoIntero = 20;
+
+        matriceTable = aWebService.getMatriceTableWiki(PAGINA, titoli);
+        assertNotNull(matriceTable);
+        assertEquals(previstoIntero, matriceTable.size());
+    }// end of single test
+
+    /**
+     * Request di tipo GET
+     * Accetta un array di titoli della table
+     *
+     * @param indirizzoWikiGrezzo della pagina
+     * @param titoliTable         per individuarla
+     *
+     * @return lista grezza di righe
+     */
+    @Test
+    public void getMatriceTableWiki2() {
+        List<List<String>> matriceTable = null;
+        String[] titoli = new String[]{"pos.", "comune"};
+
+        int previstoIntero = 136;
+
+        matriceTable = aWebService.getMatriceTableWiki("Comuni del Molise", titoli);
+        assertNotNull(matriceTable);
+        assertEquals(previstoIntero, matriceTable.size());
+    }// end of single test
+
 }// end of class

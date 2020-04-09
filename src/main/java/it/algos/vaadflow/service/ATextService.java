@@ -1222,4 +1222,19 @@ public class ATextService extends AbstractService {
     }// end of method
 
 
+    /**
+     * Estrae delle singole stringhe separate da virgola
+     */
+    public Integer[] getMatriceInt(String stringaMultipla) {
+        Integer[] matrice = null;
+        List<String> lista = getArray(stringaMultipla);
+
+        if (lista != null) {
+            matrice = lista.toArray(new Integer[lista.size()]);
+        }// end of if cycle
+
+        return matrice;
+    }// end of method
+
+
 }// end of class

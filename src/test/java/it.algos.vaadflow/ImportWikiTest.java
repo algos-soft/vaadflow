@@ -73,6 +73,25 @@ public class ImportWikiTest extends ATest {
     }// end of single test
 
 
+    /**
+     * Estrae una lista da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con due stringhe ognuno
+     */
+    @Test
+    public void estraeListaDue() {
+        List<WrapDueStringhe> listaWrap = null;
+        List<List<String>> matriceTable = null;
+        String pagina = "Comuni del Molise";
+        String titoli = "pos.,comune";
+        int previstoIntero = 136;
+
+        listaWrap = importWiki.estraeListaDue(pagina, titoli, 2, 3);
+        assertNotNull(listaWrap);
+        assertEquals(previstoIntero, listaWrap.size());
+    }// end of single test
+
+
     @Test
     public void regioni() {
         List<WrapDueStringhe> risultato = null;
@@ -111,78 +130,128 @@ public class ImportWikiTest extends ATest {
      */
 //    @Test
     public void comune() {
-        List<WrapTreStringhe> risultato = null;
+        List<WrapDueStringhe> risultato = null;
         risultato = importWiki.comuni();
         assertNotNull(risultato);
 
         System.out.println("");
-        for (WrapTreStringhe wrap : risultato) {
+        for (WrapDueStringhe wrap : risultato) {
             System.out.println("");
             System.out.println("Regione: " + wrap.getPrima());
             System.out.println("Provincia: " + wrap.getSeconda());
-            System.out.println("Nome: " + wrap.getTerza());
         }// end of for cycle
     }// end of single test
 
 
-    @Test
+    //    @Test
     public void comuniRegioneAbruzzo() {
         singolaRegione(EARegione.abruzzo);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneBasilicata() {
         singolaRegione(EARegione.basilicata);
     }// end of single test
+
 
 //    @Test
     public void comuniRegioneCalabria() {
         singolaRegione(EARegione.calabria);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneCampania() {
         singolaRegione(EARegione.campania);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneEmilia() {
         singolaRegione(EARegione.emilia);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneFriuli() {
         singolaRegione(EARegione.friuli);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneLazio() {
         singolaRegione(EARegione.lazio);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneLiguria() {
         singolaRegione(EARegione.liguria);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneLombardia() {
         singolaRegione(EARegione.lombardia);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneMarche() {
         singolaRegione(EARegione.marche);
     }// end of single test
 
-//    @Test
+
+//        @Test
     public void comuniRegioneMolise() {
         singolaRegione(EARegione.molise);
     }// end of single test
 
+
 //    @Test
     public void comuniRegionePiemonte() {
         singolaRegione(EARegione.piemonte);
+    }// end of single test
+
+//    @Test
+    public void comuniRegionePuglia() {
+        singolaRegione(EARegione.puglia);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneSardegna() {
+        singolaRegione(EARegione.sardegna);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneSicilia() {
+        singolaRegione(EARegione.sicilia);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneToscana() {
+        singolaRegione(EARegione.toscana);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneTrentino() {
+        singolaRegione(EARegione.trentino);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneUmbria() {
+        singolaRegione(EARegione.umbria);
+    }// end of single test
+
+    @Test
+    public void comuniRegioneAosta() {
+        singolaRegione(EARegione.aosta);
+    }// end of single test
+
+//    @Test
+    public void comuniRegioneVeneto() {
+        singolaRegione(EARegione.veneto);
     }// end of single test
 
 
@@ -191,19 +260,19 @@ public class ImportWikiTest extends ATest {
      *
      * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-    private List<WrapTreStringhe> singolaRegione(EARegione eaRegione) {
-        List<WrapTreStringhe> risultato = null;
+    private List<WrapDueStringhe> singolaRegione(EARegione eaRegione) {
+        List<WrapDueStringhe> risultato = null;
 
-        previstoIntero = eaRegione.getComuni();
+        previstoIntero = eaRegione.getComuniTotali();
         risultato = importWiki.singolaRegione(eaRegione);
         assertNotNull(risultato);
         assertEquals(previstoIntero, risultato.size());
 
         System.out.println(eaRegione.getNome() + " con " + risultato.size() + " comuni");
-        for (WrapTreStringhe wrap : risultato) {
+        for (WrapDueStringhe wrap : risultato) {
             System.out.println("");
-            System.out.println("Provincia: " + wrap.getSeconda());
-            System.out.println("Comune: " + wrap.getTerza());
+            System.out.println("Provincia: " + wrap.getPrima());
+            System.out.println("Comune: " + wrap.getSeconda());
         }// end of for cycle
 
         return risultato;

@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.VIRGOLA;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
  * Project vaadflow
@@ -104,21 +105,60 @@ public class ImportWiki {
      *
      * @return lista di wrapper con due stringhe ognuno
      */
-    public List<WrapDueStringhe> estraeListaDue(String pagina, String titoli) {
+    @Deprecated
+    public List<WrapDueStringhe> estraeListaDue(String pagina, String titoli, String posizioni) {
         List<WrapDueStringhe> listaWrap = null;
         LinkedHashMap<String, LinkedHashMap<String, String>> mappaGenerale = null;
+        List<List<String>> matriceTable = null;
         LinkedHashMap<String, String> mappa;
         String[] titoliTable = text.getMatrice(titoli);
-        String tagUno = titoliTable[0];
-        String tagDue = titoliTable[1];
+//        Integer[] posizioniColonne = text.getMatriceInt(posizioni);
+//        String tagUno = titoliTable[posizioniColonne[0]];
+//        String tagDue = titoliTable[posizioniColonne[1]];
+        String tagUno = "";
+        String tagDue = "";
         WrapDueStringhe wrapGrezzo;
 
-        mappaGenerale = aWebService.getMappaTableWiki(pagina, titoliTable);
-        if (mappaGenerale != null && mappaGenerale.size() > 0) {
+        matriceTable = aWebService.getMatriceTableWiki(pagina, titoliTable);
+        if (matriceTable != null && matriceTable.size() > 0) {
             listaWrap = new ArrayList<>();
-            for (String elemento : mappaGenerale.keySet()) {
-                mappa = mappaGenerale.get(elemento);
-                wrapGrezzo = new WrapDueStringhe(mappa.get(tagUno), mappa.get(tagDue));
+            for (List riga : matriceTable) {
+//                wrapGrezzo = new WrapDueStringhe(mappa.get(tagUno), mappa.get(tagDue));
+//                listaWrap.add(wrapGrezzo);
+            }// end of for cycle
+        }// end of if cycle
+
+
+//        mappaGenerale = aWebService.getMappaTableWiki(pagina, titoliTable);
+//        if (mappaGenerale != null && mappaGenerale.size() > 0) {
+//            listaWrap = new ArrayList<>();
+//            for (String elemento : mappaGenerale.keySet()) {
+//                mappa = mappaGenerale.get(elemento);
+//                wrapGrezzo = new WrapDueStringhe(mappa.get(tagUno), mappa.get(tagDue));
+//                listaWrap.add(wrapGrezzo);
+//            }// end of for cycle
+//        }// end of if cycle
+
+        return listaWrap;
+    }// end of method
+
+
+    /**
+     * Estrae una lista da una pagina di wikipedia <br>
+     *
+     * @return lista di wrapper con due stringhe ognuno
+     */
+    public List<WrapDueStringhe> estraeListaDue(String pagina, String titoli, int posUno, int posDue) {
+        List<WrapDueStringhe> listaWrap = null;
+        List<List<String>> matriceTable = null;
+        String[] titoliTable = text.getMatrice(titoli);
+        WrapDueStringhe wrapGrezzo;
+
+        matriceTable = aWebService.getMatriceTableWiki(pagina, titoliTable);
+        if (matriceTable != null && matriceTable.size() > 0) {
+            listaWrap = new ArrayList<>();
+            for (List<String> riga : matriceTable) {
+                wrapGrezzo = new WrapDueStringhe(riga.get(posUno - 1), posDue > 0 ? riga.get(posDue - 1) : VUOTA);
                 listaWrap.add(wrapGrezzo);
             }// end of for cycle
         }// end of if cycle
@@ -206,7 +246,7 @@ public class ImportWiki {
         String prima;
         String seconda;
 
-        listaWrapGrezzo = estraeListaDue(PAGINA, titoli);
+        listaWrapGrezzo = estraeListaDue(PAGINA, titoli, 1, 2);
         if (listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
             listaWrap = new ArrayList<>();
             for (WrapDueStringhe wrap : listaWrapGrezzo) {
@@ -287,23 +327,24 @@ public class ImportWiki {
      *
      * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-    public List<WrapTreStringhe> comuniBase(String regioneTxt, String pagina, String titoli) {
-        List<WrapTreStringhe> listaWrap = null;
-        List<WrapTreStringhe> listaWrapGrezzo = null;
-        WrapTreStringhe wrapValido;
+    public List<WrapDueStringhe> comuniBase(String regioneTxt, String pagina, String titoli, int posUno, int posDue) {
+        List<WrapDueStringhe> listaWrap = null;
+        List<WrapDueStringhe> listaWrapGrezzo = null;
+        WrapDueStringhe wrapValido;
         String prima;
         String seconda;
 
-        listaWrapGrezzo = estraeListaTre(pagina, titoli);
+        listaWrapGrezzo = estraeListaDue(pagina, titoli, posUno, posDue);
         if (text.isValid(regioneTxt) && listaWrapGrezzo != null && listaWrapGrezzo.size() > 0) {
             listaWrap = new ArrayList<>();
-            for (WrapTreStringhe wrap : listaWrapGrezzo) {
+            for (WrapDueStringhe wrap : listaWrapGrezzo) {
                 prima = wrap.getPrima();
                 seconda = wrap.getSeconda();
                 prima = elaboraNome(prima);
                 seconda = elaboraNome(seconda);
-                if (text.isValid(seconda) && text.isValid(prima)) {
-                    wrapValido = new WrapTreStringhe(regioneTxt, seconda, prima);
+                seconda = text.isValid(seconda) ? seconda : regioneTxt;
+                if (text.isValid(prima)) {
+                    wrapValido = new WrapDueStringhe(seconda, prima);
                     listaWrap.add(wrapValido);
                 }// end of if cycle
             }// end of for cycle
@@ -318,17 +359,21 @@ public class ImportWiki {
      *
      * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-    public List<WrapTreStringhe> singolaRegione(EARegione eaRegione) {
-        List<WrapTreStringhe> listaWrap = null;
+    public List<WrapDueStringhe> singolaRegione(EARegione eaRegione) {
+        List<WrapDueStringhe> listaWrap = null;
         String regioneTxt;
         String paginaWiki;
         String titoli;
+        int posUno;
+        int posDue;
 
         regioneTxt = eaRegione.getNome();
         paginaWiki = eaRegione.getPaginaWiki();
         titoli = eaRegione.getTitoli();
+        posUno = eaRegione.getPosColonnaUno();
+        posDue = eaRegione.getPosColonnaDue();
         if (text.isValid(titoli)) {
-            listaWrap = comuniBase(regioneTxt, paginaWiki, titoli);
+            listaWrap = comuniBase(regioneTxt, paginaWiki, titoli, posUno, posDue);
         }// end of if cycle
 
         return listaWrap;
@@ -340,9 +385,9 @@ public class ImportWiki {
      *
      * @return lista di wrapper con tre stringhe ognuno (regione, provincia, nome)
      */
-    public List<WrapTreStringhe> comuni() {
-        List<WrapTreStringhe> listaWrap = new ArrayList<>();
-        List<WrapTreStringhe> listaWrapRegione = null;
+    public List<WrapDueStringhe> comuni() {
+        List<WrapDueStringhe> listaWrap = new ArrayList<>();
+        List<WrapDueStringhe> listaWrapRegione = null;
 
         for (EARegione eaRegione : EARegione.values()) {
             listaWrapRegione = singolaRegione(eaRegione);

@@ -559,7 +559,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         deleteButton.setVisible(operation.isDeleteEnabled());
 
         //--Crea i fields
-        creaFields( entityBean);
+        creaFields(entityBean);
 
         super.open();
     }// end of method
@@ -641,8 +641,14 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
         //--Crea un nuovo binder (vuoto) per questo Dialog e questa entityBean (currentItem)
         binder = new Binder(binderClass);
 
-        //--Costruisce ogni singolo field
-        creaFieldsBase( entityBean,propertyNamesList);
+        //--Eventuali fields specifici aggiunti PRIMA di quelli automatici
+        this.creaFieldsBefore();
+
+        //--Fields normali indicati in @AIForfm(fields =... , aggiunti in automatico
+        creaFieldsBase(entityBean, propertyNamesList);
+
+        //--Eventuali fields specifici aggiunti DOPO quelli automatici
+        this.creaFieldsAfter();
 
         //--Eventuali regolazioni aggiuntive ai fields del binder PRIMA di associare i valori
         fixStandardAlgosFieldsAnte();
@@ -684,19 +690,28 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
+     * Eventuali fields specifici aggiunti PRIMA di quelli automatici <br>
+     * Sovrascritto nella sottoclasse <br>
+     */
+    protected void creaFieldsBefore() {
+    }// end of method
+
+
+    /**
      * Costruisce ogni singolo field <br>
+     * Fields normali indicati in @AIForfm(fields =... , aggiunti in automatico
      * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service <br>
      * Inizializza le properties grafiche (caption, visible, editable, width, ecc) <br>
      * Aggiunge il field al binder, nel metodo create() del fieldService <br>
      * Aggiunge il field ad una fieldMap, per recuperare i fields dal nome <br>
      * Controlla l'esistenza tra i field di un eventuale field di tipo textArea. Se NON esiste, abilita il tasto 'return'
      */
-    protected void creaFieldsBase(AEntity entityBean,List<String> propertyNamesList) {
+    protected void creaFieldsBase(AEntity entityBean, List<String> propertyNamesList) {
         AbstractField propertyField = null;
         boolean esisteTextArea = false;
 
         for (String propertyName : propertyNamesList) {
-            propertyField = fieldService.create(entityBean,appContext, binder, binderClass, propertyName);
+            propertyField = fieldService.create(entityBean, appContext, binder, binderClass, propertyName);
             if (propertyField != null) {
                 fieldMap.put(propertyName, propertyField);
             }// end of if cycle
@@ -711,6 +726,14 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             }// end of if cycle
         }// end of if cycle
 
+    }// end of method
+
+
+    /**
+     * Eventuali fields specifici aggiunti DOPO quelli automatici <br>
+     * Sovrascritto nella sottoclasse <br>
+     */
+    protected void creaFieldsAfter() {
     }// end of method
 
 
@@ -755,6 +778,7 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
             getFormLayout().add(fieldMap.get(name));
         }// end of for cycle
     }// end of method
+
 
     /**
      * Eventuali regolazioni aggiuntive ai fields del binder DOPO aver associato i valori <br>

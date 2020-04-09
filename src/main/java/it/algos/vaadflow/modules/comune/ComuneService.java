@@ -2,13 +2,14 @@ package it.algos.vaadflow.modules.comune;
 
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EARegione;
 import it.algos.vaadflow.importa.ImportWiki;
 import it.algos.vaadflow.modules.provincia.Provincia;
 import it.algos.vaadflow.modules.provincia.ProvinciaService;
 import it.algos.vaadflow.modules.regione.Regione;
 import it.algos.vaadflow.modules.regione.RegioneService;
 import it.algos.vaadflow.service.AService;
-import it.algos.vaadflow.wrapper.WrapTreStringhe;
+import it.algos.vaadflow.wrapper.WrapDueStringhe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -194,6 +195,7 @@ public class ComuneService extends AService {
         return (List) repository.findAllByProvinciaOrderByNomeAsc(provincia);
     }// end of method
 
+
     /**
      * Creazione di alcuni dati iniziali <br>
      * Viene invocato alla creazione del programma e dal bottone Reset della lista (solo per il developer) <br>
@@ -204,29 +206,35 @@ public class ComuneService extends AService {
      */
     @Override
     public int reset() {
-        List<WrapTreStringhe> listaWrap = null;
+        List<WrapDueStringhe> listaWrap = null;
         ImportWiki importService;
         Regione regione;
         Provincia provincia;
         int numRec = super.reset();
+        String comuneText;
 
         //--recupera una lista di tutte le provincie dal server di Wikipedia
         importService = appContext.getBean(ImportWiki.class);
-        listaWrap = importService.comuni();
+//        listaWrap = importService.comuni();
 
-        if (listaWrap != null && listaWrap.size() > 0) {
-            for (WrapTreStringhe wrap : listaWrap) {
-                regione = regioneService.findByNome(wrap.getPrima());
-                provincia = provinciaService.findByNome(wrap.getSeconda());
-                creaIfNotExist(regione,provincia, wrap.getTerza());
-            }// end of for cycle
-        }// end of if cycle
+        for (EARegione eaRegione : EARegione.values()) {
+            listaWrap = importService.singolaRegione(eaRegione);
+            if (listaWrap != null && listaWrap.size() > 0) {
+                for (WrapDueStringhe wrap : listaWrap) {
+                    regione = regioneService.findByNome(eaRegione.getNome());
+                    provincia = provinciaService.findByNome(wrap.getPrima());
+                    comuneText = wrap.getSeconda();
+                    creaIfNotExist(regione, provincia, comuneText);
+                }// end of for cycle
+            }// end of if cycle
+        }// end of for cycle
 
         return numRec;
     }// end of method
 
+
     public List<Comune> findItems(AEntity entityBean) {
-        return findAllByProvincia((Provincia)entityBean);
+        return findAllByProvincia((Provincia) entityBean);
     }// end of method
 
 }// end of class
