@@ -101,7 +101,7 @@ public class Beta extends AEntity {
      */
     @NotNull(message = "Il codice è obbligatorio")
 //    @Indexed()
-    @Size(min = 2)
+    @Size(min = 10)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
     @AIColumn(sortable = true, widthEM = 8)

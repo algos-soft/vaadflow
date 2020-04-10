@@ -1,10 +1,13 @@
 package it.algos.vaadflow.ui.form;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.binder.Binder;
+import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.log.LogService;
@@ -14,6 +17,8 @@ import it.algos.vaadflow.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +33,9 @@ import java.util.Map;
  * Nell'ordine (dall'alto):
  * - 1 APropertyViewForm (che estende la classe Vaadin VerticalLayout) per elencare tutte le property usate <br>
  * - 2 AViewForm con la business logic principale <br>
+ * - 3 APrefViewList per regolare i parametri, le preferenze ed i flags <br>
+ * - 4 ALayoutViewForm per regolare il layout <br>
+ * - 5 AFieldsViewForm per gestire i Fields <br>
  * L'utilizzo pratico per il programmatore è come se fosse una classe sola <br>
  * <p>
  * Superclasse di servizio per separare le property di AViewForm in una classe 'dedicata' <br>
@@ -77,6 +85,12 @@ public abstract class APropertyViewForm extends VerticalLayout {
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     public ATextService text = ATextService.getInstance();
+
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    protected AFieldService fieldService =AFieldService.getInstance();
 
     /**
      * Istanza unica di una classe di servizio: <br>
@@ -129,6 +143,15 @@ public abstract class APropertyViewForm extends VerticalLayout {
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
+    public ARouteService routeService = ARouteService.getInstance();
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
     protected PreferenzaService pref;
 
 
@@ -151,8 +174,24 @@ public abstract class APropertyViewForm extends VerticalLayout {
      * <p>
      * Modello-dati specifico di questo modulo <br>
      */
-    protected Class<? extends AEntity> entityClazz;
+    protected Class<? extends AEntity> binderClass;
 
+
+    //--collegamento tra i fields e la entityBean
+    protected Binder binder;
+
+
+    /**
+     * Recuperato dalla sessione, quando la @route fa partire la UI. <br>
+     * Viene regolato nel service specifico (AVaadinService) <br>
+     */
+    protected AContext context;
+
+
+    /**
+     * Lista ordinata di nomi di properties <br>
+     */
+    protected List<String> propertyNamesList;
 
     /**
      * Singolo parametro (opzionale) in ingresso nella chiamata del browser (da @Route oppure diretta) <br>
@@ -187,10 +226,10 @@ public abstract class APropertyViewForm extends VerticalLayout {
     protected AEntity entityBean;
 
     /**
-     * Label o altro per informazioni specifiche; di norma per il developer <br>
-     * Placeholder (eventuale, non presente di default) <br>
+     * Mappa ordinata di tutti i filds del form <br>
+     * Serve per presentarli (ordinati) dall'alto in basso nel form <br>
      */
-    protected VerticalLayout alertPlacehorder;
+    protected LinkedHashMap<String, AbstractField> fieldMap;
 
     /**
      * Titolo del dialogo <br>
@@ -199,10 +238,16 @@ public abstract class APropertyViewForm extends VerticalLayout {
     protected Div titlePlaceholder;
 
     /**
+     * Label o altro per informazioni specifiche; di norma per il developer <br>
+     * Placeholder (eventuale, non presente di default) <br>
+     */
+    protected VerticalLayout alertPlacehorder;
+
+    /**
      * Corpo centrale del Form <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected FormLayout bodyPlaceHolder;
+    protected Div bodyPlaceHolder;
 
     /**
      * Corpo centrale aggiuntivo del Form <br>
@@ -216,6 +261,24 @@ public abstract class APropertyViewForm extends VerticalLayout {
      */
     protected HorizontalLayout bottomPlacehorder;
 
+
+    /**
+     * Lista di avvisi da mostrare nel alertPlacehorder SOTTO il titolo e SOPRA il Form. <br>
+     * Opzionale. Visibile a tutti. Di colore verde.
+     */
+    protected List<String> alertUser;
+
+    /**
+     * Lista di avvisi da mostrare nel alertPlacehorder SOTTO il titolo e SOPRA il Form. <br>
+     * Opzionale. Visibile agli admin. Di colore blue.
+     */
+    protected List<String> alertAdmin;
+
+    /**
+     * Lista di avvisi da mostrare nel alertPlacehorder SOTTO il titolo e SOPRA il Form. <br>
+     * Opzionale. Visibile ai developer. Di colore rosso.
+     */
+    protected List<String> alertDev;
 
     /**
      * Flag di preferenza per mostrare il titolo del Form. Normalmente true. <br>
@@ -365,6 +428,16 @@ public abstract class APropertyViewForm extends VerticalLayout {
      * Flag di preferenza col testo del bottone Delete. Normalmente regolato in AViewForm.fixPreferenze().
      */
     protected String deleteButtonIcon;
+
+    /**
+     * Form centrale (obbligatorio) con i fields normali.
+     */
+    protected FormLayout formLayout;
+
+    /**
+     * Form aggiuntivo (opzionale) per altre regolazioni
+     */
+    protected FormLayout formSubLayout;
 
 
 }// end of class

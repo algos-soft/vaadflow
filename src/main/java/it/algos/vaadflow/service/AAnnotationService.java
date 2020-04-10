@@ -541,6 +541,26 @@ public class AAnnotationService extends AbstractService {
 
 
     /**
+     * Restituisce il nome della property per navigare verso il Form <br>
+     *
+     * @param viewClazz the view class
+     *
+     * @return the name of the property
+     */
+    public String getFormRouteName(final Class<? extends IAView> viewClazz) {
+        String routeFormName = "";
+        AIView annotationView = null;
+
+        annotationView = this.getAIView(viewClazz);
+        if (annotationView != null) {
+            routeFormName = annotationView.routeFormName();
+        }// end of if cycle
+
+        return routeFormName;
+    }// end of method
+
+
+    /**
      * Nomi delle properties della Grid, estratti dalle @Annotation della Entity
      * Se la classe AEntity->@AIList prevede una lista specifica, usa quella lista (con o senza ID)
      * Se l'annotation @AIList non esiste od è vuota,
@@ -2130,6 +2150,7 @@ public class AAnnotationService extends AbstractService {
 
         return methodName;
     }// end of method
+
 
     /**
      * Get the color of the property.

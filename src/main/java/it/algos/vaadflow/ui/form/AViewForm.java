@@ -1,34 +1,28 @@
 package it.algos.vaadflow.ui.form;
 
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.History;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadtest.modules.beta.Beta;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_ENTITY_BEAN;
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_FORM_TYPE;
 
 /**
  * Project vaadflow
@@ -41,9 +35,13 @@ import static it.algos.vaadflow.application.FlowCost.*;
  * Nell'ordine (dall'alto):
  * - 1 APropertyViewForm (che estende la classe Vaadin VerticalLayout) per elencare tutte le property usate <br>
  * - 2 AViewForm con la business logic principale <br>
+ * - 3 APrefViewList per regolare i parametri, le preferenze ed i flags <br>
+ * - 4 ALayoutViewForm per regolare il layout <br>
+ * - 5 AFieldsViewForm per gestire i Fields <br>
  * L'utilizzo pratico per il programmatore è come se fosse una classe sola <br>
  * <p>
  * Questa classe viene costruita partendo da @Route e non da SprinBoot <br>
+ * La chiamata sarà: getUI().ifPresent(ui -> ui.navigate("XxxForm", query)); con il tag della @Route specifica <br>
  * La injection viene fatta da @Route nel costruttore <br>
  * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
  * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
@@ -98,6 +96,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @Slf4j
 public abstract class AViewForm extends APropertyViewForm implements BeforeEnterObserver, HasUrlParameter<String> {
 
+
     /**
      * Costruttore @Autowired <br>
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -106,11 +105,11 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      * Passa nella superclasse anche la entityClazz che viene definita qui (specifica di questo mopdulo) <br>
      *
      * @param service     business class e layer di collegamento per la Repository
-     * @param entityClazz modello-dati specifico di questo modulo
+     * @param binderClass di tipo AEntity usata dal Binder dei Fields
      */
-    public AViewForm(IAService service, Class<? extends AEntity> entityClazz) {
+    public AViewForm(IAService service, Class<? extends AEntity> binderClass) {
         this.service = service;
-        this.entityClazz = entityClazz;
+        this.binderClass = binderClass;
     }// end of Vaadin/@Route constructor
 
 
@@ -137,42 +136,6 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
 
 
     /**
-     * Regola i parametri provenienti dal browser per una view costruita da @Route <br>
-     * <p>
-     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewForm <br>
-     * Chiamato DOPO @PostConstruct ma PRIMA di beforeEnter() <br>
-     * <p>
-     * Dal browser arrivano come parametri:
-     * 1) typo di form da utilizzare: New, Edit, Show (obbligatorio) <br>
-     * 2) entityBean specifico (obbligatorio se Edit o Show) sotto forma di ID univoco della entityClazz specifica <br>
-     * 3) link di ritorno (facoltativi) <br>
-     * Può essere sovrascritto, per gestire diversamente i parametri in ingresso <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     *
-     * @param event     con la location, ui, navigationTarget, source, ecc
-     * @param parameter opzionali nella chiamata del browser
-     */
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        Location location = event.getLocation();
-        QueryParameters queryParameters = location.getQueryParameters();
-        Map<String, List<String>> multiParametersMap = queryParameters.getParameters();
-
-        if (text.isValid(parameter)) {
-            this.singleParameter = parameter;
-        }// end of if cycle
-
-        if (array.isValid(multiParametersMap)) {
-            if (array.isMappaSemplificabile(multiParametersMap)) {
-                this.parametersMap = array.semplificaMappa(multiParametersMap);
-            } else {
-                this.multiParametersMap = multiParametersMap;
-            }// end of if/else cycle
-        }// end of if cycle
-    }// end of method
-
-
-    /**
      * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
      * <p>
      * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewForm <br>
@@ -184,9 +147,22 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        fixParameters();
-        fixPreferenze();
-        initView();
+        this.fixLoginContext();
+        this.fixPreferenze();
+        this.fixProperties();
+        this.fixPropertyNamesList();
+        this.initView();
+        this.creaAllFields();
+    }// end of method
+
+
+    /**
+     * Regola login and context della sessione <br>
+     * Può essere sovrascritto, per aggiungere e/o modificareinformazioni <br>
+     * Invocare PRIMA il metodo della superclasse <br>
+     */
+    protected void fixLoginContext() {
+        context = vaadinService.getSessionContext();
     }// end of method
 
 
@@ -197,115 +173,33 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      * Le preferenze vengono (eventualmente) lette da mongo e (eventualmente) sovrascritte nella sottoclasse <br>
      */
     protected void fixPreferenze() {
-        super.usaTitoloForm = true;
-        super.titoloForm = VUOTA;
-        super.usaFormDueColonne= true;
-
-        super.usaBackButton = true;
-        super.usaCancelButton = false;
-        super.usaAnnullaButton = false;
-        super.usaSaveButton = true;
-        super.usaDeleteButton = false;
-
-        super.backButtonText = BOT_BACK;
-        super.cancelButtonText = "Pippoz";
-        super.annullaButtonText = "Pippoz";
-        super.saveButtonText = "Pippoz";
-        super.deleteButtonText = "Pippoz";
-
-        super.backButtonIcon = "Pippoz";
-        super.cancelButtonIcon = "Pippoz";
-        super.annullaButtonIcon = "Pippoz";
-        super.saveButtonIcon = "Pippoz";
-        super.deleteButtonIcon = "Pippoz";
     }// end of method
 
 
     /**
-     * Elabora i parametri ricevuti <br>
+     * Regola alcune properties (non grafiche) <br>
+     */
+    protected void fixProperties() {
+    }// end of method
+
+
+    /**
+     * Costruisce una lista ordinata di nomi di properties <br>
      * <p>
-     * Dal browser arrivano come parametri:
-     * 1) typo di form da utilizzare: New, Edit, Show (obbligatorio) <br>
-     * 2) entityBean specifico (obbligatorio se Edit o Show) sotto forma di ID univoco della entityClazz specifica <br>
-     * 3) link di ritorno (facoltativi) <br>
+     * La lista viene usata per la costruzione automatica dei campi e l'inserimento nel binder <br>
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     * Sovrasrivibile nella sottoclasse <br>
+     * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
      */
-    protected void fixParameters() {
-        String operationFormTxt = VUOTA;
-        String entityBeanKey = VUOTA;
-
-        //--formType
-        if (parametersMap != null) {
-            if (parametersMap.containsKey(KEY_MAPPA_FORM_TYPE)) {
-                operationFormTxt = parametersMap.get(KEY_MAPPA_FORM_TYPE);
-                if (text.isValid(operationFormTxt)) {
-                    if (EAOperation.contiene(operationFormTxt)) {
-                        operationForm = EAOperation.valueOf(operationFormTxt);
-                        logger.info("Per ora tutto bene. Il formOperation è arrivato del tipo: " + operationFormTxt, getClass(), "fixPreferenze");
-                    } else {
-                        logger.error("Il valore " + operationFormTxt + " del parametro formOperation non è tra quelli previsti", getClass(), "fixPreferenze");
-                        ritorno();
-                        return;
-                    }// end of if/else cycle
-                } else {
-                    logger.error("Il parametro formOperation è arrivato ma è vuoto", getClass(), "fixPreferenze");
-                    ritorno();
-                    return;
-                }// end of if/else cycle
-            } else {
-                logger.error("La mappa parametersMap non contiene formOperation", getClass(), "fixPreferenze");
-                ritorno();
-                return;
-            }// end of if/else cycle
-        } else {
-            logger.error("Manca parametersMap", getClass(), "fixPreferenze");
-            ritorno();
-            return;
-        }// end of if/else cycle
-
-        //--entityBean
-        //--parametersMap è sicuramente arrivata, se non sarebbe uscito prima
-        if (parametersMap.containsKey(KEY_MAPPA_ENTITY_BEAN)) {
-            entityBeanKey = parametersMap.get(KEY_MAPPA_ENTITY_BEAN);
-            if (text.isValid(entityBeanKey)) {
-                if (isValidEntityBeanKey(entityBeanKey)) {
-                    logger.info("Per ora tutto bene. Il parametro entityBeanKey è arrivato col valore " + entityBeanKey + " ed ha recuperato la entityBean corrispondente", getClass(), "fixPreferenze");
-                } else {
-                    logger.error("Il valore " + entityBeanKey + " del parametro entityBeanKey non corrisponde a nessuna entityBean del mongoDB " + entityClazz.getSimpleName(), getClass(), "fixPreferenze");
-                    ritorno();
-                    return;
-                }// end of if/else cycle
-            } else {
-                logger.error("Il parametro entityBeanKey è arrivato ma è vuoto", getClass(), "fixPreferenze");
-                ritorno();
-                return;
-            }// end of if/else cycle
-        } else {
-            if (operationFormTxt.equals(EAOperation.addNew.name())) {
-                logger.info("Per ora tutto bene. Manca l'entityBeanKey ma non serviva.", getClass(), "fixPreferenze");
-            } else {
-                logger.error("La mappa parametersMap non contiene entityBeanKey", getClass(), "fixPreferenze");
-                ritorno();
-                return;
-            }// end of if/else cycle
-        }// end of if/else cycle
+    protected void fixPropertyNamesList() {
+        propertyNamesList = service != null ? service.getFormPropertyNamesList(context) : null;
     }// end of method
 
 
     /**
-     * Controlla la validità del parametro entityBeanKey in ingresso <br>
-     * Regola la property interna entityBean <br>
-     */
-    protected boolean isValidEntityBeanKey(String entityBeanKey) {
-        if (text.isValid(entityBeanKey)) {
-            entityBean = service.findById(entityBeanKey);
-        }// end of if cycle
-
-        return entityBean != null;
-    }// end of method
-
-
-    /**
-     * Qui va tutta la logica inizale della view <br>
+     * Qui va tutta la logica grafica della view <br>
      * <p>
      * Graficamente abbiamo in tutte (di solito) le XxxViewForm: <br>
      * 1) un titolo (eventuale, presente di default) di tipo Label o HorizontalLayout <br>
@@ -315,215 +209,67 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      * 5) un footer (obbligatorio) con informazioni generali <br>
      */
     protected void initView() {
-        //--Costruisce tutti i placeholder di questa view
-        this.fixLayout();
-
-        //--Regola il titolo della view <br>
-        this.fixTitleLayout();
-
-        //--Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
-        this.fixAlertLayout();
-
-        //--Form placeholder standard per i campi
-        this.fixFormBody();
-
-        //--Separatore
-        this.add(new H3());
-
-        //--Form placeholder accessorio eventuale per altri campi, resi graficamente diversi
-        this.fixFormSubBody();
-
-        //--Regola la barra dei bottoni di comando <br>
-        this.fixBottomBar();
     }// end of method
 
 
     /**
-     * Costruisce tutti i placeholder di questa view e li aggiunge alla view stessa <br>
-     * Chiamato da AViewForm.initView() <br>
-     * Può essere sovrascritto, per modificare il layout standard <br>
-     * Invocare PRIMA il metodo della superclasse <br>
+     * Crea i fields
+     * <p>
+     * Crea un nuovo binder (vuoto) per questa View e questa Entity
+     * Crea una mappa fieldMap (vuota), per recuperare i fields dal nome
+     * Costruisce una lista di nomi delle properties. Ordinata. Sovrascrivibile.
+     * <p>
+     * Costruisce i fields (di tipo AbstractField) della lista, in base ai reflectedFields ricevuti dal service
+     * Inizializza le properties grafiche (caption, visible, editable, width, ecc)
+     * Aggiunge alla mappa (ordinata) eventuali fields specifici PRIMA di quelli automatici
+     * Aggiunge i fields al binder
+     * Aggiunge alla mappa (ordinata)  eventuali fields specifici DOPO quelli automatici
+     * Aggiunge i fields alla mappa fieldMap
+     * <p>
+     * Aggiunge eventuali fields specifici (costruiti non come standard type) al binder ed alla fieldMap
+     * Aggiunge i fields della fieldMap al layout grafico
+     * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
+     * Legge la entityBean ed inserisce nella UI i valori di eventuali fields NON associati al binder
      */
-    protected void fixLayout() {
-        this.setMargin(false);
-        this.setSpacing(false);
-        this.setPadding(true);
+    protected void creaAllFields() {
+    }// end of method
 
-        super.titlePlaceholder = new Div();
-        super.alertPlacehorder = new VerticalLayout();
-        super.bodyPlaceHolder = new FormLayout();
-        super.bodySubPlaceHolder = new FormLayout();
-        super.bottomPlacehorder = new HorizontalLayout();
 
-        if (pref.isBool(USA_DEBUG)) {
-            this.getElement().getStyle().set("background-color", EAColor.yellow.getEsadecimale());
-            titlePlaceholder.getElement().getStyle().set("background-color", EAColor.lime.getEsadecimale());
-            alertPlacehorder.getElement().getStyle().set("background-color", EAColor.lightgreen.getEsadecimale());
-            bodyPlaceHolder.getElement().getStyle().set("background-color", EAColor.bisque.getEsadecimale());
-            bodySubPlaceHolder.getElement().getStyle().set("background-color", EAColor.red.getEsadecimale());
-            bottomPlacehorder.getElement().getStyle().set("background-color", EAColor.silver.getEsadecimale());
+    /**
+     * Azione proveniente dal click sul bottone Edit
+     * Apre una View in Edit mode <br>
+     */
+    protected void modifica() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.edit.name());
+        mappa.put(KEY_MAPPA_ENTITY_BEAN, entityBean.id);
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("betaForm", query));
+    }// end of method
+
+
+    /**
+     * Azione proveniente dal click sul bottone Registra
+     * Inizio delle operazioni di registrazione
+     */
+    protected void saveClicked() {
+        boolean isValid = false;
+        if (entityBean != null) {
+            //--trasferisce tutti i valori (se accettabili nel loro insieme) dai campi GUI al currentItem
+            isValid = binder.writeBeanIfValid(entityBean);
         }// end of if cycle
 
-        this.add(titlePlaceholder, alertPlacehorder, bodyPlaceHolder, bodySubPlaceHolder, bottomPlacehorder);
-    }// end of method
-
-
-    /**
-     * Regola il titolo della view <br>
-     * <p>
-     * Chiamato da AViewForm.initView() <br>
-     * Recupera recordName dalle @Annotation della classe Entity. Non dovrebbe mai essere vuoto. <br>
-     * Costruisce il titolo con la descrizione dell'operazione (New, Edit,...) ed il recordName <br>
-     * Sostituisce interamente il titlePlaceholder <br>
-     */
-    protected void fixTitleLayout() {
-        String recordName = annotation.getRecordName(Beta.class);
-        String title = text.isValid(recordName) ? recordName : "Error";
-        title=operationForm.getNameInTitle() + " " + title.toLowerCase();
-        String titoloValido = text.isValid(titoloForm) ? titoloForm : title;
-
-        if (usaTitoloForm) {
-            if (operationForm != null) {
-                titlePlaceholder.add(new H2(titoloValido));
-            }// end of if cycle
-        }// end of if cycle
-    }// end of method
-
-
-    /**
-     * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
-     * <p>
-     * Chiamato da AViewForm.initView() <br>
-     * Normalmente ad uso esclusivo del developer (eventualmente dell'admin) <br>
-     * Può essere sovrascritto, per aggiungere informazioni <br>
-     * Invocare PRIMA il metodo della superclasse <br>
-     */
-    protected void fixAlertLayout() {
-        alertPlacehorder.removeAll();
-        alertPlacehorder.setMargin(false);
-        alertPlacehorder.setSpacing(false);
-        alertPlacehorder.setPadding(false);
-    }// end of method
-
-    /**
-     * Form placeholder standard per i campi <br>
-     * Chiamato da AViewForm.initView() <br>
-     */
-    protected void fixFormBody() {
-        FormLayout formLayout=new FormLayout();
-        Div div;
-        if (usaFormDueColonne) {
-            formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
-                    new FormLayout.ResponsiveStep("50em", 2));
+        if (isValid) {
+//            writeSpecificFields();
+//            itemSaver.accept(currentItem, operation);
+            service.save(entityBean, EAOperation.edit);
+            ritorno();
         } else {
-            formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("50em", 1));
-        }// end of if/else cycle
-
-        formLayout.addClassName("no-padding");
-        div = new Div(formLayout);
-        div.addClassName("has-padding");
-
-        this.add(div);
-    }// end of method
-
-    /**
-     * Form placeholder accessorio eventuale per altri campi, resi graficamente diversi <br>
-     * Chiamato da AViewForm.initView() <br>
-     */
-    protected void fixFormSubBody() {
-    }// end of method
-
-    /**
-     * Regola la barra dei bottoni di comando <br>
-     * Chiamato da AViewForm.initView() <br>
-     */
-    protected void fixBottomBar() {
-        bottomPlacehorder.removeAll();
-        bottomPlacehorder.setMargin(false);
-        bottomPlacehorder.setSpacing(false);
-        bottomPlacehorder.setPadding(false);
-        Label spazioVuotoEspandibile = new Label("");
-
-        fixBackButton();
-        fixEditButton();
-        fixSaveButton();
-        fixDeleteButton();
-
-//        cancelButton = new Button(ANNULLA);
-//        annullaButton = new Button(ANNULLA);
-
-        bottomPlacehorder.setFlexGrow(1, spazioVuotoEspandibile);
-    }// end of method
-
-
-    /**
-     * Regola il bottone di 'ritorno' <br>
-     * Chiamato da AViewForm.fixBottomBar() <br>
-     * Può essere sovrascritto, per modificare titolo, icona, colore e dimensioni del bottone <br>
-     */
-    protected void fixBackButton() {
-        if (usaBackButton) {
-            backButton = new Button(backButtonText);
-            backButton.addClickListener(e -> ritorno());
-            backButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                backButton.addClickShortcut(Key.ARROW_LEFT);
-            }// end of if cycle
-            bottomPlacehorder.add(backButton);
-        }// end of if cycle
-    }// end of method
-
-
-    /**
-     * Regola il bottone di 'modifica' <br>
-     * Chiamato da AViewForm.fixBottomBar() <br>
-     * Può essere sovrascritto, per modificare titolo, icona, colore e dimensioni del bottone <br>
-     */
-    protected void fixEditButton() {
-        if (usaEditButton) {
-            editButton = new Button("Edit");
-            editButton.addClickListener(e -> ritorno()); //@todo provvisorio
-            editButton.setIcon(new Icon(VaadinIcon.EDIT));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                editButton.addClickShortcut(Key.ENTER);
-            }// end of if cycle
-            bottomPlacehorder.add(editButton);
-        }// end of if cycle
-    }// end of method
-
-    /**
-     * Regola il bottone di 'registra' <br>
-     * Chiamato da AViewForm.fixBottomBar() <br>
-     * Può essere sovrascritto, per modificare titolo, icona, colore e dimensioni del bottone <br>
-     */
-    protected void fixSaveButton() {
-        if (usaSaveButton) {
-            saveButton = new Button("Save");
-            saveButton.addClickListener(e -> ritorno()); //@todo provvisorio
-            saveButton.setIcon(new Icon(VaadinIcon.DATABASE));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                saveButton.addClickShortcut(Key.ENTER);
-            }// end of if cycle
-            bottomPlacehorder.add(saveButton);
-        }// end of if cycle
-    }// end of method
-
-    /**
-     * Regola il bottone di 'registra' <br>
-     * Chiamato da AViewForm.fixBottomBar() <br>
-     * Può essere sovrascritto, per modificare titolo, icona, colore e dimensioni del bottone <br>
-     */
-    protected void fixDeleteButton() {
-        if (usaDeleteButton) {
-            deleteButton = new Button("Delete");
-            deleteButton.getElement().setAttribute("theme", "error");
-            deleteButton.addClickListener(e -> ritorno()); //@todo provvisorio
-            deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
-            if (pref.isBool(USA_BUTTON_SHORTCUT)) {
-                deleteButton.addClickShortcut(Key.ENTER);
-            }// end of if cycle
-            bottomPlacehorder.add(deleteButton);
-        }// end of if cycle
+            BinderValidationStatus<Beta> status = binder.validate();
+            Notification.show(status.getValidationErrors().stream()
+                    .map(ValidationResult::getErrorMessage)
+                    .collect(Collectors.joining("; ")), 3000, Notification.Position.BOTTOM_START);
+        }
     }// end of method
 
 
@@ -533,6 +279,9 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
     protected void ritorno() {
         History history = UI.getCurrent().getPage().getHistory();
         history.back();
+        if (operationForm == EAOperation.edit) {
+            history.back();
+        }// end of if cycle
     }// end of method
 
 }// end of class

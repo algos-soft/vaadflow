@@ -7,9 +7,7 @@ import com.vaadin.flow.router.*;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EAFormType;
 import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.service.ARouteService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -106,14 +104,13 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Slf4j
 @Secured("developer")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_BET, menuIcon = VaadinIcon.MAILBOX, searchProperty = "code")
+@AIView(vaadflow = false, routeFormName = "betaForm", menuName = TAG_BET, menuIcon = VaadinIcon.MAILBOX, searchProperty = "code")
 public class BetaList extends AGridViewList {
 
-    @Autowired
-    ARouteService routeService;
 
     //--casting del Service per usarlo localmente
     private BetaService service;
+
 
     /**
      * Costruttore @Autowired <br>
@@ -169,6 +166,8 @@ public class BetaList extends AGridViewList {
         super.usaBottoneEdit = true;
         super.isEntityModificabile = true;
         super.usaBottomLayout = true;
+
+        super.usaRouteFormView = true;
 //        logger.debug("Prova mail", getClass(), "fixPreferenze");
 //        logger.info("Prova mail", getClass(), "fixPreferenze");
 //        logger.warn("Prova mail", getClass(), "fixPreferenze");
@@ -219,7 +218,7 @@ public class BetaList extends AGridViewList {
         mappaEditValCorretto.addClassName("view-toolbar__button");
         mappaEditValCorretto.addClickListener(e -> navigaEditValCorretto());
 
-        topPlaceholder.add(nulla, singolo, mappaSenzaPar, mappaSenzaVal, mappaEdit,mappaNew,mappaEditValErrato,mappaEditValCorretto);
+        topPlaceholder.add(nulla, singolo, mappaSenzaPar, mappaSenzaVal, mappaEdit, mappaNew, mappaEditValErrato, mappaEditValCorretto);
     }// end of method
 
 
@@ -256,12 +255,14 @@ public class BetaList extends AGridViewList {
         getUI().ifPresent(ui -> ui.navigate("form", query));
     }// end of method
 
+
     protected void navigaMappaCorrettaNew() {
         HashMap mappa = new HashMap();
         mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.addNew.name());
         final QueryParameters query = routeService.getQuery(mappa);
         getUI().ifPresent(ui -> ui.navigate("form", query));
     }// end of method
+
 
     protected void navigaEditValErrato() {
         HashMap mappa = new HashMap();
@@ -270,6 +271,7 @@ public class BetaList extends AGridViewList {
         final QueryParameters query = routeService.getQuery(mappa);
         getUI().ifPresent(ui -> ui.navigate("form", query));
     }// end of method
+
 
     protected void navigaEditValCorretto() {
         HashMap mappa = new HashMap();
@@ -290,6 +292,37 @@ public class BetaList extends AGridViewList {
     protected void creaGridBottomLayout() {
         super.creaGridBottomLayout();
 //        bottomPlacehorder.add(new Label("Pippoz"));
+    }// end of method
+
+
+//    protected Button createEditButton(AEntity entityBean) {
+//        String label = VUOTA;
+//        String iconaTxt = pref.getStr(ICONA_EDIT_BUTTON);
+//        if (pref.isBool(FlowCost.USA_TEXT_EDIT_BUTTON)) {
+//            label = isEntityModificabile ? pref.getStr(FLAG_TEXT_EDIT) : pref.getStr(FLAG_TEXT_SHOW);
+//        }// end of if cycle
+//
+//        buttonEdit = new Button(label, event -> openForm(entityBean));
+////        buttonEdit.setIcon(new Icon("lumo", isEntityModificabile ? "edit" : "search"));
+//        buttonEdit.setIcon(new Icon("lumo", iconaTxt));
+//        buttonEdit.addClassName("review__edit");
+//        buttonEdit.getElement().setAttribute("theme", "tertiary");
+//        buttonEdit.setHeight("1em");
+//
+//        return buttonEdit;
+//    }// end of method
+
+
+    /**
+     * Creazione ed apertura del dialogo per una nuova entity oppure per una esistente <br>
+     * Il metodo DEVE essere sovrascritto e chiamare super.openForm(AEntity entityBean, String formRouteName) <br>
+     *
+     * @param entityBean item corrente, null se nuova entity
+     */
+    @Override
+    protected void openForm(AEntity entityBean) {
+        String formRouteName = annotation.getFormRouteName(BetaList.class);
+        super.openForm(entityBean, formRouteName);
     }// end of method
 
 

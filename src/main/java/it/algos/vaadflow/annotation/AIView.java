@@ -29,6 +29,11 @@ public @interface AIView {
     String menuName() default "";
 
     /**
+     * (Optional) Tag della @Route per aprire il Form
+     */
+    String routeFormName() default "";
+
+    /**
      * (Optional) Icona visibile nel menu
      * Di default un asterisco
      */

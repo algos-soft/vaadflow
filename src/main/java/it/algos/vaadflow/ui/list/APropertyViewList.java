@@ -101,6 +101,12 @@ public abstract class APropertyViewList extends VerticalLayout {
     public ATextService text = ATextService.getInstance();
 
     /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public ARouteService routeService = ARouteService.getInstance();
+
+    /**
      * Istanza unica di una classe di servizio: <br>
      * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
      * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
@@ -479,7 +485,7 @@ public abstract class APropertyViewList extends VerticalLayout {
 //    protected ArrayList<AppLayoutMenuItem> specificMenuItems = new ArrayList<AppLayoutMenuItem>();
 
     /**
-     * Flag di preferenza per usare una route view come detail della singola istanza. Normalmente true. <br>
+     * Flag di preferenza per usare una route view come detail della singola istanza. Normalmente false. <br>
      * In alternativa si può usare un Dialog.
      */
     protected boolean usaRouteFormView;
@@ -509,5 +515,6 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Si recupera nel metodo AViewList.setParameter(), chiamato dall'interfaccia HasUrlParameter <br>
      */
     protected Map<String, List<String>> multiParametersMap = null;
+
 
 }// end of class

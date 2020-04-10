@@ -2,6 +2,9 @@ package it.algos.vaadtest.modules.beta;
 
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.form.AFieldsViewForm;
+import it.algos.vaadflow.ui.form.ALayoutViewForm;
+import it.algos.vaadflow.ui.form.APrefViewForm;
 import it.algos.vaadflow.ui.form.AViewForm;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -17,8 +20,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
  * Time: 07:27
  */
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Route(value = "form")
-public class BetaForm extends AViewForm {
+@Route(value = "betaForm")
+public class BetaForm extends AFieldsViewForm {
 
     public BetaForm(@Qualifier(TAG_BET) IAService service) {
         super(service, Beta.class);
@@ -34,10 +37,12 @@ public class BetaForm extends AViewForm {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaTitoloForm = true;
-        super.titoloForm = "Pippoz Belloz";
-        super.usaEditButton = true;
-        super.usaDeleteButton = true;
+//        super.usaTitoloForm = true;
+//        super.titoloForm = "Pippoz Belloz";
+//        super.usaEditButton = true;
+//        super.usaDeleteButton = true;
+//        super.usaSaveButton = true;
+//        super.usaFormDueColonne = false;
     }// end of method
 
 

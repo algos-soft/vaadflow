@@ -813,7 +813,7 @@ public abstract class AService extends AbstractService implements IAService {
 
 
     /**
-     * Proviene da Lista (quasi sempre)
+     * Proviene da List e da Form (quasi sempre) <br>
      * Primo ingresso dopo il click sul bottone <br>
      */
     public AEntity save(AEntity entityBean, EAOperation operation) {
