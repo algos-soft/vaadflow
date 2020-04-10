@@ -1,14 +1,15 @@
 package it.algos.vaadtest.modules.beta;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAFormType;
 import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.service.ARouteService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.list.AGridViewList;
@@ -19,6 +20,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.annotation.Secured;
 
+import java.util.HashMap;
+
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_ENTITY_BEAN;
+import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_FORM_TYPE;
 import static it.algos.vaadtest.application.TestCost.TAG_BET;
 
 /**
@@ -104,6 +109,11 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @AIView(vaadflow = false, menuName = TAG_BET, menuIcon = VaadinIcon.MAILBOX, searchProperty = "code")
 public class BetaList extends AGridViewList {
 
+    @Autowired
+    ARouteService routeService;
+
+    //--casting del Service per usarlo localmente
+    private BetaService service;
 
     /**
      * Costruttore @Autowired <br>
@@ -118,6 +128,7 @@ public class BetaList extends AGridViewList {
     @Autowired
     public BetaList(@Qualifier(TAG_BET) IAService service) {
         super(service, Beta.class);
+        this.service = (BetaService) service;
     }// end of Vaadin/@Route constructor
 
 
@@ -158,10 +169,114 @@ public class BetaList extends AGridViewList {
         super.usaBottoneEdit = true;
         super.isEntityModificabile = true;
         super.usaBottomLayout = true;
-        logger.debug("Prova mail", getClass(), "fixPreferenze");
-        logger.info("Prova mail", getClass(), "fixPreferenze");
-        logger.warn("Prova mail", getClass(), "fixPreferenze");
-        logger.error("Prova mail", getClass(), "fixPreferenze");
+//        logger.debug("Prova mail", getClass(), "fixPreferenze");
+//        logger.info("Prova mail", getClass(), "fixPreferenze");
+//        logger.warn("Prova mail", getClass(), "fixPreferenze");
+//        logger.error("Prova mail", getClass(), "fixPreferenze");
+    }// end of method
+
+
+    protected void creaTopLayout() {
+        super.creaTopLayout();
+
+        Button nulla = new Button("Nulla", new Icon(VaadinIcon.ASTERISK));
+        nulla.getElement().setAttribute("theme", "error");
+        nulla.addClassName("view-toolbar__button");
+        nulla.addClickListener(e -> navigaNulla());
+
+        Button singolo = new Button("Singolo", new Icon(VaadinIcon.ASTERISK));
+        singolo.getElement().setAttribute("theme", "error");
+        singolo.addClassName("view-toolbar__button");
+        singolo.addClickListener(e -> navigaSingolo());
+
+        Button mappaSenzaPar = new Button("Mappa par errato", new Icon(VaadinIcon.ASTERISK));
+        mappaSenzaPar.getElement().setAttribute("theme", "error");
+        mappaSenzaPar.addClassName("view-toolbar__button");
+        mappaSenzaPar.addClickListener(e -> navigaMappaParErrata());
+
+        Button mappaSenzaVal = new Button("Mappa val errato", new Icon(VaadinIcon.ASTERISK));
+        mappaSenzaVal.getElement().setAttribute("theme", "error");
+        mappaSenzaVal.addClassName("view-toolbar__button");
+        mappaSenzaVal.addClickListener(e -> navigaMappaValErrato());
+
+        Button mappaEdit = new Button("Edit", new Icon(VaadinIcon.ASTERISK));
+        mappaEdit.getElement().setAttribute("theme", "error");
+        mappaEdit.addClassName("view-toolbar__button");
+        mappaEdit.addClickListener(e -> navigaMappaCorrettaEdit());
+
+        Button mappaNew = new Button("New", new Icon(VaadinIcon.ASTERISK));
+        mappaNew.getElement().setAttribute("theme", "error");
+        mappaNew.addClassName("view-toolbar__button");
+        mappaNew.addClickListener(e -> navigaMappaCorrettaNew());
+
+        Button mappaEditValErrato = new Button("Edit val errato", new Icon(VaadinIcon.ASTERISK));
+        mappaEditValErrato.getElement().setAttribute("theme", "error");
+        mappaEditValErrato.addClassName("view-toolbar__button");
+        mappaEditValErrato.addClickListener(e -> navigaEditValErrato());
+
+        Button mappaEditValCorretto = new Button("Edit val corretto", new Icon(VaadinIcon.ASTERISK));
+        mappaEditValCorretto.getElement().setAttribute("theme", "error");
+        mappaEditValCorretto.addClassName("view-toolbar__button");
+        mappaEditValCorretto.addClickListener(e -> navigaEditValCorretto());
+
+        topPlaceholder.add(nulla, singolo, mappaSenzaPar, mappaSenzaVal, mappaEdit,mappaNew,mappaEditValErrato,mappaEditValCorretto);
+    }// end of method
+
+
+    protected void navigaNulla() {
+        getUI().ifPresent(ui -> ui.navigate("form"));
+    }// end of method
+
+
+    protected void navigaSingolo() {
+        getUI().ifPresent(ui -> ui.navigate("form" + "/27"));
+    }// end of method
+
+
+    protected void navigaMappaParErrata() {
+        HashMap mappa = new HashMap();
+        mappa.put("mariorr", "domani");
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
+    }// end of method
+
+
+    protected void navigaMappaValErrato() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, "domani");
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
+    }// end of method
+
+
+    protected void navigaMappaCorrettaEdit() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.edit.getNameInText());
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
+    }// end of method
+
+    protected void navigaMappaCorrettaNew() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.addNew.name());
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
+    }// end of method
+
+    protected void navigaEditValErrato() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.edit.name());
+        mappa.put(KEY_MAPPA_ENTITY_BEAN, "alfa");
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
+    }// end of method
+
+    protected void navigaEditValCorretto() {
+        HashMap mappa = new HashMap();
+        mappa.put(KEY_MAPPA_FORM_TYPE, EAOperation.edit.name());
+        mappa.put(KEY_MAPPA_ENTITY_BEAN, service.findByKeyUnica("alfa").id);
+        final QueryParameters query = routeService.getQuery(mappa);
+        getUI().ifPresent(ui -> ui.navigate("form", query));
     }// end of method
 
 

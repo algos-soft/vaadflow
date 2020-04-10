@@ -239,6 +239,7 @@ public abstract class FlowCost {
     public static final String COMPANY_UNICO = "codeCompanyUnico";
 
     //--bottoni della scheda/form/dialog
+
     public static final String REGISTRA = "Save";
 
     public static final String ANNULLA = "Back";
@@ -341,6 +342,10 @@ public abstract class FlowCost {
     public static final String KEY_MAPPA_HEADER = "header";
 
     public static final String KEY_MAPPA_BODY = "body";
+
+    public static final String KEY_MAPPA_FORM_TYPE = "keyFormType";
+
+    public static final String KEY_MAPPA_ENTITY_BEAN = "keyEntityBean";
 
     public static final String KEY_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 

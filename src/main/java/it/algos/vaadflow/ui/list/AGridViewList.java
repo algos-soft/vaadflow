@@ -335,9 +335,11 @@ public abstract class AGridViewList extends ALayoutViewList {
                         if (pref.isBool(USA_SEARCH_CASE_SENSITIVE)) {
                             filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue())));
                         } else {
-                            filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + searchField.getValue(), "i")));
+                            String valore = searchField.getValue();
+                            if (text.isValid(valore)) {
+                                filtri.add(new AFiltro(Criteria.where(searchProperty).regex("^" + valore, "i")));
+                            }// end of if cycle
                         }// end of if/else cycle
-
                         break;
                     case integer:
                         try { // prova ad eseguire il codice

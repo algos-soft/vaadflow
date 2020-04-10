@@ -454,7 +454,24 @@ public class PreferenzaService extends AService {
     }// end of method
 
 
-    public List<Preferenza> findAllByType(EAPrefType type) {
+    /**
+     * Returns all entities of the type <br>
+     * <p>
+     * Se esiste la property 'ordine', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'code', ordinate secondo questa property <br>
+     * Altrimenti, se esiste la property 'descrizione', ordinate secondo questa property <br>
+     * Altrimenti, ordinate secondo il metodo sovrascritto nella sottoclasse concreta <br>
+     * Altrimenti, ordinate in ordine di inserimento nel DB mongo <br>
+     *
+     * @return all ordered entities
+     */
+    @Override
+    public List<? extends AEntity> findAll() {
+        return repository.findAllByOrderByOrdine();
+    }// end of method
+
+
+//    public List<Preferenza> findAllByType(EAPrefType type) {
 //        Query query = new Query();
 //        String meseField = "mese";
 //
@@ -463,8 +480,8 @@ public class PreferenzaService extends AService {
 //        }// end of if cycle
 //
 //        return mongo.mongoOp.find(query, Preferenza.class);
-        return repository.findAllByTypeOrderByValue(type);
-    }// end of method
+//        return repository.findAllByTypeOrderByValue(type);
+//    }// end of method
 
 
     /**

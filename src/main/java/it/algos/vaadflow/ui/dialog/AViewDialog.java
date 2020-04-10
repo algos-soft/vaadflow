@@ -610,6 +610,20 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
 
 
     /**
+     * Costruisce nell'ordine una lista di nomi di properties <br>
+     * La lista viene usata per la costruzione automatica dei campi e l'inserimento nel binder <br>
+     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
+     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
+     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
+     * Sovrasrivibile nella sottoclasse <br>
+     * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
+     */
+    protected List<String> getPropertiesName() {
+        return service != null ? service.getFormPropertyNamesList(context) : null;
+    }// end of method
+
+
+    /**
      * Crea i fields
      * <p>
      * Crea un nuovo binder (vuoto) per questo Dialog e questa Entity
@@ -737,18 +751,6 @@ public abstract class AViewDialog<T extends Serializable> extends Dialog impleme
     }// end of method
 
 
-    /**
-     * Costruisce nell'ordine una lista di nomi di properties <br>
-     * La lista viene usata per la costruzione automatica dei campi e l'inserimento nel binder <br>
-     * 1) Cerca nell'annotation @AIForm della Entity e usa quella lista (con o senza ID)
-     * 2) Utilizza tutte le properties della Entity (properties della classe e superclasse)
-     * 3) Sovrascrive la lista nella sottoclasse specifica di xxxService
-     * Sovrasrivibile nella sottoclasse <br>
-     * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
-     */
-    protected List<String> getPropertiesName() {
-        return service != null ? service.getFormPropertyNamesList(context) : null;
-    }// end of method
 
 
     /**

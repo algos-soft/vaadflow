@@ -40,7 +40,7 @@ import static it.algos.@MODULELOWER@.application.@COST@.@QUALIFIER@;
 @AIScript(sovrascrivibile = true)
 public class @ENTITY@Dialog extends AViewDialog<@ENTITY@> {
 
-    //--casting per usarlo localmente
+    //--casting del Service per usarlo localmente
     private @ENTITY@Service service;
 
     /**

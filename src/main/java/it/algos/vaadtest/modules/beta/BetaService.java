@@ -185,10 +185,7 @@ public class BetaService extends AService {
      * @return istanza della Entity, null se non trovata
      */
     public Beta findByKeyUnica(String code) {
-        Beta beta = repository.findByCode(code);
-
-        int a = 87;
-        return null;
+        return repository.findByCode(code);
     }// end of method
 
 
