@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import static it.algos.vaadflow.application.FlowCost.*;
-import static it.algos.vaadflow.application.FlowCost.KEY_MAPPA_ENTITY_BEAN;
 
 /**
  * Project vaadflow
@@ -154,6 +153,10 @@ public abstract class APrefViewForm extends AViewForm {
                 return;
             }// end of if/else cycle
         }// end of if/else cycle
+
+        if (entityBean == null) {
+            entityBean = service.newEntity();
+        }// end of if cycle
     }// end of method
 
 
@@ -186,7 +189,13 @@ public abstract class APrefViewForm extends AViewForm {
         super.usaCancelButton = false;
         super.usaAnnullaButton = false;
         super.usaEditButton = operationForm == EAOperation.showOnly;
-        super.usaSaveButton = operationForm == EAOperation.edit;;
+        super.minWidthForm = "50em";
+
+        if (operationForm == EAOperation.addNew || operationForm == EAOperation.edit || operationForm == EAOperation.editNoDelete) {
+            super.usaSaveButton = true;
+        } else {
+            super.usaSaveButton = false;
+        }// end of if/else cycle
         super.usaDeleteButton = false;
 
         super.backButtonText = BOT_BACK;

@@ -296,6 +296,12 @@ public abstract class APropertyViewForm extends VerticalLayout {
     protected boolean usaFormDueColonne;
 
     /**
+     * Preferenza per la larghezza 'minima' del Form. Normalmente "50em". <br>
+     */
+    protected String minWidthForm;
+
+
+    /**
      * Back (obbligatorio) <br>
      * Ritorna, con history.back(),  alla view precedente che ha invocato, tramite @Route, questa view <br>
      * Bottone di comando posto nella barra inferiore della scheda <br>

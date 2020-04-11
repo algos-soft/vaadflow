@@ -1157,6 +1157,13 @@ public class ATextService extends AbstractService {
     /**
      * Label colorata
      */
+    public Label getLabelHost(String message) {
+        return getLabel(message, "black");
+    }// end of method
+
+    /**
+     * Label colorata
+     */
     public Label getLabelDev(String message) {
         return getLabel(message, "red");
     }// end of method

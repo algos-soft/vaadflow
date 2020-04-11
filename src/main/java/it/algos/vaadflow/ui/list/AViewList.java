@@ -31,7 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static it.algos.vaadflow.application.FlowCost.*;
 
@@ -574,6 +577,15 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     /**
      * Creazione ed apertura di una view di tipo Form per una nuova entity oppure per una esistente <br>
      * Il metodo DEVE essere sovrascritto e chiamare super.openForm(AEntity entityBean, String formRouteName) <br>
+     */
+    protected void openFormNew(String formRouteName) {
+        openForm(null, formRouteName, EAOperation.addNew);
+    }// end of method
+
+
+    /**
+     * Creazione ed apertura di una view di tipo Form per una nuova entity oppure per una esistente <br>
+     * Il metodo DEVE essere sovrascritto e chiamare super.openForm(AEntity entityBean, String formRouteName) <br>
      *
      * @param entityBean item corrente, null se nuova entity
      */
@@ -613,7 +625,9 @@ public abstract class AViewList extends APropertyViewList implements IAView, Bef
     protected void openForm(AEntity entityBean, String formRouteName, EAOperation operation) {
         HashMap mappa = new HashMap();
         mappa.put(KEY_MAPPA_FORM_TYPE, operation.name());
-        mappa.put(KEY_MAPPA_ENTITY_BEAN, entityBean.id);
+        if (entityBean!=null) {
+            mappa.put(KEY_MAPPA_ENTITY_BEAN, entityBean.id);
+        }// end of if cycle
         final QueryParameters query = routeService.getQuery(mappa);
         getUI().ifPresent(ui -> ui.navigate(formRouteName, query));
     }// end of method

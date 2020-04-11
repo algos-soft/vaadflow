@@ -104,7 +104,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 @Slf4j
 @Secured("user")
 @AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione", roleTypeVisibility = EARoleType.developer)
+@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione",  roleTypeVisibility = EARoleType.developer)
 public class AlfaList extends AGridViewList {
 
     private Checkbox checkbox1;
@@ -154,7 +154,7 @@ public class AlfaList extends AGridViewList {
         super.creaPopupFiltro();
 
         filtroComboBox.setPlaceholder("nazionalità ...");
-        filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca","turco","russo")));
+        filtroComboBox.setItems(new ArrayList(Arrays.asList("francese", "inglese", "tedesca", "turco", "russo")));
     }// end of method
 
 

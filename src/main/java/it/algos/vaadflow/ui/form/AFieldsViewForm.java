@@ -132,15 +132,18 @@ public class AFieldsViewForm extends ALayoutViewForm {
         AbstractField propertyField = null;
         boolean esisteTextArea = false;
 
-        for (String propertyName : propertyNamesList) {
-            propertyField = fieldService.create(entityBean, appContext, binder, binderClass, propertyName);
-            if (propertyField != null) {
-                fieldMap.put(propertyName, propertyField);
-            }// end of if cycle
-            if (propertyField instanceof TextArea) {
-                esisteTextArea = true;
-            }// end of if cycle
-        }// end of for cycle
+        if (propertyNamesList != null) {
+            for (String propertyName : propertyNamesList) {
+                propertyField = fieldService.create(entityBean, appContext, binder, binderClass, propertyName);
+                if (propertyField != null) {
+                    fieldMap.put(propertyName, propertyField);
+                }// end of if cycle
+                if (propertyField instanceof TextArea) {
+                    esisteTextArea = true;
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
 
 //        if (!esisteTextArea) {
 //            if (pref.isBool(USA_BUTTON_SHORTCUT) && isDialogoPrimoLivello) {

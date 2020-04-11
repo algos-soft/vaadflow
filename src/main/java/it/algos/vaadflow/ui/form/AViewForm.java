@@ -1,5 +1,6 @@
 package it.algos.vaadflow.ui.form;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.notification.Notification;
@@ -14,7 +15,6 @@ import com.vaadin.flow.shared.ui.LoadMode;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadtest.modules.beta.Beta;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
@@ -194,7 +194,22 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      * Se serve, modifica l'ordine della lista oppure esclude una property che non deve andare nel binder <br>
      */
     protected void fixPropertyNamesList() {
-        propertyNamesList = service != null ? service.getFormPropertyNamesList(context) : null;
+        switch (operationForm) {
+            case addNew:
+                propertyNamesList = service != null ? service.getFormPropertyNamesListNew(context) : null;
+                break;
+            case edit:
+            case editNoDelete:
+            case editDaLink:
+                propertyNamesList = service != null ? service.getFormPropertyNamesListEdit(context) : null;
+                break;
+            case showOnly:
+                propertyNamesList = service != null ? service.getFormPropertyNamesListShow(context) : null;
+                break;
+            default:
+                logger.warn("Switch - caso non definito");
+                break;
+        } // end of switch statement
     }// end of method
 
 
@@ -249,6 +264,15 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
 
 
     /**
+     * Regola in scrittura eventuali valori NON associati al binder. Dalla UI al DB <br>
+     * Sovrascritto nella sottoclasse <br>
+     */
+    protected boolean writeSpecificFields() {
+        return true;
+    }// end of method
+
+
+    /**
      * Azione proveniente dal click sul bottone Registra
      * Inizio delle operazioni di registrazione
      */
@@ -260,16 +284,29 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
         }// end of if cycle
 
         if (isValid) {
-//            writeSpecificFields();
-//            itemSaver.accept(currentItem, operation);
-            service.save(entityBean, EAOperation.edit);
-            ritorno();
+            if (writeSpecificFields()) {
+                service.save(entityBean, EAOperation.edit);
+                ritorno();
+            }// end of if cycle
         } else {
-            BinderValidationStatus<Beta> status = binder.validate();
+            BinderValidationStatus<AEntity> status = binder.validate();
             Notification.show(status.getValidationErrors().stream()
                     .map(ValidationResult::getErrorMessage)
                     .collect(Collectors.joining("; ")), 3000, Notification.Position.BOTTOM_START);
         }
+    }// end of method
+
+    /**
+     * Recupera il field dal nome
+     */
+    protected AbstractField getField(String publicFieldName) {
+
+        if (fieldMap != null) {
+            return fieldMap.get(publicFieldName);
+        } else {
+            return null;
+        }// end of if/else cycle
+
     }// end of method
 
 
