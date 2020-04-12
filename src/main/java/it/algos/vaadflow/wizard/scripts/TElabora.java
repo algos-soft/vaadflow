@@ -34,7 +34,6 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 @Slf4j
 public class TElabora {
 
-
     public static final String PROPERTY_ORDINE_NAME = "Ordine";
 
     private static final String A_CAPO = "\n";
@@ -198,9 +197,34 @@ public class TElabora {
 
     public boolean flagSecurity;            //--dal dialogo di input
 
+    public boolean flagSovrascriveFile;        //--dal dialogo di input
+
+    public boolean flagSovrascriveDirectory;        //--dal dialogo di input
+
+    public boolean flagDocumentation;            //--dal dialogo di input
+
+    public boolean flagLinks;            //--dal dialogo di input
+
+    public boolean flagSnippets;            //--dal dialogo di input
+
+    public boolean flagDirectoryFlow;            //--dal dialogo di input
+
+    public boolean flagDirectoryNewProject;            //--dal dialogo di input
+
+    public boolean flagResources;            //--dal dialogo di input
+
+    public boolean flagProperties;            //--dal dialogo di input
+
+    public boolean flagRead;            //--dal dialogo di input
+
+    public boolean flagGit;            //--dal dialogo di input
+
+    public boolean flagPom;            //--dal dialogo di input
+
     public boolean flagGrid;            //--dal dialogo di input
 
     public boolean flagList;            //--dal dialogo di input
+
 
     //--regolate indipendentemente dai risultati del dialogo
     private String userDir;                 //--di sistema
@@ -224,7 +248,6 @@ public class TElabora {
 
     private String newEntityTag;            //--dal dialogo di input
 
-    private boolean flagSovrascrive;        //--dal dialogo di input
 
     private boolean flagAllPackages;        //--dal dialogo di input
 
@@ -320,8 +343,8 @@ public class TElabora {
      */
     public void newProject(Map<Chiave, Object> mappaInput) {
         this.regolazioni(mappaInput);
-        this.directoryBase(mappaInput);
-        this.directorySpecifica(mappaInput);
+        this.copiaDirectoryBase();
+        this.regolaDirectorySpecifica();
     }// end of method
 
 
@@ -330,8 +353,8 @@ public class TElabora {
      */
     public void updateProject(Map<Chiave, Object> mappaInput) {
         this.regolazioni(mappaInput);
-        this.directoryBase(mappaInput);
-        this.directorySpecifica(mappaInput);
+        this.copiaDirectoryBase();
+        this.regolaDirectorySpecifica();
     }// end of method
 
 
@@ -348,15 +371,28 @@ public class TElabora {
     /**
      * Directory it.algos.vaadflow
      */
-    public void directoryBase(Map<Chiave, Object> mappaInput) {
-        this.copiaDirectoriesBase();
+    public void copiaDirectoryBase() {
+        if (flagDirectoryFlow) {
+            copiaDirectoriesBaseFlow();
+        }// end of if cycle
     }// end of method
 
 
     /**
      * Directory specifica
      */
-    public void directorySpecifica(Map<Chiave, Object> mappaInput) {
+    public void regolaDirectorySpecifica() {
+        if (flagDirectoryNewProject) {
+            this.copiaBase();
+            this.copiaExtra();
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Directory specifica
+     */
+    public void copiaBase() {
         this.creaProjectModule();
         this.creaApplicationMain();
         this.creaApplicationDirectory();
@@ -364,19 +400,21 @@ public class TElabora {
         this.creaSecurityDirectory();
         this.creaSecurityFolderContent();
         this.creaModulesDirectory();
-        this.copiaExtra();
     }// end of method
 
 
     private void copiaExtra() {
-        this.copiaPom();
-        this.copiaRead();
-        this.copiaResources();
+        this.regolaDocumentation();
+        this.regolaLinks();
+        this.regolaSnippets();
+
+        this.regolaRead();
+        this.regolaGit();
+        this.regolaProperties();
+        this.regolaPom();
         this.copiaMetaInf();
-        this.copiaGit();
-        this.copiaDocumentation();
-        this.copiaLinks();
-        this.copiaSnippets();
+
+//        this.copiaResources();
     }// end of method
 
 
@@ -443,6 +481,7 @@ public class TElabora {
 
         this.projectBasePath = ideaProjectRootPath + SEP + PROJECT_BASE_NAME;
         this.sourcePath = projectBasePath + DIR_SOURCES;
+        this.ideaProjectRootPath = text.levaCodaDa(ideaProjectRootPath, SEP);
     }// end of method
 
 
@@ -498,6 +537,42 @@ public class TElabora {
             if (mappaInput.containsKey(Chiave.flagSecurity)) {
                 this.flagSecurity = (boolean) mappaInput.get(Chiave.flagSecurity);
             }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
+                this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
+                this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagDocumentation)) {
+                this.flagDocumentation = (boolean) mappaInput.get(Chiave.flagDocumentation);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagLinks)) {
+                this.flagLinks = (boolean) mappaInput.get(Chiave.flagLinks);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagSnippets)) {
+                this.flagSnippets = (boolean) mappaInput.get(Chiave.flagSnippets);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagDirectoryFlow)) {
+                this.flagDirectoryFlow = (boolean) mappaInput.get(Chiave.flagDirectoryFlow);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagDirectoryNewProject)) {
+                this.flagDirectoryNewProject = (boolean) mappaInput.get(Chiave.flagDirectoryNewProject);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagResources)) {
+                this.flagResources = (boolean) mappaInput.get(Chiave.flagResources);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagProperties)) {
+                this.flagProperties = (boolean) mappaInput.get(Chiave.flagProperties);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagRead)) {
+                this.flagRead = (boolean) mappaInput.get(Chiave.flagRead);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagGit)) {
+                this.flagGit = (boolean) mappaInput.get(Chiave.flagGit);
+            }// end of if cycle
+            if (mappaInput.containsKey(Chiave.flagPom)) {
+                this.flagPom = (boolean) mappaInput.get(Chiave.flagPom);
+            }// end of if cycle
             this.firstCharProject = nameShort.substring(0, 1);
         } else {
             if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
@@ -523,6 +598,9 @@ public class TElabora {
             this.newEntityTag = (String) mappaInput.get(Chiave.newEntityTag);
             this.firstCharProject = newEntityTag.substring(0, 1);
         }// end of if cycle
+
+        log.info("Conferma nome nuovo progetto: " + newProjectName);
+        log.info("Conferma directory nuovo progetto: " + projectPath);
     }// end of method
 
 
@@ -588,8 +666,8 @@ public class TElabora {
             }// end of if/else cycle
         }// end of if cycle
 
-        if (mappaInput.containsKey(Chiave.flagSovrascrive)) {
-            this.flagSovrascrive = (boolean) mappaInput.get(Chiave.flagSovrascrive);
+        if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
+            this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
         }// end of if cycle
 
         if (mappaInput.containsKey(Chiave.flagUsaAllPackages)) {
@@ -654,7 +732,7 @@ public class TElabora {
         fileNameJava = newEntityName + task.getJavaClassName();
         pathFileJava = packagePath + SEP + fileNameJava;
 
-        if (flagSovrascrive) {
+        if (flagSovrascriveFile) {
             file.sovraScriveFile(pathFileJava, newTaskText);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {
@@ -701,7 +779,7 @@ public class TElabora {
         String fileNameJava = "";
         String oldText = "";
 
-        if (flagSovrascrive) {
+        if (flagSovrascriveFile) {
             file.scriveFile(pathNewFile, sourceText, true);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {
@@ -1424,7 +1502,7 @@ public class TElabora {
     }// end of method
 
 
-    private void copiaDirectoriesBase() {
+    private void copiaDirectoriesBaseFlow() {
         boolean progettoCancellato = false;
         String tag = DIR_JAVA + "/" + PROJECT_BASE_NAME;
         String srcPath = projectBasePath;
@@ -1441,38 +1519,85 @@ public class TElabora {
 
 
     /**
-     * File MAVEN di script
+     * Cartella di documentazione (in formati vari)
      */
-    private void copiaPom() {
-        String destPath = ideaProjectRootPath + "/" + newProjectName + "/" + POM + ".xml";
-        String sourceText = leggeFile(POM);
+    private void regolaDocumentation() {
+        fixCartellaExtra(flagDocumentation, DIR_DOC);
+    }// end of method
 
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
-        checkAndWriteFile(destPath, sourceText);
+
+    /**
+     * Cartella di LINKS utili in text
+     */
+    private void regolaLinks() {
+        fixCartellaExtra(flagLinks, DIR_LINKS);
+    }// end of method
+
+
+    /**
+     * Cartella di snippets utili in text
+     */
+    private void regolaSnippets() {
+        fixCartellaExtra(flagSnippets, DIR_SNIPPETS);
     }// end of method
 
 
     /**
      * File README di text
      */
-    private void copiaRead() {
+    private void regolaRead() {
         String fileName = "/" + READ + SOURCE_SUFFIX;
         String srcPath = sourcePath + fileName;
         String destPath = projectPath + fileName;
-        file.copyFile(srcPath, destPath);
+
+        if (flagRead) {
+            if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
+                file.copyFile(srcPath, destPath);
+            }// end of if cycle
+        }// end of if cycle
     }// end of method
 
 
     /**
-     * File application di properties
+     * File di esclusioni GIT di text
      */
-    private void copiaResources() {
-        String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + "/application.properties";
+    private void regolaGit() {
+        String srcPath = projectBasePath + "/" + GIT;
+        String destPath = projectPath + "/" + GIT;
 
+        if (flagGit) {
+            if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
+                file.copyFile(srcPath, destPath);
+            }// end of if cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File  application.properties
+     */
+    private void regolaProperties() {
         String sourceText = leggeFile("properties");
+        String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + "/application.properties";
         sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
 
-        checkAndWriteFile(destPath, sourceText);
+        if (flagProperties) {
+            checkAndWriteFile(destPath, sourceText);
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File MAVEN di script
+     */
+    private void regolaPom() {
+        String sourceText = leggeFile(POM);
+        String destPath = ideaProjectRootPath + "/" + newProjectName + "/" + POM + ".xml";
+        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+
+        if (flagPom) {
+            checkAndWriteFile(destPath, sourceText);
+        }// end of if cycle
     }// end of method
 
 
@@ -1484,78 +1609,57 @@ public class TElabora {
         String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + META_NAME;
         boolean dirCancellata = false;
 
-        if (text.isValid(newProjectName)) {
-            dirCancellata = file.deleteDirectory(destPath);
-        }// end of if cycle
+        if (flagResources) {
+            if (text.isValid(newProjectName)) {
+                dirCancellata = file.deleteDirectory(destPath);
+            }// end of if cycle
 
-        if (dirCancellata || !file.isEsisteDirectory(destPath)) {
-            file.copyDirectory(srcPath, destPath);
+            if (dirCancellata || !file.isEsisteDirectory(destPath)) {
+                file.copyDirectory(srcPath, destPath);
+            }// end of if cycle
         }// end of if cycle
     }// end of method
 
 
     /**
-     * File di esclusioni GIT di text
+     * Sovrascrive o aggiunge a seconda del flag
      */
-    private void copiaGit() {
+    private void fixCartellaExtra(boolean esegue, String dirName) {
         boolean dirCancellata = false;
-        String srcPath = projectBasePath + "/" + GIT;
-        String destPath = projectPath + "/" + GIT;
+        String sep = "/";
+        String srcPath = projectBasePath + sep + dirName;
+        String destPath = projectPath + sep + dirName;
 
-        if (!file.isEsisteFile(srcPath)) {
+        if (!esegue) {
             return;
         }// end of if cycle
 
-        if (file.isEsisteFile(destPath)) {
-            return;
-        }// end of if cycle
-
-        if (text.isValid(newProjectName)) {
-            dirCancellata = file.deleteFile(destPath);
-        }// end of if cycle
-
-        if (dirCancellata || !file.isEsisteFile(destPath)) {
-            file.copyFile(srcPath, destPath);
-        }// end of if cycle
-    }// end of method
-
-
-    /**
-     * Cartella di documentazione (in formati vari)
-     */
-    private void copiaDocumentation() {
-        copiaCartellaExtra(DIR_DOC);
-    }// end of method
-
-
-    /**
-     * Cartella di LINKS utili in text
-     */
-    private void copiaLinks() {
-        copiaCartellaExtra(DIR_LINKS);
-    }// end of method
-
-
-    /**
-     * Cartella di snippets utili in text
-     */
-    private void copiaSnippets() {
-        copiaCartellaExtra(DIR_SNIPPETS);
-    }// end of method
-
-
-    private void copiaCartellaExtra(String dirName) {
-        boolean dirCancellata = false;
-        String srcPath = projectBasePath + "/" + dirName;
-        String destPath = projectPath + "/" + dirName;
-
-        if (text.isValid(newProjectName)) {
+        if (flagSovrascriveDirectory) {
             dirCancellata = file.deleteDirectory(destPath);
-        }// end of if cycle
+            if (dirCancellata || !file.isEsisteDirectory(destPath)) {
+                file.copyDirectory(srcPath, destPath);
+            }// end of if cycle
+        } else {
+            List<String> lista = file.getFiles(srcPath);
+            for (String nomeFile : lista) {
+                if (!file.isEsisteFile(destPath + sep + nomeFile) || flagSovrascriveFile) {
+                    file.copyFile(srcPath + sep + nomeFile, destPath + sep + nomeFile);
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if/else cycle
 
-        if (dirCancellata || !file.isEsisteDirectory(destPath)) {
-            file.copyDirectory(srcPath, destPath);
-        }// end of if cycle
+
+//        if (overwrite) {
+//            if (text.isValid(newProjectName)) {
+//                dirCancellata = file.deleteDirectory(destPath);
+//            }// end of if cycle
+//
+//            if (dirCancellata || !file.isEsisteDirectory(destPath)) {
+//                file.copyDirectory(srcPath, destPath);
+//            }// end of if cycle
+//        } else {
+//        }// end of if/else cycle
+
     }// end of method
 
 
@@ -1647,8 +1751,10 @@ public class TElabora {
 
 
     private void creaSecurityFolderContent() {
-        creaConfiguration();
-        creaDetails();
+        if (flagSecurity) {
+            creaConfiguration();
+            creaDetails();
+        }// end of if cycle
     }// end of method
 
 
@@ -1679,7 +1785,7 @@ public class TElabora {
 
 
     private List<String> recuperaPackagesEsistenti() {
-        return file.getSubdirectories(entityPath);
+        return file.getSubDirectories(entityPath);
     }// end of method
 
 //    private void addTagCost(String tag, String value) {

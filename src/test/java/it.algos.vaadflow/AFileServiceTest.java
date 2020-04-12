@@ -289,8 +289,8 @@ public class AFileServiceTest extends ATest {
 
     @Test
     public void getSubdiretories() {
-        ottenutoList = service.getSubdirectories(MODULES);
-        ottenutoList = service.getSubdirectories(MODULES);
+        ottenutoList = service.getSubDirectories(MODULES);
+        ottenutoList = service.getSubDirectories(MODULES);
     }// end of single test
 
 

@@ -1,6 +1,7 @@
 package it.algos.vaadflow.wizard.scripts;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
@@ -16,6 +17,8 @@ import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.algos.vaadflow.wizard.enumeration.Chiave.newProjectName;
 
 /**
  * Project it.algos.vaadflow
@@ -50,6 +53,8 @@ public class TDialogoNewProject extends TDialogo {
 
     private String ideaProjectRootPath;     //--userDir meno PROJECT_BASE_NAME
 
+    private String ideaNewProjectPath;     //--userDir meno PROJECT_BASE_NAME
+
     private String projectBasePath;         //--ideaProjectRootPath più PROJECT_BASE_NAME
 
     private String sourcePath;              //--projectBasePath più DIR_SOURCES
@@ -57,6 +62,30 @@ public class TDialogoNewProject extends TDialogo {
     private TextField fieldTextProject;
 
     private Checkbox fieldCheckBoxSecurity;
+
+    private Checkbox fieldCheckBoxSovrascriveFile;
+
+    private Checkbox fieldCheckBoxSovrascriveDirectory;
+
+    private Checkbox fieldCheckBoxDocumentation;
+
+    private Checkbox fieldCheckBoxLinks;
+
+    private Checkbox fieldCheckBoxSnippets;
+
+    private Checkbox fieldCheckBoxFlow;
+
+    private Checkbox fieldCheckBoxNewProject;
+
+    private Checkbox fieldCheckBoxResources;
+
+    private Checkbox fieldCheckBoxProperties;
+
+    private Checkbox fieldCheckBoxRead;
+
+    private Checkbox fieldCheckBoxGit;
+
+    private Checkbox fieldCheckBoxPom;
 
 
     /**
@@ -84,9 +113,10 @@ public class TDialogoNewProject extends TDialogo {
         layout.add(new Label("Poi seleziona il progetto dalla lista sottostante"));
         this.add(layout);
 
+        creaFooter();//per avere disponibili i bottoni da regolare
         this.add(creaBody());
-        this.add(creaSecurity());
-        this.add(creaFooter());
+        creaCheckBoxList();
+        this.add(layoutBottoni);//aggiungre graficamente i bottoni
 
         addListener();
     }// end of method
@@ -98,6 +128,7 @@ public class TDialogoNewProject extends TDialogo {
     private void regola() {
         this.userDir = System.getProperty("user.dir");
         this.ideaProjectRootPath = text.levaCodaDa(userDir, SEP);
+        this.ideaNewProjectPath = text.levaCodaDa(ideaProjectRootPath, SEP);
 
         this.projectBasePath = ideaProjectRootPath + SEP + PROJECT_BASE_NAME;
         this.sourcePath = projectBasePath + DIR_SOURCES;
@@ -115,16 +146,53 @@ public class TDialogoNewProject extends TDialogo {
 
 
     private Component creaBody() {
+        forzaDirectory = new Button("Forza directory");
+        forzaDirectory.addClickListener(e -> forzaProgetti());
+        forzaDirectory.setWidth(NORMAL_WIDTH);
+        forzaDirectory.setHeight(NORMAL_HEIGHT);
+        forzaDirectory.setVisible(true);
+
         String label = "Progetti vuoti esistenti (nella directory IdeaProjects)";
-        List<String> progetti = getProgetti();
+        List<String> progetti = getProgetti(false);
 
         fieldComboProgetti = new ComboBox<>();
         fieldComboProgetti.setWidth("22em");
         fieldComboProgetti.setAllowCustomValue(false);
         fieldComboProgetti.setLabel(label);
         fieldComboProgetti.setItems(progetti);
+        if (progetti.size() == 1) {
+            fieldComboProgetti.setValue(progetti.get(0));
+            confirmButton.setVisible(true);
+        }// end of if cycle
 
-        return new VerticalLayout(fieldComboProgetti);
+        return new VerticalLayout(forzaDirectory, fieldComboProgetti);
+    }// end of method
+
+
+    private void forzaProgetti() {
+        List<String> progetti = getProgetti(true);
+        fieldComboProgetti.setItems(progetti);
+        if (progetti.size() == 1) {
+            fieldComboProgetti.setValue(progetti.get(0));
+            confirmButton.setVisible(true);
+        }// end of if cycle
+    }// end of method
+
+
+    private void creaCheckBoxList() {
+        this.add(creaSecurity());
+        this.add(creaSovrascriveFile());
+        this.add(creaSovrascriveDirectory());
+        this.add(creaDocumentation());
+        this.add(creaLinks());
+        this.add(creaSnippets());
+        this.add(creaFlow());
+        this.add(creaDirectoryNewProject());
+        this.add(creaResources());
+        this.add(creaProperties());
+        this.add(creaRead());
+        this.add(creaGit());
+        this.add(creaPom());
     }// end of method
 
 
@@ -133,6 +201,102 @@ public class TDialogoNewProject extends TDialogo {
         fieldCheckBoxSecurity.setLabel("Utilizza Spring Security");
         fieldCheckBoxSecurity.setValue(false);
         return fieldCheckBoxSecurity;
+    }// end of method
+
+
+    private Component creaSovrascriveFile() {
+        fieldCheckBoxSovrascriveFile = new Checkbox();
+        fieldCheckBoxSovrascriveFile.setLabel("Sovrascrive il singolo FILE");
+        fieldCheckBoxSovrascriveFile.setValue(false);
+        return fieldCheckBoxSovrascriveFile;
+    }// end of method
+
+
+    private Component creaSovrascriveDirectory() {
+        fieldCheckBoxSovrascriveDirectory = new Checkbox();
+        fieldCheckBoxSovrascriveDirectory.setLabel("Sovrascrive la DIRECTORY");
+        fieldCheckBoxSovrascriveDirectory.setValue(false);
+        return fieldCheckBoxSovrascriveDirectory;
+    }// end of method
+
+
+    private Component creaDocumentation() {
+        fieldCheckBoxDocumentation = new Checkbox();
+        fieldCheckBoxDocumentation.setLabel("Directory documentazione");
+        fieldCheckBoxDocumentation.setValue(true);
+        return fieldCheckBoxDocumentation;
+    }// end of method
+
+
+    private Component creaLinks() {
+        fieldCheckBoxLinks = new Checkbox();
+        fieldCheckBoxLinks.setLabel("Directory links a web");
+        fieldCheckBoxLinks.setValue(true);
+        return fieldCheckBoxLinks;
+    }// end of method
+
+
+    private Component creaSnippets() {
+        fieldCheckBoxSnippets = new Checkbox();
+        fieldCheckBoxSnippets.setLabel("Directory snippets di aiuto");
+        fieldCheckBoxSnippets.setValue(true);
+        return fieldCheckBoxSnippets;
+    }// end of method
+
+
+    private Component creaFlow() {
+        fieldCheckBoxFlow = new Checkbox();
+        fieldCheckBoxFlow.setLabel("Copia la cartella VaadFlow");
+        fieldCheckBoxFlow.setValue(true);
+        return fieldCheckBoxFlow;
+    }// end of method
+
+
+    private Component creaDirectoryNewProject() {
+        fieldCheckBoxNewProject = new Checkbox();
+        fieldCheckBoxNewProject.setLabel("Crea la cartella del nuovo progetto");
+        fieldCheckBoxNewProject.setValue(true);
+        return fieldCheckBoxNewProject;
+    }// end of method
+
+
+    private Component creaPom() {
+        fieldCheckBoxPom = new Checkbox();
+        fieldCheckBoxPom.setLabel("File Maven di POM.xml");
+        fieldCheckBoxPom.setValue(true);
+        return fieldCheckBoxPom;
+    }// end of method
+
+
+    private Component creaResources() {
+        fieldCheckBoxResources = new Checkbox();
+        fieldCheckBoxResources.setLabel("Directory resources - ATTENZIONE");
+        fieldCheckBoxResources.setValue(false);
+        return fieldCheckBoxResources;
+    }// end of method
+
+
+    private Component creaProperties() {
+        fieldCheckBoxProperties = new Checkbox();
+        fieldCheckBoxProperties.setLabel("File application.properties");
+        fieldCheckBoxProperties.setValue(true);
+        return fieldCheckBoxProperties;
+    }// end of method
+
+
+    private Component creaRead() {
+        fieldCheckBoxRead = new Checkbox();
+        fieldCheckBoxRead.setLabel("File READ con note di testo");
+        fieldCheckBoxRead.setValue(true);
+        return fieldCheckBoxRead;
+    }// end of method
+
+
+    private Component creaGit() {
+        fieldCheckBoxGit = new Checkbox();
+        fieldCheckBoxGit.setLabel("File GIT di esclusione");
+        fieldCheckBoxGit.setValue(true);
+        return fieldCheckBoxGit;
     }// end of method
 
 
@@ -150,27 +314,48 @@ public class TDialogoNewProject extends TDialogo {
     }// end of method
 
 
-    protected ArrayList<String> getProgetti() {
-        ArrayList<String> progettiVuoti = null;
-        ArrayList<String> progettiEsistenti = null;
-        ArrayList<String> subMain;
-        ArrayList<String> subJava;
+    /**
+     * Mopstra i progetti 'vuoti'
+     * Per essere 'vuoti' non devono avere la directory:
+     * src.main.java.it.algos.vaadflow
+     * <p>
+     * Per essere 'vuoti' deve esserci la directory: src/main/java vuota
+     */
+    protected List<String> getProgetti(boolean liPrendeTutti) {
+        List<String> progettiVuoti = null;
+        List<String> progettiEsistenti = null;
+        List<String> subMain;
+        List<String> subJava;
+        String tagVuoto = DIR_MAIN;
+        String tagPieno = tagVuoto + "/java";
+        String tagCompleto = tagPieno + "/it";
+        String pahtDirectoryChiave;
 
-        if (text.isValid(ideaProjectRootPath)) {
-            progettiEsistenti = file.getSubdirectories(ideaProjectRootPath);
+        if (text.isValid(ideaNewProjectPath)) {
+            progettiEsistenti = file.getSubDirectories(ideaNewProjectPath);
         }// end of if cycle
 
         if (progettiEsistenti != null && progettiEsistenti.size() > 0) {
             progettiVuoti = new ArrayList<>();
             for (String nome : progettiEsistenti) {
-                subMain = file.getSubdirectories(ideaProjectRootPath + "/" + nome + DIR_MAIN);
+
+                subMain = file.getSubDirectories(ideaNewProjectPath + "/" + nome + tagVuoto);
+
+                //se manca la sottodirectory src/main non se ne parla
                 if (array.isValid(subMain)) {
-                    subJava = file.getSubdirectories(ideaProjectRootPath + "/" + nome + DIR_MAIN + "/java");
-                    if (array.isEmpty(subJava)) {
+
+                    //se esiste NON deve esserci il percorso src/main/java/it
+                    subJava = file.getSubDirectories(ideaNewProjectPath + "/" + nome + tagPieno);
+                    pahtDirectoryChiave = ideaNewProjectPath + "/" + nome + tagCompleto;
+                    if (array.isEmpty(subJava) && !file.isEsisteDirectory(pahtDirectoryChiave)) {
                         progettiVuoti.add(nome);
                     }// end of if cycle
                 }// end of if cycle
             }// end of for cycle
+        }// end of if cycle
+
+        if (array.isEmpty(progettiVuoti) && liPrendeTutti) {
+            progettiVuoti = progettiEsistenti;
         }// end of if cycle
 
         return progettiVuoti;
@@ -179,9 +364,23 @@ public class TDialogoNewProject extends TDialogo {
 
     protected void setMappa() {
         if (mappaInput != null) {
-            mappaInput.put(Chiave.newProjectName, fieldComboProgetti.getValue());
+            mappaInput.put(newProjectName, fieldComboProgetti.getValue());
             mappaInput.put(Chiave.targetProjectName, fieldComboProgetti.getValue());
             mappaInput.put(Chiave.flagSecurity, fieldCheckBoxSecurity.getValue());
+            mappaInput.put(Chiave.flagSovrascriveFile, fieldCheckBoxSovrascriveFile.getValue());
+            mappaInput.put(Chiave.flagSovrascriveDirectory, fieldCheckBoxSovrascriveDirectory.getValue());
+            mappaInput.put(Chiave.flagDocumentation, fieldCheckBoxDocumentation.getValue());
+            mappaInput.put(Chiave.flagLinks, fieldCheckBoxLinks.getValue());
+            mappaInput.put(Chiave.flagSnippets, fieldCheckBoxSnippets.getValue());
+            mappaInput.put(Chiave.flagDirectoryFlow, fieldCheckBoxFlow.getValue());
+            mappaInput.put(Chiave.flagDirectoryNewProject, fieldCheckBoxNewProject.getValue());
+            mappaInput.put(Chiave.flagResources, fieldCheckBoxResources.getValue());
+            mappaInput.put(Chiave.flagProperties, fieldCheckBoxProperties.getValue());
+            mappaInput.put(Chiave.flagRead, fieldCheckBoxRead.getValue());
+            mappaInput.put(Chiave.flagGit, fieldCheckBoxGit.getValue());
+            mappaInput.put(Chiave.flagPom, fieldCheckBoxPom.getValue());
+            log.info("Nome nuovo progetto: " + fieldComboProgetti.getValue());
+            log.info("Directory nuovo progetto: " + ideaNewProjectPath);
         }// end of if cycle
     }// end of method
 

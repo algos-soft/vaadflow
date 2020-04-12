@@ -1,10 +1,7 @@
 package it.algos.vaadflow.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 
@@ -274,7 +271,11 @@ public class AFileService extends AbstractService {
         if (creata) {
             System.out.println("La directory " + nomeCompletoDirectory + " è stata creata");
         } else {
-            System.out.println("La directory " + nomeCompletoDirectory + " esisteva già, oppure non è stato possibile crearla");
+            if (isEsisteDirectory(nomeCompletoDirectory)) {
+                System.out.println("La directory " + nomeCompletoDirectory + " esisteva già");
+            } else {
+                System.out.println("La directory " + nomeCompletoDirectory + " non è stato possibile crearla");
+            }// end of if/else cycle
         }// end of if/else cycle
 
         return creata;
@@ -434,13 +435,14 @@ public class AFileService extends AbstractService {
         return testo;
     }// end of method
 
+
     /**
-     * Legge il contenuto di una directory
+     * Estrae le sub-directories da una directory
      *
      * @param pathDirectoryToBeScanned nome completo della directory
      */
-    public ArrayList<String> getSubdirectories(String pathDirectoryToBeScanned) {
-        ArrayList<String> subDirectory = null;
+    public List<String> getSubDirectories(String pathDirectoryToBeScanned) {
+        List<String> subDirectory = null;
         File[] allFiles = null;
         File directory = new File(pathDirectoryToBeScanned);
 
@@ -458,6 +460,33 @@ public class AFileService extends AbstractService {
         }// end of if cycle
 
         return subDirectory;
+    }// end of method
+
+
+    /**
+     * Estrae i files da una directory
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    public List<String> getFiles(String pathDirectoryToBeScanned) {
+        List<String> files = null;
+        File[] allFiles = null;
+        File directory = new File(pathDirectoryToBeScanned);
+
+        if (directory != null) {
+            allFiles = directory.listFiles();
+        }// end of if cycle
+
+        if (allFiles != null) {
+            files = new ArrayList<>();
+            for (File file : allFiles) {
+                if (!file.isDirectory()) {
+                    files.add(file.getName());
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
+        return files;
     }// end of method
 
 }// end of class

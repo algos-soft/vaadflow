@@ -19,9 +19,20 @@ public enum Chiave {
     flagKeyCode,
     flagCompany,
     flagSecurity,
+    flagSovrascriveDirectory,
+    flagSovrascriveFile,
+    flagDocumentation,
+    flagLinks,
+    flagSnippets,
+    flagDirectoryFlow,
+    flagDirectoryNewProject,
+    flagResources,
+    flagProperties,
+    flagRead,
+    flagGit,
+    flagPom,
     flagGrid,
     flagList,
-    flagSovrascrive,
     flagUsaAllPackages
 
 }// end of enumeration

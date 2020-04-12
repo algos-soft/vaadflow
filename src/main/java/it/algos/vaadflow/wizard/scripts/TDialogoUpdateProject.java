@@ -6,13 +6,8 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.service.AArrayService;
-import it.algos.vaadflow.service.AFileService;
-import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.wizard.WizardView;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -72,12 +67,13 @@ public class TDialogoUpdateProject extends TDialogo {
         this.removeAll();
         super.open();
 
+        creaFooter();//per avere disponibili i bottoni da regolare
         this.add(new Label("Update di un project esistente"));
         this.add(creaBody());
-        this.add(creaFooter());
         if (fieldComboProgetti != null && !fieldComboProgetti.getValue().equals("")) {
             confirmButton.setVisible(true);
         }// end of if cycle
+        this.add(layoutBottoni);//aggiungre graficamente i bottoni
 
         addListener();
     }// end of method
@@ -142,7 +138,7 @@ public class TDialogoUpdateProject extends TDialogo {
         String tag = DIR_JAVA + "/" + PROJECT_BASE_NAME;
 
         if (text.isValid(ideaProjectRootPath)) {
-            progettiEsistenti = file.getSubdirectories(ideaProjectRootPath);
+            progettiEsistenti = file.getSubDirectories(ideaProjectRootPath);
         }// end of if cycle
 
         if (progettiEsistenti != null && progettiEsistenti.size() > 0) {

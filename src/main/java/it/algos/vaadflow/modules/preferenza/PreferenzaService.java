@@ -395,9 +395,13 @@ public class PreferenzaService extends AService {
 
         //--Se ce n'è una sola, usa quella
         //--Se ne trova più di una, DEVONO essere companySpecifica=true
-        //--Prende la prima e costruisce la chaive di ricerca per la keyID
+        //--Prende la prima e costruisce la chiave di ricerca per la keyID
         if (lista.size() == 1) {
             pref = lista.get(0);
+            if (text.isEmpty(pref.code)) {
+                pref = null;
+                log.error("Manca il codice della preferenza");
+            }// end of if cycle
         } else {
 //            pref = repository.findFirstByCode(prefCode);
             if (lista != null && lista.get(0).companySpecifica) {

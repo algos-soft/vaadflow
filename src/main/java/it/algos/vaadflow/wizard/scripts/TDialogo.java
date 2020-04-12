@@ -1,9 +1,8 @@
 package it.algos.vaadflow.wizard.scripts;
 
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.NativeButton;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -32,23 +31,38 @@ import java.util.Map;
 public abstract class TDialogo extends Dialog {
 
     protected static final String PROJECT_BASE_NAME = "vaadflow";
+
     protected final static String NORMAL_WIDTH = "9em";
+
     protected final static String NORMAL_HEIGHT = "3em";
+
     protected static final String DIR_MAIN = "/src/main";
+
     protected static final String DIR_JAVA = DIR_MAIN + "/java/it/algos";
+
     protected static final String ENTITIES_NAME = "modules";
+
     protected TRecipient recipient;
+
     protected Map<Chiave, Object> mappaInput = new HashMap<>();
 
     protected ComboBox<Progetto> fieldComboProgetti;
 
-    protected NativeButton confirmButton;
-    protected NativeButton cancelButton;
+    protected VerticalLayout layoutBottoni;
+
+    protected Button confirmButton;
+
+    protected Button cancelButton;
+
+    protected Button forzaDirectory;
+
     protected RadioButtonGroup<String> groupTitolo;
+
     /**
      * Service recuperato come istanza dalla classe singleton
      */
     protected ATextService text = ATextService.getInstance();
+
     /**
      * Service recuperato come istanza dalla classe singleton
      */
@@ -69,13 +83,13 @@ public abstract class TDialogo extends Dialog {
     }// end of method
 
 
-    protected Component creaFooter() {
-        VerticalLayout layout = new VerticalLayout();
+    protected void creaFooter() {
+        layoutBottoni = new VerticalLayout();
         HorizontalLayout layoutFooter = new HorizontalLayout();
         layoutFooter.setSpacing(true);
         layoutFooter.setMargin(true);
 
-        cancelButton = new NativeButton("Annulla", event -> {
+        cancelButton = new Button("Annulla", event -> {
             recipient.gotInput(null);
             this.close();
         });//end of lambda expressions
@@ -83,7 +97,7 @@ public abstract class TDialogo extends Dialog {
         cancelButton.setHeight(NORMAL_HEIGHT);
         cancelButton.setVisible(true);
 
-        confirmButton = new NativeButton("Conferma", event -> {
+        confirmButton = new Button("Conferma", event -> {
             chiudeDialogo();
         });//end of lambda expressions
         confirmButton.setWidth(NORMAL_WIDTH);
@@ -91,8 +105,7 @@ public abstract class TDialogo extends Dialog {
         confirmButton.setVisible(false);
 
         layoutFooter.add(cancelButton, confirmButton);
-        layout.add(layoutFooter);
-        return layout;
+        layoutBottoni.add(layoutFooter);
     }// end of method
 
 
