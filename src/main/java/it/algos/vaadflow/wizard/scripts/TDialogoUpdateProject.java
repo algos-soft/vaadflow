@@ -1,6 +1,5 @@
 package it.algos.vaadflow.wizard.scripts;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,8 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.ArrayList;
-import java.util.List;
+import static it.algos.vaadflow.wizard.enumeration.Chiave.newProjectName;
 
 /**
  * Project it.algos.vaadflow
@@ -55,6 +53,7 @@ public class TDialogoUpdateProject extends TDialogo {
      */
     public TDialogoUpdateProject() {
         super();
+        super.isNuovoProgetto = false;
     }// end of Spring constructor
 
 
@@ -68,14 +67,14 @@ public class TDialogoUpdateProject extends TDialogo {
         super.open();
 
         creaFooter();//per avere disponibili i bottoni da regolare
-        this.add(new Label("Update di un project esistente"));
-        this.add(creaBody());
+        this.add(new Label("Update di questo project"));
+
+        creaCheckBoxList();
         if (fieldComboProgetti != null && !fieldComboProgetti.getValue().equals("")) {
             confirmButton.setVisible(true);
         }// end of if cycle
         this.add(layoutBottoni);//aggiungre graficamente i bottoni
-
-        addListener();
+        confirmButton.setVisible(true);
     }// end of method
 
     /**
@@ -100,64 +99,24 @@ public class TDialogoUpdateProject extends TDialogo {
     }// end of method
 
 
-    private Component creaBody() {
-        String label = "Progetti esistenti (nella directory IdeaProjects)";
-        List<String> progetti = getProgetti();
-
-        fieldComboProgetti = new ComboBox<>();
-        fieldComboProgetti.setWidth("20em");
-        fieldComboProgetti.setAllowCustomValue(false);
-        fieldComboProgetti.setLabel(label);
-        fieldComboProgetti.setItems(progetti);
-
-        if (progetti != null && progetti.size() > 0) {
-            fieldComboProgetti.setValue(progetti.get(0));
-        }// end of if cycle
-
-        return new VerticalLayout(fieldComboProgetti);
-    }// end of method
-
-
-    private void addListener() {
-        fieldComboProgetti.addValueChangeListener(event -> sincroProject(event.getValue()));//end of lambda expressions
-    }// end of method
-
-
-    private void sincroProject(String valueFromProject) {
-        if (text.isValid(valueFromProject) && valueFromProject.length() > 2) {
-            confirmButton.setVisible(true);
-        } else {
-            confirmButton.setVisible(false);
-        }// end of if/else cycle
-    }// end of method
-
-
-    protected List<String> getProgetti() {
-        List<String> progettiValidi = null;
-        List<String> progettiEsistenti = null;
-        String tag = DIR_JAVA + "/" + PROJECT_BASE_NAME;
-
-        if (text.isValid(ideaProjectRootPath)) {
-            progettiEsistenti = file.getSubDirectories(ideaProjectRootPath);
-        }// end of if cycle
-
-        if (progettiEsistenti != null && progettiEsistenti.size() > 0) {
-            progettiValidi = new ArrayList<>();
-            for (String nome : progettiEsistenti) {
-                if (file.isEsisteDirectory(ideaProjectRootPath + "/" + nome + tag)) {
-                    if (!nome.equals(PROJECT_BASE_NAME)) {
-                        progettiValidi.add(nome);
-                    }// end of if cycle
-                }// end of if cycle
-            }// end of for cycle
-        }// end of if cycle
-
-        return progettiValidi;
-    }// end of method
-
     protected void setMappa() {
         if (mappaInput != null) {
-            mappaInput.put(Chiave.newProjectName, fieldComboProgetti.getValue());
+            mappaInput.put(newProjectName, fieldComboProgetti.getValue());
+            mappaInput.put(Chiave.targetProjectName, fieldComboProgetti.getValue());
+            mappaInput.put(Chiave.flagSecurity, fieldCheckBoxSecurity.getValue());
+            mappaInput.put(Chiave.flagSovrascriveFile, fieldCheckBoxSovrascriveFile.getValue());
+            mappaInput.put(Chiave.flagSovrascriveDirectory, fieldCheckBoxSovrascriveDirectory.getValue());
+            mappaInput.put(Chiave.flagDocumentation, fieldCheckBoxDocumentation.getValue());
+            mappaInput.put(Chiave.flagLinks, fieldCheckBoxLinks.getValue());
+            mappaInput.put(Chiave.flagSnippets, fieldCheckBoxSnippets.getValue());
+            mappaInput.put(Chiave.flagDirectoryFlow, fieldCheckBoxFlow.getValue());
+            mappaInput.put(Chiave.flagDirectoryNewProject, fieldCheckBoxNewProject.getValue());
+            mappaInput.put(Chiave.flagResources, fieldCheckBoxResources.getValue());
+            mappaInput.put(Chiave.flagProperties, fieldCheckBoxProperties.getValue());
+            mappaInput.put(Chiave.flagRead, fieldCheckBoxRead.getValue());
+            mappaInput.put(Chiave.flagGit, fieldCheckBoxGit.getValue());
+            mappaInput.put(Chiave.flagPom, fieldCheckBoxPom.getValue());
+            log.info("Nome nuovo progetto: " + fieldComboProgetti.getValue());
         }// end of if cycle
     }// end of method
 

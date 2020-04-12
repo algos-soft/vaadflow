@@ -191,15 +191,6 @@ public class WizardView extends VerticalLayout {
         }));// end of lambda expressions and anonymous inner class
         this.add(buttonUno);
 
-//        buttonDue = new Button("Update project");
-//        buttonDue.addClickListener(event -> updateProject.open(new TRecipient() {
-//            @Override
-//            public void gotInput(Map<Chiave, Object> mappaInput) {
-//                elaboraUpdateProject(mappaInput);
-//            }// end of inner method
-//        }));// end of lambda expressions and anonymous inner class
-//        layout.add(buttonDue);
-
         labelDue = new Label(PACKAGE);
         this.add(labelDue);
         buttonDue = new Button("Nuovo package");
@@ -236,11 +227,27 @@ public class WizardView extends VerticalLayout {
         mappaInput.put(Chiave.targetProjectName, currentProject != null ? currentProject : nomeProgetto);
 
         buttonProject = new Button("Update this project");
-        buttonProject.addClickListener(e -> {
-            elaboraUpdateProject(mappaInput);
-            layout.add(new Checkbox("Fatto", true));
-        });//end of lambda expressions
+        buttonProject.addClickListener(event -> updateProject.open(new TRecipient() {
+
+            @Override
+            public void gotInput(Map<Chiave, Object> mappaInput) {
+                elaboraUpdateProject(mappaInput);
+            }// end of inner method
+        }));// end of lambda expressions and anonymous inner class
         layout.add(buttonProject);
+
+//        buttonProject = new Button("Update this project");
+//        buttonProject.addClickListener(e -> {
+//            elaboraUpdateProject(mappaInput);
+//            layout.add(new Checkbox("Fatto", true));
+//        });//end of lambda expressions
+//        layout.add(buttonProject);
+
+
+//        buttonProject.addClickListener(e ->  {
+//                elaboraUpdateProject(mappaInput);
+//        });// end of lambda expressions and anonymous inner class
+
 
         this.add(layout);
         return layout;
