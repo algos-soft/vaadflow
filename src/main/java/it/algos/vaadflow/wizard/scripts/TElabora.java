@@ -225,6 +225,7 @@ public class TElabora {
 
     public boolean flagList;            //--dal dialogo di input
 
+    protected boolean isNuovoProgetto;
 
     //--regolate indipendentemente dai risultati del dialogo
     private String userDir;                 //--di sistema
@@ -248,9 +249,7 @@ public class TElabora {
 
     private String newEntityTag;            //--dal dialogo di input
 
-
     private boolean flagAllPackages;        //--dal dialogo di input
-
 
     //--regolate elaborando i risultati del dialogo
     private String projectPath;         //--ideaProjectRootPath più targetProjectName (usato come radice per pom.xml e README.text)
@@ -342,6 +341,7 @@ public class TElabora {
      * Creazione di un nuovo project
      */
     public void newProject(Map<Chiave, Object> mappaInput) {
+        isNuovoProgetto = true;
         this.regolazioni(mappaInput);
         this.copiaDirectoryBase();
         this.regolaDirectorySpecifica();
@@ -352,6 +352,7 @@ public class TElabora {
      * Update di un project esistente
      */
     public void updateProject(Map<Chiave, Object> mappaInput) {
+        isNuovoProgetto = false;
         this.regolazioni(mappaInput);
         this.copiaDirectoryBase();
         this.regolaDirectorySpecifica();
@@ -479,7 +480,12 @@ public class TElabora {
         this.userDir = System.getProperty("user.dir");
         this.ideaProjectRootPath = text.levaCodaDa(userDir, SEP);
 
-        this.projectBasePath = ideaProjectRootPath + SEP + PROJECT_BASE_NAME;
+        if (isNuovoProgetto) {
+            this.projectBasePath = ideaProjectRootPath + SEP + PROJECT_BASE_NAME;
+        } else {
+            this.projectBasePath = ideaProjectRootPath + SEP + "operativi" + SEP + PROJECT_BASE_NAME;
+        }// end of if/else cycle
+
         this.sourcePath = projectBasePath + DIR_SOURCES;
         this.ideaProjectRootPath = text.levaCodaDa(ideaProjectRootPath, SEP);
     }// end of method
@@ -493,8 +499,50 @@ public class TElabora {
         Progetto progetto;
         String projectName;
 
-//        if (targetModuleName.equals(PROJECT_BASE_NAME)) {
-//        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
+            this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
+        } else {
+            this.newProjectName = targetProjectName;
+        }// end of if/else cycle
+        if (mappaInput.containsKey(Chiave.flagSecurity)) {
+            this.flagSecurity = (boolean) mappaInput.get(Chiave.flagSecurity);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
+            this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
+            this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagDocumentation)) {
+            this.flagDocumentation = (boolean) mappaInput.get(Chiave.flagDocumentation);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagLinks)) {
+            this.flagLinks = (boolean) mappaInput.get(Chiave.flagLinks);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagSnippets)) {
+            this.flagSnippets = (boolean) mappaInput.get(Chiave.flagSnippets);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagDirectoryFlow)) {
+            this.flagDirectoryFlow = (boolean) mappaInput.get(Chiave.flagDirectoryFlow);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagDirectoryNewProject)) {
+            this.flagDirectoryNewProject = (boolean) mappaInput.get(Chiave.flagDirectoryNewProject);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagResources)) {
+            this.flagResources = (boolean) mappaInput.get(Chiave.flagResources);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagProperties)) {
+            this.flagProperties = (boolean) mappaInput.get(Chiave.flagProperties);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagRead)) {
+            this.flagRead = (boolean) mappaInput.get(Chiave.flagRead);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagGit)) {
+            this.flagGit = (boolean) mappaInput.get(Chiave.flagGit);
+        }// end of if cycle
+        if (mappaInput.containsKey(Chiave.flagPom)) {
+            this.flagPom = (boolean) mappaInput.get(Chiave.flagPom);
+        }// end of if cycle
 
         if (mappaInput.containsKey(Chiave.targetProjectName) && mappaInput.get(Chiave.targetProjectName) != null) {
             projectValue = mappaInput.get(Chiave.targetProjectName);
@@ -529,50 +577,50 @@ public class TElabora {
             this.versPath = projectJavaPath + SEP + APP_NAME + SEP + nameClassVers + JAVA_SUFFIX;
 
             this.layoutPath = projectPath + DIR_JAVA + SEP + targetLayoutName + SEP + LAYOUT_NAME + JAVA_SUFFIX;
-            if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
-                this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
-            } else {
-                this.newProjectName = targetProjectName;
-            }// end of if/else cycle
-            if (mappaInput.containsKey(Chiave.flagSecurity)) {
-                this.flagSecurity = (boolean) mappaInput.get(Chiave.flagSecurity);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
-                this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
-                this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagDocumentation)) {
-                this.flagDocumentation = (boolean) mappaInput.get(Chiave.flagDocumentation);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagLinks)) {
-                this.flagLinks = (boolean) mappaInput.get(Chiave.flagLinks);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagSnippets)) {
-                this.flagSnippets = (boolean) mappaInput.get(Chiave.flagSnippets);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagDirectoryFlow)) {
-                this.flagDirectoryFlow = (boolean) mappaInput.get(Chiave.flagDirectoryFlow);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagDirectoryNewProject)) {
-                this.flagDirectoryNewProject = (boolean) mappaInput.get(Chiave.flagDirectoryNewProject);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagResources)) {
-                this.flagResources = (boolean) mappaInput.get(Chiave.flagResources);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagProperties)) {
-                this.flagProperties = (boolean) mappaInput.get(Chiave.flagProperties);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagRead)) {
-                this.flagRead = (boolean) mappaInput.get(Chiave.flagRead);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagGit)) {
-                this.flagGit = (boolean) mappaInput.get(Chiave.flagGit);
-            }// end of if cycle
-            if (mappaInput.containsKey(Chiave.flagPom)) {
-                this.flagPom = (boolean) mappaInput.get(Chiave.flagPom);
-            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {
+//                this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
+//            } else {
+//                this.newProjectName = targetProjectName;
+//            }// end of if/else cycle
+//            if (mappaInput.containsKey(Chiave.flagSecurity)) {
+//                this.flagSecurity = (boolean) mappaInput.get(Chiave.flagSecurity);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
+//                this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
+//                this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagDocumentation)) {
+//                this.flagDocumentation = (boolean) mappaInput.get(Chiave.flagDocumentation);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagLinks)) {
+//                this.flagLinks = (boolean) mappaInput.get(Chiave.flagLinks);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagSnippets)) {
+//                this.flagSnippets = (boolean) mappaInput.get(Chiave.flagSnippets);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagDirectoryFlow)) {
+//                this.flagDirectoryFlow = (boolean) mappaInput.get(Chiave.flagDirectoryFlow);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagDirectoryNewProject)) {
+//                this.flagDirectoryNewProject = (boolean) mappaInput.get(Chiave.flagDirectoryNewProject);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagResources)) {
+//                this.flagResources = (boolean) mappaInput.get(Chiave.flagResources);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagProperties)) {
+//                this.flagProperties = (boolean) mappaInput.get(Chiave.flagProperties);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagRead)) {
+//                this.flagRead = (boolean) mappaInput.get(Chiave.flagRead);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagGit)) {
+//                this.flagGit = (boolean) mappaInput.get(Chiave.flagGit);
+//            }// end of if cycle
+//            if (mappaInput.containsKey(Chiave.flagPom)) {
+//                this.flagPom = (boolean) mappaInput.get(Chiave.flagPom);
+//            }// end of if cycle
             this.firstCharProject = nameShort.substring(0, 1);
         } else {
             if (mappaInput.containsKey(Chiave.newProjectName) && mappaInput.get(Chiave.newProjectName) != null) {

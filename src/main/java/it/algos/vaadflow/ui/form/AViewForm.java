@@ -138,7 +138,7 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
     /**
      * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
      * <p>
-     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewForm <br>
+     * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewForm <br>
      * Chiamato DOPO @PostConstruct e DOPO setParameter() <br>
      * Può essere sovrascritto, per costruire diversamente la view <br>
      * Invocare PRIMA il metodo della superclasse <br>

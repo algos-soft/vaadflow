@@ -171,7 +171,7 @@ public class TDialogoNewProject extends TDialogo {
 
 
     /**
-     * Mopstra i progetti 'vuoti'
+     * Mostra i progetti 'vuoti'
      * Per essere 'vuoti' non devono avere la directory:
      * src.main.java.it.algos.vaadflow
      * <p>

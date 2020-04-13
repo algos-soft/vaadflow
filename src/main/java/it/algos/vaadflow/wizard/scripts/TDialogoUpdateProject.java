@@ -27,9 +27,13 @@ public class TDialogoUpdateProject extends TDialogo {
 
 
     private static final String SEP = "/";
-    private static final String PROJECT_BASE_NAME = "it.algos.vaadflow";
+
+    private static final String PROJECT_BASE_NAME = "it.algos.operativi.vaadflow";
+
     private static final String SOURCES_NAME = "wizard/sources";
+
     private static final String DIR_PROJECT_BASE = DIR_JAVA + "/" + PROJECT_BASE_NAME;
+
     private static final String DIR_SOURCES = DIR_PROJECT_BASE + SEP + SOURCES_NAME;
 
     //    @Autowired
@@ -39,11 +43,16 @@ public class TDialogoUpdateProject extends TDialogo {
 //    @Autowired
 //    private AArrayService array;
     private ComboBox<String> fieldComboProgetti;
+
     //--regolate indipendentemente dai risultati del dialogo
     private String userDir;                 //--di sistema
+
     private String ideaProjectRootPath;     //--userDir meno PROJECT_BASE_NAME
+
     private String projectBasePath;         //--ideaProjectRootPath più PROJECT_BASE_NAME
+
     private String sourcePath;              //--projectBasePath più DIR_SOURCES
+
     private TextField fieldTextProject;
 
 
@@ -77,6 +86,7 @@ public class TDialogoUpdateProject extends TDialogo {
         confirmButton.setVisible(true);
     }// end of method
 
+
     /**
      * Regolazioni iniziali indipendenti dal dialogo di input
      */
@@ -101,22 +111,18 @@ public class TDialogoUpdateProject extends TDialogo {
 
     protected void setMappa() {
         if (mappaInput != null) {
-            mappaInput.put(newProjectName, fieldComboProgetti.getValue());
-            mappaInput.put(Chiave.targetProjectName, fieldComboProgetti.getValue());
-            mappaInput.put(Chiave.flagSecurity, fieldCheckBoxSecurity.getValue());
+            mappaInput.put(newProjectName, "pippoz");
             mappaInput.put(Chiave.flagSovrascriveFile, fieldCheckBoxSovrascriveFile.getValue());
             mappaInput.put(Chiave.flagSovrascriveDirectory, fieldCheckBoxSovrascriveDirectory.getValue());
             mappaInput.put(Chiave.flagDocumentation, fieldCheckBoxDocumentation.getValue());
             mappaInput.put(Chiave.flagLinks, fieldCheckBoxLinks.getValue());
             mappaInput.put(Chiave.flagSnippets, fieldCheckBoxSnippets.getValue());
             mappaInput.put(Chiave.flagDirectoryFlow, fieldCheckBoxFlow.getValue());
-            mappaInput.put(Chiave.flagDirectoryNewProject, fieldCheckBoxNewProject.getValue());
             mappaInput.put(Chiave.flagResources, fieldCheckBoxResources.getValue());
             mappaInput.put(Chiave.flagProperties, fieldCheckBoxProperties.getValue());
             mappaInput.put(Chiave.flagRead, fieldCheckBoxRead.getValue());
             mappaInput.put(Chiave.flagGit, fieldCheckBoxGit.getValue());
             mappaInput.put(Chiave.flagPom, fieldCheckBoxPom.getValue());
-            log.info("Nome nuovo progetto: " + fieldComboProgetti.getValue());
         }// end of if cycle
     }// end of method
 

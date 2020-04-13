@@ -48,6 +48,10 @@ public abstract class FlowCost {
 
     public static final String TAG_GIO = "giorno";
 
+    public static final String TAG_WIZ_VIEW = "wizView";
+
+    public static final String TAG_WIZ_NEW_PROJECT = "vizNewProject";
+
     public static final Locale APP_LOCALE = Locale.US;
 
     public static final String VUOTA = "";
@@ -368,6 +372,8 @@ public abstract class FlowCost {
     public static final LocalDateTime START_DATE_TIME = LocalDateTime.of(1970, 1, 1, 0, 0);
 
     public static final LocalTime START_TIME = LocalTime.of(0, 0);
+
+    public static final String TAG = "nonRegistrare";
 
     private static final String[] esclusiAll = {PROPERTY_SERIAL, PROPERTY_CREAZIONE, PROPERTY_MODIFICA};
 
