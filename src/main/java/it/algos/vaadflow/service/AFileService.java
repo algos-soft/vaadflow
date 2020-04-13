@@ -45,11 +45,13 @@ public class AFileService extends AbstractService {
      */
     private static final AFileService INSTANCE = new AFileService();
 
+
     /**
      * Private constructor to avoid client applications to use constructor
      */
     private AFileService() {
     }// end of constructor
+
 
     /**
      * Gets the unique instance of this Singleton.
@@ -60,43 +62,85 @@ public class AFileService extends AbstractService {
         return INSTANCE;
     }// end of static method
 
+
     /**
      * Controlla l'esistenza di un file
+     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
      *
-     * @param pathFileToBeChecked nome completo del file
+     * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
      * @return true se il file esiste
      * false se non è un file o se non esiste
      */
-    public boolean isEsisteFile(String pathFileToBeChecked) {
-        return isEsisteFile(new File(pathFileToBeChecked));
-    }// end of method
+    public boolean isEsisteFile(String absolutePathFileToBeChecked) {
+        boolean esiste = false;
+        String carattereIniziale;
+        File fileToBeChecked;
 
+        if (text.isEmpty(absolutePathFileToBeChecked)) {
+            return false;
+        }// end of if cycle
 
-    /**
-     * Controlla l'esistenza di un file
-     *
-     * @param fileToBeChecked file col path completo
-     *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
-     */
-    public boolean isEsisteFile(File fileToBeChecked) {
-        boolean status = false;
+        carattereIniziale = absolutePathFileToBeChecked.substring(0, 1);
+        if (!carattereIniziale.equals("/")) {
+            return false;
+        }// end of if cycle
 
-        status = fileToBeChecked.exists();
-        if (status) {
+        fileToBeChecked = new File(absolutePathFileToBeChecked);
+        esiste = fileToBeChecked.exists();
+        if (esiste) {
             if (fileToBeChecked.isFile()) {
                 System.out.println("Il file " + fileToBeChecked + " esiste");
             } else {
                 System.out.println(fileToBeChecked + " non è un file");
-                status = false;
+                esiste = false;
             }// end of if/else cycle
         } else {
             System.out.println("Il file " + fileToBeChecked + " non esiste");
         }// end of if/else cycle
 
-        return status;
+        return esiste;
+    }// end of method
+
+
+    /**
+     * Controlla l'esistenza di un file
+     * Il File DEVE essere costruito col path completo, altrimenti assume che sia nella directory in uso corrente
+     *
+     * @param fileToBeChecked file col path completo del file che DEVE cominciare con '/' SLASH
+     *
+     * @return true se il file esiste
+     * false se non è un file o se non esiste
+     */
+    public boolean isEsisteFile(File fileToBeChecked) {
+        boolean esiste = false;
+        String absolutePathFileToBeChecked;
+        String carattereIniziale;
+
+        if (fileToBeChecked == null) {
+            return false;
+        }// end of if cycle
+
+        absolutePathFileToBeChecked = fileToBeChecked.getAbsolutePath();
+        carattereIniziale = absolutePathFileToBeChecked.substring(0, 1);
+        if (!carattereIniziale.equals("/")) {
+            return false;
+        }// end of if cycle
+
+        esiste = fileToBeChecked.exists();
+        if (esiste) {
+            if (fileToBeChecked.isFile()) {
+                System.out.println("Il file " + fileToBeChecked + " esiste");
+            } else {
+                System.out.println(fileToBeChecked + " non è un file");
+                esiste = false;
+            }// end of if/else cycle
+        } else {
+            System.out.println("Il file " + fileToBeChecked + " non esiste");
+        }// end of if/else cycle
+
+        return esiste;
     }// end of method
 
 
@@ -109,7 +153,7 @@ public class AFileService extends AbstractService {
      * false se non è una directory o se non esiste
      */
     public boolean isEsisteDirectory(String pathDirectoryToBeChecked) {
-        return isEsisteDirectory(new File(pathDirectoryToBeChecked));
+        return text.isValid(pathDirectoryToBeChecked) && isEsisteDirectory(new File(pathDirectoryToBeChecked));
     }// end of method
 
 
@@ -122,21 +166,33 @@ public class AFileService extends AbstractService {
      * false se non è una directory o se non esiste
      */
     public boolean isEsisteDirectory(File directoryToBeChecked) {
-        boolean status = false;
+        boolean esiste = false;
+        String absolutePathDirectoryToBeChecked;
+        String carattereIniziale;
 
-        status = directoryToBeChecked.exists();
-        if (status) {
+        if (directoryToBeChecked == null) {
+            return false;
+        }// end of if cycle
+
+        absolutePathDirectoryToBeChecked = directoryToBeChecked.getName();
+        carattereIniziale = absolutePathDirectoryToBeChecked.substring(0, 1);
+        if (!carattereIniziale.equals("/")) {
+            return false;
+        }// end of if cycle
+
+        esiste = directoryToBeChecked.exists();
+        if (esiste) {
             if (directoryToBeChecked.isDirectory()) {
                 System.out.println("La directory " + directoryToBeChecked + " esiste");
             } else {
                 System.out.println(directoryToBeChecked + " non è una directory");
-                status = false;
+                esiste = false;
             }// end of if/else cycle
         } else {
             System.out.println("La directory " + directoryToBeChecked + " non esiste");
         }// end of if/else cycle
 
-        return status;
+        return esiste;
     }// end of method
 
 
@@ -281,6 +337,7 @@ public class AFileService extends AbstractService {
         return creata;
     }// end of method
 
+
     /**
      * Copia una directory
      *
@@ -301,6 +358,7 @@ public class AFileService extends AbstractService {
 
         return copiata;
     }// end of method
+
 
     /**
      * Copia un file
@@ -407,6 +465,7 @@ public class AFileService extends AbstractService {
 
         return status;
     }// end of method
+
 
     /**
      * Legge un file

@@ -98,6 +98,7 @@ public class WizDialog extends Dialog {
 
     protected ComboBox<String> fieldComboNomeProgetti;
 
+
     //--regolata indipendentemente dai risultati del dialogo
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
@@ -108,7 +109,7 @@ public class WizDialog extends Dialog {
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory che contiene il programma VaadFlow
-    //--userDir meno NAME_PROJECT_BASE
+    //--PATH_VAAD_FLOW_DIR_STANDARD oppure userDir meno NAME_PROJECT_BASE
     protected String pathVaadFlowDir;
 
     //--regolata indipendentemente dai risultati del dialogo
@@ -143,16 +144,25 @@ public class WizDialog extends Dialog {
      */
     protected void regolazioniIniziali() {
         this.pathUserDir = System.getProperty("user.dir");
-        this.pathVaadFlowDir = text.levaCodaDa(pathUserDir, SLASH);
+        if (pathUserDir.equals(PATH_VAAD_FLOW_DIR_STANDARD)) {
+            this.pathVaadFlowDir = pathUserDir;
+        } else {
+            this.pathVaadFlowDir = text.levaCodaDa(pathUserDir, SLASH);
+            log.warn("Attenzione. La directory di VaadFlow è cambiata");
+        }// end of if/else cycle
 
         //valido SOLO per new project
         if (isNuovoProgetto) {
             this.pathProjectsDir = text.levaCodaDa(pathVaadFlowDir, SLASH);
+            this.pathProjectsDir = text.levaCodaDa(pathProjectsDir, SLASH);
+            if (!pathProjectsDir.equals(PATH_PROJECTS_DIR_STANDARD)) {
+                log.warn("Attenzione. La directory dei Projects è cambiata");
+            }// end of if cycle
         } else {
             this.pathProjectsDir = VUOTA;
         }// end of if/else cycle
 
-        this.pathSources = pathVaadFlowDir + SLASH + VAAD_FLOW_PROJECT + DIR_SOURCES;
+        this.pathSources = pathVaadFlowDir + DIR_SOURCES;
     }// end of method
 
 
@@ -374,14 +384,15 @@ public class WizDialog extends Dialog {
                 mappaInput.put(Chiave.flagSovrascriveDirectory, fieldCheckBoxSovrascriveDirectory.getValue());
             }// end of if cycle
 
-            log.info("Progetto corrente: " + pathUserDir);
-            log.info("Directory VaadFlow: " + pathVaadFlowDir);
+            //--visualizzazione di controllo
+            log.info("Progetto corrente: pathUserDir=" + pathUserDir);
+            log.info("Directory VaadFlow: pathVaadFlowDir=" + pathVaadFlowDir);
             if (isNuovoProgetto) {
-                log.info("Directory dei nuovi progetti: " + pathProjectsDir);
+                log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
             }// end of if cycle
-            log.info("Sorgenti VaadFlow: " + pathSources);
+            log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
             if (isNuovoProgetto) {
-                log.info("Nome nuovo progetto: " + fieldComboNomeProgetti.getValue());
+                log.info("Nome nuovo progetto: fieldComboNomeProgetti=" + fieldComboNomeProgetti.getValue());
             }// end of if cycle
             log.info("");
         }// end of if cycle

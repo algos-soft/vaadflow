@@ -26,7 +26,20 @@ public class WizElaboraNewProject extends WizElabora {
         super.isNuovoProgetto = true;
 
         super.gotInput(mappaInput);
+
+        copiaCartelleVarie();
     }// end of method
 
+
+    public void copiaCartelleVarie() {
+        super.regolaDocumentation();
+        this.regolaLinks();
+        this.regolaSnippets();
+        this.regolaRead();
+        this.regolaGit();
+        this.regolaProperties();
+//        this.regolaPom();
+//        this.copiaMetaInf();
+    }// end of method
 
 }// end of class

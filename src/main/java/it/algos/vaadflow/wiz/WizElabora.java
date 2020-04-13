@@ -1,11 +1,16 @@
 package it.algos.vaadflow.wiz;
 
+import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wizard.enumeration.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
+import static it.algos.vaadflow.wiz.WizCost.*;
 
 /**
  * Project vaadflow
@@ -16,7 +21,6 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  */
 @Slf4j
 public abstract class WizElabora implements WizRecipient {
-
 
     //--flag regolato nel dialogo di input
     public boolean flagSecurity;
@@ -56,6 +60,11 @@ public abstract class WizElabora implements WizRecipient {
 
     //--flag regolato nel dialogo di input
     public boolean flagSovrascriveDirectory;
+
+    /**
+     * Service recuperato come istanza dalla classe singleton
+     */
+    protected AFileService file = AFileService.getInstance();
 
     //--wrapper di trasmissione dati tra i dialoghi e e questa classe di elaborazione
     protected LinkedHashMap<Chiave, Object> mappaInput;
@@ -97,6 +106,10 @@ public abstract class WizElabora implements WizRecipient {
     //--ha senso solo se isNuovoProgetto=false
     protected String targetProjectName;
 
+    //--regolata in base ai risultati del dialogo
+    //--path completo del progetto da creare/modificare
+    protected String pathProject;
+
 
     /**
      * Evento lanciato alla chiusura del dialogo
@@ -104,15 +117,15 @@ public abstract class WizElabora implements WizRecipient {
     @Override
     public void gotInput(LinkedHashMap<Chiave, Object> mappaInput) {
         this.mappaInput = mappaInput;
-        this.regolazioniIndipendentiDalDialogo();
+        this.regolazioniIniziali();
         this.regolazioniMappaInputDialogo();
     }// end of method
 
 
     /**
-     * Regolazioni iniziali indipendenti dal dialogo di input
+     * Regolazioni iniziali indipendenti (inj parte) dal dialogo di input
      */
-    protected void regolazioniIndipendentiDalDialogo() {
+    protected void regolazioniIniziali() {
         this.pathUserDir = (String) mappaInput.get(Chiave.pathUserDir);
         this.pathVaadFlowDir = (String) mappaInput.get(Chiave.pathVaadFlowDir);
         if (isNuovoProgetto) {
@@ -126,15 +139,22 @@ public abstract class WizElabora implements WizRecipient {
         } else {
             this.targetProjectName = (String) mappaInput.get(Chiave.targetProjectName);
         }// end of if/else cycle
+        if (isNuovoProgetto) {
+            this.pathProject = pathProjectsDir + SLASH + newProjectName;
+        } else {
+            this.pathProject = VUOTA;
+        }// end of if/else cycle
 
-        log.info("Progetto corrente: " + pathUserDir);
-        log.info("Directory VaadFlow: " + pathVaadFlowDir);
+        //--visualizzazione di controllo
+        log.info("Progetto corrente: pathUserDir=" + pathUserDir);
+        log.info("Directory VaadFlow: pathVaadFlowDir=" + pathVaadFlowDir);
         if (isNuovoProgetto) {
-            log.info("Directory dei nuovi progetti: " + pathProjectsDir);
+            log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
         }// end of if cycle
-        log.info("Sorgenti VaadFlow: " + pathSources);
+        log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
         if (isNuovoProgetto) {
-            log.info("Nome nuovo progetto: " + newProjectName);
+            log.info("Nome nuovo progetto: newProjectName=" + newProjectName);
+            log.info("Directory nuovo progetto: pathProject=" + pathProject);
         }// end of if cycle
     }// end of method
 
@@ -182,6 +202,148 @@ public abstract class WizElabora implements WizRecipient {
         if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
             this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
         }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Cartella di documentazione (in formati vari)
+     */
+    protected void regolaDocumentation() {
+        fixCartellaExtra(flagDocumentation, DIR_DOC);
+    }// end of method
+
+
+    /**
+     * Cartella di LINKS utili in text
+     */
+    protected void regolaLinks() {
+        fixCartellaExtra(flagLinks, DIR_LINKS);
+    }// end of method
+
+
+    /**
+     * Cartella di snippets utili in text
+     */
+    protected void regolaSnippets() {
+        fixCartellaExtra(flagSnippets, DIR_SNIPPETS);
+    }// end of method
+
+
+    /**
+     * File README di text
+     */
+    protected void regolaRead() {
+        String fileName = SLASH + FILE_READ + SOURCE_SUFFIX;
+        String srcPath = pathVaadFlowDir + fileName;
+        String destPath = pathProject + fileName;
+
+        if (flagRead) {
+            if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
+                file.copyFile(srcPath, destPath);
+            }// end of if cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File di esclusioni GIT di text
+     */
+    protected void regolaGit() {
+        String srcPath = pathVaadFlowDir + SLASH + FILE_GIT;
+        String destPath = pathProject + SLASH + FILE_GIT;
+
+        if (flagGit) {
+            if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
+                file.copyFile(srcPath, destPath);
+            }// end of if cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File application.properties
+     * Controlla se esiste la directory e nel caso la crea
+     * Letto dai sorgenti
+     * Sovrascrive dopo aver controllato se non c'è lo stop nel testo
+     */
+    protected void regolaProperties() {
+        String sourceText = leggeFile(FILE_PROPERTIES);
+        String destPath = pathProject + DIR_RESOURCES + SLASH + FILE_PROPERTIES_DEST;
+//        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+
+        if (flagProperties) {
+            file.scriveFile(destPath, sourceText, true);
+//            checkAndWriteFile(destPath, sourceText);
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Sovrascrive o aggiunge a seconda del flag
+     */
+    protected void fixCartellaExtra(boolean esegue, String dirName) {
+        boolean dirCancellata = false;
+        String srcPath = pathVaadFlowDir + SLASH + dirName;
+        String destPath = pathProject + SLASH + dirName;
+
+        if (!esegue) {
+            return;
+        }// end of if cycle
+
+        if (flagSovrascriveDirectory) {
+            dirCancellata = file.deleteDirectory(destPath);
+            if (dirCancellata || !file.isEsisteDirectory(destPath)) {
+                file.copyDirectory(srcPath, destPath);
+            }// end of if cycle
+        } else {
+            List<String> lista = file.getFiles(srcPath);
+            for (String nomeFile : lista) {
+                if (!file.isEsisteFile(destPath + SLASH + nomeFile) || flagSovrascriveFile) {
+                    file.copyFile(srcPath + SLASH + nomeFile, destPath + SLASH + nomeFile);
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if/else cycle
+
+    }// end of method
+
+
+    private String leggeFile(String nomeFileTextSorgente) {
+        String nomeFileTxt = nomeFileTextSorgente;
+
+        if (!nomeFileTxt.endsWith(SOURCE_SUFFIX)) {
+            nomeFileTxt += SOURCE_SUFFIX;
+        }// end of if cycle
+
+        return file.leggeFile(pathSources + SLASH + nomeFileTxt);
+    }// end of method
+
+
+    private void checkAndWriteFileTask(Task task, String newTaskText) {
+        String fileNameJava = "";
+        String pathFileJava;
+        String oldFileText = "";
+
+//        fileNameJava = newEntityName + task.getJavaClassName();
+//        pathFileJava = packagePath + SEP + fileNameJava;
+//
+//        if (flagSovrascriveFile) {
+//            file.sovraScriveFile(pathFileJava, newTaskText);
+//            System.out.println(fileNameJava + " esisteva già ed è stato modificato");
+//        } else {
+//            oldFileText = file.leggeFile(pathFileJava);
+//            if (text.isValid(oldFileText)) {
+//                if (checkFile(oldFileText)) {
+//                    file.sovraScriveFile(pathFileJava, newTaskText);
+//                    System.out.println(fileNameJava + " esisteva già ed è stato modificato");
+//                } else {
+//                    writeDocOnly(pathFileJava, oldFileText, newTaskText);
+//                    System.out.println(fileNameJava + " esisteva già ed è stato modificato SOLO nella documentazione");
+//                }// end of if/else cycle
+//            } else {
+//                file.scriveFile(pathFileJava, newTaskText, true);
+//                System.out.println(fileNameJava + " non esisteva ed è stato creato");
+//            }// end of if/else cycle
+//        }// end of if/else cycle
     }// end of method
 
 }// end of class
