@@ -45,7 +45,7 @@ public class AFileServiceTest extends ATest {
 
     private static String NOME_FILE_TEST = "TestNonCancellare";
 
-    private static String PATH_FILE_TEST = "/Users/gac/Desktop/test/";
+    private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/test/";
 
     @InjectMocks
     private AFileService service;
@@ -78,20 +78,10 @@ public class AFileServiceTest extends ATest {
         MockitoAnnotations.initMocks(service);
         MockitoAnnotations.initMocks(textService);
         service.text = textService;
-        nomeCompletoDirectory = PATH_FILE_TEST;
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
     }// end of method
 
 
-    /**
-     * Controlla l'esistenza di un file
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve comprendere anche l'estensione
-     *
-     * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
-     *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
-     */
     @Test
     public void isEsisteFileZero() {
         nomeFile = "nonEsiste";
@@ -154,6 +144,7 @@ public class AFileServiceTest extends ATest {
      * Controlla l'esistenza di un file
      * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
      * Deve comprendere anche l'estensione
+     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
      *
      * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
@@ -205,6 +196,7 @@ public class AFileServiceTest extends ATest {
      * Controlla l'esistenza di un file
      * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
      * Deve comprendere anche l'estensione
+     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
      *
      * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
@@ -259,22 +251,25 @@ public class AFileServiceTest extends ATest {
     @SuppressWarnings("javadoc")
     /**
      * Controlla l'esistenza di una directory
+     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
+     * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param directoryToBeChecked
+     * @param absolutePathDirectoryToBeChecked nome completo della directory
      *
-     * @return true se la directory
+     * @return true se la directory esiste
      * false se non è una directory o se non esiste
      */
-//    @Test
+    @Test
     public void isEsisteDirectory() {
         System.out.println("*isEsisteDirectory - inizio");
         nomeDirectory = "nonEsiste";
         statusPrevisto = false;
 
-        statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
+        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
         assertEquals(statusPrevisto, statusOttenuto);
 
-        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
+        statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
         assertEquals(statusPrevisto, statusOttenuto);
 
         nomeDirectory = "src";
@@ -290,7 +285,7 @@ public class AFileServiceTest extends ATest {
         System.out.println("*isEsisteDirectory - fine");
 
 
-        nomeCompletoDirectory = PATH_FILE_TEST;
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
         statusPrevisto = true;
         statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
         assertEquals(statusPrevisto, statusOttenuto);
@@ -432,7 +427,7 @@ public class AFileServiceTest extends ATest {
 //    @Test
     public void leggeFile() {
         System.out.println("*leggeFile - inizio");
-        service.scriveFile(PATH_FILE_TEST + NOME_FILE_TEST, TESTO);
+        service.scriveFile(nomeCompletoDirectory + NOME_FILE_TEST, TESTO);
         String nomeFile = NOME_FILE_TEST;
         String testo = TESTO;
 

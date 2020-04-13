@@ -67,6 +67,7 @@ public class AFileService extends AbstractService {
      * Controlla l'esistenza di un file
      * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
      * Deve comprendere anche l'estensione
+     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
      *
      * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
@@ -74,39 +75,22 @@ public class AFileService extends AbstractService {
      * false se non è un file o se non esiste
      */
     public boolean isEsisteFile(String absolutePathFileToBeChecked) {
-        boolean esiste = false;
-        String carattereIniziale;
         File fileToBeChecked;
 
         if (text.isEmpty(absolutePathFileToBeChecked)) {
             return false;
         }// end of if cycle
 
-        carattereIniziale = absolutePathFileToBeChecked.substring(0, 1);
-        if (!carattereIniziale.equals("/")) {
-            return false;
-        }// end of if cycle
-
         fileToBeChecked = new File(absolutePathFileToBeChecked);
-        esiste = fileToBeChecked.exists();
-        if (esiste) {
-            if (fileToBeChecked.isFile()) {
-                System.out.println("Il file " + fileToBeChecked + " esiste");
-            } else {
-                System.out.println(fileToBeChecked + " non è un file");
-                esiste = false;
-            }// end of if/else cycle
-        } else {
-            System.out.println("Il file " + fileToBeChecked + " non esiste");
-        }// end of if/else cycle
-
-        return esiste;
+        return isEsisteFile(fileToBeChecked);
     }// end of method
 
 
     /**
      * Controlla l'esistenza di un file
      * Il File DEVE essere costruito col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
+     * getPath() e getAbsolutePath() devono essere uguali
      *
      * @param fileToBeChecked file col path completo del file che DEVE cominciare con '/' SLASH
      *
@@ -115,29 +99,24 @@ public class AFileService extends AbstractService {
      */
     public boolean isEsisteFile(File fileToBeChecked) {
         boolean esiste = false;
-        String absolutePathFileToBeChecked;
-        String carattereIniziale;
 
         if (fileToBeChecked == null) {
             return false;
         }// end of if cycle
 
-        absolutePathFileToBeChecked = fileToBeChecked.getAbsolutePath();
-        carattereIniziale = absolutePathFileToBeChecked.substring(0, 1);
-        if (!carattereIniziale.equals("/")) {
-            return false;
-        }// end of if cycle
-
-        esiste = fileToBeChecked.exists();
-        if (esiste) {
-            if (fileToBeChecked.isFile()) {
-                System.out.println("Il file " + fileToBeChecked + " esiste");
+        if (fileToBeChecked.getPath().equals(fileToBeChecked.getAbsolutePath())) {
+            if (fileToBeChecked.exists()) {
+                if (fileToBeChecked.isFile()) {
+                    esiste = true;
+                    System.out.println("Il file " + fileToBeChecked + " esiste");
+                } else {
+                    System.out.println(fileToBeChecked + " non è un file");
+                }// end of if/else cycle
             } else {
-                System.out.println(fileToBeChecked + " non è un file");
-                esiste = false;
+                System.out.println("Il file " + fileToBeChecked + " non esiste");
             }// end of if/else cycle
         } else {
-            System.out.println("Il file " + fileToBeChecked + " non esiste");
+            System.out.println("Il path del file non è assoluto");
         }// end of if/else cycle
 
         return esiste;
@@ -146,50 +125,58 @@ public class AFileService extends AbstractService {
 
     /**
      * Controlla l'esistenza di una directory
+     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
+     * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param pathDirectoryToBeChecked nome completo della directory
+     * @param absolutePathDirectoryToBeChecked nome completo della directory
      *
      * @return true se la directory esiste
      * false se non è una directory o se non esiste
      */
-    public boolean isEsisteDirectory(String pathDirectoryToBeChecked) {
-        return text.isValid(pathDirectoryToBeChecked) && isEsisteDirectory(new File(pathDirectoryToBeChecked));
+    public boolean isEsisteDirectory(String absolutePathDirectoryToBeChecked) {
+        File directoryToBeChecked;
+
+        if (text.isEmpty(absolutePathDirectoryToBeChecked)) {
+            return false;
+        }// end of if cycle
+
+        directoryToBeChecked = new File(absolutePathDirectoryToBeChecked);
+        return isEsisteDirectory(directoryToBeChecked);
     }// end of method
 
 
     /**
      * Controlla l'esistenza di una directory
+     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
+     * getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param directoryToBeChecked file col path completo
+     * @param directoryToBeChecked file col path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory esiste
-     * false se non è una directory o se non esiste
+     * @return true se il file esiste
+     * false se non è un file o se non esiste
      */
     public boolean isEsisteDirectory(File directoryToBeChecked) {
         boolean esiste = false;
-        String absolutePathDirectoryToBeChecked;
-        String carattereIniziale;
 
         if (directoryToBeChecked == null) {
             return false;
         }// end of if cycle
 
-        absolutePathDirectoryToBeChecked = directoryToBeChecked.getName();
-        carattereIniziale = absolutePathDirectoryToBeChecked.substring(0, 1);
-        if (!carattereIniziale.equals("/")) {
-            return false;
-        }// end of if cycle
-
-        esiste = directoryToBeChecked.exists();
-        if (esiste) {
-            if (directoryToBeChecked.isDirectory()) {
-                System.out.println("La directory " + directoryToBeChecked + " esiste");
+        if (directoryToBeChecked.getPath().equals(directoryToBeChecked.getAbsolutePath())) {
+            if (directoryToBeChecked.exists()) {
+                if (directoryToBeChecked.isDirectory()) {
+                    esiste = true;
+                    System.out.println("La directory " + directoryToBeChecked + " esiste");
+                } else {
+                    System.out.println(directoryToBeChecked + " non è una directory");
+                }// end of if/else cycle
             } else {
-                System.out.println(directoryToBeChecked + " non è una directory");
-                esiste = false;
+                System.out.println("La directory " + directoryToBeChecked + " non esiste");
             }// end of if/else cycle
         } else {
-            System.out.println("La directory " + directoryToBeChecked + " non esiste");
+            System.out.println("Il path della directory non è assoluto");
         }// end of if/else cycle
 
         return esiste;
