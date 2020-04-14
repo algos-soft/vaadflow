@@ -1,5 +1,6 @@
 package it.algos.vaadflow;
 
+import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
@@ -10,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 
+import static it.algos.vaadflow.application.FlowCost.SLASH;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -27,37 +30,50 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AFileServiceTest extends ATest {
 
 
-    private static String PATH = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/";
-
-    private static String SOURCES = PATH + "wizard/sources/";
-
-    private static String MODULES = PATH + "modules/";
-
-    private static String DIR = SOURCES + "Prova";
-
-    private static String SLASH = "/";
-
-    private static String READ = "README.txt";
-
-    private static String PACKAGE = "package it.algos.it.algos.vaadflow;\n";
-
-    private static String TESTO = PACKAGE + "public class Alfa {}";
-
-    private static String NOME_FILE_TEST = "TestNonCancellare";
+//    private static String PATH = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/";
+//
+//    private static String SOURCES = PATH + "wizard/sources/";
+//
+//    private static String MODULES = PATH + "modules/";
+//
+//    private static String DIR = SOURCES + "Prova";
+//
+//    private static String SLASH = "/";
+//
+//    private static String READ = "README.txt";
+//
+//    private static String PACKAGE = "package it.algos.it.algos.vaadflow;\n";
+//
+//    private static String TESTO = PACKAGE + "public class Alfa {}";
+//
+//    private static String NOME_FILE_TEST = "TestNonCancellare";
 
     private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/test/";
+
+    private static String PATH_DIRECTORY_NEW = "/Users/gac/Desktop/test/Pippo/";
+
+    private static String PATH_DIRECTORY_DUE = "/Users/gac/Desktop/test/Possibile/";
+
+    private static String PATH_FILE_NEW = "/Users/gac/Desktop/test/Paperino/Topolino.txt";
+
+    private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/Paperino/Minni.txt";
 
     @InjectMocks
     private AFileService service;
 
     @InjectMocks
-    private ATextService textService;
+    private ATextService text;
+
+    @InjectMocks
+    private AArrayService array;
 
     private boolean statusPrevisto;
 
     private boolean statusOttenuto;
 
     private File unFile;
+
+    private File unaDirectory;
 
     private String nomeFile;
 
@@ -76,8 +92,20 @@ public class AFileServiceTest extends ATest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         MockitoAnnotations.initMocks(service);
-        MockitoAnnotations.initMocks(textService);
-        service.text = textService;
+        MockitoAnnotations.initMocks(text);
+        MockitoAnnotations.initMocks(array);
+        service.text = text;
+        service.array = array;
+        service.array.text = text;
+        service.text.array = array;
+    }// end of method
+
+
+    @BeforeEach
+    public void setUp2() {
+        nomeFile = VUOTA;
+        unFile = null;
+        unaDirectory = null;
         nomeCompletoDirectory = PATH_DIRECTORY_TEST;
     }// end of method
 
@@ -135,7 +163,6 @@ public class AFileServiceTest extends ATest {
         } catch (Exception unErrore) { // intercetta l'errore
             System.out.println("Errore");
         }// fine del blocco try-catch
-
     }// end of single test
 
 
@@ -153,16 +180,15 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void isEsisteFile() {
-        System.out.println("");
-        System.out.println("Controllo l'esistenza del file");
         nomeFile = "nonEsiste";
         statusPrevisto = false;
 
-        statusOttenuto = service.isEsisteFile(nomeFile);
+        statusOttenuto = service.isEsisteFile((String) null);
         assertEquals(statusPrevisto, statusOttenuto);
 
-        nomeFile = READ;
-        statusPrevisto = false;
+        statusOttenuto = service.isEsisteFile(VUOTA);
+        assertEquals(statusPrevisto, statusOttenuto);
+
         statusOttenuto = service.isEsisteFile(nomeFile);
         assertEquals(statusPrevisto, statusOttenuto);
 
@@ -183,12 +209,17 @@ public class AFileServiceTest extends ATest {
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
         assertEquals(statusPrevisto, statusOttenuto);
 
-        nomeFile = "Pluto.rtf";
+        nomeFile = "pluto.rtf";
         nomeCompletoFile = nomeCompletoDirectory + nomeFile;
         statusPrevisto = true;
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
         assertEquals(statusPrevisto, statusOttenuto);
 
+        nomeFile = "Pluto.rtf";
+        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
+        statusPrevisto = true;
+        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
+        assertEquals(statusPrevisto, statusOttenuto);
     }// end of single test
 
 
@@ -205,24 +236,18 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void isEsisteFile2() {
-        System.out.println("");
-        System.out.println("Controllo l'esistenza del file");
-
         nomeFile = "nonEsiste";
         unFile = new File(nomeFile);
         statusPrevisto = false;
+
+        statusOttenuto = service.isEsisteFile((File) null);
+        assertEquals(statusPrevisto, statusOttenuto);
 
         statusOttenuto = service.isEsisteFile(unFile);
         assertEquals(statusPrevisto, statusOttenuto);
         print("Esiste file", nomeFile, statusOttenuto);
 
         unFile = null;
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        nomeFile = READ;
-        unFile = new File(nomeFile);
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(unFile);
         assertEquals(statusPrevisto, statusOttenuto);
 
@@ -262,9 +287,14 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void isEsisteDirectory() {
-        System.out.println("*isEsisteDirectory - inizio");
         nomeDirectory = "nonEsiste";
         statusPrevisto = false;
+
+        statusOttenuto = service.isEsisteDirectory((String) null);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusOttenuto = service.isEsisteDirectory(VUOTA);
+        assertEquals(statusPrevisto, statusOttenuto);
 
         statusOttenuto = service.isEsisteDirectory(nomeDirectory);
         assertEquals(statusPrevisto, statusOttenuto);
@@ -277,18 +307,144 @@ public class AFileServiceTest extends ATest {
 
         statusOttenuto = service.isEsisteDirectory(nomeDirectory);
         assertEquals(statusPrevisto, statusOttenuto);
-
-        nomeDirectory = READ;
-        statusPrevisto = false;
-        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
         System.out.println("*isEsisteDirectory - fine");
-
 
         nomeCompletoDirectory = PATH_DIRECTORY_TEST;
         statusPrevisto = true;
         statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
         assertEquals(statusPrevisto, statusOttenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pippo";
+        statusPrevisto = true;
+        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pluto";
+        statusPrevisto = false;
+        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Controlla l'esistenza di una directory
+     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve comprendere anche l'estensione
+     * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
+     *
+     * @param absolutePathDirectoryToBeChecked nome completo della directory
+     *
+     * @return true se la directory esiste
+     * false se non è una directory o se non esiste
+     */
+    @Test
+    public void isEsisteDirectory2() {
+        nomeDirectory = "nonEsiste";
+        unaDirectory = new File(nomeDirectory);
+        statusPrevisto = false;
+
+        statusOttenuto = service.isEsisteFile((File) null);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusOttenuto = service.isEsisteFile(nomeDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+        print("Esiste directory", nomeDirectory, statusOttenuto);
+
+        unaDirectory = null;
+        statusOttenuto = service.isEsisteFile(unaDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        nomeDirectory = "src";
+        unaDirectory = new File(nomeDirectory);
+        statusPrevisto = false;
+        statusOttenuto = service.isEsisteFile(unaDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        nomeDirectory = "pippoz";
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
+        unaDirectory = new File(nomeCompletoDirectory);
+        statusPrevisto = false;
+        statusOttenuto = service.isEsisteFile(unaDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        nomeDirectory = "Pluto.rtf";
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
+        unaDirectory = new File(nomeCompletoDirectory);
+        statusPrevisto = true;
+        statusOttenuto = service.isEsisteFile(unaDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Crea una nuova directory
+     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     *
+     * @param absolutePathDirectoryToBeCreated file col path completo della directory che DEVE cominciare con '/' SLASH
+     *
+     * @return true se la directory è stata creata oppure esisteva già
+     * false se non è una directory o se non esiste
+     */
+    @Test
+    public void creaDirectory() {
+        statusPrevisto = false;
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Topolino";
+
+        statusOttenuto = service.creaDirectory((String) null);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusOttenuto = service.creaDirectory(VUOTA);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusOttenuto = service.creaDirectory("Pippo");
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusPrevisto = false;
+        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusPrevisto = true;
+        statusOttenuto = service.creaDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        statusPrevisto = true;
+        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+
+        service.deleteDirectory(nomeCompletoDirectory);
+
+        statusPrevisto = false;
+        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+        assertEquals(statusPrevisto, statusOttenuto);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Crea un nuovo file
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Se manca la directory, la crea
+     *
+     * @param absolutePathFileToBeCreatedWithSuffix path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     *
+     * @return true se il file è stato creato oppure esisteva già
+     * false se non è un file o se non esiste
+     */
+    @Test
+    public void creaFile() {
+        nomeFile = PATH_FILE_DELETE;
+        statusPrevisto = true;
+        statusOttenuto = service.creaFile(nomeFile);
+        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(service.deleteFile(nomeFile));
+
+        nomeFile = "alfa.java";
+        statusPrevisto = false;
+        statusOttenuto = service.creaFile(nomeFile);
+        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(service.deleteFile(nomeFile));
     }// end of single test
 
 
@@ -303,21 +459,14 @@ public class AFileServiceTest extends ATest {
      */
 //    @Test
     public void deleteFile() {
-        System.out.println("*deleteFile - inizio");
         statusPrevisto = false;
         statusOttenuto = service.deleteFile("pippo");
         assertEquals(statusPrevisto, statusOttenuto);
 
-        service.creaFile("pippo");
+        service.creaFile(PATH_FILE_NEW);
         statusPrevisto = true;
         statusOttenuto = service.deleteFile("pippo");
         assertEquals(statusPrevisto, statusOttenuto);
-
-        statusPrevisto = false;
-        statusOttenuto = service.deleteFile(DIR);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        System.out.println("*deleteFile - fine");
     }// end of single test
 
 
@@ -332,62 +481,15 @@ public class AFileServiceTest extends ATest {
      */
 //    @Test
     public void deleteDirectory() {
-        System.out.println("*deleteDirectory - inizio");
-        statusPrevisto = false;
-        statusOttenuto = service.deleteDirectory(new File(DIR.toLowerCase()));
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        service.creaDirectory(DIR);
+        service.creaDirectory(PATH_DIRECTORY_DUE);
 
         statusPrevisto = true;
-        statusOttenuto = service.deleteDirectory(DIR);
+        statusOttenuto = service.deleteDirectory(PATH_DIRECTORY_DUE);
         assertEquals(statusPrevisto, statusOttenuto);
 
         statusPrevisto = false;
         statusOttenuto = service.deleteDirectory("pippo");
         assertEquals(statusPrevisto, statusOttenuto);
-
-        System.out.println("*deleteDirectory - fine");
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Crea una directory
-     *
-     * @param nomeCompletoDirectory
-     */
-//    @Test
-    public void creaDirectory() {
-        System.out.println("*creaDirectory - inizio");
-        statusPrevisto = true;
-        String nomeDirectory = DIR;
-        statusOttenuto = service.creaDirectory(nomeDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        service.deleteDirectory(DIR);
-
-        System.out.println("*creaDirectory - fine");
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Crea un file
-     *
-     * @param nameFileWithSuffix nome completo del file, compreso il suffisso
-     * @param text     completo del file
-     */
-//    @Test
-    public void creaFile() {
-        System.out.println("*creaFile - inizio");
-        statusPrevisto = true;
-        String nomeFile = "alfa.java";
-        statusOttenuto = service.creaFile(nomeFile);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        service.deleteFile(nomeFile);
-        System.out.println("*creaFile - fine");
     }// end of single test
 
 
@@ -402,19 +504,19 @@ public class AFileServiceTest extends ATest {
      */
 //    @Test
     public void scriveFile() {
-        System.out.println("*scriveFile - inizio");
-        statusPrevisto = true;
-        String nomeFile = NOME_FILE_TEST;
-        String testo = TESTO;
-        statusOttenuto = service.scriveFile(nomeFile, testo);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusPrevisto = true;
-        statusOttenuto = service.scriveFile(nomeFile, testo + "pippo", true);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        service.deleteFile(nomeFile);
-        System.out.println("*scriveFile - fine");
+//        System.out.println("*scriveFile - inizio");
+//        statusPrevisto = true;
+//        String nomeFile = NOME_FILE_TEST;
+//        String testo = TESTO;
+//        statusOttenuto = service.scriveFile(nomeFile, testo);
+//        assertEquals(statusPrevisto, statusOttenuto);
+//
+//        statusPrevisto = true;
+//        statusOttenuto = service.scriveFile(nomeFile, testo + "pippo", true);
+//        assertEquals(statusPrevisto, statusOttenuto);
+//
+//        service.deleteFile(nomeFile);
+//        System.out.println("*scriveFile - fine");
     }// end of single test
 
 
@@ -426,36 +528,36 @@ public class AFileServiceTest extends ATest {
      */
 //    @Test
     public void leggeFile() {
-        System.out.println("*leggeFile - inizio");
-        service.scriveFile(nomeCompletoDirectory + NOME_FILE_TEST, TESTO);
-        String nomeFile = NOME_FILE_TEST;
-        String testo = TESTO;
-
-        testoPrevisto = testo;
-        testoOttenuto = service.leggeFile(nomeFile);
-        assertEquals(testoPrevisto, testoOttenuto);
-        System.out.println(testoOttenuto);
-
-        service.deleteFile(nomeFile);
-        System.out.println("*leggeFile - fine");
-
-        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCost.java";
-        testoOttenuto = service.leggeFile(nomeFile);
-        assertNotNull(testoOttenuto);
-        assertTrue(testoOttenuto.length() > 0);
-        System.out.println(testoOttenuto);
-
-        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCostDeleted.java";
-        testoOttenuto = service.leggeFile(nomeFile);
-        assertEquals("", testoOttenuto);
-        assertTrue(testoOttenuto.length() == 0);
+//        System.out.println("*leggeFile - inizio");
+//        service.scriveFile(nomeCompletoDirectory + NOME_FILE_TEST, TESTO);
+//        String nomeFile = NOME_FILE_TEST;
+//        String testo = TESTO;
+//
+//        testoPrevisto = testo;
+//        testoOttenuto = service.leggeFile(nomeFile);
+//        assertEquals(testoPrevisto, testoOttenuto);
+//        System.out.println(testoOttenuto);
+//
+//        service.deleteFile(nomeFile);
+//        System.out.println("*leggeFile - fine");
+//
+//        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCost.java";
+//        testoOttenuto = service.leggeFile(nomeFile);
+//        assertNotNull(testoOttenuto);
+//        assertTrue(testoOttenuto.length() > 0);
+//        System.out.println(testoOttenuto);
+//
+//        nomeFile = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/application/BaseCostDeleted.java";
+//        testoOttenuto = service.leggeFile(nomeFile);
+//        assertEquals("", testoOttenuto);
+//        assertTrue(testoOttenuto.length() == 0);
     }// end of single test
 
 
     //    @Test
     public void getSubdiretories() {
-        ottenutoList = service.getSubDirectories(MODULES);
-        ottenutoList = service.getSubDirectories(MODULES);
+//        ottenutoList = service.getSubDirectories(MODULES);
+//        ottenutoList = service.getSubDirectories(MODULES);
     }// end of single test
 
 

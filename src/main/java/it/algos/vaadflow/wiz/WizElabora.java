@@ -1,9 +1,11 @@
 package it.algos.vaadflow.wiz;
 
 import it.algos.vaadflow.service.AFileService;
+import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wizard.enumeration.Chiave;
 import it.algos.vaadflow.wizard.enumeration.Task;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,7 +66,14 @@ public abstract class WizElabora implements WizRecipient {
     /**
      * Service recuperato come istanza dalla classe singleton
      */
-    protected AFileService file = AFileService.getInstance();
+    @Autowired
+    protected AFileService file;
+
+    /**
+     * Service recuperato come istanza dalla classe singleton
+     */
+    @Autowired
+    protected ATextService text;
 
     //--wrapper di trasmissione dati tra i dialoghi e e questa classe di elaborazione
     protected LinkedHashMap<Chiave, Object> mappaInput;
