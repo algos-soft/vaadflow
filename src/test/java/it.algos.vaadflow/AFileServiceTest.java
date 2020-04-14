@@ -182,14 +182,15 @@ public class AFileServiceTest extends ATest {
      * Il path non deve essere vuoto <br>
      * Il path deve essere completo ed inziare con uno 'slash' <br>
      * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
      * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
-     * @param absolutePathFileWithSuffixToBeChecked path completo del file che DEVE cominciare con '/' SLASH
+     * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return testo di errore, vuota se esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void isEsisteFile() {
+    @Test
+    public void isEsisteFileTramiteNome() {
         ottenuto = service.isEsisteFileStr((String) null);
         assertFalse(service.isEsisteFile((String) null));
         assertEquals(PATH_NULLO, ottenuto);
@@ -203,12 +204,22 @@ public class AFileServiceTest extends ATest {
         assertFalse(service.isEsisteFile(nomeCompletoFile));
         assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
+        nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(NON_ESISTE_FILE, ottenuto);
+
         nomeCompletoFile = PATH_FILE_NO_SUFFIX;
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
         assertEquals(PATH_SENZA_SUFFIX, ottenuto);
 
         nomeCompletoFile = PATH_FILE_NEW;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(NON_ESISTE_FILE, ottenuto);
+
+        nomeCompletoFile = PATH_DIRECTORY_NEW;
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
         assertEquals(NON_E_FILE, ottenuto);
@@ -222,30 +233,35 @@ public class AFileServiceTest extends ATest {
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
         assertTrue(service.isEsisteFile(nomeCompletoFile));
         assertEquals(VUOTA, ottenuto);
+
+        nomeCompletoFile = PATH_DIRECTORY_NEW;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(NON_E_FILE, ottenuto);
     }// end of single test
 
 
     /**
-     * Controlla l'esistenza di un file
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve comprendere anche l'estensione
-     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
-     * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
+     * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     @Test
-    public void isEsisteFile2() {
-        unFile = new File(nomeFile);
-
+    public void isEsisteFileTramiteFile() {
         ottenuto = service.isEsisteFileStr((File) null);
         assertFalse(service.isEsisteFile((File) null));
         assertEquals(PARAMETRO_NULLO, ottenuto);
 
-        nomeCompletoFile = VUOTA;
-        unFile = new File(nomeCompletoFile);
+        unFile = new File(VUOTA);
         ottenuto = service.isEsisteFileStr(unFile);
         assertFalse(service.isEsisteFile(unFile));
         assertEquals(PATH_NULLO, ottenuto);
@@ -256,13 +272,19 @@ public class AFileServiceTest extends ATest {
         assertFalse(service.isEsisteFile(unFile));
         assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
+        nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(NON_ESISTE_FILE, ottenuto);
+
         nomeCompletoFile = PATH_FILE_NO_SUFFIX;
         unFile = new File(nomeCompletoFile);
         ottenuto = service.isEsisteFileStr(unFile);
         assertFalse(service.isEsisteFile(unFile));
         assertEquals(PATH_SENZA_SUFFIX, ottenuto);
 
-        nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
+        nomeCompletoFile = PATH_FILE_NEW;
         unFile = new File(nomeCompletoFile);
         ottenuto = service.isEsisteFileStr(unFile);
         assertFalse(service.isEsisteFile(unFile));
@@ -279,101 +301,141 @@ public class AFileServiceTest extends ATest {
         ottenuto = service.isEsisteFileStr(unFile);
         assertTrue(service.isEsisteFile(unFile));
         assertEquals(VUOTA, ottenuto);
+
+        nomeCompletoFile = PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertTrue(service.isEsisteFile(unFile));
+        assertEquals(VUOTA, ottenuto);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Controlla l'esistenza di una directory
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve comprendere anche l'estensione
+     * Controlla l'esistenza di una directory <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param absolutePathDirectoryToBeChecked nome completo della directory
+     * @param absolutePathDirectoryToBeChecked path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory esiste
-     * false se non è una directory o se non esiste
+     * @return true se la directory esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void isEsisteDirectory() {
-        nomeDirectory = "nonEsiste";
-        statusPrevisto = false;
+    @Test
+    public void isEsisteDirectoryTramiteNome() {
+        ottenuto = service.isEsisteDirectoryStr((String) null);
+        assertFalse(service.isEsisteDirectory((String) null));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteDirectory((String) null);
-        assertFalse(statusOttenuto);
+        ottenuto = service.isEsisteDirectoryStr(VUOTA);
+        assertFalse(service.isEsisteDirectory(VUOTA));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteDirectory(VUOTA);
-        assertFalse(statusOttenuto);
+        nomeCompletoDirectory = "nonEsiste";
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
-        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-        assertFalse(statusOttenuto);
-
-        statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
-        assertFalse(statusOttenuto);
-
-        nomeDirectory = "src";
-        statusPrevisto = false;
-
-        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-        assertFalse(statusOttenuto);
-
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertTrue(statusOttenuto);
-
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pippo";
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertTrue(statusOttenuto);
-
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pluto";
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertFalse(statusOttenuto);
+        //
+//        statusOttenuto = service.isEsisteDirectory((String) null);
+//        assertFalse(statusOttenuto);
+//
+//        statusOttenuto = service.isEsisteDirectory(VUOTA);
+//        assertFalse(statusOttenuto);
+//
+//        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
+//        assertFalse(statusOttenuto);
+//
+//        nomeDirectory = "src";
+//        statusPrevisto = false;
+//
+//        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
+//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+//        assertTrue(statusOttenuto);
+//
+//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pippo";
+//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+//        assertTrue(statusOttenuto);
+//
+//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pluto";
+//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
+//        assertFalse(statusOttenuto);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Controlla l'esistenza di una directory
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve comprendere anche l'estensione
+     * Controlla l'esistenza di una directory <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param absolutePathDirectoryToBeChecked nome completo della directory
+     * @param absolutePathDirectoryToBeChecked path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory esiste
-     * false se non è una directory o se non esiste
+     * @return true se la directory esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void isEsisteDirectory2() {
-        nomeDirectory = "nonEsiste";
-        unaDirectory = new File(nomeDirectory);
+    @Test
+    public void isEsisteDirectoryTramiteFile() {
+        ottenuto = service.isEsisteDirectoryStr((File) null);
+        assertFalse(service.isEsisteDirectory((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteFile((File) null);
-        assertFalse(statusOttenuto);
+        unaDirectory = new File(VUOTA);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteFile(nomeDirectory);
-        assertFalse(statusOttenuto);
-
-        unaDirectory = null;
-        statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertFalse(statusOttenuto);
-
-        nomeDirectory = "src";
-        unaDirectory = new File(nomeDirectory);
-        statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertFalse(statusOttenuto);
-
-        nomeDirectory = "pippoz";
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
+        nomeCompletoDirectory = "nonEsiste";
         unaDirectory = new File(nomeCompletoDirectory);
-        statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertFalse(statusOttenuto);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
-        nomeDirectory = "Pluto.rtf";
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
-        unaDirectory = new File(nomeCompletoDirectory);
-        statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertTrue(statusOttenuto);
+//        nomeDirectory = "nonEsiste";
+//        unaDirectory = new File(nomeDirectory);
+//
+//        statusOttenuto = service.isEsisteFile((File) null);
+//        assertFalse(statusOttenuto);
+//
+//        statusOttenuto = service.isEsisteFile(nomeDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        unaDirectory = null;
+//        statusOttenuto = service.isEsisteFile(unaDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        nomeDirectory = "src";
+//        unaDirectory = new File(nomeDirectory);
+//        statusOttenuto = service.isEsisteFile(unaDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        nomeDirectory = "pippoz";
+//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
+//        unaDirectory = new File(nomeCompletoDirectory);
+//        statusOttenuto = service.isEsisteFile(unaDirectory);
+//        assertFalse(statusOttenuto);
+//
+//        nomeDirectory = "Pluto.rtf";
+//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
+//        unaDirectory = new File(nomeCompletoDirectory);
+//        statusOttenuto = service.isEsisteFile(unaDirectory);
+//        assertTrue(statusOttenuto);
     }// end of single test
 
 
