@@ -444,33 +444,44 @@ public class AFileServiceTest extends ATest {
     @SuppressWarnings("javadoc")
     /**
      * Crea un nuovo file
+     * <p>
      * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Se manca la directory, la crea
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     * Se manca la directory, viene creata dal System <br>
      *
-     * @param absolutePathFileToBeCreatedWithSuffix path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
      *
-     * @return true se il file è stato creato oppure esisteva già
-     * false se non è un file o se non esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void creaFile() {
+    @Test
+    public void creaFileTramiteNome() {
+        ottenuto = service.creaFileStr((String) null);
+        assertFalse(service.creaFile((String) null));
+        assertEquals(PATH_NULLO, ottenuto);
+
+        ottenuto = service.creaFileStr(VUOTA);
+        assertFalse(service.creaFile(VUOTA));
+        assertEquals(PATH_NULLO, ottenuto);
+
+        nomeCompletoFile = "nonEsiste";
+        ottenuto = service.creaFileStr(nomeCompletoFile);
+        assertFalse(service.creaFile(nomeCompletoFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+
+
+        //--************************
         nomeCompletoFile = PATH_FILE_DELETE;
-
-        statusOttenuto = service.creaFile((String) null);
-        assertFalse(statusOttenuto);
-
-        statusOttenuto = service.creaFile(VUOTA);
-        assertFalse(statusOttenuto);
-
-        statusOttenuto = service.creaFile("Pippo");
-        assertFalse(statusOttenuto);
 
         //--controlla prima di crearlo - Non esiste
         assertFalse(service.isEsisteFile(nomeCompletoFile));
 
         //--creazione da testare
-        statusOttenuto = service.creaFile(nomeCompletoFile);
-        assertTrue(statusOttenuto);
+        ottenuto = service.creaFileStr(nomeCompletoFile);
+        assertTrue(service.creaFile(nomeCompletoFile));
 
         //--controlla dopo averlo creato - Esiste
         assertTrue(service.isEsisteFile(nomeCompletoFile));
@@ -480,29 +491,61 @@ public class AFileServiceTest extends ATest {
 
         //--controlla dopo averlo cancellato - Non esiste
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-
-        nomeFile = "alfa.java";
-        statusOttenuto = service.creaFile(nomeFile);
-        assertFalse(statusOttenuto);
+        //--************************
 
 
-        unFile = new File(nomeCompletoFile);
+//        nomeFile = "alfa.java";
+//        statusOttenuto = service.creaFile(nomeFile);
+//        assertFalse(statusOttenuto);
+//
+//
+//        unFile = new File(nomeCompletoFile);
+//
+//        //--controlla prima di crearlo - Non esiste
+//        assertFalse(service.isEsisteFile(unFile));
+//
+//        //--creazione da testare
+//        statusOttenuto = service.creaFile(unFile);
+//        assertTrue(statusOttenuto);
+//
+//        //--controlla dopo averlo creato - Esiste
+//        assertTrue(service.isEsisteFile(unFile));
+//
+//        //--cancellazione
+//        service.deleteFile(unFile);
+//
+//        //--controlla dopo averlo cancellato - Non esiste
+//        assertFalse(service.isEsisteFile(unFile));
+    }// end of single test
 
-        //--controlla prima di crearlo - Non esiste
-        assertFalse(service.isEsisteFile(unFile));
 
-        //--creazione da testare
-        statusOttenuto = service.creaFile(unFile);
-        assertTrue(statusOttenuto);
+    @SuppressWarnings("javadoc")
+    /**
+     * Crea un nuovo file
+     * <p>
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     * Se manca la directory, viene creata dal System <br>
+     *
+     * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     *
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
+     */
+    @Test
+    public void creaFileTramiteFile() {
+        ottenuto = service.creaFileStr((File) null);
+        assertFalse(service.creaFile((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenuto);
 
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteFile(unFile));
+        unFile = new File(VUOTA);
+        ottenuto = service.creaFileStr(unFile);
+        assertFalse(service.creaFile(unFile));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        //--cancellazione
-        service.deleteFile(unFile);
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteFile(unFile));
     }// end of single test
 
 

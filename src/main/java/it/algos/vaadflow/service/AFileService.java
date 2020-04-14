@@ -50,6 +50,8 @@ public class AFileService extends AbstractService {
 
     public static final String NON_E_FILE = "Non è un file";
 
+    public static final String NON_CREATO_FILE = "Il file non è stato creato";
+
 
     public static final String NON_E_DIRECTORY = "Non è una directory";
 
@@ -222,15 +224,6 @@ public class AFileService extends AbstractService {
      */
     public boolean isEsisteDirectory(String absolutePathDirectoryToBeChecked) {
         return isEsisteDirectoryStr(absolutePathDirectoryToBeChecked).equals(VUOTA);
-//        File directoryToBeChecked;
-//
-//        if (text.isEmpty(absolutePathDirectoryToBeChecked)) {
-//            System.out.println("Il parametro 'absolutePathDirectoryToBeChecked' è nullo o vuoto");
-//            return false;
-//        }// end of if cycle
-//
-//        directoryToBeChecked = new File(absolutePathDirectoryToBeChecked);
-//        return isEsisteDirectory(directoryToBeChecked);
     }// end of method
 
 
@@ -315,13 +308,14 @@ public class AFileService extends AbstractService {
                 return NON_E_DIRECTORY;
             }// end of if/else cycle
         } else {
-                return NON_ESISTE_DIRECTORY;
+            return NON_ESISTE_DIRECTORY;
         }// end of if/else cycle
     }// end of method
 
 
     /**
      * Crea un nuovo file
+     * <p>
      * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
      * Il path non deve essere nullo <br>
      * Il path non deve essere vuoto <br>
@@ -335,50 +329,94 @@ public class AFileService extends AbstractService {
      * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaFile(String absolutePathFileWithSuffixToBeCreated) {
-        File fileCreated;
-        String primoCarattere;
-
-        if (text.isEmpty(absolutePathFileWithSuffixToBeCreated)) {
-            System.out.println("Il parametro 'absolutePathFileToBeCreated' è nullo o vuoto");
-            return false;
-        }// end of if cycle
-
-        primoCarattere = absolutePathFileWithSuffixToBeCreated.substring(0, 1);
-        if (!primoCarattere.equals("/")) {
-            System.out.println("Il primo carattere di 'absolutePathFileToBeCreated' NON è uno '/' (slash)");
-            return false;
-        }// end of if cycle
-
-        fileCreated = new File(absolutePathFileWithSuffixToBeCreated);
-        return creaFile(fileCreated);
+        return creaFileStr(absolutePathFileWithSuffixToBeCreated).equals(VUOTA);
     }// end of method
 
 
     /**
      * Crea un nuovo file
+     * <p>
      * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
-     * Se manca la directory, la crea (il sistema in automatico)
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     * Se manca la directory, viene creata dal System <br>
+     *
+     * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     *
+     * @return testo di errore, vuoto se il file è stato creato
+     */
+    public String creaFileStr(String absolutePathFileWithSuffixToBeCreated) {
+
+        if (text.isEmpty(absolutePathFileWithSuffixToBeCreated)) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        return creaFileStr(new File(absolutePathFileWithSuffixToBeCreated));
+    }// end of method
+
+
+    /**
+     * Crea un nuovo file
+     * <p>
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     * Se manca la directory, viene creata dal System <br>
      *
      * @param fileToBeCreated con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file è stato creato oppure esisteva già
-     * false se non è un file o se non esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaFile(File fileToBeCreated) {
-        if (fileToBeCreated.exists()) {
-            System.out.println("Il file " + fileToBeCreated + " non è stato creato, perché esiste già");
-        } else {
-            try { // prova ad eseguire il codice
-                fileToBeCreated.createNewFile();
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
+        return creaFileStr(fileToBeCreated).equals(VUOTA);
+    }// end of method
+
+
+    /**
+     * Crea un nuovo file
+     * <p>
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     * Se manca la directory, viene creata dal System <br>
+     *
+     * @param fileToBeCreated con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuoto se il file è stato creato
+     */
+    public String creaFileStr(File fileToBeCreated) {
+        if (fileToBeCreated == null) {
+            return PARAMETRO_NULLO;
+        }// end of if cycle
+
+        if (text.isEmpty(fileToBeCreated.getName())) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (!fileToBeCreated.getPath().equals(fileToBeCreated.getAbsolutePath())) {
+            return PATH_NOT_ABSOLUTE;
         }// end of if/else cycle
 
-        return fileToBeCreated.exists();
+        if (text.isNotSuffix(fileToBeCreated.getAbsolutePath())) {
+            return PATH_SENZA_SUFFIX;
+        }// end of if cycle
+
+        try { // prova ad eseguire il codice
+            fileToBeCreated.createNewFile();
+        } catch (Exception unErrore) { // intercetta l'errore
+            return NON_CREATO_FILE;
+        }// fine del blocco try-catch
+
+        return fileToBeCreated.exists() ? VUOTA : NON_CREATO_FILE;
     }// end of method
 
 
