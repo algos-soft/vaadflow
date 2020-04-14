@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
@@ -420,6 +421,53 @@ public class ATextService extends AbstractService {
     private boolean isNotNumber(char ch) {
         return !isNumber(ch);
     }// end of method
+
+
+    /**
+     * Controlla se il primo carattere della stringa passata come parametro è uno 'slash' <br>
+     *
+     * @param testoIngresso da elaborare
+     *
+     * @return true se NON è uno 'slash'
+     */
+    public boolean isNotSlasch(String testoIngresso) {
+        boolean status = true;
+        String primoCarattere;
+
+        if (isValid(testoIngresso)) {
+            primoCarattere = testoIngresso.substring(0, 1);
+            if (primoCarattere.equals(SLASH)) {
+                status = false;
+            }// end of if cycle
+        }// end of if cycle
+
+        return status;
+    } // fine del metodo
+
+
+    /**
+     * Controlla la stringa passata come parametro termina con un 'suffix' (3 caratteri terminali dopo un punto) <br>
+     *
+     * @param testoIngresso da elaborare
+     *
+     * @return true se MANCA il 'suffix'
+     */
+    public boolean isNotSuffix(String testoIngresso) {
+        boolean status = true;
+        String quartultimoCarattere;
+        int gap = 4;
+        int max;
+
+        if (isValid(testoIngresso)) {
+            max = testoIngresso.length();
+            quartultimoCarattere = testoIngresso.substring(max - gap, max - gap + 1);
+            if (quartultimoCarattere.equals(PUNTO)) {
+                status = false;
+            }// end of if cycle
+        }// end of if cycle
+
+        return status;
+    } // fine del metodo
 
 
     public String getModifiche(Object oldValue, Object newValue) {
@@ -1160,6 +1208,7 @@ public class ATextService extends AbstractService {
     public Label getLabelHost(String message) {
         return getLabel(message, "black");
     }// end of method
+
 
     /**
      * Label colorata

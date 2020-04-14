@@ -68,6 +68,8 @@ public abstract class FlowCost {
 
     public static final String VIRGOLA = ",";
 
+    public static final String PUNTO = ".";
+
     public static final String PUNTO_VIRGOLA = ";";
 
     public static final String TRE_PUNTI = "...";

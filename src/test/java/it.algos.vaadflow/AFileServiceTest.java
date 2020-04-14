@@ -11,8 +11,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 
-import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
+import static it.algos.vaadflow.service.AFileService.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -54,7 +54,13 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_DIRECTORY_DUE = "/Users/gac/Desktop/test/Possibile/";
 
+    private static String PATH_FILE_NO_SUFFIX = "/Users/gac/Desktop/test/Paperino/Topolino";
+
     private static String PATH_FILE_NEW = "/Users/gac/Desktop/test/Paperino/Topolino.txt";
+
+    private static String PATH_FILE_ESISTENTE = "/Users/gac/Desktop/test/Pluto.rtf";
+
+    private static String PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/Desktop/test/pluto.rtf";
 
     private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/Paperino/Minni.txt";
 
@@ -110,7 +116,7 @@ public class AFileServiceTest extends ATest {
     }// end of method
 
 
-    @Test
+    //    @Test
     public void isEsisteFileZero() {
         nomeFile = "nonEsiste";
         unFile = new File(nomeFile);
@@ -168,57 +174,52 @@ public class AFileServiceTest extends ATest {
 
     @SuppressWarnings("javadoc")
     /**
-     * Controlla l'esistenza di un file
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve comprendere anche l'estensione
-     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
-     * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
+     * @param absolutePathFileWithSuffixToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
+     * @return testo di errore, vuota se esiste
      */
     @Test
     public void isEsisteFile() {
-        nomeFile = "nonEsiste";
+        ottenuto = service.isEsisteFileStr((String) null);
+        assertFalse(service.isEsisteFile((String) null));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteFile((String) null);
-        assertFalse(statusOttenuto);
+        ottenuto = service.isEsisteFileStr(VUOTA);
+        assertFalse(service.isEsisteFile(VUOTA));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteFile(VUOTA);
-        assertFalse(statusOttenuto);
+        nomeCompletoFile = "nonEsiste";
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
-        statusOttenuto = service.isEsisteFile(nomeFile);
-        assertFalse(statusOttenuto);
+        nomeCompletoFile = PATH_FILE_NO_SUFFIX;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
 
-        nomeFile = "src";
-        statusOttenuto = service.isEsisteFile(nomeFile);
-        assertFalse(statusOttenuto);
+        nomeCompletoFile = PATH_FILE_NEW;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(NO_FILE, ottenuto);
 
-        nomeFile = "pippoz";
-        nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
-        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertFalse(statusOttenuto);
+        nomeCompletoFile = PATH_FILE_ESISTENTE;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertTrue(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(VUOTA, ottenuto);
 
-        nomeFile = "pluto";
-        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertFalse(statusOttenuto);
-
-        nomeFile = "Pluto";
-        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertFalse(statusOttenuto);
-
-        nomeFile = "pluto.rtf";
-        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertTrue(statusOttenuto);
-
-        nomeFile = "Pluto.rtf";
-        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertTrue(statusOttenuto);
+        nomeCompletoFile = PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
+        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        assertTrue(service.isEsisteFile(nomeCompletoFile));
+        assertEquals(VUOTA, ottenuto);
     }// end of single test
 
 
@@ -238,32 +239,36 @@ public class AFileServiceTest extends ATest {
         nomeFile = "nonEsiste";
         unFile = new File(nomeFile);
 
-        statusOttenuto = service.isEsisteFile((File) null);
-        assertFalse(statusOttenuto);
+        ottenuto = service.isEsisteFileStr((File) null);
+        assertFalse(service.isEsisteFile((File) null));
+        assertEquals(PATH_NULLO, ottenuto);
 
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertFalse(statusOttenuto);
-
-        unFile = null;
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertFalse(statusOttenuto);
-
-        nomeFile = "src";
-        unFile = new File(nomeFile);
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertFalse(statusOttenuto);
-
-        nomeFile = "pippoz";
-        nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
-        unFile = new File(nomeCompletoFile);
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertFalse(statusOttenuto);
-
-        nomeFile = "Pluto.rtf";
-        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        unFile = new File(nomeCompletoFile);
-        statusOttenuto = service.isEsisteFile(unFile);
-        assertTrue(statusOttenuto);
+//        statusOttenuto = service.isEsisteFile((File) null);
+//        assertFalse(statusOttenuto);
+//
+//        statusOttenuto = service.isEsisteFile(unFile);
+//        assertFalse(statusOttenuto);
+//
+//        unFile = null;
+//        statusOttenuto = service.isEsisteFile(unFile);
+//        assertFalse(statusOttenuto);
+//
+//        nomeFile = "src";
+//        unFile = new File(nomeFile);
+//        statusOttenuto = service.isEsisteFile(unFile);
+//        assertFalse(statusOttenuto);
+//
+//        nomeFile = "pippoz";
+//        nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
+//        unFile = new File(nomeCompletoFile);
+//        statusOttenuto = service.isEsisteFile(unFile);
+//        assertFalse(statusOttenuto);
+//
+//        nomeFile = "Pluto.rtf";
+//        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
+//        unFile = new File(nomeCompletoFile);
+//        statusOttenuto = service.isEsisteFile(unFile);
+//        assertTrue(statusOttenuto);
     }// end of single test
 
 
@@ -279,7 +284,7 @@ public class AFileServiceTest extends ATest {
      * @return true se la directory esiste
      * false se non è una directory o se non esiste
      */
-    @Test
+//    @Test
     public void isEsisteDirectory() {
         nomeDirectory = "nonEsiste";
         statusPrevisto = false;
@@ -328,7 +333,7 @@ public class AFileServiceTest extends ATest {
      * @return true se la directory esiste
      * false se non è una directory o se non esiste
      */
-    @Test
+//    @Test
     public void isEsisteDirectory2() {
         nomeDirectory = "nonEsiste";
         unaDirectory = new File(nomeDirectory);
@@ -373,7 +378,7 @@ public class AFileServiceTest extends ATest {
      * @return true se il file è stato creato oppure esisteva già
      * false se non è un file o se non esiste
      */
-    @Test
+//    @Test
     public void creaFile() {
         nomeCompletoFile = PATH_FILE_DELETE;
 
@@ -437,7 +442,7 @@ public class AFileServiceTest extends ATest {
      * @return true se la directory è stata creata oppure esisteva già
      * false se non è una directory o se non esiste
      */
-    @Test
+//    @Test
     public void creaDirectory() {
         nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Topolino";
 

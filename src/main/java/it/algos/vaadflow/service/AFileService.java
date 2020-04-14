@@ -9,6 +9,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
+
 /**
  * Project springvaadin
  * Created by Algos
@@ -34,11 +36,20 @@ import java.util.List;
 @Slf4j
 public class AFileService extends AbstractService {
 
+    public static final String PARAMETRO_NULLO = "Il parametro in ingresso è nullo";
+
+    public static final String PATH_NULLO = "Il path in ingresso è nullo o vuoto";
+
+    public static final String PATH_NOT_ABSOLUTE = "Il primo carattere del path NON è uno '/' (slash)";
+
+    public static final String PATH_SENZA_SUFFIX = "Manca il 'suffix' terminale";
+
+    public static final String NO_FILE = "Il file non esiste";
+
     /**
      * versione della classe per la serializzazione
      */
     private final static long serialVersionUID = 1L;
-
 
     /**
      * Private final property
@@ -64,43 +75,69 @@ public class AFileService extends AbstractService {
 
 
     /**
-     * Controlla l'esistenza di un file
-     * Il path deve essere completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
-     * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param absolutePathFileWithSuffixToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean isEsisteFile(String absolutePathFileWithSuffixToBeChecked) {
-        File fileToBeChecked;
-
-        if (text.isEmpty(absolutePathFileWithSuffixToBeChecked)) {
-            System.out.println("Il parametro 'absolutePathFileToBeChecked' è nullo o vuoto");
-            return false;
-        }// end of if cycle
-
-        fileToBeChecked = new File(absolutePathFileWithSuffixToBeChecked);
-        return isEsisteFile(fileToBeChecked);
+        return isEsisteFileStr(absolutePathFileWithSuffixToBeChecked).equals(VUOTA);
     }// end of method
 
 
     /**
-     * Controlla l'esistenza di un file
-     * Il File DEVE essere costruito col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
-     * getPath() e getAbsolutePath() devono essere uguali
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param absolutePathFileWithSuffixToBeChecked path completo del file che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuota se esiste
+     */
+    public String isEsisteFileStr(String absolutePathFileWithSuffixToBeChecked) {
+        File fileToBeChecked;
+
+        if (text.isEmpty(absolutePathFileWithSuffixToBeChecked)) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (text.isNotSlasch(absolutePathFileWithSuffixToBeChecked)) {
+            return PATH_NOT_ABSOLUTE;
+        }// end of if cycle
+
+        if (text.isNotSuffix(absolutePathFileWithSuffixToBeChecked)) {
+            return PATH_SENZA_SUFFIX;
+        }// end of if cycle
+
+        fileToBeChecked = new File(absolutePathFileWithSuffixToBeChecked);
+        return isEsisteFileStr(fileToBeChecked);
+    }// end of method
+
+
+    /**
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean isEsisteFile(File fileToBeChecked) {
         boolean esiste = false;
@@ -126,6 +163,46 @@ public class AFileService extends AbstractService {
         }// end of if/else cycle
 
         return esiste;
+    }// end of method
+
+
+    /**
+     * Controlla l'esistenza di un file <br>
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
+     */
+    public String isEsisteFileStr(File fileToBeChecked) {
+        String risposta = VUOTA;
+
+        if (fileToBeChecked == null) {
+            return PARAMETRO_NULLO;
+        }// end of if cycle
+
+        if (fileToBeChecked.getPath().equals(fileToBeChecked.getAbsolutePath())) {
+            if (fileToBeChecked.exists()) {
+                if (fileToBeChecked.isFile()) {
+                    risposta = "pippoz";
+                    System.out.println("Il file " + fileToBeChecked + " esiste");
+                } else {
+                    System.out.println(fileToBeChecked + " non è un file");
+                }// end of if/else cycle
+            } else {
+                System.out.println("Il file " + fileToBeChecked + " non esiste");
+            }// end of if/else cycle
+        } else {
+            System.out.println("Il path del file non è assoluto");
+        }// end of if/else cycle
+
+        return risposta;
     }// end of method
 
 
