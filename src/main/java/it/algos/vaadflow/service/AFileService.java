@@ -71,20 +71,20 @@ public class AFileService extends AbstractService {
      * La richiesta NON è CASE sensitive
      * Una volta costruito il file, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param absolutePathFileToBeChecked path completo del file che DEVE cominciare con '/' SLASH
+     * @param absolutePathFileWithSuffixToBeChecked path completo del file che DEVE cominciare con '/' SLASH
      *
      * @return true se il file esiste
      * false se non è un file o se non esiste
      */
-    public boolean isEsisteFile(String absolutePathFileToBeChecked) {
+    public boolean isEsisteFile(String absolutePathFileWithSuffixToBeChecked) {
         File fileToBeChecked;
 
-        if (text.isEmpty(absolutePathFileToBeChecked)) {
+        if (text.isEmpty(absolutePathFileWithSuffixToBeChecked)) {
             System.out.println("Il parametro 'absolutePathFileToBeChecked' è nullo o vuoto");
             return false;
         }// end of if cycle
 
-        fileToBeChecked = new File(absolutePathFileToBeChecked);
+        fileToBeChecked = new File(absolutePathFileWithSuffixToBeChecked);
         return isEsisteFile(fileToBeChecked);
     }// end of method
 
@@ -97,7 +97,7 @@ public class AFileService extends AbstractService {
      * La richiesta NON è CASE sensitive
      * getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param fileToBeChecked file col path completo del file che DEVE cominciare con '/' SLASH
+     * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
      *
      * @return true se il file esiste
      * false se non è un file o se non esiste
@@ -137,7 +137,7 @@ public class AFileService extends AbstractService {
      * La richiesta NON è CASE sensitive
      * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param absolutePathDirectoryToBeChecked nome completo della directory
+     * @param absolutePathDirectoryToBeChecked path completo della directory che DEVE cominciare con '/' SLASH
      *
      * @return true se la directory esiste
      * false se non è una directory o se non esiste
@@ -163,10 +163,10 @@ public class AFileService extends AbstractService {
      * La richiesta NON è CASE sensitive
      * getPath() e getAbsolutePath() devono essere uguali
      *
-     * @param directoryToBeChecked file col path completo della directory che DEVE cominciare con '/' SLASH
+     * @param directoryToBeChecked con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste
-     * false se non è un file o se non esiste
+     * @return true se la directory esiste
+     * false se non è una directory o se non esiste
      */
     public boolean isEsisteDirectory(File directoryToBeChecked) {
         boolean esiste = false;
@@ -192,6 +192,67 @@ public class AFileService extends AbstractService {
         }// end of if/else cycle
 
         return esiste;
+    }// end of method
+
+
+    /**
+     * Crea un nuovo file
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve cominciare con lo slash
+     * Deve comprendere anche l'estensione
+     * La richiesta NON è CASE sensitive
+     * Se manca la directory, la crea
+     *
+     * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     *
+     * @return true se il file è stato creato oppure esisteva già
+     * false se non è un file o se non esiste
+     */
+    public boolean creaFile(String absolutePathFileWithSuffixToBeCreated) {
+        File fileCreated;
+        String primoCarattere;
+
+        if (text.isEmpty(absolutePathFileWithSuffixToBeCreated)) {
+            System.out.println("Il parametro 'absolutePathFileToBeCreated' è nullo o vuoto");
+            return false;
+        }// end of if cycle
+
+        primoCarattere = absolutePathFileWithSuffixToBeCreated.substring(0, 1);
+        if (!primoCarattere.equals("/")) {
+            System.out.println("Il primo carattere di 'absolutePathFileToBeCreated' NON è uno '/' (slash)");
+            return false;
+        }// end of if cycle
+
+        fileCreated = new File(absolutePathFileWithSuffixToBeCreated);
+        return creaFile(fileCreated);
+    }// end of method
+
+
+    /**
+     * Crea un nuovo file
+     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     * Deve cominciare con lo slash
+     * Deve comprendere anche l'estensione
+     * La richiesta NON è CASE sensitive
+     * Se manca la directory, la crea (il sistema in automatico)
+     *
+     * @param fileToBeCreated con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return true se il file è stato creato oppure esisteva già
+     * false se non è un file o se non esiste
+     */
+    public boolean creaFile(File fileToBeCreated) {
+        if (fileToBeCreated.exists()) {
+            System.out.println("Il file " + fileToBeCreated + " non è stato creato, perché esiste già");
+        } else {
+            try { // prova ad eseguire il codice
+                fileToBeCreated.createNewFile();
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if/else cycle
+
+        return fileToBeCreated.exists();
     }// end of method
 
 
@@ -245,105 +306,68 @@ public class AFileService extends AbstractService {
      * Deve comprendere anche l'estensione
      * La richiesta NON è CASE sensitive
      *
-     * @param directoryToBeChecked path completo della directory che DEVE cominciare con '/' SLASH
+     * @param directoryToBeCreated con path completo che DEVE cominciare con '/' SLASH
      *
      * @return true se la directory è stata creata oppure esisteva già
      * false se non è una directory o se non esiste
      */
-    public boolean creaDirectory(File directoryToBeChecked) {
-        if (directoryToBeChecked.exists()) {
-            System.out.println("La directory " + directoryToBeChecked + " non è stata creata, perché esiste già");
+    public boolean creaDirectory(File directoryToBeCreated) {
+        if (directoryToBeCreated.exists()) {
+            System.out.println("La directory " + directoryToBeCreated + " non è stata creata, perché esiste già");
         } else {
             try { // prova ad eseguire il codice
-                String absolutePathDirectoryToBeCreated = directoryToBeChecked.getAbsolutePath();
+                String absolutePathDirectoryToBeCreated = directoryToBeCreated.getAbsolutePath();
                 new File(absolutePathDirectoryToBeCreated).mkdirs();
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error(unErrore.toString());
             }// fine del blocco try-catch
         }// end of if/else cycle
 
-        return directoryToBeChecked.exists();
+        return directoryToBeCreated.exists();
     }// end of method
 
 
     /**
-     * Crea un nuovo file
+     * Cancella un file
      * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
      * Deve cominciare con lo slash
      * Deve comprendere anche l'estensione
      * La richiesta NON è CASE sensitive
-     * Se manca la directory, la crea
      *
-     * @param absolutePathFileToBeCreatedWithSuffix path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     * @param absolutePathFileWithSuffixToBeCanceled path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
      *
-     * @return true se il file è stato creato oppure esisteva già
-     * false se non è un file o se non esiste
+     * @return true se il file è stato cancellato oppure non esisteva
      */
-    public boolean creaFile(String absolutePathFileToBeCreatedWithSuffix) {
-        File fileCreated;
+    public boolean deleteFile(String absolutePathFileWithSuffixToBeCanceled) {
+        File fileCanceled;
         String primoCarattere;
 
-        if (text.isEmpty(absolutePathFileToBeCreatedWithSuffix)) {
-            System.out.println("Il parametro 'absolutePathFileToBeCreated' è nullo o vuoto");
+        if (text.isEmpty(absolutePathFileWithSuffixToBeCanceled)) {
+            System.out.println("Il parametro 'absolutePathDirectoryToBeCreated' è vuoto");
             return false;
         }// end of if cycle
 
-        primoCarattere = absolutePathFileToBeCreatedWithSuffix.substring(0, 1);
+        primoCarattere = absolutePathFileWithSuffixToBeCanceled.substring(0, 1);
         if (!primoCarattere.equals("/")) {
-            System.out.println("Il primo carattere di 'absolutePathFileToBeCreated' NON è uno '/' (slash)");
+            System.out.println("Il primo carattere di 'absolutePathDirectoryToBeCreated' NON è uno '/' (slash)");
             return false;
         }// end of if cycle
 
-        fileCreated = new File(absolutePathFileToBeCreatedWithSuffix);
-        return creaFile(fileCreated);
+        fileCanceled = new File(absolutePathFileWithSuffixToBeCanceled);
+        return deleteFile(fileCanceled);
     }// end of method
 
 
     /**
-     * Crea un nuovo file
+     * Cancella un file
      * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
      * Deve cominciare con lo slash
      * Deve comprendere anche l'estensione
      * La richiesta NON è CASE sensitive
-     * Se manca la directory, la crea (il sistema in automatico)
      *
-     * @param fileToBeChecked file col path completo della directory che DEVE cominciare con '/' SLASH
+     * @param fileToBeDeleted con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file è stato creato oppure esisteva già
-     * false se non è un file o se non esiste
-     */
-    public boolean creaFile(File fileToBeChecked) {
-        if (fileToBeChecked.exists()) {
-            System.out.println("Il file " + fileToBeChecked + " non è stato creato, perché esiste già");
-        } else {
-            try { // prova ad eseguire il codice
-                fileToBeChecked.createNewFile();
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
-        }// end of if/else cycle
-
-        return fileToBeChecked.exists();
-    }// end of method
-
-
-    /**
-     * Cancella un file
-     *
-     * @param pathFileToBeDeleted nome completo del file
-     */
-    public boolean deleteFile(String pathFileToBeDeleted) {
-        return deleteFile(new File(pathFileToBeDeleted));
-    }// end of method
-
-
-    /**
-     * Cancella un file
-     *
-     * @param fileToBeDeleted file col path completo
-     *
-     * @return true se il file è stata cancellata
-     * false se non è stato cancellato o se non esiste
+     * @return true se il file è stato cancellato oppure non esisteva
      */
     public boolean deleteFile(File fileToBeDeleted) {
         boolean status = false;

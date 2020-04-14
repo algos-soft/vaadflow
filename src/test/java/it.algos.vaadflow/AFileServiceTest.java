@@ -181,45 +181,44 @@ public class AFileServiceTest extends ATest {
     @Test
     public void isEsisteFile() {
         nomeFile = "nonEsiste";
-        statusPrevisto = false;
 
         statusOttenuto = service.isEsisteFile((String) null);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteFile(VUOTA);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteFile(nomeFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "src";
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(nomeFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "pippoz";
         nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
+
+        nomeFile = "pluto";
+        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
+        statusOttenuto = service.isEsisteFile(nomeCompletoFile);
+        assertFalse(statusOttenuto);
 
         nomeFile = "Pluto";
         nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "pluto.rtf";
         nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
 
         nomeFile = "Pluto.rtf";
         nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteFile(nomeCompletoFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
     }// end of single test
 
 
@@ -238,38 +237,33 @@ public class AFileServiceTest extends ATest {
     public void isEsisteFile2() {
         nomeFile = "nonEsiste";
         unFile = new File(nomeFile);
-        statusPrevisto = false;
 
         statusOttenuto = service.isEsisteFile((File) null);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
-        print("Esiste file", nomeFile, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         unFile = null;
         statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "src";
         unFile = new File(nomeFile);
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "pippoz";
         nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
         unFile = new File(nomeCompletoFile);
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeFile = "Pluto.rtf";
         nomeCompletoFile = nomeCompletoDirectory + nomeFile;
         unFile = new File(nomeCompletoFile);
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteFile(unFile);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
     }// end of single test
 
 
@@ -291,38 +285,34 @@ public class AFileServiceTest extends ATest {
         statusPrevisto = false;
 
         statusOttenuto = service.isEsisteDirectory((String) null);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteDirectory(VUOTA);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeDirectory = "src";
         statusPrevisto = false;
 
         statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-        System.out.println("*isEsisteDirectory - fine");
+        assertFalse(statusOttenuto);
 
         nomeCompletoDirectory = PATH_DIRECTORY_TEST;
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
 
         nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pippo";
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
 
         nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pluto";
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
     }// end of single test
 
 
@@ -342,82 +332,33 @@ public class AFileServiceTest extends ATest {
     public void isEsisteDirectory2() {
         nomeDirectory = "nonEsiste";
         unaDirectory = new File(nomeDirectory);
-        statusPrevisto = false;
 
         statusOttenuto = service.isEsisteFile((File) null);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         statusOttenuto = service.isEsisteFile(nomeDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-        print("Esiste directory", nomeDirectory, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         unaDirectory = null;
         statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeDirectory = "src";
         unaDirectory = new File(nomeDirectory);
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeDirectory = "pippoz";
         nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
         unaDirectory = new File(nomeCompletoDirectory);
-        statusPrevisto = false;
         statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertFalse(statusOttenuto);
 
         nomeDirectory = "Pluto.rtf";
         nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
         unaDirectory = new File(nomeCompletoDirectory);
-        statusPrevisto = true;
         statusOttenuto = service.isEsisteFile(unaDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Crea una nuova directory
-     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     *
-     * @param absolutePathDirectoryToBeCreated file col path completo della directory che DEVE cominciare con '/' SLASH
-     *
-     * @return true se la directory è stata creata oppure esisteva già
-     * false se non è una directory o se non esiste
-     */
-    @Test
-    public void creaDirectory() {
-        statusPrevisto = false;
-        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Topolino";
-
-        statusOttenuto = service.creaDirectory((String) null);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusOttenuto = service.creaDirectory(VUOTA);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusOttenuto = service.creaDirectory("Pippo");
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusPrevisto = false;
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusPrevisto = true;
-        statusOttenuto = service.creaDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        statusPrevisto = true;
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
-
-        service.deleteDirectory(nomeCompletoDirectory);
-
-        statusPrevisto = false;
-        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-        assertEquals(statusPrevisto, statusOttenuto);
+        assertTrue(statusOttenuto);
     }// end of single test
 
 
@@ -434,17 +375,111 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void creaFile() {
-        nomeFile = PATH_FILE_DELETE;
-        statusPrevisto = true;
-        statusOttenuto = service.creaFile(nomeFile);
-        assertEquals(statusPrevisto, statusOttenuto);
-        assertTrue(service.deleteFile(nomeFile));
+        nomeCompletoFile = PATH_FILE_DELETE;
+
+        statusOttenuto = service.creaFile((String) null);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.creaFile(VUOTA);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.creaFile("Pippo");
+        assertFalse(statusOttenuto);
+
+        //--controlla prima di crearlo - Non esiste
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
+
+        //--creazione da testare
+        statusOttenuto = service.creaFile(nomeCompletoFile);
+        assertTrue(statusOttenuto);
+
+        //--controlla dopo averlo creato - Esiste
+        assertTrue(service.isEsisteFile(nomeCompletoFile));
+
+        //--cancellazione
+        service.deleteFile(nomeCompletoFile);
+
+        //--controlla dopo averlo cancellato - Non esiste
+        assertFalse(service.isEsisteFile(nomeCompletoFile));
 
         nomeFile = "alfa.java";
-        statusPrevisto = false;
         statusOttenuto = service.creaFile(nomeFile);
-        assertEquals(statusPrevisto, statusOttenuto);
-        assertFalse(service.deleteFile(nomeFile));
+        assertFalse(statusOttenuto);
+
+
+        unFile = new File(nomeCompletoFile);
+
+        //--controlla prima di crearlo - Non esiste
+        assertFalse(service.isEsisteFile(unFile));
+
+        //--creazione da testare
+        statusOttenuto = service.creaFile(unFile);
+        assertTrue(statusOttenuto);
+
+        //--controlla dopo averlo creato - Esiste
+        assertTrue(service.isEsisteFile(unFile));
+
+        //--cancellazione
+        service.deleteFile(unFile);
+
+        //--controlla dopo averlo cancellato - Non esiste
+        assertFalse(service.isEsisteFile(unFile));
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Crea una nuova directory
+     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
+     *
+     * @param absolutePathDirectoryToBeCreated file col path completo della directory che DEVE cominciare con '/' SLASH
+     *
+     * @return true se la directory è stata creata oppure esisteva già
+     * false se non è una directory o se non esiste
+     */
+    @Test
+    public void creaDirectory() {
+        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Topolino";
+
+        statusOttenuto = service.creaDirectory((String) null);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.creaDirectory(VUOTA);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.creaDirectory("Pippo");
+        assertFalse(statusOttenuto);
+
+        //--controlla prima di crearla - Non esiste
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+
+        statusOttenuto = service.creaDirectory(nomeCompletoDirectory);
+        assertTrue(statusOttenuto);
+
+        //--controlla dopo averla creata - Esiste
+        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
+
+        service.deleteDirectory(nomeCompletoDirectory);
+
+        //--controlla dopo averla cancellata - Non esiste
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+
+
+        unaDirectory = new File(nomeCompletoDirectory);
+
+        //--controlla prima di crearla - Non esiste
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+
+        statusOttenuto = service.creaDirectory(unaDirectory);
+        assertTrue(statusOttenuto);
+
+        //--controlla dopo averla creata - Esiste
+        assertTrue(service.isEsisteDirectory(unaDirectory));
+
+        service.deleteDirectory(unaDirectory);
+
+        //--controlla dopo averla cancellata - Non esiste
+        assertFalse(service.isEsisteDirectory(unaDirectory));
     }// end of single test
 
 
@@ -459,14 +494,29 @@ public class AFileServiceTest extends ATest {
      */
 //    @Test
     public void deleteFile() {
-        statusPrevisto = false;
-        statusOttenuto = service.deleteFile("pippo");
-        assertEquals(statusPrevisto, statusOttenuto);
+        nomeFile = "pippo";
 
-        service.creaFile(PATH_FILE_NEW);
-        statusPrevisto = true;
-        statusOttenuto = service.deleteFile("pippo");
-        assertEquals(statusPrevisto, statusOttenuto);
+        statusOttenuto = service.deleteFile(VUOTA);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.deleteFile((File) null);
+        assertFalse(statusOttenuto);
+
+        statusOttenuto = service.deleteFile(nomeFile);
+        assertFalse(statusOttenuto);
+
+        //--controlla prima di crearlo - Non esiste
+        assertFalse(service.isEsisteFile(PATH_FILE_NEW));
+
+        //--creazione
+        assertTrue(service.creaFile(PATH_FILE_NEW));
+
+        //--cancellazione da testare
+        statusOttenuto = service.deleteFile(PATH_FILE_NEW);
+        assertTrue(statusOttenuto);
+
+        //--controlla dopo averlo cancellato - Non esiste
+        assertFalse(service.isEsisteFile(PATH_FILE_NEW));
     }// end of single test
 
 
