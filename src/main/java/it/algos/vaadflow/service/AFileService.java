@@ -52,6 +52,8 @@ public class AFileService extends AbstractService {
 
     public static final String NON_CREATO_FILE = "Il file non è stato creato";
 
+    public static final String NON_CREATA_DIRECTORY = "La directory non è stata creata";
+
 
     public static final String NON_E_DIRECTORY = "Non è una directory";
 
@@ -326,7 +328,7 @@ public class AFileService extends AbstractService {
      *
      * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
      *
-     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
+     * @return true se il file è stato creato, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaFile(String absolutePathFileWithSuffixToBeCreated) {
         return creaFileStr(absolutePathFileWithSuffixToBeCreated).equals(VUOTA);
@@ -371,7 +373,7 @@ public class AFileService extends AbstractService {
      *
      * @param fileToBeCreated con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
+     * @return true se il file è stato creato, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaFile(File fileToBeCreated) {
         return creaFileStr(fileToBeCreated).equals(VUOTA);
@@ -422,72 +424,99 @@ public class AFileService extends AbstractService {
 
     /**
      * Crea una nuova directory
-     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param absolutePathDirectoryToBeCreated path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory è stata creata oppure esisteva già
-     * false se non è una directory o se non esiste
+     * @return true se la directory è stat creata, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaDirectory(String absolutePathDirectoryToBeCreated) {
-        boolean creata;
-        String primoCarattere;
-
-        if (text.isEmpty(absolutePathDirectoryToBeCreated)) {
-            System.out.println("Il parametro 'absolutePathDirectoryToBeCreated' è vuoto");
-            return false;
-        }// end of if cycle
-
-        primoCarattere = absolutePathDirectoryToBeCreated.substring(0, 1);
-        if (!primoCarattere.equals("/")) {
-            System.out.println("Il primo carattere di 'absolutePathDirectoryToBeCreated' NON è uno '/' (slash)");
-            return false;
-        }// end of if cycle
-
-        creata = new File(absolutePathDirectoryToBeCreated).mkdirs();
-        if (creata) {
-            System.out.println("La directory " + absolutePathDirectoryToBeCreated + " è stata creata");
-        } else {
-            if (isEsisteDirectory(absolutePathDirectoryToBeCreated)) {
-                creata = true;
-                System.out.println("La directory " + absolutePathDirectoryToBeCreated + " esisteva già");
-            } else {
-                System.out.println("La directory " + absolutePathDirectoryToBeCreated + " non è stato possibile crearla");
-            }// end of if/else cycle
-        }// end of if/else cycle
-
-        return creata;
+        return creaDirectoryStr(absolutePathDirectoryToBeCreated).equals(VUOTA);
     }// end of method
 
 
     /**
      * Crea una nuova directory
-     * La directory DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param absolutePathDirectoryToBeCreated path completo della directory che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuoto se il file è stato creato
+     */
+    public String creaDirectoryStr(String absolutePathDirectoryToBeCreated) {
+        if (text.isEmpty(absolutePathDirectoryToBeCreated)) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        return creaDirectoryStr(new File(absolutePathDirectoryToBeCreated));
+    }// end of method
+
+
+    /**
+     * Crea una nuova directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param directoryToBeCreated con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory è stata creata oppure esisteva già
-     * false se non è una directory o se non esiste
+     * @return true se la directory è stat creata, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaDirectory(File directoryToBeCreated) {
-        if (directoryToBeCreated.exists()) {
-            System.out.println("La directory " + directoryToBeCreated + " non è stata creata, perché esiste già");
-        } else {
-            try { // prova ad eseguire il codice
-                String absolutePathDirectoryToBeCreated = directoryToBeCreated.getAbsolutePath();
-                new File(absolutePathDirectoryToBeCreated).mkdirs();
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error(unErrore.toString());
-            }// fine del blocco try-catch
+        return creaDirectoryStr(directoryToBeCreated).equals(VUOTA);
+    }// end of method
+
+
+    /**
+     * Crea una nuova directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param directoryToBeCreated con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuoto se il file è stato creato
+     */
+    public String creaDirectoryStr(File directoryToBeCreated) {
+        if (directoryToBeCreated == null) {
+            return PARAMETRO_NULLO;
+        }// end of if cycle
+
+        if (text.isEmpty(directoryToBeCreated.getName())) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (!directoryToBeCreated.getPath().equals(directoryToBeCreated.getAbsolutePath())) {
+            return PATH_NOT_ABSOLUTE;
         }// end of if/else cycle
 
-        return directoryToBeCreated.exists();
+        if (!text.isNotSuffix(directoryToBeCreated.getAbsolutePath())) {
+            return NON_E_DIRECTORY;
+        }// end of if cycle
+
+        try { // prova ad eseguire il codice
+            directoryToBeCreated.mkdirs();
+        } catch (Exception unErrore) { // intercetta l'errore
+            return NON_CREATA_DIRECTORY;
+        }// fine del blocco try-catch
+
+        return directoryToBeCreated.exists() ? VUOTA : NON_CREATA_DIRECTORY;
     }// end of method
 
 
