@@ -64,6 +64,8 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/Desktop/test/pluto.rtf";
 
+    private static String PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/desktop/test";
+
     private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/Paperino/Minni.txt";
 
     @InjectMocks
@@ -233,11 +235,6 @@ public class AFileServiceTest extends ATest {
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
         assertTrue(service.isEsisteFile(nomeCompletoFile));
         assertEquals(VUOTA, ottenuto);
-
-        nomeCompletoFile = PATH_DIRECTORY_NEW;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
-        assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(NON_E_FILE, ottenuto);
     }// end of single test
 
 
@@ -341,36 +338,35 @@ public class AFileServiceTest extends ATest {
         assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
         assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
-        //
-//        statusOttenuto = service.isEsisteDirectory((String) null);
-//        assertFalse(statusOttenuto);
-//
-//        statusOttenuto = service.isEsisteDirectory(VUOTA);
-//        assertFalse(statusOttenuto);
-//
-//        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        statusOttenuto = service.isEsisteDirectory(new File(nomeDirectory));
-//        assertFalse(statusOttenuto);
-//
-//        nomeDirectory = "src";
-//        statusPrevisto = false;
-//
-//        statusOttenuto = service.isEsisteDirectory(nomeDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
-//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-//        assertTrue(statusOttenuto);
-//
-//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pippo";
-//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-//        assertTrue(statusOttenuto);
-//
-//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + "Pluto";
-//        statusOttenuto = service.isEsisteDirectory(nomeCompletoDirectory);
-//        assertFalse(statusOttenuto);
+        nomeCompletoDirectory = PATH_FILE_NON_ESISTENTE;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_NO_SUFFIX;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_DUE;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_NEW;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_ESISTENTE;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_E_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
+        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(VUOTA, ottenuto);
     }// end of single test
 
 
@@ -407,35 +403,41 @@ public class AFileServiceTest extends ATest {
         assertFalse(service.isEsisteDirectory(unaDirectory));
         assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
 
-//        nomeDirectory = "nonEsiste";
-//        unaDirectory = new File(nomeDirectory);
-//
-//        statusOttenuto = service.isEsisteFile((File) null);
-//        assertFalse(statusOttenuto);
-//
-//        statusOttenuto = service.isEsisteFile(nomeDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        unaDirectory = null;
-//        statusOttenuto = service.isEsisteFile(unaDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        nomeDirectory = "src";
-//        unaDirectory = new File(nomeDirectory);
-//        statusOttenuto = service.isEsisteFile(unaDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        nomeDirectory = "pippoz";
-//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
-//        unaDirectory = new File(nomeCompletoDirectory);
-//        statusOttenuto = service.isEsisteFile(unaDirectory);
-//        assertFalse(statusOttenuto);
-//
-//        nomeDirectory = "Pluto.rtf";
-//        nomeCompletoDirectory = PATH_DIRECTORY_TEST + nomeDirectory;
-//        unaDirectory = new File(nomeCompletoDirectory);
-//        statusOttenuto = service.isEsisteFile(unaDirectory);
-//        assertTrue(statusOttenuto);
+        nomeCompletoDirectory = PATH_FILE_NON_ESISTENTE;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_NO_SUFFIX;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_DUE;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_NEW;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_FILE_ESISTENTE;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertFalse(service.isEsisteDirectory(unaDirectory));
+        assertEquals(NON_E_DIRECTORY, ottenuto);
+
+        nomeCompletoDirectory = PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        assertTrue(service.isEsisteDirectory(unaDirectory));
+        assertEquals(VUOTA, ottenuto);
     }// end of single test
 
 

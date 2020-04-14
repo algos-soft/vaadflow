@@ -278,29 +278,6 @@ public class AFileService extends AbstractService {
      */
     public boolean isEsisteDirectory(File directoryToBeChecked) {
         return isEsisteDirectoryStr(directoryToBeChecked).equals(VUOTA);
-//        boolean esiste = false;
-//
-//        if (directoryToBeChecked == null) {
-//            System.out.println("La Directory 'directoryToBeChecked' è nulla");
-//            return false;
-//        }// end of if cycle
-//
-//        if (directoryToBeChecked.getPath().equals(directoryToBeChecked.getAbsolutePath())) {
-//            if (directoryToBeChecked.exists()) {
-//                if (directoryToBeChecked.isDirectory()) {
-//                    esiste = true;
-//                    System.out.println("La directory " + directoryToBeChecked + " esiste");
-//                } else {
-//                    System.out.println(directoryToBeChecked + " non è una directory");
-//                }// end of if/else cycle
-//            } else {
-//                System.out.println("La directory " + directoryToBeChecked + " non esiste");
-//            }// end of if/else cycle
-//        } else {
-//            System.out.println("Il path della directory non è assoluto");
-//        }// end of if/else cycle
-//
-//        return esiste;
     }// end of method
 
 
@@ -338,15 +315,7 @@ public class AFileService extends AbstractService {
                 return NON_E_DIRECTORY;
             }// end of if/else cycle
         } else {
-            if (text.isNotSuffix(directoryToBeChecked.getAbsolutePath())) {
-                return PATH_SENZA_SUFFIX;
-            }// end of if cycle
-
-            if (!directoryToBeChecked.exists()) {
                 return NON_ESISTE_DIRECTORY;
-            }// end of if cycle
-
-            return VUOTA;
         }// end of if/else cycle
     }// end of method
 
