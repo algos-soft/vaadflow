@@ -60,6 +60,8 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_FILE_ESISTENTE = "/Users/gac/Desktop/test/Pluto.rtf";
 
+    private static String PATH_FILE_NON_ESISTENTE = "/Users/gac/Desktop/pippoz/Pluto.rtf";
+
     private static String PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/Desktop/test/pluto.rtf";
 
     private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/Paperino/Minni.txt";
@@ -186,7 +188,7 @@ public class AFileServiceTest extends ATest {
      *
      * @return testo di errore, vuota se esiste
      */
-    @Test
+//    @Test
     public void isEsisteFile() {
         ottenuto = service.isEsisteFileStr((String) null);
         assertFalse(service.isEsisteFile((String) null));
@@ -209,7 +211,7 @@ public class AFileServiceTest extends ATest {
         nomeCompletoFile = PATH_FILE_NEW;
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(NO_FILE, ottenuto);
+        assertEquals(NON_E_FILE, ottenuto);
 
         nomeCompletoFile = PATH_FILE_ESISTENTE;
         ottenuto = service.isEsisteFileStr(nomeCompletoFile);
@@ -236,39 +238,47 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void isEsisteFile2() {
-        nomeFile = "nonEsiste";
         unFile = new File(nomeFile);
 
         ottenuto = service.isEsisteFileStr((File) null);
         assertFalse(service.isEsisteFile((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenuto);
+
+        nomeCompletoFile = VUOTA;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
         assertEquals(PATH_NULLO, ottenuto);
 
-//        statusOttenuto = service.isEsisteFile((File) null);
-//        assertFalse(statusOttenuto);
-//
-//        statusOttenuto = service.isEsisteFile(unFile);
-//        assertFalse(statusOttenuto);
-//
-//        unFile = null;
-//        statusOttenuto = service.isEsisteFile(unFile);
-//        assertFalse(statusOttenuto);
-//
-//        nomeFile = "src";
-//        unFile = new File(nomeFile);
-//        statusOttenuto = service.isEsisteFile(unFile);
-//        assertFalse(statusOttenuto);
-//
-//        nomeFile = "pippoz";
-//        nomeCompletoFile = nomeCompletoDirectory + SLASH + nomeFile;
-//        unFile = new File(nomeCompletoFile);
-//        statusOttenuto = service.isEsisteFile(unFile);
-//        assertFalse(statusOttenuto);
-//
-//        nomeFile = "Pluto.rtf";
-//        nomeCompletoFile = nomeCompletoDirectory + nomeFile;
-//        unFile = new File(nomeCompletoFile);
-//        statusOttenuto = service.isEsisteFile(unFile);
-//        assertTrue(statusOttenuto);
+        nomeCompletoFile = "nonEsiste";
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+
+        nomeCompletoFile = PATH_FILE_NO_SUFFIX;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
+
+        nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(NON_ESISTE_FILE, ottenuto);
+
+        nomeCompletoFile = PATH_DIRECTORY_NEW;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(NON_E_FILE, ottenuto);
+
+        nomeCompletoFile = PATH_FILE_ESISTENTE;
+        unFile = new File(nomeCompletoFile);
+        ottenuto = service.isEsisteFileStr(unFile);
+        assertTrue(service.isEsisteFile(unFile));
+        assertEquals(VUOTA, ottenuto);
     }// end of single test
 
 

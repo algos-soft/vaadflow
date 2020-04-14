@@ -44,7 +44,9 @@ public class AFileService extends AbstractService {
 
     public static final String PATH_SENZA_SUFFIX = "Manca il 'suffix' terminale";
 
-    public static final String NO_FILE = "Il file non esiste";
+    public static final String NON_ESISTE_FILE = "Il file non esiste";
+
+    public static final String NON_E_FILE = "Non è un file";
 
     /**
      * versione della classe per la serializzazione
@@ -106,7 +108,6 @@ public class AFileService extends AbstractService {
      * @return testo di errore, vuota se esiste
      */
     public String isEsisteFileStr(String absolutePathFileWithSuffixToBeChecked) {
-        File fileToBeChecked;
 
         if (text.isEmpty(absolutePathFileWithSuffixToBeChecked)) {
             return PATH_NULLO;
@@ -120,8 +121,7 @@ public class AFileService extends AbstractService {
             return PATH_SENZA_SUFFIX;
         }// end of if cycle
 
-        fileToBeChecked = new File(absolutePathFileWithSuffixToBeChecked);
-        return isEsisteFileStr(fileToBeChecked);
+        return isEsisteFileStr(new File(absolutePathFileWithSuffixToBeChecked));
     }// end of method
 
 
@@ -140,29 +140,7 @@ public class AFileService extends AbstractService {
      * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean isEsisteFile(File fileToBeChecked) {
-        boolean esiste = false;
-
-        if (fileToBeChecked == null) {
-            System.out.println("Il File 'fileToBeChecked' è nullo");
-            return false;
-        }// end of if cycle
-
-        if (fileToBeChecked.getPath().equals(fileToBeChecked.getAbsolutePath())) {
-            if (fileToBeChecked.exists()) {
-                if (fileToBeChecked.isFile()) {
-                    esiste = true;
-                    System.out.println("Il file " + fileToBeChecked + " esiste");
-                } else {
-                    System.out.println(fileToBeChecked + " non è un file");
-                }// end of if/else cycle
-            } else {
-                System.out.println("Il file " + fileToBeChecked + " non esiste");
-            }// end of if/else cycle
-        } else {
-            System.out.println("Il path del file non è assoluto");
-        }// end of if/else cycle
-
-        return esiste;
+        return isEsisteFileStr(fileToBeChecked).equals(VUOTA);
     }// end of method
 
 
@@ -181,28 +159,35 @@ public class AFileService extends AbstractService {
      * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     public String isEsisteFileStr(File fileToBeChecked) {
-        String risposta = VUOTA;
-
         if (fileToBeChecked == null) {
             return PARAMETRO_NULLO;
         }// end of if cycle
 
-        if (fileToBeChecked.getPath().equals(fileToBeChecked.getAbsolutePath())) {
-            if (fileToBeChecked.exists()) {
-                if (fileToBeChecked.isFile()) {
-                    risposta = "pippoz";
-                    System.out.println("Il file " + fileToBeChecked + " esiste");
-                } else {
-                    System.out.println(fileToBeChecked + " non è un file");
-                }// end of if/else cycle
-            } else {
-                System.out.println("Il file " + fileToBeChecked + " non esiste");
-            }// end of if/else cycle
-        } else {
-            System.out.println("Il path del file non è assoluto");
+        if (text.isEmpty(fileToBeChecked.getName())) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (!fileToBeChecked.getPath().equals(fileToBeChecked.getAbsolutePath())) {
+            return PATH_NOT_ABSOLUTE;
         }// end of if/else cycle
 
-        return risposta;
+        if (fileToBeChecked.exists()) {
+            if (fileToBeChecked.isFile()) {
+                return VUOTA;
+            } else {
+                return NON_E_FILE;
+            }// end of if/else cycle
+        } else {
+            if (text.isNotSuffix(fileToBeChecked.getAbsolutePath())) {
+                return PATH_SENZA_SUFFIX;
+            }// end of if cycle
+
+            if (!fileToBeChecked.exists()) {
+                return NON_ESISTE_FILE;
+            }// end of if cycle
+
+            return VUOTA;
+        }// end of if/else cycle
     }// end of method
 
 
