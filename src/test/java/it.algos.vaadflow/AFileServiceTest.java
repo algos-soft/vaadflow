@@ -64,6 +64,8 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_FILE_NO_GOOD = "/Users/gac/Desktop/test/Pa perino/Topolino.abc";
 
+    private static String PATH_FILE_ANOMALO = PATH_DIRECTORY_TEST + "Pluto.properties";
+
     private static String PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/desktop/test/Pippo/";
 
     private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/NonEsiste/Minni.txt";
@@ -556,6 +558,7 @@ public class AFileServiceTest extends ATest {
         System.out.println("Risposta" + CREA_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         creaFileValido(PATH_FILE_DELETE);
+        creaFileValido(PATH_FILE_ANOMALO);
     }// end of single test
 
 

@@ -9,7 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,8 +26,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_WIZ_VIEW;
  * Date: lun, 13-apr-2020
  * Time: 03:02
  */
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Route(value = TAG_WIZ_VIEW)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
     @Autowired

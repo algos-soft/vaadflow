@@ -1,12 +1,19 @@
 package it.algos.vaadflow.wiz;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
+
+import static it.algos.vaadflow.application.FlowCost.SLASH;
+import static it.algos.vaadflow.wiz.WizCost.DIR_JAVA;
+import static it.algos.vaadflow.wiz.WizCost.VAAD_FLOW_PROJECT;
 
 /**
  * Project vaadflow
@@ -27,19 +34,40 @@ public class WizElaboraNewProject extends WizElabora {
 
         super.gotInput(mappaInput);
 
-        copiaCartelleVarie();
+        this.copiaCartelleVarie();
+        this.copiaCartellaVaadFlow();
     }// end of method
 
 
     public void copiaCartelleVarie() {
         super.regolaDocumentation();
-        this.regolaLinks();
-        this.regolaSnippets();
-        this.regolaRead();
-        this.regolaGit();
-        this.regolaProperties();
+        super.regolaLinks();
+        super.regolaSnippets();
+        super.regolaRead();
+        super.regolaGit();
+        super.regolaProperties();
 //        this.regolaPom();
 //        this.copiaMetaInf();
+    }// end of method
+
+
+    public void copiaCartellaVaadFlow() {
+
+
+        String source = pathVaadFlowDir + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
+        File srcDir = new File(source);
+
+        String destination = pathProject + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
+        File destDir = new File(destination);
+
+        try {
+            FileUtils.copyDirectory(srcDir, destDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        super.fixCartellaExtra(true, DIR_JAVA + SLASH + VAAD_FLOW_PROJECT);
     }// end of method
 
 }// end of class

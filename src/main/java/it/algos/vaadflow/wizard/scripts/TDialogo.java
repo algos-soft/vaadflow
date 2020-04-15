@@ -12,8 +12,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
-import it.algos.vaadflow.wizard.enumeration.Progetto;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Progetto;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;

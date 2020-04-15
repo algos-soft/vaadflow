@@ -13,15 +13,16 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static it.algos.vaadflow.wiz.WizCost.*;
-import static it.algos.vaadflow.wizard.enumeration.Chiave.newProjectName;
+import static it.algos.vaadflow.wiz.enumeration.Chiave.newProjectName;
 
 /**
  * Project vaadflow
@@ -33,20 +34,14 @@ import static it.algos.vaadflow.wizard.enumeration.Chiave.newProjectName;
 @Slf4j
 public class WizDialog extends Dialog {
 
-    /**
-     * Service recuperato come istanza dalla classe singleton
-     */
-    protected ATextService text = ATextService.getInstance();
+    @Autowired
+    protected ATextService text;
 
-    /**
-     * Service recuperato come istanza dalla classe singleton
-     */
-    protected AArrayService array = AArrayService.getInstance();
+    @Autowired
+    protected AArrayService array;
 
-    /**
-     * Service recuperato come istanza dalla classe singleton
-     */
-    protected AFileService file = AFileService.getInstance();
+    @Autowired
+    protected AFileService file;
 
     protected WizRecipient wizRecipient;
 
@@ -133,7 +128,6 @@ public class WizDialog extends Dialog {
         this.setCloseOnEsc(true);
         this.setCloseOnOutsideClick(true);
         this.removeAll();
-
         this.regolazioniIniziali();
         this.legenda();
     }// end of method

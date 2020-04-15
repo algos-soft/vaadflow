@@ -19,7 +19,7 @@ public class WizCost {
 
     public static final String PATH_PROJECTS_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects";
 
-    public static final String NAME_PROJECT_BASE_LONG = "it/algos/vaadflow";
+    public static final String DIR_FLOW = "/it/algos/vaadflow";
 
     public static final String NORMAL_WIDTH = "9em";
 

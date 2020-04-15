@@ -457,6 +457,7 @@ public class ATextService extends AbstractService {
         String quartultimoCarattere;
         int gap = 4;
         int max;
+        String tagPatch = ".properties";
 
         if (isValid(testoIngresso)) {
             max = testoIngresso.length();
@@ -464,6 +465,10 @@ public class ATextService extends AbstractService {
             if (quartultimoCarattere.equals(PUNTO)) {
                 status = false;
             }// end of if cycle
+        }// end of if cycle
+
+        if (testoIngresso.endsWith(tagPatch)) {
+            status = false;
         }// end of if cycle
 
         return status;

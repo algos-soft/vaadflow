@@ -1,6 +1,6 @@
 package it.algos.vaadflow.wiz;
 
-import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
 
 import java.util.LinkedHashMap;
 

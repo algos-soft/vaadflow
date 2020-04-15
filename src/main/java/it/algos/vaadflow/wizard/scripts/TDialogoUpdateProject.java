@@ -5,12 +5,12 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import static it.algos.vaadflow.wizard.enumeration.Chiave.newProjectName;
+import static it.algos.vaadflow.wiz.enumeration.Chiave.newProjectName;
 
 /**
  * Project it.algos.vaadflow

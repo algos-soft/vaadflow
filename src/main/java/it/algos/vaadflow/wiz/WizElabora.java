@@ -2,11 +2,13 @@ package it.algos.vaadflow.wiz;
 
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.wizard.enumeration.Chiave;
-import it.algos.vaadflow.wizard.enumeration.Task;
+import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Task;
+import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -278,20 +280,21 @@ public abstract class WizElabora implements WizRecipient {
     protected void regolaProperties() {
         String sourceText = leggeFile(FILE_PROPERTIES);
         String destPath = pathProject + DIR_RESOURCES + SLASH + FILE_PROPERTIES_DEST;
-//        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
 
         if (flagProperties) {
             file.scriveFile(destPath, sourceText, true);
-//            checkAndWriteFile(destPath, sourceText);
+            checkAndWriteFile(destPath, sourceText);
         }// end of if cycle
     }// end of method
 
 
     /**
-     * Sovrascrive o aggiunge a seconda del flag
+     * Sovrascrive o aggiunge a seconda del flag 'flagSovrascriveDirectory'
      */
-    protected void fixCartellaExtra(boolean esegue, String dirName) {
+    protected void fixCartellaExtra(boolean esegue, String dirNameGrezzo) {
         boolean dirCancellata = false;
+        String dirName = dirNameGrezzo.startsWith("/") ? dirNameGrezzo.substring(1) : dirNameGrezzo;
         String srcPath = pathVaadFlowDir + SLASH + dirName;
         String destPath = pathProject + SLASH + dirName;
 
@@ -327,6 +330,30 @@ public abstract class WizElabora implements WizRecipient {
     }// end of method
 
 
+    protected void checkAndWriteFile(String pathNewFile, String sourceText) {
+        String fileNameJava = VUOTA;
+        String oldText = VUOTA;
+
+        if (flagSovrascriveFile) {
+            file.scriveFile(pathNewFile, sourceText, true);
+            System.out.println(fileNameJava + " esisteva già ed è stato modificato");
+        } else {
+            oldText = file.leggeFile(pathNewFile);
+            if (text.isValid(oldText)) {
+                if (checkFile(oldText)) {
+                    file.scriveFile(pathNewFile, sourceText, true);
+                    System.out.println(fileNameJava + " esisteva già ed è stato modificato");
+                } else {
+                    System.out.println(fileNameJava + " esisteva già e NON è stato modificato");
+                }// end of if/else cycle
+            } else {
+                file.scriveFile(pathNewFile, sourceText, true);
+                System.out.println(fileNameJava + " non esisteva ed è stato creato");
+            }// end of if/else cycle
+        }// end of if/else cycle
+    }// end of method
+
+
     private void checkAndWriteFileTask(Task task, String newTaskText) {
         String fileNameJava = "";
         String pathFileJava;
@@ -353,6 +380,17 @@ public abstract class WizElabora implements WizRecipient {
 //                System.out.println(fileNameJava + " non esisteva ed è stato creato");
 //            }// end of if/else cycle
 //        }// end of if/else cycle
+    }// end of method
+
+
+    private boolean checkFile(String oldFileText) {
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("@AIScript(sovrascrivibile = false)");
+        tags.add("@AIScript(sovrascrivibile=false)");
+        tags.add("@AIScript(sovrascrivibile= false)");
+        tags.add("@AIScript(sovrascrivibile =false)");
+
+        return text.nonContiene(oldFileText, tags);
     }// end of method
 
 }// end of class

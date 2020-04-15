@@ -880,7 +880,7 @@ public class ATextServiceTest extends ATest {
 
 
         sorgente = "Mario-Pippoz-Francesca";
-        previstoIntero=1;
+        previstoIntero = 1;
         previstoList = new ArrayList<>();
         previstoList.add("Mario-Pippoz-Francesca");
 
@@ -889,7 +889,7 @@ public class ATextServiceTest extends ATest {
         assertEquals(previstoIntero, ottenutoList.size());
 
         sorgente = "Mario,Pippoz,Francesca";
-        previstoIntero=3;
+        previstoIntero = 3;
         previstoList = new ArrayList<>();
         previstoList.add("Mario");
         previstoList.add("Pippoz");
@@ -916,6 +916,33 @@ public class ATextServiceTest extends ATest {
 //        previstoMatrice = new String[]{"Mario", "Pippoz", "Francesca"};
 //        ottenutoMatrice = service.getMatrice(sorgente);
 //        assertNotNull(ottenutoMatrice);
+    }// end of single test
+
+
+    /**
+     * Controlla la stringa passata come parametro termina con un 'suffix' (3 caratteri terminali dopo un punto) <br>
+     * Accettata la patch del suffisso '.properties' <br>
+     *
+     * @param testoIngresso da elaborare
+     *
+     * @return true se MANCA il 'suffix'
+     */
+    @Test
+    public void isNotSuffix() {
+        //--file con suffisso accettabile
+        sorgente = "Users/gac/Desktop/test/Pluto.rtf";
+        ottenutoBooleano = service.isNotSuffix(sorgente);
+        assertFalse(ottenutoBooleano);
+
+        //--file con suffisso NON accettabile
+        sorgente = "Users/gac/Desktop/test/Pluto";
+        ottenutoBooleano = service.isNotSuffix(sorgente);
+        assertTrue(ottenutoBooleano);
+
+        //--file con suffisso NON accettabile senza la patch e accettabile CON la patch
+        sorgente = "Users/gac/Desktop/test/Pluto.properties";
+        ottenutoBooleano = service.isNotSuffix(sorgente);
+        assertFalse(ottenutoBooleano);
     }// end of single test
 
 }// end of class
