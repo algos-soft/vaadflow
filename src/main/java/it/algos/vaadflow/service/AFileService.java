@@ -3,7 +3,6 @@ package it.algos.vaadflow.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -42,15 +41,18 @@ public class AFileService extends AbstractService {
 
     public static final String PATH_NOT_ABSOLUTE = "Il primo carattere del path NON è uno '/' (slash)";
 
-    public static final String PATH_SENZA_SUFFIX = "Manca il 'suffix' terminale";
-
     public static final String NON_ESISTE_FILE = "Il file non esiste";
 
-    public static final String NON_ESISTE_DIRECTORY = "La directory non esiste";
+    public static final String PATH_SENZA_SUFFIX = "Manca il 'suffix' terminale";
+
 
     public static final String NON_E_FILE = "Non è un file";
 
     public static final String NON_CREATO_FILE = "Il file non è stato creato";
+
+    public static final String NON_CANCELLATO_FILE = "Il file non è stato cancellato";
+
+    public static final String NON_ESISTE_DIRECTORY = "La directory non esiste";
 
     public static final String NON_CREATA_DIRECTORY = "La directory non è stata creata";
 
@@ -433,7 +435,7 @@ public class AFileService extends AbstractService {
      *
      * @param absolutePathDirectoryToBeCreated path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory è stat creata, false se non sono rispettate le condizioni della richiesta
+     * @return true se la directory è stata creata, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaDirectory(String absolutePathDirectoryToBeCreated) {
         return creaDirectoryStr(absolutePathDirectoryToBeCreated).equals(VUOTA);
@@ -473,7 +475,7 @@ public class AFileService extends AbstractService {
      *
      * @param directoryToBeCreated con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory è stat creata, false se non sono rispettate le condizioni della richiesta
+     * @return true se la directory è stata creata, false se non sono rispettate le condizioni della richiesta
      */
     public boolean creaDirectory(File directoryToBeCreated) {
         return creaDirectoryStr(directoryToBeCreated).equals(VUOTA);
@@ -522,111 +524,200 @@ public class AFileService extends AbstractService {
 
     /**
      * Cancella un file
-     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param absolutePathFileWithSuffixToBeCanceled path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
      *
      * @return true se il file è stato cancellato oppure non esisteva
      */
     public boolean deleteFile(String absolutePathFileWithSuffixToBeCanceled) {
-        File fileCanceled;
-        String primoCarattere;
-
-        if (text.isEmpty(absolutePathFileWithSuffixToBeCanceled)) {
-            System.out.println("Il parametro 'absolutePathDirectoryToBeCreated' è vuoto");
-            return false;
-        }// end of if cycle
-
-        primoCarattere = absolutePathFileWithSuffixToBeCanceled.substring(0, 1);
-        if (!primoCarattere.equals("/")) {
-            System.out.println("Il primo carattere di 'absolutePathDirectoryToBeCreated' NON è uno '/' (slash)");
-            return false;
-        }// end of if cycle
-
-        fileCanceled = new File(absolutePathFileWithSuffixToBeCanceled);
-        return deleteFile(fileCanceled);
+        return deleteFileStr(absolutePathFileWithSuffixToBeCanceled).equals(VUOTA);
     }// end of method
 
 
     /**
      * Cancella un file
-     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Deve cominciare con lo slash
-     * Deve comprendere anche l'estensione
-     * La richiesta NON è CASE sensitive
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param absolutePathFileWithSuffixToBeCanceled path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
+     *
+     * @return testo di errore, vuoto se il file è stato cancellato
+     */
+    public String deleteFileStr(String absolutePathFileWithSuffixToBeCanceled) {
+        if (text.isEmpty(absolutePathFileWithSuffixToBeCanceled)) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        return deleteFileStr(new File(absolutePathFileWithSuffixToBeCanceled));
+    }// end of method
+
+
+    /**
+     * Cancella un file
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
      * @param fileToBeDeleted con path completo che DEVE cominciare con '/' SLASH
      *
      * @return true se il file è stato cancellato oppure non esisteva
      */
     public boolean deleteFile(File fileToBeDeleted) {
-        boolean status = false;
+        return deleteFileStr(fileToBeDeleted).equals(VUOTA);
+    }// end of method
 
-        status = fileToBeDeleted.exists();
-        if (status) {
-            if (fileToBeDeleted.isFile()) {
-                status = fileToBeDeleted.delete();
-                if (status) {
-                    System.out.println("Il file " + fileToBeDeleted + " è stata cancellato");
-                } else {
-                    System.out.println("Il file " + fileToBeDeleted + " non è stata cancellato, perché non ci sono riuscito");
-                }// end of if/else cycle
-            } else {
-                System.out.println(fileToBeDeleted + " non è stato cancellato, perché non è un file");
-                status = false;
-            }// end of if/else cycle
-        } else {
-            System.out.println("Il file " + fileToBeDeleted + " non è stata cancellato, perché non esiste");
+
+    /**
+     * Cancella un file
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param fileToBeDeleted con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuoto se il file è stato creato
+     */
+    public String deleteFileStr(File fileToBeDeleted) {
+
+        if (fileToBeDeleted == null) {
+            return PARAMETRO_NULLO;
+        }// end of if cycle
+
+        if (text.isEmpty(fileToBeDeleted.getName())) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (!fileToBeDeleted.getPath().equals(fileToBeDeleted.getAbsolutePath())) {
+            return PATH_NOT_ABSOLUTE;
         }// end of if/else cycle
 
-        return status;
+        if (text.isNotSuffix(fileToBeDeleted.getAbsolutePath())) {
+            return PATH_SENZA_SUFFIX;
+        }// end of if cycle
+
+        if (!fileToBeDeleted.exists()) {
+            return NON_ESISTE_FILE;
+        }// end of if cycle
+
+        if (fileToBeDeleted.delete()) {
+            return VUOTA;
+        } else {
+            return NON_CANCELLATO_FILE;
+        }// end of if/else cycle
+
     }// end of method
 
 
     /**
      * Cancella una directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
-     * @param pathDirectoryToBeDeleted nome completo della directory
+     * @param absolutePathDirectoryToBeDeleted path completo della directory che DEVE cominciare con '/' SLASH
+     *
+     * @return true se la directory è stato cancellato oppure non esisteva
      */
-    public boolean deleteDirectory(String pathDirectoryToBeDeleted) {
-        return deleteDirectory(new File(pathDirectoryToBeDeleted.toLowerCase()));
+    public boolean deleteDirectory(String absolutePathDirectoryToBeDeleted) {
+        return deleteDirectoryStr(absolutePathDirectoryToBeDeleted).equals(VUOTA);
     }// end of method
 
 
     /**
      * Cancella una directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
      *
-     * @param directoryToBeDeleted file col path completo
+     * @param absolutePathDirectoryToBeDeleted path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return true se la directory è stata cancellata
-     * false se non è stata cancellata o se non esiste
+     * @return testo di errore, vuoto se il file è stato cancellato
+     */
+    public String deleteDirectoryStr(String absolutePathDirectoryToBeDeleted) {
+        if (text.isEmpty(absolutePathDirectoryToBeDeleted)) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        return deleteDirectoryStr(new File(absolutePathDirectoryToBeDeleted));
+    }// end of method
+
+
+    /**
+     * Cancella una directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param directoryToBeDeleted con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return true se il file è stato cancellato oppure non esisteva
      */
     public boolean deleteDirectory(File directoryToBeDeleted) {
-        boolean status = false;
-
-        status = directoryToBeDeleted.exists();
-        if (status) {
-            if (directoryToBeDeleted.isDirectory()) {
-                status = FileSystemUtils.deleteRecursively(directoryToBeDeleted);
-                if (status) {
-                    System.out.println("La directory " + directoryToBeDeleted + " è stata cancellata");
-                } else {
-                    System.out.println("La directory " + directoryToBeDeleted + " non è stata cancellata, perché non ci sono riuscito");
-                }// end of if/else cycle
-            } else {
-                System.out.println(directoryToBeDeleted + " non è stato cancellato, perché non è una directory");
-                status = false;
-            }// end of if/else cycle
-        } else {
-            System.out.println("La directory " + directoryToBeDeleted + " non è stata cancellata, perché non esiste");
-        }// end of if/else cycle
-
-        return status;
+        return deleteDirectoryStr(directoryToBeDeleted).equals(VUOTA);
     }// end of method
 
+
+    /**
+     * Cancella una directory
+     * <p>
+     * Il path non deve essere nullo <br>
+     * Il path non deve essere vuoto <br>
+     * Il path deve essere completo ed inziare con uno 'slash' <br>
+     * Il path deve essere completo e terminare con un 'suffix' <br>
+     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+     *
+     * @param directoryToBeDeleted con path completo che DEVE cominciare con '/' SLASH
+     *
+     * @return testo di errore, vuoto se il file è stato cancellato
+     */
+    public String deleteDirectoryStr(File directoryToBeDeleted) {
+        if (directoryToBeDeleted == null) {
+            return PARAMETRO_NULLO;
+        }// end of if cycle
+
+        if (text.isEmpty(directoryToBeDeleted.getName())) {
+            return PATH_NULLO;
+        }// end of if cycle
+
+        if (!directoryToBeDeleted.getPath().equals(directoryToBeDeleted.getAbsolutePath())) {
+            return PATH_NOT_ABSOLUTE;
+        }// end of if/else cycle
+
+        if (!directoryToBeDeleted.exists()) {
+            return NON_ESISTE_FILE;
+        }// end of if cycle
+
+        if (directoryToBeDeleted.delete()) {
+            return VUOTA;
+        } else {
+            return NON_CANCELLATO_FILE;
+        }// end of if/else cycle
+    }// end of method
 
     /**
      * Copia una directory
