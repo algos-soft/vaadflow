@@ -33,24 +33,7 @@ public class AFileServiceTest extends ATest {
 
     static boolean FLAG_CREAZIONE_INIZIALE = true;
 
-    static boolean FLAG_CANCELLAZIONE_FINALE = false;
-//    private static String PATH = "/Users/gac/Documents/IdeaProjects/it.algos.vaadflow/src/main/java/it/algos/it.algos.vaadflow/";
-//
-//    private static String SOURCES = PATH + "wizard/sources/";
-//
-//    private static String MODULES = PATH + "modules/";
-//
-//    private static String DIR = SOURCES + "Prova";
-//
-//    private static String SLASH = "/";
-//
-//    private static String READ = "README.txt";
-//
-//    private static String PACKAGE = "package it.algos.it.algos.vaadflow;\n";
-//
-//    private static String TESTO = PACKAGE + "public class Alfa {}";
-//
-//    private static String NOME_FILE_TEST = "TestNonCancellare";
+    static boolean FLAG_CANCELLAZIONE_FINALE = true;
 
     private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/test/";
 
@@ -60,7 +43,7 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_DIRECTORY_TRE = PATH_DIRECTORY_TEST + "Mantova/";
 
-    private static String PATH_DIRECTORY_QUATTRO = PATH_DIRECTORY_TEST + "Genova/";
+    private static String PATH_DIRECTORY_NON_ESISTENTE = PATH_DIRECTORY_TEST + "Genova/";
 
 
     private static String PATH_FILE_UNO = PATH_DIRECTORY_TEST + "Pluto.rtf";
@@ -71,19 +54,33 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/Desktop/test/pluto.rtf";
 
-
     private static String PATH_FILE_NO_SUFFIX = PATH_DIRECTORY_TEST + "Topolino";
 
     private static String PATH_FILE_NON_ESISTENTE = PATH_DIRECTORY_TEST + "Topolino.txt";
 
     private static String PATH_FILE_NO_PATH = "Users/gac/Desktop/test/Pluto.rtf";
 
+    private static String PATH_DIRECTORY_NO_PATH = "Users/gac/Desktop/test/Mantova/";
 
-    private static String PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/desktop/test";
+    private static String PATH_FILE_NO_GOOD = "/Users/gac/Desktop/test/Pa perino/Topolino.abc";
 
-    private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/Paperino/Minni.txt";
+    private static String PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/desktop/test/Pippo/";
+
+    private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/NonEsiste/Minni.txt";
 
     private static String VALIDO = "TROVATO";
+
+    private static String ESISTE_FILE = " isEsisteFile() ";
+
+    private static String ESISTE_DIRECTORY = " isEsisteDirectory() ";
+
+    private static String CREA_FILE = " creaFile() ";
+
+    private static String CREA_DIRECTORY = " creaDirectory() ";
+
+    private static String DELETE_FILE = " deleteFile() ";
+
+    private static String DELETE_DIRECTORY = " deleteDirectory() ";
 
     @InjectMocks
     private AFileService service;
@@ -97,6 +94,10 @@ public class AFileServiceTest extends ATest {
     private File unFile;
 
     private File unaDirectory;
+
+    private String ottenutoDaNome;
+
+    private String ottenutoDaFile;
 
     private String nomeFile;
 
@@ -130,7 +131,6 @@ public class AFileServiceTest extends ATest {
             creazioneDirectory();
             creazioneFiles();
         }// end of if cycle
-
     }// end of method
 
 
@@ -165,24 +165,18 @@ public class AFileServiceTest extends ATest {
         listaDirectory.add(new File(PATH_DIRECTORY_TEST));
         listaDirectory.add(new File(PATH_DIRECTORY_UNO));
         listaDirectory.add(new File(PATH_DIRECTORY_DUE));
-        listaDirectory.add(new File(PATH_DIRECTORY_TRE));
-        listaDirectory.add(new File(PATH_DIRECTORY_QUATTRO));
 
         listaFile = new ArrayList<>();
         listaFile.add(new File(PATH_FILE_UNO));
         listaFile.add(new File(PATH_FILE_DUE));
         listaFile.add(new File(PATH_FILE_TRE));
         listaFile.add(new File(PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA));
-
     }// end of method
 
 
     /**
      * Creazioni di servizio per essere sicuri che ci siano tutti i files/directories richiesti <br>
      * Alla fine verranno cancellati tutti <br>
-     * //        nomeCompletoDirectory = PATH_DIRECTORY_TEST;
-     * //        unaDirectory = new File(nomeCompletoDirectory);
-     * //        unaDirectory.mkdirs();
      */
     private void creazioneDirectory() {
         if (array.isValid(listaDirectory)) {
@@ -196,13 +190,6 @@ public class AFileServiceTest extends ATest {
     /**
      * Creazioni di servizio per essere sicuri che ci siano tutti i files/directories richiesti <br>
      * Alla fine verranno cancellati tutti <br>
-     * //        nomeCompletoFile = PATH_FILE_UNO;
-     * //        unFile = new File(nomeCompletoFile);
-     * //        try { // prova ad eseguire il codice
-     * //            unFile.createNewFile();
-     * //        } catch (Exception unErrore) { // intercetta l'errore
-     * //            System.out.println(unErrore);
-     * //        }// fine del blocco try-catch
      */
     private void creazioneFiles() {
         if (array.isValid(listaFile)) {
@@ -210,39 +197,12 @@ public class AFileServiceTest extends ATest {
                 try { // prova ad eseguire il codice
                     unFile.createNewFile();
                 } catch (Exception unErrore) { // intercetta l'errore
-                    creaDirectoryParentAndFile(unFile);
+                    if (service.creaDirectoryParentAndFile(unFile).equals(VUOTA)) {
+                        listaDirectory.add(new File(unFile.getParent()));
+                    }// end of if cycle
                 }// fine del blocco try-catch
             }// end of for cycle
         }// end of if cycle
-    }// end of method
-
-
-    /**
-     * Creazioni di una directory 'parent' <br>
-     * Se manca il path completo alla creazione di un file, creo la directory 'parent' di quel file <br>
-     * Aggiungo la directory alla lista per assicurarne la cancellazione alla fine del test <br>
-     * Riprovo la creazione del file <br>
-     */
-    private void creaDirectoryParentAndFile(File unFile) {
-        String parentDirectoryName;
-        File parentDirectoryFile = null;
-        boolean parentDirectoryCreata = false;
-
-        if (unFile != null) {
-            parentDirectoryName = unFile.getParent();
-            parentDirectoryFile = new File(parentDirectoryName);
-            parentDirectoryCreata = parentDirectoryFile.mkdirs();
-        }// end of if cycle
-
-        if (parentDirectoryCreata) {
-            try { // prova ad eseguire il codice
-                unFile.createNewFile();
-                listaDirectory.add(parentDirectoryFile);
-            } catch (Exception unErrore) { // intercetta l'errore
-                System.out.println("Errore nel path per la creazione di un file");
-            }// fine del blocco try-catch
-        }// end of if cycle
-
     }// end of method
 
 
@@ -337,138 +297,104 @@ public class AFileServiceTest extends ATest {
      * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
     @Test
-    public void isEsisteFileTramiteNome() {
-        ottenuto = service.isEsisteFileStr((String) null);
+    public void isEsisteFile() {
+        nomeCompletoFile = "null";
+        ottenutoDaNome = service.isEsisteFileStr((String) null);
         assertFalse(service.isEsisteFile((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + "null" + " = " + ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.isEsisteFileStr((File) null);
+        assertFalse(service.isEsisteFile((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = VUOTA;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(PATH_NULLO, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = "nonEsiste";
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_NO_SUFFIX;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(PATH_SENZA_SUFFIX, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_SENZA_SUFFIX, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(NON_ESISTE_FILE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(NON_ESISTE_FILE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_NO_PATH;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_DIRECTORY_UNO;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(NON_E_FILE, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(NON_E_FILE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertFalse(service.isEsisteFile(unFile));
+        assertEquals(NON_E_FILE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_UNO;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertTrue(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(VUOTA, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
+        assertTrue(service.isEsisteFile(unFile));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
-        ottenuto = service.isEsisteFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.isEsisteFileStr(nomeCompletoFile);
         assertTrue(service.isEsisteFile(nomeCompletoFile));
-        assertEquals(VUOTA, ottenuto);
-        System.out.println("Risposta se esiste file di nome: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-    }// end of single test
-
-
-    /**
-     * Controlla l'esistenza di un file <br>
-     * <p>
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     *
-     * @param fileToBeChecked con path completo che DEVE cominciare con '/' SLASH
-     *
-     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
-     */
-//    @Test
-    public void isEsisteFileTramiteFile() {
-        ottenuto = service.isEsisteFileStr((File) null);
-        assertFalse(service.isEsisteFile((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
-        System.out.println("Risposta se esiste File : " + "null" + " = " + ottenuto);
-
-        nomeCompletoFile = VUOTA;
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(PATH_NULLO, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = "nonEsiste";
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_FILE_NO_SUFFIX;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_DIRECTORY_QUATTRO;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_FILE_NEW;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_DIRECTORY_NEW;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertFalse(service.isEsisteFile(unFile));
-        assertEquals(NON_E_FILE, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_FILE_ESISTENTE;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
+        ottenutoDaFile = service.isEsisteFileStr(unFile);
         assertTrue(service.isEsisteFile(unFile));
-        assertEquals(VUOTA, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
-
-        nomeCompletoFile = PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.isEsisteFileStr(unFile);
-        assertTrue(service.isEsisteFile(unFile));
-        assertEquals(VUOTA, ottenuto);
-        System.out.println("Risposta se esiste File: " + nomeCompletoFile + " = " + (ottenuto.equals(VUOTA) ? VALIDO : ottenuto));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
     }// end of single test
 
 
@@ -488,110 +414,94 @@ public class AFileServiceTest extends ATest {
      *
      * @return true se la directory esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void isEsisteDirectoryTramiteNome() {
-        ottenuto = service.isEsisteDirectoryStr((String) null);
+    @Test
+    public void isEsisteDirectory() {
+        nomeCompletoDirectory = "null";
+        ottenutoDaNome = service.isEsisteDirectoryStr((String) null);
         assertFalse(service.isEsisteDirectory((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        ottenuto = service.isEsisteDirectoryStr(VUOTA);
-        assertFalse(service.isEsisteDirectory(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoDirectory = "nonEsiste";
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-
-//        nomeCompletoDirectory = PATH_FILE_ESISTENTE_DUE;
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
-
-        nomeCompletoDirectory = PATH_DIRECTORY_DUE;
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
-
-//        nomeCompletoDirectory = PATH_FILE_NEW;
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
-
-//        nomeCompletoDirectory = PATH_FILE_ESISTENTE;
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(NON_E_DIRECTORY, ottenuto);
-
-        nomeCompletoDirectory = PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
-        ottenuto = service.isEsisteDirectoryStr(nomeCompletoDirectory);
-        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
-        assertEquals(VUOTA, ottenuto);
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Controlla l'esistenza di una directory <br>
-     * <p>
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * Controlla che getPath() e getAbsolutePath() siano uguali <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     * Una volta costruita la directory, getPath() e getAbsolutePath() devono essere uguali
-     *
-     * @param absolutePathDirectoryToBeChecked path completo della directory che DEVE cominciare con '/' SLASH
-     *
-     * @return true se la directory esiste, false se non sono rispettate le condizioni della richiesta
-     */
-//    @Test
-    public void isEsisteDirectoryTramiteFile() {
-        ottenuto = service.isEsisteDirectoryStr((File) null);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.isEsisteDirectoryStr((File) null);
         assertFalse(service.isEsisteDirectory((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        unaDirectory = new File(VUOTA);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
-        assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(PATH_NULLO, ottenuto);
+        nomeCompletoDirectory = VUOTA;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr((File) null);
+        assertFalse(service.isEsisteDirectory((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoDirectory = "nonEsiste";
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
         assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-//        nomeCompletoDirectory = PATH_FILE_ESISTENTE_DUE;
+        nomeCompletoDirectory = PATH_DIRECTORY_NON_ESISTENTE;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
         assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+        assertEquals(NON_ESISTE_DIRECTORY, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        nomeCompletoDirectory = PATH_DIRECTORY_DUE;
+        nomeCompletoDirectory = PATH_FILE_UNO;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_E_DIRECTORY, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
         assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+        assertEquals(NON_E_DIRECTORY, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-//        nomeCompletoDirectory = PATH_FILE_NEW;
+        nomeCompletoDirectory = PATH_DIRECTORY_NO_PATH;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
         assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(NON_ESISTE_DIRECTORY, ottenuto);
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-//        nomeCompletoDirectory = PATH_FILE_ESISTENTE;
+        nomeCompletoDirectory = PATH_DIRECTORY_UNO;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
-        assertFalse(service.isEsisteDirectory(unaDirectory));
-        assertEquals(NON_E_DIRECTORY, ottenuto);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
+        assertTrue(service.isEsisteDirectory(unaDirectory));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoDirectory = PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA;
+        ottenutoDaNome = service.isEsisteDirectoryStr(nomeCompletoDirectory);
+        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
         unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.isEsisteDirectoryStr(unaDirectory);
+        ottenutoDaFile = service.isEsisteDirectoryStr(unaDirectory);
         assertTrue(service.isEsisteDirectory(unaDirectory));
-        assertEquals(VUOTA, ottenuto);
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + ESISTE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
     }// end of single test
 
 
@@ -611,122 +521,80 @@ public class AFileServiceTest extends ATest {
      *
      * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
      */
-//    @Test
-    public void creaFileTramiteNome() {
-        ottenuto = service.creaFileStr((String) null);
+    @Test
+    public void creaFile() {
+        nomeCompletoFile = "null";
+        ottenutoDaNome = service.creaFileStr((String) null);
         assertFalse(service.creaFile((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.creaFileStr((File) null);
+        assertFalse(service.creaFile((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        ottenuto = service.creaFileStr(VUOTA);
-        assertFalse(service.creaFile(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoFile = "nonEsiste";
-        ottenuto = service.creaFileStr(nomeCompletoFile);
+        nomeCompletoFile = VUOTA;
+        ottenutoDaNome = service.creaFileStr(nomeCompletoFile);
         assertFalse(service.creaFile(nomeCompletoFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.creaFileStr(unFile);
+        assertFalse(service.creaFile(unFile));
+        assertEquals(PATH_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoFile = PATH_FILE_NO_SUFFIX;
-        ottenuto = service.creaFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.creaFileStr(nomeCompletoFile);
         assertFalse(service.creaFile(nomeCompletoFile));
-        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
+        assertEquals(PATH_SENZA_SUFFIX, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.creaFileStr(unFile);
+        assertFalse(service.creaFile(unFile));
+        assertEquals(PATH_SENZA_SUFFIX, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        nomeCompletoFile = "/Users/gac/Desktop/test/Pa perino/Topolino.abc";
-        ottenuto = service.creaFileStr(nomeCompletoFile);
-        assertFalse(service.creaFile(nomeCompletoFile));
-        assertEquals(NON_CREATO_FILE, ottenuto);
+        creaFileValido(PATH_FILE_DELETE);
+    }// end of single test
 
 
-        //--************************
-        nomeCompletoFile = PATH_FILE_DELETE;
+    /**
+     * Creo un file e lo cancello subito dopo
+     * Se esiste già, lo cancello al volo PRIMA di crearlo
+     */
+    private void creaFileValido(String nomeCompletoFile) {
+        System.out.println("");
 
-        //--controlla prima di crearlo - Non esiste
-        assertFalse(service.isEsisteFile(nomeCompletoFile));
+        //--controlla che non esista prima di crearlo
+        service.deleteFile(nomeCompletoFile);
 
         //--creazione da testare
-        ottenuto = service.creaFileStr(nomeCompletoFile);
+        ottenutoDaNome = service.creaFileStr(nomeCompletoFile);
         assertTrue(service.creaFile(nomeCompletoFile));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.creaFileStr(unFile);
+        assertTrue(service.creaFile(unFile));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         //--controlla dopo averlo creato - Esiste
         assertTrue(service.isEsisteFile(nomeCompletoFile));
+
+        //--se è stato creato il file che qui viene cancellato,
+        //--devo aggiungere allla lista la directory parent per poterla cancellare alla fine del test
+        if (service.isEsisteFile(nomeCompletoFile)) {
+            listaDirectory.add(new File(unFile.getParent()));
+        }// end of if cycle
 
         //--cancellazione
         service.deleteFile(nomeCompletoFile);
 
         //--controlla dopo averlo cancellato - Non esiste
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-        //--************************
-
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Crea un nuovo file
-     * <p>
-     * Il file DEVE essere costruita col path completo, altrimenti assume che sia nella directory in uso corrente
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     * Se manca la directory, viene creata dal System <br>
-     *
-     * @param absolutePathFileWithSuffixToBeCreated path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
-     *
-     * @return true se il file esiste, false se non sono rispettate le condizioni della richiesta
-     */
-//    @Test
-    public void creaFileTramiteFile() {
-        ottenuto = service.creaFileStr((File) null);
-        assertFalse(service.creaFile((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
-
-        unFile = new File(VUOTA);
-        ottenuto = service.creaFileStr(unFile);
-        assertFalse(service.creaFile(unFile));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoFile = "nonEsiste";
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.creaFileStr(unFile);
-        assertFalse(service.creaFile(unFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-
-        nomeCompletoFile = PATH_FILE_NO_SUFFIX;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.creaFileStr(unFile);
-        assertFalse(service.creaFile(unFile));
-        assertEquals(PATH_SENZA_SUFFIX, ottenuto);
-
-        nomeCompletoFile = "/Users/gac/Desktop/test/Pa perino/Topolino.abc";
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.creaFileStr(unFile);
-        assertFalse(service.creaFile(unFile));
-        assertEquals(NON_CREATO_FILE, ottenuto);
-
-        //--************************
-        nomeCompletoFile = PATH_FILE_DELETE;
-        unFile = new File(nomeCompletoFile);
-
-        //--controlla prima di crearlo - Non esiste
-        assertFalse(service.isEsisteFile(unFile));
-
-        //--creazione da testare
-        ottenuto = service.creaFileStr(unFile);
-        assertTrue(service.creaFile(unFile));
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteFile(unFile));
-
-        //--cancellazione
-        service.deleteFile(unFile);
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteFile(unFile));
-        //--************************
-
-    }// end of single test
+    }// end of method
 
 
     @SuppressWarnings("javadoc")
@@ -743,110 +611,80 @@ public class AFileServiceTest extends ATest {
      *
      * @return testo di errore, vuoto se il file è stato creato
      */
-//    @Test
-    public void creaDirectoryTramiteNome() {
-        ottenuto = service.creaDirectoryStr((String) null);
+    @Test
+    public void creaDirectory() {
+        nomeCompletoDirectory = "null";
+        ottenutoDaNome = service.creaDirectoryStr((String) null);
         assertFalse(service.creaDirectory((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.creaDirectoryStr((File) null);
+        assertFalse(service.creaDirectory((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        ottenuto = service.creaDirectoryStr(VUOTA);
-        assertFalse(service.creaDirectory(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
+        nomeCompletoDirectory = VUOTA;
+        ottenutoDaNome = service.creaDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.creaDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.creaDirectoryStr(unaDirectory);
+        assertFalse(service.creaDirectory(unaDirectory));
+        assertEquals(PATH_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoDirectory = "nonEsiste";
-        ottenuto = service.creaDirectoryStr(nomeCompletoDirectory);
+        ottenutoDaNome = service.creaDirectoryStr(nomeCompletoDirectory);
         assertFalse(service.creaDirectory(nomeCompletoDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.creaDirectoryStr(unaDirectory);
+        assertFalse(service.creaDirectory(unaDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         nomeCompletoDirectory = "/Users/gac/Desktop/test/Paperino/Topolino.abc";
-        ottenuto = service.creaDirectoryStr(nomeCompletoDirectory);
+        ottenutoDaNome = service.creaDirectoryStr(nomeCompletoDirectory);
         assertFalse(service.creaDirectory(nomeCompletoDirectory));
-        assertEquals(NON_E_DIRECTORY, ottenuto);
+        assertEquals(NON_E_DIRECTORY, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.creaDirectoryStr(unaDirectory);
+        assertFalse(service.creaDirectory(unaDirectory));
+        assertEquals(NON_E_DIRECTORY, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-
-        //--************************
-        nomeCompletoDirectory = PATH_DIRECTORY_TRE;
-        unFile = new File(nomeCompletoDirectory);
-
-        //--controlla prima di crearlo - Non esiste
-        assertFalse(service.isEsisteDirectory(unFile));
-
-        //--creazione da testare
-        ottenuto = service.creaDirectoryStr(unFile);
-        assertTrue(service.creaDirectory(unFile));
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteDirectory(unFile));
-
-        //--cancellazione
-        service.deleteDirectory(unFile);
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteDirectory(unFile));
-        //--************************
-
+        creaDirectoryValida(PATH_DIRECTORY_TRE);
     }// end of single test
 
 
-    @SuppressWarnings("javadoc")
     /**
-     * Crea una nuova directory
-     * <p>
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     *
-     * @param absolutePathDirectoryToBeCreated path completo della directory che DEVE cominciare con '/' SLASH
-     *
-     * @return testo di errore, vuoto se il file è stato creato
+     * Crea al volo una directory (probabilmente) valida e la cancella subito dopo
      */
-//    @Test
-    public void creaDirectoryTramiteFile() {
-        ottenuto = service.creaDirectoryStr((File) null);
-        assertFalse(service.creaDirectory((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
-
-        unaDirectory = new File(VUOTA);
-        ottenuto = service.creaDirectoryStr(unaDirectory);
-        assertFalse(service.creaDirectory(unaDirectory));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoDirectory = "nonEsiste";
-        unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.creaDirectoryStr(unaDirectory);
-        assertFalse(service.creaDirectory(unaDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-
-        nomeCompletoDirectory = "/Users/gac/Desktop/test/Pa perino/Topolino.abc";
-        unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.creaDirectoryStr(unaDirectory);
-        assertFalse(service.creaDirectory(unaDirectory));
-        assertEquals(NON_E_DIRECTORY, ottenuto);
-
-        //--************************
-        nomeCompletoDirectory = PATH_DIRECTORY_TRE;
-        unaDirectory = new File(nomeCompletoDirectory);
-
-        //--controlla prima di crearlo - Non esiste
-        assertFalse(service.isEsisteDirectory(unaDirectory));
+    private void creaDirectoryValida(String nomeCompletoDirectory) {
+        System.out.println("");
 
         //--creazione da testare
-        ottenuto = service.creaDirectoryStr(unaDirectory);
+        ottenutoDaNome = service.creaDirectoryStr(nomeCompletoDirectory);
+        assertTrue(service.creaDirectory(nomeCompletoDirectory));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.creaDirectoryStr(unaDirectory);
         assertTrue(service.creaDirectory(unaDirectory));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + CREA_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteDirectory(unaDirectory));
+        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
 
-        //--cancellazione
-        service.deleteDirectory(unaDirectory);
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteDirectory(unaDirectory));
-        //--************************
-
-    }// end of single test
+        //--se è stato creato la directory, la aggiungo alla lista in modo da poterla camncellare alla fine del test
+        if (!listaDirectory.contains(unaDirectory)) {
+            listaDirectory.add(unaDirectory);
+        }// end of if cycle
+    }// end of method
 
 
     @SuppressWarnings("javadoc")
@@ -863,112 +701,83 @@ public class AFileServiceTest extends ATest {
      *
      * @return true se il file è stato cancellato oppure non esisteva
      */
-//    @Test
-    public void deleteFileTramiteNome() {
-        ottenuto = service.deleteFileStr((String) null);
+    @Test
+    public void deleteFile() {
+        nomeCompletoFile = "null";
+        ottenutoDaNome = service.deleteFileStr((String) null);
         assertFalse(service.deleteFile((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.deleteFileStr((File) null);
+        assertFalse(service.deleteFile((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        ottenuto = service.deleteFileStr(VUOTA);
-        assertFalse(service.deleteFile(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoFile = "pippo";
-        ottenuto = service.deleteFileStr(nomeCompletoFile);
+        nomeCompletoFile = VUOTA;
+        ottenutoDaNome = service.deleteFileStr(nomeCompletoFile);
         assertFalse(service.deleteFile(nomeCompletoFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.deleteFileStr(unFile);
+        assertFalse(service.deleteFile(unFile));
+        assertEquals(PATH_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-//        nomeCompletoFile = PATH_FILE_NEW;
-        ottenuto = service.deleteFileStr(nomeCompletoFile);
+        nomeCompletoFile = "Pippo";
+        ottenutoDaNome = service.deleteFileStr(nomeCompletoFile);
         assertFalse(service.deleteFile(nomeCompletoFile));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.deleteFileStr(unFile);
+        assertFalse(service.deleteFile(unFile));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
+
+        nomeCompletoFile = PATH_FILE_NON_ESISTENTE;
+        ottenutoDaNome = service.deleteFileStr(nomeCompletoFile);
+        assertFalse(service.deleteFile(nomeCompletoFile));
+        assertEquals(NON_ESISTE_FILE, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.deleteFileStr(unFile);
+        assertFalse(service.deleteFile(unFile));
+        assertEquals(NON_ESISTE_FILE, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
 
-        //--************************
-//        nomeCompletoFile = PATH_FILE_ESISTENTE_TRE;
+        deleFileValido(PATH_FILE_DELETE);
+    }// end of single test
 
-        //--controlla prima di cancellarlo - Esiste
-        if (!service.isEsisteFile(nomeCompletoFile)) {
-            service.creaFile(nomeCompletoFile);
-        }// end of if cycle
-        assertTrue(service.isEsisteFile(nomeCompletoFile));
+
+    /**
+     * Cancello un file e lo ricreo subito dopo
+     * Se non esiste, lo creo al volo PRIMA di cancellarlo
+     */
+    private void deleFileValido(String nomeCompletoFile) {
+        System.out.println("");
+
+        //--controlla che esista prima di cancellarlo
+        service.creaFile(nomeCompletoFile);
 
         //--cancellazione da testare
+        ottenutoDaNome = service.deleteFileStr(nomeCompletoFile);
+        service.creaFile(nomeCompletoFile);
         assertTrue(service.deleteFile(nomeCompletoFile));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaNome: " + nomeCompletoFile + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        service.creaFile(nomeCompletoFile);
+        unFile = new File(nomeCompletoFile);
+        ottenutoDaFile = service.deleteFileStr(unFile);
+        service.creaFile(nomeCompletoFile);
+        assertTrue(service.deleteFile(unFile));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         //--controlla dopo averlo cancellato - Non esiste
         assertFalse(service.isEsisteFile(nomeCompletoFile));
-
-        //--creazione
-        service.creaFile(nomeCompletoFile);
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteFile(nomeCompletoFile));
-        //--************************
-
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Cancella un file
-     * <p>
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     *
-     * @param absolutePathFileWithSuffixToBeCanceled path completo del file che DEVE cominciare con '/' SLASH e compreso il suffisso
-     *
-     * @return true se il file è stato cancellato oppure non esisteva
-     */
-//    @Test
-    public void deleteFileTramiteFile() {
-        ottenuto = service.deleteFileStr((File) null);
-        assertFalse(service.deleteFile((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
-
-        unFile = new File(VUOTA);
-        ottenuto = service.deleteFileStr(unFile);
-        assertFalse(service.deleteFile(unFile));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoFile = "pippo";
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.deleteFileStr(unFile);
-        assertFalse(service.deleteFile(unFile));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-
-//        nomeCompletoFile = PATH_FILE_NEW;
-        unFile = new File(nomeCompletoFile);
-        ottenuto = service.deleteFileStr(unFile);
-        assertFalse(service.deleteFile(unFile));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
-
-        //--************************
-//        nomeCompletoFile = PATH_FILE_ESISTENTE_TRE;
-        unFile = new File(nomeCompletoFile);
-
-        //--controlla prima di cancellarlo - Esiste
-        if (!service.isEsisteFile(unFile)) {
-            service.creaFile(unFile);
-        }// end of if cycle
-        assertTrue(service.isEsisteFile(unFile));
-
-        //--cancellazione da testare
-        assertTrue(service.deleteFile(unFile));
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteFile(unFile));
-
-        //--creazione
-        service.creaFile(unFile);
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteFile(unFile));
-        //--************************
-    }// end of single test
+    }// end of method
 
 
     /**
@@ -984,112 +793,82 @@ public class AFileServiceTest extends ATest {
      *
      * @return true se la directory è stato cancellato oppure non esisteva
      */
-//    @Test
-    public void deleteDirectoryTramiteNome() {
-        ottenuto = service.deleteDirectoryStr((String) null);
+    @Test
+    public void deleteDirectory() {
+        nomeCompletoDirectory = "null";
+        ottenutoDaNome = service.deleteDirectoryStr((String) null);
         assertFalse(service.deleteDirectory((String) null));
-        assertEquals(PATH_NULLO, ottenuto);
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        ottenutoDaFile = service.deleteDirectoryStr((File) null);
+        assertFalse(service.deleteDirectory((File) null));
+        assertEquals(PARAMETRO_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        ottenuto = service.deleteDirectoryStr(VUOTA);
-        assertFalse(service.deleteDirectory(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
+        nomeCompletoDirectory = VUOTA;
+        ottenutoDaNome = service.deleteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.deleteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NULLO, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.deleteDirectoryStr(unaDirectory);
+        assertFalse(service.deleteDirectory(unaDirectory));
+        assertEquals(PATH_NULLO, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-        nomeCompletoDirectory = "pippo";
-        ottenuto = service.deleteFileStr(nomeCompletoDirectory);
-        assertFalse(service.deleteFile(nomeCompletoDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
+        nomeCompletoDirectory = "Pippo";
+        ottenutoDaNome = service.deleteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.deleteDirectory(nomeCompletoDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.deleteDirectoryStr(unaDirectory);
+        assertFalse(service.deleteDirectory(unaDirectory));
+        assertEquals(PATH_NOT_ABSOLUTE, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-//        nomeCompletoDirectory = PATH_FILE_NEW;
-        ottenuto = service.deleteFileStr(nomeCompletoDirectory);
-        assertFalse(service.deleteFile(nomeCompletoDirectory));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
+        nomeCompletoDirectory = PATH_DIRECTORY_NON_ESISTENTE;
+        ottenutoDaNome = service.deleteDirectoryStr(nomeCompletoDirectory);
+        assertFalse(service.deleteDirectory(nomeCompletoDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        unaDirectory = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.deleteDirectoryStr(unaDirectory);
+        assertFalse(service.deleteDirectory(unaDirectory));
+        assertEquals(NON_ESISTE_DIRECTORY, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
+
+        deleteDirectoryValida(PATH_DIRECTORY_NON_ESISTENTE);
+    }// end of single test
 
 
-        //--************************
-        nomeCompletoDirectory = PATH_FILE_NO_SUFFIX;
+    /**
+     * Cancello una directory e la ricreo subito dopo
+     * Se non esiste, la creo al volo PRIMA di cancellarla
+     */
+    private void deleteDirectoryValida(String nomeCompletoDirectory) {
+        System.out.println("");
 
-        //--controlla prima di cancellarlo - Esiste
-        if (!service.isEsisteDirectory(nomeCompletoDirectory)) {
-            service.creaDirectory(nomeCompletoDirectory);
-        }// end of if cycle
-        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
+        //--controlla che esista prima di cancellarla
+        service.creaDirectory(nomeCompletoDirectory);
 
         //--cancellazione da testare
+        ottenutoDaNome = service.deleteDirectoryStr(nomeCompletoDirectory);
+        service.creaDirectory(nomeCompletoDirectory);
         assertTrue(service.deleteDirectory(nomeCompletoDirectory));
+        assertEquals(VUOTA, ottenutoDaNome);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaNome: " + nomeCompletoDirectory + " = " + (ottenutoDaNome.equals(VUOTA) ? VALIDO : ottenutoDaNome));
+        service.creaDirectory(nomeCompletoDirectory);
+        unFile = new File(nomeCompletoDirectory);
+        ottenutoDaFile = service.deleteDirectoryStr(unFile);
+        service.creaDirectory(nomeCompletoDirectory);
+        assertTrue(service.deleteDirectory(unFile));
+        assertEquals(VUOTA, ottenutoDaFile);
+        System.out.println("Risposta" + DELETE_DIRECTORY + "ottenutoDaFile: " + nomeCompletoDirectory + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
         //--controlla dopo averlo cancellato - Non esiste
         assertFalse(service.isEsisteDirectory(nomeCompletoDirectory));
-
-        //--creazione
-        service.creaDirectory(nomeCompletoDirectory);
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteDirectory(nomeCompletoDirectory));
-        //--************************
-
-    }// end of single test
-
-
-    /**
-     * Cancella una directory
-     * <p>
-     * Il path non deve essere nullo <br>
-     * Il path non deve essere vuoto <br>
-     * Il path deve essere completo ed inziare con uno 'slash' <br>
-     * Il path deve essere completo e terminare con un 'suffix' <br>
-     * La richiesta è CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
-     *
-     * @param absolutePathDirectoryToBeDeleted path completo della directory che DEVE cominciare con '/' SLASH
-     *
-     * @return true se la directory è stato cancellato oppure non esisteva
-     */
-//    @Test
-    public void deleteDirectoryTramiteFile() {
-        ottenuto = service.deleteDirectoryStr((File) null);
-        assertFalse(service.deleteDirectory((File) null));
-        assertEquals(PARAMETRO_NULLO, ottenuto);
-
-        ottenuto = service.deleteDirectoryStr(VUOTA);
-        assertFalse(service.deleteDirectory(VUOTA));
-        assertEquals(PATH_NULLO, ottenuto);
-
-        nomeCompletoDirectory = "pippo";
-        unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.deleteFileStr(unaDirectory);
-        assertFalse(service.deleteFile(unaDirectory));
-        assertEquals(PATH_NOT_ABSOLUTE, ottenuto);
-
-//        nomeCompletoDirectory = PATH_FILE_NEW;
-        unaDirectory = new File(nomeCompletoDirectory);
-        ottenuto = service.deleteFileStr(unaDirectory);
-        assertFalse(service.deleteFile(unaDirectory));
-        assertEquals(NON_ESISTE_FILE, ottenuto);
-
-
-        //--************************
-        nomeCompletoDirectory = PATH_FILE_NO_SUFFIX;
-        unaDirectory = new File(nomeCompletoDirectory);
-
-        //--controlla prima di cancellarlo - Esiste
-        if (!service.isEsisteDirectory(unaDirectory)) {
-            service.creaDirectory(unaDirectory);
-        }// end of if cycle
-        assertTrue(service.isEsisteDirectory(unaDirectory));
-
-        //--cancellazione da testare
-        assertTrue(service.deleteDirectory(unaDirectory));
-
-        //--controlla dopo averlo cancellato - Non esiste
-        assertFalse(service.isEsisteDirectory(unaDirectory));
-
-        //--creazione
-        service.creaDirectory(unaDirectory);
-
-        //--controlla dopo averlo creato - Esiste
-        assertTrue(service.isEsisteDirectory(unaDirectory));
-        //--************************
-
-    }// end of single test
+    }// end of method
 
 
     @SuppressWarnings("javadoc")

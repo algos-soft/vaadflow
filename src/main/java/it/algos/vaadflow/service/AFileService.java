@@ -30,6 +30,22 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, basta il 'pattern') <br>
  * Annotated with @@Slf4j (facoltativo) per i logs automatici <br>
  * <p>
+ * Fondamentalmente per l'accesso al file system si costruisce un'istanza della classe File a cui si applicano i seguenti metodi:
+ * fileToBeChecked.exists()
+ * directoryToBeChecked.exists()
+ * fileToBeCreated.createNewFile()
+ * directoryToBeCreated.mkdirs()
+ * fileToBeDeleted.delete()
+ * directoryToBeDeleted.delete()
+ * directoryToBeDeleted.deleteOnExit()
+ * Questa libreria costituisce un layer di collegamento per questi metodi base <br>
+ * Viene restituito un messaggio di errore per i metodi principali <br>
+ * <p>
+ * Nel system, un file viene creato SOLO se esiste già il path completo <br>
+ * In questa libreria, un file viene creato ANCHE se manca il path completo (se lo costruisce in automatico) <br>
+ * Le richieste sono CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
+ * Nel system tutti gli indirizzi che NON cominciano con '/' (slash) vengono riferiti alla directory di funzionamento del programma in uso <br>
+ * In questa libreria vengono accettati SOLO indirizzi di root completi che inziano con '/' (slash) <br>
  */
 @Service
 @Slf4j
@@ -51,6 +67,8 @@ public class AFileService extends AbstractService {
     public static final String NON_CREATO_FILE = "Il file non è stato creato";
 
     public static final String NON_CANCELLATO_FILE = "Il file non è stato cancellato";
+
+    public static final String NON_CANCELLATA_DIRECTORY = "La directory non è stata cancellata";
 
     public static final String NON_ESISTE_DIRECTORY = "La directory non esiste";
 
@@ -417,10 +435,40 @@ public class AFileService extends AbstractService {
         try { // prova ad eseguire il codice
             fileToBeCreated.createNewFile();
         } catch (Exception unErrore) { // intercetta l'errore
-            return NON_CREATO_FILE;
+            return creaDirectoryParentAndFile(fileToBeCreated);
         }// fine del blocco try-catch
 
         return fileToBeCreated.exists() ? VUOTA : NON_CREATO_FILE;
+    }// end of method
+
+
+    /**
+     * Creazioni di una directory 'parent' <br>
+     * Se manca il path completo alla creazione di un file, creo la directory 'parent' di quel file <br>
+     * Riprovo la creazione del file <br>
+     */
+    public String creaDirectoryParentAndFile(File unFile) {
+        String risposta = NON_CREATO_FILE;
+        String parentDirectoryName;
+        File parentDirectoryFile = null;
+        boolean parentDirectoryCreata = false;
+
+        if (unFile != null) {
+            parentDirectoryName = unFile.getParent();
+            parentDirectoryFile = new File(parentDirectoryName);
+            parentDirectoryCreata = parentDirectoryFile.mkdirs();
+        }// end of if cycle
+
+        if (parentDirectoryCreata) {
+            try { // prova ad eseguire il codice
+                unFile.createNewFile();
+                risposta = VUOTA;
+            } catch (Exception unErrore) { // intercetta l'errore
+                System.out.println("Errore nel path per la creazione di un file");
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        return risposta;
     }// end of method
 
 
@@ -709,15 +757,16 @@ public class AFileService extends AbstractService {
         }// end of if/else cycle
 
         if (!directoryToBeDeleted.exists()) {
-            return NON_ESISTE_FILE;
+            return NON_ESISTE_DIRECTORY;
         }// end of if cycle
 
         if (directoryToBeDeleted.delete()) {
             return VUOTA;
         } else {
-            return NON_CANCELLATO_FILE;
+            return NON_CANCELLATA_DIRECTORY;
         }// end of if/else cycle
     }// end of method
+
 
     /**
      * Copia una directory
