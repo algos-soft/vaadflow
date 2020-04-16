@@ -48,7 +48,7 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_DIRECTORY_DA_COPIARE = PATH_DIRECTORY_TEST + "NuovaDirectory/";
 
-    private static String PATH_DIRECTORY_MANCANTE = PATH_DIRECTORY_TEST + "CartellaMancante/";
+    private static String PATH_DIRECTORY_MANCANTE = PATH_DIRECTORY_TEST + "CartellaCopiata/";
 
 
     private static String PATH_FILE_UNO = PATH_DIRECTORY_TEST + "Pluto.rtf";
@@ -67,7 +67,7 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_FILE_AGGIUNTO = PATH_DIRECTORY_MANCANTE + "TerzaPossibilita.htm";
 
-    private static String PATH_FILE_AGGIUNTO_TRE = PATH_DIRECTORY_TRE + "FileAggiunto.ccs";
+    private static String PATH_FILE_AGGIUNTO_TRE = PATH_DIRECTORY_TRE + "FileSorgenteAggiunto.ccs";
 
     private static String PATH_FILE_NO_PATH = "Users/gac/Desktop/test/Pluto.rtf";
 
@@ -1013,6 +1013,7 @@ public class AFileServiceTest extends ATest {
         String srcPathValida = PATH_DIRECTORY_TRE;
         String srcPathNonEsistente = PATH_DIRECTORY_NON_ESISTENTE;
         String destPathDaSovrascrivere = PATH_DIRECTORY_MANCANTE;
+        String srcFileAggiunto = PATH_FILE_AGGIUNTO_TRE;
 
         //--esegue con sorgente NON esistente
         assertFalse(service.isEsisteDirectory(srcPathNonEsistente));
@@ -1028,6 +1029,9 @@ public class AFileServiceTest extends ATest {
         assertTrue(ottenutoBooleano);
         assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
 
+        //--aggiunge nella cartella sorgente un file per controllare che NON venga aggiunto (come previsto)
+        assertTrue(service.creaFile(srcFileAggiunto));
+
         //--esegue con destinazione esistente
         assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
         assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
@@ -1040,6 +1044,78 @@ public class AFileServiceTest extends ATest {
         }// fine del blocco try-catch
 
         assertFalse(service.isEsisteDirectory(destPathDaSovrascrivere));
+    }// end of single test
+
+
+    /**
+     * Copia una directory aggiungendo files e subdirectories a quelli eventualmente esistenti <br>
+     * Lascia inalterate subdirectories e files già esistenti <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory destinazione, aggiunge files e subdirectories <br>
+     * Tutti i files e le subdirectories esistenti vengono mantenuti <br>
+     * Tutte le aggiunte sono ricorsive nelle subdirectories <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    @Test
+    public void copyDirectoryOnlyNotExisting2() {
+        String primo = "PrimoFileCheResta.txx";
+        String secondo = "SecondoFileCheResta.txx";
+        String terzo = "TerzoFileVariabile.txx";
+        String quarto = "QuartoIncerto.txx";
+        String sorgente = PATH_DIRECTORY_TEST + "Sorgente/";
+        String emptyDirCopiata = sorgente + "VieneCopiata";
+        String srcDirectoryUno = sorgente + "PrimaDirectory/";
+        String srcDirUnoFileUno = srcDirectoryUno + primo;
+        String srcDirUnoFileDue = srcDirectoryUno + secondo;
+        String srcDirUnoFileTre = srcDirectoryUno + terzo;
+        String srcDirectoryDue = sorgente + "SecondaDirectory/";
+        String srcDirDueFileUno = srcDirectoryDue + primo;
+        String srcDirDueFileDue = srcDirectoryDue + secondo;
+        String srcDirDueFileQuattro = srcDirectoryDue + quarto;
+
+        String destinazione = PATH_DIRECTORY_TEST + "Destinazione/";
+        String emptyDirRimane = destinazione + "Rimane";
+        String destDirectoryUno = destinazione + "PrimaDirectory/";
+        String destDirUnoFileUno = destDirectoryUno + primo;
+        String destDirUnoFileDue = destDirectoryUno + secondo;
+        String destDirUnoFileQuattro = destDirectoryUno + quarto;
+        String destDirectoryDue = destinazione + "SecondaDirectory/";
+        String destDirDueFileUno = destDirectoryDue + primo;
+        String destDirDueFileDue = destDirectoryDue + secondo;
+        String destDirDueFileTre = destDirectoryDue + terzo;
+
+        assertTrue(service.creaDirectory(emptyDirCopiata));
+        assertTrue(service.creaFile(srcDirUnoFileUno));
+        assertTrue(service.creaFile(srcDirUnoFileDue));
+        assertTrue(service.creaFile(srcDirUnoFileTre));
+        assertTrue(service.creaFile(srcDirDueFileUno));
+        assertTrue(service.creaFile(srcDirDueFileDue));
+        assertTrue(service.creaFile(srcDirDueFileQuattro));
+
+        assertTrue(service.creaDirectory(emptyDirRimane));
+        assertTrue(service.creaFile(destDirUnoFileUno));
+        assertTrue(service.creaFile(destDirUnoFileUno));
+        assertTrue(service.creaFile(destDirUnoFileDue));
+        assertTrue(service.creaFile(destDirUnoFileQuattro));
+        assertTrue(service.creaFile(destDirDueFileUno));
+        assertTrue(service.creaFile(destDirDueFileDue));
+        assertTrue(service.creaFile(destDirDueFileTre));
+
+        ottenutoBooleano = service.copyDirectoryAddingOnly(sorgente, destinazione);
+        assertTrue(ottenutoBooleano);
+
+        try { // prova ad eseguire il codice
+//            FileUtils.forceDelete(new File(destPathDaSovrascrivere));
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+
+//        assertFalse(service.isEsisteDirectory(destPathDaSovrascrivere));
     }// end of single test
 
 
