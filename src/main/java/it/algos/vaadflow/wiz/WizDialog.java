@@ -105,7 +105,7 @@ public class WizDialog extends Dialog {
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory che contiene il programma VaadFlow
     //--PATH_VAAD_FLOW_DIR_STANDARD oppure userDir meno NAME_PROJECT_BASE
-    protected String pathVaadFlowDir;
+    protected String pathVaadFlow;
 
     //--regolata indipendentemente dai risultati del dialogo
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
@@ -139,15 +139,15 @@ public class WizDialog extends Dialog {
     protected void regolazioniIniziali() {
         this.pathUserDir = System.getProperty("user.dir");
         if (pathUserDir.equals(PATH_VAAD_FLOW_DIR_STANDARD)) {
-            this.pathVaadFlowDir = pathUserDir;
+            this.pathVaadFlow = pathUserDir;
         } else {
-            this.pathVaadFlowDir = text.levaCodaDa(pathUserDir, SLASH);
+            this.pathVaadFlow = text.levaCodaDa(pathUserDir, SLASH);
             log.warn("Attenzione. La directory di VaadFlow è cambiata");
         }// end of if/else cycle
 
         //valido SOLO per new project
         if (isNuovoProgetto) {
-            this.pathProjectsDir = text.levaCodaDa(pathVaadFlowDir, SLASH);
+            this.pathProjectsDir = text.levaCodaDa(pathVaadFlow, SLASH);
             this.pathProjectsDir = text.levaCodaDa(pathProjectsDir, SLASH);
             if (!pathProjectsDir.equals(PATH_PROJECTS_DIR_STANDARD)) {
                 log.warn("Attenzione. La directory dei Projects è cambiata");
@@ -156,7 +156,7 @@ public class WizDialog extends Dialog {
             this.pathProjectsDir = VUOTA;
         }// end of if/else cycle
 
-        this.pathSources = pathVaadFlowDir + DIR_SOURCES;
+        this.pathSources = pathVaadFlow + DIR_SOURCES;
     }// end of method
 
 
@@ -351,7 +351,7 @@ public class WizDialog extends Dialog {
     protected void setMappa() {
         if (mappaInput != null) {
             mappaInput.put(Chiave.pathUserDir, pathUserDir);
-            mappaInput.put(Chiave.pathVaadFlowDir, pathVaadFlowDir);
+            mappaInput.put(Chiave.pathVaadFlow, pathVaadFlow);
             mappaInput.put(Chiave.pathProjectsDir, pathProjectsDir);
             mappaInput.put(Chiave.pathSources, pathSources);
             if (isNuovoProgetto) {
@@ -380,7 +380,7 @@ public class WizDialog extends Dialog {
 
             //--visualizzazione di controllo
             log.info("Progetto corrente: pathUserDir=" + pathUserDir);
-            log.info("Directory VaadFlow: pathVaadFlowDir=" + pathVaadFlowDir);
+            log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
             if (isNuovoProgetto) {
                 log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
             }// end of if cycle

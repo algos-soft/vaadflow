@@ -1561,7 +1561,7 @@ public class TElabora {
         }// end of if cycle
 
         if (progettoCancellato || !file.isEsisteDirectory(destPath + tag)) {
-            file.copyDirectory(srcPath + tag, destPath + tag);
+            file.copyDirectoryAddingOnly(srcPath + tag, destPath + tag);
         }// end of if cycle
     }// end of method
 
@@ -1663,7 +1663,7 @@ public class TElabora {
             }// end of if cycle
 
             if (dirCancellata || !file.isEsisteDirectory(destPath)) {
-                file.copyDirectory(srcPath, destPath);
+                file.copyDirectoryAddingOnly(srcPath, destPath);
             }// end of if cycle
         }// end of if cycle
     }// end of method
@@ -1685,7 +1685,7 @@ public class TElabora {
         if (flagSovrascriveDirectory) {
             dirCancellata = file.deleteDirectory(destPath);
             if (dirCancellata || !file.isEsisteDirectory(destPath)) {
-                file.copyDirectory(srcPath, destPath);
+                file.copyDirectoryAddingOnly(srcPath, destPath);
             }// end of if cycle
         } else {
             List<String> lista = file.getFiles(srcPath);

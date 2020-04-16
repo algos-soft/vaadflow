@@ -93,8 +93,8 @@ public abstract class WizElabora implements WizRecipient {
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory che contiene il programma VaadFlow
-    //--userDir meno NAME_PROJECT_BASE
-    protected String pathVaadFlowDir;
+    //--normalmente uguale a pathUserDir
+    protected String pathVaadFlow;
 
     //--regolata indipendentemente dai risultati del dialogo
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
@@ -106,7 +106,14 @@ public abstract class WizElabora implements WizRecipient {
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory dei sorgenti testuali di VaadFlow (da elaborare)
-    //--pathVaadFlowDir più DIR_SOURCES
+    //--pathVaadFlow più DIR_MAIN
+    protected String pathVaadFlowMain;
+
+    //--regolata indipendentemente dai risultati del dialogo
+    //--dipende solo da dove si trava attualmente il progetto VaadFlow
+    //--posso spostarlo (è successo) senza che cambi nulla
+    //--directory dei sorgenti testuali di VaadFlow (da elaborare)
+    //--pathVaadFlowJava più DIR_SOURCES
     protected String pathSources;
 
     //--regolata in base ai risultati del dialogo
@@ -120,6 +127,10 @@ public abstract class WizElabora implements WizRecipient {
     //--regolata in base ai risultati del dialogo
     //--path completo del progetto da creare/modificare
     protected String pathProject;
+
+    //--regolata in base ai risultati del dialogo
+    //--pathProject più DIR_MAIN
+    protected String pathProjectMain;
 
 
     /**
@@ -138,12 +149,13 @@ public abstract class WizElabora implements WizRecipient {
      */
     protected void regolazioniIniziali() {
         this.pathUserDir = (String) mappaInput.get(Chiave.pathUserDir);
-        this.pathVaadFlowDir = (String) mappaInput.get(Chiave.pathVaadFlowDir);
+        this.pathVaadFlow = (String) mappaInput.get(Chiave.pathVaadFlow);
         if (isNuovoProgetto) {
             this.pathProjectsDir = (String) mappaInput.get(Chiave.pathProjectsDir);
         } else {
             this.pathProjectsDir = VUOTA;
         }// end of if/else cycle
+        this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
         this.pathSources = (String) mappaInput.get(Chiave.pathSources);
         if (isNuovoProgetto) {
             this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
@@ -155,10 +167,11 @@ public abstract class WizElabora implements WizRecipient {
         } else {
             this.pathProject = VUOTA;
         }// end of if/else cycle
+        pathProjectMain = pathProject + DIR_MAIN;
 
         //--visualizzazione di controllo
         log.info("Progetto corrente: pathUserDir=" + pathUserDir);
-        log.info("Directory VaadFlow: pathVaadFlowDir=" + pathVaadFlowDir);
+        log.info("Directory VaadFlow: pathVaadFlowDir=" + pathVaadFlow);
         if (isNuovoProgetto) {
             log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
         }// end of if cycle
@@ -245,7 +258,7 @@ public abstract class WizElabora implements WizRecipient {
      */
     protected void regolaRead() {
         String fileName = SLASH + FILE_READ + SOURCE_SUFFIX;
-        String srcPath = pathVaadFlowDir + fileName;
+        String srcPath = pathVaadFlow + fileName;
         String destPath = pathProject + fileName;
 
         if (flagRead) {
@@ -260,7 +273,7 @@ public abstract class WizElabora implements WizRecipient {
      * File di esclusioni GIT di text
      */
     protected void regolaGit() {
-        String srcPath = pathVaadFlowDir + SLASH + FILE_GIT;
+        String srcPath = pathVaadFlow + SLASH + FILE_GIT;
         String destPath = pathProject + SLASH + FILE_GIT;
 
         if (flagGit) {
@@ -290,12 +303,25 @@ public abstract class WizElabora implements WizRecipient {
 
 
     /**
+     * Cartella di resources META-INF
+     */
+    protected void copiaMetaInf() {
+        String srcPath = pathVaadFlowMain + SLASH + "resources";
+        String destPath = pathProjectMain + SLASH + "resources";
+
+        if (flagResources) {
+            file.copyDirectoryAddingOnly(srcPath, destPath);
+        }// end of if cycle
+    }// end of method
+
+
+    /**
      * Sovrascrive o aggiunge a seconda del flag 'flagSovrascriveDirectory'
      */
     protected void fixCartellaExtra(boolean esegue, String dirNameGrezzo) {
         boolean dirCancellata = false;
         String dirName = dirNameGrezzo.startsWith("/") ? dirNameGrezzo.substring(1) : dirNameGrezzo;
-        String srcPath = pathVaadFlowDir + SLASH + dirName;
+        String srcPath = pathVaadFlow + SLASH + dirName;
         String destPath = pathProject + SLASH + dirName;
 
         if (!esegue) {
@@ -305,7 +331,7 @@ public abstract class WizElabora implements WizRecipient {
         if (flagSovrascriveDirectory) {
             dirCancellata = file.deleteDirectory(destPath);
             if (dirCancellata || !file.isEsisteDirectory(destPath)) {
-                file.copyDirectory(srcPath, destPath);
+                file.copyDirectoryAddingOnly(srcPath, destPath);
             }// end of if cycle
         } else {
             List<String> lista = file.getFiles(srcPath);

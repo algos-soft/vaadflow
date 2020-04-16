@@ -35,7 +35,7 @@ public class WizElaboraNewProject extends WizElabora {
         super.gotInput(mappaInput);
 
         this.copiaCartelleVarie();
-        this.copiaCartellaVaadFlow();
+//        this.copiaCartellaVaadFlow();
     }// end of method
 
 
@@ -47,14 +47,14 @@ public class WizElaboraNewProject extends WizElabora {
         super.regolaGit();
         super.regolaProperties();
 //        this.regolaPom();
-//        this.copiaMetaInf();
+        super.copiaMetaInf();
     }// end of method
 
 
     public void copiaCartellaVaadFlow() {
 
 
-        String source = pathVaadFlowDir + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
+        String source = pathVaadFlow + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
         File srcDir = new File(source);
 
         String destination = pathProject + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;

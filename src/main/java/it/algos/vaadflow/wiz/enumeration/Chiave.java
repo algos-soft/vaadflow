@@ -14,7 +14,7 @@ public enum Chiave {
     newEntityName,
     newEntityTag,
     pathUserDir,
-    pathVaadFlowDir,
+    pathVaadFlow,
     pathProjectsDir,
     pathSources,
     flagOrdine,

@@ -833,19 +833,9 @@ public class AFileService extends AbstractService {
      *
      * @return true se la directory  è stata copiata
      */
+    @Deprecated
     public boolean copyDirectory(String srcPath, String destPath) {
-        boolean copiata = false;
-        File srcDir = new File(srcPath);
-        File destDir = new File(destPath);
-
-        try { // prova ad eseguire il codice
-            FileUtils.copyDirectory(srcDir, destDir);
-            copiata = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }// fine del blocco try-catch
-
-        return copiata;
+        return copyDirectoryAddingOnly(srcPath, destPath);
     }// end of method
 
 
