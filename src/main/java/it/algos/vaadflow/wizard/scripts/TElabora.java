@@ -794,7 +794,7 @@ public class TElabora {
                     System.out.println(fileNameJava + " esisteva già ed è stato modificato SOLO nella documentazione");
                 }// end of if/else cycle
             } else {
-                file.scriveFile(pathFileJava, newTaskText, true);
+                file.scriveNewFile(pathFileJava, newTaskText);
                 System.out.println(fileNameJava + " non esisteva ed è stato creato");
             }// end of if/else cycle
         }// end of if/else cycle
@@ -828,19 +828,19 @@ public class TElabora {
         String oldText = "";
 
         if (flagSovrascriveFile) {
-            file.scriveFile(pathNewFile, sourceText, true);
+            file.scriveNewFile(pathNewFile, sourceText);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {
             oldText = file.leggeFile(pathNewFile);
             if (text.isValid(oldText)) {
                 if (checkFile(oldText)) {
-                    file.scriveFile(pathNewFile, sourceText, true);
+                    file.scriveNewFile(pathNewFile, sourceText);
                     System.out.println(fileNameJava + " esisteva già ed è stato modificato");
                 } else {
                     System.out.println(fileNameJava + " esisteva già e NON è stato modificato");
                 }// end of if/else cycle
             } else {
-                file.scriveFile(pathNewFile, sourceText, true);
+                file.scriveNewFile(pathNewFile, sourceText);
                 System.out.println(fileNameJava + " non esisteva ed è stato creato");
             }// end of if/else cycle
         }// end of if/else cycle
@@ -1545,7 +1545,7 @@ public class TElabora {
         textCostClass = file.leggeFile(path);
         if (!textCostClass.contains(tagRif)) {
             textCostClass = text.sostituisce(textCostClass, tagOld, tagNew);
-            file.scriveFile(path, textCostClass, true);
+            file.scriveNewFile(path, textCostClass);
         }// end of if cycle
     }// end of method
 
@@ -1827,7 +1827,7 @@ public class TElabora {
     private void checkAndWrite(String destPath, String newText) {
         String oldFileText = file.leggeFile(destPath);
         if (checkFile(oldFileText)) {
-            file.scriveFile(destPath, newText, true);
+            file.scriveNewFile(destPath, newText);
         }// end of if cycle
     }// end of method
 

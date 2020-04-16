@@ -4,6 +4,7 @@ import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,12 +46,16 @@ public class AFileServiceTest extends ATest {
 
     private static String PATH_DIRECTORY_NON_ESISTENTE = PATH_DIRECTORY_TEST + "Genova/";
 
+    private static String PATH_DIRECTORY_DA_COPIARE = PATH_DIRECTORY_TEST + "NuovaDirectory/";
+
+    private static String PATH_DIRECTORY_MANCANTE = PATH_DIRECTORY_TEST + "CartellaMancante/";
+
 
     private static String PATH_FILE_UNO = PATH_DIRECTORY_TEST + "Pluto.rtf";
 
-    private static String PATH_FILE_DUE = PATH_DIRECTORY_TEST + "CartellaMancante/Secondo.rtf";
+    private static String PATH_FILE_DUE = PATH_DIRECTORY_MANCANTE + "Secondo.rtf";
 
-    private static String PATH_FILE_TRE = PATH_DIRECTORY_TEST + "Paperino/Topolino.txt";
+    private static String PATH_FILE_TRE = PATH_DIRECTORY_TRE + "/Topolino.txt";
 
     private static String PATH_FILE_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/Desktop/test/pluto.rtf";
 
@@ -213,17 +218,30 @@ public class AFileServiceTest extends ATest {
      * I files li cancella subito 'al volo', per essere sicuri di svuotare le directory <br>
      * Le directory, che sono vuote, le segnala al System che le chiude alla fine del test <br>
      */
-    private void fine() {
+    @Deprecated
+    private void fineOld() {
         if (array.isValid(listaFile)) {
             for (File file : listaFile) {
                 file.delete(); //--cancellazionew immediata
             }// end of for cycle
         }// end of if cycle
+
         if (array.isValid(listaDirectory)) {
             for (File directory : listaDirectory) {
-                directory.deleteOnExit(); //--cancellazionew alla fine del programma (in questo caso il test)
+                directory.deleteOnExit(); //--cancellazione alla fine del programma (in questo caso il test)
             }// end of for cycle
         }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Cancellazione finale di tutti i files/directories creati in questo test <br>
+     */
+    private void fine() {
+        try { // prova ad eseguire il codice
+            FileUtils.forceDelete(new File(PATH_DIRECTORY_TEST));
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
     }// end of method
 
 
@@ -749,7 +767,6 @@ public class AFileServiceTest extends ATest {
         assertEquals(NON_ESISTE_FILE, ottenutoDaFile);
         System.out.println("Risposta" + DELETE_FILE + "ottenutoDaFile: " + nomeCompletoFile + " = " + (ottenutoDaFile.equals(VUOTA) ? VALIDO : ottenutoDaFile));
 
-
         deleFileValido(PATH_FILE_DELETE);
     }// end of single test
 
@@ -874,6 +891,181 @@ public class AFileServiceTest extends ATest {
     }// end of method
 
 
+    /**
+     * Copia un file
+     * <p>
+     * Se manca il file sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste il file destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo del file sorgente
+     * @param destPath nome completo del file destinazione
+     *
+     * @return true se è stato copiato
+     */
+    @Test
+    public void copyFile() {
+        String srcPathNonEsistente = PATH_FILE_NON_ESISTENTE;
+        String srcPath = PATH_FILE_UNO;
+        String destPath = PATH_DIRECTORY_TEST + "NuovoFile.rtf";
+        String destPathEsistente = PATH_FILE_DUE;
+
+        //--esegue con sorgente NON esistente
+        ottenutoBooleano = service.copyFile(srcPathNonEsistente, destPath);
+        assertFalse(ottenutoBooleano);
+        ottenuto = service.copyFileStr(srcPathNonEsistente, destPath);
+        assertEquals(NON_COPIATO_FILE, ottenuto);
+
+        //--esegue con destinazione GIA esistente
+        ottenutoBooleano = service.copyFile(srcPath, destPathEsistente);
+        assertFalse(ottenutoBooleano);
+        ottenuto = service.copyFileStr(srcPathNonEsistente, destPath);
+        assertEquals(NON_COPIATO_FILE, ottenuto);
+
+        //--controllo condizioni iniziali
+        assertTrue(service.isEsisteFile(srcPath));
+        assertFalse(service.isEsisteFile(destPath));
+
+        //--esegue
+        ottenutoBooleano = service.copyFile(srcPath, destPath);
+        assertTrue(ottenutoBooleano);
+
+        //--controllo condizioni finali
+        assertTrue(service.isEsisteFile(srcPath));
+        assertTrue(service.isEsisteFile(destPath));
+
+        //--ripristina condizioni iniziali
+        assertTrue(service.deleteFile(destPath));
+    }// end of method
+
+
+    /**
+     * Copia una directory sostituendo integralmente quella eventualmente esistente <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, la cancella prima di ricopiarla <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    @Test
+    public void copyDirectoryDeletingAll() {
+        String srcPathNonEsistente = PATH_DIRECTORY_NON_ESISTENTE;
+        String srcPath = PATH_DIRECTORY_TRE;
+        String destPath = PATH_DIRECTORY_NON_ESISTENTE;
+        String destPathNonEsistente = PATH_DIRECTORY_DA_COPIARE;
+        String destPathDaSovrascrivere = PATH_DIRECTORY_MANCANTE;
+
+        //--esegue con sorgente NON esistente
+        assertFalse(service.isEsisteDirectory(srcPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryDeletingAll(srcPathNonEsistente, destPath);
+        assertFalse(ottenutoBooleano);
+
+        //--esegue con destinazione NON esistente
+        assertFalse(service.isEsisteDirectory(destPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryDeletingAll(srcPath, destPathNonEsistente);
+        assertTrue(ottenutoBooleano);
+
+        //--esegue con destinazione esistente
+        assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
+        ottenutoBooleano = service.copyDirectoryDeletingAll(srcPath, destPathDaSovrascrivere);
+        assertTrue(ottenutoBooleano);
+
+        try { // prova ad eseguire il codice
+            FileUtils.forceDelete(new File(destPathNonEsistente));
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+    }// end of single test
+
+
+    /**
+     * Copia una directory solo se non esisteva <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    @Test
+    public void copyDirectoryOnlyNotExisting() {
+        String srcPathNonEsistente = PATH_DIRECTORY_NON_ESISTENTE;
+        String srcPath = PATH_DIRECTORY_TRE;
+        String destPath = PATH_DIRECTORY_NON_ESISTENTE;
+        String destPathNonEsistente = PATH_DIRECTORY_DA_COPIARE;
+        String destPathDaSovrascrivere = PATH_DIRECTORY_MANCANTE;
+
+        //--esegue con sorgente NON esistente
+        assertFalse(service.isEsisteDirectory(srcPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryOnlyNotExisting(srcPathNonEsistente, destPath);
+        assertFalse(ottenutoBooleano);
+
+        //--esegue con destinazione NON esistente
+        assertFalse(service.isEsisteDirectory(destPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryOnlyNotExisting(srcPath, destPathNonEsistente);
+        assertTrue(ottenutoBooleano);
+
+        //--esegue con destinazione esistente
+        assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
+        ottenutoBooleano = service.copyDirectoryOnlyNotExisting(srcPath, destPathDaSovrascrivere);
+
+        try { // prova ad eseguire il codice
+            FileUtils.forceDelete(new File(destPathNonEsistente));
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+    }// end of single test
+
+
+    /**
+     * Copia una directory aggiungendo files e subdirectories a quelli eventualmente esistenti <br>
+     * Lascia inalterate subdirectories e files già esistenti <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory destinazione, aggiunge files e subdirectories <br>
+     * Tutte le aggiunte sono ricorsive nelle subdirectories <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    @Test
+    public void copyDirectoryAddingOnly() {
+        String srcPathNonEsistente = PATH_DIRECTORY_NON_ESISTENTE;
+        String srcPath = PATH_DIRECTORY_TRE;
+        String destPath = PATH_DIRECTORY_NON_ESISTENTE;
+        String destPathNonEsistente = PATH_DIRECTORY_DA_COPIARE;
+        String destPathDaSovrascrivere = PATH_DIRECTORY_MANCANTE;
+
+        //--esegue con sorgente NON esistente
+        assertFalse(service.isEsisteDirectory(srcPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryAddingOnly(srcPathNonEsistente, destPath);
+        assertFalse(ottenutoBooleano);
+
+        //--esegue con destinazione NON esistente
+        assertFalse(service.isEsisteDirectory(destPathNonEsistente));
+        ottenutoBooleano = service.copyDirectoryAddingOnly(srcPath, destPathNonEsistente);
+        assertTrue(ottenutoBooleano);
+
+        //--esegue con destinazione esistente
+        assertTrue(service.isEsisteDirectory(destPathDaSovrascrivere));
+        ottenutoBooleano = service.copyDirectoryAddingOnly(srcPath, destPathDaSovrascrivere);
+        assertTrue(ottenutoBooleano);
+
+        try { // prova ad eseguire il codice
+            FileUtils.forceDelete(new File(destPathNonEsistente));
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+    }// end of single test
+
+
     @SuppressWarnings("javadoc")
     /**
      * Scrive un file
@@ -893,7 +1085,7 @@ public class AFileServiceTest extends ATest {
 //        assertEquals(statusPrevisto, statusOttenuto);
 //
 //        statusPrevisto = true;
-//        statusOttenuto = service.scriveFile(nomeFile, testo + "pippo", true);
+//        statusOttenuto = service.scriveNewFile(nomeFile, testo + "pippo", true);
 //        assertEquals(statusPrevisto, statusOttenuto);
 //
 //        service.deleteFile(nomeFile);

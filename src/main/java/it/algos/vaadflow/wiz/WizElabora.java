@@ -283,7 +283,7 @@ public abstract class WizElabora implements WizRecipient {
         sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
 
         if (flagProperties) {
-            file.scriveFile(destPath, sourceText, true);
+            file.scriveNewFile(destPath, sourceText);
             checkAndWriteFile(destPath, sourceText);
         }// end of if cycle
     }// end of method
@@ -335,19 +335,19 @@ public abstract class WizElabora implements WizRecipient {
         String oldText = VUOTA;
 
         if (flagSovrascriveFile) {
-            file.scriveFile(pathNewFile, sourceText, true);
+            file.scriveNewFile(pathNewFile, sourceText);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {
             oldText = file.leggeFile(pathNewFile);
             if (text.isValid(oldText)) {
                 if (checkFile(oldText)) {
-                    file.scriveFile(pathNewFile, sourceText, true);
+                    file.scriveNewFile(pathNewFile, sourceText);
                     System.out.println(fileNameJava + " esisteva già ed è stato modificato");
                 } else {
                     System.out.println(fileNameJava + " esisteva già e NON è stato modificato");
                 }// end of if/else cycle
             } else {
-                file.scriveFile(pathNewFile, sourceText, true);
+                file.scriveNewFile(pathNewFile, sourceText);
                 System.out.println(fileNameJava + " non esisteva ed è stato creato");
             }// end of if/else cycle
         }// end of if/else cycle

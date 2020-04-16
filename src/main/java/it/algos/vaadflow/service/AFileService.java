@@ -38,6 +38,7 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  * fileToBeDeleted.delete()
  * directoryToBeDeleted.delete()
  * directoryToBeDeleted.deleteOnExit()
+ * FileUtils.forceDelete(directoryToBeDeleted)
  * Questa libreria costituisce un layer di collegamento per questi metodi base <br>
  * Viene restituito un messaggio di errore per i metodi principali <br>
  * <p>
@@ -46,6 +47,8 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  * Le richieste sono CASE INSENSITIVE (maiuscole e minuscole SONO uguali) <br>
  * Nel system tutti gli indirizzi che NON cominciano con '/' (slash) vengono riferiti alla directory di funzionamento del programma in uso <br>
  * In questa libreria vengono accettati SOLO indirizzi di root completi che inziano con '/' (slash) <br>
+ * Alcuni metodi (quasi tutti) restituiscono un booleano <br>
+ * Spesso  sono associati ad un metodo analogo ...str() che restituisce una stringa di errore <br>
  */
 @Service
 @Slf4j
@@ -65,6 +68,8 @@ public class AFileService extends AbstractService {
     public static final String NON_E_FILE = "Non è un file";
 
     public static final String NON_CREATO_FILE = "Il file non è stato creato";
+
+    public static final String NON_COPIATO_FILE = "Il file non è stato copiato";
 
     public static final String NON_CANCELLATO_FILE = "Il file non è stato cancellato";
 
@@ -701,7 +706,7 @@ public class AFileService extends AbstractService {
      *
      * @param absolutePathDirectoryToBeDeleted path completo della directory che DEVE cominciare con '/' SLASH
      *
-     * @return testo di errore, vuoto se il file è stato cancellato
+     * @return testo di errore, vuoto se la directory è stata cancellata
      */
     public String deleteDirectoryStr(String absolutePathDirectoryToBeDeleted) {
         if (text.isEmpty(absolutePathDirectoryToBeDeleted)) {
@@ -723,7 +728,7 @@ public class AFileService extends AbstractService {
      *
      * @param directoryToBeDeleted con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return true se il file è stato cancellato oppure non esisteva
+     * @return true se la directory è stata cancellata oppure non esisteva
      */
     public boolean deleteDirectory(File directoryToBeDeleted) {
         return deleteDirectoryStr(directoryToBeDeleted).equals(VUOTA);
@@ -741,7 +746,7 @@ public class AFileService extends AbstractService {
      *
      * @param directoryToBeDeleted con path completo che DEVE cominciare con '/' SLASH
      *
-     * @return testo di errore, vuoto se il file è stato cancellato
+     * @return testo di errore, vuoto se la directory è stata cancellata
      */
     public String deleteDirectoryStr(File directoryToBeDeleted) {
         if (directoryToBeDeleted == null) {
@@ -769,10 +774,64 @@ public class AFileService extends AbstractService {
 
 
     /**
+     * Copia un file
+     * <p>
+     * Se manca il file sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste il file destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo del file sorgente
+     * @param destPath nome completo del file destinazione
+     *
+     * @return true se il file è stato copiato
+     */
+    public boolean copyFile(String srcPath, String destPath) {
+        return copyFileStr(srcPath, destPath) == VUOTA;
+    }// end of method
+
+
+    /**
+     * Copia un file
+     * <p>
+     * Se manca il file sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste il file destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo del file sorgente
+     * @param destPath nome completo del file destinazione
+     *
+     * @return testo di errore, vuoto se il file è stato copiato
+     */
+    public String copyFileStr(String srcPath, String destPath) {
+        String risposta = VUOTA;
+        File srcFile = new File(srcPath);
+        File destFile = new File(destPath);
+
+        if (isEsisteFile(destPath)) {
+            return NON_COPIATO_FILE;
+        }// end of if cycle
+
+        try { // prova ad eseguire il codice
+            FileUtils.copyFile(srcFile, destFile);
+        } catch (IOException e) {
+            return NON_COPIATO_FILE;
+        }// fine del blocco try-catch
+
+        return risposta;
+    }// end of method
+
+
+    /**
      * Copia una directory
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, non fa nulla <br>
      *
      * @param srcPath  nome completo della directory sorgente
      * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
      */
     public boolean copyDirectory(String srcPath, String destPath) {
         boolean copiata = false;
@@ -791,35 +850,116 @@ public class AFileService extends AbstractService {
 
 
     /**
-     * Copia un file
+     * Copia una directory sostituendo integralmente quella eventualmente esistente <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, la cancella prima di ricopiarla <br>
      *
-     * @param srcPath  nome completo del file sorgente
-     * @param destPath nome completo del file destinazione
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
      */
-    public boolean copyFile(String srcPath, String destPath) {
-        boolean copiato = false;
-        File srcFile = new File(srcPath);
-        File destFile = new File(destPath);
+    public boolean copyDirectoryDeletingAll(String srcPath, String destPath) {
+        boolean copiata = false;
+        File srcDir = new File(srcPath);
+        File destDir = new File(destPath);
+
+        if (!isEsisteDirectory(srcPath)) {
+            return false;
+        }// end of if cycle
+
+        if (isEsisteDirectory(destPath)) {
+            try { // prova ad eseguire il codice
+                FileUtils.forceDelete(new File(destPath));
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if cycle
+
+        if (isEsisteDirectory(destPath)) {
+            return false;
+        } else {
+            try { // prova ad eseguire il codice
+                FileUtils.copyDirectory(srcDir, destDir);
+                return true;
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error(unErrore.toString());
+            }// fine del blocco try-catch
+        }// end of if/else cycle
+
+        return copiata;
+    }// end of method
+
+
+    /**
+     * Copia una directory solo se non esisteva <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    public boolean copyDirectoryOnlyNotExisting(String srcPath, String destPath) {
+        if (!isEsisteDirectory(srcPath)) {
+            return false;
+        }// end of if cycle
+
+        if (isEsisteDirectory(destPath)) {
+            return false;
+        }// end of if cycle
+
+        return copyDirectoryDeletingAll(srcPath, destPath);
+    }// end of method
+
+
+    /**
+     * Copia una directory aggiungendo files e subdirectories a quelli eventualmente esistenti <br>
+     * Lascia inalterate subdirectories e files già esistenti <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory destinazione, aggiunge files e subdirectories <br>
+     * Tutte le aggiunte sono ricorsive nelle subdirectories <br>
+     *
+     * @param srcPath  nome completo della directory sorgente
+     * @param destPath nome completo della directory destinazione
+     *
+     * @return true se la directory  è stata copiata
+     */
+    public boolean copyDirectoryAddingOnly(String srcPath, String destPath) {
+        boolean copiata = false;
+        File srcDir = new File(srcPath);
+        File destDir = new File(destPath);
+
+        if (!isEsisteDirectory(srcPath)) {
+            return false;
+        }// end of if cycle
 
         try { // prova ad eseguire il codice
-            FileUtils.copyFile(srcFile, destFile);
-            copiato = true;
+            FileUtils.copyDirectory(srcDir, destDir);
+            copiata = true;
         } catch (IOException e) {
             e.printStackTrace();
         }// fine del blocco try-catch
 
-        return copiato;
+        return copiata;
     }// end of method
 
 
     /**
      * Scrive un file
-     * Se non esiste, lo crea
+     * Se non esiste, non fa nulla
      *
      * @param pathFileToBeWritten nome completo del file
      * @param text                contenuto del file
      */
-    public boolean scriveFile(String pathFileToBeWritten, String text) {
+    public boolean scriveNewFile(String pathFileToBeWritten, String text) {
         return scriveFile(pathFileToBeWritten, text, false);
     }// end of method
 
