@@ -855,6 +855,7 @@ public class AFileService extends AbstractService {
      * Se manca la directory sorgente, non fa nulla <br>
      * Se manca la directory di destinazione, la crea <br>
      * Se esiste la directory di destinazione, la cancella prima di ricopiarla <br>
+     * Tutte i files e le subdirectories originali vengono cancellata <br>
      *
      * @param srcPath  nome completo della directory sorgente
      * @param destPath nome completo della directory destinazione
@@ -925,6 +926,7 @@ public class AFileService extends AbstractService {
      * Se manca la directory sorgente, non fa nulla <br>
      * Se manca la directory di destinazione, la crea <br>
      * Se esiste la directory destinazione, aggiunge files e subdirectories <br>
+     * Tutti i files e le subdirectories esistenti vengono mantenuti <br>
      * Tutte le aggiunte sono ricorsive nelle subdirectories <br>
      *
      * @param srcPath  nome completo della directory sorgente
