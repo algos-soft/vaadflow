@@ -39,6 +39,7 @@ public class EAColorTest extends ATest {
         assertNotNull(lista);
         assertEquals(lista.getClass(), ArrayList.class);
 
+        previstoIntero = 39;
         ottenutoIntero = ((ArrayList) lista).size();
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test

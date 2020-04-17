@@ -44,9 +44,10 @@ public class WizElaboraNewProject extends WizElabora {
         super.regolaLinks();
         super.regolaSnippets();
         super.regolaRead();
+        super.regolaBanner();
         super.regolaGit();
         super.regolaProperties();
-//        this.regolaPom();
+        super.regolaPom();
         super.copiaMetaInf();
     }// end of method
 

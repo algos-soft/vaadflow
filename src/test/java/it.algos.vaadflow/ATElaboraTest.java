@@ -1,5 +1,6 @@
 package it.algos.vaadflow;
 
+import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wizard.scripts.TElabora;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
@@ -25,17 +26,24 @@ public class ATElaboraTest extends ATest {
     @InjectMocks
     public TElabora elabora;
 
+    @InjectMocks
+    public ATextService text;
+
     private static final String PROPERTY_ORDINE_NAME = "Ordine";
+
 
     @BeforeAll
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(elabora);
+        MockitoAnnotations.initMocks(text);
         elabora.newEntityName = "Prova";
         elabora.flagCode = false;
         elabora.flagCompany = false;
         elabora.flagDescrizione = false;
         elabora.flagKeyCode = false;
         elabora.flagOrdine = false;
+        elabora.text = text;
     }// end of method
 
 

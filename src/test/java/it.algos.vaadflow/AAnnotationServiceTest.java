@@ -201,7 +201,7 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getViewName() {
-        previsto = "role";
+        previsto = "Ruoli";
         ottenuto = annotation.getMenuName(ROLE_VIEW_CLASS);
         assertEquals(previsto, ottenuto);
     }// end of single test
@@ -409,6 +409,7 @@ public class AAnnotationServiceTest extends ATest {
 
         previsto = FIELD_NAME_CODE + TESTO_NULL;
         previsto = text.primaMaiuscola(previsto);
+        previsto = "Il codice è obbligatorio";
         ottenuto = annotation.getMessage(FIELD_CODE);
         assertEquals(previsto, ottenuto);
         ottenuto = annotation.getMessageNull(FIELD_CODE);

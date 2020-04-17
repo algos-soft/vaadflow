@@ -60,7 +60,7 @@ public class ATest {
 
     protected final static String HEADER_ORDINE = "#";
 
-    protected final static String HEADER_CODE = "Code";
+    protected final static String HEADER_CODE = "code";
 
     // alcune date di riferimento
     protected final static Date DATE_UNO = new Date(1413870120000L); // 21 ottobre 2014, 7 e 42

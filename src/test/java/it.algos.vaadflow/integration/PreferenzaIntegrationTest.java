@@ -140,15 +140,15 @@ public class PreferenzaIntegrationTest extends ATest {
     public void preferenzeMultiple() {
         sorgente = MAX_RIGHE_GRID;
 
-        previstoIntero = 0;
+        previstoIntero = 20;
         ottenutoIntero = pref.getInt(sorgente);
         assertEquals(previstoIntero, ottenutoIntero);
 
-        previstoIntero = 37;
-        ottenutoIntero = pref.getInt(sorgente,37);
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, 37);
         assertEquals(previstoIntero, ottenutoIntero);
 
-        previstoIntero = 25;
+        previstoIntero = 20;
         ottenutoIntero = pref.getInt(sorgente, "demo");
         assertEquals(previstoIntero, ottenutoIntero);
 
@@ -160,7 +160,7 @@ public class PreferenzaIntegrationTest extends ATest {
         ottenutoIntero = pref.getInt(sorgente, "Algos");
         assertEquals(previstoIntero, ottenutoIntero);
 
-        previstoIntero = 0;
+        previstoIntero = 20;
         ottenutoIntero = pref.getInt(sorgente, "ALGOS");
         assertEquals(previstoIntero, ottenutoIntero);
 
@@ -172,8 +172,8 @@ public class PreferenzaIntegrationTest extends ATest {
         ottenutoIntero = pref.getInt(sorgente, 37,"Algos");
         assertEquals(previstoIntero, ottenutoIntero);
 
-        previstoIntero = 37;
-        ottenutoIntero = pref.getInt(sorgente, 37,"ALGOS");
+        previstoIntero = 20;
+        ottenutoIntero = pref.getInt(sorgente, 37, "ALGOS");
         assertEquals(previstoIntero, ottenutoIntero);
     }// end of single test
 
@@ -181,11 +181,11 @@ public class PreferenzaIntegrationTest extends ATest {
     public void preferenzeMultiple2() {
         sorgente = USA_TEXT_EDIT_BUTTON;
 
-        previstoBooleano = false;
+        previstoBooleano = true;
         ottenutoBooleano = pref.isBool(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
 
-        previstoBooleano = false;
+        previstoBooleano = true;
         ottenutoBooleano = pref.isBool(sorgente, "demo");
         assertEquals(previstoBooleano, ottenutoBooleano);
 

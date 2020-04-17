@@ -37,6 +37,8 @@ public class WizCost {
 
     public static final String FILE_READ = "README";
 
+    public static final String FILE_BANNER = "banner";
+
     public static final String FILE_GIT = ".gitignore";
 
     public static final String FILE_PROPERTIES = "properties";

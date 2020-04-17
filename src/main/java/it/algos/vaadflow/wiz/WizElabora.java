@@ -257,9 +257,25 @@ public abstract class WizElabora implements WizRecipient {
      * File README di text
      */
     protected void regolaRead() {
-        String fileName = SLASH + FILE_READ + SOURCE_SUFFIX;
-        String srcPath = pathVaadFlow + fileName;
-        String destPath = pathProject + fileName;
+        String pathName = SLASH + FILE_READ + SOURCE_SUFFIX;
+        String srcPath = pathVaadFlow + pathName;
+        String destPath = pathProject + pathName;
+
+        if (flagRead) {
+            if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
+                file.copyFile(srcPath, destPath);
+            }// end of if cycle
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File banner di text
+     */
+    protected void regolaBanner() {
+        String pathName = DIR_RESOURCES + SLASH + FILE_BANNER + SOURCE_SUFFIX;
+        String srcPath = pathVaadFlow + pathName;
+        String destPath = pathProject + pathName;
 
         if (flagRead) {
             if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
@@ -273,8 +289,9 @@ public abstract class WizElabora implements WizRecipient {
      * File di esclusioni GIT di text
      */
     protected void regolaGit() {
-        String srcPath = pathVaadFlow + SLASH + FILE_GIT;
-        String destPath = pathProject + SLASH + FILE_GIT;
+        String pathName = SLASH + FILE_GIT;
+        String srcPath = pathVaadFlow + pathName;
+        String destPath = pathProject + pathName;
 
         if (flagGit) {
             if (flagSovrascriveFile || !file.isEsisteFile(destPath)) {
@@ -306,12 +323,27 @@ public abstract class WizElabora implements WizRecipient {
      * Cartella di resources META-INF
      */
     protected void copiaMetaInf() {
-        String srcPath = pathVaadFlowMain + SLASH + "resources";
-        String destPath = pathProjectMain + SLASH + "resources";
+        String pathName = SLASH + "resources";
+        String srcPath = pathVaadFlowMain + pathName;
+        String destPath = pathProjectMain + pathName;
 
         if (flagResources) {
             file.copyDirectoryAddingOnly(srcPath, destPath);
         }// end of if cycle
+    }// end of method
+
+
+    /**
+     * File MAVEN di script
+     */
+    protected void regolaPom() {
+//        String sourceText = leggeFile(POM);
+//        String destPath = ideaProjectRootPath + "/" + newProjectName + "/" + POM + ".xml";
+//        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+//
+//        if (flagPom) {
+//            checkAndWriteFile(destPath, sourceText);
+//        }// end of if cycle
     }// end of method
 
 
