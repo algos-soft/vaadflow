@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 
 /**
@@ -1058,11 +1059,11 @@ public class AFileService extends AbstractService {
 
 
     /**
-     * Estrae le sub-directories da una directory
+     * Estrae le sub-directories da una directory <br>
      *
      * @param pathDirectoryToBeScanned nome completo della directory
      */
-    public List<String> getSubDirectories(String pathDirectoryToBeScanned) {
+    public List<String> getSubDirectoriesName(String pathDirectoryToBeScanned) {
         List<String> subDirectory = null;
         File[] allFiles = null;
         File directory = new File(pathDirectoryToBeScanned);
@@ -1076,6 +1077,59 @@ public class AFileService extends AbstractService {
             for (File file : allFiles) {
                 if (file.isDirectory()) {
                     subDirectory.add(file.getName());
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
+        return subDirectory;
+    }// end of method
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    public List<File> getSubDirectories(String pathDirectoryToBeScanned) {
+        List<File> subDirectory = null;
+        File[] allFiles = null;
+        File directory = new File(pathDirectoryToBeScanned);
+
+        if (directory != null) {
+            allFiles = directory.listFiles();
+        }// end of if cycle
+
+        if (allFiles != null) {
+            subDirectory = new ArrayList<>();
+            for (File file : allFiles) {
+                if (file.isDirectory()) {
+                    subDirectory.add(file);
+                }// end of if cycle
+            }// end of for cycle
+        }// end of if cycle
+
+        return subDirectory;
+    }// end of method
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param directoryToBeScanned della directory
+     */
+    public List<File> getSubDirectories(File directoryToBeScanned) {
+        List<File> subDirectory = null;
+        File[] allFiles = null;
+
+        if (directoryToBeScanned != null) {
+            allFiles = directoryToBeScanned.listFiles();
+        }// end of if cycle
+
+        if (allFiles != null) {
+            subDirectory = new ArrayList<>();
+            for (File file : allFiles) {
+                if (file.isDirectory()) {
+                    subDirectory.add(file);
                 }// end of if cycle
             }// end of for cycle
         }// end of if cycle
@@ -1108,6 +1162,30 @@ public class AFileService extends AbstractService {
         }// end of if cycle
 
         return files;
+    }// end of method
+
+
+    /**
+     * Elimina l'ultima directory da un path <br>
+     * <p>
+     * Esegue solo se il path è valido
+     * Elimina spazi vuoti iniziali e finali
+     *
+     * @param pathIn in ingresso
+     *
+     * @return path ridotto in uscita
+     */
+    public String levaDirectoryFinale(final String pathIn) {
+        String pathOut = pathIn.trim();
+
+        if (text.isValid(pathOut)) {
+            if (pathOut.contains(SLASH)) {
+                pathOut = text.levaCoda(pathOut, SLASH);
+                pathOut = text.levaCodaDa(pathOut, SLASH) + SLASH;
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return pathOut.trim();
     }// end of method
 
 }// end of class

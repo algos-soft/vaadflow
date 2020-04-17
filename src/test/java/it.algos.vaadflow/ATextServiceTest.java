@@ -325,6 +325,7 @@ public class ATextServiceTest extends ATest {
         ottenuto = service.levaCoda(sorgente, tag);
         assertEquals(previsto, ottenuto);
         print("Leva tag", sorgente + SEP3 + tag, ottenuto);
+
     }// end of single test
 
 
@@ -364,13 +365,6 @@ public class ATextServiceTest extends ATest {
         sorgente = "Non Levare questa fine ";
         tag = "questa";
         previsto = "Non Levare";
-        ottenuto = service.levaCodaDa(sorgente, tag);
-        assertEquals(previsto, ottenuto);
-        print("Leva da tag", sorgente + SEP3 + tag, ottenuto);
-
-        sorgente = "Non Levare questa fine ";
-        tag = "NonEsisteQuestoTag";
-        previsto = "Non Levare questa fine";
         ottenuto = service.levaCodaDa(sorgente, tag);
         assertEquals(previsto, ottenuto);
         print("Leva da tag", sorgente + SEP3 + tag, ottenuto);

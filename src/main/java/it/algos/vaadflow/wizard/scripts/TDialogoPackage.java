@@ -525,7 +525,7 @@ public class TDialogoPackage extends TDialogo {
     private boolean isPackageEsistente() {
         boolean esiste = false;
         String pathModules = getPathModules();
-        List<String> packagesEsistenti = file.getSubDirectories(pathModules);
+        List<String> packagesEsistenti = file.getSubDirectoriesName(pathModules);
 
         if (packagesEsistenti != null && packagesEsistenti.contains(getPackage())) {
             esiste = true;
@@ -666,7 +666,7 @@ public class TDialogoPackage extends TDialogo {
     }// end of method
 
     private List<String> recuperaPackageEsistenti(String projectName) {
-        return file.getSubDirectories(getPathModules());
+        return file.getSubDirectoriesName(getPathModules());
     }// end of method
 
 }// end of class

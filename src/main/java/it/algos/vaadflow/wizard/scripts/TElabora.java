@@ -1833,7 +1833,7 @@ public class TElabora {
 
 
     private List<String> recuperaPackagesEsistenti() {
-        return file.getSubDirectories(entityPath);
+        return file.getSubDirectoriesName(entityPath);
     }// end of method
 
 //    private void addTagCost(String tag, String value) {

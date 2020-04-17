@@ -188,20 +188,20 @@ public class TDialogoNewProject extends TDialogo {
         String pahtDirectoryChiave;
 
         if (text.isValid(ideaNewProjectPath)) {
-            progettiEsistenti = file.getSubDirectories(ideaNewProjectPath);
+            progettiEsistenti = file.getSubDirectoriesName(ideaNewProjectPath);
         }// end of if cycle
 
         if (progettiEsistenti != null && progettiEsistenti.size() > 0) {
             progettiVuoti = new ArrayList<>();
             for (String nome : progettiEsistenti) {
 
-                subMain = file.getSubDirectories(ideaNewProjectPath + "/" + nome + tagVuoto);
+                subMain = file.getSubDirectoriesName(ideaNewProjectPath + "/" + nome + tagVuoto);
 
                 //se manca la sottodirectory src/main non se ne parla
                 if (array.isValid(subMain)) {
 
                     //se esiste NON deve esserci il percorso src/main/java/it
-                    subJava = file.getSubDirectories(ideaNewProjectPath + "/" + nome + tagPieno);
+                    subJava = file.getSubDirectoriesName(ideaNewProjectPath + "/" + nome + tagPieno);
                     pahtDirectoryChiave = ideaNewProjectPath + "/" + nome + tagCompleto;
                     if (array.isEmpty(subJava) && !file.isEsisteDirectory(pahtDirectoryChiave)) {
                         progettiVuoti.add(nome);

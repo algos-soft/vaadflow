@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
@@ -42,6 +43,9 @@ public class WizDialog extends Dialog {
 
     @Autowired
     protected AFileService file;
+
+    @Autowired
+    protected LogService logger;
 
     protected WizRecipient wizRecipient;
 
@@ -137,20 +141,22 @@ public class WizDialog extends Dialog {
      * Regolazioni iniziali indipendenti dal dialogo di input
      */
     protected void regolazioniIniziali() {
+        if (FLAG_DEBUG_WIZ) {
+            WizCost.printInfo(log);
+        }// end of if cycle
+
         this.pathUserDir = System.getProperty("user.dir") + SLASH;
-        if (pathUserDir.equals(PATH_VAAD_FLOW_DIR_STANDARD)) {
-            this.pathVaadFlow = pathUserDir;
-        } else {
-            this.pathVaadFlow = text.levaCodaDa(pathUserDir, SLASH);
-            log.warn("Attenzione. La directory di VaadFlow è cambiata");
+        this.pathVaadFlow = PATH_VAAD_FLOW_DIR_STANDARD;
+        if (!pathVaadFlow.equals(pathUserDir)) {
+            logger.error("Attenzione. La directory di VaadFlow è cambiata", WizDialog.class, "regolazioniIniziali");
         }// end of if/else cycle
 
         //valido SOLO per new project
         if (isNuovoProgetto) {
-            this.pathProjectsDir = text.levaCodaDa(pathVaadFlow, SLASH);
-            this.pathProjectsDir = text.levaCodaDa(pathProjectsDir, SLASH);
+            this.pathProjectsDir = file.levaDirectoryFinale(pathVaadFlow);
+            this.pathProjectsDir = file.levaDirectoryFinale(pathProjectsDir);
             if (!pathProjectsDir.equals(PATH_PROJECTS_DIR_STANDARD)) {
-                log.warn("Attenzione. La directory dei Projects è cambiata");
+                logger.error("Attenzione. La directory dei Projects è cambiata", WizDialog.class, "regolazioniIniziali");
             }// end of if cycle
         } else {
             this.pathProjectsDir = VUOTA;
@@ -159,14 +165,15 @@ public class WizDialog extends Dialog {
         this.pathSources = pathVaadFlow + DIR_SOURCES;
 
         if (FLAG_DEBUG_WIZ) {
-            log.info("");
+            WizCost.printInfo(log);
+            System.out.println("");
             log.info("Directory di esecuzione: pathUserDir=" + pathUserDir);
             log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
             if (isNuovoProgetto) {
                 log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
             }// end of if cycle
             log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
-            log.info("");
+            System.out.println("");
         }// end of if cycle
     }// end of method
 

@@ -9,6 +9,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class WizDialogNewProject extends WizDialog {
      * Recupera i possibili progetti 'vuoti' <br>
      */
     protected void spazzolaDirectory() {
-        List<String> progetti = getProgetti(false);
+        List<String> progetti = getNomiProgettiVuoti();
 
         fieldComboNomeProgetti = new ComboBox<>();
         fieldComboNomeProgetti.setWidth("22em");
@@ -94,7 +95,7 @@ public class WizDialogNewProject extends WizDialog {
 
 
     protected void forzaProgetti() {
-        List<String> progetti = getProgetti(true);
+        List<String> progetti = file.getSubDirectoriesName(pathProjectsDir);
         fieldComboNomeProgetti.setItems(progetti);
         fieldComboNomeProgetti.setLabel(LABEL_COMBO_DUE);
         if (progetti.size() == 1) {
@@ -112,43 +113,44 @@ public class WizDialogNewProject extends WizDialog {
      * <p>
      * Per essere 'vuoti' deve esserci la directory: src/main/java vuota
      */
-    protected List<String> getProgetti(boolean recuperaTuttiProgetti) {
-        List<String> progettiVuoti = new ArrayList<>();
-        List<String> progettiEsistenti = null;
-        List<String> subMain;
-        List<String> subJava;
+    protected List<String> getNomiProgettiVuoti() {
+        List<String> nomiProgettiVuoti = new ArrayList<>();
+        List<File> cartelleProgetti = null;
+        List<File> subMain;
+        List<File> subJava;
         String tagVuoto = DIR_MAIN;
         String tagPieno = tagVuoto + "/java";
         String tagCompleto = tagPieno + "/it";
         String pahtDirectoryChiave;
 
         if (text.isValid(pathProjectsDir)) {
-            progettiEsistenti = file.getSubDirectories(pathProjectsDir);
+            cartelleProgetti = file.getSubDirectories(pathProjectsDir);
         }// end of if cycle
 
-        if (array.isValid(progettiEsistenti)) {
-            for (String nome : progettiEsistenti) {
+        //--deve essere valido subMain e vuoto subJava
+        if (array.isValid(cartelleProgetti)) {
+            for (File cartellaProgetto : cartelleProgetti) {
 
-                subMain = file.getSubDirectories(pathProjectsDir + "/" + nome + tagVuoto);
+                subMain = file.getSubDirectories(cartellaProgetto);
 
                 //se manca la sottodirectory src/main non se ne parla
                 if (array.isValid(subMain)) {
 
                     //se esiste NON deve esserci il percorso src/main/java/it
-                    subJava = file.getSubDirectories(pathProjectsDir + "/" + nome + tagPieno);
-                    pahtDirectoryChiave = pathProjectsDir + "/" + nome + tagCompleto;
+                    subJava = file.getSubDirectories(pathProjectsDir + "/" + cartellaProgetto + tagPieno);
+                    pahtDirectoryChiave = pathProjectsDir + "/" + cartellaProgetto + tagCompleto;
                     if (array.isEmpty(subJava) && !file.isEsisteDirectory(pahtDirectoryChiave)) {
-                        progettiVuoti.add(nome);
+                        nomiProgettiVuoti.add(cartellaProgetto.getName());
                     }// end of if cycle
                 }// end of if cycle
             }// end of for cycle
         }// end of if cycle
 
-        if (array.isEmpty(progettiVuoti) && recuperaTuttiProgetti) {
-            progettiVuoti = progettiEsistenti;
+        if (array.isEmpty(nomiProgettiVuoti)) {
+//            nomiProgettiVuoti = progettiEsistenti;
         }// end of if cycle
 
-        return progettiVuoti;
+        return nomiProgettiVuoti;
     }// end of method
 
 

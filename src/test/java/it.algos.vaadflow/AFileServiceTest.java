@@ -1252,4 +1252,56 @@ public class AFileServiceTest extends ATest {
     }// end of single test
 
 
+    /**
+     * Elimina l'ultima directory da un path <br>
+     * <p>
+     * Esegue solo se il path è valido
+     * Elimina spazi vuoti iniziali e finali
+     *
+     * @param path in ingresso
+     *
+     * @return path ridotto in uscita
+     */
+    @Test
+    public void levaDirectoryFinale() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
+        previsto = "/Users/gac/Documents/IdeaProjects/operativi/";
+        ottenuto = service.levaDirectoryFinale(sorgente);
+        assertEquals(previsto, ottenuto);
+    }// end of single test
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    @Test
+    public void getSubDirectories() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/";
+        List<File> ottenuto = service.getSubDirectories(sorgente);
+        if (ottenuto != null) {
+            for (File stringa : ottenuto) {
+                System.out.println(stringa);
+            }// end of for cycle
+        }// end of if cycle
+    }// end of single test
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param directoryToBeScanned della directory
+     */
+    @Test
+    public void getSubDirectories2() {
+        File fileSorgente = new File("/Users/gac/Documents/IdeaProjects/");
+        List<File> ottenuto = service.getSubDirectories(fileSorgente);
+        if (ottenuto != null) {
+            for (File stringa : ottenuto) {
+                System.out.println(stringa);
+            }// end of for cycle
+        }// end of if cycle
+    }// end of single test
+
 }// end of class

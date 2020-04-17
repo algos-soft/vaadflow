@@ -1,8 +1,7 @@
 package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.component.html.H3;
-
-import static it.algos.vaadflow.application.FlowCost.SLASH;
+import org.slf4j.Logger;
 
 /**
  * Project vaadflow
@@ -16,7 +15,7 @@ public class WizCost {
     //--flag per stampare info di debug
     public static final boolean FLAG_DEBUG_WIZ = true;
 
-    public static final String VAAD_FLOW_PROJECT = "vaadflow";
+    public static final String VAAD_FLOW_PROJECT = "vaadflow/";
 
     public static final String PATH_VAAD_FLOW_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
 
@@ -60,7 +59,7 @@ public class WizCost {
 
     //--parte dal livello modulo base
     //--valida SOLO per progetto vaadFlow
-    public static final String DIR_SOURCES = DIR_JAVA + SLASH + VAAD_FLOW_PROJECT + "wizard/sources/";
+    public static final String DIR_SOURCES = DIR_JAVA + VAAD_FLOW_PROJECT + "wiz/sources/";
 
     //--parte dal livello main
     //--contiene application.properties (di solito)
@@ -70,5 +69,17 @@ public class WizCost {
     //--contiene images, src, styles (di solito)
     public static final String DIR_FRONTEND = DIR_RESOURCES + "META_INF/resources/frontend/";
 
+
+    //--metodo statico invocato da WizDialog.regolazioniIniziali()
+    public static void printInfo(Logger log) {
+        System.out.println("");
+        log.info("PATH_VAAD_FLOW_DIR_STANDARD = " + PATH_VAAD_FLOW_DIR_STANDARD);
+        log.info("PATH_PROJECTS_DIR_STANDARD = " + PATH_PROJECTS_DIR_STANDARD);
+        log.info("DIR_MAIN = " + DIR_MAIN);
+        log.info("DIR_JAVA = " + DIR_JAVA);
+        log.info("DIR_SOURCES = " + DIR_SOURCES);
+        log.info("DIR_FRONTEND = " + DIR_FRONTEND);
+        System.out.println("");
+    }// end of static method
 
 }// end of class
