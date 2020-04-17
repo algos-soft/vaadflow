@@ -1281,8 +1281,8 @@ public class AFileServiceTest extends ATest {
         sorgente = "/Users/gac/Documents/IdeaProjects/";
         List<File> ottenuto = service.getSubDirectories(sorgente);
         if (ottenuto != null) {
-            for (File stringa : ottenuto) {
-                System.out.println(stringa);
+            for (File file : ottenuto) {
+                System.out.println(file.getName());
             }// end of for cycle
         }// end of if cycle
     }// end of single test
@@ -1298,8 +1298,42 @@ public class AFileServiceTest extends ATest {
         File fileSorgente = new File("/Users/gac/Documents/IdeaProjects/");
         List<File> ottenuto = service.getSubDirectories(fileSorgente);
         if (ottenuto != null) {
-            for (File stringa : ottenuto) {
-                System.out.println(stringa);
+            for (File file : ottenuto) {
+                System.out.println(file.getName());
+            }// end of for cycle
+        }// end of if cycle
+    }// end of single test
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    @Test
+    public void getSubDirectoriesName() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/";
+        List<String> ottenuto = service.getSubDirectoriesName(sorgente);
+        if (ottenuto != null) {
+            for (String directory : ottenuto) {
+                System.out.println(directory);
+            }// end of for cycle
+        }// end of if cycle
+    }// end of single test
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    @Test
+    public void getSubDirectoriesAbsolutePathName() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/";
+        List<String> ottenuto = service.getSubDirectoriesAbsolutePathName(sorgente);
+        if (ottenuto != null) {
+            for (String directory : ottenuto) {
+                System.out.println(directory);
             }// end of for cycle
         }// end of if cycle
     }// end of single test

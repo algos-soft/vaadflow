@@ -1063,25 +1063,36 @@ public class AFileService extends AbstractService {
      *
      * @param pathDirectoryToBeScanned nome completo della directory
      */
-    public List<String> getSubDirectoriesName(String pathDirectoryToBeScanned) {
-        List<String> subDirectory = null;
-        File[] allFiles = null;
-        File directory = new File(pathDirectoryToBeScanned);
+    public List<String> getSubDirectoriesAbsolutePathName(String pathDirectoryToBeScanned) {
+        List<String> subDirectoryName = new ArrayList<>();
+        List<File> subDirectory = getSubDirectories(pathDirectoryToBeScanned);
 
-        if (directory != null) {
-            allFiles = directory.listFiles();
-        }// end of if cycle
-
-        if (allFiles != null) {
-            subDirectory = new ArrayList<>();
-            for (File file : allFiles) {
-                if (file.isDirectory()) {
-                    subDirectory.add(file.getName());
-                }// end of if cycle
+        if (subDirectory != null) {
+            for (File file : subDirectory) {
+                subDirectoryName.add(file.getAbsolutePath());
             }// end of for cycle
         }// end of if cycle
 
-        return subDirectory;
+        return subDirectoryName;
+    }// end of method
+
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    public List<String> getSubDirectoriesName(String pathDirectoryToBeScanned) {
+        List<String> subDirectoryName = new ArrayList<>();
+        List<File> subDirectory = getSubDirectories(pathDirectoryToBeScanned);
+
+        if (subDirectory != null) {
+            for (File file : subDirectory) {
+                subDirectoryName.add(file.getName());
+            }// end of for cycle
+        }// end of if cycle
+
+        return subDirectoryName;
     }// end of method
 
 
@@ -1091,24 +1102,7 @@ public class AFileService extends AbstractService {
      * @param pathDirectoryToBeScanned nome completo della directory
      */
     public List<File> getSubDirectories(String pathDirectoryToBeScanned) {
-        List<File> subDirectory = null;
-        File[] allFiles = null;
-        File directory = new File(pathDirectoryToBeScanned);
-
-        if (directory != null) {
-            allFiles = directory.listFiles();
-        }// end of if cycle
-
-        if (allFiles != null) {
-            subDirectory = new ArrayList<>();
-            for (File file : allFiles) {
-                if (file.isDirectory()) {
-                    subDirectory.add(file);
-                }// end of if cycle
-            }// end of for cycle
-        }// end of if cycle
-
-        return subDirectory;
+        return getSubDirectories(new File(pathDirectoryToBeScanned));
     }// end of method
 
 
