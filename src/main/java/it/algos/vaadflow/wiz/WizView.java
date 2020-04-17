@@ -10,6 +10,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.scripts.WizDialogNewProject;
+import it.algos.vaadflow.wiz.scripts.WizElaboraNewProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

@@ -1,4 +1,4 @@
-package it.algos.vaadflow.wiz;
+package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
-import static it.algos.vaadflow.wiz.WizCost.DIR_JAVA;
-import static it.algos.vaadflow.wiz.WizCost.VAAD_FLOW_PROJECT;
+import static it.algos.vaadflow.wiz.scripts.WizCost.DIR_JAVA;
+import static it.algos.vaadflow.wiz.scripts.WizCost.VAAD_FLOW_PROJECT;
 
 /**
  * Project vaadflow

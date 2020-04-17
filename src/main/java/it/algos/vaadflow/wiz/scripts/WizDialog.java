@@ -1,4 +1,4 @@
-package it.algos.vaadflow.wiz;
+package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
@@ -21,8 +21,8 @@ import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
-import static it.algos.vaadflow.wiz.WizCost.*;
 import static it.algos.vaadflow.wiz.enumeration.Chiave.newProjectName;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
  * Project vaadflow
@@ -137,7 +137,7 @@ public class WizDialog extends Dialog {
      * Regolazioni iniziali indipendenti dal dialogo di input
      */
     protected void regolazioniIniziali() {
-        this.pathUserDir = System.getProperty("user.dir");
+        this.pathUserDir = System.getProperty("user.dir") + SLASH;
         if (pathUserDir.equals(PATH_VAAD_FLOW_DIR_STANDARD)) {
             this.pathVaadFlow = pathUserDir;
         } else {
@@ -157,6 +157,17 @@ public class WizDialog extends Dialog {
         }// end of if/else cycle
 
         this.pathSources = pathVaadFlow + DIR_SOURCES;
+
+        if (FLAG_DEBUG_WIZ) {
+            log.info("");
+            log.info("Directory di esecuzione: pathUserDir=" + pathUserDir);
+            log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
+            if (isNuovoProgetto) {
+                log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
+            }// end of if cycle
+            log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
+            log.info("");
+        }// end of if cycle
     }// end of method
 
 

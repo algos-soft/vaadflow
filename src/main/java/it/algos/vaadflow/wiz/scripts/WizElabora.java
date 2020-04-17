@@ -1,4 +1,4 @@
-package it.algos.vaadflow.wiz;
+package it.algos.vaadflow.wiz.scripts;
 
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
-import static it.algos.vaadflow.wiz.WizCost.*;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
  * Project vaadflow

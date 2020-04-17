@@ -1,4 +1,4 @@
-package it.algos.vaadflow.wiz;
+package it.algos.vaadflow.wiz.scripts;
 
 import it.algos.vaadflow.wiz.enumeration.Chiave;
 

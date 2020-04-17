@@ -1,4 +1,4 @@
-package it.algos.vaadflow.wiz;
+package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.algos.vaadflow.wiz.WizCost.*;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
  * Project vaadflow
