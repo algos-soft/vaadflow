@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.*;
-import static it.algos.vaadflow.wiz.scripts.WizCost.VAAD_FLOW_NAME;
+import static it.algos.vaadflow.wiz.scripts.WizCost.VAADFLOW_NAME;
 
 /**
  * Project vaadflow
@@ -96,7 +96,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         String pathUserDir = System.getProperty("user.dir") + SLASH;
         File unaDirectory = new File(pathUserDir);
         String nomeDirectory = unaDirectory.getName();
-        isProgettoBase = nomeDirectory.equals(VAAD_FLOW_NAME);
+        isProgettoBase = nomeDirectory.equals(VAADFLOW_NAME);
     }// end of method
 
 

@@ -36,17 +36,17 @@ public class WizElaboraNewProject extends WizElabora {
 
         super.gotInput(mappaInput);
 
-        this.copiaCartellaVaadFlow();
+//        this.copiaCartellaVaadFlow();
         this.copiaCartelleVarie();
         this.creaModuloNuovoProgetto();
     }// end of method
 
 
     public void copiaCartellaVaadFlow() {
-        String source = pathVaadFlow + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
+        String source = pathVaadFlow + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
         File srcDir = new File(source);
 
-        String destination = pathProject + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
+        String destination = pathProject + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
         File destDir = new File(destination);
 
         try {
@@ -90,7 +90,7 @@ public class WizElaboraNewProject extends WizElabora {
         testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
         testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
 
-        if (mappaFlags.get(EAWiz.security.getChiave())) {
+        if (EAWiz.flagSecurity.isAbilitato()) {
             testoApp = Token.replace(Token.usaSecurity, testoApp, VUOTA);
         } else {
             testoApp = Token.replace(Token.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");

@@ -22,6 +22,8 @@ import static it.algos.vaadflow.wiz.scripts.WizCost.*;
  * User: gac
  * Date: lun, 13-apr-2020
  * Time: 03:36
+ * <p>
+ * Regolazione di alcuni parametri per un nuovo progetto <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

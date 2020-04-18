@@ -119,11 +119,11 @@ public abstract class AViewForm extends APropertyViewForm implements BeforeEnter
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() <br>
      * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
      * <p>
-     * 1) viene chiamato il costruttore (da @Route) <br>
-     * 2) viene eseguito l'init(); del costruttore <br>
+     * 1) viene chiamato il costruttore da @Route <br>
+     * 2) viene eseguito l'init() del costruttore <br>
      * 3) viene chiamato @PostConstruct da SpringBoot (con qualsiasi firma) <br>
-     * 4) viene chiamato setParameter(); <br>
-     * 5) viene chiamato beforeEnter(); <br>
+     * 4) viene chiamato setParameter() da @Route <br>
+     * 5) viene chiamato beforeEnter() da @Route <br>
      * <p>
      * Considerato che le sottoclassi concrete NON sono singleton e vengo ri-create ogni volta che dal menu (via @Router)
      * si invocano, è inutile (anche se possibile) usare un metodo @PostConstruct che è sempre un'appendice di init() del

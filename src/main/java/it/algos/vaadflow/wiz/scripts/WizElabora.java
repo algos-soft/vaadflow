@@ -26,62 +26,24 @@ import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 @Slf4j
 public abstract class WizElabora implements WizRecipient {
 
-//    //--flag regolato nel dialogo di input
-//    public boolean flagSecurity;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagDocumentation;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagLinks;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagSnippets;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagDirectoryFlow;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagDirectoryNewProject;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagResources;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagProperties;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagRead;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagGit;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagPom;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagSovrascriveFile;
-//
-//    //--flag regolato nel dialogo di input
-//    public boolean flagSovrascriveDirectory;
-
-    //--mappa dei vari flags di attivazione
-    protected LinkedHashMap<Chiave, Boolean> mappaFlags;
-
     /**
-     * Service recuperato come istanza dalla classe singleton
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
      */
     @Autowired
     protected AFileService file;
 
     /**
-     * Service recuperato come istanza dalla classe singleton
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
      */
     @Autowired
     protected ATextService text;
 
-    //--wrapper di trasmissione dati tra i dialoghi e e questa classe di elaborazione
-    protected LinkedHashMap<Chiave, Object> mappaInput;
+//    --wrapper di trasmissione dati tra i dialoghi e e questa classe di elaborazione
+//    protected LinkedHashMap<Chiave, Object> mappaInput;
 
     //--flag di controllo regolato nella sottoclasse concreta
     protected boolean isNuovoProgetto;
@@ -149,9 +111,8 @@ public abstract class WizElabora implements WizRecipient {
      */
     @Override
     public void gotInput(LinkedHashMap<Chiave, Object> mappaInput) {
-        this.mappaInput = mappaInput;
+//        this.mappaInput = mappaInput;
         this.regolazioniIniziali();
-        this.regolazioniMappaInputDialogo();
     }// end of method
 
 
@@ -159,29 +120,29 @@ public abstract class WizElabora implements WizRecipient {
      * Regolazioni iniziali indipendenti (in parte) dal dialogo di input
      */
     protected void regolazioniIniziali() {
-        this.pathUserDir = (String) mappaInput.get(Chiave.pathUserDir);
-        this.pathVaadFlow = (String) mappaInput.get(Chiave.pathVaadFlow);
-        if (isNuovoProgetto) {
-            this.pathProjectsDir = (String) mappaInput.get(Chiave.pathProjectsDir);
-        } else {
-            this.pathProjectsDir = VUOTA;
-        }// end of if/else cycle
-        this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
-        this.pathVaadFlowSources = (String) mappaInput.get(Chiave.pathSources);
-
-        if (isNuovoProgetto) {
-            this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
-        } else {
-            this.targetProjectName = (String) mappaInput.get(Chiave.targetProjectName);
-        }// end of if/else cycle
-
-        //--Path proveniente da un File (directory) che finisce SENZA '/' (slash)
-        //--Aggiungo lo slash per omogeneità con tutte le altre directory
-        if (isNuovoProgetto) {
-            this.pathProject = (String) mappaInput.get(Chiave.pathTargetProget) + SLASH;
-        } else {
-            this.pathProject = VUOTA;
-        }// end of if/else cycle
+//        this.pathUserDir = (String) mappaInput.get(Chiave.pathUserDir);
+//        this.pathVaadFlow = (String) mappaInput.get(Chiave.pathVaadFlow);
+//        if (isNuovoProgetto) {
+//            this.pathProjectsDir = (String) mappaInput.get(Chiave.pathProjectsDir);
+//        } else {
+//            this.pathProjectsDir = VUOTA;
+//        }// end of if/else cycle
+//        this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
+//        this.pathVaadFlowSources = (String) mappaInput.get(Chiave.pathSources);
+//
+//        if (isNuovoProgetto) {
+//            this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
+//        } else {
+//            this.targetProjectName = (String) mappaInput.get(Chiave.targetProjectName);
+//        }// end of if/else cycle
+//
+//        //--Path proveniente da un File (directory) che finisce SENZA '/' (slash)
+//        //--Aggiungo lo slash per omogeneità con tutte le altre directory
+//        if (isNuovoProgetto) {
+//            this.pathProject = (String) mappaInput.get(Chiave.pathTargetProget) + SLASH;
+//        } else {
+//            this.pathProject = VUOTA;
+//        }// end of if/else cycle
         pathProjectMain = pathProject + DIR_MAIN;
         pathProjectAlgos = pathProject + DIR_JAVA;
         pathProjectModulo = pathProjectAlgos + newProjectName + SLASH;
@@ -189,26 +150,26 @@ public abstract class WizElabora implements WizRecipient {
         //--visualizzazione di controllo
         if (FLAG_DEBUG_WIZ) {
             System.out.println("");
+            System.out.println("********************");
             if (isNuovoProgetto) {
                 System.out.println("Ingresso in WizElaboraNewProject");
             } else {
                 System.out.println("Ingresso in WizElaboraUpdateProject");
             }// end of if/else cycle
-
-            log.info("Progetto corrente: pathUserDir=" + pathUserDir);
-            log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
+            System.out.println("********************");
+            System.out.println("Progetto corrente: pathUserDir=" + pathUserDir);
+            System.out.println("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
             if (isNuovoProgetto) {
-                log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
+                System.out.println("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
             }// end of if cycle
-            log.info("Sorgenti VaadFlow: pathSources=" + pathVaadFlowSources);
+            System.out.println("Sorgenti VaadFlow: pathSources=" + pathVaadFlowSources);
             if (isNuovoProgetto) {
-                log.info("Nome nuovo progetto: newProjectName=" + newProjectName);
-                log.info("Path nuovo progetto: pathTargetProget=" + pathProject);
+                System.out.println("Nome nuovo progetto: newProjectName=" + newProjectName);
+                System.out.println("Path nuovo progetto: pathTargetProget=" + pathProject);
             }// end of if cycle
-            log.info("Directory principale target: pathProjectMain=" + pathProjectMain);
-            log.info("Cartella Algos: pathProjectAlgos=" + pathProjectAlgos);
-            log.info("Modulo progetto: pathProjectModulo=" + pathProjectModulo);
-
+            System.out.println("Directory principale target: pathProjectMain=" + pathProjectMain);
+            System.out.println("Cartella Algos: pathProjectAlgos=" + pathProjectAlgos);
+            System.out.println("Modulo progetto: pathProjectModulo=" + pathProjectModulo);
             System.out.println("");
         }// end of if cycle
 
@@ -216,77 +177,10 @@ public abstract class WizElabora implements WizRecipient {
 
 
     /**
-     * Regolazioni della mappa proveniente dal dialogo di input <br>
-     * Regolazione dei flags booleani di attivazione delle singole directories/singoli files <br>
-     */
-    protected void regolazioniMappaInputDialogo() {
-        mappaFlags = new LinkedHashMap<>();
-
-        for (EAWiz flag : EAWiz.values()) {
-            if (mappaInput.containsKey(flag.getChiave())) {
-                mappaFlags.put(flag.getChiave(), (boolean) mappaInput.get(flag.getChiave()));
-            }// end of if cycle
-        }// end of for cycle
-
-//        if (mappaInput.containsKey(Chiave.flagSecurity)) {
-//            this.flagSecurity = (boolean) mappaInput.get(Chiave.flagSecurity);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagDocumentation)) {
-//            this.flagDocumentation = (boolean) mappaInput.get(Chiave.flagDocumentation);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagLinks)) {
-//            this.flagLinks = (boolean) mappaInput.get(Chiave.flagLinks);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagSnippets)) {
-//            this.flagSnippets = (boolean) mappaInput.get(Chiave.flagSnippets);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagDirectoryFlow)) {
-//            this.flagDirectoryFlow = (boolean) mappaInput.get(Chiave.flagDirectoryFlow);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagDirectoryNewProject)) {
-//            this.flagDirectoryNewProject = (boolean) mappaInput.get(Chiave.flagDirectoryNewProject);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagResources)) {
-//            this.flagResources = (boolean) mappaInput.get(Chiave.flagResources);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagProperties)) {
-//            this.flagProperties = (boolean) mappaInput.get(Chiave.flagProperties);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagRead)) {
-//            this.flagRead = (boolean) mappaInput.get(Chiave.flagRead);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagGit)) {
-//            this.flagGit = (boolean) mappaInput.get(Chiave.flagGit);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagPom)) {
-//            this.flagPom = (boolean) mappaInput.get(Chiave.flagPom);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagSovrascriveFile)) {
-//            this.flagSovrascriveFile = (boolean) mappaInput.get(Chiave.flagSovrascriveFile);
-//        }// end of if cycle
-//        if (mappaInput.containsKey(Chiave.flagSovrascriveDirectory)) {
-//            this.flagSovrascriveDirectory = (boolean) mappaInput.get(Chiave.flagSovrascriveDirectory);
-//        }// end of if cycle
-
-        if (FLAG_DEBUG_WIZ) {
-            System.out.println("Flag di attivazione provenienti dal dialogo");
-//            for (EAWizFlag flag : EAWizFlag.values()) {
-//                log.info("Valore di: " + EAWizFlag.property.getChiave() + " uguale a " + mappaFlags.get(EAWizFlag.property.getChiave()));
-//            }// end of for cycle
-
-            for (Chiave key : mappaFlags.keySet()) {
-                log.info("Valore di: " + key.name() + " uguale a " + mappaFlags.get(key));
-            }// end of for cycle
-
-        }// end of if cycle
-    }// end of method
-
-
-    /**
      * Cartella di documentazione (in formati vari)
      */
     protected void copiaDocumentation() {
-        if (mappaFlags.get(EAWiz.documentation.getChiave())) {
+        if (EAWiz.flagDocumentation.isAbilitato()) {
             copyCartellaRootProject(DIR_DOC);
         }// end of if cycle
     }// end of method
@@ -296,7 +190,7 @@ public abstract class WizElabora implements WizRecipient {
      * Cartella di LINKS utili in text
      */
     protected void copiaLinks() {
-        if (mappaFlags.get(EAWiz.links.getChiave())) {
+        if (EAWiz.flagLinks.isAbilitato()) {
             copyCartellaRootProject(DIR_LINKS);
         }// end of if cycle
     }// end of method
@@ -306,7 +200,7 @@ public abstract class WizElabora implements WizRecipient {
      * Cartella di snippets utili in text
      */
     protected void copiaSnippets() {
-        if (mappaFlags.get(EAWiz.snippets.getChiave())) {
+        if (EAWiz.flagSnippets.isAbilitato()) {
             copyCartellaRootProject(DIR_SNIPPETS);
         }// end of if cycle
     }// end of method
@@ -316,7 +210,7 @@ public abstract class WizElabora implements WizRecipient {
      * File README di text
      */
     protected void copiaRead() {
-        if (mappaFlags.get(EAWiz.read.getChiave())) {
+        if (EAWiz.flagRead.isAbilitato()) {
             copyFileRootProject(FILE_READ + TXT_SUFFIX);
         }// end of if cycle
     }// end of method
@@ -342,7 +236,7 @@ public abstract class WizElabora implements WizRecipient {
      * File di esclusioni GIT di text
      */
     protected void copiaGit() {
-        if (mappaFlags.get(EAWiz.git.getChiave())) {
+        if (EAWiz.flagGit.isAbilitato()) {
             copyFileRootProject(FILE_GIT);
         }// end of if cycle
     }// end of method
@@ -359,7 +253,7 @@ public abstract class WizElabora implements WizRecipient {
         String destPath = pathProject + DIR_RESOURCES + FILE_PROPERTIES_DEST;
         sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
 
-        if (mappaFlags.get(EAWiz.property.getChiave())) {
+        if (EAWiz.flagProperty.isAbilitato()) {
             file.scriveNewFile(destPath, sourceText);
             checkAndWriteFile(destPath, sourceText);
         }// end of if cycle
@@ -374,7 +268,7 @@ public abstract class WizElabora implements WizRecipient {
         String srcPath = pathVaadFlowMain + pathName;
         String destPath = pathProjectMain + pathName;
 
-        if (mappaFlags.get(EAWiz.resources.getChiave())) {
+        if (EAWiz.flagResources.isAbilitato()) {
             file.copyDirectoryAddingOnly(srcPath, destPath);
         }// end of if cycle
     }// end of method
@@ -388,7 +282,7 @@ public abstract class WizElabora implements WizRecipient {
         String destPath = pathProject + FILE_POM + XML_SUFFIX;
         sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
 
-        if (mappaFlags.get(EAWiz.pom.getChiave())) {
+        if (EAWiz.flagPom.isAbilitato()) {
             checkAndWriteFile(destPath, sourceText);
         }// end of if cycle
     }// end of method
@@ -401,7 +295,7 @@ public abstract class WizElabora implements WizRecipient {
         String srcPath = pathVaadFlow + dirName;
         String destPath = pathProject + dirName;
 
-        if (mappaFlags.get(EAWiz.directory.getChiave())) {
+        if (EAWiz.flagDirectory.isAbilitato()) {
             file.copyDirectoryDeletingAll(srcPath, destPath);
         } else {
             file.copyDirectoryAddingOnly(srcPath, destPath);
@@ -416,7 +310,7 @@ public abstract class WizElabora implements WizRecipient {
         String srcPath = pathVaadFlow + fileName;
         String destPath = pathProject + fileName;
 
-        if (mappaFlags.get(EAWiz.file.getChiave())) {
+        if (EAWiz.flagFile.isAbilitato()) {
             file.sovraScriveFile(srcPath, destPath);
         } else {
             file.copyFile(srcPath, destPath);
@@ -439,7 +333,7 @@ public abstract class WizElabora implements WizRecipient {
         String fileNameJava = VUOTA;
         String oldText = VUOTA;
 
-        if (mappaFlags.get(EAWiz.file.getChiave())) {
+        if (EAWiz.flagFile.isAbilitato()) {
             file.scriveNewFile(pathNewFile, sourceText);
             System.out.println(fileNameJava + " esisteva già ed è stato modificato");
         } else {

@@ -1,8 +1,1 @@
-.gradle
-build
-/.nb-gradle/
-.idea
-*.iml
-src/main/resources/local.properties
-/classes/
-/out/
+/Users/gac/Documents/IdeaProjects/pippoz/.gitignore

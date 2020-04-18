@@ -15,15 +15,15 @@ public class WizCost {
     //--flag per stampare info di debug
     public static final boolean FLAG_DEBUG_WIZ = true;
 
-    public static final String VAAD_FLOW_PROJECT = "vaadflow/";
+    public static final String VAADFLOW_PROJECT = "vaadflow/";
 
-    public static final String VAAD_FLOW_NAME = "vaadflow";
+    public static final String VAADFLOW_NAME = "vaadflow";
 
-    public static final String PATH_VAAD_FLOW_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
+    public static final String PATH_VAADFLOW_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
 
     public static final String PATH_PROJECTS_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/";
 
-    public static final String DIR_FLOW = "it/algos/vaadflow/";
+    public static final String DIR_VAADFLOW = "it/algos/vaadflow/";
 
     public static final String NORMAL_WIDTH = "9em";
 
@@ -71,7 +71,7 @@ public class WizCost {
 
     //--parte dal livello modulo base
     //--valida SOLO per progetto vaadFlow
-    public static final String DIR_SOURCES = DIR_JAVA + VAAD_FLOW_PROJECT + "wiz/sources/";
+    public static final String DIR_VAADFLOW_SOURCES = DIR_JAVA + VAADFLOW_PROJECT + "wiz/sources/";
 
     //--parte dal livello main
     //--contiene application.properties (di solito)
@@ -84,15 +84,19 @@ public class WizCost {
 
     //--metodo statico invocato da WizDialog.regolazioniIniziali()
     public static void printInfo(Logger log) {
-        System.out.println("");
-        System.out.println("Costanti statiche");
-        log.info("PATH_VAAD_FLOW_DIR_STANDARD = " + PATH_VAAD_FLOW_DIR_STANDARD);
-        log.info("PATH_PROJECTS_DIR_STANDARD = " + PATH_PROJECTS_DIR_STANDARD);
-        log.info("DIR_MAIN = " + DIR_MAIN);
-        log.info("DIR_JAVA = " + DIR_JAVA);
-        log.info("DIR_SOURCES = " + DIR_SOURCES);
-        log.info("DIR_FRONTEND = " + DIR_FRONTEND);
-        System.out.println("");
+        if (FLAG_DEBUG_WIZ) {
+            System.out.println("");
+            System.out.println("********************");
+            System.out.println("Costanti statiche");
+            System.out.println("********************");
+            System.out.println("PATH_VAADFLOW_DIR_STANDARD = " + PATH_VAADFLOW_DIR_STANDARD);
+            System.out.println("PATH_PROJECTS_DIR_STANDARD = " + PATH_PROJECTS_DIR_STANDARD);
+            System.out.println("DIR_MAIN = " + DIR_MAIN);
+            System.out.println("DIR_JAVA = " + DIR_JAVA);
+            System.out.println("DIR_VAADFLOW_SOURCES = " + DIR_VAADFLOW_SOURCES);
+            System.out.println("DIR_FRONTEND = " + DIR_FRONTEND);
+            System.out.println("");
+        }// end of if cycle
     }// end of static method
 
 }// end of class

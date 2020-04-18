@@ -31,25 +31,47 @@ import static it.algos.vaadflow.wiz.scripts.WizCost.*;
  * User: gac
  * Date: lun, 13-apr-2020
  * Time: 05:17
+ * <p>
+ * Classe astratta per alcuni dialoghi di regolazione dei parametri per il Wizard <br>
  */
 @Slf4j
-public class WizDialog extends Dialog {
+public abstract class WizDialog extends Dialog {
 
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
+     */
     @Autowired
     protected ATextService text;
 
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
+     */
     @Autowired
     protected AArrayService array;
 
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
+     */
     @Autowired
     protected AFileService file;
 
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Disponibile al termine del costruttore di questa classe <br>
+     */
     @Autowired
     protected LogService logger;
 
     protected WizRecipient wizRecipient;
 
-    protected LinkedHashMap<Chiave, Checkbox> mappaCheckbox;
+    protected LinkedHashMap<String, Checkbox> mappaCheckbox;
 
     protected boolean isNuovoProgetto;
 
@@ -71,35 +93,31 @@ public class WizDialog extends Dialog {
 
     protected H3 titoloCorrente;
 
-    protected ComboBox<String> fieldComboNomeProgetti;
-
     protected ComboBox<File> fieldComboProgetti;
 
-
-    //--regolata indipendentemente dai risultati del dialogo
-    //--dipende solo da dove si trava attualmente il progetto VaadFlow
-    //--posso spostarlo (è successo) senza che cambi nulla
-    //--directory dove gira questo programma; recuperata dal System
+    //--regolata iniziale indipendentemente dai risultati del dialogo
+    //--directory recuperata dal System dove gira il programma in uso
     protected String pathUserDir;
 
-    //--regolata indipendentemente dai risultati del dialogo
-    //--dipende solo da dove si trava attualmente il progetto VaadFlow
+    //--regolata iniziale indipendentemente dai risultati del dialogo
+    //--dipende solo da dove si trova attualmente il progetto base VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory che contiene il programma VaadFlow
-    //--PATH_VAAD_FLOW_DIR_STANDARD oppure userDir meno NAME_PROJECT_BASE
+    //--dovrebbe essere PATH_VAAD_FLOW_DIR_STANDARD
+    //--posso spostarlo (è successo) senza che cambi nulla
     protected String pathVaadFlow;
 
-    //--regolata indipendentemente dai risultati del dialogo
-    //--dipende solo da dove si trava attualmente il progetto VaadFlow
-    //--posso spostarlo (è successo) senza che cambi nulla
+    //--regolata iniziale indipendentemente dai risultati del dialogo
     //--directory che contiene i nuovi programmi appena creati da Idea
+    //--dovrebbe essere PATH_PROJECTS_DIR_STANDARD
+    //--posso spostarla (è successo) senza che cambi nulla
     protected String pathProjectsDir;
 
-    //--regolata indipendentemente dai risultati del dialogo
-    //--dipende solo da dove si trava attualmente il progetto VaadFlow
+    //--regolata iniziale indipendentemente dai risultati del dialogo
+    //--dipende solo da dove si trova attualmente il progetto base VaadFlow
     //--posso spostarlo (è successo) senza che cambi nulla
     //--directory dei sorgenti testuali di VaadFlow (da elaborare)
-    //--pathVaadFlowDir più DIR_SOURCES
+    //--pathVaadFlow più DIR_SOURCES
     protected String pathSources;
 
 
@@ -124,7 +142,7 @@ public class WizDialog extends Dialog {
         }// end of if cycle
 
         this.pathUserDir = System.getProperty("user.dir") + SLASH;
-        this.pathVaadFlow = PATH_VAAD_FLOW_DIR_STANDARD;
+        this.pathVaadFlow = PATH_VAADFLOW_DIR_STANDARD;
         if (!pathVaadFlow.equals(pathUserDir)) {
             logger.error("Attenzione. La directory di VaadFlow è cambiata", WizDialog.class, "regolazioniIniziali");
         }// end of if/else cycle
@@ -140,16 +158,18 @@ public class WizDialog extends Dialog {
             this.pathProjectsDir = VUOTA;
         }// end of if/else cycle
 
-        this.pathSources = pathVaadFlow + DIR_SOURCES;
+        this.pathSources = pathVaadFlow + DIR_VAADFLOW_SOURCES;
 
         if (FLAG_DEBUG_WIZ) {
+            System.out.println("********************");
             System.out.println("Ingresso del dialogo");
-            log.info("Directory di esecuzione: pathUserDir=" + pathUserDir);
-            log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
+            System.out.println("********************");
+            System.out.println("Directory di esecuzione: pathUserDir=" + pathUserDir);
+            System.out.println("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
             if (isNuovoProgetto) {
-                log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
+                System.out.println("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
             }// end of if cycle
-            log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
+            System.out.println("Sorgenti VaadFlow: pathSources=" + pathSources);
             System.out.println("");
         }// end of if cycle
     }// end of method
@@ -187,10 +207,12 @@ public class WizDialog extends Dialog {
         mappaCheckbox = new LinkedHashMap<>();
         Checkbox unCheckbox;
         for (EAWiz flag : EAWiz.values()) {
-            if (flag.isNewProject()) {
-                unCheckbox = new Checkbox(flag.getLabelBox(), flag.isStatus());
-                mappaCheckbox.put(flag.getChiave(), unCheckbox);
-                layoutCheckBox.add(unCheckbox);
+            if (flag.isCheckBox()) {
+                if (flag.isNewProject()) {
+                    unCheckbox = new Checkbox(flag.getLabelBox(), flag.isStatus());
+                    mappaCheckbox.put(flag.name(), unCheckbox);
+                    layoutCheckBox.add(unCheckbox);
+                }// end of if cycle
             }// end of if cycle
         }// end of for cycle
 
@@ -231,32 +253,35 @@ public class WizDialog extends Dialog {
 
     /**
      * Chiamato all'uscita del dialogo <br>
-     * Regola in una mappa tutti i valori che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
+     * Regola tutti i valori della Enumeration EAWiz che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
      */
     protected void setMappa() {
         if (mappaInput != null) {
-            mappaInput.put(Chiave.pathUserDir, pathUserDir);
-            mappaInput.put(Chiave.pathVaadFlow, pathVaadFlow);
-            mappaInput.put(Chiave.pathProjectsDir, pathProjectsDir);
-            mappaInput.put(Chiave.pathSources, pathSources);
-            mappaInput.put(Chiave.newProjectName, fieldComboProgetti.getValue().getName());
-            mappaInput.put(Chiave.pathTargetProget, fieldComboProgetti.getValue().getAbsolutePath());
+            EAWiz.pathUserDir.setValue(pathUserDir);
+            EAWiz.pathVaadFlow.setValue(pathVaadFlow);
+            EAWiz.pathProjectsDir.setValue(pathProjectsDir);
+            EAWiz.pathSources.setValue(pathSources);
+            EAWiz.newProjectName.setValue(fieldComboProgetti.getValue().getName());
+            EAWiz.pathTargetProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath());
 
-            for (Chiave key : mappaCheckbox.keySet()) {
-                mappaInput.put(key, mappaCheckbox.get(key).getValue());
+            for (EAWiz flag : EAWiz.values()) {
+                if (mappaCheckbox.get(flag.name()) != null) {
+                    flag.setStatus(mappaCheckbox.get(flag.name()).getValue());
+                }// end of if cycle
             }// end of for cycle
 
             //--visualizzazione di controllo
             if (FLAG_DEBUG_WIZ) {
+                System.out.println("********************");
                 System.out.println("Uscita dal dialogo");
-                log.info("Progetto corrente: pathUserDir=" + pathUserDir);
-                log.info("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
-                log.info("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
-                log.info("Sorgenti VaadFlow: pathSources=" + pathSources);
-                if (isNuovoProgetto) {
-                    log.info("Nome nuovo progetto: newProjectName=" + fieldComboProgetti.getValue().getName());
-                    log.info("Directory nuovo progetto: pathTargetProget=" + fieldComboProgetti.getValue().getAbsolutePath());
-                }// end of if cycle
+                System.out.println("********************");
+                for (EAWiz flag : EAWiz.values()) {
+                    if (flag.isCheckBox()) {
+                        System.out.println("EAWiz." + flag.name() + " \"" + flag.getLabelBox() + "\" = " + flag.isAbilitato());
+                    } else {
+                        System.out.println("EAWiz." + flag.name() + " \"" + flag.getDescrizione() + "\" = " + flag.getValue());
+                    }// end of if/else cycle
+                }// end of for cycle
                 System.out.println("");
             }// end of if cycle
         }// end of if cycle

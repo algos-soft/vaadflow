@@ -1,6 +1,1 @@
-Flusso
-#TestBoot.constructor()
-#TestBoot.contextInitialized
-#ABoot.inizia()
-#StaticContextAccessor.registerInstance()
--browser pronto-
+/Users/gac/Documents/IdeaProjects/pippoz/README.txt
