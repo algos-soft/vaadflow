@@ -2,6 +2,7 @@ package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -89,7 +90,7 @@ public class WizElaboraNewProject extends WizElabora {
         testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
         testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
 
-        if (flagSecurity) {
+        if (mappaFlags.get(EAWiz.security.getChiave())) {
             testoApp = Token.replace(Token.usaSecurity, testoApp, VUOTA);
         } else {
             testoApp = Token.replace(Token.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");

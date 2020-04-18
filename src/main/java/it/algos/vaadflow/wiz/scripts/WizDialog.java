@@ -14,6 +14,7 @@ import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,31 +49,7 @@ public class WizDialog extends Dialog {
 
     protected WizRecipient wizRecipient;
 
-    protected Checkbox fieldCheckBoxSecurity = new Checkbox();
-
-    protected Checkbox fieldCheckBoxDocumentation = new Checkbox();
-
-    protected Checkbox fieldCheckBoxLinks = new Checkbox();
-
-    protected Checkbox fieldCheckBoxSnippets = new Checkbox();
-
-    protected Checkbox fieldCheckBoxBaseFlow = new Checkbox();
-
-    protected Checkbox fieldCheckBoxNewProject = new Checkbox();
-
-    protected Checkbox fieldCheckBoxResources = new Checkbox();
-
-    protected Checkbox fieldCheckBoxProperties = new Checkbox();
-
-    protected Checkbox fieldCheckBoxRead = new Checkbox();
-
-    protected Checkbox fieldCheckBoxGit = new Checkbox();
-
-    protected Checkbox fieldCheckBoxPom = new Checkbox();
-
-    protected Checkbox fieldCheckBoxSovrascriveFile = new Checkbox();
-
-    protected Checkbox fieldCheckBoxSovrascriveDirectory = new Checkbox();
+    protected LinkedHashMap<Chiave, Checkbox> mappaCheckbox;
 
     protected boolean isNuovoProgetto;
 
@@ -207,39 +184,17 @@ public class WizDialog extends Dialog {
         layoutCheckBox.setSpacing(false);
         layoutCheckBox.setPadding(true);
 
-        if (isNuovoProgetto) {
-            creaCheckBox(fieldCheckBoxSecurity, "Utilizza Spring Security", false);
-        }// end of if cycle
-        creaCheckBox(fieldCheckBoxDocumentation, "Directory documentazione");
-        creaCheckBox(fieldCheckBoxLinks, "Directory links a web");
-        creaCheckBox(fieldCheckBoxSnippets, "Directory snippets di aiuto");
-        creaCheckBox(fieldCheckBoxBaseFlow, "Copia la cartella VaadFlow");
-        if (isNuovoProgetto) {
-            creaCheckBox(fieldCheckBoxNewProject, "Crea la cartella del nuovo progetto");
-        }// end of if cycle
-        creaCheckBox(fieldCheckBoxResources, "Directory resources - ATTENZIONE");
-        creaCheckBox(fieldCheckBoxProperties, "File application.properties");
-        creaCheckBox(fieldCheckBoxRead, "File READ con note di testo");
-        creaCheckBox(fieldCheckBoxGit, "File GIT di esclusione");
-        creaCheckBox(fieldCheckBoxPom, "File Maven di POM.xml - ATTENZIONE");
-        if (!isNuovoProgetto) {
-            creaCheckBox(fieldCheckBoxSovrascriveFile, "Sovrascrive il singolo FILE");
-            creaCheckBox(fieldCheckBoxSovrascriveDirectory, "Sovrascrive la DIRECTORY");
-        }// end of if cycle
+        mappaCheckbox = new LinkedHashMap<>();
+        Checkbox unCheckbox;
+        for (EAWiz flag : EAWiz.values()) {
+            if (flag.isNewProject()) {
+                unCheckbox = new Checkbox(flag.getLabelBox(), flag.isStatus());
+                mappaCheckbox.put(flag.getChiave(), unCheckbox);
+                layoutCheckBox.add(unCheckbox);
+            }// end of if cycle
+        }// end of for cycle
 
         this.add(layoutCheckBox);
-    }// end of method
-
-
-    private void creaCheckBox(Checkbox unCheckBox, String label) {
-        creaCheckBox(unCheckBox, label, true);
-    }// end of method
-
-
-    private void creaCheckBox(Checkbox unCheckBox, String label, boolean status) {
-        unCheckBox.setLabel(label);
-        unCheckBox.setValue(status);
-        layoutCheckBox.add(unCheckBox);
     }// end of method
 
 
@@ -287,24 +242,9 @@ public class WizDialog extends Dialog {
             mappaInput.put(Chiave.newProjectName, fieldComboProgetti.getValue().getName());
             mappaInput.put(Chiave.pathTargetProget, fieldComboProgetti.getValue().getAbsolutePath());
 
-            mappaInput.put(Chiave.flagSecurity, fieldCheckBoxSecurity.getValue());
-            mappaInput.put(Chiave.flagDocumentation, fieldCheckBoxDocumentation.getValue());
-            mappaInput.put(Chiave.flagLinks, fieldCheckBoxLinks.getValue());
-            mappaInput.put(Chiave.flagSnippets, fieldCheckBoxSnippets.getValue());
-            mappaInput.put(Chiave.flagDirectoryFlow, fieldCheckBoxBaseFlow.getValue());
-            if (!isNuovoProgetto) {
-                mappaInput.put(Chiave.flagDirectoryNewProject, fieldCheckBoxNewProject.getValue());
-            }// end of if cycle
-            mappaInput.put(Chiave.flagResources, fieldCheckBoxResources.getValue());
-            mappaInput.put(Chiave.flagProperties, fieldCheckBoxProperties.getValue());
-            mappaInput.put(Chiave.flagRead, fieldCheckBoxRead.getValue());
-            mappaInput.put(Chiave.flagGit, fieldCheckBoxGit.getValue());
-            mappaInput.put(Chiave.flagPom, fieldCheckBoxPom.getValue());
-
-            if (!isNuovoProgetto) {
-                mappaInput.put(Chiave.flagSovrascriveFile, fieldCheckBoxSovrascriveFile.getValue());
-                mappaInput.put(Chiave.flagSovrascriveDirectory, fieldCheckBoxSovrascriveDirectory.getValue());
-            }// end of if cycle
+            for (Chiave key : mappaCheckbox.keySet()) {
+                mappaInput.put(key, mappaCheckbox.get(key).getValue());
+            }// end of for cycle
 
             //--visualizzazione di controllo
             if (FLAG_DEBUG_WIZ) {
