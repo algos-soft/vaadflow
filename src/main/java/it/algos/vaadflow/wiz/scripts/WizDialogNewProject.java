@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
@@ -55,7 +56,7 @@ public class WizDialogNewProject extends WizDialog {
         super.legenda();
 
         layoutLegenda.add(new Label("Creazione di un nuovo project"));
-        layoutLegenda.add(new Label("Devi prima creare un project idea"));
+        layoutLegenda.add(new Label("Devi prima creare un new project IntelliJIdea"));
         layoutLegenda.add(new Label("Di tipo 'MAVEN' senza selezionare archetype"));
         layoutLegenda.add(new Label("Rimane il POM vuoto, ma verrà sovrascritto"));
         layoutLegenda.add(new Label("Poi seleziona il progetto dalla lista sottostante"));
@@ -67,16 +68,18 @@ public class WizDialogNewProject extends WizDialog {
      * Recupera i possibili progetti 'vuoti' <br>
      */
     protected void spazzolaDirectory() {
-        List<String> progetti = getNomiProgettiVuoti();
+        List<File> progetti = getProgettiVuoti();
 
-        fieldComboNomeProgetti = new ComboBox<>();
-        fieldComboNomeProgetti.setWidth("22em");
-        fieldComboNomeProgetti.setAllowCustomValue(false);
-        fieldComboNomeProgetti.setLabel(LABEL_COMBO_UNO);
+        fieldComboProgetti = new ComboBox<>();
+        // Choose which property from Department is the presentation value
+        fieldComboProgetti.setItemLabelGenerator(File::getName);
+        fieldComboProgetti.setWidth("22em");
+        fieldComboProgetti.setAllowCustomValue(false);
+        fieldComboProgetti.setLabel(LABEL_COMBO_UNO);
 
-        fieldComboNomeProgetti.setItems(progetti);
+        fieldComboProgetti.setItems(progetti);
         if (progetti.size() == 1) {
-            fieldComboNomeProgetti.setValue(progetti.get(0));
+            fieldComboProgetti.setValue(progetti.get(0));
             confirmButton.setEnabled(true);
         }// end of if cycle
 
@@ -90,16 +93,16 @@ public class WizDialogNewProject extends WizDialog {
         buttonForzaDirectory.setEnabled(progetti.size() < 1);
 
         addListener();
-        this.add(new VerticalLayout(fieldComboNomeProgetti, buttonForzaDirectory));
+        this.add(new VerticalLayout(fieldComboProgetti, buttonForzaDirectory));
     }// end of method
 
 
     protected void forzaProgetti() {
-        List<String> progetti = file.getSubDirectoriesName(pathProjectsDir);
-        fieldComboNomeProgetti.setItems(progetti);
-        fieldComboNomeProgetti.setLabel(LABEL_COMBO_DUE);
+        List<File> progetti = file.getSubDirectories(pathProjectsDir);
+        fieldComboProgetti.setItems(progetti);
+        fieldComboProgetti.setLabel(LABEL_COMBO_DUE);
         if (progetti.size() == 1) {
-            fieldComboNomeProgetti.setValue(progetti.get(0));
+            fieldComboProgetti.setValue(progetti.get(0));
             confirmButton.setVisible(true);
         }// end of if cycle
         buttonForzaDirectory.setEnabled(false);
@@ -113,15 +116,11 @@ public class WizDialogNewProject extends WizDialog {
      * <p>
      * Per essere 'vuoti' deve esserci la directory: src/main/java vuota
      */
-    protected List<String> getNomiProgettiVuoti() {
-        List<String> nomiProgettiVuoti = new ArrayList<>();
+    protected List<File> getProgettiVuoti() {
+        List<File> progettiVuoti = new ArrayList<>();
         List<File> cartelleProgetti = null;
-        List<File> subMain;
-        List<File> subJava;
-        String tagVuoto = DIR_MAIN;
-        String tagPieno = tagVuoto + "/java";
-        String tagCompleto = tagPieno + "/it";
-        String pahtDirectoryChiave;
+        String tagPienoDeveEsserci = SLASH + DIR_MAIN;
+        String tagVuotoNonDeveEsserci = tagPienoDeveEsserci + "/java";
 
         if (text.isValid(pathProjectsDir)) {
             cartelleProgetti = file.getSubDirectories(pathProjectsDir);
@@ -131,36 +130,28 @@ public class WizDialogNewProject extends WizDialog {
         if (array.isValid(cartelleProgetti)) {
             for (File cartellaProgetto : cartelleProgetti) {
 
-                subMain = file.getSubDirectories(cartellaProgetto);
-
                 //se manca la sottodirectory src/main non se ne parla
-                if (array.isValid(subMain)) {
+                if (file.isEsisteSubDirectory(cartellaProgetto, tagPienoDeveEsserci)) {
 
                     //se esiste NON deve esserci il percorso src/main/java/it
-                    subJava = file.getSubDirectories(pathProjectsDir + "/" + cartellaProgetto + tagPieno);
-                    pahtDirectoryChiave = pathProjectsDir + "/" + cartellaProgetto + tagCompleto;
-                    if (array.isEmpty(subJava) && !file.isEsisteDirectory(pahtDirectoryChiave)) {
-                        nomiProgettiVuoti.add(cartellaProgetto.getName());
+                    if (file.isVuotaSubDirectory(cartellaProgetto, tagVuotoNonDeveEsserci)) {
+                        progettiVuoti.add(cartellaProgetto);
                     }// end of if cycle
                 }// end of if cycle
             }// end of for cycle
         }// end of if cycle
 
-        if (array.isEmpty(nomiProgettiVuoti)) {
-//            nomiProgettiVuoti = progettiEsistenti;
-        }// end of if cycle
-
-        return nomiProgettiVuoti;
+        return progettiVuoti;
     }// end of method
 
 
     private void addListener() {
-        fieldComboNomeProgetti.addValueChangeListener(event -> sincroProject(event.getValue()));
+        fieldComboProgetti.addValueChangeListener(event -> sincroProject(event.getValue()));
     }// end of method
 
 
-    private void sincroProject(String valueFromProject) {
-        confirmButton.setEnabled(text.isValid(valueFromProject));
+    private void sincroProject(File valueFromProject) {
+        confirmButton.setEnabled(valueFromProject != null);
     }// end of method
 
 }// end of class

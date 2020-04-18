@@ -16,10 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_WIZ_NEW_PROJECT;
-import static it.algos.vaadflow.application.FlowCost.TAG_WIZ_VIEW;
+import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.wiz.scripts.WizCost.VAAD_FLOW_NAME;
 
 /**
  * Project vaadflow
@@ -37,6 +38,8 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
     @Autowired
     private WizElaboraNewProject elaboraNewProject;
+
+    private boolean isProgettoBase = false;
 
 
     /**
@@ -70,10 +73,30 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         this.setSpacing(false);
 
         titolo();
-        primoParagrafo();
-        secondoParagrafo();
+        selezioneProgettoInUso();
+
+        if (isProgettoBase) {
+            paragrafoNewProject();
+        } else {
+            paragrafoUpdateProject();
+        }// end of if/else cycle
+
         terzoParagrafo();
         quartoParagrafo();
+    }// end of method
+
+
+    /**
+     * Seleziona se parte da VaadFlow o da un altro progetto <br>
+     * Comportamento diverso:
+     * 1) da VaadFlow può creare nuovi progetti
+     * 2) da un progetto derivato può 'aggiornare' la propria cartella VaadFlow
+     */
+    public void selezioneProgettoInUso() {
+        String pathUserDir = System.getProperty("user.dir") + SLASH;
+        File unaDirectory = new File(pathUserDir);
+        String nomeDirectory = unaDirectory.getName();
+        isProgettoBase = nomeDirectory.equals(VAAD_FLOW_NAME);
     }// end of method
 
 
@@ -84,7 +107,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
     }// end of method
 
 
-    public void primoParagrafo() {
+    public void paragrafoNewProject() {
         H3 paragrafo = new H3("Nuovo progetto");
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);
@@ -107,7 +130,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
     }// end of method
 
 
-    public void secondoParagrafo() {
+    public void paragrafoUpdateProject() {
         H3 paragrafo = new H3("Modifica progetto esistente");
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);

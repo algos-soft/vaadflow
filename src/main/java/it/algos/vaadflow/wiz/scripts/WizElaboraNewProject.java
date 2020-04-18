@@ -2,6 +2,7 @@ package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,8 +13,8 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
-import static it.algos.vaadflow.wiz.scripts.WizCost.DIR_JAVA;
-import static it.algos.vaadflow.wiz.scripts.WizCost.VAAD_FLOW_PROJECT;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
  * Project vaadflow
@@ -34,27 +35,13 @@ public class WizElaboraNewProject extends WizElabora {
 
         super.gotInput(mappaInput);
 
+        this.copiaCartellaVaadFlow();
         this.copiaCartelleVarie();
-//        this.copiaCartellaVaadFlow();
-    }// end of method
-
-
-    public void copiaCartelleVarie() {
-        super.regolaDocumentation();
-        super.regolaLinks();
-        super.regolaSnippets();
-        super.regolaRead();
-        super.regolaBanner();
-        super.regolaGit();
-        super.regolaProperties();
-        super.regolaPom();
-        super.copiaMetaInf();
+        this.creaModuloNuovoProgetto();
     }// end of method
 
 
     public void copiaCartellaVaadFlow() {
-
-
         String source = pathVaadFlow + DIR_JAVA + SLASH + VAAD_FLOW_PROJECT;
         File srcDir = new File(source);
 
@@ -66,9 +53,63 @@ public class WizElaboraNewProject extends WizElabora {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }// end of method
 
 
-//        super.fixCartellaExtra(true, DIR_JAVA + SLASH + VAAD_FLOW_PROJECT);
+    public void copiaCartelleVarie() {
+        super.copiaDocumentation();
+        super.copiaLinks();
+        super.copiaSnippets();
+        super.copiaRead();
+        super.copiaBanner();
+        super.copiaGit();
+        super.copiaProperties();
+        super.copiaPom();
+        super.copiaMetaInf();
+    }// end of method
+
+
+    public void creaModuloNuovoProgetto() {
+        String srcPath = pathVaadFlow;
+        String destPath = pathProject;
+
+        creaApplicationMainClass();
+        creaDirectoryApplication();
+        creaDirectoryModules();
+        creaDirectorySecurity();
+    }// end of method
+
+
+    public void creaApplicationMainClass() {
+        String mainApp = newProjectName + text.primaMaiuscola(APP_NAME);
+        mainApp = text.primaMaiuscola(mainApp);
+        String destPath = pathProjectModulo + mainApp + JAVA_SUFFIX;
+        String testoApp = leggeFile("Application.txt");
+
+        testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
+        testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
+
+        if (flagSecurity) {
+            testoApp = Token.replace(Token.usaSecurity, testoApp, VUOTA);
+        } else {
+            testoApp = Token.replace(Token.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");
+        }// end of if/else cycle
+
+        file.scriveFile(destPath, testoApp, true);
+    }// end of method
+
+
+    public void creaDirectoryApplication() {
+        String destPath = pathProjectModulo + DIR_APPLICATION;
+        file.creaDirectory(destPath);
+    }// end of method
+
+
+    public void creaDirectoryModules() {
+    }// end of method
+
+
+    public void creaDirectorySecurity() {
     }// end of method
 
 }// end of class

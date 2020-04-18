@@ -457,7 +457,9 @@ public class ATextService extends AbstractService {
         String quartultimoCarattere;
         int gap = 4;
         int max;
-        String tagPatch = ".properties";
+        String tagPatchProperties = ".properties";
+        String tagPatchGitIgnore = ".gitignore";
+        String tagPatchJava = ".java";
 
         if (isValid(testoIngresso)) {
             max = testoIngresso.length();
@@ -467,7 +469,15 @@ public class ATextService extends AbstractService {
             }// end of if cycle
         }// end of if cycle
 
-        if (testoIngresso.endsWith(tagPatch)) {
+        if (testoIngresso.endsWith(tagPatchProperties)) {
+            status = false;
+        }// end of if cycle
+
+        if (testoIngresso.endsWith(tagPatchGitIgnore)) {
+            status = false;
+        }// end of if cycle
+
+        if (testoIngresso.endsWith(tagPatchJava)) {
             status = false;
         }// end of if cycle
 

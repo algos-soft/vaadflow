@@ -17,6 +17,7 @@ public enum Chiave {
     pathVaadFlow,
     pathProjectsDir,
     pathSources,
+    pathTargetProget,
     flagOrdine,
     flagCode,
     flagDescrizione,

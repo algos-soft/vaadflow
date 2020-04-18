@@ -17,6 +17,8 @@ public class WizCost {
 
     public static final String VAAD_FLOW_PROJECT = "vaadflow/";
 
+    public static final String VAAD_FLOW_NAME = "vaadflow";
+
     public static final String PATH_VAAD_FLOW_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
 
     public static final String PATH_PROJECTS_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/";
@@ -37,7 +39,13 @@ public class WizCost {
 
     public static final String DIR_SNIPPETS = "snippets/";
 
+    public static final String DIR_APPLICATION = "application/";
+
+    public static final String APP_NAME = "application";
+
     public static final String FILE_READ = "README";
+
+    public static final String FILE_POM = "pom";
 
     public static final String FILE_BANNER = "banner";
 
@@ -47,7 +55,11 @@ public class WizCost {
 
     public static final String FILE_PROPERTIES_DEST = "application.properties";
 
-    public static final String SOURCE_SUFFIX = ".txt";
+    public static final String TXT_SUFFIX = ".txt";
+
+    public static final String XML_SUFFIX = ".xml";
+
+    public static final String JAVA_SUFFIX = ".java";
 
     //--parte dal livello del progetto
     //--contiene java e resources di ogni progetto
@@ -73,6 +85,7 @@ public class WizCost {
     //--metodo statico invocato da WizDialog.regolazioniIniziali()
     public static void printInfo(Logger log) {
         System.out.println("");
+        System.out.println("Costanti statiche");
         log.info("PATH_VAAD_FLOW_DIR_STANDARD = " + PATH_VAAD_FLOW_DIR_STANDARD);
         log.info("PATH_PROJECTS_DIR_STANDARD = " + PATH_PROJECTS_DIR_STANDARD);
         log.info("DIR_MAIN = " + DIR_MAIN);

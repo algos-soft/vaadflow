@@ -1110,9 +1110,11 @@ public class AFileService extends AbstractService {
      * Estrae le sub-directories da una directory <br>
      *
      * @param directoryToBeScanned della directory
+     *
+     * @return lista di sub-directory SENZA files
      */
     public List<File> getSubDirectories(File directoryToBeScanned) {
-        List<File> subDirectory = null;
+        List<File> subDirectory = new ArrayList<>();
         File[] allFiles = null;
 
         if (directoryToBeScanned != null) {
@@ -1130,6 +1132,71 @@ public class AFileService extends AbstractService {
 
         return subDirectory;
     }// end of method
+
+
+    /**
+     * Estrae le sub-directories da un sotto-livello di una directory <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return lista di sub-directory SENZA files
+     */
+    public List<File> getSubSubDirectories(String pathDirectoryToBeScanned, String dirInterna) {
+        return getSubSubDirectories(new File(pathDirectoryToBeScanned), dirInterna);
+    }// end of method
+
+
+    /**
+     * Estrae le sub-directories da un sotto-livello di una directory <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return lista di sub-directory SENZA files
+     */
+    public List<File> getSubSubDirectories(File directoryToBeScanned, String dirInterna) {
+        String subDir = directoryToBeScanned.getAbsolutePath();
+
+        if (subDir.endsWith(SLASH)) {
+            subDir = text.levaCoda(subDir, SLASH);
+        }// end of if cycle
+
+        if (dirInterna.startsWith(SLASH)) {
+            dirInterna = text.levaTesta(dirInterna, SLASH);
+        }// end of if cycle
+
+        String newPath = subDir + SLASH + dirInterna;
+        File subFile = new File(newPath);
+
+        return getSubDirectories(subFile);
+    }// end of method
+
+
+    /**
+     * Controlla se una sotto-directory è piena <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return true se è piena
+     */
+    public boolean isEsisteSubDirectory(File directoryToBeScanned, String dirInterna) {
+        return array.isValid(getSubSubDirectories(directoryToBeScanned, dirInterna));
+    }// end of method
+
+
+    /**
+     * Controlla se una sotto-directory è vuota <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return true se è vuota
+     */
+    public boolean isVuotaSubDirectory(File directoryToBeScanned, String dirInterna) {
+        return array.isEmpty(getSubSubDirectories(directoryToBeScanned, dirInterna));
+    }// end of single test
 
 
     /**

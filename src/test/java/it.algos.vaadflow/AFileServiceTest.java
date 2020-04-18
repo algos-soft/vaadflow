@@ -1279,9 +1279,9 @@ public class AFileServiceTest extends ATest {
     @Test
     public void getSubDirectories() {
         sorgente = "/Users/gac/Documents/IdeaProjects/";
-        List<File> ottenuto = service.getSubDirectories(sorgente);
-        if (ottenuto != null) {
-            for (File file : ottenuto) {
+        listaDirectory = service.getSubDirectories(sorgente);
+        if (listaDirectory != null) {
+            for (File file : listaDirectory) {
                 System.out.println(file.getName());
             }// end of for cycle
         }// end of if cycle
@@ -1296,9 +1296,9 @@ public class AFileServiceTest extends ATest {
     @Test
     public void getSubDirectories2() {
         File fileSorgente = new File("/Users/gac/Documents/IdeaProjects/");
-        List<File> ottenuto = service.getSubDirectories(fileSorgente);
-        if (ottenuto != null) {
-            for (File file : ottenuto) {
+        listaDirectory = service.getSubDirectories(fileSorgente);
+        if (listaDirectory != null) {
+            for (File file : listaDirectory) {
                 System.out.println(file.getName());
             }// end of for cycle
         }// end of if cycle
@@ -1337,5 +1337,78 @@ public class AFileServiceTest extends ATest {
             }// end of for cycle
         }// end of if cycle
     }// end of single test
+
+
+    /**
+     * Estrae le sub-directories da un sotto-livello di una directory <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return lista di sub-directory SENZA files
+     */
+    @Test
+    public void getSubSubDirectories() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow";
+        String dirInterna = "src/main";
+        listaDirectory = service.getSubSubDirectories(sorgente, dirInterna);
+        assertEquals(listaDirectory.size(), 3);
+        if (listaDirectory != null) {
+            for (File file : listaDirectory) {
+                System.out.println(file.getName());
+            }// end of for cycle
+        }// end of if cycle
+
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
+        dirInterna = "/src/main";
+        listaDirectory = service.getSubSubDirectories(sorgente, dirInterna);
+        assertEquals(listaDirectory.size(), 3);
+
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow";
+        dirInterna = "/src/main";
+        listaDirectory = service.getSubSubDirectories(sorgente, dirInterna);
+        assertEquals(listaDirectory.size(), 3);
+
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
+        dirInterna = "src/main";
+        listaDirectory = service.getSubSubDirectories(sorgente, dirInterna);
+        assertEquals(listaDirectory.size(), 3);
+
+    }// end of single test
+
+
+    /**
+     * Controlla se una sotto-directory è piena <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return true se è piena
+     */
+    @Test
+    public void isEsisteSubDirectory() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow";
+        String dirInterna = "src/main";
+        ottenutoBooleano = service.isEsisteSubDirectory(new File(sorgente), dirInterna);
+        assertTrue(ottenutoBooleano);
+    }// end of single test
+
+
+    /**
+     * Controlla se una sotto-directory è vuota <br>
+     *
+     * @param directoryToBeScanned della directory
+     * @param dirInterna           da scandagliare
+     *
+     * @return true se è vuota
+     */
+    @Test
+    public void isVuotaSubDirectory() {
+        sorgente = "/Users/gac/Documents/IdeaProjects/tutorial";
+        String dirInterna = "src/main";
+        ottenutoBooleano = service.isVuotaSubDirectory(new File(sorgente), dirInterna);
+        assertTrue(ottenutoBooleano);
+    }// end of single test
+
 
 }// end of class
