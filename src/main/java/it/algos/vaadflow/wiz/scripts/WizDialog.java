@@ -260,9 +260,9 @@ public abstract class WizDialog extends Dialog {
             EAWiz.pathUserDir.setValue(pathUserDir);
             EAWiz.pathVaadFlow.setValue(pathVaadFlow);
             EAWiz.pathProjectsDir.setValue(pathProjectsDir);
-            EAWiz.pathSources.setValue(pathSources);
+            EAWiz.pathVaadFlowSources.setValue(pathSources);
             EAWiz.newProjectName.setValue(fieldComboProgetti.getValue().getName());
-            EAWiz.pathTargetProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath());
+            EAWiz.pathProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath());
 
             for (EAWiz flag : EAWiz.values()) {
                 if (mappaCheckbox.get(flag.name()) != null) {
@@ -296,9 +296,9 @@ public abstract class WizDialog extends Dialog {
     private void esceDalDialogo(boolean esegue) {
         if (esegue) {
             setMappa();
-            wizRecipient.gotInput(mappaInput);
+            wizRecipient.gotInput();
         } else {
-            wizRecipient.gotInput(null);
+            wizRecipient.gotInput();
         }// end of if/else cycle
         this.close();
     }// end of method

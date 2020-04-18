@@ -2,7 +2,6 @@ package it.algos.vaadflow.wiz.scripts;
 
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
-import it.algos.vaadflow.wiz.enumeration.Chiave;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import it.algos.vaadflow.wiz.enumeration.Task;
 import it.algos.vaadflow.wiz.enumeration.Token;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
@@ -54,11 +52,11 @@ public abstract class WizElabora implements WizRecipient {
     //--directory dove gira questo programma; recuperata dal System
     protected String pathUserDir;
 
-    //--regolata indipendentemente dai risultati del dialogo
-    //--dipende solo da dove si trava attualmente il progetto VaadFlow
-    //--posso spostarlo (è successo) senza che cambi nulla
-    //--directory che contiene i nuovi programmi appena creati da Idea
-    protected String pathProjectsDir;
+//    //--regolata indipendentemente dai risultati del dialogo
+//    //--dipende solo da dove si trava attualmente il progetto VaadFlow
+//    //--posso spostarlo (è successo) senza che cambi nulla
+//    //--directory che contiene i nuovi programmi appena creati da Idea
+//    protected String pathProjectsDir;
 
     //--regolata indipendentemente dai risultati del dialogo
     //--dipende solo da dove si trava attualmente il progetto VaadFlow
@@ -110,32 +108,33 @@ public abstract class WizElabora implements WizRecipient {
      * Evento lanciato alla chiusura del dialogo
      */
     @Override
-    public void gotInput(LinkedHashMap<Chiave, Object> mappaInput) {
+    public void gotInput() {
 //        this.mappaInput = mappaInput;
         this.regolazioniIniziali();
     }// end of method
 
 
     /**
-     * Regolazioni iniziali indipendenti (in parte) dal dialogo di input
+     * Regolazioni iniziali indipendenti (in parte) dal dialogo di input <br>
      */
     protected void regolazioniIniziali() {
-//        this.pathUserDir = (String) mappaInput.get(Chiave.pathUserDir);
-//        this.pathVaadFlow = (String) mappaInput.get(Chiave.pathVaadFlow);
+        this.pathUserDir = EAWiz.pathUserDir.getValue();
+        this.pathVaadFlow = EAWiz.pathVaadFlow.getValue();
 //        if (isNuovoProgetto) {
-//            this.pathProjectsDir = (String) mappaInput.get(Chiave.pathProjectsDir);
+//            this.pathProjectsDir = EAWiz.pathProjectsDir.getValue();
 //        } else {
 //            this.pathProjectsDir = VUOTA;
 //        }// end of if/else cycle
-//        this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
-//        this.pathVaadFlowSources = (String) mappaInput.get(Chiave.pathSources);
-//
-//        if (isNuovoProgetto) {
-//            this.newProjectName = (String) mappaInput.get(Chiave.newProjectName);
-//        } else {
-//            this.targetProjectName = (String) mappaInput.get(Chiave.targetProjectName);
-//        }// end of if/else cycle
-//
+        this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
+        this.pathVaadFlowSources = EAWiz.pathVaadFlowSources.getValue();
+
+        if (isNuovoProgetto) {
+            this.newProjectName = EAWiz.newProjectName.getValue();
+        } else {
+
+        }// end of if/else cycle
+        this.pathProject = EAWiz.pathProjet.getValue() + SLASH;
+
 //        //--Path proveniente da un File (directory) che finisce SENZA '/' (slash)
 //        //--Aggiungo lo slash per omogeneità con tutte le altre directory
 //        if (isNuovoProgetto) {
@@ -159,17 +158,21 @@ public abstract class WizElabora implements WizRecipient {
             System.out.println("********************");
             System.out.println("Progetto corrente: pathUserDir=" + pathUserDir);
             System.out.println("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
-            if (isNuovoProgetto) {
-                System.out.println("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
-            }// end of if cycle
-            System.out.println("Sorgenti VaadFlow: pathSources=" + pathVaadFlowSources);
+//            if (isNuovoProgetto) {
+//                System.out.println("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
+//            }// end of if cycle
+            System.out.println("Sorgenti VaadFlow: pathVaadFlowSources=" + pathVaadFlowSources);
             if (isNuovoProgetto) {
                 System.out.println("Nome nuovo progetto: newProjectName=" + newProjectName);
-                System.out.println("Path nuovo progetto: pathTargetProget=" + pathProject);
+                System.out.println("Path nuovo progetto: pathProject=" + pathProject);
             }// end of if cycle
+
+            System.out.println("Cartella 'main' di VaadFlow': pathVaadFlowMain=" + pathVaadFlowMain);
+            System.out.println("Cartella dei sorgenti di testo di VaadFlow=" + pathVaadFlowSources);
             System.out.println("Directory principale target: pathProjectMain=" + pathProjectMain);
             System.out.println("Cartella Algos: pathProjectAlgos=" + pathProjectAlgos);
             System.out.println("Modulo progetto: pathProjectModulo=" + pathProjectModulo);
+
             System.out.println("");
         }// end of if cycle
 

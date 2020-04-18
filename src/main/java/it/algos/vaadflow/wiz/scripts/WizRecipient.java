@@ -1,9 +1,5 @@
 package it.algos.vaadflow.wiz.scripts;
 
-import it.algos.vaadflow.wiz.enumeration.Chiave;
-
-import java.util.LinkedHashMap;
-
 /**
  * Project vaadflow
  * Created by Algos
@@ -13,6 +9,6 @@ import java.util.LinkedHashMap;
  */
 public interface WizRecipient {
 
-    public void gotInput(LinkedHashMap<Chiave, Object> mappaInput);
+    public void gotInput();
 
 }// end of interface

@@ -9,7 +9,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
-import it.algos.vaadflow.wiz.enumeration.Chiave;
 import it.algos.vaadflow.wiz.scripts.WizDialogNewProject;
 import it.algos.vaadflow.wiz.scripts.WizElaboraNewProject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.*;
 import static it.algos.vaadflow.wiz.scripts.WizCost.VAADFLOW_NAME;
@@ -121,12 +119,10 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
     }// end of method
 
 
-    private void elaboraNewProject(LinkedHashMap<Chiave, Object> mappaInput) {
+    private void elaboraNewProject() {
         dialogNewProject.close();
 
-        if (mappaInput != null) {
-            elaboraNewProject.gotInput(mappaInput);
-        }// end of if cycle
+        elaboraNewProject.gotInput();
     }// end of method
 
 

@@ -1,7 +1,6 @@
 package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaadflow.wiz.enumeration.Chiave;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
@@ -31,10 +29,10 @@ public class WizElaboraNewProject extends WizElabora {
 
 
     @Override
-    public void gotInput(LinkedHashMap<Chiave, Object> mappaInput) {
+    public void gotInput() {
         super.isNuovoProgetto = true;
 
-        super.gotInput(mappaInput);
+        super.gotInput();
 
 //        this.copiaCartellaVaadFlow();
         this.copiaCartelleVarie();

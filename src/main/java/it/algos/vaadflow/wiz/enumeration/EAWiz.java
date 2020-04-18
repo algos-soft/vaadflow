@@ -27,9 +27,9 @@ public enum EAWiz {
     pathUserDir(false, "Directory recuperata dal System dove gira il programma in uso", true, true, false, false, true, VUOTA),
     pathVaadFlow(false, "Directory che contiene il programma VaadFlow", true, true, false, false, true, VUOTA),
     pathProjectsDir(false, "Directory che contiene i nuovi programmi appena creati da Idea", true, true, false, false, true, VUOTA),
-    pathSources(false, "Directory dei sorgenti testuali di VaadFlow da elaborare", true, true, false, false, true, VUOTA),
+    pathVaadFlowSources(false, "Directory dei sorgenti testuali di VaadFlow da elaborare", true, true, false, false, true, VUOTA),
     newProjectName(false, "Nome breve del nuovo progetto", true, true, false, false, true, VUOTA),
-    pathTargetProjet(false, "Path del nuovo progetto", true, true, false, false, true, VUOTA),
+    pathProjet(false, "Path del nuovo progetto", true, true, false, false, true, VUOTA),
     ;
 
 
