@@ -9,6 +9,6 @@ package it.algos.vaadflow.wiz.scripts;
  */
 public interface WizRecipient {
 
-    public void gotInput();
+    public void esegue();
 
 }// end of interface

@@ -121,8 +121,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
     private void elaboraNewProject() {
         dialogNewProject.close();
-
-        elaboraNewProject.gotInput();
+        elaboraNewProject.esegue();
     }// end of method
 
 

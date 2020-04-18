@@ -4,14 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.io.File;
-import java.io.IOException;
-
-import static it.algos.vaadflow.application.FlowCost.SLASH;
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
@@ -29,30 +24,30 @@ public class WizElaboraNewProject extends WizElabora {
 
 
     @Override
-    public void gotInput() {
+    public void esegue() {
         super.isNuovoProgetto = true;
 
-        super.gotInput();
+        super.esegue();
 
 //        this.copiaCartellaVaadFlow();
         this.copiaCartelleVarie();
-        this.creaModuloNuovoProgetto();
+//        this.creaModuloNuovoProgetto();
     }// end of method
 
 
-    public void copiaCartellaVaadFlow() {
-        String source = pathVaadFlow + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
-        File srcDir = new File(source);
-
-        String destination = pathProject + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
-        File destDir = new File(destination);
-
-        try {
-            FileUtils.copyDirectory(srcDir, destDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }// end of method
+//    public void copiaCartellaVaadFlow() {
+//        String source = pathVaadFlow + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
+//        File srcDir = new File(source);
+//
+//        String destination = pathProject + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
+//        File destDir = new File(destination);
+//
+//        try {
+//            FileUtils.copyDirectory(srcDir, destDir);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }// end of method
 
 
     public void copiaCartelleVarie() {

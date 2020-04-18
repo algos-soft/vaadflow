@@ -108,7 +108,7 @@ public abstract class WizElabora implements WizRecipient {
      * Evento lanciato alla chiusura del dialogo
      */
     @Override
-    public void gotInput() {
+    public void esegue() {
 //        this.mappaInput = mappaInput;
         this.regolazioniIniziali();
     }// end of method

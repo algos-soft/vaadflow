@@ -296,9 +296,9 @@ public abstract class WizDialog extends Dialog {
     private void esceDalDialogo(boolean esegue) {
         if (esegue) {
             setMappa();
-            wizRecipient.gotInput();
+            wizRecipient.esegue();
         } else {
-            wizRecipient.gotInput();
+            wizRecipient.esegue();
         }// end of if/else cycle
         this.close();
     }// end of method
