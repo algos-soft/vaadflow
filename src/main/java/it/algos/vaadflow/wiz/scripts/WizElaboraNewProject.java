@@ -46,32 +46,37 @@ public class WizElaboraNewProject extends WizElabora {
 
 
     public void copiaCartellaVaadFlow() {
-        String srcPath = pathVaadFlowAlgos + VAADFLOW_NAME;
-        String destPath = pathProjectAlgos + VAADFLOW_NAME;
+        String srcPath = pathVaadFlowAlgos + NAME_VAADFLOW;
+        String destPath = pathProjectAlgos + NAME_VAADFLOW;
 
-        file.copyDirectoryDeletingAll(srcPath, destPath);
+        if (EAWiz.flagFlow.isAbilitato()) {
+            file.copyDirectoryDeletingAll(srcPath, destPath);
+        }// end of if cycle
     }// end of method
 
 
     public void creaModuloNuovoProgetto() {
-        //--creaDirectoryProjectModulo
-        file.creaDirectory(pathProjectModulo);
+        if (EAWiz.flagProject.isAbilitato()) {
 
-        //--classe principale dell'applicazione col metodo 'main'
-        creaFileApplicationMainClass();
+            //--creaDirectoryProjectModulo
+            file.creaDirectory(pathProjectModulo);
 
-        //--creaDirectoryApplication (empty)
-        file.creaDirectory(pathProjectDirApplication);
+            //--classe principale dell'applicazione col metodo 'main'
+            creaFileApplicationMainClass();
 
-        //--creaDirectoryModules (empty)
-        file.creaDirectory(pathProjectDirModules);
+            //--creaDirectoryApplication (empty)
+            file.creaDirectory(pathProjectDirApplication);
 
-        //--crea contenuto della directory Application
-        scriveFileCost();
-        scriveFileBoot();
+            //--creaDirectoryModules (empty)
+            file.creaDirectory(pathProjectDirModules);
+
+            //--crea contenuto della directory Application
+            scriveFileCost();
+            scriveFileBoot();
 //        scriveFileVers();
 
-        creaDirectorySecurity();
+            creaDirectorySecurity();
+        }// end of if cycle
     }// end of method
 
 

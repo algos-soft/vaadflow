@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Scope;
 import java.io.File;
 
 import static it.algos.vaadflow.application.FlowCost.*;
-import static it.algos.vaadflow.wiz.scripts.WizCost.VAADFLOW_NAME;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
  * Project vaadflow
@@ -81,13 +81,11 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         titolo();
         selezioneProgettoInUso();
 
-//        if (isProgettoBase) {
-//            paragrafoNewProject();
-//        } else {
-//            paragrafoUpdateProject();
-//        }// end of if/else cycle
-        paragrafoNewProject();
-        paragrafoUpdateProject();
+        if (isProgettoBase) {
+            paragrafoNewProject();
+        } else {
+            paragrafoUpdateProject();
+        }// end of if/else cycle
 
         terzoParagrafo();
         quartoParagrafo();
@@ -104,7 +102,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         String pathUserDir = System.getProperty("user.dir") + SLASH;
         File unaDirectory = new File(pathUserDir);
         String nomeDirectory = unaDirectory.getName();
-        isProgettoBase = nomeDirectory.equals(VAADFLOW_NAME);
+        isProgettoBase = nomeDirectory.equals(NAME_VAADFLOW);
     }// end of method
 
 
@@ -116,7 +114,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
 
     public void paragrafoNewProject() {
-        H3 paragrafo = new H3("Nuovo progetto");
+        H3 paragrafo = new H3(TITOLO_NUOVO_PROGETTO);
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);
         this.add(new Label("Vuoto e nella directory IdeaProjects"));
@@ -130,13 +128,13 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
 
     private void elaboraNewProject() {
-        elaboraNewProject.esegue();
         dialogNewProject.close();
+        elaboraNewProject.esegue();
     }// end of method
 
 
     public void paragrafoUpdateProject() {
-        H3 paragrafo = new H3("Modifica progetto esistente");
+        H3 paragrafo = new H3(TITOLO_MODIFICA_PROGETTO);
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);
         this.add(new Label("Esistente in qualsiasi directory"));

@@ -14,7 +14,7 @@ public enum EAWiz {
     flagDocumentation(true, "Directory documentazione", true, true, false, false, true),
     flagLinks(true, "Directory links a web", true, true, false, false, true),
     flagSnippets(true, "Directory snippets di aiuto", true, true, false, false, true),
-    flow(true, "Copia la cartella VaadFlow", true, true, false, false, true),
+    flagFlow(true, "Copia la cartella VaadFlow", true, true, false, false, true),
     flagProject(true, "Crea la cartella del nuovo progetto", true, false, false, false, true),
     flagResources(true, "Directory resources - ATTENZIONE", true, true, false, false, true),
     flagProperty(true, "File application.properties", true, true, false, false, true),
@@ -28,8 +28,8 @@ public enum EAWiz {
     pathVaadFlow(false, "Directory che contiene il programma VaadFlow", true, true, false, false, true, VUOTA),
     pathProjectsDir(false, "Directory che contiene i nuovi programmi appena creati da Idea", true, true, false, false, true, VUOTA),
     pathVaadFlowSources(false, "Directory dei sorgenti testuali di VaadFlow da elaborare", true, true, false, false, true, VUOTA),
-    newProjectName(false, "Nome breve del nuovo progetto", true, true, false, false, true, VUOTA),
-    pathProjet(false, "Path del nuovo progetto", true, true, false, false, true, VUOTA),
+    nameTargetProject(false, "Nome breve new/update project", true, true, false, false, true, VUOTA),
+    pathTargetProjet(false, "Path new/update project", true, true, false, false, true, VUOTA),
     ;
 
 

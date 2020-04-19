@@ -1,6 +1,5 @@
 package it.algos.vaadflow.wiz.scripts;
 
-import com.vaadin.flow.component.html.H3;
 import org.slf4j.Logger;
 
 /**
@@ -15,9 +14,9 @@ public class WizCost {
     //--flag per stampare info di debug
     public static final boolean FLAG_DEBUG_WIZ = true;
 
-    public static final String VAADFLOW_PROJECT = "vaadflow/";
+    public static final String PROJECT_VAADFLOW = "vaadflow/";
 
-    public static final String VAADFLOW_NAME = "vaadflow";
+    public static final String NAME_VAADFLOW = "vaadflow";
 
     public static final String PATH_VAADFLOW_DIR_STANDARD = "/Users/gac/Documents/IdeaProjects/operativi/vaadflow/";
 
@@ -29,9 +28,9 @@ public class WizCost {
 
     public static final String NORMAL_HEIGHT = "3em";
 
-    public static final H3 TITOLO_NUOVO_PROGETTO = new H3("Nuovo progetto");
+    public static final String TITOLO_NUOVO_PROGETTO = "Nuovo progetto";
 
-    public static final H3 TITOLO_MODIFICA_PROGETTO = new H3("Modifica progetto esistente");
+    public static final String TITOLO_MODIFICA_PROGETTO = "Modifica progetto esistente";
 
     public static final String DIR_DOC = "documentation/";
 
@@ -79,7 +78,7 @@ public class WizCost {
 
     //--parte dal livello modulo base
     //--valida SOLO per progetto vaadFlow
-    public static final String DIR_VAADFLOW_SOURCES = DIR_JAVA + VAADFLOW_PROJECT + "wiz/sources/";
+    public static final String DIR_VAADFLOW_SOURCES = DIR_JAVA + PROJECT_VAADFLOW + "wiz/sources/";
 
     //--parte dal livello main
     //--contiene application.properties (di solito)

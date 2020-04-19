@@ -146,13 +146,9 @@ public abstract class WizElabora implements WizRecipient {
 
         this.pathVaadFlowSources = EAWiz.pathVaadFlowSources.getValue();
 
-        if (isNuovoProgetto) {
-            this.newProjectName = EAWiz.newProjectName.getValue();
-        } else {
-
-        }// end of if/else cycle
+        this.newProjectName = EAWiz.nameTargetProject.getValue();
         this.newProjectNameUpper = text.primaMaiuscola(newProjectName);
-        this.pathProject = EAWiz.pathProjet.getValue() + SLASH;
+        this.pathProject = EAWiz.pathTargetProjet.getValue() + SLASH;
 
 //        //--Path proveniente da un File (directory) che finisce SENZA '/' (slash)
 //        //--Aggiungo lo slash per omogeneità con tutte le altre directory

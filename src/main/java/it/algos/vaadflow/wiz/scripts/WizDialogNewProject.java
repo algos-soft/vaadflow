@@ -2,6 +2,7 @@ package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -40,7 +41,7 @@ public class WizDialogNewProject extends WizDialog {
     public void open(WizRecipient wizRecipient) {
         super.wizRecipient = wizRecipient;
         super.isNuovoProgetto = true;
-        super.titoloCorrente = TITOLO_NUOVO_PROGETTO;
+        super.titoloCorrente = new H3(TITOLO_NUOVO_PROGETTO);
 
         super.inizia();
         super.creaBottoni();

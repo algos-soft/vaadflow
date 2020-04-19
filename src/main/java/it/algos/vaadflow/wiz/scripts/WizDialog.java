@@ -254,17 +254,20 @@ public abstract class WizDialog extends Dialog {
 
 
     /**
-     * Chiamato all'uscita del dialogo <br>
+     * Chiamato alla dismissione del dialogo <br>
      * Regola tutti i valori della Enumeration EAWiz che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
      */
-    protected void setMappa() {
+    protected void regolazioniFinali() {
         if (mappaInput != null) {
             EAWiz.pathUserDir.setValue(pathUserDir);
             EAWiz.pathVaadFlow.setValue(pathVaadFlow);
             EAWiz.pathProjectsDir.setValue(pathProjectsDir);
             EAWiz.pathVaadFlowSources.setValue(pathSources);
-            EAWiz.newProjectName.setValue(fieldComboProgetti.getValue().getName());
-            EAWiz.pathProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath());
+
+            if (fieldComboProgetti != null && fieldComboProgetti.getValue() != null) {
+                EAWiz.nameTargetProject.setValue(fieldComboProgetti.getValue().getName());
+                EAWiz.pathTargetProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath());
+            }// end of if cycle
 
             for (EAWiz flag : EAWiz.values()) {
                 if (mappaCheckbox.get(flag.name()) != null) {
@@ -296,13 +299,11 @@ public abstract class WizDialog extends Dialog {
      * 2) esegue
      */
     private void esceDalDialogo(boolean esegue) {
-        if (esegue) {
-            setMappa();
-            wizRecipient.esegue();
-        } else {
-            wizRecipient.esegue();
-        }// end of if/else cycle
+        regolazioniFinali();
         this.close();
+        if (esegue) {
+            wizRecipient.esegue();
+        }// end of if cycle
     }// end of method
 
 }// end of class
