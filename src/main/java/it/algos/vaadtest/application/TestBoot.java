@@ -4,8 +4,6 @@ import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
-import it.algos.vaadtest.modules.lievito.LievitoList;
-import it.algos.vaadflow.enumeration.EALogType;
 import it.algos.vaadflow.modules.company.CompanyService;
 import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.modules.utente.UtenteService;
@@ -14,18 +12,16 @@ import it.algos.vaadtest.modules.alfa.AlfaList;
 import it.algos.vaadtest.modules.beta.BetaList;
 import it.algos.vaadtest.modules.beta.BetaService;
 import it.algos.vaadtest.modules.gamma.GammaList;
+import it.algos.vaadtest.modules.lievito.LievitoList;
 import it.algos.vaadtest.modules.prova.ProvaList;
 import it.algos.vaadtest.modules.prova.ProvaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContextEvent;
 import java.time.LocalDate;
 
 /**
@@ -81,6 +77,8 @@ public class TestBoot extends ABoot {
 
     /**
      * Costruttore @Autowired <br>
+     * Iniettato automaticamente dal framework SpringBoot/Vaadin <br>
+     * I parametri sono disponibili anche durante il ciclo init() del costruttore <br>
      *
      * @param testVers Log delle versioni, modifiche e patch installat
      */
@@ -286,8 +284,8 @@ public class TestBoot extends ABoot {
         FlowVar.menuClazzList.add(BetaList.class);
         FlowVar.menuClazzList.add(AlfaList.class);
         FlowVar.menuClazzList.add(GammaList.class);
-    	FlowVar.menuClazzList.add(LievitoList.class);
-	}// end of method
+        FlowVar.menuClazzList.add(LievitoList.class);
+    }// end of method
 
 
 }// end of boot class

@@ -10,7 +10,9 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.wiz.scripts.WizDialogNewProject;
+import it.algos.vaadflow.wiz.scripts.WizDialogUpdateProject;
 import it.algos.vaadflow.wiz.scripts.WizElaboraNewProject;
+import it.algos.vaadflow.wiz.scripts.WizElaboraUpdateProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,7 +37,13 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
     private WizDialogNewProject dialogNewProject;
 
     @Autowired
+    private WizDialogUpdateProject dialogUpdateProject;
+
+    @Autowired
     private WizElaboraNewProject elaboraNewProject;
+
+    @Autowired
+    private WizElaboraUpdateProject elaboraUpdateProject;
 
     private boolean isProgettoBase = false;
 
@@ -73,11 +81,13 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         titolo();
         selezioneProgettoInUso();
 
-        if (isProgettoBase) {
-            paragrafoNewProject();
-        } else {
-            paragrafoUpdateProject();
-        }// end of if/else cycle
+//        if (isProgettoBase) {
+//            paragrafoNewProject();
+//        } else {
+//            paragrafoUpdateProject();
+//        }// end of if/else cycle
+        paragrafoNewProject();
+        paragrafoUpdateProject();
 
         terzoParagrafo();
         quartoParagrafo();
@@ -120,8 +130,8 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
 
 
     private void elaboraNewProject() {
-        dialogNewProject.close();
         elaboraNewProject.esegue();
+        dialogNewProject.close();
     }// end of method
 
 
@@ -130,7 +140,18 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);
         this.add(new Label("Esistente in qualsiasi directory"));
+
+        Button bottone = new Button("Update project");
+        bottone.getElement().setAttribute("theme", "pimary");
+        bottone.addClickListener(event -> dialogUpdateProject.open(this::elaboraUpdateProject));
+        this.add(bottone);
         this.add(new H1());
+    }// end of method
+
+
+    private void elaboraUpdateProject() {
+        elaboraUpdateProject.esegue();
+        dialogUpdateProject.close();
     }// end of method
 
 

@@ -1,11 +1,21 @@
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
-     * Disponibile al termine del costruttore di questa classe <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
 
-    /**
+     /**
+      * Costruttore @Autowired <br>
+      * Iniettato automaticamente dal framework SpringBoot/Vaadin <br>
+      * I parametri sono disponibili ANCHE durante il ciclo init() del costruttore <br>
+      *
+      * @param testVers Log delle versioni, modifiche e patch installat
+      */
+     @Autowired
+
+
+   /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
      * Questa classe viene costruita partendo da @Route e NON da SpringBoot <br>
      * Iniettata automaticamente dal framework Vaadin con @Autowired <br>

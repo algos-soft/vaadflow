@@ -786,7 +786,48 @@ public class AFileService extends AbstractService {
      *
      * @return true se il file è stato copiato
      */
+    @Deprecated
     public boolean copyFile(String srcPath, String destPath) {
+        return copyFileStr(srcPath, destPath) == VUOTA;
+    }// end of method
+
+
+    /**
+     * Copia un file sovrascrivendolo se già esistente
+     * <p>
+     * Se manca il file sorgente, non fa nulla <br>
+     * Se esiste il file destinazione, lo cancella prima di copiarlo <br>
+     *
+     * @param srcPath  nome completo del file sorgente
+     * @param destPath nome completo del file destinazione
+     *
+     * @return true se il file è stato copiato
+     */
+    public boolean copyFileDeletingAll(String srcPath, String destPath) {
+        if (!isEsisteFile(srcPath)) {
+            return false;
+        }// end of if cycle
+
+        if (isEsisteFile(destPath)) {
+            deleteFile(destPath);
+        }// end of if cycle
+
+        return copyFileStr(srcPath, destPath) == VUOTA;
+    }// end of method
+
+
+    /**
+     * Copia un file solo se non già esistente
+     * <p>
+     * Se manca il file sorgente, non fa nulla <br>
+     * Se esiste il file destinazione, non fa nulla <br>
+     *
+     * @param srcPath  nome completo del file sorgente
+     * @param destPath nome completo del file destinazione
+     *
+     * @return true se il file è stato copiato
+     */
+    public boolean copyFileOnlyNotExisting(String srcPath, String destPath) {
         return copyFileStr(srcPath, destPath) == VUOTA;
     }// end of method
 

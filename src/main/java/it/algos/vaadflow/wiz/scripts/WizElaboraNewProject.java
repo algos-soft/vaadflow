@@ -26,59 +26,60 @@ public class WizElaboraNewProject extends WizElabora {
     @Override
     public void esegue() {
         super.isNuovoProgetto = true;
-
         super.esegue();
 
-//        this.copiaCartellaVaadFlow();
-        this.copiaCartelleVarie();
-//        this.creaModuloNuovoProgetto();
+        super.copiaDirectoryDocumentation();
+        super.copiaDirectoryLinks();
+        super.copiaDirectorySnippets();
+
+        this.copiaCartellaVaadFlow();
+        this.creaModuloNuovoProgetto();
+
+        super.copiaMetaInf();
+        super.scriveFileProperties();
+
+        super.scriveFileRead();
+        super.copiaFileGit();
+        super.scriveFilePom();
+//        super.copiaFileBanner();
     }// end of method
 
 
-//    public void copiaCartellaVaadFlow() {
-//        String source = pathVaadFlow + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
-//        File srcDir = new File(source);
-//
-//        String destination = pathProject + DIR_JAVA + SLASH + VAADFLOW_PROJECT;
-//        File destDir = new File(destination);
-//
-//        try {
-//            FileUtils.copyDirectory(srcDir, destDir);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }// end of method
+    public void copiaCartellaVaadFlow() {
+        String srcPath = pathVaadFlowAlgos + VAADFLOW_NAME;
+        String destPath = pathProjectAlgos + VAADFLOW_NAME;
 
-
-    public void copiaCartelleVarie() {
-        super.copiaDocumentation();
-        super.copiaLinks();
-        super.copiaSnippets();
-        super.copiaRead();
-        super.copiaBanner();
-        super.copiaGit();
-        super.copiaProperties();
-        super.copiaPom();
-        super.copiaMetaInf();
+        file.copyDirectoryDeletingAll(srcPath, destPath);
     }// end of method
 
 
     public void creaModuloNuovoProgetto() {
-        String srcPath = pathVaadFlow;
-        String destPath = pathProject;
+        //--creaDirectoryProjectModulo
+        file.creaDirectory(pathProjectModulo);
 
-        creaApplicationMainClass();
-        creaDirectoryApplication();
-        creaDirectoryModules();
+        //--classe principale dell'applicazione col metodo 'main'
+        creaFileApplicationMainClass();
+
+        //--creaDirectoryApplication (empty)
+        file.creaDirectory(pathProjectDirApplication);
+
+        //--creaDirectoryModules (empty)
+        file.creaDirectory(pathProjectDirModules);
+
+        //--crea contenuto della directory Application
+        scriveFileCost();
+        scriveFileBoot();
+//        scriveFileVers();
+
         creaDirectorySecurity();
     }// end of method
 
 
-    public void creaApplicationMainClass() {
+    public void creaFileApplicationMainClass() {
         String mainApp = newProjectName + text.primaMaiuscola(APP_NAME);
         mainApp = text.primaMaiuscola(mainApp);
         String destPath = pathProjectModulo + mainApp + JAVA_SUFFIX;
-        String testoApp = leggeFile("Application.txt");
+        String testoApp = leggeFile(APP_NAME + TXT_SUFFIX);
 
         testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
         testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
@@ -93,13 +94,36 @@ public class WizElaboraNewProject extends WizElabora {
     }// end of method
 
 
-    public void creaDirectoryApplication() {
-        String destPath = pathProjectModulo + DIR_APPLICATION;
-        file.creaDirectory(destPath);
+    protected void scriveFileCost() {
+        String sourceText = leggeFile(FILE_COST);
+        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_COST + JAVA_SUFFIX;
+
+        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+
+        file.scriveFile(destPath, sourceText, true);
     }// end of method
 
 
-    public void creaDirectoryModules() {
+    public void scriveFileBoot() {
+        String sourceText = leggeFile(FILE_BOOT);
+        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_BOOT + JAVA_SUFFIX;
+
+        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+
+        file.scriveFile(destPath, sourceText, true);
+    }// end of method
+
+
+    public void scriveFileVers() {
+        String sourceText = leggeFile(FILE_VERS);
+        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_VERS + JAVA_SUFFIX;
+
+        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+
+        file.scriveFile(destPath, sourceText, true);
     }// end of method
 
 

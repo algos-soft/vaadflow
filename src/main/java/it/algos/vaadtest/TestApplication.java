@@ -1,20 +1,13 @@
 package it.algos.vaadtest;
 
 import com.vaadin.flow.spring.annotation.EnableVaadin;
-import it.algos.vaadflow.modules.address.AddressService;
-import it.algos.vaadflow.modules.company.CompanyService;
-import it.algos.vaadflow.modules.person.PersonService;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
@@ -42,7 +35,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @SpringBootApplication(scanBasePackages = {"it.algos"}, exclude = {SecurityAutoConfiguration.class})
 @EnableVaadin({"it.algos"})
-@EntityScan({"it.algos.vaadflow.modules", "it.algos.vaadtest.modules"})
+@EntityScan({"it.algos"})
 @EnableMongoRepositories({"it.algos"})
 //@Configuration
 public class TestApplication extends SpringBootServletInitializer {

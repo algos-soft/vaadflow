@@ -137,6 +137,8 @@ public abstract class WizDialog extends Dialog {
      * Regolazioni iniziali indipendenti dal dialogo di input
      */
     protected void regolazioniIniziali() {
+        EAWiz.reset();
+
         if (FLAG_DEBUG_WIZ) {
             WizCost.printInfo(log);
         }// end of if cycle
@@ -208,7 +210,7 @@ public abstract class WizDialog extends Dialog {
         Checkbox unCheckbox;
         for (EAWiz flag : EAWiz.values()) {
             if (flag.isCheckBox()) {
-                if (flag.isNewProject()) {
+                if ((isNuovoProgetto && flag.isNewProject()) || flag.isUpdateProject()) {
                     unCheckbox = new Checkbox(flag.getLabelBox(), flag.isStatus());
                     mappaCheckbox.put(flag.name(), unCheckbox);
                     layoutCheckBox.add(unCheckbox);
@@ -244,7 +246,7 @@ public abstract class WizDialog extends Dialog {
         confirmButton.setWidth(NORMAL_WIDTH);
         confirmButton.setHeight(NORMAL_HEIGHT);
         confirmButton.setVisible(true);
-        confirmButton.setEnabled(false);
+        confirmButton.setEnabled(!isNuovoProgetto);
 
         layoutFooter.add(cancelButton, confirmButton);
         layoutBottoni.add(layoutFooter);

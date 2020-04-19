@@ -41,9 +41,17 @@ public class WizCost {
 
     public static final String DIR_APPLICATION = "application/";
 
+    public static final String DIR_MODULES = "modules/";
+
     public static final String APP_NAME = "application";
 
     public static final String FILE_READ = "README";
+
+    public static final String FILE_COST = "Cost";
+
+    public static final String FILE_BOOT = "Boot";
+
+    public static final String FILE_VERS = "Vers";
 
     public static final String FILE_POM = "pom";
 
