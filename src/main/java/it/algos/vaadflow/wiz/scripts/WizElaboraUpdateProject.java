@@ -17,4 +17,23 @@ import org.springframework.context.annotation.Scope;
 @Slf4j
 public class WizElaboraUpdateProject extends WizElabora {
 
+    @Override
+    public void esegue() {
+        super.isNuovoProgetto = false;
+        super.esegue();
+
+        super.copiaDirectoryDocumentation();
+        super.copiaDirectoryLinks();
+        super.copiaDirectorySnippets();
+
+        super.copiaCartellaVaadFlow();
+
+        super.copiaMetaInf();
+        super.scriveFileProperties();
+
+        super.scriveFileRead();
+        super.copiaFileGit();
+        super.scriveFilePom();
+    }// end of method
+
 }// end of class

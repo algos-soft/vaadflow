@@ -120,7 +120,6 @@ public abstract class WizElabora implements WizRecipient {
     //--pathProjectModulo più DIR_MODULES
     protected String pathProjectDirModules;
 
-
     /**
      * Evento lanciato alla chiusura del dialogo
      */
@@ -136,32 +135,19 @@ public abstract class WizElabora implements WizRecipient {
     protected void regolazioniIniziali() {
         this.pathUserDir = EAWiz.pathUserDir.getValue();
         this.pathVaadFlow = EAWiz.pathVaadFlow.getValue();
-//        if (isNuovoProgetto) {
-//            this.pathProjectsDir = EAWiz.pathProjectsDir.getValue();
-//        } else {
-//            this.pathProjectsDir = VUOTA;
-//        }// end of if/else cycle
         this.pathVaadFlowMain = pathVaadFlow + DIR_MAIN;
         this.pathVaadFlowAlgos = pathVaadFlow + DIR_JAVA;
-
         this.pathVaadFlowSources = EAWiz.pathVaadFlowSources.getValue();
 
         this.newProjectName = EAWiz.nameTargetProject.getValue();
         this.newProjectNameUpper = text.primaMaiuscola(newProjectName);
-        this.pathProject = EAWiz.pathTargetProjet.getValue() + SLASH;
+        this.pathProject = EAWiz.pathTargetProjet.getValue();
 
-//        //--Path proveniente da un File (directory) che finisce SENZA '/' (slash)
-//        //--Aggiungo lo slash per omogeneità con tutte le altre directory
-//        if (isNuovoProgetto) {
-//            this.pathProject = (String) mappaInput.get(Chiave.pathTargetProget) + SLASH;
-//        } else {
-//            this.pathProject = VUOTA;
-//        }// end of if/else cycle
-        pathProjectMain = pathProject + DIR_MAIN;
-        pathProjectAlgos = pathProject + DIR_JAVA;
-        pathProjectModulo = pathProjectAlgos + newProjectName + SLASH;
-        pathProjectDirApplication = pathProjectModulo + DIR_APPLICATION;
-        pathProjectDirModules = pathProjectModulo + DIR_MODULES;
+        this.pathProjectMain = pathProject + DIR_MAIN;
+        this.pathProjectAlgos = pathProject + DIR_JAVA;
+        this.pathProjectModulo = pathProjectAlgos + newProjectName + SLASH;
+        this.pathProjectDirApplication = pathProjectModulo + DIR_APPLICATION;
+        this.pathProjectDirModules = pathProjectModulo + DIR_MODULES;
 
         //--visualizzazione di controllo
         if (FLAG_DEBUG_WIZ) {
@@ -175,15 +161,11 @@ public abstract class WizElabora implements WizRecipient {
             System.out.println("********************");
             System.out.println("Progetto corrente: pathUserDir=" + pathUserDir);
             System.out.println("Directory VaadFlow: pathVaadFlow=" + pathVaadFlow);
-//            if (isNuovoProgetto) {
-//                System.out.println("Directory dei nuovi progetti: pathProjectsDir=" + pathProjectsDir);
-//            }// end of if cycle
             System.out.println("Sorgenti VaadFlow: pathVaadFlowSources=" + pathVaadFlowSources);
-            if (isNuovoProgetto) {
-                System.out.println("Nome nuovo progetto: newProjectName=" + newProjectName);
-                System.out.println("Path nuovo progetto: pathProject=" + pathProject);
-            }// end of if cycle
-            System.out.println("Nome nuovo progetto maiuscolo: newProjectNameUpper=" + newProjectNameUpper);
+
+            System.out.println("Nome target progetto: newProjectName=" + newProjectName);
+            System.out.println("Nome target progetto maiuscolo: newProjectNameUpper=" + newProjectNameUpper);
+            System.out.println("Path target progetto: pathProject=" + pathProject);
 
             System.out.println("Cartella 'main' di VaadFlow: pathVaadFlowMain=" + pathVaadFlowMain);
             System.out.println("Cartella 'algos' di VaadFlow: pathVaadFlowAlgos=" + pathVaadFlowAlgos);
@@ -229,6 +211,16 @@ public abstract class WizElabora implements WizRecipient {
     protected void copiaDirectorySnippets() {
         if (EAWiz.flagSnippets.isAbilitato()) {
             copyCartellaRootProject(DIR_SNIPPETS);
+        }// end of if cycle
+    }// end of method
+
+
+    public void copiaCartellaVaadFlow() {
+        String srcPath = pathVaadFlowAlgos + NAME_VAADFLOW;
+        String destPath = pathProjectAlgos + NAME_VAADFLOW;
+
+        if (EAWiz.flagFlow.isAbilitato()) {
+            file.copyDirectoryDeletingAll(srcPath, destPath);
         }// end of if cycle
     }// end of method
 
@@ -381,28 +373,6 @@ public abstract class WizElabora implements WizRecipient {
         String fileNameJava = "";
         String pathFileJava;
         String oldFileText = "";
-
-//        fileNameJava = newEntityName + task.getJavaClassName();
-//        pathFileJava = packagePath + SEP + fileNameJava;
-//
-//        if (flagSovrascriveFile) {
-//            file.sovraScriveFile(pathFileJava, newTaskText);
-//            System.out.println(fileNameJava + " esisteva già ed è stato modificato");
-//        } else {
-//            oldFileText = file.leggeFile(pathFileJava);
-//            if (text.isValid(oldFileText)) {
-//                if (checkFile(oldFileText)) {
-//                    file.sovraScriveFile(pathFileJava, newTaskText);
-//                    System.out.println(fileNameJava + " esisteva già ed è stato modificato");
-//                } else {
-//                    writeDocOnly(pathFileJava, oldFileText, newTaskText);
-//                    System.out.println(fileNameJava + " esisteva già ed è stato modificato SOLO nella documentazione");
-//                }// end of if/else cycle
-//            } else {
-//                file.scriveFile(pathFileJava, newTaskText, true);
-//                System.out.println(fileNameJava + " non esisteva ed è stato creato");
-//            }// end of if/else cycle
-//        }// end of if/else cycle
     }// end of method
 
 

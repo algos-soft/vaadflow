@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -46,7 +47,7 @@ public class WizDialogNewProject extends WizDialog {
         super.inizia();
         super.creaBottoni();
         this.spazzolaDirectory();
-        super.creaCheckBoxList();
+        this.creaCheckBoxList();
         this.add(layoutBottoni);
         super.open();
     }// end of method
@@ -63,6 +64,21 @@ public class WizDialogNewProject extends WizDialog {
         layoutLegenda.add(new Label("Di tipo 'MAVEN' senza selezionare archetype"));
         layoutLegenda.add(new Label("Rimane il POM vuoto, ma verrà sovrascritto"));
         layoutLegenda.add(new Label("Poi seleziona il progetto dalla lista sottostante"));
+    }// end of method
+
+
+    /**
+     * Spazzola la Enumeration e regola a 'true' tutti i parametri eccetto 'flagSecurity' <br>
+     */
+    protected void creaCheckBoxList() {
+        for (EAWiz flag : EAWiz.values()) {
+            if (flag.isCheckBox()) {
+                flag.setStatus(true);
+            }// end of if cycle
+        }// end of for cycle
+        EAWiz.flagSecurity.setStatus(false);
+
+        super.creaCheckBoxList();
     }// end of method
 
 
@@ -101,7 +117,7 @@ public class WizDialogNewProject extends WizDialog {
 
 
     protected void forzaProgetti() {
-        List<File> progetti = file.getSubDirectories(pathProjectsDir);
+        List<File> progetti = file.getSubDirectories(pathIdeaProjects);
         fieldComboProgetti.setItems(progetti);
         fieldComboProgetti.setLabel(LABEL_COMBO_DUE);
         if (progetti.size() == 1) {
@@ -125,8 +141,8 @@ public class WizDialogNewProject extends WizDialog {
         String tagPienoDeveEsserci = SLASH + DIR_MAIN;
         String tagVuotoNonDeveEsserci = tagPienoDeveEsserci + "/java";
 
-        if (text.isValid(pathProjectsDir)) {
-            cartelleProgetti = file.getSubDirectories(pathProjectsDir);
+        if (text.isValid(pathIdeaProjects)) {
+            cartelleProgetti = file.getSubDirectories(pathIdeaProjects);
         }// end of if cycle
 
         //--deve essere valido subMain e vuoto subJava
