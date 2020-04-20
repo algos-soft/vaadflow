@@ -4,7 +4,6 @@ import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wiz.enumeration.EAToken;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
-import it.algos.vaadflow.wiz.enumeration.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -265,9 +264,6 @@ public abstract class WizElabora implements WizRecipient {
 
 
     public void copiaCartellaVaadFlow() {
-//        String srcPath = pathVaadFlowAlgos + NAME_VAADFLOW;
-//        String destPath = pathProjectAlgos + NAME_VAADFLOW;
-//
         if (EAWiz.flagFlow.isAbilitato()) {
             file.copyDirectoryDeletingAll(pathVaadFlowAlgos, pathProjectAlgos, NAME_VAADFLOW);
         }// end of if cycle
@@ -289,9 +285,6 @@ public abstract class WizElabora implements WizRecipient {
      * Cartella di resources META-INF
      */
     protected void copiaMetaInf() {
-//        String srcPath = pathVaadFlowMain + DIR_RESOURCES_NAME;
-//        String destPath = pathProjectMain + DIR_RESOURCES_NAME;
-//
         if (EAWiz.flagResources.isAbilitato()) {
             file.copyDirectoryAddingOnly(pathVaadFlowMain, pathProjectMain, DIR_RESOURCES_NAME);
         }// end of if cycle
@@ -344,17 +337,6 @@ public abstract class WizElabora implements WizRecipient {
     }// end of method
 
 
-//    /**
-//     * Crea o modifica a seconda del flag 'flagSovrascriveFile' <br>
-//     */
-//    protected void copyFileRootProject(String fileName) {
-//        String srcPath = pathVaadFlow + fileName;
-//        String destPath = pathProject + fileName;
-//
-//        file.copyFileDeletingAll(srcPath, destPath);
-//    }// end of method
-
-
     protected String leggeFile(String nomeFileTextSorgente) {
         String nomeFileTxt = nomeFileTextSorgente;
 
@@ -366,29 +348,11 @@ public abstract class WizElabora implements WizRecipient {
     }// end of method
 
 
-//    protected void checkAndWriteFile2(String pathNewFile, String sourceText) {
-//        String oldText = VUOTA;
-//
-//        if (file.isEsisteFile(pathNewFile)) {
-//            oldText = file.leggeFile(pathNewFile);
-//            if (text.isValid(oldText)) {
-//                if (checkFile(oldText)) {
-//                    file.scriveFile(pathNewFile, sourceText, true);
-//                }// end of if cycle
-//            } else {
-//                file.scriveFile(pathNewFile, sourceText, true);
-//            }// end of if/else cycle
-//        } else {
-//            file.scriveFile(pathNewFile, sourceText, true);
-//        }// end of if/else cycle
+//    private void checkAndWriteFileTask(Task task, String newTaskText) {
+//        String fileNameJava = "";
+//        String pathFileJava;
+//        String oldFileText = "";
 //    }// end of method
-
-
-    private void checkAndWriteFileTask(Task task, String newTaskText) {
-        String fileNameJava = "";
-        String pathFileJava;
-        String oldFileText = "";
-    }// end of method
 
 
     private boolean checkFile(String oldFileText) {

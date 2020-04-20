@@ -54,6 +54,8 @@ public class WizCost {
 
     public static final String FILE_VERS = "Vers";
 
+    public static final String FILE_HOME = "Home";
+
     public static final String FILE_POM = "pom";
 
     public static final String FILE_BANNER = "banner";
