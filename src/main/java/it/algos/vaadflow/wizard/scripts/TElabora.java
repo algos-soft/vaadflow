@@ -4,9 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
+import it.algos.vaadflow.wiz.enumeration.EAToken;
 import it.algos.vaadflow.wiz.enumeration.Progetto;
 import it.algos.vaadflow.wiz.enumeration.Task;
-import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -859,54 +859,54 @@ public class TElabora {
 
 
     private String replaceText(String sourceText) {
-        Map<Token, String> mappa = new HashMap<>();
+        Map<EAToken, String> mappa = new HashMap<>();
 
-        mappa.put(Token.projectName, targetProjectName);
-        mappa.put(Token.moduleNameMinuscolo, targetModuleName);
-        mappa.put(Token.moduleNameMaiuscolo, targetModuleCapitalName);
-        mappa.put(Token.first, firstCharProject);
-        mappa.put(Token.packageName, newPackageName);
-        mappa.put(Token.projectCost, nameShort + COST_SUFFIX);
-        mappa.put(Token.user, "Gac");
-        mappa.put(Token.today, LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
-        mappa.put(Token.qualifier, qualifier != null ? qualifier : "");
-        mappa.put(Token.tagView, "");
-        mappa.put(Token.entity, newEntityName);
-        mappa.put(Token.estendeEntity, creaEstendeEntity());
-        mappa.put(Token.superClassEntity, superClassEntity);
-        mappa.put(Token.usaCompany, creaUsaCompany());
-        mappa.put(Token.usaSecurity, creaUsaCompany());
-        mappa.put(Token.readCompany, creaReadCompany());
-        mappa.put(Token.grid, gridSuperclass);
-        mappa.put(Token.creaGrid, creaGrid());
-        mappa.put(Token.postConstruct, postConstruct());
-        mappa.put(Token.setParameter, setParameter());
-        mappa.put(Token.beforeEnter, beforeEnter());
-        mappa.put(Token.fixPreferenze, fixPreferenze());
-        mappa.put(Token.fixLayout, fixLayout());
-        mappa.put(Token.creaAlertLayout, creaAlertLayout());
-        mappa.put(Token.creaTopLayout, creaTopLayout());
-        mappa.put(Token.creaPopupFiltro, creaPopupFiltro());
-        mappa.put(Token.creaFiltri, creaFiltri());
-        mappa.put(Token.updateFiltri, updateFiltri());
-        mappa.put(Token.addListeners, addListeners());
-        mappa.put(Token.methodFind, creaFind());
-        mappa.put(Token.parametersDoc, creaParametersDoc());
-        mappa.put(Token.keyUnica, creaKeyUnica());
-        mappa.put(Token.builder, creaBuilder());
-        mappa.put(Token.methodNewOrdine, creaNewOrdine());
-        mappa.put(Token.methodIdKeySpecifica, creaIdKeySpecifica());
-        mappa.put(Token.parameters, creaParameters());
-        mappa.put(Token.parametersNewEntity, creaParametersNewEntity());
-        mappa.put(Token.query, creaQuery());
-        mappa.put(Token.findAll, creaFindAll());
-        mappa.put(Token.properties, creaProperties());
-        mappa.put(Token.propertyOrdine, creaPropertyOrdine());
-        mappa.put(Token.propertyCode, creaPropertyCode());
-        mappa.put(Token.propertyDescrizione, creaPropertyDescrizione());
-        mappa.put(Token.toString, creaToString());
+        mappa.put(EAToken.nameTargetProject, targetProjectName);
+        mappa.put(EAToken.moduleNameMinuscolo, targetModuleName);
+        mappa.put(EAToken.moduleNameMaiuscolo, targetModuleCapitalName);
+        mappa.put(EAToken.first, firstCharProject);
+        mappa.put(EAToken.packageName, newPackageName);
+        mappa.put(EAToken.projectCost, nameShort + COST_SUFFIX);
+        mappa.put(EAToken.user, "Gac");
+        mappa.put(EAToken.today, LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
+        mappa.put(EAToken.qualifier, qualifier != null ? qualifier : "");
+        mappa.put(EAToken.tagView, "");
+        mappa.put(EAToken.entity, newEntityName);
+        mappa.put(EAToken.estendeEntity, creaEstendeEntity());
+        mappa.put(EAToken.superClassEntity, superClassEntity);
+        mappa.put(EAToken.usaCompany, creaUsaCompany());
+        mappa.put(EAToken.usaSecurity, creaUsaCompany());
+        mappa.put(EAToken.readCompany, creaReadCompany());
+        mappa.put(EAToken.grid, gridSuperclass);
+        mappa.put(EAToken.creaGrid, creaGrid());
+        mappa.put(EAToken.postConstruct, postConstruct());
+        mappa.put(EAToken.setParameter, setParameter());
+        mappa.put(EAToken.beforeEnter, beforeEnter());
+        mappa.put(EAToken.fixPreferenze, fixPreferenze());
+        mappa.put(EAToken.fixLayout, fixLayout());
+        mappa.put(EAToken.creaAlertLayout, creaAlertLayout());
+        mappa.put(EAToken.creaTopLayout, creaTopLayout());
+        mappa.put(EAToken.creaPopupFiltro, creaPopupFiltro());
+        mappa.put(EAToken.creaFiltri, creaFiltri());
+        mappa.put(EAToken.updateFiltri, updateFiltri());
+        mappa.put(EAToken.addListeners, addListeners());
+        mappa.put(EAToken.methodFind, creaFind());
+        mappa.put(EAToken.parametersDoc, creaParametersDoc());
+        mappa.put(EAToken.keyUnica, creaKeyUnica());
+        mappa.put(EAToken.builder, creaBuilder());
+        mappa.put(EAToken.methodNewOrdine, creaNewOrdine());
+        mappa.put(EAToken.methodIdKeySpecifica, creaIdKeySpecifica());
+        mappa.put(EAToken.parameters, creaParameters());
+        mappa.put(EAToken.parametersNewEntity, creaParametersNewEntity());
+        mappa.put(EAToken.query, creaQuery());
+        mappa.put(EAToken.findAll, creaFindAll());
+        mappa.put(EAToken.properties, creaProperties());
+        mappa.put(EAToken.propertyOrdine, creaPropertyOrdine());
+        mappa.put(EAToken.propertyCode, creaPropertyCode());
+        mappa.put(EAToken.propertyDescrizione, creaPropertyDescrizione());
+        mappa.put(EAToken.toString, creaToString());
 
-        return Token.replaceAll(sourceText, mappa);
+        return EAToken.replaceAll(sourceText, mappa);
     }// end of method
 
 
@@ -915,9 +915,9 @@ public class TElabora {
 
         if (flagCode) {
             methodFindText += leggeFile(METHOD_FIND);
-            methodFindText = Token.replace(Token.entity, methodFindText, newEntityName);
-            methodFindText = Token.replace(Token.parameters, methodFindText, creaParameters());
-            methodFindText = Token.replace(Token.parametersFind, methodFindText, creaParametersFind());
+            methodFindText = EAToken.replace(EAToken.entity, methodFindText, newEntityName);
+            methodFindText = EAToken.replace(EAToken.parameters, methodFindText, creaParameters());
+            methodFindText = EAToken.replace(EAToken.parametersFind, methodFindText, creaParametersFind());
         }// end of if cycle
 
         return methodFindText;
@@ -930,7 +930,7 @@ public class TElabora {
 
         if (flagOrdine) {
             methodNewOrdineText += leggeFile(nomeFileSorgente);
-            methodNewOrdineText = Token.replace(Token.entity, methodNewOrdineText, newEntityName);
+            methodNewOrdineText = EAToken.replace(EAToken.entity, methodNewOrdineText, newEntityName);
         }// end of if cycle
 
         return methodNewOrdineText;
@@ -942,7 +942,7 @@ public class TElabora {
 
         if (flagCode && flagKeyCode) {
             methodIdKeySpecificaText += leggeFile(METHOD_ID_KEY_SPECIFICA);
-            methodIdKeySpecificaText = Token.replace(Token.entity, methodIdKeySpecificaText, newEntityName);
+            methodIdKeySpecificaText = EAToken.replace(EAToken.entity, methodIdKeySpecificaText, newEntityName);
         }// end of if cycle
 
         return methodIdKeySpecificaText;
@@ -954,7 +954,7 @@ public class TElabora {
 
         if (flagCompany) {
             methodReadCompanyText += leggeFile(METHOD_READ_COMPANY);
-            methodReadCompanyText = Token.replace(Token.entity, methodReadCompanyText, newEntityName);
+            methodReadCompanyText = EAToken.replace(EAToken.entity, methodReadCompanyText, newEntityName);
         }// end of if cycle
 
         return methodReadCompanyText;
@@ -966,7 +966,7 @@ public class TElabora {
 
         if (flagGrid) {
             testo += leggeFile(METHOD_CREA_GRID);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -978,7 +978,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_POST_CONSTRUCT);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -990,7 +990,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_SET_PARAMETER);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1002,7 +1002,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_BEFORE_ENTER);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1014,7 +1014,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_FIX_PREFERENZE);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1026,7 +1026,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_FIX_LAYOUT);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1038,7 +1038,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_CREA_ALERT_LAYOUT);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1050,7 +1050,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_CREA_TOP_LAYOUT);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1062,7 +1062,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_CREA_POPUP_FILTRO);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1074,7 +1074,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_CREA_FILTRI);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1086,7 +1086,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_UPDATE_FILTRI);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1098,7 +1098,7 @@ public class TElabora {
 
         if (flagList) {
             testo += leggeFile(METHOD_ADD_LISTENERS);
-            testo = Token.replace(Token.entity, testo, newEntityName);
+            testo = EAToken.replace(EAToken.entity, testo, newEntityName);
         }// end of if cycle
 
         return testo;
@@ -1627,7 +1627,7 @@ public class TElabora {
     private void regolaProperties() {
         String sourceText = leggeFile("properties");
         String destPath = projectPath + DIR_MAIN + RESOURCES_NAME + "/application.properties";
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
 
         if (flagProperties) {
             checkAndWriteFile(destPath, sourceText);
@@ -1641,7 +1641,7 @@ public class TElabora {
     private void regolaPom() {
         String sourceText = leggeFile(POM);
         String destPath = ideaProjectRootPath + "/" + newProjectName + "/" + POM + ".xml";
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
 
         if (flagPom) {
             checkAndWriteFile(destPath, sourceText);
@@ -1723,13 +1723,13 @@ public class TElabora {
         String destPath = projectJavaPath + "/" + mainApp + JAVA_SUFFIX;
         String testoApp = leggeFile(APP_NAME + SOURCE_SUFFIX);
 
-        testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
-        testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(nameShort));
+        testoApp = EAToken.replace(EAToken.moduleNameMinuscolo, testoApp, newProjectName);
+        testoApp = EAToken.replace(EAToken.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(nameShort));
 
         if (flagSecurity) {
-            testoApp = Token.replace(Token.usaSecurity, testoApp, VUOTA);
+            testoApp = EAToken.replace(EAToken.usaSecurity, testoApp, VUOTA);
         } else {
-            testoApp = Token.replace(Token.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");
+            testoApp = EAToken.replace(EAToken.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");
         }// end of if/else cycle
 
         checkAndWrite(destPath, testoApp);
@@ -1765,7 +1765,7 @@ public class TElabora {
         String destPath = projectJavaPath + "/" + APP_NAME + "/" + HOME_NAME + JAVA_SUFFIX;
         String testoHome = leggeFile(HOME_NAME + SOURCE_SUFFIX);
 
-        testoHome = Token.replace(Token.moduleNameMinuscolo, testoHome, newProjectName);
+        testoHome = EAToken.replace(EAToken.moduleNameMinuscolo, testoHome, newProjectName);
         checkAndWrite(destPath, testoHome);
     }// end of method
 
@@ -1773,8 +1773,8 @@ public class TElabora {
     private void creaCost() {
         String testoCost = leggeFile(COST_SUFFIX + SOURCE_SUFFIX);
 
-        testoCost = Token.replace(Token.moduleNameMinuscolo, testoCost, newProjectName);
-        testoCost = Token.replace(Token.moduleNameMaiuscolo, testoCost, text.primaMaiuscola(nameShort));
+        testoCost = EAToken.replace(EAToken.moduleNameMinuscolo, testoCost, newProjectName);
+        testoCost = EAToken.replace(EAToken.moduleNameMaiuscolo, testoCost, text.primaMaiuscola(nameShort));
         checkAndWrite(costPath, testoCost);
     }// end of method
 
@@ -1782,8 +1782,8 @@ public class TElabora {
     private void creaBoot() {
         String testoBoot = leggeFile(BOOT_SUFFIX + SOURCE_SUFFIX);
 
-        testoBoot = Token.replace(Token.moduleNameMinuscolo, testoBoot, newProjectName);
-        testoBoot = Token.replace(Token.moduleNameMaiuscolo, testoBoot, text.primaMaiuscola(nameShort));
+        testoBoot = EAToken.replace(EAToken.moduleNameMinuscolo, testoBoot, newProjectName);
+        testoBoot = EAToken.replace(EAToken.moduleNameMaiuscolo, testoBoot, text.primaMaiuscola(nameShort));
         checkAndWrite(bootPath, testoBoot);
     }// end of method
 
@@ -1791,9 +1791,9 @@ public class TElabora {
     private void creaVers() {
         String testoVers = leggeFile(VERS_SUFFIX + SOURCE_SUFFIX);
 
-        testoVers = Token.replace(Token.moduleNameMinuscolo, testoVers, newProjectName);
-        testoVers = Token.replace(Token.moduleNameMaiuscolo, testoVers, text.primaMaiuscola(nameShort));
-        testoVers = Token.replace(Token.first, testoVers, firstCharProject);
+        testoVers = EAToken.replace(EAToken.moduleNameMinuscolo, testoVers, newProjectName);
+        testoVers = EAToken.replace(EAToken.moduleNameMaiuscolo, testoVers, text.primaMaiuscola(nameShort));
+        testoVers = EAToken.replace(EAToken.first, testoVers, firstCharProject);
         checkAndWrite(versPath, testoVers);
     }// end of method
 
@@ -1810,7 +1810,7 @@ public class TElabora {
         String destPath = projectJavaPath + "/" + SECURITY_NAME + "/" + CONFIGURATION_NAME + JAVA_SUFFIX;
         String testoHome = leggeFile(CONFIGURATION_NAME + SOURCE_SUFFIX);
 
-        testoHome = Token.replace(Token.moduleNameMinuscolo, testoHome, newProjectName);
+        testoHome = EAToken.replace(EAToken.moduleNameMinuscolo, testoHome, newProjectName);
         checkAndWrite(destPath, testoHome);
     }// end of method
 
@@ -1819,7 +1819,7 @@ public class TElabora {
         String destPath = projectJavaPath + "/" + SECURITY_NAME + "/" + DETAILS_NAME + JAVA_SUFFIX;
         String testoHome = leggeFile(DETAILS_NAME + SOURCE_SUFFIX);
 
-        testoHome = Token.replace(Token.moduleNameMinuscolo, testoHome, newProjectName);
+        testoHome = EAToken.replace(EAToken.moduleNameMinuscolo, testoHome, newProjectName);
         checkAndWrite(destPath, testoHome);
     }// end of method
 

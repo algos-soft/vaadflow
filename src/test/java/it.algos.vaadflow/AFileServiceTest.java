@@ -3,6 +3,7 @@ package it.algos.vaadflow;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.wiz.scripts.WizCost;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static it.algos.vaadflow.service.AFileService.*;
+import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -80,6 +82,9 @@ public class AFileServiceTest extends ATest {
     private static String PATH_DIRECTORY_ESISTENTE_CON_MAIUSCOLA_SBAGLIATA = "/Users/gac/desktop/test/Pippo/";
 
     private static String PATH_FILE_DELETE = "/Users/gac/Desktop/test/NonEsiste/Minni.txt";
+
+    private static String PATH_MODULO_PROVA = PATH_VAADFLOW_DIR_STANDARD + DIR_ALGOS + "vaadtest/";
+
 
     private static String VALIDO = "TROVATO";
 
@@ -921,13 +926,13 @@ public class AFileServiceTest extends ATest {
         ottenutoBooleano = service.copyFile(srcPathNonEsistente, destPath);
         assertFalse(ottenutoBooleano);
         ottenuto = service.copyFileStr(srcPathNonEsistente, destPath);
-        assertEquals(NON_COPIATO_FILE, ottenuto);
+        assertEquals(NON_ESISTE_FILE, ottenuto);
 
         //--esegue con destinazione GIA esistente
         ottenutoBooleano = service.copyFile(srcPath, destPathEsistente);
         assertFalse(ottenutoBooleano);
         ottenuto = service.copyFileStr(srcPathNonEsistente, destPath);
-        assertEquals(NON_COPIATO_FILE, ottenuto);
+        assertEquals(NON_ESISTE_FILE, ottenuto);
 
         //--controllo condizioni iniziali
         assertTrue(service.isEsisteFile(srcPath));
@@ -1064,30 +1069,95 @@ public class AFileServiceTest extends ATest {
      */
     @Test
     public void copyDirectoryOnlyNotExisting2() {
+//        String primo = "PrimoFileCheResta.txx";
+//        String secondo = "SecondoFileCheResta.txx";
+//        String terzo = "TerzoFileVariabile.txx";
+//        String quarto = "QuartoIncerto.txx";
+//        String dirCopiata = "VieneCopiata";
+//        String dirRimane = "Rimane";
+//        String sorgente = PATH_DIRECTORY_TEST + "Sorgente/";
+//        String emptyDirCopiata = sorgente + dirCopiata;
+//        String srcDirectoryUno = sorgente + "PrimaDirectory/";
+//        String srcDirUnoFileUno = srcDirectoryUno + primo;
+//        String srcDirUnoFileDue = srcDirectoryUno + secondo;
+//        String srcDirUnoFileTre = srcDirectoryUno + terzo;
+//        String srcDirectoryDue = sorgente + "SecondaDirectory/";
+//        String srcDirDueFileUno = srcDirectoryDue + primo;
+//        String srcDirDueFileDue = srcDirectoryDue + secondo;
+//        String srcDirDueFileQuattro = srcDirectoryDue + quarto;
+//
+//        String destinazione = PATH_DIRECTORY_TEST + "Destinazione/";
+//        String emptyDirRimane = destinazione + dirRimane;
+//        String destDirectoryUno = destinazione + "PrimaDirectory/";
+//        String destDirUnoFileUno = destDirectoryUno + primo;
+//        String destDirUnoFileDue = destDirectoryUno + secondo;
+//        String destDirUnoFileQuattro = destDirectoryUno + quarto;
+//        String destDirectoryDue = destinazione + "SecondaDirectory/";
+//        String destDirDueFileUno = destDirectoryDue + primo;
+//        String destDirDueFileDue = destDirectoryDue + secondo;
+//        String destDirDueFileTre = destDirectoryDue + terzo;
+//
+//        assertTrue(service.creaDirectory(emptyDirCopiata));
+//        assertTrue(service.creaFile(srcDirUnoFileUno));
+//        assertTrue(service.creaFile(srcDirUnoFileDue));
+//        assertTrue(service.creaFile(srcDirUnoFileTre));
+//        assertTrue(service.creaFile(srcDirDueFileUno));
+//        assertTrue(service.creaFile(srcDirDueFileDue));
+//        assertTrue(service.creaFile(srcDirDueFileQuattro));
+//
+//        assertTrue(service.creaDirectory(emptyDirRimane));
+//        assertTrue(service.creaFile(destDirUnoFileUno));
+//        assertTrue(service.creaFile(destDirUnoFileDue));
+//        assertTrue(service.creaFile(destDirUnoFileQuattro));
+//        assertTrue(service.creaFile(destDirDueFileUno));
+//        assertTrue(service.creaFile(destDirDueFileDue));
+//        assertTrue(service.creaFile(destDirDueFileTre));
+
+        String sorgente = PATH_DIRECTORY_TEST + "Sorgente/";
+        String destinazione = PATH_DIRECTORY_TEST + "Destinazione/";
+        String dirUno = "PrimaDirectory/";
+        String dirDue = "SecondaDirectory/";
+        creaCartelleTemporanee(sorgente, destinazione, dirUno, dirDue);
+
+        ottenutoBooleano = service.copyDirectoryAddingOnly(sorgente, destinazione);
+        assertTrue(ottenutoBooleano);
+
+        assertTrue(service.isEsisteDirectory(destinazione + "Rimane"));
+        assertTrue(service.isEsisteDirectory(destinazione + "VieneCopiata"));
+
+        assertTrue(service.isEsisteFile(destinazione + dirUno + "TerzoFileVariabile.txx"));
+        assertTrue(service.isEsisteFile(destinazione + dirUno + "QuartoIncerto.txx"));
+
+        assertTrue(service.isEsisteFile(destinazione + dirDue + "TerzoFileVariabile.txx"));
+        assertTrue(service.isEsisteFile(destinazione + dirDue + "QuartoIncerto.txx"));
+    }// end of single test
+
+
+    private void creaCartelleTemporanee(String srcPath, String destPath, String dirUno, String dirDue) {
         String primo = "PrimoFileCheResta.txx";
         String secondo = "SecondoFileCheResta.txx";
         String terzo = "TerzoFileVariabile.txx";
         String quarto = "QuartoIncerto.txx";
+        String fileConTesto = "FileConTesto.txt";
         String dirCopiata = "VieneCopiata";
         String dirRimane = "Rimane";
-        String sorgente = PATH_DIRECTORY_TEST + "Sorgente/";
-        String emptyDirCopiata = sorgente + dirCopiata;
-        String srcDirectoryUno = sorgente + "PrimaDirectory/";
+
+        String emptyDirCopiata = srcPath + dirCopiata;
+        String srcDirectoryUno = srcPath + dirUno;
         String srcDirUnoFileUno = srcDirectoryUno + primo;
         String srcDirUnoFileDue = srcDirectoryUno + secondo;
         String srcDirUnoFileTre = srcDirectoryUno + terzo;
-        String srcDirectoryDue = sorgente + "SecondaDirectory/";
+        String srcDirectoryDue = srcPath + dirDue;
         String srcDirDueFileUno = srcDirectoryDue + primo;
         String srcDirDueFileDue = srcDirectoryDue + secondo;
         String srcDirDueFileQuattro = srcDirectoryDue + quarto;
 
-        String destinazione = PATH_DIRECTORY_TEST + "Destinazione/";
-        String emptyDirRimane = destinazione + dirRimane;
-        String destDirectoryUno = destinazione + "PrimaDirectory/";
+        String emptyDirRimane = destPath + dirRimane;
+        String destDirectoryUno = destPath + dirUno;
         String destDirUnoFileUno = destDirectoryUno + primo;
         String destDirUnoFileDue = destDirectoryUno + secondo;
         String destDirUnoFileQuattro = destDirectoryUno + quarto;
-        String destDirectoryDue = destinazione + "SecondaDirectory/";
+        String destDirectoryDue = destPath + dirDue;
         String destDirDueFileUno = destDirectoryDue + primo;
         String destDirDueFileDue = destDirectoryDue + secondo;
         String destDirDueFileTre = destDirectoryDue + terzo;
@@ -1108,22 +1178,12 @@ public class AFileServiceTest extends ATest {
         assertTrue(service.creaFile(destDirDueFileDue));
         assertTrue(service.creaFile(destDirDueFileTre));
 
-        ottenutoBooleano = service.copyDirectoryAddingOnly(sorgente, destinazione);
-        assertTrue(ottenutoBooleano);
-
-        assertTrue(service.isEsisteDirectory(destinazione + dirRimane));
-        assertTrue(service.isEsisteDirectory(destinazione + dirCopiata));
-
-        assertTrue(service.isEsisteFile(destDirUnoFileUno));
-        assertTrue(service.isEsisteFile(destDirUnoFileDue));
-        assertTrue(service.isEsisteFile(destDirectoryUno + terzo));
-        assertTrue(service.isEsisteFile(destDirUnoFileQuattro));
-
-        assertTrue(service.isEsisteFile(destDirDueFileUno));
-        assertTrue(service.isEsisteFile(destDirDueFileDue));
-        assertTrue(service.isEsisteFile(destDirDueFileTre));
-        assertTrue(service.isEsisteFile(destDirectoryDue + quarto));
-    }// end of single test
+        //--aggiunge nella directory sorgente un file di testo contenete effettivamente del testo
+        assertTrue(service.creaFile(srcPath + dirUno + fileConTesto));
+        service.sovraScriveFile(srcPath + dirUno + fileConTesto, "Questo testo verrà copiato");
+        assertTrue(service.creaFile(destPath + dirUno + fileConTesto));
+        service.sovraScriveFile(destPath + dirUno + fileConTesto, "Questo testo verrà cancellato");
+    }// end of method
 
 
     /**
@@ -1341,6 +1401,7 @@ public class AFileServiceTest extends ATest {
 
     /**
      * Estrae le sub-directories da un sotto-livello di una directory <br>
+     * La dirInterna non è, ovviamente, al primo livello della directory altrimenti chiamerei getSubDirectories <br>
      *
      * @param directoryToBeScanned della directory
      * @param dirInterna           da scandagliare
@@ -1410,5 +1471,82 @@ public class AFileServiceTest extends ATest {
         assertTrue(ottenutoBooleano);
     }// end of single test
 
+
+    /**
+     * Sposta un file da una directoy ad un'altra <br>
+     * Esegue solo se il path sorgente esiste <br>
+     * Esegue solo se il path destinazione NON esiste <br>
+     * Viene cancellato il file sorgente <br>
+     *
+     * @param pathFileToBeRead  posizione iniziale del file da spostare
+     * @param pathFileToBeWrite posizione iniziale del file da spostare
+     *
+     * @return testo di errore, vuoto se il file è stato spostato
+     */
+    @Test
+    public void spostaFile() {
+        nomeFile = "PerAdessoNonEsisto" + WizCost.TXT_SUFFIX;
+        String pathDirectoryUno = PATH_MODULO_PROVA + DIR_APPLICATION;
+        String pathDirectoryDue = PATH_MODULO_PROVA + DIR_MODULES;
+        String pathFileUno = pathDirectoryUno + nomeFile;
+        String pathFileDue = pathDirectoryDue + nomeFile;
+
+        //--situazione iniziale vuota
+        assertFalse(service.isEsisteFile(pathFileUno));
+        assertFalse(service.isEsisteFile(pathFileDue));
+
+        //--provo con condizioni NON valide
+        ottenuto = service.spostaFileStr(VUOTA, pathFileDue);
+        assertEquals(PATH_NULLO, ottenuto);
+
+        //--provo con condizioni NON valide
+        ottenuto = service.spostaFileStr(pathFileUno, pathFileDue);
+        assertEquals(NON_ESISTE_FILE, ottenuto);
+
+        //--creo un file e controllo la situazione al momento
+        service.creaFile(pathFileUno);
+        assertTrue(service.isEsisteFile(pathFileUno));
+        assertFalse(service.isEsisteFile(pathFileDue));
+
+        //--eseguo lo spostamento
+        ottenuto = service.spostaFileStr(pathFileUno, pathFileDue);
+        assertEquals(VUOTA, ottenuto);
+
+        //--ccontrollo la situazione dopo lo spostamento
+        assertFalse(service.isEsisteFile(pathFileUno));
+        assertTrue(service.isEsisteFile(pathFileDue));
+
+        //--cancello il file temporaneo
+        service.deleteFile(pathFileDue);
+
+        //--situazione finale vuota
+        assertFalse(service.isEsisteFile(pathFileUno));
+        assertFalse(service.isEsisteFile(pathFileDue));
+    }// end of single test
+
+
+    /**
+     * Copia tutta una directory ESCLUSO il file indicato <br>
+     * <p>
+     * Esegue solo se il il file esiste nel srcPath <br>
+     * Esegue solo se il il file esiste nel destPath <br>
+     * Esegue solo se la dir interna del file è la stessa in srcPath e destPath <br>
+     * Viene ignorato il file sorgente srcPath + dirFileToBeKeep <br>
+     * Viene mantenuto il file esistente destPath + dirFileToBeKeep <br>
+     *
+     * @param srcPath         nome completo della directory sorgente
+     * @param destPath        nome completo della directory destinazione
+     * @param dirFileToBeKeep dir interna del file da mantenere - deve essere uguale in srcPath e in destPath
+     *
+     * @return testo di errore, vuoto se la directory è stata copiata ed il il file mantenuto originale
+     */
+    @Test
+    public void copyDirectoryLessFile() {
+        String sorgente = PATH_DIRECTORY_TEST + "Alfetta/";
+        String destinazione = PATH_DIRECTORY_TEST + "Beretta/";
+        String dirUno = "PrimaDirectory/";
+        String dirDue = "SecondaDirectory/";
+        creaCartelleTemporanee(sorgente, destinazione, dirUno, dirDue);
+    }// end of single test
 
 }// end of class

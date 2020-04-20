@@ -23,11 +23,11 @@ public enum EAWiz {
     flagPom(true, "File Maven di POM.xml - ATTENZIONE", true, true, false, false, false),
     flagFile(true, "Sovrascrive il singolo FILE", false, false, false, false, false),
     flagDirectory(true, "Sovrascrive la DIRECTORY", false, false, false, false, false),
-    //    flagBanner(true, "File banner di SpringBoot", true, true, false, false, true),
+    flagBanner(true, "File banner di SpringBoot", true, true, false, false, true),
     pathUserDir(false, "Directory recuperata dal System dove gira il programma in uso", true, true, false, false, false, VUOTA),
     pathVaadFlow(false, "Directory che contiene il programma VaadFlow", true, true, false, false, false, VUOTA),
     pathIdeaProjects(false, "Directory che contiene i nuovi programmi appena creati da Idea", true, true, false, false, false, VUOTA),
-    pathVaadFlowSources(false, "Directory dei sorgenti testuali di VaadFlow da elaborare", true, true, false, false, false, VUOTA),
+    //    pathVaadFlowSources(false, "Directory dei sorgenti testuali di VaadFlow da elaborare", true, true, false, false, false, VUOTA),
     nameTargetProject(false, "Nome breve new/update project", true, true, false, false, false, VUOTA),
     pathTargetProjet(false, "Path new/update project", true, true, false, false, false, VUOTA),
     ;

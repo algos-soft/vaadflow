@@ -13,6 +13,7 @@ import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.wiz.enumeration.EAToken;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 import static it.algos.vaadflow.application.FlowCost.SLASH;
+import static it.algos.vaadflow.application.FlowCost.VUOTA;
 import static it.algos.vaadflow.wiz.scripts.WizCost.*;
 
 /**
@@ -122,12 +124,12 @@ public abstract class WizDialog extends Dialog {
 
     //--regolata da questo dialogo
     //--può essere un new project oppure un update di un progetto esistente
-    protected String nameTargetProject;
+    protected String nameTargetProject = VUOTA;
 
     //--regolata da questo dialogo
     //--può essere il path completo di un new project oppure di un update esistente
     //--tutte le property il cui nome inizia con 'path' finiscono con SLASH
-    protected String pathTargetProjet;
+    protected String pathTargetProjet = VUOTA;
 
 
     /**
@@ -273,22 +275,31 @@ public abstract class WizDialog extends Dialog {
     /**
      * Chiamato alla dismissione del dialogo <br>
      * Regola tutti i valori della Enumeration EAWiz che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
+     * Regola alcuni valori della Enumeration EAToken che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
      */
     protected void regolazioniFinali() {
+        if (isNuovoProgetto) {
+            if (fieldComboProgetti != null && fieldComboProgetti.getValue() != null) {
+                nameTargetProject = fieldComboProgetti.getValue().getName();
+                pathTargetProjet = fieldComboProgetti.getValue().getAbsolutePath() + SLASH;
+            }// end of if cycle
+        }// end of if cycle
+
+        regolaEAWiz();
+        regolaEAToken();
+    }// end of method
+
+
+    /**
+     * Chiamato alla dismissione del dialogo <br>
+     * Regola tutti i valori della Enumeration EAWiz che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
+     */
+    protected void regolaEAWiz() {
         EAWiz.pathUserDir.setValue(pathUserDir);
         EAWiz.pathVaadFlow.setValue(pathVaadFlow);
         EAWiz.pathIdeaProjects.setValue(pathIdeaProjects);
-        EAWiz.pathVaadFlowSources.setValue(pathSources);
-
-        if (isNuovoProgetto) {
-            if (fieldComboProgetti != null && fieldComboProgetti.getValue() != null) {
-                EAWiz.nameTargetProject.setValue(fieldComboProgetti.getValue().getName());
-                EAWiz.pathTargetProjet.setValue(fieldComboProgetti.getValue().getAbsolutePath() + SLASH);
-            }// end of if cycle
-        } else {
-            EAWiz.nameTargetProject.setValue(nameTargetProject);
-            EAWiz.pathTargetProjet.setValue(pathTargetProjet);
-        }// end of if/else cycle
+        EAWiz.nameTargetProject.setValue(nameTargetProject);
+        EAWiz.pathTargetProjet.setValue(pathTargetProjet);
 
         for (EAWiz flag : EAWiz.values()) {
             if (mappaCheckbox.get(flag.name()) != null) {
@@ -299,7 +310,7 @@ public abstract class WizDialog extends Dialog {
         //--visualizzazione di controllo
         if (FLAG_DEBUG_WIZ) {
             System.out.println("********************");
-            System.out.println("Uscita dal dialogo");
+            System.out.println("Uscita dal dialogo - EAWiz");
             System.out.println("********************");
             for (EAWiz flag : EAWiz.values()) {
                 if (flag.isCheckBox()) {
@@ -307,6 +318,35 @@ public abstract class WizDialog extends Dialog {
                 } else {
                     System.out.println("EAWiz." + flag.name() + " \"" + flag.getDescrizione() + "\" = " + flag.getValue());
                 }// end of if/else cycle
+            }// end of for cycle
+            System.out.println("");
+        }// end of if cycle
+    }// end of method
+
+
+    /**
+     * Chiamato alla dismissione del dialogo <br>
+     * Regola alcuni valori della Enumeration EAToken che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
+     */
+    protected void regolaEAToken() {
+        EAToken.reset();
+        EAToken.nameTargetProject.setValue(nameTargetProject);
+        EAToken.pathTargetProjet.setValue(pathTargetProjet);
+
+        EAToken.projectNameUpper.setValue(nameTargetProject.toUpperCase());
+        EAToken.moduleNameMinuscolo.setValue(nameTargetProject.toLowerCase());
+        EAToken.moduleNameMaiuscolo.setValue(text.primaMaiuscola(nameTargetProject));
+        EAToken.first.setValue(text.isValid(nameTargetProject) ? nameTargetProject.substring(0, 1).toUpperCase() : VUOTA);
+
+        //--visualizzazione di controllo
+        if (FLAG_DEBUG_WIZ) {
+            System.out.println("********************");
+            System.out.println("Uscita dal dialogo - EAToken");
+            System.out.println("********************");
+            for (EAToken token : EAToken.values()) {
+                if (token.isUsaValue()) {
+                    System.out.println("EAToken." + token.name() + "  - " + token.getTokenTag() + " = " + token.getValue());
+                }// end of if cycle
             }// end of for cycle
             System.out.println("");
         }// end of if cycle

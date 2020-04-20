@@ -65,6 +65,7 @@ public class AFileService extends AbstractService {
 
     public static final String PATH_SENZA_SUFFIX = "Manca il 'suffix' terminale";
 
+    public static final String PATH_FILE_ESISTENTE = "Esiste già il file";
 
     public static final String NON_E_FILE = "Non è un file";
 
@@ -849,8 +850,12 @@ public class AFileService extends AbstractService {
         File srcFile = new File(srcPath);
         File destFile = new File(destPath);
 
+        if (!isEsisteFile(srcPath)) {
+            return NON_ESISTE_FILE;
+        }// end of if cycle
+
         if (isEsisteFile(destPath)) {
-            return NON_COPIATO_FILE;
+            return PATH_FILE_ESISTENTE;
         }// end of if cycle
 
         try { // prova ad eseguire il codice
@@ -878,6 +883,25 @@ public class AFileService extends AbstractService {
     @Deprecated
     public boolean copyDirectory(String srcPath, String destPath) {
         return copyDirectoryAddingOnly(srcPath, destPath);
+    }// end of method
+
+
+    /**
+     * Copia una directory sostituendo integralmente quella eventualmente esistente <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory di destinazione, la cancella prima di ricopiarla <br>
+     * Tutte i files e le subdirectories originali vengono cancellata <br>
+     *
+     * @param srcPath  nome parziale del path sorgente
+     * @param destPath nome parziale del path destinazione
+     * @param dirName  nome della directory da copiare
+     *
+     * @return true se la directory  è stata copiata
+     */
+    public boolean copyDirectoryDeletingAll(String srcPath, String destPath, String dirName) {
+        return copyDirectoryDeletingAll(srcPath + dirName, destPath + dirName);
     }// end of method
 
 
@@ -948,6 +972,27 @@ public class AFileService extends AbstractService {
         }// end of if cycle
 
         return copyDirectoryDeletingAll(srcPath, destPath);
+    }// end of method
+
+
+    /**
+     * Copia una directory aggiungendo files e subdirectories a quelli eventualmente esistenti <br>
+     * Lascia inalterate subdirectories e files già esistenti <br>
+     * <p>
+     * Se manca la directory sorgente, non fa nulla <br>
+     * Se manca la directory di destinazione, la crea <br>
+     * Se esiste la directory destinazione, aggiunge files e subdirectories <br>
+     * Tutti i files e le subdirectories esistenti vengono mantenuti <br>
+     * Tutte le aggiunte sono ricorsive nelle subdirectories <br>
+     *
+     * @param srcPath  nome parziale del path sorgente
+     * @param destPath nome parziale del path destinazione
+     * @param dirName  nome della directory da copiare
+     *
+     * @return true se la directory  è stata copiata
+     */
+    public boolean copyDirectoryAddingOnly(String srcPath, String destPath, String dirName) {
+        return copyDirectoryAddingOnly(srcPath + dirName, destPath + dirName);
     }// end of method
 
 
@@ -1177,9 +1222,10 @@ public class AFileService extends AbstractService {
 
     /**
      * Estrae le sub-directories da un sotto-livello di una directory <br>
+     * La dirInterna non è, ovviamente, al primo livello della directory altrimenti chiamerei getSubDirectories <br>
      *
-     * @param directoryToBeScanned della directory
-     * @param dirInterna           da scandagliare
+     * @param pathDirectoryToBeScanned della directory
+     * @param dirInterna               da scandagliare
      *
      * @return lista di sub-directory SENZA files
      */
@@ -1289,5 +1335,71 @@ public class AFileService extends AbstractService {
 
         return pathOut.trim();
     }// end of method
+
+
+    /**
+     * Sposta un file da una directoy ad un'altra <br>
+     * Esegue solo se il path sorgente esiste <br>
+     * Esegue solo se il path destinazione NON esiste <br>
+     * Viene cancellato il file sorgente <br>
+     *
+     * @param pathFileToBeRead  posizione iniziale del file da spostare
+     * @param pathFileToBeWrite posizione iniziale del file da spostare
+     *
+     * @return testo di errore, vuoto se il file è stato spostato
+     */
+    public boolean spostaFile(String pathFileToBeRead, String pathFileToBeWrite) {
+        return spostaFileStr(pathFileToBeRead, pathFileToBeWrite) == VUOTA;
+    }// end of method
+
+
+    /**
+     * Sposta un file da una directoy ad un'altra <br>
+     * Esegue solo se il path sorgente esiste <br>
+     * Esegue solo se il path destinazione NON esiste <br>
+     * Viene cancellato il file sorgente <br>
+     *
+     * @param pathFileToBeRead  posizione iniziale del file da spostare
+     * @param pathFileToBeWrite posizione iniziale del file da spostare
+     *
+     * @return testo di errore, vuoto se il file è stato spostato
+     */
+    public String spostaFileStr(String pathFileToBeRead, String pathFileToBeWrite) {
+        String status = VUOTA;
+
+        if (text.isValid(pathFileToBeRead) && text.isValid(pathFileToBeWrite)) {
+            status = copyFileStr(pathFileToBeRead, pathFileToBeWrite);
+        } else {
+            return PATH_NULLO;
+        }// end of if/else cycle
+
+        if (status.equals(VUOTA)) {
+            status = deleteFileStr(pathFileToBeRead);
+        }// end of if cycle
+
+        return status;
+    }// end of method
+
+
+//    /**
+//     * Copia tutta una directory ESCLUSO il file indicato <br>
+//     * <p>
+//     * Esegue solo se il il file esiste nel srcPath <br>
+//     * Esegue solo se il il file esiste nel destPath <br>
+//     * Esegue solo se la dir interna del file è la stessa in srcPath e destPath <br>
+//     * Viene ignorato il file sorgente srcPath + dirFileToBeKeep <br>
+//     * Viene mantenuto il file esistente destPath + dirFileToBeKeep <br>
+//     *
+//     * @param srcPath         nome completo della directory sorgente
+//     * @param destPath        nome completo della directory destinazione
+//     * @param dirFileToBeKeep dir interna del file da mantenere - deve essere uguale in srcPath e in destPath
+//     *
+//     * @return testo di errore, vuoto se la directory è stata copiata ed il il file mantenuto originale
+//     */
+//    public String copyDirectoryLessFile(String srcPath, String destPath, String dirFileToBeKeep) {
+//        String status = VUOTA;
+//
+//        return status;
+//    }// end of method
 
 }// end of class

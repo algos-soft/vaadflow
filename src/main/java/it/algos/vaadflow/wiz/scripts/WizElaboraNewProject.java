@@ -1,8 +1,8 @@
 package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.vaadflow.wiz.enumeration.EAToken;
 import it.algos.vaadflow.wiz.enumeration.EAWiz;
-import it.algos.vaadflow.wiz.enumeration.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,13 +35,15 @@ public class WizElaboraNewProject extends WizElabora {
         this.copiaCartellaVaadFlow();
         this.creaModuloNuovoProgetto();
 
+        //--banner deve essere chiamato PRIMA di copiaMetaInf
+        super.scriveFileBanner();
+
         super.copiaMetaInf();
         super.scriveFileProperties();
 
         super.scriveFileRead();
         super.copiaFileGit();
         super.scriveFilePom();
-//        super.copiaFileBanner();
     }// end of method
 
 
@@ -86,13 +88,13 @@ public class WizElaboraNewProject extends WizElabora {
         String destPath = pathProjectModulo + mainApp + JAVA_SUFFIX;
         String testoApp = leggeFile(APP_NAME + TXT_SUFFIX);
 
-        testoApp = Token.replace(Token.moduleNameMinuscolo, testoApp, newProjectName);
-        testoApp = Token.replace(Token.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
+        testoApp = EAToken.replace(EAToken.moduleNameMinuscolo, testoApp, newProjectName);
+        testoApp = EAToken.replace(EAToken.moduleNameMaiuscolo, testoApp, text.primaMaiuscola(newProjectName));
 
         if (EAWiz.flagSecurity.isAbilitato()) {
-            testoApp = Token.replace(Token.usaSecurity, testoApp, VUOTA);
+            testoApp = EAToken.replace(EAToken.usaSecurity, testoApp, VUOTA);
         } else {
-            testoApp = Token.replace(Token.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");
+            testoApp = EAToken.replace(EAToken.usaSecurity, testoApp, ", exclude = {SecurityAutoConfiguration.class}");
         }// end of if/else cycle
 
         file.scriveFile(destPath, testoApp, true);
@@ -103,8 +105,8 @@ public class WizElaboraNewProject extends WizElabora {
         String sourceText = leggeFile(FILE_COST);
         String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_COST + JAVA_SUFFIX;
 
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
-        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
 
         file.scriveFile(destPath, sourceText, true);
     }// end of method
@@ -114,8 +116,8 @@ public class WizElaboraNewProject extends WizElabora {
         String sourceText = leggeFile(FILE_BOOT);
         String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_BOOT + JAVA_SUFFIX;
 
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
-        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
 
         file.scriveFile(destPath, sourceText, true);
     }// end of method
@@ -125,8 +127,8 @@ public class WizElaboraNewProject extends WizElabora {
         String sourceText = leggeFile(FILE_VERS);
         String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_VERS + JAVA_SUFFIX;
 
-        sourceText = Token.replace(Token.moduleNameMinuscolo, sourceText, newProjectName);
-        sourceText = Token.replace(Token.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
+        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
+        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
 
         file.scriveFile(destPath, sourceText, true);
     }// end of method
