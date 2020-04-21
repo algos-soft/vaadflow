@@ -93,49 +93,21 @@ public class WizElaboraNewProject extends WizElabora {
 
 
     protected void scriveFileCost() {
-//        String sourceText = leggeFile(FILE_COST);
-//        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_COST + JAVA_SUFFIX;
-//
-//        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
-//        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
-//
-//        file.scriveFile(destPath, sourceText, true);
         wizService.scriveNewFileCreatoDaWizSource(FILE_COST, pathProjectDirApplication);
     }// end of method
 
 
     public void scriveFileBoot() {
-//        String sourceText = leggeFile(FILE_BOOT);
-//        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_BOOT + JAVA_SUFFIX;
-//
-//        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
-//        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
-//
-//        file.scriveFile(destPath, sourceText, true);
         wizService.scriveNewFileCreatoDaWizSource(FILE_BOOT, pathProjectDirApplication);
     }// end of method
 
 
     public void scriveFileVers() {
-//        String sourceText = leggeFile(FILE_VERS);
-//        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_VERS + JAVA_SUFFIX;
-//
-//        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
-//        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
-//
-//        file.scriveFile(destPath, sourceText, true);
         wizService.scriveNewFileCreatoDaWizSource(FILE_VERS, pathProjectDirApplication);
     }// end of method
 
 
     public void scriveFileHome() {
-//        String sourceText = leggeFile(FILE_HOME);
-//        String destPath = pathProjectDirApplication + newProjectNameUpper + FILE_VERS + JAVA_SUFFIX;
-//
-//        sourceText = EAToken.replace(EAToken.moduleNameMinuscolo, sourceText, newProjectName);
-//        sourceText = EAToken.replace(EAToken.moduleNameMaiuscolo, sourceText, text.primaMaiuscola(newProjectName));
-//
-//        file.scriveFile(destPath, sourceText, true);
         wizService.scriveNewFileCreatoDaWizSource(FILE_HOME, pathProjectDirApplication);
     }// end of method
 
