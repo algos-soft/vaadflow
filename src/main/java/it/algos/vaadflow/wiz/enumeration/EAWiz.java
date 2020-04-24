@@ -11,19 +11,19 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
  */
 public enum EAWiz {
     flagSecurity(true, "Utilizza Spring Security", true, false, false, false, false),
-    flagDocumentation(true, "Directory documentazione", true, true, false, false, false),
-    flagLinks(true, "Directory links a web", true, true, false, false, false),
-    flagSnippets(true, "Directory snippets di aiuto", true, true, false, false, false),
-    flagFlow(true, "Copia la cartella VaadFlow", true, true, false, false, false),
+    flagDocumentation(true, "Directory documentazione", true, true, false, false, true),
+    flagLinks(true, "Directory links a web", true, true, false, false, true),
+    flagSnippets(true, "Directory snippets di aiuto", true, true, false, false, true),
+    flagFlow(true, "Copia la cartella VaadFlow", true, true, false, false, true),
     flagProject(true, "Crea la cartella del nuovo progetto", true, false, false, false, false),
     flagResources(true, "Directory resources - ATTENZIONE", true, true, false, false, false),
-    flagProperty(true, "File application.properties", true, true, false, false, false),
-    flagRead(true, "File READ con note di testo", true, true, false, false, false),
+    flagProperty(true, "File application.properties", true, true, false, false, true),
+    flagRead(true, "File READ con note di testo", true, true, false, false, true),
     flagGit(true, "File GIT di esclusione", true, true, false, false, false),
     flagPom(true, "File Maven di POM.xml - ATTENZIONE", true, true, false, false, false),
     flagFile(true, "Sovrascrive il singolo FILE", false, false, false, false, false),
     flagDirectory(true, "Sovrascrive la DIRECTORY", false, false, false, false, false),
-    flagBanner(true, "File banner di SpringBoot", true, true, false, false, true),
+    flagBanner(true, "File banner di SpringBoot", true, true, false, false, false),
     pathUserDir(false, "Directory recuperata dal System dove gira il programma in uso", true, true, false, false, false, VUOTA),
     pathVaadFlow(false, "Directory che contiene il programma VaadFlow", true, true, false, false, false, VUOTA),
     pathIdeaProjects(false, "Directory che contiene i nuovi programmi appena creati da Idea", true, true, false, false, false, VUOTA),
@@ -47,9 +47,9 @@ public enum EAWiz {
 
     private boolean updatePackage;
 
-    private boolean defaultStatus = false;
+    private boolean defaultAcceso = false;
 
-    private boolean status;
+    private boolean acceso;
 
     private String defaultValue = VUOTA;
 
@@ -59,8 +59,8 @@ public enum EAWiz {
     /**
      * Costruttore per i flag con valore booleano <br>
      */
-    EAWiz(boolean checkBox, String unTesto, boolean newProject, boolean updateProject, boolean newPackage, boolean updatePackage, boolean defaultStatus) {
-        this(checkBox, unTesto, newProject, updateProject, newPackage, updatePackage, defaultStatus, VUOTA);
+    EAWiz(boolean checkBox, String unTesto, boolean newProject, boolean updateProject, boolean newPackage, boolean updatePackage, boolean defaultAcceso) {
+        this(checkBox, unTesto, newProject, updateProject, newPackage, updatePackage, defaultAcceso, VUOTA);
     }// fine del costruttore
 
 
@@ -75,7 +75,7 @@ public enum EAWiz {
     /**
      * Costruttore completo <br>
      */
-    EAWiz(boolean checkBox, String unTesto, boolean newProject, boolean updateProject, boolean newPackage, boolean updatePackage, boolean defaultStatus, String defaultValue) {
+    EAWiz(boolean checkBox, String unTesto, boolean newProject, boolean updateProject, boolean newPackage, boolean updatePackage, boolean defaultAcceso, String defaultValue) {
         this.checkBox = checkBox;
         if (checkBox) {
             this.labelBox = unTesto;
@@ -88,8 +88,8 @@ public enum EAWiz {
         this.updatePackage = updatePackage;
 
         if (checkBox) {
-            this.defaultStatus = defaultStatus;
-            this.status = defaultStatus;
+            this.defaultAcceso = defaultAcceso;
+            this.acceso = defaultAcceso;
         } else {
             this.defaultValue = defaultValue;
             this.value = defaultValue;
@@ -99,7 +99,7 @@ public enum EAWiz {
 
     public static void reset() {
         for (EAWiz eaWiz : EAWiz.values()) {
-            eaWiz.setStatus(eaWiz.defaultStatus);
+            eaWiz.setAcceso(eaWiz.defaultAcceso);
             eaWiz.setValue(eaWiz.defaultValue);
         }// end of for cycle
     }// end of method
@@ -149,17 +149,17 @@ public enum EAWiz {
 
 
     public boolean isAbilitato() {
-        return status;
+        return acceso;
     }// end of method
 
 
-    public boolean isStatus() {
-        return status;
+    public boolean isAcceso() {
+        return acceso;
     }// end of method
 
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setAcceso(boolean acceso) {
+        this.acceso = acceso;
     }// end of method
 
 

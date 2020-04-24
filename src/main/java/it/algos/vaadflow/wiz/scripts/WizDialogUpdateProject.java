@@ -1,5 +1,6 @@
 package it.algos.vaadflow.wiz.scripts;
 
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -28,18 +29,15 @@ public class WizDialogUpdateProject extends WizDialog {
         super.titoloCorrente = new H3();
 
         super.inizia();
-        super.creaBottoni();
-        this.creaCheckBoxList();
-        this.add(layoutBottoni);
-        super.open();
     }// end of method
 
 
     /**
      * Legenda iniziale <br>
+     * Viene sovrascritta nella sottoclasse che deve einvocare PRIMA questo metodo <br>
      */
-    protected void legenda() {
-        super.legenda();
+    protected void creaLegenda() {
+        super.creaLegenda();
 
         layoutLegenda.add(new Label("Update di un progetto esistente"));
         layoutLegenda.add(new Label("Il modulo vaadflow viene sovrascritto"));
@@ -49,12 +47,26 @@ public class WizDialogUpdateProject extends WizDialog {
 
 
     /**
-     * Di default regola a 'true' solo il parametro 'flagFlow' <br>
+     * Crea i checkbox di controllo <br>
+     * Spazzola (nella sottoclasse) la Enumeration per aggiungere solo i checkbox adeguati: <br>
+     * newProject
+     * updateProject
+     * newPackage
+     * updatePackage
+     * Spazzola la Enumeration e regola a 'true' i chekbox secondo il flag 'isAcceso' <br>
+     * DEVE essere sovrascritto nella sottoclasse <br>
      */
-    protected void creaCheckBoxList() {
-        EAWiz.flagFlow.setStatus(true);
+    @Override
+    protected void creaCheckBoxMap() {
+        Checkbox unCheckbox;
 
-        super.creaCheckBoxList();
+        for (EAWiz flag : EAWiz.values()) {
+            if (flag.isCheckBox() && flag.isUpdateProject()) {
+                unCheckbox = new Checkbox(flag.getLabelBox(), flag.isAcceso());
+                mappaCheckbox.put(flag.name(), unCheckbox);
+            }// end of if cycle
+        }// end of for cycle
+
     }// end of method
 
 }// end of class

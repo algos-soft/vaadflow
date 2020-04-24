@@ -1,6 +1,7 @@
 package it.algos.vaadflow.wiz.scripts;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
@@ -45,19 +46,15 @@ public class WizDialogNewProject extends WizDialog {
         super.titoloCorrente = new H3(TITOLO_NUOVO_PROGETTO);
 
         super.inizia();
-        super.creaBottoni();
-        this.spazzolaDirectory();
-        this.creaCheckBoxList();
-        this.add(layoutBottoni);
-        super.open();
     }// end of method
 
 
     /**
      * Legenda iniziale <br>
+     * Viene sovrascritta nella sottoclasse che deve einvocare PRIMA questo metodo <br>
      */
-    protected void legenda() {
-        super.legenda();
+    protected void creaLegenda() {
+        super.creaLegenda();
 
         layoutLegenda.add(new Label("Creazione di un nuovo project"));
         layoutLegenda.add(new Label("Devi prima creare un new project IntelliJIdea"));
@@ -68,17 +65,33 @@ public class WizDialogNewProject extends WizDialog {
 
 
     /**
-     * Spazzola la Enumeration e regola a 'true' tutti i parametri eccetto 'flagSecurity' <br>
+     * Crea i checkbox di controllo <br>
+     * Spazzola (nella sottoclasse) la Enumeration per aggiungere solo i checkbox adeguati: <br>
+     * newProject
+     * updateProject
+     * newPackage
+     * updatePackage
+     * Spazzola la Enumeration e regola a 'true' i chekbox secondo il flag 'isAcceso' <br>
+     * DEVE essere sovrascritto nella sottoclasse <br>
      */
-    protected void creaCheckBoxList() {
+    @Override
+    protected void creaCheckBoxMap() {
+        Checkbox unCheckbox;
+
+        //--accende tutti i checkbox escluso flagSecurity
         for (EAWiz flag : EAWiz.values()) {
             if (flag.isCheckBox()) {
-                flag.setStatus(true);
+                flag.setAcceso(true);
             }// end of if cycle
         }// end of for cycle
-        EAWiz.flagSecurity.setStatus(false);
+        EAWiz.flagSecurity.setAcceso(false);
 
-        super.creaCheckBoxList();
+        for (EAWiz flag : EAWiz.values()) {
+            if (flag.isCheckBox() && flag.isNewProject()) {
+                unCheckbox = new Checkbox(flag.getLabelBox(), flag.isAcceso());
+                mappaCheckbox.put(flag.name(), unCheckbox);
+            }// end of if cycle
+        }// end of for cycle
     }// end of method
 
 

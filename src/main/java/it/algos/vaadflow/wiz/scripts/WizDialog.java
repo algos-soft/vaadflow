@@ -139,15 +139,33 @@ public abstract class WizDialog extends Dialog {
         this.setCloseOnEsc(true);
         this.setCloseOnOutsideClick(true);
         this.removeAll();
-        this.regolazioniIniziali();
-        this.legenda();
+
+        //--regolazione di property varie
+        this.regolaVariabili();
+
+        //--info di avvisi
+        this.creaLegenda();
+
+        //--solo per newProject
+        this.spazzolaDirectory();
+
+        //--checkbox di spunta
+        mappaCheckbox = new LinkedHashMap<>();
+        creaCheckBoxMap();
+        this.addCheckBoxMap();
+
+        //--bottoni di comando
+        this.creaBottoni();
+
+        //--superclasse
+        super.open();
     }// end of method
 
 
     /**
      * Regolazioni iniziali indipendenti dal dialogo di input
      */
-    protected void regolazioniIniziali() {
+    protected void regolaVariabili() {
         EAWiz.reset();
 
         if (FLAG_DEBUG_WIZ) {
@@ -192,8 +210,9 @@ public abstract class WizDialog extends Dialog {
 
     /**
      * Legenda iniziale <br>
+     * Viene sovrascritta nella sottoclasse che deve einvocare PRIMA questo metodo <br>
      */
-    protected void legenda() {
+    protected void creaLegenda() {
         if (isNuovoProgetto) {
             this.titoloCorrente = new H3(TITOLO_NUOVO_PROGETTO);
         } else {
@@ -219,22 +238,40 @@ public abstract class WizDialog extends Dialog {
     }// end of method
 
 
-    protected void creaCheckBoxList() {
+    /**
+     * Spazzola la directory 'ideaProjects' <br>
+     * Recupera i possibili progetti 'vuoti' <br>
+     * Sovrascritto nella sottoclasse <br>
+     */
+    protected void spazzolaDirectory() {
+    }// end of method
+
+
+    /**
+     * Crea i checkbox di controllo <br>
+     * Spazzola (nella sottoclasse) la Enumeration per aggiungere solo i checkbox adeguati: <br>
+     * newProject
+     * updateProject
+     * newPackage
+     * updatePackage
+     * Spazzola la Enumeration e regola a 'true' i chekbox secondo il flag 'isAcceso' <br>
+     * DEVE essere sovrascritto nella sottoclasse <br>
+     */
+    protected void creaCheckBoxMap() {
+    }// end of method
+
+
+    /**
+     * Aggiounge al layout i checkbox di controllo <br>
+     */
+    private void addCheckBoxMap() {
         layoutCheckBox = new VerticalLayout();
         layoutCheckBox.setMargin(false);
         layoutCheckBox.setSpacing(false);
         layoutCheckBox.setPadding(true);
 
-        mappaCheckbox = new LinkedHashMap<>();
-        Checkbox unCheckbox;
-        for (EAWiz flag : EAWiz.values()) {
-            if (flag.isCheckBox()) {
-                if ((isNuovoProgetto && flag.isNewProject()) || flag.isUpdateProject()) {
-                    unCheckbox = new Checkbox(flag.getLabelBox(), flag.isStatus());
-                    mappaCheckbox.put(flag.name(), unCheckbox);
-                    layoutCheckBox.add(unCheckbox);
-                }// end of if cycle
-            }// end of if cycle
+        for (String key : mappaCheckbox.keySet()) {
+            layoutCheckBox.add(mappaCheckbox.get(key));
         }// end of for cycle
 
         this.add(layoutCheckBox);
@@ -269,6 +306,7 @@ public abstract class WizDialog extends Dialog {
 
         layoutFooter.add(cancelButton, confirmButton);
         layoutBottoni.add(layoutFooter);
+        this.add(layoutBottoni);
     }// end of method
 
 
@@ -303,7 +341,7 @@ public abstract class WizDialog extends Dialog {
 
         for (EAWiz flag : EAWiz.values()) {
             if (mappaCheckbox.get(flag.name()) != null) {
-                flag.setStatus(mappaCheckbox.get(flag.name()).getValue());
+                flag.setAcceso(mappaCheckbox.get(flag.name()).getValue());
             }// end of if cycle
         }// end of for cycle
 
