@@ -146,6 +146,9 @@ public abstract class WizDialog extends Dialog {
         //--info di avvisi
         this.creaLegenda();
 
+        //--creazione bottoni di comando
+        this.creaBottoni();
+
         //--solo per newProject
         this.spazzolaDirectory();
 
@@ -154,8 +157,8 @@ public abstract class WizDialog extends Dialog {
         creaCheckBoxMap();
         this.addCheckBoxMap();
 
-        //--bottoni di comando
-        this.creaBottoni();
+        //--aggiunge bottoni al layout
+        this.addBottoni();
 
         //--superclasse
         super.open();
@@ -238,6 +241,29 @@ public abstract class WizDialog extends Dialog {
     }// end of method
 
 
+    protected void creaBottoni() {
+        cancelButton = new Button("Annulla", event -> {
+            esceDalDialogo(false);
+        });//end of lambda expressions
+        cancelButton.setIcon(VaadinIcon.ARROW_LEFT.create());
+        cancelButton.getElement().setAttribute("theme", "primary");
+        cancelButton.addClickShortcut(Key.ARROW_LEFT);
+        cancelButton.setWidth(NORMAL_WIDTH);
+        cancelButton.setHeight(NORMAL_HEIGHT);
+        cancelButton.setVisible(true);
+
+        confirmButton = new Button("Conferma", event -> {
+            esceDalDialogo(true);
+        });//end of lambda expressions
+        confirmButton.setIcon(VaadinIcon.EDIT.create());
+        confirmButton.getElement().setAttribute("theme", "error");
+        confirmButton.setWidth(NORMAL_WIDTH);
+        confirmButton.setHeight(NORMAL_HEIGHT);
+        confirmButton.setVisible(true);
+        confirmButton.setEnabled(!isNuovoProgetto);
+    }// end of method
+
+
     /**
      * Spazzola la directory 'ideaProjects' <br>
      * Recupera i possibili progetti 'vuoti' <br>
@@ -278,31 +304,11 @@ public abstract class WizDialog extends Dialog {
     }// end of method
 
 
-    protected void creaBottoni() {
+    protected void addBottoni() {
         layoutBottoni = new VerticalLayout();
         HorizontalLayout layoutFooter = new HorizontalLayout();
         layoutFooter.setSpacing(true);
         layoutFooter.setMargin(true);
-
-        cancelButton = new Button("Annulla", event -> {
-            esceDalDialogo(false);
-        });//end of lambda expressions
-        cancelButton.setIcon(VaadinIcon.ARROW_LEFT.create());
-        cancelButton.getElement().setAttribute("theme", "primary");
-        cancelButton.addClickShortcut(Key.ARROW_LEFT);
-        cancelButton.setWidth(NORMAL_WIDTH);
-        cancelButton.setHeight(NORMAL_HEIGHT);
-        cancelButton.setVisible(true);
-
-        confirmButton = new Button("Conferma", event -> {
-            esceDalDialogo(true);
-        });//end of lambda expressions
-        confirmButton.setIcon(VaadinIcon.EDIT.create());
-        confirmButton.getElement().setAttribute("theme", "error");
-        confirmButton.setWidth(NORMAL_WIDTH);
-        confirmButton.setHeight(NORMAL_HEIGHT);
-        confirmButton.setVisible(true);
-        confirmButton.setEnabled(!isNuovoProgetto);
 
         layoutFooter.add(cancelButton, confirmButton);
         layoutBottoni.add(layoutFooter);
