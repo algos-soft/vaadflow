@@ -9,6 +9,7 @@ import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import it.algos.vaadflow.enumeration.EAPrefType;
+import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.fields.ACheckBox;
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +64,12 @@ public class AColumnService extends AbstractService {
      */
     public PreferenzaService pref;
 
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    public LogService logger;
+
 
     /**
      * Private constructor to avoid client applications to use constructor <br>
@@ -106,6 +113,7 @@ public class AColumnService extends AbstractService {
      */
     public void create(Grid<AEntity> grid, Class<? extends AEntity> entityClazz, String propertyName, String searchProperty) {
         pref = StaticContextAccessor.getBean(PreferenzaService.class);
+        logger = StaticContextAccessor.getBean(LogService.class);
         Grid.Column<AEntity> colonna = null;
         EAFieldType type = annotation.getColumnType(entityClazz, propertyName);
         String headerNotNull = annotation.getColumnNameProperty(entityClazz, propertyName);
@@ -371,18 +379,6 @@ public class AColumnService extends AbstractService {
                 break;
             case combo:
             case combolinkato:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    ComboBox combo = new ComboBox();
-//                    Object entityBean = reflection.getPropertyValue(entity, propertyName);
-//                    IAService service = (IAService) StaticContextAccessor.getBean(clazz);
-//                    List items = ((IAService) service).findAll();
-//                    if (array.isValid(items)) {
-//                        combo.setItems(items);
-//                        combo.setValue(entityBean);
-//                    }// end of if cycle
-//                    combo.setEnabled(false);
-//                    return combo;
-//                }));
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
                     String testo = "";
@@ -647,7 +643,7 @@ public class AColumnService extends AbstractService {
                 }));//end of lambda expressions and anonymous inner class
                 break;
             default:
-                log.warn("Switch - caso non definito");
+                logger.warn("Switch - manca type '" + type + "' alla property '" + propertyName + "' di " + entityClazz.getSimpleName(), AColumnService.class, "create (colonna)");
                 break;
         } // end of switch statement
 
@@ -749,11 +745,7 @@ public class AColumnService extends AbstractService {
                 width = "3em";
                 break;
             default:
-//                logger.warn("Switch - caso non definito", AColumnService.class, "create");
-                log.warn("Switch - caso non definito per type = " + type);
-                log.warn("Switch - caso non definito per propertyName = " + propertyName);
-                log.warn("Switch - caso non definito per linkClazz = " + linkClazz);
-                log.warn("Switch - caso non definito per entityClazz = " + entityClazz);
+                logger.warn("Switch - manca type '" + type + "' alla property '" + propertyName + "' di " + entityClazz.getSimpleName(), AColumnService.class, "create (width)");
                 break;
         } // end of switch statement
 
