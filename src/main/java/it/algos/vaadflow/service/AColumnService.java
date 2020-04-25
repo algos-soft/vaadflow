@@ -57,7 +57,6 @@ public class AColumnService extends AbstractService {
      */
     private static final AColumnService INSTANCE = new AColumnService();
 
-
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
@@ -701,6 +700,7 @@ public class AColumnService extends AbstractService {
                 width = text.isValid(width) ? width : "20em";
                 break;
             case combo:
+            case combolinkato:
                 break;
             case monthdate:
                 //--larghezza di default per un data = 6em
@@ -749,7 +749,11 @@ public class AColumnService extends AbstractService {
                 width = "3em";
                 break;
             default:
-                log.warn("Switch - caso non definito");
+//                logger.warn("Switch - caso non definito", AColumnService.class, "create");
+                log.warn("Switch - caso non definito per type = " + type);
+                log.warn("Switch - caso non definito per propertyName = " + propertyName);
+                log.warn("Switch - caso non definito per linkClazz = " + linkClazz);
+                log.warn("Switch - caso non definito per entityClazz = " + entityClazz);
                 break;
         } // end of switch statement
 
@@ -841,5 +845,6 @@ public class AColumnService extends AbstractService {
         }// end of if/else cycle
 
     }// end of method
+
 
 }// end of class
