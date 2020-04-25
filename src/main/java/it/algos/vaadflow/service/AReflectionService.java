@@ -49,9 +49,11 @@ public class AReflectionService extends AbstractService {
 
 
     /**
-     * Private constructor to avoid client applications to use constructor
+     * Private constructor to avoid client applications to use constructor <br>
+     * In alcune circostanze SpringBoot non riesce a costruire l'istanza <br>
+     * Rimesso 'public' al posto del precedente 'private' <br>
      */
-    private AReflectionService() {
+    public AReflectionService() {
     }// end of constructor
 
 
