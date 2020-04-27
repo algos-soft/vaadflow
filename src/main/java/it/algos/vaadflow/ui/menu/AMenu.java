@@ -41,25 +41,29 @@ public abstract class AMenu extends Div implements IAMenu {
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    public AAnnotationService annotation;
 
     /**
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AReflectionService reflection = AReflectionService.getInstance();
+    @Autowired
+    protected AReflectionService reflection;
 
     /**
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected ATextService text = ATextService.getInstance();
+    @Autowired
+    protected ATextService text;
 
     /**
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AArrayService array = AArrayService.getInstance();
+    @Autowired
+    protected AArrayService array;
 
 
     /**

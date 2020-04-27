@@ -1,9 +1,12 @@
+
+    //as - shortcut
     /**
-     * Istanza unica di una classe (@Scope = 'singleton') di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con @Autowired <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
+    //as - end
 
      /**
       * Costruttore @Autowired <br>

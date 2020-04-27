@@ -2,17 +2,11 @@ package it.algos.vaadflow.footer;
 
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.application.AContext;
-import it.algos.vaadflow.application.FlowCost;
-import it.algos.vaadflow.application.FlowVar;
 import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EATime;
-import it.algos.vaadflow.modules.company.Company;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.service.ADateService;
 import it.algos.vaadflow.service.ATextService;
@@ -23,7 +17,8 @@ import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.DEVELOPER_COMPANY;
+import static it.algos.vaadflow.application.FlowCost.USA_DEBUG;
 import static it.algos.vaadflow.application.FlowVar.*;
 
 /**
@@ -50,13 +45,15 @@ public class AFooter extends VerticalLayout  {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
+    @Autowired
+    public ATextService text;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ADateService date = ADateService.getInstance();
+    @Autowired
+    public ADateService date;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>

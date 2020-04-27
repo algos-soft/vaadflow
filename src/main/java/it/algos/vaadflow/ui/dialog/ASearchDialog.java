@@ -8,8 +8,8 @@ import it.algos.vaadflow.service.AFieldService;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
@@ -36,13 +36,15 @@ public class ASearchDialog extends ADialog {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AFieldService fieldService = AFieldService.getInstance();
+    @Autowired
+    public AFieldService fieldService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    public AAnnotationService annotation;
 
     public LinkedHashMap<String, AbstractField> fieldMap;
 

@@ -5,6 +5,7 @@ import it.algos.vaadflow.service.AAnnotationService;
 import it.algos.vaadflow.service.AbstractService;
 import it.algos.vaadflow.service.IAService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -40,7 +41,8 @@ public abstract class AData extends AbstractService {
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    protected AAnnotationService annotation;
 
     /**
      * Nome della collezione su mongoDB <br>

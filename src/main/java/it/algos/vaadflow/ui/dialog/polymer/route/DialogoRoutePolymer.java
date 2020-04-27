@@ -100,7 +100,7 @@ public class DialogoRoutePolymer extends PolymerTemplate<DialogoRoutePolymer.Dia
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public ATextService text = ATextService.getInstance();
+    public ATextService text;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
@@ -109,7 +109,7 @@ public class DialogoRoutePolymer extends PolymerTemplate<DialogoRoutePolymer.Dia
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public AArrayService array = AArrayService.getInstance();
+    public ADialogoService dialogoService;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
@@ -118,7 +118,7 @@ public class DialogoRoutePolymer extends PolymerTemplate<DialogoRoutePolymer.Dia
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public ADialogoService dialogoService = ADialogoService.getInstance();
+    public ARouteService routeService;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
@@ -127,7 +127,7 @@ public class DialogoRoutePolymer extends PolymerTemplate<DialogoRoutePolymer.Dia
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public ARouteService routeService = ARouteService.getInstance();
+    protected AArrayService array;
 
     public Runnable cancelHandler;
 

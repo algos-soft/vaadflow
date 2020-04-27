@@ -59,10 +59,10 @@ public class ABootService extends AbstractService {
     private final static long serialVersionUID = 1L;
 
 
-    /**
-     * Private final property
-     */
-    private static final ABootService INSTANCE = new ABootService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final ABootService INSTANCE = new ABootService();
 
 
     /**
@@ -80,23 +80,23 @@ public class ABootService extends AbstractService {
     public ABootService() {
     }// end of constructor
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static ABootService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static ABootService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     public void creaRouteStandard() {
         FlowVar.menuClazzList = new ArrayList<>();
 
         //--developer
-//        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
-//            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
-//        }// end of if cycle
+        //        if (pref.isBool(EAPreferenza.showDeveloper.getCode())) {
+        //            FlowCost.MENU_CLAZZ_LIST.add(DeveloperView.class);
+        //        }// end of if cycle
         if (pref.isBool(EAPreferenza.showWizard.getCode())) {
             FlowVar.menuClazzList.add(WizView.class);
         }// end of if cycle

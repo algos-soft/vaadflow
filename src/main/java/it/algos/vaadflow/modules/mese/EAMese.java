@@ -1,7 +1,7 @@
 package it.algos.vaadflow.modules.mese;
 
-import it.algos.vaadflow.modules.secolo.EASecolo;
 import it.algos.vaadflow.service.ATextService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -26,7 +26,8 @@ public enum EAMese {
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
+    @Autowired
+    public ATextService text;
 
     String breve;
     String lungo;

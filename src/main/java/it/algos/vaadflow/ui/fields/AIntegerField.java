@@ -4,6 +4,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.service.ATextService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -25,7 +26,8 @@ public class AIntegerField extends TextField implements IAField {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
+    @Autowired
+    public ATextService text;
 
 
     public AIntegerField() {

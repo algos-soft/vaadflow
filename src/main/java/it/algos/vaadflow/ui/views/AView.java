@@ -77,19 +77,22 @@ public abstract class AView extends VerticalLayout implements HasUrlParameter<St
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected ATextService text = ATextService.getInstance();
+    @Autowired
+    protected ATextService text;
 
     /**
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected AArrayService array = AArrayService.getInstance();
+    @Autowired
+    protected AArrayService array;
 
     /**
      * Service (@Scope = 'singleton') recuperato come istanza dalla classe e usato come libreria <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    protected ADateService date = ADateService.getInstance();
+    @Autowired
+    protected ADateService date;
 
     /**
      * Istanza (@Scope = 'singleton') inietta da @Route <br>

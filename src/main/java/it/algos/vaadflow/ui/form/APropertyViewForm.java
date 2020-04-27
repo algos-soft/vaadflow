@@ -17,7 +17,6 @@ import it.algos.vaadflow.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,49 +47,59 @@ public abstract class APropertyViewForm extends VerticalLayout {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    public AAnnotationService annotation;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AArrayService array = AArrayService.getInstance();
+    @Autowired
+    public AColumnService columnService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AColumnService columnService = AColumnService.getInstance();
+    @Autowired
+    public ADateService date;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ADateService date = ADateService.getInstance();
+    @Autowired
+    public AFieldService field;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AFieldService field = AFieldService.getInstance();
+    @Autowired
+    public AReflectionService reflection;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AReflectionService reflection = AReflectionService.getInstance();
+    @Autowired
+    public ATextService text;
+
+    /**
+     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
+     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
+     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
+     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     */
+    @Autowired
+    public ARouteService routeService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
-
-    /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
-     */
-    protected AFieldService fieldService =AFieldService.getInstance();
+    @Autowired
+    protected AArrayService array;
 
     /**
      * Istanza unica di una classe di servizio: <br>
@@ -137,13 +146,11 @@ public abstract class APropertyViewForm extends VerticalLayout {
     protected AVaadinService vaadinService;
 
     /**
-     * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
-     * Iniettata automaticamente dal Framework @Autowired (SpringBoot/Vaadin) <br>
-     * Disponibile dopo il metodo beforeEnter() invocato da @Route al termine dell'init() di questa classe <br>
-     * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
     @Autowired
-    public ARouteService routeService = ARouteService.getInstance();
+    protected AFieldService fieldService;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>

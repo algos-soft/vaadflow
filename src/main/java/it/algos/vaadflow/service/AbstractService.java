@@ -1,9 +1,8 @@
 package it.algos.vaadflow.service;
 
+import it.algos.vaadflow.modules.log.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Project vaadflow
@@ -18,167 +17,112 @@ import javax.annotation.PostConstruct;
  */
 public abstract class AbstractService {
 
+
+    /**
+     * Istanza di una interfaccia <br>
+     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
     @Autowired
     public ApplicationContext appContext;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AAnnotationService annotation;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AArrayService array;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public ABootService boot;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AColumnService column;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public ADateService date;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AFieldService field;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AMongoService mongo;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AReflectionService reflection;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public ATextService text;
 
+
     /**
-     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
-     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
+    @Autowired
     public AEnumerationService enumService;
 
-    @PostConstruct
-    protected void postConstruct() {
-        this.annotation = AAnnotationService.getInstance();
-        this.array = AArrayService.getInstance();
-        this.column = AColumnService.getInstance();
-        this.boot = ABootService.getInstance();
-        this.date = ADateService.getInstance();
-        this.field = AFieldService.getInstance();
-        this.mongo = appContext.getBean(AMongoService.class);
-        this.reflection = AReflectionService.getInstance();
-        this.text = ATextService.getInstance();
-        this.enumService = AEnumerationService.getInstance();
 
-        fixIncrociati();
-    }// end of constructor
-
-
-    protected void fixIncrociati() {
-        this.annotation.array = array;
-        this.annotation.boot = boot;
-        this.annotation.column = column;
-        this.annotation.date = date;
-        this.annotation.field = field;
-        this.annotation.mongo = mongo;
-        this.annotation.reflection = reflection;
-        this.annotation.text = text;
-
-        this.array.annotation = annotation;
-        this.array.boot = boot;
-        this.array.column = column;
-        this.array.date = date;
-        this.array.field = field;
-        this.array.mongo = mongo;
-        this.array.reflection = reflection;
-        this.array.text = text;
-
-        this.boot.annotation = annotation;
-        this.boot.array = array;
-        this.boot.column = column;
-        this.boot.date = date;
-        this.boot.field = field;
-        this.boot.mongo = mongo;
-        this.boot.reflection = reflection;
-        this.boot.text = text;
-
-        this.column.annotation = annotation;
-        this.column.array = array;
-        this.column.boot = boot;
-        this.column.date = date;
-        this.column.field = field;
-        this.column.mongo = mongo;
-        this.column.reflection = reflection;
-        this.column.text = text;
-
-        this.date.annotation = annotation;
-        this.date.array = array;
-        this.date.boot = boot;
-        this.date.column = column;
-        this.date.field = field;
-        this.date.mongo = mongo;
-        this.date.reflection = reflection;
-        this.date.text = text;
-
-        this.field.annotation = annotation;
-        this.field.array = array;
-        this.field.boot = boot;
-        this.field.column = column;
-        this.field.date = date;
-        this.field.mongo = mongo;
-        this.field.reflection = reflection;
-        this.field.text = text;
-
-        this.mongo.annotation = annotation;
-        this.mongo.array = array;
-        this.mongo.boot = boot;
-        this.mongo.column = column;
-        this.mongo.date = date;
-        this.mongo.field = field;
-        this.mongo.reflection = reflection;
-        this.mongo.text = text;
-
-        this.reflection.annotation = annotation;
-        this.reflection.array = array;
-        this.reflection.boot = boot;
-        this.reflection.column = column;
-        this.reflection.date = date;
-        this.reflection.field = field;
-        this.reflection.mongo = mongo;
-        this.reflection.text = text;
-
-        this.text.annotation = annotation;
-        this.text.array = array;
-        this.text.boot = boot;
-        this.text.column = column;
-        this.text.date = date;
-        this.text.field = field;
-        this.text.mongo = mongo;
-        this.text.reflection = reflection;
-    }// end of method
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public LogService logger;
 
 }// end of class

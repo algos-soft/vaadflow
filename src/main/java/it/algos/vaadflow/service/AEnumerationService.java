@@ -22,10 +22,10 @@ public class AEnumerationService extends AbstractService {
     private final static long serialVersionUID = 1L;
 
 
-    /**
-     * Private final property
-     */
-    private static final AEnumerationService INSTANCE = new AEnumerationService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final AEnumerationService INSTANCE = new AEnumerationService();
 
     private final static String TAG = ";";
 
@@ -39,14 +39,14 @@ public class AEnumerationService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AEnumerationService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static AEnumerationService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     /**

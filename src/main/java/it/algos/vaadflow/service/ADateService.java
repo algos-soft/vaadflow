@@ -89,14 +89,18 @@ public class ADateService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static ADateService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    public static ADateService getInstance() {
+    //    }
+
+
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static ADateService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     /**

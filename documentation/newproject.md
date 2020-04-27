@@ -15,13 +15,15 @@ Usa Vaadin 14.0.1 e IntelliJ Idea 2019.3
 4. Non selezionare 'Create from archetype'.
    <br>Confermare -> _Next_
 
-6. Controllare 'Name' del progetto (minuscolo) e 'Location' d'installazione.
+5. Controllare 'Name' del progetto (minuscolo) e 'Location' d'installazione.
 
-5. Aprire 'Artifact Coordinates' e regolare: 
+6. Aprire 'Artifact Coordinates' e regolare: 
    <br>GroupId: it.algos
    <br>ArtifactId: nomeNuovoProgetto
    <br>Version: 1.0-SNAPSHOT
    <br> Confermare -> _Finish_
+   
+   In realtà inutile, perché il wizard costruisce comunque le directory coi nomi necessari.
 
 
 

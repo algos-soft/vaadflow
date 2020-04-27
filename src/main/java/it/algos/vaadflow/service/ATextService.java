@@ -79,10 +79,10 @@ public class ATextService extends AbstractService {
      */
     private final static long serialVersionUID = 1L;
 
-    /**
-     * Private final property
-     */
-    private static final ATextService INSTANCE = new ATextService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final ATextService INSTANCE = new ATextService();
 
 
     /**
@@ -94,14 +94,14 @@ public class ATextService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static ATextService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static ATextService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     private static boolean isNumber(char ch) {

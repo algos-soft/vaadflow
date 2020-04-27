@@ -38,29 +38,13 @@ public class AArrayService extends AbstractService {
     private final static long serialVersionUID = 1L;
 
 
-    /**
-     * Private final property
-     */
-    private static final AArrayService INSTANCE = new AArrayService();
-
-
-    /**
-     * Private constructor to avoid client applications to use constructor <br>
-     * In alcune circostanze SpringBoot non riesce a costruire l'istanza <br>
-     * Rimesso 'public' al posto del precedente 'private' <br>
-     */
-    public AArrayService() {
-    }// end of constructor
-
-
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AArrayService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Private constructor to avoid client applications to use constructor <br>
+    //     * In alcune circostanze SpringBoot non riesce a costruire l'istanza <br>
+    //     * Rimesso 'public' al posto del precedente 'private' <br>
+    //     */
+    //    public AArrayService() {
+    //    }// end of constructor
 
 
     /**

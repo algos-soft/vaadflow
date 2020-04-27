@@ -90,7 +90,7 @@ public abstract class DialogoBeanPolymer extends PolymerTemplate<DialogoBeanPoly
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public ATextService text = ATextService.getInstance();
+    public ATextService text;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>
@@ -99,7 +99,7 @@ public abstract class DialogoBeanPolymer extends PolymerTemplate<DialogoBeanPoly
      * Disponibile dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    public AArrayService array = AArrayService.getInstance();
+    protected AArrayService array;
 
     /**
      * Istanza unica di una classe (@Scope = 'singleton') di servizio: <br>

@@ -42,10 +42,10 @@ public class AReflectionService extends AbstractService {
      */
     private final static long serialVersionUID = 1L;
 
-    /**
-     * Private final property
-     */
-    private static final AReflectionService INSTANCE = new AReflectionService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final AReflectionService INSTANCE = new AReflectionService();
 
 
     /**
@@ -57,14 +57,14 @@ public class AReflectionService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AReflectionService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static AReflectionService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     /**

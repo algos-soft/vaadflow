@@ -392,6 +392,16 @@ public class LogService extends AService {
     /**
      * Gestisce un log di error <br>
      *
+     * @param unErrore
+     */
+    public void error(Exception unErrore) {
+        error(unErrore.toString());
+    }
+
+
+    /**
+     * Gestisce un log di error <br>
+     *
      * @param descrizione della informazione da gestire
      */
     public void error(String descrizione) {

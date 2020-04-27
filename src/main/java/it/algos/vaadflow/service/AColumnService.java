@@ -13,6 +13,7 @@ import it.algos.vaadflow.modules.log.LogService;
 import it.algos.vaadflow.modules.preferenza.PreferenzaService;
 import it.algos.vaadflow.ui.fields.ACheckBox;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -53,10 +54,10 @@ public class AColumnService extends AbstractService {
      */
     private final static long serialVersionUID = 1L;
 
-    /**
-     * Private final property
-     */
-    private static final AColumnService INSTANCE = new AColumnService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final AColumnService INSTANCE = new AColumnService();
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
@@ -70,6 +71,16 @@ public class AColumnService extends AbstractService {
      */
     public LogService logger;
 
+    /**
+     * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
+     * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
+     */
+    @Autowired
+    public AAnnotationService annotation;
+
+    @Autowired
+    public AEnumerationService enumService;
+
 
     /**
      * Private constructor to avoid client applications to use constructor <br>
@@ -80,14 +91,14 @@ public class AColumnService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AColumnService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static AColumnService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     /**
@@ -125,7 +136,6 @@ public class AColumnService extends AbstractService {
         Class serviceClazz = annotation.getServiceClass(entityClazz, propertyName);
         String colorColumnName = annotation.getColumnColor(entityClazz, propertyName);
         boolean sortable = annotation.isSortable(entityClazz, propertyName);
-        this.enumService = AEnumerationService.getInstance();
         VaadinIcon headerIcon = annotation.getHeaderIcon(entityClazz, propertyName);
         String widthHeaderIcon = annotation.getHeaderIconSizePX(entityClazz, propertyName);
         String colorHeaderIcon = annotation.getHeaderIconColor(entityClazz, propertyName);
@@ -331,28 +341,28 @@ public class AColumnService extends AbstractService {
                 }));//end of lambda expressions and anonymous inner class
                 break;
             case multicombo:
-//                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
-//                    Field field = reflection.getField(entityClazz, propertyName);
-//                    String testo = "";
-//                    List valueList;
-//
-//                    try { // prova ad eseguire il codice
-//                        if (field.get(entity) instanceof List) {
-//                            valueList = (List) field.get(entity);
-//                            if (array.isValid(valueList)) {
-//                                for (Object singleValue : valueList) {
-//                                    testo += singleValue.toString();
-//                                    testo += VIRGOLA + SPAZIO;
-//                                }// end of for cycle
-//                                testo = text.levaCoda(testo.trim(), VIRGOLA).trim();
-//                            }// end of if cycle
-//                        }// end of if cycle
-//                    } catch (Exception unErrore) { // intercetta l'errore
-//                        log.error(unErrore.toString());
-//                    }// fine del blocco try-catch
-//
-//                    return new Label(testo);
-//                }));//end of lambda expressions and anonymous inner class
+                //                colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+                //                    Field field = reflection.getField(entityClazz, propertyName);
+                //                    String testo = "";
+                //                    List valueList;
+                //
+                //                    try { // prova ad eseguire il codice
+                //                        if (field.get(entity) instanceof List) {
+                //                            valueList = (List) field.get(entity);
+                //                            if (array.isValid(valueList)) {
+                //                                for (Object singleValue : valueList) {
+                //                                    testo += singleValue.toString();
+                //                                    testo += VIRGOLA + SPAZIO;
+                //                                }// end of for cycle
+                //                                testo = text.levaCoda(testo.trim(), VIRGOLA).trim();
+                //                            }// end of if cycle
+                //                        }// end of if cycle
+                //                    } catch (Exception unErrore) { // intercetta l'errore
+                //                        log.error(unErrore.toString());
+                //                    }// fine del blocco try-catch
+                //
+                //                    return new Label(testo);
+                //                }));//end of lambda expressions and anonymous inner class
 
                 colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
                     Field field = reflection.getField(entityClazz, propertyName);
@@ -788,11 +798,11 @@ public class AColumnService extends AbstractService {
             //--di default le colonne NON sono sortable
             //--può essere modificata con sortable = true, nell'annotation @AIColumn della Entity
             colonna.setSortable(sortable);
-//            colonna.setSortProperty(propertyName);
+            //            colonna.setSortProperty(propertyName);
 
-//            if (property.equals("id")) {
-//                colonna.setWidth("1px");
-//            }// end of if cycle
+            //            if (property.equals("id")) {
+            //                colonna.setWidth("1px");
+            //            }// end of if cycle
 
             if (isFlexGrow) {
                 colonna.setFlexGrow(1);

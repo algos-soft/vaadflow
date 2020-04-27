@@ -62,49 +62,57 @@ public abstract class APropertyViewList extends VerticalLayout {
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    public AAnnotationService annotation;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AArrayService array = AArrayService.getInstance();
+    @Autowired
+    public AColumnService columnService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AColumnService columnService = AColumnService.getInstance();
+    @Autowired
+    public ADateService date;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ADateService date = ADateService.getInstance();
+    @Autowired
+    public AFieldService field;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AFieldService field = AFieldService.getInstance();
+    @Autowired
+    public AReflectionService reflection;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public AReflectionService reflection = AReflectionService.getInstance();
+    @Autowired
+    public ATextService text;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ATextService text = ATextService.getInstance();
+    @Autowired
+    public ARouteService routeService;
 
     /**
      * Service (pattern SINGLETON) recuperato come istanza dalla classe <br>
      * The class MUST be an instance of Singleton Class and is created at the time of class loading <br>
      */
-    public ARouteService routeService = ARouteService.getInstance();
+    @Autowired
+    protected AArrayService array;
 
     /**
      * Istanza unica di una classe di servizio: <br>

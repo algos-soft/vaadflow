@@ -6,8 +6,6 @@ package it.algos.vaadflow.ui;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-//import com.vaadin.flow.component.applayout.AppLayoutMenu;
-//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
@@ -29,11 +27,16 @@ import it.algos.vaadflow.service.AReflectionService;
 import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.service.AVaadinService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static it.algos.vaadflow.application.FlowVar.menuClazzList;
+
+//import com.vaadin.flow.component.applayout.AppLayoutMenu;
+//import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+
 
 /**
  * Gestore dei menu. Unico nell'applicazione (almeno finche non riesco a farne girare un altro)
@@ -62,13 +65,16 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
 
     protected AppLayout appLayout;
 
-//    protected AppLayoutMenu appMenu;
+    //    protected AppLayoutMenu appMenu;
 
-    private AAnnotationService annotation = AAnnotationService.getInstance();
+    @Autowired
+    private AAnnotationService annotation;
 
-    private AReflectionService reflection = AReflectionService.getInstance();
+    @Autowired
+    private AReflectionService reflection;
 
-    private ATextService text = ATextService.getInstance();
+    @Autowired
+    private ATextService text;
 
     private Map<String, List<Class>> mappaClassi;
 
@@ -89,7 +95,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout, PageConf
     private AVaadinService vaadinService = StaticContextAccessor.getBean(AVaadinService.class);
 
 
-    public MainLayout() {
+    public MainLayout(AAnnotationService annotation, AReflectionService reflection) {
         setMargin(false);
         setSpacing(false);
         setPadding(false);

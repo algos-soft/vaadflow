@@ -67,14 +67,14 @@ public class AFieldService extends AbstractService {
     private final static long serialVersionUID = 1L;
 
 
-    /**
-     * Private final property
-     */
-    private static final AFieldService INSTANCE = new AFieldService();
+    //    /**
+    //     * Private final property
+    //     */
+    //    private static final AFieldService INSTANCE = new AFieldService();
 
 
-//    @Autowired
-//    private AConverterPrefByte prefConverter;
+    //    @Autowired
+    //    private AConverterPrefByte prefConverter;
 
 
     /**
@@ -86,14 +86,14 @@ public class AFieldService extends AbstractService {
     }// end of constructor
 
 
-    /**
-     * Gets the unique instance of this Singleton.
-     *
-     * @return the unique instance of this Singleton
-     */
-    public static AFieldService getInstance() {
-        return INSTANCE;
-    }// end of static method
+    //    /**
+    //     * Gets the unique instance of this Singleton.
+    //     *
+    //     * @return the unique instance of this Singleton
+    //     */
+    //    public static AFieldService getInstance() {
+    //        return INSTANCE;
+    //    }// end of static method
 
 
     /**

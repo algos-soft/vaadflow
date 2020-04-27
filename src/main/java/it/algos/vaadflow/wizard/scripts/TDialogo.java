@@ -15,6 +15,7 @@ import it.algos.vaadflow.service.ATextService;
 import it.algos.vaadflow.wiz.enumeration.Chiave;
 import it.algos.vaadflow.wiz.enumeration.Progetto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -63,12 +64,14 @@ public abstract class TDialogo extends Dialog {
     /**
      * Service recuperato come istanza dalla classe singleton
      */
-    protected ATextService text = ATextService.getInstance();
+    @Autowired
+    protected ATextService text;
 
     /**
      * Service recuperato come istanza dalla classe singleton
      */
-    protected AFileService file = AFileService.getInstance();
+    @Autowired
+    protected AFileService file;
 
     protected Checkbox fieldCheckBoxSecurity;
 
