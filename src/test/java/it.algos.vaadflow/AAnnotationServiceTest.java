@@ -7,7 +7,10 @@ import it.algos.vaadflow.modules.role.Role;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +31,26 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Test sulle annotazioni Algos")
 public class AAnnotationServiceTest extends ATest {
 
+    private AIEntity aiEntity;
+
+    private AIList aiList;
+
+    private AIForm aiForm;
+
+    private AIView aiView;
+
+    private AIColumn aiColumn;
+
+    private AIField aiField;
+
+    private Document document;
+
+    private Qualifier qualifier;
+
+    private Route route;
+
+    private NotNull notNull;
+
 
     @BeforeAll
     public void setUp() {
@@ -35,160 +58,209 @@ public class AAnnotationServiceTest extends ATest {
     }// end of method
 
 
-//    @SuppressWarnings("javadoc")
-//    /**
-//     * Get the specific annotation of the class.
-//     * Spring view class
-//     *
-//     * @param viewClazz the view class
-//     *
-//     * @return the Annotation for the specific class
-//     */
-//    @Test
-//    public void getAIView() {
-//        AIView ottenuto = service.getAIView(ROLE_VIEW_CLASS_LIST);
-//        assertNotNull(ottenuto);
-//    }// end of single test
+    //    @SuppressWarnings("javadoc")
+    //    /**
+    //     * Get the specific annotation of the class.
+    //     * Spring view class
+    //     *
+    //     * @param viewClazz the view class
+    //     *
+    //     * @return the Annotation for the specific class
+    //     */
+    //    @Test
+    //    public void getAIView() {
+    //        AIView ottenuto = service.getAIView(ROLE_VIEW_CLASS_LIST);
+    //        assertNotNull(ottenuto);
+    //    }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the class.
-     * Entity class
+     * Get the annotation Algos AIEntity.
      *
-     * @param entityClazz the entity class
+     * @param entityClazz the class of type AEntity
      *
-     * @return the Annotation for the specific class
+     * @return the specific annotation
      */
     @Test
     public void getAIEntity() {
-        AIEntity ottenuto = annotation.getAIEntity(ROLE_ENTITY_CLASS);
-        assertNotNull(ottenuto);
+        aiEntity = annotation.getAIEntity(ROLE_ENTITY_CLASS);
+        assertNotNull(aiEntity);
+
+        aiEntity = annotation.getAIEntity(LOG_ENTITY_CLASS);
+        assertNull(aiEntity);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the class.
-     * Entity class
+     * Get the annotation Algos AIList.
      *
-     * @param entityClazz the entity class
+     * @param entityClazz the class of type AEntity
      *
-     * @return the Annotation for the specific class
+     * @return the specific annotation
      */
     @Test
     public void getAIList() {
-        AIList ottenuto;
+        aiList = annotation.getAIList(ROLE_ENTITY_CLASS);
+        assertNotNull(aiList);
 
-        ottenuto = annotation.getAIList(ROLE_ENTITY_CLASS);
-        assertNotNull(ottenuto);
-
-//        ottenuto = service.getAIList(USER_ENTITY_CLASS);
-//        assertNotNull(ottenuto);
+        aiList = annotation.getAIList(LOG_ENTITY_CLASS);
+        assertNotNull(aiList);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the class.
-     * Entity class
+     * Get the annotation Algos AIForm.
      *
-     * @param entityClazz the entity class
+     * @param entityClazz the class of type AEntity
      *
-     * @return the Annotation for the specific class
+     * @return the specific annotation
      */
     @Test
     public void getAIForm() {
-        AIForm ottenuto = annotation.getAIForm(ROLE_ENTITY_CLASS);
-        assertNotNull(ottenuto);
+        aiForm = annotation.getAIForm(ROLE_ENTITY_CLASS);
+        assertNotNull(aiForm);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the class.
-     * Entity class
+     * Get the annotation Algos AIView.
      *
-     * @param entityClazz the entity class
+     * @param viewClazz the class of type IAView
      *
-     * @return the Annotation for the specific class
+     * @return the specific annotation
      */
     @Test
     public void getAIView() {
-//        AIView ottenutoList = service.getAIView(ROLE_VIEW_CLASS_LIST);
-//        assertNotNull(ottenutoList);
+        aiView = annotation.getAIView(ROLE_VIEW_CLASS);
+        assertNotNull(aiView);
 
-        AIView ottenutoForm = annotation.getAIView(ROLE_VIEW_CLASS);
-//        assertNull(ottenutoForm);
+        aiView = annotation.getAIView(LOG_VIEW_CLASS);
+        assertNotNull(aiView);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the class.
-     * View class
+     * Get the annotation Algos AIColumn.
      *
-     * @param entityClazz the entity class
+     * @param reflectionJavaField di riferimento per estrarre l'interfaccia
      *
-     * @return the Annotation for the specific class
-     */
-    @Test
-    public void getRoute() {
-        Route ottenuto = annotation.getRoute(ROLE_VIEW_CLASS);
-        assertNotNull(ottenuto);
-    }// end of single test
-
-
-    @SuppressWarnings("javadoc")
-    /**
-     * Get the specific annotation of the field.
-     *
-     * @param reflectionJavaField di riferimento per estrarre la Annotation
-     *
-     * @return the Annotation for the specific field
+     * @return the specific annotation
      */
     @Test
     public void getAIColumn() {
-        AIColumn ottenuto;
+        aiColumn = annotation.getAIColumn(FIELD_CODE);
+        assertNotNull(aiColumn);
+    }// end of single test
 
-        ottenuto = annotation.getAIColumn(FIELD_CODE);
-        assertNotNull(ottenuto);
 
-        ottenuto = annotation.getAIColumn(ROLE_ENTITY_CLASS, FIELD_NAME_NOTE);
-        assertNotNull(ottenuto);
+    /**
+     * Get the annotation Algos Algos.
+     *
+     * @param entityClazz the class of type AEntity
+     * @param fieldName   the property name
+     *
+     * @return the specific interface
+     */
+    @Test
+    public void getAIColumn2() {
+        aiColumn = annotation.getAIColumn(ROLE_ENTITY_CLASS, FIELD_NAME_NOTE);
+        assertNotNull(aiColumn);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the field.
+     * Get the annotation Algos AIField.
      *
-     * @param reflectionJavaField di riferimento per estrarre la Annotation
+     * @param reflectionJavaField di riferimento per estrarre l'interfaccia
      *
-     * @return the Annotation for the specific field
+     * @return the specific annotation
      */
     @Test
     public void getAIField() {
-        AIField ottenuto = annotation.getAIField(FIELD_CODE);
-        assertNotNull(ottenuto);
+        aiField = annotation.getAIField(FIELD_CODE);
+        assertNotNull(aiField);
     }// end of single test
 
 
     @SuppressWarnings("javadoc")
     /**
-     * Get the specific annotation of the field.
+     * Get the annotation Algos AIField.
      *
-     * @param entityClazz the entity class
+     * @param entityClazz the class of type AEntity
      * @param fieldName   the property name
+     *
+     * @return the specific annotation
+     */
+    @Test
+    public void getAIField2() {
+        aiField = annotation.getAIField(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
+        assertNotNull(aiField);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Get the annotation Document.
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the specific Annotation
+     */
+    @Test
+    public void getDocument() {
+        document = annotation.getDocument(ROLE_ENTITY_CLASS);
+        assertNotNull(document);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Get the annotation Qualifier.
+     *
+     * @param viewClazz the class of type AViewList
+     *
+     * @return the specific Annotation
+     */
+    @Test
+    public void getQualifier() {
+        qualifier = annotation.getQualifier(ROLE_VIEW_CLASS);
+        assertNotNull(qualifier);
+    }// end of single test
+
+
+    @SuppressWarnings("javadoc")
+    /**
+     * Get the annotation Route.
+     *
+     * @param viewClazz the class of type AViewList
+     *
+     * @return the specific Annotation
+     */
+    @Test
+    public void getRoute() {
+        route = annotation.getRoute(ROLE_VIEW_CLASS);
+        assertNotNull(route);
+    }// end of single test
+
+
+    /**
+     * Get the annotation NotNull.
+     *
+     * @param reflectionJavaField di riferimento per estrarre l'annotation
      *
      * @return the Annotation for the specific field
      */
     @Test
-    public void getAIField2() {
-        AIField ottenuto;
-        ottenuto = annotation.getAIField(ROLE_ENTITY_CLASS, FIELD_NAME_CODE);
-        assertNotNull(ottenuto);
-    }// end of method
+    public void getNotNull() {
+        notNull = annotation.getNotNull(FIELD_CODE);
+        assertNotNull(notNull);
+    }// end of single test
 
 
     @SuppressWarnings("javadoc")
@@ -207,20 +279,20 @@ public class AAnnotationServiceTest extends ATest {
     }// end of single test
 
 
-//    @SuppressWarnings("javadoc")
-//    /**
-//     * Get the status listShowsID of the class.
-//     *
-//     * @param clazz the entity class
-//     *
-//     * @return status of class - default false
-//     */
-//    @Test
-//    public void isListShowsID() {
-//        previstoBooleano = false;
-//        ottenutoBooleano = service.isListShowsID(ROLE_ENTITY_CLASS);
-//        assertEquals(previstoBooleano, ottenutoBooleano);
-//    }// end of single test
+    //    @SuppressWarnings("javadoc")
+    //    /**
+    //     * Get the status listShowsID of the class.
+    //     *
+    //     * @param clazz the entity class
+    //     *
+    //     * @return status of class - default false
+    //     */
+    //    @Test
+    //    public void isListShowsID() {
+    //        previstoBooleano = false;
+    //        ottenutoBooleano = service.isListShowsID(ROLE_ENTITY_CLASS);
+    //        assertEquals(previstoBooleano, ottenutoBooleano);
+    //    }// end of single test
 
 
     @SuppressWarnings("javadoc")
@@ -280,8 +352,8 @@ public class AAnnotationServiceTest extends ATest {
         ottenutoList = annotation.getFormFieldsName(ROLE_ENTITY_CLASS);
         assertEquals(previstoList, ottenutoList);
 
-//        ottenutoList = service.getFormFieldsName(USER_ENTITY_CLASS);
-//        assertNull(ottenutoList);
+        //        ottenutoList = service.getFormFieldsName(USER_ENTITY_CLASS);
+        //        assertNull(ottenutoList);
     }// end of single test
 
 
@@ -318,13 +390,13 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getColumnType() {
-//        previstoType = EAFieldType.integer;
-//        ottenutoType = service.getColumnType(FIELD_ORDINE);
-//        assertEquals(previstoType, ottenutoType);
-//
-//        previstoType = EAFieldType.text;
-//        ottenutoType = service.getColumnType(FIELD_CODE);
-//        assertEquals(previstoType, ottenutoType);
+        //        previstoType = EAFieldType.integer;
+        //        ottenutoType = service.getColumnType(FIELD_ORDINE);
+        //        assertEquals(previstoType, ottenutoType);
+        //
+        //        previstoType = EAFieldType.text;
+        //        ottenutoType = service.getColumnType(FIELD_CODE);
+        //        assertEquals(previstoType, ottenutoType);
     }// end of single test
 
 
@@ -450,11 +522,11 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getListBotton() {
-//        EAListButton ottenutoListButton;
-//        EAListButton previstoListButton = EAListButton.standard;
-//
-//        ottenutoListButton = service.getListBotton(ROLE_ENTITY_CLASS);
-//        assertEquals(previstoListButton, ottenutoListButton);
+        //        EAListButton ottenutoListButton;
+        //        EAListButton previstoListButton = EAListButton.standard;
+        //
+        //        ottenutoListButton = service.getListBotton(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstoListButton, ottenutoListButton);
         //@todo RIMETTERE
     }// end of single test
 
@@ -467,11 +539,11 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFormBotton() {
-//        EAFormButton ottenutoFormButton;
-//        EAFormButton previstoFormButton = EAFormButton.standard;
-//
-//        ottenutoFormButton = service.getFormBotton(ROLE_ENTITY_CLASS);
-//        assertEquals(previstoFormButton, ottenutoFormButton);
+        //        EAFormButton ottenutoFormButton;
+        //        EAFormButton previstoFormButton = EAFormButton.standard;
+        //
+        //        ottenutoFormButton = service.getFormBotton(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstoFormButton, ottenutoFormButton);
         //@todo RIMETTERE
     }// end of single test
 
@@ -503,8 +575,7 @@ public class AAnnotationServiceTest extends ATest {
      * @param reflectionJavaField di riferimento per estrarre la Annotation
      *
      * @return the class for the specific columnService
-     */
-    public void getComboClass() {
+     */ public void getComboClass() {
         Class previstoClass = Role.class;
         Class ottenutoClass = annotation.getLinkClass(FIELD_CODE);
         assertEquals(previstoClass, ottenutoClass);
@@ -579,13 +650,13 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getCompanyRequired() {
-//        previstoCompany = EACompanyRequired.nonUsata;
-//        ottenutoCompany = service.getCompanyRequired(ROLE_ENTITY_CLASS);
-//        assertEquals(previstoCompany, ottenutoCompany);
-//
-//        previstoCompany = EACompanyRequired.obbligatoria;
-//        ottenutoCompany = service.getCompanyRequired(USER_ENTITY_CLASS);
-//        assertEquals(previstoCompany, ottenutoCompany);
+        //        previstoCompany = EACompanyRequired.nonUsata;
+        //        ottenutoCompany = service.getCompanyRequired(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstoCompany, ottenutoCompany);
+        //
+        //        previstoCompany = EACompanyRequired.obbligatoria;
+        //        ottenutoCompany = service.getCompanyRequired(USER_ENTITY_CLASS);
+        //        assertEquals(previstoCompany, ottenutoCompany);
     }// end of single test
 
 
@@ -602,10 +673,10 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getEntityRoleType() {
-//        EARoleType roleTypeVisibilityOttenuta = null;
-//        EARoleType roleTypeVisibilityPrevista = EARoleType.developer;
-//        roleTypeVisibilityOttenuta = service.getEntityRoleType(ROLE_ENTITY_CLASS);
-//        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
+        //        EARoleType roleTypeVisibilityOttenuta = null;
+        //        EARoleType roleTypeVisibilityPrevista = EARoleType.developer;
+        //        roleTypeVisibilityOttenuta = service.getEntityRoleType(ROLE_ENTITY_CLASS);
+        //        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
     }// end of single test
 
 
@@ -621,14 +692,14 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getViewRoleType() {
-//        EARoleType roleTypeVisibilityOttenuta = null;
-//        EARoleType roleTypeVisibilityPrevista = EARoleType.user;
-//        roleTypeVisibilityOttenuta = service.getViewRoleType(ROLE_VIEW_CLASS_LIST);
-//        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
-//
-//        roleTypeVisibilityPrevista = EARoleType.user;
-//        roleTypeVisibilityOttenuta = service.getViewRoleType(ROLE_VIEW_CLASS_FORM);
-//        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
+        //        EARoleType roleTypeVisibilityOttenuta = null;
+        //        EARoleType roleTypeVisibilityPrevista = EARoleType.user;
+        //        roleTypeVisibilityOttenuta = service.getViewRoleType(ROLE_VIEW_CLASS_LIST);
+        //        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
+        //
+        //        roleTypeVisibilityPrevista = EARoleType.user;
+        //        roleTypeVisibilityOttenuta = service.getViewRoleType(ROLE_VIEW_CLASS_FORM);
+        //        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
     }// end of single test
 
 
@@ -645,9 +716,9 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFormAccessibilityDev() {
-//        previstaAccessibilità = EAFieldAccessibility.allways;
-//        ottenutaAccessibilità = service.getFormAccessibilityDev(ROLE_ENTITY_CLASS);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.allways;
+        //        ottenutaAccessibilità = service.getFormAccessibilityDev(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -664,9 +735,9 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFormAccessibilityAdmin() {
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFormAccessibilityAdmin(ROLE_ENTITY_CLASS);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFormAccessibilityAdmin(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -683,9 +754,9 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFormAccessibilityUser() {
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFormAccessibilityUser(ROLE_ENTITY_CLASS);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFormAccessibilityUser(ROLE_ENTITY_CLASS);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -702,13 +773,13 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFieldAccessibilityDev() {
-//        previstaAccessibilità = EAFieldAccessibility.showOnly;
-//        ottenutaAccessibilità = service.getFieldAccessibilityDev(FIELD_ORDINE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//
-//        previstaAccessibilità = EAFieldAccessibility.allways;
-//        ottenutaAccessibilità = service.getFieldAccessibilityDev(FIELD_CODE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.showOnly;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityDev(FIELD_ORDINE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //
+        //        previstaAccessibilità = EAFieldAccessibility.allways;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityDev(FIELD_CODE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -725,13 +796,13 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFieldAccessibilityAdmin() {
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibilityAdmin(FIELD_ORDINE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//
-//        previstaAccessibilità = EAFieldAccessibility.showOnly;
-//        ottenutaAccessibilità = service.getFieldAccessibilityAdmin(FIELD_CODE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityAdmin(FIELD_ORDINE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //
+        //        previstaAccessibilità = EAFieldAccessibility.showOnly;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityAdmin(FIELD_CODE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -748,13 +819,13 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFieldAccessibilityUser() {
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibilityUser(FIELD_ORDINE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibilityUser(FIELD_CODE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityUser(FIELD_ORDINE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibilityUser(FIELD_CODE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -769,38 +840,38 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFieldAccessibility() {
-//        //--developer
-//        session.setDeveloper(true);
-//        session.setAdmin(false);
-//        session.setUser(false);
-//        previstaAccessibilità = EAFieldAccessibility.showOnly;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//        previstaAccessibilità = EAFieldAccessibility.allways;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
-//        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//
-//        //--admin Non funziona, perché ASessionService usa VaadinSession.getCurrent();
-//        session.setDeveloper(false);
-//        session.setAdmin(true);
-//        session.setUser(false);
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
-////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//        previstaAccessibilità = EAFieldAccessibility.showOnly;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
-////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//
-//        //--user Non funziona, perché ASessionService usa VaadinSession.getCurrent();
-//        session.setDeveloper(false);
-//        session.setAdmin(false);
-//        session.setUser(true);
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
-////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
-//        previstaAccessibilità = EAFieldAccessibility.never;
-//        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
-////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        //--developer
+        //        session.setDeveloper(true);
+        //        session.setAdmin(false);
+        //        session.setUser(false);
+        //        previstaAccessibilità = EAFieldAccessibility.showOnly;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.allways;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
+        //        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //
+        //        //--admin Non funziona, perché ASessionService usa VaadinSession.getCurrent();
+        //        session.setDeveloper(false);
+        //        session.setAdmin(true);
+        //        session.setUser(false);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
+        ////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.showOnly;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
+        ////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //
+        //        //--user Non funziona, perché ASessionService usa VaadinSession.getCurrent();
+        //        session.setDeveloper(false);
+        //        session.setAdmin(false);
+        //        session.setUser(true);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_ORDINE);
+        ////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
+        //        previstaAccessibilità = EAFieldAccessibility.never;
+        //        ottenutaAccessibilità = service.getFieldAccessibility(FIELD_CODE);
+        ////        assertEquals(previstaAccessibilità, ottenutaAccessibilità);
     }// end of single test
 
 
@@ -817,10 +888,10 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void getFieldRoleType() {
-//        EARoleType roleTypeVisibilityOttenuta = null;
-//        EARoleType roleTypeVisibilityPrevista = EARoleType.developer;
-//        roleTypeVisibilityOttenuta = service.getFieldRoleType(FIELD_ORDINE);
-//        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
+        //        EARoleType roleTypeVisibilityOttenuta = null;
+        //        EARoleType roleTypeVisibilityPrevista = EARoleType.developer;
+        //        roleTypeVisibilityOttenuta = service.getFieldRoleType(FIELD_ORDINE);
+        //        assertEquals(roleTypeVisibilityPrevista, roleTypeVisibilityOttenuta);
     }// end of single test
 
 
@@ -835,29 +906,29 @@ public class AAnnotationServiceTest extends ATest {
      */
     @Test
     public void isFieldVisibileRole() {
-//        //--developer
-//        session.setDeveloper(true);
-//        session.setAdmin(false);
-//        session.setUser(false);
-//        previstoBooleano = true;
-//        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
-//        assertEquals(previstoBooleano, ottenutoBooleano);
-//
-//        //--admin
-//        session.setDeveloper(false);
-//        session.setAdmin(true);
-//        session.setUser(false);
-//        previstoBooleano = true;
-//        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
-//        assertEquals(previstoBooleano, ottenutoBooleano);
-//
-//        //--user Non funziona, perché ASessionService usa VaadinSession.getCurrent();
-//        session.setDeveloper(false);
-//        session.setAdmin(false);
-//        session.setUser(true);
-//        previstoBooleano = false;
-//        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
-////        assertEquals(previstoBooleano, ottenutoBooleano);
+        //        //--developer
+        //        session.setDeveloper(true);
+        //        session.setAdmin(false);
+        //        session.setUser(false);
+        //        previstoBooleano = true;
+        //        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
+        //        assertEquals(previstoBooleano, ottenutoBooleano);
+        //
+        //        //--admin
+        //        session.setDeveloper(false);
+        //        session.setAdmin(true);
+        //        session.setUser(false);
+        //        previstoBooleano = true;
+        //        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
+        //        assertEquals(previstoBooleano, ottenutoBooleano);
+        //
+        //        //--user Non funziona, perché ASessionService usa VaadinSession.getCurrent();
+        //        session.setDeveloper(false);
+        //        session.setAdmin(false);
+        //        session.setUser(true);
+        //        previstoBooleano = false;
+        //        ottenutoBooleano = service.isFieldVisibileRole(FIELD_ORDINE);
+        ////        assertEquals(previstoBooleano, ottenutoBooleano);
     }// end of single test
 
 }// end of class

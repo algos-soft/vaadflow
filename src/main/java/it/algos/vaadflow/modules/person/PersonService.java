@@ -52,7 +52,7 @@ import static it.algos.vaadflow.application.FlowVar.usaSecurity;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PER)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class PersonService extends AService {
 
     public final static List<String> PROPERTIES_SECURED =

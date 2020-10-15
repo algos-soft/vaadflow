@@ -108,7 +108,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @Qualifier(TAG_PRE)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "preferenze", menuIcon = VaadinIcon.SCREWDRIVER, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class PreferenzaList extends AGridViewList {
 

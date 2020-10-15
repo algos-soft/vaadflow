@@ -70,7 +70,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderComune")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "comune", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"regione", "provincia", "nome"})
 @AIForm(fields = {"regione", "provincia", "nome"})

@@ -1,15 +1,14 @@
 package it.algos.vaadflow.modules.logtype;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
@@ -30,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_TYP)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface LogtypeRepository extends MongoRepository<Logtype, String> {
 
 	public Logtype findByCode(String code);

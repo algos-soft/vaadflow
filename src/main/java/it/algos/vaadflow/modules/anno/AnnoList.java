@@ -52,7 +52,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @Qualifier(TAG_ANN)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "anni", menuIcon = VaadinIcon.CALENDAR, searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 public class AnnoList extends AGridViewList {
 

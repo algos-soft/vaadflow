@@ -126,6 +126,9 @@ public class MainLayout14 extends AppLayout {
     protected void fixSessione() {
         context = vaadinService.getSessionContext();
         login = context != null ? context.getLogin() : null;
+        if (login != null) {
+            pref.login = login;
+        }
     }// end of method
 
 

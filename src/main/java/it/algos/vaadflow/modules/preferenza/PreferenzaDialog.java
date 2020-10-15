@@ -1,10 +1,8 @@
 package it.algos.vaadflow.modules.preferenza;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
@@ -53,7 +51,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_PRE)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
 
@@ -211,7 +209,7 @@ public class PreferenzaDialog extends AViewDialog<Preferenza> {
 
     /**
      * Cambia il valueField sincronizzandolo col comboBox
-     * Senza valori, perché è attivo SOLO in modalita AddNew (new record)
+     * Senza valori, perché è attivo SOLO in modalità AddNew (new record)
      */
     protected AbstractField sincro(EAPrefType type) {
         String caption = "Valore ";

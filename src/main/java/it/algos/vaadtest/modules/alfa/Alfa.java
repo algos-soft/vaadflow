@@ -61,7 +61,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderAlfa")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "alfa", company = EACompanyRequired.facoltativa)
 @AIList(fields = {"company", "descrizione", "nazionalita", "ragazzo",  "simpatico"})
 @AIForm(fields = {"descrizione", "ragazzo", "nazionalita", "simpatico"})

@@ -66,7 +66,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderLog")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "log", company = EACompanyRequired.obbligatoria)
 @AIList(fields = {"type", "evento", "descrizione"})
 @AIForm(fields = {"type", "evento", "descrizione"})

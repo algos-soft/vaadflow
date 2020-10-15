@@ -28,7 +28,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -81,7 +80,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderProva")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"ordine", "pageid", "code", "colore","descrizione", "inizio", "fine", "durataOre", "durataMinuti", "durataTempo", "sino", "box", "yesno", "yesnobold", "ruoli"})
 @AIForm(fields = {"ordine", "pageid", "code", "descrizione", "inizio", "listaA", "listaB", "listaC", "sino", "box", "yesno", "yesnobold", "ruoli", "lastModifica","mese", "secolo", "indirizzoStatico", "indirizzoDinamico"})

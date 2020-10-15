@@ -26,7 +26,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_MES)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface MeseRepository extends MongoRepository<Mese, String> {
 
     public Mese findByTitoloLungo(String titoloLungo);

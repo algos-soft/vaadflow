@@ -27,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_LOG;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_LOG)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface LogRepository extends MongoRepository<Log, String> {
 
     public Log findByDescrizione(String descrizione);

@@ -40,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_SEC)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class SecoloService extends AService {
 
 

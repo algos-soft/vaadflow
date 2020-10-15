@@ -207,6 +207,7 @@ public abstract class AService extends AbstractService implements IAService {
      * Returns the number of entities available.
      *
      * @return the number of entities
+     *
      */
     @Override
     public int count() {

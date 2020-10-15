@@ -3,12 +3,12 @@ package it.algos.vaadflow;
 
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAFieldType;
+import it.algos.vaadflow.modules.log.LogService;
+import it.algos.vaadflow.modules.logtype.Logtype;
+import it.algos.vaadflow.modules.logtype.LogtypeList;
 import it.algos.vaadflow.modules.role.Role;
 import it.algos.vaadflow.modules.role.RoleList;
-import it.algos.vaadflow.service.AAnnotationService;
-import it.algos.vaadflow.service.AArrayService;
-import it.algos.vaadflow.service.AReflectionService;
-import it.algos.vaadflow.service.ATextService;
+import it.algos.vaadflow.service.*;
 import it.algos.vaadflow.ui.IAView;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
@@ -115,6 +115,10 @@ public class ATest {
 
     protected static Class<? extends AEntity> ROLE_ENTITY_CLASS = Role.class;
 
+    protected static Class<? extends IAView> LOG_VIEW_CLASS = LogtypeList.class;
+
+    protected static Class<? extends AEntity> LOG_ENTITY_CLASS = Logtype.class;
+
     protected static String TITOLO_WEB = "http://www.algos.it/estudio";
 
     protected static String TITOLO_WEB_ERRATO = "http://www.pippozbelloz.it/";
@@ -131,15 +135,21 @@ public class ATest {
     @InjectMocks
     public ATextService text;
 //    protected EAFieldAccessibility previstaAccessibilità;
-//    protected EAFieldAccessibility ottenutaAccessibilità;
-//    protected EACompanyRequired previstoCompany;
-//    protected EACompanyRequired ottenutoCompany;
+    //    protected EAFieldAccessibility ottenutaAccessibilità;
+    //    protected EACompanyRequired previstoCompany;
+    //    protected EACompanyRequired ottenutoCompany;
 
     @InjectMocks
     protected AAnnotationService annotation;
 
     @InjectMocks
     protected AReflectionService reflection;
+
+    @InjectMocks
+    LogService logger;
+
+    @InjectMocks
+    ADateService date;
 
     protected Field reflectionJavaField;
 
@@ -196,11 +206,16 @@ public class ATest {
         MockitoAnnotations.initMocks(reflection);
         MockitoAnnotations.initMocks(array);
         MockitoAnnotations.initMocks(text);
+        MockitoAnnotations.initMocks(logger);
+        MockitoAnnotations.initMocks(date);
         annotation.reflection = reflection;
         annotation.text = text;
         array.text = text;
         annotation.array = array;
         reflection.array = array;
+        annotation.logger = logger;
+        logger.date = date;
+        logger.text = text;
         FIELD_ORDINE = reflection.getField(ROLE_ENTITY_CLASS, NAME_ORDINE);
         FIELD_CODE = reflection.getField(ROLE_ENTITY_CLASS, NAME_CODE);
     }// end of method

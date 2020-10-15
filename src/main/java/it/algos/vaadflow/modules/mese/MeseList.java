@@ -8,8 +8,8 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.list.ACronoViewList;
 import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.ACronoViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_MES;
 @Qualifier(TAG_MES)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "mesi", roleTypeVisibility = EARoleType.developer)
 public class MeseList extends ACronoViewList {
 

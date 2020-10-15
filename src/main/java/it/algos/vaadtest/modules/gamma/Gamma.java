@@ -68,7 +68,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderGamma")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "gamma", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code", "ruoli"})
 @AIForm(fields = {"ordine", "code", "ruoli"})

@@ -103,8 +103,8 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 @Qualifier(TAG_ALF)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione",  roleTypeVisibility = EARoleType.developer)
+@AIScript(sovraScrivibile = false)
+@AIView(vaadflow = false, menuName = TAG_ALF, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione", roleTypeVisibility = EARoleType.developer)
 public class AlfaList extends AGridViewList {
 
     private Checkbox checkbox1;

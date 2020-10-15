@@ -103,7 +103,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Qualifier(TAG_BET)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, routeFormName = "betaForm", menuName = TAG_BET, menuIcon = VaadinIcon.MAILBOX, searchProperty = "code")
 public class BetaList extends AGridViewList {
 

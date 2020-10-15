@@ -1,8 +1,10 @@
 package it.algos.vaadflow.modules.preferenza;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.application.AContext;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.backend.login.ALogin;
 import it.algos.vaadflow.boot.ABoot;
 import it.algos.vaadflow.enumeration.EAPrefType;
 import it.algos.vaadflow.modules.company.Company;
@@ -14,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,11 +45,11 @@ import static it.algos.vaadflow.application.FlowVar.usaCompany;
  * - la documentazione precedente a questo tag viene SEMPRE riscritta <br>
  * - se occorre preservare delle @Annotation con valori specifici, spostarle DOPO @AIScript <br>
  */
-@Service
+@SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PRE)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class PreferenzaService extends AService {
 
     public final static List<String> LIST_PROPERTIES_MULTICOMPANY =
@@ -69,6 +70,9 @@ public class PreferenzaService extends AService {
      * Riferimento alla sottoclasse specifica di ABoot per utilizzare il metodo sovrascritto resetPreferenze() <br>
      */
     public ABoot applicationBoot;
+
+
+    public ALogin login;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>
@@ -625,7 +629,7 @@ public class PreferenzaService extends AService {
 
 
     public Object getValue(String keyCode) {
-        return getValue(keyCode, VUOTA);
+        return getValue(keyCode, getPrefix());
     } // end of method
 
 
@@ -642,12 +646,12 @@ public class PreferenzaService extends AService {
 
 
     public String getStr(IAPreferenza eaPref) {
-        return getStr(eaPref.getCode(), (String) eaPref.getValue(), VUOTA);
+        return getStr(eaPref.getCode(), (String) eaPref.getValue(), getPrefix());
     } // end of method
 
 
     public String getStr(String keyCode) {
-        return getStr(keyCode, VUOTA, VUOTA);
+        return getStr(keyCode, VUOTA, getPrefix());
     } // end of method
 
 
@@ -681,7 +685,7 @@ public class PreferenzaService extends AService {
 
 
     public Boolean isBool(String keyCode) {
-        return isBool(keyCode, VUOTA);
+        return isBool(keyCode, getPrefix());
     } // end of method
 
 
@@ -714,7 +718,7 @@ public class PreferenzaService extends AService {
 
 
     public int getInt(String keyCode, int defaultValue) {
-        return getInt(keyCode, defaultValue, VUOTA);
+        return getInt(keyCode, defaultValue, getPrefix());
     } // end of method
 
 
@@ -1007,14 +1011,20 @@ public class PreferenzaService extends AService {
 //        Pref pref = Pref.findByCode(code, company);
 //
 //        if (pref != null) {
-//            return (boolean) pref.getValore();
-//        }// end of if cycle
-//
-//        if (defaultValue != null && defaultValue instanceof Boolean) {
-//            return (boolean) defaultValue;
-//        }// end of if cycle
-//
-//        return false;
-//    } // end of method
+    //            return (boolean) pref.getValore();
+    //        }// end of if cycle
+    //
+    //        if (defaultValue != null && defaultValue instanceof Boolean) {
+    //            return (boolean) defaultValue;
+    //        }// end of if cycle
+    //
+    //        return false;
+    //    } // end of method
+
+
+    public String getPrefix() {
+        String companyPrefix = login != null ? login.getCompany() != null ? login.getCompany().code : VUOTA : VUOTA;
+        return companyPrefix;
+    } // end of method
 
 }// end of class

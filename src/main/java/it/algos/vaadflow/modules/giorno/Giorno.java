@@ -66,7 +66,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderGiorno")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "giorno", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "mese", "titolo"})
 @AIForm(fields = {"ordine", "mese", "titolo"})

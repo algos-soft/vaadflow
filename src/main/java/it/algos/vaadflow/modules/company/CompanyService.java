@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_COM)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class CompanyService extends AService {
 
     /**

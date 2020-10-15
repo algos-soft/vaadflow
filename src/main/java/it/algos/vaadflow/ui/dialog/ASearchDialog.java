@@ -146,7 +146,7 @@ public class ASearchDialog extends ADialog {
             for (String propertyName : propertyNamesList) {
 //                propertyField = fieldService.create((AEntity)null, (ApplicationContext)null, ((AService) service).entityClass, propertyName);
                 if (propertyField != null) {
-                    fieldKeyMongo = annotation.getFieldKeyMongo(((AService) service).entityClass, propertyName);
+                    fieldKeyMongo = annotation.getKeyFieldMongo(((AService) service).entityClass, propertyName);
                     fieldMap.put(fieldKeyMongo, propertyField);
                 }// end of if cycle
             }// end of for cycle

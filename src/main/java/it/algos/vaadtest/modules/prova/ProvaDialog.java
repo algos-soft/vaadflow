@@ -17,9 +17,8 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.ADialog;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
@@ -33,7 +32,6 @@ import org.springframework.context.annotation.Scope;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static it.algos.vaadflow.application.FlowCost.FLASH;
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
@@ -61,7 +59,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_PRO)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class ProvaDialog extends AViewDialog<Prova> {
 
     private final static String INDIRIZZO = "indirizzoStatico";

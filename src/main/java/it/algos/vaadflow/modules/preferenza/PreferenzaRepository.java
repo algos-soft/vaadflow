@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.preferenza;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.enumeration.EAPrefType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PRE;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PRE)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface PreferenzaRepository extends MongoRepository<Preferenza, String> {
 
     public Preferenza findByCode(String code);

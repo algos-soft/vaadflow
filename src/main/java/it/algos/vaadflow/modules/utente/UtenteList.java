@@ -47,7 +47,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @Qualifier(TAG_UTE)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = TAG_UTE, searchProperty = "username", menuIcon = VaadinIcon.USERS, roleTypeVisibility = EARoleType.developer)
 public class UtenteList extends AGridViewList {
 

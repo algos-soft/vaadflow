@@ -71,11 +71,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderBeta")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "beta", company = EACompanyRequired.nonUsata)
 //@AIList(fields = {"ordine", "code", "data", "datetime", "time", "icona", "posta", "password", "intero"})
 @AIList(fields = {"ordine", "code"})
-@AIForm(fields = {"ordine", "code", "indirizzo", "data", "datetime", "time", "icona", "posta", "password", "intero"})
+@AIForm(fields = {"ordine", "code", "indirizzo", "data", "datetime", "time", "icona", "posta", "password", "intero", "note"})
 public class Beta extends AEntity {
 
 
@@ -101,7 +101,7 @@ public class Beta extends AEntity {
      */
     @NotNull(message = "Il codice è obbligatorio")
 //    @Indexed()
-    @Size(min = 10)
+    @Size(min = 2)
     @Field("cod")
     @AIField(type = EAFieldType.text, required = true, focus = true, widthEM = 8)
     @AIColumn(sortable = true, widthEM = 8)

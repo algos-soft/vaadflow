@@ -459,12 +459,16 @@ public class AFieldService extends AbstractService {
                 field = new ATextField(caption);
                 break;
             case pref:
-//                field = new ATextField(caption);
-//                binder.forField(field).withConverter(prefConverter).bind(fieldName);
+                //                field = new ATextField(caption);
+                //                binder.forField(field).withConverter(prefConverter).bind(fieldName);
                 break;
             case custom:
-                field = appContext.getBean(AIndirizzo.class);
-                binder.forField(field).bind(fieldName);
+                try {
+                    field = (AbstractField) appContext.getBean(Class.forName(serviceClazz.getCanonicalName()));
+                    binder.forField(field).bind(fieldName);
+                } catch (Exception unErrore) {
+                    logger.error(unErrore, this.getClass(), "create");
+                }
                 break;
             case noBinder:
                 field = new ATextField(caption);

@@ -13,13 +13,12 @@
 
     <!-- Questo blocco sembra consolidato in tutte le demo recuperate -->
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- Dependencies -->
-        <!-- Va tenuta aggiornata la versione di VAADIN 14.1.3 -->
+        <!-- Va tenuta aggiornata la versione di VAADIN 14.1.25 -->
         <vaadin.version>14.1.25</vaadin.version>
 
         <!-- Va tenuta aggiornata la versione di spring-boot -->

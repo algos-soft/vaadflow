@@ -243,7 +243,7 @@ public class AFieldsViewForm extends ALayoutViewForm {
 
 
     /**
-     * gAgiunge eventuali listeners ai fields (dopo aver regolato il loro valore iniziale) <br>
+     * Agiunge eventuali listeners ai fields (dopo aver regolato il loro valore iniziale) <br>
      * Sovrascritto nella sottoclasse <br>
      */
     protected void addListeners() {

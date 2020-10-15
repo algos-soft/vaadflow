@@ -45,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Qualifier(TAG_PER)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "persone", menuIcon = VaadinIcon.USERS, searchProperty = "cognome", roleTypeVisibility = EARoleType.developer)
 public class PersonList extends AGridViewList {
 

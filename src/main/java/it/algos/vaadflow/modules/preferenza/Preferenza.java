@@ -68,7 +68,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderPreferenza")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(company = EACompanyRequired.facoltativa)
 @AIList(fields = {"ordine", "code", "type", "value", "descrizione", "show", "companySpecifica"})
 @AIForm(fields = {"company", "ordine", "code", "descrizione", "type", "show", "companySpecifica"})

@@ -111,7 +111,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
 @Qualifier(TAG_COMUNE)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_COMUNE, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class ComuneList extends AGridViewList {
 

@@ -1,20 +1,15 @@
 package it.algos.vaadtest.modules.gamma;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.AService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
 import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 
 /**
@@ -39,7 +34,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_GAM)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class GammaService extends AService {
 
 

@@ -25,6 +25,6 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PER)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface PersonRepository extends MongoRepository<Person, String> {
 }// end of class

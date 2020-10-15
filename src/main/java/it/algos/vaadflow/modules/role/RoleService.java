@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ROL)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class RoleService extends AService {
 
     /**

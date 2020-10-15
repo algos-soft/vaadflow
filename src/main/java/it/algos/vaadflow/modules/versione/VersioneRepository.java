@@ -1,13 +1,14 @@
 package it.algos.vaadflow.modules.versione;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
@@ -26,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_VER)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface VersioneRepository extends MongoRepository<Versione, String> {
 
 	public List<Versione> findByOrderById();

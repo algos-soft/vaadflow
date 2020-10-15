@@ -45,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_COMUNE)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class ComuneService extends AService {
 
 

@@ -1,14 +1,13 @@
 package it.algos.vaadtest.modules.prova;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 
@@ -30,7 +29,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_PRO;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PRO)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface ProvaRepository extends MongoRepository<Prova, String> {
 
 

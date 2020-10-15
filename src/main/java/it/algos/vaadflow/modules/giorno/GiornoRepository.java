@@ -27,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_GIO;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_GIO)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface GiornoRepository extends MongoRepository<Giorno, String> {
 
     public Giorno findByTitolo(String titolo);

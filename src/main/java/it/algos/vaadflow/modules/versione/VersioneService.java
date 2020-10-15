@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_VER)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class VersioneService extends AService {
 
 

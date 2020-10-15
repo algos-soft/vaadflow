@@ -7,17 +7,15 @@ import it.algos.vaadflow.application.StaticContextAccessor;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.address.Address;
-import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.address.AddressDialog;
+import it.algos.vaadflow.modules.address.AddressService;
 import it.algos.vaadflow.modules.person.Person;
-import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.modules.person.PersonDialog;
-import it.algos.vaadflow.presenter.IAPresenter;
+import it.algos.vaadflow.modules.person.PersonService;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.ui.fields.ATextField;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COM;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_COM)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class CompanyDialog extends AViewDialog<Company> {
 
     public static String CONTATTO = "contatto";

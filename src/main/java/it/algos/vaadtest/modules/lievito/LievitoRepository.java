@@ -30,7 +30,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_LIE;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_LIE)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface LievitoRepository extends MongoRepository<Lievito, String> {
 
 

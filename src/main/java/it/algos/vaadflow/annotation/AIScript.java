@@ -22,7 +22,7 @@ public @interface AIScript {
      * (Optional) Status of this file.
      * Defaults to false.
      */
-    boolean sovrascrivibile() default false;
+    boolean sovraScrivibile() default false;
 
 
 }// end of interface annotation

@@ -43,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_GIO)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class GiornoService extends AService {
 
 

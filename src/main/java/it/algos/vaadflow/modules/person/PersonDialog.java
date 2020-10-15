@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PER;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_PER)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class PersonDialog extends AViewDialog<Person> {
 
 

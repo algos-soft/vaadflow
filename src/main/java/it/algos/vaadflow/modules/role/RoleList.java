@@ -44,7 +44,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @Qualifier(TAG_ROL)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "ruoli", menuIcon = VaadinIcon.USER, roleTypeVisibility = EARoleType.developer)
 public class RoleList extends AGridViewList {
 

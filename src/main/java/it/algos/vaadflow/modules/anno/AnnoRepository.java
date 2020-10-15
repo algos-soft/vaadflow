@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.anno;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.modules.giorno.Giorno;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,7 +27,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ANN;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ANN)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface AnnoRepository extends MongoRepository<Anno, String> {
 
     public Anno findByTitolo(String titolo);

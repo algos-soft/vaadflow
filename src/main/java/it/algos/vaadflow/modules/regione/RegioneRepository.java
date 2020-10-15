@@ -29,7 +29,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_REGIONE)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface RegioneRepository extends MongoRepository<Regione, String> {
 
     public Regione findByIso(String iso);

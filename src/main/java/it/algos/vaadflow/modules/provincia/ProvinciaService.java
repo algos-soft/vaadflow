@@ -42,7 +42,7 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PROVINCIA)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class ProvinciaService extends AService {
 
 

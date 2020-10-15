@@ -10,8 +10,8 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.modules.role.EARoleType;
 import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.list.AGridViewList;
 import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -98,7 +98,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @Qualifier(TAG_TYP)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "logTypes", menuIcon = VaadinIcon.PAINTBRUSH, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class LogtypeList extends AGridViewList {
 

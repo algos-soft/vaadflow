@@ -1,6 +1,5 @@
 package it.algos.vaadtest.application;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.boot.AVers;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class TestVers extends AVers {
 
     /**

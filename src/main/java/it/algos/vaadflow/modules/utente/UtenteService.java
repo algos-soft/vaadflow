@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
@@ -46,7 +45,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_UTE;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_UTE)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class UtenteService extends AService {
 
     private final static String SUFFIX = "123";

@@ -47,7 +47,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @Qualifier(TAG_VER)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = "versioni", menuIcon = VaadinIcon.DROP, searchProperty = "titolo", roleTypeVisibility = EARoleType.developer)
 public class VersioneList extends AGridViewList {
 

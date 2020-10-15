@@ -43,7 +43,7 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ANN)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class AnnoService extends AService {
 
 

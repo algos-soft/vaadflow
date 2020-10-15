@@ -1,6 +1,7 @@
 package it.algos.vaadflow.ui.fields;
 
 import com.vaadin.flow.component.customfield.CustomField;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaadflow.modules.address.Address;
 import it.algos.vaadflow.modules.address.AddressService;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 
 /**
  * Project vaadflow
@@ -33,7 +33,7 @@ public class AIndirizzo extends CustomField<Address> {
 
     private String keyId;
 
-//    private Address currentItem;
+    //    private Address currentItem;
 
 
     public AIndirizzo() {
@@ -43,36 +43,59 @@ public class AIndirizzo extends CustomField<Address> {
 
     public AIndirizzo(String keyId) {
         this.keyId = keyId;
-//        add(datePicker, timePicker);
-    }// end of constructor
+
+        indirizzo.setLabel("Indirizzo");
+        indirizzo.getStyle().set("width", "12em");
+        indirizzo.setPlaceholder("indirizzo...");
+
+        localita.setLabel("Località");
+        localita.getStyle().set("width", "14em");
+        localita.setPlaceholder("comune...");
+
+        cap.setLabel("Cap");
+        cap.setPattern("[0-9]*");
+        cap.setPreventInvalidInput(true);
+        cap.setMaxLength(5);
+        cap.getStyle().set("width", "5em");
+        cap.setPlaceholder("cap...");
+    }
 
 
     @PostConstruct
     public void inizia() {
-//        currentItem = service.findByKeyUnica(keyId);
+        //        currentItem = service.findByKeyUnica(keyId);
 
-        add(indirizzo, localita, cap);
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(indirizzo, localita, cap);
+        add(horizontalLayout);
 
-//        if (currentItem != null) {
-//            indirizzo.setValue(currentItem.indirizzo);
-//            localita.setValue(currentItem.localita);
-//            cap.setValue(currentItem.cap);
-//        }// end of if cycle
+        //        if (currentItem != null) {
+        //            indirizzo.setValue(currentItem.indirizzo);
+        //            localita.setValue(currentItem.localita);
+        //            cap.setValue(currentItem.cap);
+        //        }// end of if cycle
     }// end of constructor
 
 
     @Override
     protected Address generateModelValue() {
-//        final LocalDate date = datePicker.getValue();
-//        final LocalTime time = timePicker.getValue();
-//        return date != null && time != null ? LocalDateTime.of(date, time) : null;
-        return null;
+        Address address = Address.builderAddress()
+
+                .indirizzo(indirizzo.getValue())
+
+                .localita(localita.getValue())
+
+                .cap(cap.getValue())
+
+                .build();
+
+        return address;
     }// end of method
 
 
     @Override
     protected void setPresentationValue(Address currentItem) {
-//        currentItem = service.findByKeyUnica(keyId);
+        //        currentItem = service.findByKeyUnica(keyId);
 
         if (currentItem != null) {
             indirizzo.setValue(currentItem.indirizzo);
@@ -80,25 +103,25 @@ public class AIndirizzo extends CustomField<Address> {
             cap.setValue(currentItem.cap);
         }// end of if cycle
 
-//        datePicker.setValue(newPresentationValue
-//                != null ?
-//                newPresentationValue.toLocalDate() :
-//                null);
-//        timePicker.setValue(newPresentationValue
-//                != null ?
-//                newPresentationValue.toLocalTime() :
-//                null);
+        //        datePicker.setValue(newPresentationValue
+        //                != null ?
+        //                newPresentationValue.toLocalDate() :
+        //                null);
+        //        timePicker.setValue(newPresentationValue
+        //                != null ?
+        //                newPresentationValue.toLocalTime() :
+        //                null);
     }// end of method
 
-//    @Override
-//    protected String generateModelValue() {
-//        return null;
-//    }// end of method
-//
-//
-//    @Override
-//    protected void setPresentationValue(String idKey) {
-//
-//    }// end of method
+    //    @Override
+    //    protected String generateModelValue() {
+    //        return null;
+    //    }// end of method
+    //
+    //
+    //    @Override
+    //    protected void setPresentationValue(String idKey) {
+    //
+    //    }// end of method
 
 }// end of class

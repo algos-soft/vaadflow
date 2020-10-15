@@ -1,17 +1,15 @@
 package it.algos.vaadflow.modules.versione;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
-import it.algos.vaadflow.presenter.IAPresenter;
-import it.algos.vaadflow.ui.dialog.AViewDialog;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.dialog.AViewDialog;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
 import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 
 /**
@@ -35,7 +33,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_VER;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_VER)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovraScrivibile = true)
 public class VersioneDialog extends AViewDialog<Versione> {
 
 

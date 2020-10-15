@@ -125,7 +125,7 @@ public class AAnnotationService extends AbstractService {
 
 
     /**
-     * Get the annotation Algos Algos.
+     * Get the annotation Algos.
      *
      * @param entityClazz the class of type AEntity
      * @param fieldName   the property name
@@ -138,7 +138,6 @@ public class AAnnotationService extends AbstractService {
 
         try {
             listaFields = reflection.getAllFields(entityClazz);
-
             if (array.isValid(listaFields)) {
                 for (Field reflectionJavaField : listaFields) {
                     if (reflectionJavaField.getName().equals(fieldName)) {
@@ -211,7 +210,7 @@ public class AAnnotationService extends AbstractService {
      *
      * @return the specific Annotation
      */
-    public Qualifier getQualifier(final Class<? extends AViewList> viewClazz) {
+    public Qualifier getQualifier(final Class<? extends IAView> viewClazz) {
         return viewClazz != null ? viewClazz.getAnnotation(Qualifier.class) : null;
     }
 
@@ -313,28 +312,29 @@ public class AAnnotationService extends AbstractService {
 
 
     /**
-     * Get the specific annotation of the field.
+     * Get the key field for mongoDB.
+     * Si può usare una chiave più breve del nome della property <br>
+     * Da usare solo nelle Collection con molte entity <br>
      *
-     * @param entityClazz  the entity class
+     * @param entityClazz  the class of type AEntity
      * @param propertyName the property name
      *
-     * @return the Annotation for the specific field
+     * @return the name for the mongoDb database query
      */
-    public String getFieldKeyMongo(Class<? extends AEntity> entityClazz, String propertyName) {
+    public String getKeyFieldMongo(final Class<? extends AEntity> entityClazz, String propertyName) {
         String fieldKeyMongo = propertyName;
         org.springframework.data.mongodb.core.mapping.Field fieldAnnotation = null;
-        Field reflectionJavaField = reflection.getField(entityClazz, propertyName);
+        Field reflectionJavaField = reflection.getField(entityClazz, fieldKeyMongo);
 
         if (reflectionJavaField != null) {
             fieldAnnotation = reflectionJavaField.getAnnotation(org.springframework.data.mongodb.core.mapping.Field.class);
             if (fieldAnnotation != null) {
                 fieldKeyMongo = fieldAnnotation.value();
-            }// end of if cycle
-        }// end of if cycle
+            }
+        }
 
         return fieldKeyMongo;
-    }// end of method
-
+    }
 
     /**
      * Get the specific annotation of the field.
@@ -1531,314 +1531,6 @@ public class AAnnotationService extends AbstractService {
     }// end of method
 
 
-    //    /**
-    //     * Get the roleTypeVisibility of the field.
-    //     * La Annotation @AIField ha un suo valore di default per la property @AIField.roleTypeVisibility()
-    //     * Se il field lo prevede (valore di default) ci si rifà al valore generico del Form
-    //     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre le Annotation
-    //     *
-    //     * @return the ARoleType of the field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EARoleType getFieldRoleType(final Field reflectionJavaField) {
-    //        EARoleType roleTypeVisibility = null;
-    //        AIField annotation = this.getAIField(reflectionJavaField);
-    //
-    //        if (annotation != null) {
-    //            roleTypeVisibility = annotation.roleTypeVisibility();
-    //        }// end of if cycle
-    //
-    //        if (roleTypeVisibility == EARoleType.asEntity) {
-    //            Class clazz = reflectionJavaField.getDeclaringClass();
-    //            if (AEntity.class.isAssignableFrom(clazz)) {
-    //                roleTypeVisibility = this.getEntityRoleType(clazz);
-    //            }// end of if cycle
-    //        }// end of if cycle
-    //
-    //        return roleTypeVisibility;
-    //    }// end of method
-    //
-
-    //    /**
-    //     * Get the visibility of the field.
-    //     * Controlla il ruolo del login connesso
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre le Annotation
-    //     *
-    //     * @return the visibility of the field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public boolean isFieldVisibileRole(Field reflectionJavaField) {
-    //        boolean visibile = false;
-    //        EARoleType roleTypeVisibility = this.getFieldRoleType(reflectionJavaField);
-    //
-    //        if (roleTypeVisibility == EARoleType.asEntity) {
-    //            Class clazz = reflectionJavaField.getDeclaringClass();
-    //            if (AEntity.class.isAssignableFrom(clazz)) {
-    //                roleTypeVisibility = this.getEntityRoleType(clazz);
-    //            }// end of if cycle
-    //        }// end of if cycle
-    //
-    //        if (roleTypeVisibility!=null) {
-    //            switch (roleTypeVisibility) {
-    //                case nobody:
-    //                    visibile = false;
-    //                    break;
-    //                case developer:
-    //                    if (session.isDeveloper()) {
-    //                        visibile = true;
-    //                    }// end of if cycle
-    //                    break;
-    //                case admin:
-    //                    if (session.isAdmin() || session.isDeveloper()) {
-    //                        visibile = true;
-    //                    }// end of if cycle
-    //                    break;
-    //                case user:
-    //                    if (session.isUser() || session.isAdmin() || session.isDeveloper()) {
-    //                        visibile = true;
-    //                    }// end of if cycle
-    //                    break;
-    //                case guest:
-    //                    visibile = false;
-    //                    break;
-    //                default:
-    //                    visibile = false;
-    //                    log.warn("Switch - caso non definito");
-    //                    break;
-    //            } // end of switch statement
-    //        }// end of if cycle
-    //
-    //        return visibile;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the enabled state of the field.
-    //     * Controlla la visibilità del field
-    //     * Controlla il grado di accesso consentito
-    //     * Di default true
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return the visibility of the field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public boolean isFieldEnabled(Field reflectionJavaField, boolean nuovaEntity) {
-    //        boolean enabled = true;
-    //        boolean visibile = isFieldVisibileRole(reflectionJavaField);
-    //
-    //        if (visibile) {
-    //            enabled = isFieldEnabledAccess(reflectionJavaField, nuovaEntity);
-    //        }// end of if cycle
-    //
-    //        return enabled;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the enabled state of the field.
-    //     * Controlla il grado di accesso consentito
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return the visibility of the field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public boolean isFieldEnabledAccess(Field reflectionField, boolean nuovaEntity) {
-    //        boolean enabled = true;
-    //        EAFieldAccessibility fieldAccessibility = this.getFieldAccessibility(reflectionField);
-    //
-    //        switch (fieldAccessibility) {
-    //            case allways:
-    //                enabled = true;
-    //                break;
-    //            case newOnly:
-    //                enabled = nuovaEntity;
-    //                break;
-    //            case showOnly:
-    //                enabled = false;
-    //                break;
-    //            case never:
-    //                enabled = false;
-    //                break;
-    //            default:
-    //                enabled = true;
-    //                break;
-    //        } // end of switch statement
-    //
-    //        return enabled;
-    //    }// end of method
-
-    //    /**
-    //     * Get the accessibility status of the field for the developer login.
-    //     * La Annotation @AIField ha un suo valore di default per la property @AIField.dev()
-    //     * Se il field lo prevede (valore di default) ci si rifà al valore generico del Form
-    //     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return accessibilità del field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAFieldAccessibility getFieldAccessibilityDev(Field reflectionJavaField) {
-    //        EAFieldAccessibility fieldAccessibility = null;
-    //        AIField annotation = this.getAIField(reflectionJavaField);
-    //
-    //        if (annotation != null) {
-    //            fieldAccessibility = annotation.dev();
-    //        }// end of if cycle
-    //
-    //        if (fieldAccessibility == EAFieldAccessibility.asForm) {
-    //            fieldAccessibility = this.getFormAccessibilityDev(reflectionJavaField.getClass());
-    //        }// end of if cycle
-    //
-    //        return fieldAccessibility != null ? fieldAccessibility : EAFieldAccessibility.allways;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the accessibility status of the field for the admin login.
-    //     * La Annotation @AIField ha un suo valore di default per la property @AIField.admin()
-    //     * Se il field lo prevede (valore di default) ci si rifà al valore generico del Form
-    //     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return accessibilità del field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAFieldAccessibility getFieldAccessibilityAdmin(Field reflectionJavaField) {
-    //        EAFieldAccessibility fieldAccessibility = null;
-    //        AIField annotation = this.getAIField(reflectionJavaField);
-    //
-    //        if (annotation != null) {
-    //            fieldAccessibility = annotation.admin();
-    //        }// end of if cycle
-    //
-    //        if (fieldAccessibility == EAFieldAccessibility.asForm) {
-    //            fieldAccessibility = getFormAccessibilityAdmin(reflectionJavaField.getClass());
-    //        }// end of if cycle
-    //
-    //        return fieldAccessibility != null ? fieldAccessibility : EAFieldAccessibility.showOnly;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the accessibility status of the field for the user login.
-    //     * La Annotation @AIField ha un suo valore di default per la property @AIField.user()
-    //     * Se il field lo prevede (valore di default) ci si rifà al valore generico del Form
-    //     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return accessibilità del field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAFieldAccessibility getFieldAccessibilityUser(Field reflectionJavaField) {
-    //        EAFieldAccessibility fieldAccessibility = null;
-    //        AIField annotation = this.getAIField(reflectionJavaField);
-    //
-    //        if (annotation != null) {
-    //            fieldAccessibility = annotation.user();
-    //        }// end of if cycle
-    //
-    //        if (fieldAccessibility == EAFieldAccessibility.asForm) {
-    //            fieldAccessibility = getFormAccessibilityUser(reflectionJavaField.getClass());
-    //        }// end of if cycle
-    //
-    //        return fieldAccessibility != null ? fieldAccessibility : EAFieldAccessibility.never;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the accessibility status of the field for the current login.
-    //     * Se manca completamente l'annotation, inserisco qui un valore di default (per evitare comunque un nullo)
-    //     *
-    //     * @param reflectionJavaField di riferimento per estrarre la Annotation
-    //     *
-    //     * @return accessibilità del field
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAFieldAccessibility getFieldAccessibility(Field reflectionJavaField) {
-    //        EAFieldAccessibility fieldAccessibility = EAFieldAccessibility.never;
-    //
-    //        if (session.isDeveloper()) {
-    //            fieldAccessibility = getFieldAccessibilityDev(reflectionJavaField);
-    //        } else {
-    //            if (session.isAdmin()) {
-    //                fieldAccessibility = getFieldAccessibilityAdmin(reflectionJavaField);
-    //            } else {
-    //                if (session.isUser()) {
-    //                    fieldAccessibility = getFieldAccessibilityUser(reflectionJavaField);
-    //                }// end of if cycle
-    //            }// end of if/else cycle
-    //        }// end of if/else cycle
-    //
-    //        return fieldAccessibility;
-    //    }// end of method
-
-
-    //    /**
-    //     * Get the status of visibility for the field of ACompanyEntity.
-    //     * <p>
-    //     * Controlla se l'applicazione usa le company2 - flag  AlgosApp.USE_MULTI_COMPANY=true
-    //     * Controlla se la collection (table) usa la company2
-    //     * Controlla se l'buttonUser collegato è un developer
-    //     *
-    //     * @param clazz the entity class
-    //     *
-    //     * @return status - default true
-    //     */
-    //    public boolean isCompanyFieldVisible(final Class<? extends AEntity> clazz) {
-    //        boolean status = true;
-    //
-    //        //@todo RIMETTERE
-    //
-    ////        if (!AlgosApp.USE_MULTI_COMPANY) {
-    ////            return false;
-    ////        }// end of if cycle
-    ////
-    ////        if (LibAnnotation.companyType(clazz) == ACompanyRequired.nonUsata) {
-    ////            return false;
-    ////        }// end of if cycle
-    ////
-    ////        if (!LibSession.isDeveloper()) {
-    ////            return false;
-    ////        }// end of if cycle
-    //
-    //        return status;
-    //    }// end of method
-
-
-    //    /**
-    //     * Tipo di lista (EAListButton) indicata nella AEntity class per la view AList
-    //     *
-    //     * @return valore della enumeration
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAListButton getListBotton(final Class<? extends AEntity> clazz) {
-    //        EAListButton listaNomi = EAListButton.standard;
-    //
-    //        //@todo RIMETTERE
-    //
-    ////        if (LibSession.isDeveloper()) {
-    ////            listaNomi = getListBottonDev(clazz);
-    ////        } else {
-    ////            if (LibSession.isAdmin()) {
-    ////                listaNomi = getListBottonAdmin(clazz);
-    ////            } else {
-    ////                if (true) {
-    ////                    listaNomi = getListBottonUser(clazz);
-    ////                }// end of if cycle
-    ////            }// end of if/else cycle
-    ////        }// end of if/else cycle
-    //
-    //        return listaNomi;
-    //    }// end of method
-
 
     /**
      * Bottoni visibili nella toolbar
@@ -1899,30 +1591,6 @@ public class AAnnotationService extends AbstractService {
         return listaNomiBottoni;
     }// end of method
 
-
-    //    /**
-    //     * Tipo di lista (EAFormButton) indicata nella AEntity class per la view AForm
-    //     *
-    //     * @return valore della enumeration
-    //     */
-    //    @SuppressWarnings("all")
-    //    public EAFormButton getFormBotton(final Class<? extends AEntity> clazz) {
-    //        EAFormButton listaNomi = EAFormButton.standard;
-    //
-    //        if (login.isDeveloper()) {
-    //            listaNomi = getFormBottonDev(clazz);
-    //        } else {
-    //            if (login.isAdmin()) {
-    //                listaNomi = getFormBottonAdmin(clazz);
-    //            } else {
-    //                if (true) {
-    //                    listaNomi = getFormBottonUser(clazz);
-    //                }// end of if cycle
-    //            }// end of if/else cycle
-    //        }// end of if/else cycle
-    //
-    //        return listaNomi;
-    //    }// end of method
 
 
     /**

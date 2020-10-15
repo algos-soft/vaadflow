@@ -3,7 +3,6 @@ package it.algos.vaadflow.modules.regione;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.importa.ImportWiki;
-import it.algos.vaadflow.modules.provincia.Provincia;
 import it.algos.vaadflow.service.AService;
 import it.algos.vaadflow.wrapper.WrapDueStringhe;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ import static it.algos.vaadflow.application.FlowCost.VUOTA;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_REGIONE)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class RegioneService extends AService {
 
 

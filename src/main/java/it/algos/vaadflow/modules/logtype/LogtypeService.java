@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import static it.algos.vaadflow.application.FlowCost.*;
+import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 
 /**
  * Project vaadflow <br>
@@ -37,7 +37,7 @@ import static it.algos.vaadflow.application.FlowCost.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_TYP)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class LogtypeService extends AService {
 
 

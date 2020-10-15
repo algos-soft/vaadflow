@@ -79,7 +79,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderUtente")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "utente", company = EACompanyRequired.obbligatoria)
 @AIList(fields = {"company", "username", "password", "ruoli", "enabled", "mail"})
 @AIForm(fields = {"company", "username", "password", "ruoli", "enabled", "mail"})

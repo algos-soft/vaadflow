@@ -25,7 +25,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ADD;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ADD)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface AddressRepository extends MongoRepository<Address, String> {
 
     public Address findByIndirizzo(String indirizzo);

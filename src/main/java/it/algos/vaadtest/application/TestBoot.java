@@ -47,7 +47,7 @@ import java.time.LocalDate;
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class TestBoot extends ABoot {
 
 

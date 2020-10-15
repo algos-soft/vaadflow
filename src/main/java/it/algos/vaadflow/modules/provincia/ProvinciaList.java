@@ -1,31 +1,23 @@
 package it.algos.vaadflow.modules.provincia;
 
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import it.algos.vaadflow.annotation.AIView;
-import it.algos.vaadflow.enumeration.EASearch;
-import it.algos.vaadflow.service.IAService;
-import it.algos.vaadflow.ui.dialog.IADialog;
-import it.algos.vaadflow.ui.MainLayout;
-import it.algos.vaadflow.ui.list.AGridViewList;
-import it.algos.vaadflow.enumeration.EAOperation;
-import it.algos.vaadflow.modules.role.EARoleType;
-import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.backend.entity.AEntity;
+import it.algos.vaadflow.enumeration.EAOperation;
+import it.algos.vaadflow.enumeration.EASearch;
+import it.algos.vaadflow.modules.role.EARoleType;
+import it.algos.vaadflow.service.IAService;
+import it.algos.vaadflow.ui.MainLayout14;
+import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
-import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 
-import org.vaadin.klaudeta.PaginatedGrid;
-import javax.annotation.PostConstruct;
+import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 
 /**
  * Project vaadflow <br>
@@ -112,7 +104,7 @@ import javax.annotation.PostConstruct;
 @Qualifier(TAG_PROVINCIA)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_PROVINCIA, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", roleTypeVisibility = EARoleType.developer)
 public class ProvinciaList extends AGridViewList {
 

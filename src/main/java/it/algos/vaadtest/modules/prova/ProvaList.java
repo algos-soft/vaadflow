@@ -1,6 +1,5 @@
 package it.algos.vaadtest.modules.prova;
 
-import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
@@ -22,13 +21,11 @@ import it.algos.vaadflow.modules.secolo.SecoloList;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.MainLayout14;
 import it.algos.vaadflow.ui.dialog.AConfirmDialogOldino;
-import it.algos.vaadflow.ui.fields.*;
+import it.algos.vaadflow.ui.fields.AComboBox;
 import it.algos.vaadflow.ui.list.AGridViewList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.klaudeta.PaginatedGrid;
 
@@ -118,7 +115,7 @@ import static it.algos.vaadtest.application.TestCost.*;
 @Qualifier(TAG_PRO)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, menuName = "prove", menuIcon = VaadinIcon.BOAT, searchProperty = "code", roleTypeVisibility = EARoleType.user)
 public class ProvaList extends AGridViewList {
 

@@ -1,5 +1,6 @@
 package it.algos.vaadflow;
 
+import it.algos.vaadflow.enumeration.EAColor;
 import it.algos.vaadflow.service.AArrayService;
 import it.algos.vaadflow.service.AFileService;
 import it.algos.vaadflow.service.ATextService;
@@ -149,6 +150,9 @@ public class AFileServiceTest extends ATest {
             creazioneDirectory();
             creazioneFiles();
         }// end of if cycle
+
+        Object alfa = EAColor.values();
+        Object beta = EAColor.getColors();
     }// end of method
 
 

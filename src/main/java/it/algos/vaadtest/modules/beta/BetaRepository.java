@@ -29,7 +29,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_BET)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface BetaRepository extends MongoRepository<Beta, String> {
 
     public int countByCode(String code);

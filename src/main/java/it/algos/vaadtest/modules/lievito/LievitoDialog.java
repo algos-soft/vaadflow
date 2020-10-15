@@ -44,7 +44,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_LIE;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_LIE)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovraScrivibile = true)
 public class LievitoDialog extends AViewDialog<Lievito> {
 
     @Autowired

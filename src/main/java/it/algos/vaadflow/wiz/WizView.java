@@ -120,7 +120,7 @@ public class WizView extends VerticalLayout implements BeforeEnterObserver {
         this.add(new Label("Vuoto e nella directory IdeaProjects"));
 
         Button bottone = new Button("New project");
-        bottone.getElement().setAttribute("theme", "pimary");
+        bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> dialogNewProject.open(this::elaboraNewProject));
         this.add(bottone);
         this.add(new H1());

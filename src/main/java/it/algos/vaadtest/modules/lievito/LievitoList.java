@@ -113,7 +113,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_LIE;
 @Qualifier(TAG_LIE)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_LIE, menuIcon = VaadinIcon.ASTERISK, searchProperty = "descrizione", startListEmpty = true, roleTypeVisibility = EARoleType.developer)
 public class LievitoList extends AGridViewList {
 

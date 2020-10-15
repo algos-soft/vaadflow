@@ -43,7 +43,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_BET)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class BetaService extends AService {
 
     /**

@@ -57,7 +57,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_WIZ;
 @Qualifier(TAG_WIZ)
 @Slf4j
 @Secured("developer")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = true, menuName = TAG_WIZ, menuIcon = VaadinIcon.MAGIC, roleTypeVisibility = EARoleType.developer)
 public class WizardView extends VerticalLayout {
 

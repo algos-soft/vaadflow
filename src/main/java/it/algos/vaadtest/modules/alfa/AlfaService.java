@@ -39,7 +39,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_ALF;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_ALF)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class AlfaService extends AService {
 
 

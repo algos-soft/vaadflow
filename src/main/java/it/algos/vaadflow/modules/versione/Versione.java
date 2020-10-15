@@ -64,7 +64,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderVersione")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "versione", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"id", "titolo", "descrizione", "timestamp"})
 @AIForm(fields = {"id", "titolo", "descrizione", "timestamp"})

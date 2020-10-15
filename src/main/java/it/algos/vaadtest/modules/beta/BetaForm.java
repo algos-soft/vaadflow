@@ -3,9 +3,6 @@ package it.algos.vaadtest.modules.beta;
 import com.vaadin.flow.router.Route;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.form.AFieldsViewForm;
-import it.algos.vaadflow.ui.form.ALayoutViewForm;
-import it.algos.vaadflow.ui.form.APrefViewForm;
-import it.algos.vaadflow.ui.form.AViewForm;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -37,12 +34,12 @@ public class BetaForm extends AFieldsViewForm {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-//        super.usaTitoloForm = true;
-//        super.titoloForm = "Pippoz Belloz";
-//        super.usaEditButton = true;
-//        super.usaDeleteButton = true;
-//        super.usaSaveButton = true;
-//        super.usaFormDueColonne = false;
+        //        super.usaTitoloForm = true;
+        //        super.titoloForm = "Pippoz Belloz";
+        //        super.usaEditButton = true;
+        //        super.usaDeleteButton = true;
+        super.usaSaveButton = true;
+        //        super.usaFormDueColonne = false;
     }// end of method
 
 
@@ -61,5 +58,20 @@ public class BetaForm extends AFieldsViewForm {
         alertPlacehorder.add(text.getLabelAdmin("Admin"));
         alertPlacehorder.add(text.getLabelUser("User"));
     }// end of method
+
+
+    /**
+     * Aggiunge ogni singolo field della fieldMap (ordinata) al layout grafico <br>
+     */
+    @Override
+    protected void addFieldsToLayout() {
+        super.addFieldsToLayout();
+        //        formLayout.removeAll();
+        //
+        //        AIndirizzo indirizzo = appContext.getBean(AIndirizzo.class);
+        //        Address address = Address.builderAddress().indirizzo("Via delle Rose, 17").localita("San Felice sul Panaro").cap("87200").build();
+        //        indirizzo.setValue(address);
+        //        formLayout.add(indirizzo);
+    }
 
 }// end of class

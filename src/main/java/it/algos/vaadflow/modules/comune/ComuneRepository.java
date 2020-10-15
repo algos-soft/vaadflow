@@ -30,7 +30,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_COMUNE;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_COMUNE)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface ComuneRepository extends MongoRepository<Comune, String> {
 
     public Comune findByNome(String nome);

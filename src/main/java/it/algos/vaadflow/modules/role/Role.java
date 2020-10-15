@@ -1,15 +1,10 @@
 package it.algos.vaadflow.modules.role;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,8 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 
 /**
  * Project vaadflow <br>
@@ -70,7 +63,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_ROL;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderRole")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIEntity(recordName = "ruolo", company = EACompanyRequired.nonUsata)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code"})

@@ -30,7 +30,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_PROVINCIA;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_PROVINCIA)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface ProvinciaRepository extends MongoRepository<Provincia, String> {
 
     public Provincia findBySigla(String sigla);

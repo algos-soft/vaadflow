@@ -11,6 +11,7 @@ import it.algos.vaadflow.backend.entity.AEntity;
 import it.algos.vaadflow.enumeration.EAOperation;
 import it.algos.vaadflow.service.IAService;
 import it.algos.vaadflow.ui.dialog.AViewDialog;
+import it.algos.vaadflow.ui.fields.AIndirizzo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -41,7 +42,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_BET;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Qualifier(TAG_BET)
 @Slf4j
-@AIScript(sovrascrivibile = true)
+@AIScript(sovraScrivibile = true)
 public class BetaDialog extends AViewDialog<Beta> {
 
 
@@ -76,8 +77,8 @@ public class BetaDialog extends AViewDialog<Beta> {
     protected void fixLayoutFinal() {
         super.fixLayoutFinal();
 
-//        Component comp = creaSelect();
-//        getFormLayout().add(comp);
+        //        Component comp = creaSelect();
+        //        getFormLayout().add(comp);
     }// end of method
 
 
@@ -107,17 +108,17 @@ public class BetaDialog extends AViewDialog<Beta> {
 
     public Component creaSelect() {
 
-//        ComboBox<EAIconeBeta> comboBox = new ComboBox();
-//        comboBox.setLabel("Icone");
-//        comboBox.setItems(EAIconeBeta.getIcons());
-//        comboBox.setWidth("4em");
+        //        ComboBox<EAIconeBeta> comboBox = new ComboBox();
+        //        comboBox.setLabel("Icone");
+        //        comboBox.setItems(EAIconeBeta.getIcons());
+        //        comboBox.setWidth("4em");
 
 
         Select<EAIconeBeta> select = new Select<>();
         select.setLabel("How are you feeling today?");
 
         EAIconeBeta[] items = EAIconeBeta.class.getEnumConstants();
-//        select.setItems(EAIconeBeta.getIcons());
+        //        select.setItems(EAIconeBeta.getIcons());
         select.setItems(items);
 
         select.setRenderer(new ComponentRenderer<>(enumeration -> {
@@ -133,35 +134,46 @@ public class BetaDialog extends AViewDialog<Beta> {
         return select;
     }// end of method
 
-//    /**
-//     * Costruisce un comboBox di colori, costruendo una classe ad hoc con testo e bottone-colore.
-//     */
-//    private void addComboColor() {
-////        Component comp = new AColor("maroon");
-////        ComboBox<AColor> combo = new ComboBox<>();
-//
-//        Select<ProvaDialog.AColor> select = new Select<>();
-//        select.setLabel("Seleziona un colore");
-//
-//        ArrayList<ProvaDialog.AColor> items = new ArrayList<>();
-//        for (EAColor color : EAColor.values()) {
-//            items.add();
-//        }// end of for cycle
-//
-//        select.setItems(items);
-//        select.setRenderer(new ComponentRenderer<>(color -> {
-//            Div div = new Div();
-//            div.getStyle().set("text-align", "left");
-//            div.setText((color.getName()));
-//
-//            FlexLayout wrapper = new FlexLayout();
-//            wrapper.setFlexGrow(1, div);
-//            wrapper.add(color.getColore(), new Label("&nbsp;&nbsp;&nbsp;"), div);
-//            return wrapper;
-//        }));
-//
-//        select.setWidth("8em");
-//        getFormLayout().add(select);
-//    }// end of method
+
+    /**
+     * Aggiunge ogni singolo field della fieldMap al layout grafico
+     */
+    @Override
+    protected void addFieldsToLayout() {
+        getFormLayout().removeAll();
+
+        AIndirizzo indirizzo = new AIndirizzo();
+        getFormLayout().add(indirizzo);
+    }
+    //    /**
+    //     * Costruisce un comboBox di colori, costruendo una classe ad hoc con testo e bottone-colore.
+    //     */
+    //    private void addComboColor() {
+    ////        Component comp = new AColor("maroon");
+    ////        ComboBox<AColor> combo = new ComboBox<>();
+    //
+    //        Select<ProvaDialog.AColor> select = new Select<>();
+    //        select.setLabel("Seleziona un colore");
+    //
+    //        ArrayList<ProvaDialog.AColor> items = new ArrayList<>();
+    //        for (EAColor color : EAColor.values()) {
+    //            items.add();
+    //        }// end of for cycle
+    //
+    //        select.setItems(items);
+    //        select.setRenderer(new ComponentRenderer<>(color -> {
+    //            Div div = new Div();
+    //            div.getStyle().set("text-align", "left");
+    //            div.setText((color.getName()));
+    //
+    //            FlexLayout wrapper = new FlexLayout();
+    //            wrapper.setFlexGrow(1, div);
+    //            wrapper.add(color.getColore(), new Label("&nbsp;&nbsp;&nbsp;"), div);
+    //            return wrapper;
+    //        }));
+    //
+    //        select.setWidth("8em");
+    //        getFormLayout().add(select);
+    //    }// end of method
 
 }// end of class

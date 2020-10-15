@@ -46,7 +46,7 @@ import static it.algos.vaadflow.service.AConsoleColorService.RESET;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_LOG)
 @Slf4j
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public class LogService extends AService {
 
     /**
@@ -76,7 +76,7 @@ public class LogService extends AService {
      * Disponibile solo dopo un metodo @PostConstruct invocato da Spring al termine dell'init() di questa classe <br>
      */
     @Autowired
-    protected ADateService date;
+    public ADateService date;
 
     /**
      * La repository viene iniettata dal costruttore e passata al costruttore della superclasse, <br>

@@ -26,7 +26,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_SEC;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_SEC)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface SecoloRepository extends MongoRepository<Secolo, String> {
 
     public Secolo findByTitolo(String titolo);

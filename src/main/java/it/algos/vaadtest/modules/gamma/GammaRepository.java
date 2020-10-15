@@ -1,13 +1,14 @@
 package it.algos.vaadtest.modules.gamma;
 
-import java.util.List;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import it.algos.vaadflow.annotation.AIScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
 import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 
 /**
@@ -28,7 +29,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Qualifier(TAG_GAM)
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 public interface GammaRepository extends MongoRepository<Gamma, String> {
 
     public Gamma findByCode(String code);

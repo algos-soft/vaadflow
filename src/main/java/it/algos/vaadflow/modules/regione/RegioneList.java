@@ -104,8 +104,8 @@ import static it.algos.vaadflow.application.FlowCost.TAG_REGIONE;
 @Qualifier(TAG_REGIONE)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
-@AIView(vaadflow = false, menuName = TAG_REGIONE, menuIcon = VaadinIcon.ASTERISK,  roleTypeVisibility = EARoleType.developer)
+@AIScript(sovraScrivibile = false)
+@AIView(vaadflow = false, menuName = TAG_REGIONE, menuIcon = VaadinIcon.ASTERISK, roleTypeVisibility = EARoleType.developer)
 public class RegioneList extends AGridViewList {
 
 

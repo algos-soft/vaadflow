@@ -1,7 +1,6 @@
 package it.algos.vaadtest.modules.gamma;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
 
@@ -112,7 +110,7 @@ import static it.algos.vaadtest.application.TestCost.TAG_GAM;
 @Qualifier(TAG_GAM)
 @Slf4j
 @Secured("user")
-@AIScript(sovrascrivibile = false)
+@AIScript(sovraScrivibile = false)
 @AIView(vaadflow = false, menuName = TAG_GAM, menuIcon = VaadinIcon.ASTERISK, searchProperty = "code", sortProperty = "ordine", roleTypeVisibility = EARoleType.developer)
 public class GammaList extends AGridViewList {
 

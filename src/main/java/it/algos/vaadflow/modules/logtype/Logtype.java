@@ -2,7 +2,6 @@ package it.algos.vaadflow.modules.logtype;
 
 import it.algos.vaadflow.annotation.*;
 import it.algos.vaadflow.backend.entity.AEntity;
-import it.algos.vaadflow.enumeration.EACompanyRequired;
 import it.algos.vaadflow.enumeration.EAFieldType;
 import lombok.*;
 import org.springframework.data.annotation.TypeAlias;
@@ -67,8 +66,7 @@ import static it.algos.vaadflow.application.FlowCost.TAG_TYP;
 @AllArgsConstructor
 @Builder(builderMethodName = "builderLogtype")
 @EqualsAndHashCode(callSuper = false)
-@AIScript(sovrascrivibile = false)
-@AIEntity(recordName = "logtype", company = EACompanyRequired.nonUsata)
+@AIScript(sovraScrivibile = false)
 @AIList(fields = {"ordine", "code"})
 @AIForm(fields = {"ordine", "code"})
 public class Logtype extends AEntity {
